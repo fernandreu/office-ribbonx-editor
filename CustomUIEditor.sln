@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUIEditor", "CustomUIEditor\CustomUIEditor.csproj", "{87EFED6B-45A1-425F-B63B-5894E4FC0C03}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8E5E4631-F9D6-43A1-B677-FD1B0C599606}
+	EndGlobalSection
+EndGlobal
