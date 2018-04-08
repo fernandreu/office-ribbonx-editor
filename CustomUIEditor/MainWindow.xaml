@@ -4,9 +4,227 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomUIEditor"
+        xmlns:data="clr-namespace:CustomUIEditor.Data"
+        xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="{x:Static local:StringsResource.idsApplicationTitle}" Height="450" Width="800" Icon="Resources/ApplicationIcon.ico" Closing="MainWindow_OnClosing">
+    <Window.Resources>
+        <ContextMenu x:Key="ImageContextMenu">
+            <MenuItem Header="Change ID"/>
+            <MenuItem Header="Remove">
+                <MenuItem.Icon>
+                    <Image Source="/Resources/remove.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Padding="2">
+            <MenuItem Header="_File">
+                <MenuItem Header="Open" InputGestureText="Ctrl+O" Click="Open_Click">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/open.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Save" InputGestureText="Ctrl+S">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/save.png"/>
+                    </MenuItem.Icon>    
+                </MenuItem>
+
+                <MenuItem Header="Save As"/>
+                <Separator/>
+                <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
+                <Separator/>
+                <MenuItem Header="Exit" Click="Exit_Click"/>
+            </MenuItem>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="Undo" InputGestureText="Ctrl+Z">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/undo.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Redo" InputGestureText="Ctrl+Y">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/redo.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/cut.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/copy.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/paste.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Select All" InputGestureText="Ctrl+A"/>
+            </MenuItem>
+            <MenuItem Header="_Insert">
+                <MenuItem Header="Office 2010+ Custom UI Part">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/xml.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Office 2007 Custom UI Part">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/xml.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Icons...">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/insertPicture.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Sample XML">
+                    <MenuItem Header="Custom OutSpace">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/xml.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Custom Tab">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/xml.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Excel - A Custom Tab">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/xml.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Repurpose">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/xml.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Word - Group on Insert Tab">
+                        <MenuItem.Icon>
+                            <Image Source="/Resources/xml.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="Customizing the Ribbon" Click="ShowHelp_CustomizeTheRibbon"/>
+                <MenuItem Header="Customizing the Backstage" Click="ShowHelp_CustomizeTheOustpace"/>
+                <MenuItem Header="Repurposing built-in commands" Click="ShowHelp_RepurposingControls"/>
+                <MenuItem Header="Office Fluent UI Command Identifiers" Click="ShowHelp_CommandIdentifiers"/>
+                <MenuItem Header="Creating Office add-ins using Visual Studio (VSTO)" Click="ShowHelp_VSTO"/>
+                <MenuItem Header="Office Dev Center" Click="ShowHelp_OfficeDevCenter"/>
+                <Separator/>
+                <MenuItem Header="About"/>
+            </MenuItem>
+        </Menu>
+
+        <ToolBarTray DockPanel.Dock="Top">
+            <ToolBar>
+
+                <Button ToolTip="Open an Office document" Click="Open_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/open.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Open</TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Button ToolTip="Save the current Office document">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/save.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
+                    </StackPanel>
+                </Button>
+                
+                <Separator/>
+                
+                <Button ToolTip="Insert Icons">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/insertPicture.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Insert Icons</TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/check.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <Button ToolTip="Generate callbakcs for the current XML file">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/callbacks.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
+                    </StackPanel>
+                </Button>
+
+            </ToolBar>
+        </ToolBarTray>
+
+        <StatusBar DockPanel.Dock="Bottom" Height="16"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TreeView
+                ItemsSource="{Binding DocumentList}" 
+                Grid.Column="0" 
+                HorizontalAlignment="Stretch">
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}">
+                        <EventSetter Event="RequestBringIntoView" Handler="TreeViewItem_RequestBringIntoView"/>
+                        <EventSetter Event="Selected" Handler="TreeViewItem_OnSelected"/>
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                        <Setter Property="FontWeight" Value="Normal"/>
+                        <Setter Property="Padding" Value="3"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate
+                        DataType="{x:Type data:OfficeDocumentViewModel}"
+                        ItemsSource="{Binding Children}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    <DataTemplate DataType="{x:Type data:OfficePartViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
+                            <TextBlock Text="{Binding Name}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TreeView.Resources>
+            </TreeView>
+
+            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
+            <TextBox
+                HorizontalScrollBarVisibility="Auto"
+                VerticalScrollBarVisibility="Auto"
+                Grid.Column="2"
+                HorizontalAlignment="Stretch"
+                FontFamily="Consolas"
+                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
+                DataContext="{Binding Code}"
+                Text="{Binding RawText, Mode=TwoWay}"/>
+        </Grid>
+    </DockPanel>
 </Window>
