@@ -1,22 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using CustomUIEditor.Data;
 using Microsoft.Win32;
+using System.Xml;
+using System.Xml.Schema;
 
 namespace CustomUIEditor
 {
@@ -27,7 +20,28 @@ namespace CustomUIEditor
     {
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
-        public CodeViewModel Code { get; } = new CodeViewModel();
+        public bool ReloadOnSave { get; set; } = true;
+        
+        /// <summary>
+        /// The view model of the OfficeDocument currently active (selected) on the application
+        /// </summary>
+        private OfficeDocumentViewModel CurrentDocument
+        {
+            get
+            {
+                // Get currently active document
+                if (!(DocumentView.SelectedItem is TreeViewItemViewModel elem)) return null;
+
+                // Find the root document
+                if (elem is OfficePartViewModel)
+                    return (OfficeDocumentViewModel) elem.Parent;
+                
+                if (elem is OfficeDocumentViewModel doc)
+                    return doc;
+                
+                return null;
+            }
+        }
 
         public MainWindow()
         {
@@ -43,8 +57,7 @@ namespace CustomUIEditor
         private void OpenFile()
         {
             var ofd = new OpenFileDialog();
-
-            #region Initializing Open Document Dialog
+            
             ofd.Title = StringsResource.idsOpenDocumentDialogTitle;
             string[] filters =
             {
@@ -57,23 +70,15 @@ namespace CustomUIEditor
             ofd.Filter = string.Join("|", filters);
             ofd.FilterIndex = 0;
             ofd.RestoreDirectory = true;
-            #endregion
 
             ofd.FileOk += FinishOpeningFile;
             ofd.ShowDialog(this);
         }
-        
+
         private void FinishOpeningFile(object sender, CancelEventArgs e)
         {
             try
             {
-                //Debug.Assert(this.package == null);
-                //if (this.package != null)
-                //{
-                //    this.package.Dispose();
-                //    this.PackageClosed();
-                //}
-
                 string fileName = ((OpenFileDialog) sender).FileName;
                 if (string.IsNullOrEmpty(fileName)) return;
 
@@ -83,13 +88,85 @@ namespace CustomUIEditor
                 var model = new OfficeDocumentViewModel(doc);
                 if (model.Children.Count > 0) model.Children[0].IsSelected = true;
                 DocumentList.Add(model);
-
-                //this.package = new OfficeDocument(fileName);
-                //this.PackageLoaded();
-                //this.PackageTreeView();
-
+                
                 //UndoRedo
                 //_commands = new UndoRedo.Control.Commands(rtbCustomUI.Rtf);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, Title);
+            }
+        }
+
+        private void SaveAs_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAs();
+        }
+
+        private void SaveAs()
+        {
+            var doc = CurrentDocument;
+            if (doc == null) return;
+
+            var sfd = new SaveFileDialog();
+            
+            sfd.Title = "Save OOXML Document";
+            string[] filters =
+            {
+                "Excel Workbook|*.xlsx",
+                "Excel Macro-Enabled Workbook|*.xlsm",
+                "Excel Binary Workbook|*.xlsb",
+                "Excel Template|*.xltx",
+                "Excel Macro-Enabled Template|*.xltm",
+                "Excel Add-in|*.xlam",
+                "PowerPoint Presentation|*.pptx",
+                "PowerPoint Macro-Enabled Presentation|*.pptm",
+                "PowerPoint Template|*.potx",
+                "PowerPoint Macro-Enabled Template|*.potm",
+                "PowerPoint Show|*.ppsx",
+                "PowerPoint Macro-Enabled Show|*.ppsm",
+                "PowerPoint Add-in|*.ppam",
+                "Word Document|*.docx",
+                "Word Macro-Enabled Document|*.docm",
+                "Word Template|*.dotx",
+                "Word Macro-Enabled Template|*.dotm",
+                StringsResource.idsFilterAllFiles,
+            };
+            sfd.Filter = string.Join("|", filters);
+            sfd.FileName = doc.Name;
+
+            var ext = Path.GetExtension(doc.Name);
+
+            // Find the appropriate FilterIndex
+            int i;
+            for (i = 0; i < filters.Length - 1; i++)  // -1 to exclude all files
+            {
+                var otherExt = filters[i].Split('|')[1].Substring(1);
+                if (ext == otherExt) break;
+            }
+            sfd.FilterIndex = i + 1;
+
+            sfd.FileOk += FinishSavingFile;
+            sfd.ShowDialog(this);
+        }
+
+        private void FinishSavingFile(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                string fileName = ((SaveFileDialog) sender).FileName;
+                if (string.IsNullOrEmpty(fileName)) return;
+
+                // Note: We are assuming that no UI events happen between the SaveFileDialog was
+                // shown and this is called. Otherwise, selection might have changed
+                var doc = CurrentDocument;
+                Debug.Assert(doc != null);
+
+                if (!Path.HasExtension(fileName))
+                    fileName = Path.ChangeExtension(fileName, Path.GetExtension(doc.Name));
+                Debug.WriteLine("Saving " + fileName + "...");
+
+                doc.Save(ReloadOnSave, fileName);
             }
             catch (Exception ex)
             {
@@ -125,8 +202,6 @@ namespace CustomUIEditor
         }
 
         // The call to BringIntoView() in TreeViewItem_OnSelected is also important
-
-        #endregion
         
         private void TreeViewItem_OnSelected(object sender, RoutedEventArgs e)
         {
@@ -135,12 +210,9 @@ namespace CustomUIEditor
             // Correctly handle horizontally scrolling for programmatically selected items
             item.BringIntoView();
             e.Handled = true;
-
-            if (item.DataContext is OfficePartViewModel partModel)
-            {
-                Code.RawText = partModel.Part.ReadContent();
-            }
         }
+
+        #endregion
 
         private void Exit_Click(object sender, RoutedEventArgs e)
         {
@@ -177,14 +249,37 @@ namespace CustomUIEditor
             Process.Start("https://blogs.technet.microsoft.com/the_microsoft_excel_support_team_blog/2012/06/18/how-to-repurpose-a-button-in-excel-2007-or-2010/");
         }
 
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            CurrentDocument?.Save(ReloadOnSave);
+        }
+
+        private void SaveAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var doc in DocumentList)
+                doc.Save(ReloadOnSave);
+        }
+
         void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
-            // TODO: Warning
-
             foreach (var doc in DocumentList)
             {
-                doc.Document.Dispose();
+                if (doc.HasUnsavedChanges)
+                {
+                    var result = MessageBox.Show($"File '{doc.Name}' has unsaved changes. Do you want to save them before existing the program?", "Unsaved Changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.Yes)
+                        doc.Save(ReloadOnSave);
+                    else if (result == MessageBoxResult.Cancel)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
             }
+
+            // Now that it is clear we can leave the program, dispose all documents (i.e. delete the temporary unzipped files)
+            foreach (var doc in DocumentList)
+                doc.Document.Dispose();
         }
     }
 }

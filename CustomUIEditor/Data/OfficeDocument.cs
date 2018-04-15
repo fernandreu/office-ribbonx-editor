@@ -146,8 +146,11 @@ namespace CustomUIEditor
 			return OfficeApplications.XML;
 		}
 
-		public void Save()
+		public void Save(string fileName = null)
 		{
+		    if (string.IsNullOrEmpty(fileName))
+		        fileName = _fileName;
+
 			Debug.Assert(_package != null, "Failed to get packge.");
 			Debug.Assert(!_isReadOnly, "File is ReadOnly!");
 
@@ -159,7 +162,7 @@ namespace CustomUIEditor
 
 			try
 			{
-				File.Copy(_tempFileName, _fileName, true /*overwrite*/);
+				File.Copy(_tempFileName, fileName, true /*overwrite*/);
 			}
 			finally
 			{

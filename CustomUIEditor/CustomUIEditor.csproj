@@ -59,6 +59,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Data\CodeViewModel.cs" />
+    <Compile Include="Data\DataTypeConverter.cs" />
     <Compile Include="Data\OfficePartViewModel.cs" />
     <Compile Include="Data\OfficeDocumentViewModel.cs" />
     <Compile Include="Data\TreeViewViewModel.cs" />

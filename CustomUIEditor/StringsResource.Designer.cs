@@ -169,7 +169,7 @@ namespace CustomUIEditor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Microsoft Excel Workbooks|*.xl?x;*.xl?m.
+        ///   Looks up a localized string similar to Microsoft Excel Workbooks|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm.
         /// </summary>
         public static string idsFilterExcelDocuments {
             get {

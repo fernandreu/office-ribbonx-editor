@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 
 namespace CustomUIEditor.Data
 {
@@ -19,16 +20,22 @@ namespace CustomUIEditor.Data
         static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
         bool _isExpanded;
         bool _isSelected;
+        bool _canHaveContents;
+        string _contents;
 
         #endregion // Data
 
         #region Constructors
 
-        protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren)
+        protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren, bool canHaveContents = true, string contents = null)
         {
             Parent = parent;
 
             Children = new ObservableCollection<TreeViewItemViewModel>();
+
+            CanHaveContents = canHaveContents;
+
+            Contents = contents;
 
             if (lazyLoadChildren)
                 Children.Add(DummyChild);
@@ -113,6 +120,49 @@ namespace CustomUIEditor.Data
 
         #endregion // IsSelected
 
+        #region CanHaveContents
+
+        /// <summary>
+        /// Gets/sets whether this TreeViewItem can have contents edited in the code control
+        /// </summary>
+        public bool CanHaveContents
+        {
+            get => _canHaveContents;
+            set
+            {
+                if (value == _canHaveContents) return;
+                _canHaveContents = value;
+                OnPropertyChanged(nameof(CanHaveContents));
+            }
+        }
+
+        /// <summary>
+        /// The exact opposite of CanHaveContents, in case it is needed from xaml (if only needed 
+        /// once, this is more concise than having a easier than having a bool converter)
+        /// </summary>
+        public bool CannotHaveContents
+        {
+            get => !CanHaveContents;
+            set => CanHaveContents = !value;
+        }
+
+        #endregion // CanHaveContents
+
+        #region Contents
+
+        public string Contents
+        {
+            get => _contents;
+            set
+            {
+                if (value == _contents) return;
+                _contents = value;
+                OnPropertyChanged(nameof(Contents));
+            }
+        }
+
+        #endregion // Contents
+
         #region LoadChildren
 
         /// <summary>
@@ -120,6 +170,14 @@ namespace CustomUIEditor.Data
         /// Subclasses can override this to populate the Children collection.
         /// </summary>
         protected virtual void LoadChildren()
+        {
+        }
+
+        /// <summary>
+        /// Invoked when IsSelected turns to false, in case derived classes want to perform
+        /// actions such as saving the current code being shown
+        /// </summary>
+        protected virtual void SelectionLost()
         {
         }
 

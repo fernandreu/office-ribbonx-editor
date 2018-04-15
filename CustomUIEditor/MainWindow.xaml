@@ -17,6 +17,7 @@
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
+        <data:DataTypeConverter x:Key="DataTypeConverter"/>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
@@ -27,13 +28,19 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Save" InputGestureText="Ctrl+S">
+                <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Click="Save_Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/save.png"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
-                <MenuItem Header="Save As"/>
+                <MenuItem Header="Save All Documents" Click="SaveAll_Click">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/save.png"/>
+                    </MenuItem.Icon>    
+                </MenuItem>
+
+                <MenuItem Header="Save As" Click="SaveAs_Click"/>
                 <Separator/>
                 <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
                 <Separator/>
@@ -137,7 +144,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Save the current Office document">
+                <Button ToolTip="Save the current Office document" Click="Save_Click">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/save.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
@@ -166,6 +173,13 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
                     </StackPanel>
                 </Button>
+                
+                <CheckBox IsChecked="{Binding ReloadOnSave}" ToolTip="To ensure you do not delete changes made externally, you can reload the documents right before they are to be saved">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/redo.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
+                    </StackPanel>
+                </CheckBox>
 
             </ToolBar>
         </ToolBarTray>
@@ -179,8 +193,9 @@
             </Grid.ColumnDefinitions>
 
             <TreeView
+                Name="DocumentView"
                 ItemsSource="{Binding DocumentList}" 
-                Grid.Column="0" 
+                Grid.Column="0"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
@@ -216,6 +231,7 @@
             </TreeView>
 
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
+
             <TextBox
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
@@ -223,8 +239,10 @@
                 HorizontalAlignment="Stretch"
                 FontFamily="Consolas"
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
-                DataContext="{Binding Code}"
-                Text="{Binding RawText, Mode=TwoWay}"/>
+                DataContext="{Binding SelectedItem, ElementName=DocumentView}"
+                IsEnabled="{Binding CanHaveContents}"
+                Text="{Binding Contents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                />
         </Grid>
     </DockPanel>
 </Window>

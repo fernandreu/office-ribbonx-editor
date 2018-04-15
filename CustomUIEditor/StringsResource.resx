@@ -157,7 +157,7 @@
     <value>Supported Icons|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
   </data>
   <data name="idsFilterExcelDocuments" xml:space="preserve">
-    <value>Microsoft Excel Workbooks|*.xl?x;*.xl?m</value>
+    <value>Microsoft Excel Workbooks|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
   </data>
   <data name="idsFilterPPTDocuments" xml:space="preserve">
     <value>Microsoft PowerPoint Presentations|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
