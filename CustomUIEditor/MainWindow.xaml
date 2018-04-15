@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CustomUIEditor"
         xmlns:data="clr-namespace:CustomUIEditor.Data"
+        xmlns:model="clr-namespace:CustomUIEditor.Model"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         mc:Ignorable="d"
         Title="{x:Static local:StringsResource.idsApplicationTitle}" Height="450" Width="800" Icon="Resources/ApplicationIcon.ico" Closing="MainWindow_OnClosing">
@@ -17,7 +18,7 @@
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
-        <data:DataTypeConverter x:Key="DataTypeConverter"/>
+        <data:SelectionConverter x:Key="SelectionConverter"/>
     </Window.Resources>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
@@ -77,12 +78,12 @@
                 <MenuItem Header="Select All" InputGestureText="Ctrl+A"/>
             </MenuItem>
             <MenuItem Header="_Insert">
-                <MenuItem Header="Office 2010+ Custom UI Part">
+                <MenuItem Header="Office 2010+ Custom UI Part" Click="InsertXml14Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/xml.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Office 2007 Custom UI Part">
+                <MenuItem Header="Office 2007 Custom UI Part" Click="InsertXml12Click">
                     <MenuItem.Icon>
                         <Image Source="/Resources/xml.png"/>
                     </MenuItem.Icon>
@@ -160,7 +161,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema">
+                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Click="ValidateXmlClick">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/check.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
@@ -184,7 +185,25 @@
             </ToolBar>
         </ToolBarTray>
 
-        <StatusBar DockPanel.Dock="Bottom" Height="16"/>
+        <StatusBar DockPanel.Dock="Bottom" Height="Auto">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem>
+                <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2">
+                <TextBlock Name="LineBox" Margin="0,0,3,0" Text="Line 0, Col 0"/>
+            </StatusBarItem>
+        </StatusBar>
+
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
@@ -214,14 +233,14 @@
                 </TreeView.ItemContainerStyle>
                 <TreeView.Resources>
                     <HierarchicalDataTemplate
-                        DataType="{x:Type data:OfficeDocumentViewModel}"
+                        DataType="{x:Type model:OfficeDocumentViewModel}"
                         ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                    <DataTemplate DataType="{x:Type data:OfficePartViewModel}">
+                    <DataTemplate DataType="{x:Type model:OfficePartViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
@@ -233,11 +252,13 @@
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
 
             <TextBox
+                Name="Editor"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
                 Grid.Column="2"
                 HorizontalAlignment="Stretch"
                 FontFamily="Consolas"
+                SelectionChanged="EditorSelectionChanged"
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
                 DataContext="{Binding SelectedItem, ElementName=DocumentView}"
                 IsEnabled="{Binding CanHaveContents}"

@@ -10,12 +10,16 @@
 namespace CustomUIEditor
 {
     using System;
+    using System.Collections;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Xml;
+    using System.Xml.Schema;
 
     using CustomUIEditor.Data;
     using CustomUIEditor.Model;
@@ -35,6 +39,15 @@ namespace CustomUIEditor
         private bool reloadOnSave = true;
         
         private bool suppressRequestBringIntoView;
+        
+        private Hashtable customUiSchemas;
+
+        private string statusMessage;
+
+        /// <summary>
+        /// Used during the XML validation to flag whether there was any error during the process
+        /// </summary>
+        private bool hasXmlError;
 
         #endregion // Fields
 
@@ -42,6 +55,9 @@ namespace CustomUIEditor
         {
             this.InitializeComponent();
             this.DataContext = this;
+
+            var applicationFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+            this.LoadXmlSchemas(applicationFolder + @"\Schemas\");
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
@@ -57,6 +73,15 @@ namespace CustomUIEditor
         {
             get => this.reloadOnSave;
             set => this.SetField(ref this.reloadOnSave, value, nameof(this.ReloadOnSave), this.PropertyChanged);
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating the message that will appear at the bottom-left corner of the main window
+        /// </summary>
+        public string StatusMessage
+        {
+            get => this.statusMessage;
+            set => this.SetField(ref this.statusMessage, value, nameof(this.StatusMessage), this.PropertyChanged);
         }
 
         /// <summary>
@@ -346,6 +371,188 @@ namespace CustomUIEditor
             {
                 doc.Document.Dispose();
             }
+        }
+
+        private void InsertXml14Click(object sender, RoutedEventArgs e)
+        {
+            var doc = this.CurrentDocument;
+            doc?.InsertPart(XmlParts.RibbonX14);
+        }
+
+        private void InsertXml12Click(object sender, RoutedEventArgs e)
+        {
+            var doc = this.CurrentDocument;
+            doc?.InsertPart(XmlParts.RibbonX12);
+        }
+
+        private void LoadXmlSchemas(string folderName)
+        {
+            if (string.IsNullOrEmpty(folderName))
+            {
+                Debug.Print("folderName is null / empty");
+                return;
+            }
+
+            try
+            {
+                var schemas = Directory.GetFiles(folderName, "CustomUI*.xsd");
+
+                if (schemas.Length == 0)
+                {
+                    return;
+                }
+
+                this.customUiSchemas = new Hashtable(schemas.Length);
+
+                foreach (var schema in schemas)
+                {
+                    var partType = schema.Contains("14") ? XmlParts.RibbonX14 : XmlParts.RibbonX12;
+                    var reader = new StreamReader(schema);
+                    this.customUiSchemas.Add(partType, XmlSchema.Read(reader, null));
+
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Fail(ex.Message);
+            }
+        }
+
+        private void ValidateXmlClick(object sender, RoutedEventArgs e)
+        {
+            this.ValidateXml(true);
+        }
+
+        private bool ValidateXml(bool showValidMessage)
+        {
+            if (!(this.DocumentView.SelectedItem is OfficePartViewModel part))
+            {
+                return false;
+            }
+            
+            // Test to see if text is XML first
+            try
+            {
+                var xmlDoc = new XmlDocument();
+
+                if (!(this.customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
+                {
+                    return false;
+                }
+
+                xmlDoc.Schemas.Add(targetSchema);
+
+                xmlDoc.LoadXml(part.Contents);
+
+                if (xmlDoc.DocumentElement == null)
+                {
+                    // TODO: ShowError call with an actual message perhaps? Will this ever be null
+                    return false;
+                }
+
+                if (xmlDoc.DocumentElement.NamespaceURI != targetSchema.TargetNamespace)
+                {
+                    var errorText = new StringBuilder();
+                    errorText.Append(StringsResource.idsUnknownNamespace.Replace("|1", xmlDoc.DocumentElement.NamespaceURI));
+                    errorText.Append("\n" + StringsResource.idsCustomUINamespace.Replace("|1", targetSchema.TargetNamespace));
+
+                    this.ShowError(errorText.ToString());
+                    return false;
+                }
+
+                this.hasXmlError = false;
+                xmlDoc.Validate(this.XmlValidationEventHandler);
+            }
+            catch (XmlException ex)
+            {
+                this.ShowError(StringsResource.idsInvalidXml + "\n" + ex.Message);
+                return false;
+            }
+            
+            if (!this.hasXmlError)
+            {
+                if (showValidMessage)
+                {
+                    MessageBox.Show(
+                        this,
+                        StringsResource.idsValidXml,
+                        this.Title,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+
+                return true;
+            }
+
+            return false;
+        }
+
+        private void XmlValidationEventHandler(object sender, ValidationEventArgs e)
+        {
+            lock (this)
+            {
+                this.hasXmlError = true;
+            }
+
+            MessageBox.Show(
+                this,
+                e.Message,
+                e.Severity.ToString(),
+                MessageBoxButton.OK,
+                e.Severity == XmlSeverityType.Error ? MessageBoxImage.Error : MessageBoxImage.Warning);
+        }
+        
+        private void ShowError(string errorText)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(errorText), "Error message is empty");
+
+            MessageBox.Show(
+                this,
+                errorText,
+                this.Title,
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+
+        private void EditorSelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!(sender is TextBox editor))
+            {
+                Debug.Print("This should only be used with a TextBox");
+                return;
+            }
+            
+            var txt = editor.Text;
+
+            if (string.IsNullOrEmpty(txt))
+            {
+                this.LineBox.Text = "Line 0, Col 0";
+                return;
+            }
+            
+            var pos = editor.SelectionStart;
+
+            var lineCount = 0;
+            var colCount = 0;
+            for (var i = 0; i < txt.Length; i++)
+            {
+
+                if (i == pos)
+                {
+                    break;
+                }
+
+                if (txt[i] == '\n')
+                {
+                    colCount = -1;
+                    lineCount++;
+                }
+
+                colCount++;
+            }
+            
+            this.LineBox.Text = $"Line {lineCount + 1}, Col {colCount + 1}";
         }
     }
 }

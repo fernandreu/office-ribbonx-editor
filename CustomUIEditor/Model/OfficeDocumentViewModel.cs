@@ -38,12 +38,9 @@ namespace CustomUIEditor.Model
             {
                 foreach (var child in this.Children)
                 {
-                    if (child is OfficePartViewModel part)
+                    if (child is OfficePartViewModel part && part.HasUnsavedChanges)
                     {
-                        if (part.HasUnsavedChanges)
-                        {
-                            return true;
-                        }
+                        return true;
                     }
                 }
 
@@ -94,8 +91,10 @@ namespace CustomUIEditor.Model
             }
 
             // Instead, use the parts currently shown in the editor
-            foreach (var child in this.Children)
+            for (var i = 0; i < this.Children.Count; i++)
             {
+                var child = this.Children[i];
+
                 if (!(child is OfficePartViewModel part)) 
                 {
                     continue;  // TODO: Remember processing pictures here
@@ -105,7 +104,7 @@ namespace CustomUIEditor.Model
 
                 // Re-map the Part. This ensures that the PackagePart stored internally in OfficePart points to
                 // the right location, in case it is needed
-                part.Part = this.document.RetrieveCustomPart(part.Part.PartType);
+                part.Reload();
             }
         }
 
@@ -127,6 +126,21 @@ namespace CustomUIEditor.Model
 
             // Now save the actual document
             this.document.Save(fileName);
+        }
+
+        public void InsertPart(XmlParts type)
+        {
+            // Check if the part does not exist yet
+            var part = this.document.RetrieveCustomPart(type);
+            if (part != null)
+            {
+                return;
+            }
+
+            part = this.document.CreateCustomPart(type);
+            var partModel = new OfficePartViewModel(part, this);
+            this.Children.Add(partModel);
+            partModel.IsSelected = true;
         }
 
         protected override void LoadChildren()
