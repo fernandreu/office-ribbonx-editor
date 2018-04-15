@@ -1,610 +1,401 @@
-﻿using System;
-using System.Diagnostics;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.IO.Packaging;
-using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using Image = System.Windows.Controls.Image;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="OfficeDocument.cs" company="FA">
+//   Fernando Andreu
+// </copyright>
+// <summary>
+//   Defines the OfficeDocument type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor
+namespace CustomUIEditor.Data
 {
-	public class OfficeDocument : IDisposable
-	{
-		public const string CustomUIPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/extensibility";
-		public const string CustomUI14PartRelType = "http://schemas.microsoft.com/office/2007/relationships/ui/extensibility";
-		public const string QATPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/customization";
-		public const string ImagePartRelType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
-
-		private Package _package;
-
-		private List<OfficePart> _xmlParts;
-
-		private bool _isDirty;
-		private bool _isReadOnly;
-
-		private string _fileName;
-		private string _tempFileName;
-
-		public OfficeDocument(string fileName)
-		{
-			if (fileName == null) throw new ArgumentNullException(nameof(fileName));
-			if (fileName.Length == 0) throw new ArgumentException("File name cannot be empty.");
-
-			_fileName = fileName;
-			_isReadOnly = ((int)(File.GetAttributes(_fileName) & FileAttributes.ReadOnly) != 0);
-
-			_tempFileName = Path.GetTempFileName();
-
-			File.Copy(_fileName, _tempFileName, true /*overwrite*/);
-			File.SetAttributes(_tempFileName, FileAttributes.Normal);
-
-			this.Init();
-			_isDirty = false;
-		}
-
-		~OfficeDocument()
-		{
-			this.Dispose(true /*isFramework*/);
-		}
-
-		private void Init()
-		{
-			if (_isReadOnly)
-			{
-				_package = Package.Open(_tempFileName, System.IO.FileMode.Open, FileAccess.Read);
-			}
-			else
-			{
-				_package = Package.Open(_tempFileName, System.IO.FileMode.Open, FileAccess.ReadWrite);
-			}
-
-			Debug.Assert(_package != null, "Failed to get packge.");
-			if (_package == null) return;
-
-			_xmlParts = new List<OfficePart>();
-
-			foreach (PackageRelationship relationship in _package.GetRelationshipsByType(CustomUI14PartRelType))
-			{
-				Uri customUIUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-				if (_package.PartExists(customUIUri))
-				{
-					_xmlParts.Add(new OfficePart(_package.GetPart(customUIUri), XMLParts.RibbonX14, relationship.Id));
-				}
-				break;
-			}
-
-			foreach (PackageRelationship relationship in _package.GetRelationshipsByType(CustomUIPartRelType))
-			{
-				Uri customUIUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-				if (_package.PartExists(customUIUri))
-				{
-					_xmlParts.Add(new OfficePart(_package.GetPart(customUIUri), XMLParts.RibbonX12, relationship.Id));
-				}
-				break;
-			}
-
-			foreach (PackageRelationship relationship in _package.GetRelationshipsByType(QATPartRelType))
-			{
-				Uri qatUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-				if (_package.PartExists(qatUri))
-				{
-					_xmlParts.Add(new OfficePart(_package.GetPart(qatUri), XMLParts.QAT12, relationship.Id));
-				}
-				break;
-			}
-		}
-
-		#region Basic Accessors
-		public Package UnderlyingPackage => _package;
-
-	    public List<OfficePart> Parts => _xmlParts;
-
-	    public string Name => _fileName;
-
-	    public bool IsDirty
-		{
-			get => _isDirty;
-	        set => _isDirty = value;
-	    }
-
-		public bool ReadOnly => _isReadOnly;
-
-	    public bool HasCustomUI
-		{
-			get
-			{
-				if (_xmlParts == null || _xmlParts.Count == 0) return false;
-
-				foreach (var part in _xmlParts)
-				{
-				    if (part.PartType == XMLParts.RibbonX12 || part.PartType == XMLParts.RibbonX14)
-				    {
-				        return true;
-				    }
-				}
-
-				return false;
-			}
-		}
-
-	    public OfficeApplications FileType => MapFileType(Path.GetExtension(_fileName));
-		#endregion
-
-		public static OfficeApplications MapFileType(string extension)
-		{
-			extension = extension.ToLower();
-			if (extension.StartsWith(".do"))
-				return OfficeApplications.Word;
-			if (extension.StartsWith(".xl"))
-				return OfficeApplications.Excel;
-			if (extension.StartsWith(".pp"))
-				return OfficeApplications.PowerPoint;
-
-			Debug.Assert(false);
-			return OfficeApplications.XML;
-		}
-
-		public void Save(string fileName = null)
-		{
-		    if (string.IsNullOrEmpty(fileName))
-		        fileName = _fileName;
-
-			Debug.Assert(_package != null, "Failed to get packge.");
-			Debug.Assert(!_isReadOnly, "File is ReadOnly!");
-
-			if (_package == null || _isReadOnly) return;
-			if (!_isDirty) return;
-
-			_package.Flush();
-			_package.Close();
-
-			try
-			{
-				File.Copy(_tempFileName, fileName, true /*overwrite*/);
-			}
-			finally
-			{
-				Init();
-			}
-
-			_isDirty = false;
-		}
-
-		public void RemoveCustomPart(XMLParts partType)
-		{
-			Debug.Assert(!_isReadOnly, "File is ReadOnly!");
-			if (_isReadOnly) return;
-
-			for (int i = _xmlParts.Count - 1; i >= 0; i--)
-			{
-				if (_xmlParts[i].PartType != partType) continue;
-
-				OfficePart part = _xmlParts[i];
-				part.Remove();
-
-				part = null;
-				_xmlParts.RemoveAt(i);
-
-				_package.Flush();
-				_isDirty = true;
-			}
-		}
-
-		public void SaveCustomPart(XMLParts partType, string text)
-		{
-			SaveCustomPart(partType, text, false /*isCreatingNewPart*/);
-		}
-
-		public void SaveCustomPart(XMLParts partType, string text, bool isCreatingNewPart)
-		{
-			Debug.Assert(!_isReadOnly, "File is ReadOnly!");
-			if (_isReadOnly) return;
-
-			OfficePart targetPart = RetrieveCustomPart(partType);
-
-			if (targetPart == null)
-			{
-				if (isCreatingNewPart)
-				{
-					targetPart = this.CreateCustomPart(partType);
-				}
-				else
-				{
-					return;
-				}
-			}
-
-			Debug.Assert(targetPart != null);
-			targetPart.Save(text);
-			_isDirty = true;
-		}
-
-		public OfficePart CreateCustomPart(XMLParts partType)
-		{
-			string relativePath;
-			string relType;
-
-			switch (partType)
-			{
-				case XMLParts.RibbonX12:
-					relativePath = "/customUI/customUI.xml";
-					relType = CustomUIPartRelType;
-					break;
-				case XMLParts.RibbonX14:
-					relativePath = "/customUI/customUI14.xml";
-					relType = CustomUI14PartRelType;
-					break;
-				case XMLParts.QAT12:
-					relativePath = "/customUI/qat.xml";
-					relType = QATPartRelType;
-					break;
-				default:
-					Debug.Assert(false, "Unknown type");
-					return null;
-			}
-
-			Uri customUIUri = new Uri(relativePath, UriKind.Relative);
-			PackageRelationship relationship = _package.CreateRelationship(customUIUri, TargetMode.Internal, relType);
-
-			OfficePart part = null;
-			if (!_package.PartExists(customUIUri))
-			{
-				part = new OfficePart(_package.CreatePart(customUIUri, "application/xml"), partType, relationship.Id);
-			}
-			else
-			{
-				part = new OfficePart(_package.GetPart(customUIUri), partType, relationship.Id);
-			}
-			Debug.Assert(part != null, "Fail to create custom part.");
-
-			_xmlParts.Add(part);
-			_isDirty = true;
-
-			return part;
-		}
-
-		public OfficePart RetrieveCustomPart(XMLParts partType)
-		{
-			Debug.Assert(_xmlParts != null);
-			if (_xmlParts == null || _xmlParts.Count == 0) return null;
-
-			for (int i = 0; i < _xmlParts.Count; i++)
-			{
-				if (_xmlParts[i].PartType == partType)
-				{
-					return _xmlParts[i];
-				}
-			}
-			return null;
-		}
-
-		#region IDisposable Members
-
-		private bool _disposed;
-
-		public void Dispose()
-		{
-			this.Dispose(false /*isFramework*/);
-			GC.SuppressFinalize(this);
-		}
-
-		private void Dispose(bool isFramework)
-		{
-			if (_disposed) return;
-
-			if (!isFramework)
-			{
-				_fileName = null;
-				if (_xmlParts != null && _xmlParts.Count > 0)
-				{
-					for (int i = 0; i < _xmlParts.Count; i++)
-					{
-						_xmlParts[i] = null;
-					}
-				}
-
-				if (_package != null)
-				{
-					try
-					{
-						_package.Close();
-					}
-					catch (ObjectDisposedException ex)
-					{
-						Debug.Assert(false, ex.Message);
-						Debug.Fail(ex.Message);
-					}
-					_package = null;
-				}
-
-				if (_tempFileName != null)
-				{
-					try
-					{
-						File.Delete(_tempFileName);
-					}
-					catch (Exception ex)
-					{
-						Debug.Assert(false, ex.Message);
-						Debug.Fail(ex.Message);
-					}
-					_tempFileName = null;
-				}
-			}
-			_disposed = true;
-		}
-
-		#endregion
-	}
-
-	public class OfficePart
-	{
-		XMLParts _partType;
-		PackagePart _part;
-		string _id;
-		string _name;
-
-		public OfficePart(PackagePart part, XMLParts partType, string relationshipId)
-		{
-			_part = part;
-			_partType = partType;
-			_id = relationshipId;
-			_name = System.IO.Path.GetFileName(_part.Uri.ToString());
-		}
-
-		public PackagePart Part => _part;
-
-	    public XMLParts PartType => _partType;
-
-	    public string Name => _name;
-
-	    public string ReadContent()
-		{
-			TextReader rd = new StreamReader(_part.GetStream(System.IO.FileMode.Open, System.IO.FileAccess.Read));
-
-			Debug.Assert(rd != null, "Fail to get TextReader.");
-			if (rd == null) return null;
-
-			string text = rd.ReadToEnd();
-			rd.Close();
-			return text;
-		}
-
-		public void Save(string text)
-		{
-			Debug.Assert(text != null);
-			if (text == null) return;
-
-			TextWriter tw = new StreamWriter(_part.GetStream(FileMode.Create, FileAccess.Write));
-
-			Debug.Assert(tw != null, "Fail to get TextWriter.");
-			if (tw == null) return;
-
-			tw.Write(text);
-			tw.Flush();
-			tw.Close();
-		}
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.IO.Packaging;
+
+    public enum XmlParts
+    {
+        Qat12,
+        RibbonX12,
+        RibbonX14,
+        LastEntry // Always Last
+    }
+
+    public enum OfficeApplications
+    {
+        Word,
+        Excel,
+        PowerPoint,
+        Xml,
+    }
+
+    public class OfficeDocument : IDisposable
+    {
+        public const string CustomUiPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/extensibility";
+
+        public const string CustomUi14PartRelType = "http://schemas.microsoft.com/office/2007/relationships/ui/extensibility";
+
+        public const string QatPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/customization";
+
+        public const string ImagePartRelType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
         
-        // TODO: Previous Windows Forms approach of returning the TreeNodes directly does not make sense in a ViewModel approach
-        // TOOD: Leading understocre  removed for
-        public Dictionary<string, BitmapImage> GetImages()
+        private readonly bool isReadOnly;
+
+        private Package package;
+
+        private List<OfficePart> xmlParts;
+
+        private bool isDirty;
+        
+        private string fileName;
+
+        private string tempFileName;
+        
+        private bool disposed;
+
+        public OfficeDocument(string fileName)
         {
-            var imageCollection = new Dictionary<string, BitmapImage>();
-
-            foreach (PackageRelationship relationship in _part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
+            if (fileName == null)
             {
-                Uri customImageUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (!_part.Package.PartExists(customImageUri)) continue;
-
-                PackagePart imagePart = _part.Package.GetPart(customImageUri);
-
-                Stream imageStream = imagePart.GetStream(FileMode.Open, FileAccess.Read);
-
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = imageStream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-                
-                //var key = "_" + relationship.Id;
-
-                imageCollection.Add(relationship.Id, image);
-                
-                imageStream.Close();
+                throw new ArgumentNullException(nameof(fileName));
             }
 
-            return imageCollection;
+            if (fileName.Length == 0)
+            {
+                throw new ArgumentException("File name cannot be empty.");
+            }
+
+            this.fileName = fileName;
+            this.isReadOnly = (int)(File.GetAttributes(this.fileName) & FileAttributes.ReadOnly) != 0;
+
+            this.tempFileName = Path.GetTempFileName();
+
+            File.Copy(this.fileName, this.tempFileName, true /*overwrite*/);
+            File.SetAttributes(this.tempFileName, FileAttributes.Normal);
+
+            this.Init();
+            this.isDirty = false;
         }
 
-        public string AddImage(string fileName, string id)
-		{
-			if (_partType != XMLParts.RibbonX12 && _partType != XMLParts.RibbonX14)
-			{
-				Debug.Assert(false);
-				return null;
-			}
+        ~OfficeDocument()
+        {
+            this.Dispose(true /*isFramework*/);
+        }
 
-			if (fileName == null) throw new ArgumentNullException(nameof(fileName));
-			if (fileName.Length == 0) return null;
+        public Package UnderlyingPackage => this.package;
 
-			if (id == null) throw new ArgumentNullException(nameof(id));
-			if (id.Length == 0) throw new ArgumentException(StringsResource.idsNonEmptyId);
+        public List<OfficePart> Parts => this.xmlParts;
 
-			if (_part.RelationshipExists(id))
-			{
-				id = "rId";
-			}
-			return AddImageHelper(fileName, id);
-		}
+        public string Name => this.fileName;
 
-		private string AddImageHelper(string fileName, string id)
-		{
-			if (fileName == null) throw new ArgumentNullException(nameof(fileName));
+        public bool IsDirty
+        {
+            get => this.isDirty;
+            set => this.isDirty = value;
+        }
 
-			Debug.Assert(File.Exists(fileName), fileName + "does not exist.");
-			if (!File.Exists(fileName)) return null;
+        public bool ReadOnly => this.isReadOnly;
 
-			BinaryReader br = new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
-			Debug.Assert(br != null, "Fail to create a BinaryReader from file.");
-			if (br == null) return null;
+        public bool HasCustomUi
+        {
+            get
+            {
+                if (this.xmlParts == null || this.xmlParts.Count == 0)
+                {
+                    return false;
+                }
 
-			Uri imageUri = new Uri("images/" + Path.GetFileName(fileName), UriKind.Relative);
-			int fileIndex = 0;
-			while (true)
-			{
-				if (_part.Package.PartExists(PackUriHelper.ResolvePartUri(_part.Uri, imageUri)))
-				{
-					Debug.Write(imageUri.ToString() + " already exists.");
-					imageUri = new Uri(
-						"images/" +
-						Path.GetFileNameWithoutExtension(fileName) +
-						(fileIndex++).ToString() +
-						Path.GetExtension(fileName),
-						UriKind.Relative);
-					continue;
-				}
-				break;
-			}
+                foreach (var part in this.xmlParts)
+                {
+                    if (part.PartType == XmlParts.RibbonX12 || part.PartType == XmlParts.RibbonX14)
+                    {
+                        return true;
+                    }
+                }
 
-			if (id != null)
-			{
-				int idIndex = 0;
-				string testId = id;
-				while (true)
-				{
-					if (_part.RelationshipExists(testId))
-					{
-						Debug.Write(testId + " already exists.");
-						testId = id + (idIndex++);
-						continue;
-					}
-					id = testId;
-					break;
-				}
-			}
+                return false;
+            }
+        }
+        
+        public OfficeApplications FileType => MapFileType(Path.GetExtension(this.fileName));
 
-			PackageRelationship imageRel = _part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, id);
+        public static OfficeApplications MapFileType(string extension)
+        {
+            extension = extension.ToLower();
 
-			Debug.Assert(imageRel != null, "Fail to create image relationship.");
-			if (imageRel == null) return null;
+            if (extension.StartsWith(".do"))
+            {
+                return OfficeApplications.Word;
+            }
 
-			PackagePart imagePart = _part.Package.CreatePart(
-				PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri),
-				OfficePart.MapImageContentType(Path.GetExtension(fileName)));
+            if (extension.StartsWith(".xl"))
+            {
+                return OfficeApplications.Excel;
+            }
 
-			Debug.Assert(imagePart != null, "Fail to create image part.");
-			if (imagePart == null) return null;
+            if (extension.StartsWith(".pp"))
+            {
+                return OfficeApplications.PowerPoint;
+            }
 
-			BinaryWriter bw = new BinaryWriter(imagePart.GetStream(FileMode.Create, FileAccess.Write));
-			Debug.Assert(bw != null, "Fail to create a BinaryWriter to write to part.");
-			if (bw == null) return null;
+            Debug.Assert(false, "Unrecognized extension passed");
+            return OfficeApplications.Xml;
+        }
 
-			byte[] buffer = new byte[1024];
-			int byteCount = 0;
-			while ((byteCount = br.Read(buffer, 0, buffer.Length)) > 0)
-			{
-				bw.Write(buffer, 0, byteCount);
-			}
+        public void Save(string customFileName = null)
+        {
+            if (string.IsNullOrEmpty(customFileName))
+            {
+                customFileName = this.fileName;
+            }
 
-			bw.Flush();
-			bw.Close();
-			br.Close();
+            Debug.Assert(this.package != null, "Failed to get packge.");
+            Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
 
-			return imageRel.Id;
-		}
+            if (this.package == null || this.isReadOnly || !this.IsDirty)
+            {
+                return;
+            }
+            
+            this.package.Flush();
+            this.package.Close();
 
-		public void RemoveImage(string id)
-		{
-			if (id == null) throw new ArgumentNullException("id");
-			if (id.Length == 0) return;
+            try
+            {
+                File.Copy(this.tempFileName, customFileName, true /*overwrite*/);
+            }
+            finally
+            {
+                this.Init();
+            }
 
-			if (!_part.RelationshipExists(id)) return;
+            this.isDirty = false;
+        }
 
-			PackageRelationship imageRel = _part.GetRelationship(id);
+        public void RemoveCustomPart(XmlParts partType)
+        {
+            Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
+            if (this.isReadOnly)
+            {
+                return;
+            }
 
-			Uri imageUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri);
-			if (_part.Package.PartExists(imageUri))
-			{
-				_part.Package.DeletePart(imageUri);
-			}
+            for (int i = this.xmlParts.Count - 1; i >= 0; i--)
+            {
+                if (this.xmlParts[i].PartType != partType)
+                {
+                    continue;
+                }
 
-			_part.DeleteRelationship(id);
-		}
+                var part = this.xmlParts[i];
+                part.Remove();
+                
+                this.xmlParts.RemoveAt(i);
 
-		public void Remove()
-		{
-			// Remove all image parts first
-			foreach (PackageRelationship relationship in _part.GetRelationships())
-			{
-				Uri relUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-				if (_part.Package.PartExists(relUri))
-				{
-					_part.Package.DeletePart(relUri);
-				}
-			}
+                this.package.Flush();
+                this.isDirty = true;
+            }
+        }
 
-			_part.Package.DeleteRelationship(_id);
-			_part.Package.DeletePart(_part.Uri);
+        public void SaveCustomPart(XmlParts partType, string text)
+        {
+            this.SaveCustomPart(partType, text, false /*isCreatingNewPart*/);
+        }
 
-			_part = null;
-			_id = null;
-		}
+        public void SaveCustomPart(XmlParts partType, string text, bool isCreatingNewPart)
+        {
+            Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
+            if (this.isReadOnly)
+            {
+                return;
+            }
 
-		public void ChangeImageId(string source, string target)
-		{
-			if (source == null) throw new ArgumentNullException("source");
-			if (target == null) throw new ArgumentNullException("target");
-			if (target.Length == 0) throw new ArgumentException(StringsResource.idsNonEmptyId);
+            var targetPart = this.RetrieveCustomPart(partType);
 
-			if (source == target)
-			{
-				return;
-			}
+            if (targetPart == null)
+            {
+                if (isCreatingNewPart)
+                {
+                    targetPart = this.CreateCustomPart(partType);
+                }
+                else
+                {
+                    return;
+                }
+            }
 
-			if (!_part.RelationshipExists(source)) return;
-			if (_part.RelationshipExists(target))
-			{
-				throw new Exception(StringsResource.idsDuplicateId.Replace("|1", target));
-			}
+            Debug.Assert(targetPart != null, "targetPart is null when saving custom part");
+            targetPart.Save(text);
+            this.isDirty = true;
+        }
 
-			PackageRelationship imageRel = _part.GetRelationship(source);
+        public OfficePart CreateCustomPart(XmlParts partType)
+        {
+            string relativePath;
+            string relType;
 
-			_part.CreateRelationship(imageRel.TargetUri, imageRel.TargetMode, imageRel.RelationshipType, target);
-			_part.DeleteRelationship(source);
-		}
+            switch (partType)
+            {
+                case XmlParts.RibbonX12:
+                    relativePath = "/customUI/customUI.xml";
+                    relType = CustomUiPartRelType;
+                    break;
+                case XmlParts.RibbonX14:
+                    relativePath = "/customUI/customUI14.xml";
+                    relType = CustomUi14PartRelType;
+                    break;
+                case XmlParts.Qat12:
+                    relativePath = "/customUI/qat.xml";
+                    relType = QatPartRelType;
+                    break;
+                default:
+                    Debug.Assert(false, "Unknown type");
+                    // ReSharper disable once HeuristicUnreachableCode
+                    return null;
+            }
 
-		private static string MapImageContentType(string extension)
-		{
-			if (extension == null) throw new ArgumentNullException(nameof(extension));
-			if (extension.Length == 0) throw new ArgumentException("Extension cannot be empty.");
+            var customUiUri = new Uri(relativePath, UriKind.Relative);
+            var relationship = this.package.CreateRelationship(customUiUri, TargetMode.Internal, relType);
 
-			var extLowerCase = extension.ToLower();
+            OfficePart part;
+            if (!this.package.PartExists(customUiUri))
+            {
+                part = new OfficePart(this.package.CreatePart(customUiUri, "application/xml"), partType, relationship.Id);
+            }
+            else
+            {
+                part = new OfficePart(this.package.GetPart(customUiUri), partType, relationship.Id);
+            }
 
-			switch (extLowerCase)
-			{
-				case "jpg":
-					return "image/jpeg";
-				default:
-					return "image/" + extLowerCase;
-			}
-		}
-	}
+            Debug.Assert(part != null, "Fail to create custom part.");
 
-	public enum XMLParts
-	{
-		QAT12,
-		RibbonX12,
-		RibbonX14,
-		LastEntry //Always Last
-	}
+            this.xmlParts.Add(part);
+            this.isDirty = true;
 
-	public enum OfficeApplications
-	{
-		Word,
-		Excel,
-		PowerPoint,
-		XML,
-	}
+            return part;
+        }
+
+        public OfficePart RetrieveCustomPart(XmlParts partType)
+        {
+            Debug.Assert(this.xmlParts != null, "Document has no xmlParts to retrieve");
+            if (this.xmlParts == null || this.xmlParts.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (var part in this.xmlParts)
+            {
+                if (part.PartType == partType)
+                {
+                    return part;
+                }
+            }
+
+            return null;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(false /*isFramework*/);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool isFramework)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (!isFramework)
+            {
+                this.fileName = null;
+                if (this.xmlParts != null && this.xmlParts.Count > 0)
+                {
+                    for (int i = 0; i < this.xmlParts.Count; i++)
+                    {
+                        this.xmlParts[i] = null;
+                    }
+                }
+
+                if (this.package != null)
+                {
+                    try
+                    {
+                        this.package.Close();
+                    }
+                    catch (ObjectDisposedException ex)
+                    {
+                        Debug.Fail(ex.Message);
+                    }
+
+                    this.package = null;
+                }
+
+                if (this.tempFileName != null)
+                {
+                    try
+                    {
+                        File.Delete(this.tempFileName);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Fail(ex.Message);
+                    }
+
+                    this.tempFileName = null;
+                }
+            }
+
+            this.disposed = true;
+        }
+
+        private void Init()
+        {
+            this.package = Package.Open(this.tempFileName, FileMode.Open, this.isReadOnly ? FileAccess.Read : FileAccess.ReadWrite);
+
+            Debug.Assert(this.package != null, "Failed to get packge.");
+            if (this.package == null)
+            {
+                return;
+            }
+
+            this.xmlParts = new List<OfficePart>();
+
+            foreach (var relationship in this.package.GetRelationshipsByType(CustomUi14PartRelType))
+            {
+                var customUiUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
+                if (this.package.PartExists(customUiUri))
+                {
+                    this.xmlParts.Add(new OfficePart(this.package.GetPart(customUiUri), XmlParts.RibbonX14, relationship.Id));
+                }
+
+                break;
+            }
+
+            foreach (var relationship in this.package.GetRelationshipsByType(CustomUiPartRelType))
+            {
+                var customUiUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
+                if (this.package.PartExists(customUiUri))
+                {
+                    this.xmlParts.Add(new OfficePart(this.package.GetPart(customUiUri), XmlParts.RibbonX12, relationship.Id));
+                }
+
+                break;
+            }
+
+            foreach (var relationship in this.package.GetRelationshipsByType(QatPartRelType))
+            {
+                var qatUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
+                if (this.package.PartExists(qatUri))
+                {
+                    this.xmlParts.Add(new OfficePart(this.package.GetPart(qatUri), XmlParts.Qat12, relationship.Id));
+                }
+
+                break;
+            }
+        }
+    }
 }

@@ -58,17 +58,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Data\CodeViewModel.cs" />
     <Compile Include="Data\DataTypeConverter.cs" />
-    <Compile Include="Data\OfficePartViewModel.cs" />
-    <Compile Include="Data\OfficeDocumentViewModel.cs" />
-    <Compile Include="Data\TreeViewViewModel.cs" />
+    <Compile Include="Data\OfficePart.cs" />
+    <Compile Include="Model\OfficePartViewModel.cs" />
+    <Compile Include="Model\OfficeDocumentViewModel.cs" />
+    <Compile Include="Model\TreeViewItemViewModel.cs" />
     <Compile Include="ImagesResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ImagesResource.resx</DependentUpon>
     </Compile>
     <Compile Include="Data\OfficeDocument.cs" />
+    <Compile Include="PropertyChangedExtension.cs" />
     <Compile Include="StringsResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

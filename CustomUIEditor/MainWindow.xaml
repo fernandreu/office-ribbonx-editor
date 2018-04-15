@@ -22,29 +22,29 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
             <MenuItem Header="_File">
-                <MenuItem Header="Open" InputGestureText="Ctrl+O" Click="Open_Click">
+                <MenuItem Header="Open" InputGestureText="Ctrl+O" Click="OpenClick">
                     <MenuItem.Icon>
                         <Image Source="/Resources/open.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Click="Save_Click">
+                <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Click="SaveClick">
                     <MenuItem.Icon>
                         <Image Source="/Resources/save.png"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
-                <MenuItem Header="Save All Documents" Click="SaveAll_Click">
+                <MenuItem Header="Save All Documents" Click="SaveAllClick">
                     <MenuItem.Icon>
                         <Image Source="/Resources/save.png"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
-                <MenuItem Header="Save As" Click="SaveAs_Click"/>
+                <MenuItem Header="Save As" Click="SaveAsClick"/>
                 <Separator/>
                 <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
                 <Separator/>
-                <MenuItem Header="Exit" Click="Exit_Click"/>
+                <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z">
@@ -123,12 +123,12 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="Customizing the Ribbon" Click="ShowHelp_CustomizeTheRibbon"/>
-                <MenuItem Header="Customizing the Backstage" Click="ShowHelp_CustomizeTheOustpace"/>
-                <MenuItem Header="Repurposing built-in commands" Click="ShowHelp_RepurposingControls"/>
-                <MenuItem Header="Office Fluent UI Command Identifiers" Click="ShowHelp_CommandIdentifiers"/>
-                <MenuItem Header="Creating Office add-ins using Visual Studio (VSTO)" Click="ShowHelp_VSTO"/>
-                <MenuItem Header="Office Dev Center" Click="ShowHelp_OfficeDevCenter"/>
+                <MenuItem Header="Customizing the Ribbon" Click="ShowHelpCustomizeTheRibbon"/>
+                <MenuItem Header="Customizing the Backstage" Click="ShowHelpCustomizeTheOustpace"/>
+                <MenuItem Header="Repurposing built-in commands" Click="ShowHelpRepurposingControls"/>
+                <MenuItem Header="Office Fluent UI Command Identifiers" Click="ShowHelpCommandIdentifiers"/>
+                <MenuItem Header="Creating Office add-ins using Visual Studio (VSTO)" Click="ShowHelpVsto"/>
+                <MenuItem Header="Office Dev Center" Click="ShowHelpOfficeDevCenter"/>
                 <Separator/>
                 <MenuItem Header="About"/>
             </MenuItem>
@@ -137,14 +137,14 @@
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
 
-                <Button ToolTip="Open an Office document" Click="Open_Click">
+                <Button ToolTip="Open an Office document" Click="OpenClick">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/open.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Open</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Save the current Office document" Click="Save_Click">
+                <Button ToolTip="Save the current Office document" Click="SaveClick">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/save.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
@@ -199,7 +199,7 @@
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
-                        <EventSetter Event="RequestBringIntoView" Handler="TreeViewItem_RequestBringIntoView"/>
+                        <EventSetter Event="RequestBringIntoView" Handler="TreeViewItemRequestBringIntoView"/>
                         <EventSetter Event="Selected" Handler="TreeViewItem_OnSelected"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>

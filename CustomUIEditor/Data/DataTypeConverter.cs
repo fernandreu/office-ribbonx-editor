@@ -1,14 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Data;
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DataTypeConverter.cs" company="FA">
+//   Fernando Andreu
+// </copyright>
+// <summary>
+//   A value converter that gets the type of that value. This might be useful for EventTriggers and such that only need
+//   to occur when selection is of a given type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
 
 namespace CustomUIEditor.Data
 {
-    public class DataTypeConverter: IValueConverter
+    using System;
+    using System.Globalization;
+    using System.Windows.Data;
+
+    public class DataTypeConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
