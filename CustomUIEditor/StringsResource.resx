@@ -126,6 +126,12 @@
   <data name="idsChangeImageId" xml:space="preserve">
     <value>Change ID</value>
   </data>
+  <data name="idsCloseWarningMessage" xml:space="preserve">
+    <value>File {0} has unsaved changes. Do you want to save them before exiting the program?</value>
+  </data>
+  <data name="idsCloseWarningTitle" xml:space="preserve">
+    <value>Unsaved Changes</value>
+  </data>
   <data name="idsColumnStatus" xml:space="preserve">
     <value>Col </value>
     <comment>Shown in the status bar</comment>
@@ -137,15 +143,13 @@
     <value>Custom UI</value>
   </data>
   <data name="idsCustomUINamespace" xml:space="preserve">
-    <value>Custom UI XML namespace must be "|1".</value>
-    <comment>|1 is the customUI namespace.</comment>
+    <value>Custom UI XML namespace must be "{0}".</value>
   </data>
   <data name="idsCut" xml:space="preserve">
     <value>Cu&amp;t</value>
   </data>
   <data name="idsDuplicateId" xml:space="preserve">
-    <value>OOXML part Id "|1" already exists.</value>
-    <comment>|1 is the target Id.</comment>
+    <value>OOXML part Id "{0}" already exists.</value>
   </data>
   <data name="idsFilterAllFiles" xml:space="preserve">
     <value>All Files (*.*)|*.*</value>
@@ -161,6 +165,57 @@
   </data>
   <data name="idsFilterPPTDocuments" xml:space="preserve">
     <value>Microsoft PowerPoint Presentations|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
+  </data>
+  <data name="idsFilterSaveAs0" xml:space="preserve">
+    <value>Excel Workbook|*.xlsx</value>
+  </data>
+  <data name="idsFilterSaveAs1" xml:space="preserve">
+    <value>Excel Macro-Enabled Workbook|*.xlsm</value>
+  </data>
+  <data name="idsFilterSaveAs10" xml:space="preserve">
+    <value>PowerPoint Show|*.ppsx</value>
+  </data>
+  <data name="idsFilterSaveAs11" xml:space="preserve">
+    <value>PowerPoint Macro-Enabled Show|*.ppsm</value>
+  </data>
+  <data name="idsFilterSaveAs12" xml:space="preserve">
+    <value>PowerPoint Add-in|*.ppam</value>
+  </data>
+  <data name="idsFilterSaveAs13" xml:space="preserve">
+    <value>Word Document|*.docx</value>
+  </data>
+  <data name="idsFilterSaveAs14" xml:space="preserve">
+    <value>Word Macro-Enabled Document|*.docm</value>
+  </data>
+  <data name="idsFilterSaveAs15" xml:space="preserve">
+    <value>Word Template|*.dotx</value>
+  </data>
+  <data name="idsFilterSaveAs16" xml:space="preserve">
+    <value>Word Macro-Enabled Template|*.dotm</value>
+  </data>
+  <data name="idsFilterSaveAs2" xml:space="preserve">
+    <value>Excel Binary Workbook|*.xlsb</value>
+  </data>
+  <data name="idsFilterSaveAs3" xml:space="preserve">
+    <value>Excel Template|*.xltx</value>
+  </data>
+  <data name="idsFilterSaveAs4" xml:space="preserve">
+    <value>Excel Macro-Enabled Template|*.xltm</value>
+  </data>
+  <data name="idsFilterSaveAs5" xml:space="preserve">
+    <value>Excel Add-in|*.xlam</value>
+  </data>
+  <data name="idsFilterSaveAs6" xml:space="preserve">
+    <value>PowerPoint Presentation|*.pptx</value>
+  </data>
+  <data name="idsFilterSaveAs7" xml:space="preserve">
+    <value>PowerPoint Macro-Enabled Presentation|*.pptm</value>
+  </data>
+  <data name="idsFilterSaveAs8" xml:space="preserve">
+    <value>PowerPoint Template|*.potx</value>
+  </data>
+  <data name="idsFilterSaveAs9" xml:space="preserve">
+    <value>PowerPoint Macro-Enabled Template|*.potm</value>
   </data>
   <data name="idsFilterWordDocuments" xml:space="preserve">
     <value>Microsoft Word Documents|*.do?x;*.do?m</value>
@@ -208,6 +263,9 @@
   <data name="idsRemoveImage" xml:space="preserve">
     <value>Remove</value>
   </data>
+  <data name="idsSaveDocumentAsDialogTitle" xml:space="preserve">
+    <value>Save OOXML Document</value>
+  </data>
   <data name="idsSellectAll" xml:space="preserve">
     <value>Select &amp;All</value>
   </data>
@@ -221,8 +279,7 @@
     <value>&amp;Undo</value>
   </data>
   <data name="idsUnknownNamespace" xml:space="preserve">
-    <value>Unknown namespace "|1".</value>
-    <comment>|1 is the Xml namespace.</comment>
+    <value>Unknown namespace "{0}".</value>
   </data>
   <data name="idsValidXml" xml:space="preserve">
     <value>Custom UI XML is well formed!</value>

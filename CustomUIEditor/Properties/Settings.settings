@@ -5,5 +5,8 @@
     <Setting Name="EditorFontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">12</Value>
     </Setting>
+    <Setting Name="RecentFIles" Type="System.Collections.Specialized.StringCollection" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

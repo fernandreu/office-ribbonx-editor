@@ -91,10 +91,8 @@ namespace CustomUIEditor.Model
             }
 
             // Instead, use the parts currently shown in the editor
-            for (var i = 0; i < this.Children.Count; i++)
+            foreach (var child in this.Children)
             {
-                var child = this.Children[i];
-
                 if (!(child is OfficePartViewModel part)) 
                 {
                     continue;  // TODO: Remember processing pictures here

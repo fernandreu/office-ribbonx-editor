@@ -84,7 +84,7 @@ namespace CustomUIEditor.Model
             get => this.isExpanded;
             set
             {
-                this.SetField(ref this.isExpanded, value, nameof(this.IsExpanded), this.PropertyChanged);
+                this.SetField(ref this.isExpanded, value, this.PropertyChanged, nameof(this.IsExpanded));
 
                 // Expand all the way up to the root.
                 if (this.isExpanded && this.Parent != null)
@@ -109,7 +109,7 @@ namespace CustomUIEditor.Model
             get => this.isSelected;
             set
             {
-                if (this.SetField(ref this.isSelected, value, nameof(this.IsSelected), this.PropertyChanged) && this.isSelected)
+                if (this.SetField(ref this.isSelected, value, this.PropertyChanged, nameof(this.IsSelected)) && this.isSelected)
                 {
                     this.IsExpanded = true; // To select something, you should be able to see it
                 }
@@ -122,7 +122,7 @@ namespace CustomUIEditor.Model
         public bool CanHaveContents
         {
             get => this.canHaveContents;
-            set => this.SetField(ref this.canHaveContents, value, nameof(this.CanHaveContents), this.PropertyChanged);
+            set => this.SetField(ref this.canHaveContents, value, this.PropertyChanged, nameof(this.CanHaveContents), nameof(this.CannotHaveContents));
         }
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace CustomUIEditor.Model
         public string Contents
         {
             get => this.contents;
-            set => this.SetField(ref this.contents, value, nameof(this.Contents), this.PropertyChanged);
+            set => this.SetField(ref this.contents, value, this.PropertyChanged, nameof(this.Contents));
         }
         
         public TreeViewItemViewModel Parent { get; }

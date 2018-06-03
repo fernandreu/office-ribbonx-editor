@@ -44,7 +44,7 @@
                 <MenuItem Header="Save As" Click="SaveAsClick"/>
                 <Separator/>
                 <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
-                <Separator/>
+                <local:RecentFileList x:Name="RecentFileList"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit">

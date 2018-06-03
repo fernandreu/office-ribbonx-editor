@@ -11,20 +11,22 @@ namespace CustomUIEditor
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Runtime.Remoting.Channels;
     using System.Text;
     using System.Windows;
     using System.Windows.Controls;
     using System.Xml;
     using System.Xml.Schema;
 
-    using CustomUIEditor.Data;
-    using CustomUIEditor.Model;
-
+    using Data;
     using Microsoft.Win32;
+    using Model;
+
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -58,6 +60,8 @@ namespace CustomUIEditor
 
             var applicationFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             this.LoadXmlSchemas(applicationFolder + @"\Schemas\");
+
+            this.RecentFileList.MenuClick += (sender, args) => this.FinishOpeningFile(args.Filepath);
         }
         
         public event PropertyChangedEventHandler PropertyChanged;
@@ -72,7 +76,7 @@ namespace CustomUIEditor
         public bool ReloadOnSave
         {
             get => this.reloadOnSave;
-            set => this.SetField(ref this.reloadOnSave, value, nameof(this.ReloadOnSave), this.PropertyChanged);
+            set => this.SetField(ref this.reloadOnSave, value, this.PropertyChanged, nameof(this.ReloadOnSave));
         }
 
         /// <summary>
@@ -81,7 +85,7 @@ namespace CustomUIEditor
         public string StatusMessage
         {
             get => this.statusMessage;
-            set => this.SetField(ref this.statusMessage, value, nameof(this.StatusMessage), this.PropertyChanged);
+            set => this.SetField(ref this.statusMessage, value, this.PropertyChanged, nameof(this.StatusMessage));
         }
 
         /// <summary>
@@ -136,20 +140,19 @@ namespace CustomUIEditor
             ofd.FilterIndex = 0;
             ofd.RestoreDirectory = true;
 
-            ofd.FileOk += this.FinishOpeningFile;
+            ofd.FileOk += (sender, e) => this.FinishOpeningFile(((OpenFileDialog)sender).FileName);
             ofd.ShowDialog(this);
         }
 
-        private void FinishOpeningFile(object sender, CancelEventArgs e)
+        private void FinishOpeningFile(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+
             try
             {
-                string fileName = ((OpenFileDialog)sender).FileName;
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    return;
-                }
-
                 Debug.WriteLine("Opening " + fileName + "...");
 
                 var doc = new OfficeDocument(fileName);
@@ -160,6 +163,7 @@ namespace CustomUIEditor
                 }
 
                 this.DocumentList.Add(model);
+                this.RecentFileList.InsertFile(fileName);
                 
                 // UndoRedo
                 ////_commands = new UndoRedo.Control.Commands(rtbCustomUI.Rtf);
@@ -182,39 +186,28 @@ namespace CustomUIEditor
             {
                 return;
             }
-
-            var sfd = new SaveFileDialog();
             
-            sfd.Title = "Save OOXML Document";
-            string[] filters =
+            var filters = new List<string>();
+            for (;;)
             {
-                "Excel Workbook|*.xlsx",
-                "Excel Macro-Enabled Workbook|*.xlsm",
-                "Excel Binary Workbook|*.xlsb",
-                "Excel Template|*.xltx",
-                "Excel Macro-Enabled Template|*.xltm",
-                "Excel Add-in|*.xlam",
-                "PowerPoint Presentation|*.pptx",
-                "PowerPoint Macro-Enabled Presentation|*.pptm",
-                "PowerPoint Template|*.potx",
-                "PowerPoint Macro-Enabled Template|*.potm",
-                "PowerPoint Show|*.ppsx",
-                "PowerPoint Macro-Enabled Show|*.ppsm",
-                "PowerPoint Add-in|*.ppam",
-                "Word Document|*.docx",
-                "Word Macro-Enabled Document|*.docm",
-                "Word Template|*.dotx",
-                "Word Macro-Enabled Template|*.dotm",
-                StringsResource.idsFilterAllFiles,
-            };
-            sfd.Filter = string.Join("|", filters);
-            sfd.FileName = doc.Name;
+                var filter = StringsResource.ResourceManager.GetString("idsFilterSaveAs" + filters.Count);
+                if (filter == null)
+                {
+                    break;
+                }
+
+                filters.Add(filter);
+            }
+
+            filters.Add(StringsResource.idsFilterAllFiles);
+
+            var sfd = new SaveFileDialog { Title = StringsResource.idsSaveDocumentAsDialogTitle, Filter = string.Join("|", filters), FileName = doc.Name };
 
             var ext = Path.GetExtension(doc.Name);
 
             // Find the appropriate FilterIndex
             int i;
-            for (i = 0; i < filters.Length - 1; i++)
+            for (i = 0; i < filters.Count - 1; i++)
             {
                 // -1 to exclude all files
                 var otherExt = filters[i].Split('|')[1].Substring(1);
@@ -226,20 +219,19 @@ namespace CustomUIEditor
 
             sfd.FilterIndex = i + 1;
 
-            sfd.FileOk += this.FinishSavingFile;
+            sfd.FileOk += (sender, args) => this.FinishSavingFile(((SaveFileDialog)sender).FileName);
             sfd.ShowDialog(this);
         }
 
-        private void FinishSavingFile(object sender, CancelEventArgs e)
+        private void FinishSavingFile(string fileName)
         {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return;
+            }
+
             try
             {
-                string fileName = ((SaveFileDialog)sender).FileName;
-                if (string.IsNullOrEmpty(fileName))
-                {
-                    return;
-                }
-
                 // Note: We are assuming that no UI events happen between the SaveFileDialog was
                 // shown and this is called. Otherwise, selection might have changed
                 var doc = this.CurrentDocument;
@@ -253,6 +245,7 @@ namespace CustomUIEditor
                 Debug.WriteLine("Saving " + fileName + "...");
 
                 doc.Save(this.reloadOnSave, fileName);
+                this.RecentFileList.InsertFile(fileName);
             }
             catch (Exception ex)
             {
@@ -353,7 +346,7 @@ namespace CustomUIEditor
             {
                 if (doc.HasUnsavedChanges)
                 {
-                    var result = MessageBox.Show($"File '{doc.Name}' has unsaved changes. Do you want to save them before existing the program?", "Unsaved Changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                    var result = MessageBox.Show(string.Format(StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
                         doc.Save(this.reloadOnSave);
@@ -454,8 +447,8 @@ namespace CustomUIEditor
                 if (xmlDoc.DocumentElement.NamespaceURI != targetSchema.TargetNamespace)
                 {
                     var errorText = new StringBuilder();
-                    errorText.Append(StringsResource.idsUnknownNamespace.Replace("|1", xmlDoc.DocumentElement.NamespaceURI));
-                    errorText.Append("\n" + StringsResource.idsCustomUINamespace.Replace("|1", targetSchema.TargetNamespace));
+                    errorText.Append(string.Format(StringsResource.idsUnknownNamespace, xmlDoc.DocumentElement.NamespaceURI));
+                    errorText.Append("\n" + string.Format(StringsResource.idsCustomUINamespace, targetSchema.TargetNamespace));
 
                     this.ShowError(errorText.ToString());
                     return false;
@@ -537,7 +530,6 @@ namespace CustomUIEditor
             var colCount = 0;
             for (var i = 0; i < txt.Length; i++)
             {
-
                 if (i == pos)
                 {
                     break;

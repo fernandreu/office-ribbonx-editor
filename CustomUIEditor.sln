@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUIEditor", "CustomUIEditor\CustomUIEditor.csproj", "{87EFED6B-45A1-425F-B63B-5894E4FC0C03}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomUIEditorTests", "CustomUIEditorTests\CustomUIEditorTests.csproj", "{D4F06196-AE8D-4DF5-BE6B-49490919A67B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87EFED6B-45A1-425F-B63B-5894E4FC0C03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4F06196-AE8D-4DF5-BE6B-49490919A67B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4F06196-AE8D-4DF5-BE6B-49490919A67B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4F06196-AE8D-4DF5-BE6B-49490919A67B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4F06196-AE8D-4DF5-BE6B-49490919A67B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

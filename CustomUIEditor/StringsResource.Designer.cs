@@ -88,6 +88,24 @@ namespace CustomUIEditor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File {0} has unsaved changes. Do you want to save them before exiting the program?.
+        /// </summary>
+        public static string idsCloseWarningMessage {
+            get {
+                return ResourceManager.GetString("idsCloseWarningMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        public static string idsCloseWarningTitle {
+            get {
+                return ResourceManager.GetString("idsCloseWarningTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Col .
         /// </summary>
         public static string idsColumnStatus {
@@ -115,7 +133,7 @@ namespace CustomUIEditor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom UI XML namespace must be &quot;|1&quot;..
+        ///   Looks up a localized string similar to Custom UI XML namespace must be &quot;{0}&quot;..
         /// </summary>
         public static string idsCustomUINamespace {
             get {
@@ -133,7 +151,7 @@ namespace CustomUIEditor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OOXML part Id &quot;|1&quot; already exists..
+        ///   Looks up a localized string similar to OOXML part Id &quot;{0}&quot; already exists..
         /// </summary>
         public static string idsDuplicateId {
             get {
@@ -183,6 +201,159 @@ namespace CustomUIEditor {
         public static string idsFilterPPTDocuments {
             get {
                 return ResourceManager.GetString("idsFilterPPTDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Workbook|*.xlsx.
+        /// </summary>
+        public static string idsFilterSaveAs0 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Macro-Enabled Workbook|*.xlsm.
+        /// </summary>
+        public static string idsFilterSaveAs1 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Show|*.ppsx.
+        /// </summary>
+        public static string idsFilterSaveAs10 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Macro-Enabled Show|*.ppsm.
+        /// </summary>
+        public static string idsFilterSaveAs11 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Add-in|*.ppam.
+        /// </summary>
+        public static string idsFilterSaveAs12 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Document|*.docx.
+        /// </summary>
+        public static string idsFilterSaveAs13 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs13", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Macro-Enabled Document|*.docm.
+        /// </summary>
+        public static string idsFilterSaveAs14 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Template|*.dotx.
+        /// </summary>
+        public static string idsFilterSaveAs15 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs15", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Macro-Enabled Template|*.dotm.
+        /// </summary>
+        public static string idsFilterSaveAs16 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Binary Workbook|*.xlsb.
+        /// </summary>
+        public static string idsFilterSaveAs2 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Template|*.xltx.
+        /// </summary>
+        public static string idsFilterSaveAs3 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Macro-Enabled Template|*.xltm.
+        /// </summary>
+        public static string idsFilterSaveAs4 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Add-in|*.xlam.
+        /// </summary>
+        public static string idsFilterSaveAs5 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Presentation|*.pptx.
+        /// </summary>
+        public static string idsFilterSaveAs6 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Macro-Enabled Presentation|*.pptm.
+        /// </summary>
+        public static string idsFilterSaveAs7 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Template|*.potx.
+        /// </summary>
+        public static string idsFilterSaveAs8 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Macro-Enabled Template|*.potm.
+        /// </summary>
+        public static string idsFilterSaveAs9 {
+            get {
+                return ResourceManager.GetString("idsFilterSaveAs9", resourceCulture);
             }
         }
         
@@ -322,6 +493,15 @@ namespace CustomUIEditor {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save OOXML Document.
+        /// </summary>
+        public static string idsSaveDocumentAsDialogTitle {
+            get {
+                return ResourceManager.GetString("idsSaveDocumentAsDialogTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select &amp;All.
         /// </summary>
         public static string idsSellectAll {
@@ -358,7 +538,7 @@ namespace CustomUIEditor {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unknown namespace &quot;|1&quot;..
+        ///   Looks up a localized string similar to Unknown namespace &quot;{0}&quot;..
         /// </summary>
         public static string idsUnknownNamespace {
             get {

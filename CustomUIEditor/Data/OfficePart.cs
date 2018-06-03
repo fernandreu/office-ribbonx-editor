@@ -18,28 +18,25 @@ namespace CustomUIEditor.Data
 
     public class OfficePart
     {
-        private readonly XmlParts partType;
-        private readonly string name;
-        private PackagePart part;
         private string id;
 
         public OfficePart(PackagePart part, XmlParts partType, string relationshipId)
         {
-            this.part = part;
-            this.partType = partType;
+            this.Part = part;
+            this.PartType = partType;
             this.id = relationshipId;
-            this.name = Path.GetFileName(this.part.Uri.ToString());
+            this.Name = Path.GetFileName(this.Part.Uri.ToString());
         }
 
-        public PackagePart Part => this.part;
+        public PackagePart Part { get; private set; }
 
-        public XmlParts PartType => this.partType;
+        public XmlParts PartType { get; }
 
-        public string Name => this.name;
+        public string Name { get; }
 
         public string ReadContent()
         {
-            var rd = new StreamReader(this.part.GetStream(FileMode.Open, FileAccess.Read));
+            var rd = new StreamReader(this.Part.GetStream(FileMode.Open, FileAccess.Read));
             var text = rd.ReadToEnd();
             rd.Close();
             return text;
@@ -53,7 +50,7 @@ namespace CustomUIEditor.Data
                 return;
             }
 
-            var tw = new StreamWriter(this.part.GetStream(FileMode.Create, FileAccess.Write));
+            var tw = new StreamWriter(this.Part.GetStream(FileMode.Create, FileAccess.Write));
 
             tw.Write(text);
             tw.Flush();
@@ -66,15 +63,15 @@ namespace CustomUIEditor.Data
         {
             var imageCollection = new Dictionary<string, BitmapImage>();
 
-            foreach (var relationship in this.part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
+            foreach (var relationship in this.Part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
             {
                 var customImageUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (!this.part.Package.PartExists(customImageUri))
+                if (!this.Part.Package.PartExists(customImageUri))
                 {
                     continue;
                 }
 
-                var imagePart = this.part.Package.GetPart(customImageUri);
+                var imagePart = this.Part.Package.GetPart(customImageUri);
 
                 var imageStream = imagePart.GetStream(FileMode.Open, FileAccess.Read);
 
@@ -94,7 +91,7 @@ namespace CustomUIEditor.Data
 
         public string AddImage(string fileName, string imageId)
         {
-            if (this.partType != XmlParts.RibbonX12 && this.partType != XmlParts.RibbonX14)
+            if (this.PartType != XmlParts.RibbonX12 && this.PartType != XmlParts.RibbonX14)
             {
                 return null;
             }
@@ -119,7 +116,7 @@ namespace CustomUIEditor.Data
                 throw new ArgumentException(StringsResource.idsNonEmptyId);
             }
 
-            if (this.part.RelationshipExists(imageId))
+            if (this.Part.RelationshipExists(imageId))
             {
                 imageId = "rId";
             }
@@ -139,38 +136,38 @@ namespace CustomUIEditor.Data
                 return;
             }
 
-            if (!this.part.RelationshipExists(imageId))
+            if (!this.Part.RelationshipExists(imageId))
             {
                 return;
             }
 
-            var imageRel = this.part.GetRelationship(imageId);
+            var imageRel = this.Part.GetRelationship(imageId);
 
             var imageUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri);
-            if (this.part.Package.PartExists(imageUri))
+            if (this.Part.Package.PartExists(imageUri))
             {
-                this.part.Package.DeletePart(imageUri);
+                this.Part.Package.DeletePart(imageUri);
             }
 
-            this.part.DeleteRelationship(imageId);
+            this.Part.DeleteRelationship(imageId);
         }
 
         public void Remove()
         {
             // Remove all image parts first
-            foreach (PackageRelationship relationship in this.part.GetRelationships())
+            foreach (PackageRelationship relationship in this.Part.GetRelationships())
             {
-                Uri relUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (this.part.Package.PartExists(relUri))
+                var relUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
+                if (this.Part.Package.PartExists(relUri))
                 {
-                    this.part.Package.DeletePart(relUri);
+                    this.Part.Package.DeletePart(relUri);
                 }
             }
 
-            this.part.Package.DeleteRelationship(this.id);
-            this.part.Package.DeletePart(this.part.Uri);
+            this.Part.Package.DeleteRelationship(this.id);
+            this.Part.Package.DeletePart(this.Part.Uri);
 
-            this.part = null;
+            this.Part = null;
             this.id = null;
         }
 
@@ -196,20 +193,20 @@ namespace CustomUIEditor.Data
                 return;
             }
 
-            if (!this.part.RelationshipExists(source))
+            if (!this.Part.RelationshipExists(source))
             {
                 return;
             }
 
-            if (this.part.RelationshipExists(target))
+            if (this.Part.RelationshipExists(target))
             {
-                throw new Exception(StringsResource.idsDuplicateId.Replace("|1", target));
+                throw new Exception(string.Format(StringsResource.idsDuplicateId, target));
             }
 
-            var imageRel = this.part.GetRelationship(source);
+            var imageRel = this.Part.GetRelationship(source);
 
-            this.part.CreateRelationship(imageRel.TargetUri, imageRel.TargetMode, imageRel.RelationshipType, target);
-            this.part.DeleteRelationship(source);
+            this.Part.CreateRelationship(imageRel.TargetUri, imageRel.TargetMode, imageRel.RelationshipType, target);
+            this.Part.DeleteRelationship(source);
         }
 
         private static string MapImageContentType(string extension)
@@ -254,7 +251,7 @@ namespace CustomUIEditor.Data
             var fileIndex = 0;
             while (true)
             {
-                if (this.part.Package.PartExists(PackUriHelper.ResolvePartUri(this.part.Uri, imageUri)))
+                if (this.Part.Package.PartExists(PackUriHelper.ResolvePartUri(this.Part.Uri, imageUri)))
                 {
                     Debug.Write(imageUri + " already exists.");
                     imageUri = new Uri(
@@ -275,7 +272,7 @@ namespace CustomUIEditor.Data
                 string testId = imageId;
                 while (true)
                 {
-                    if (this.part.RelationshipExists(testId))
+                    if (this.Part.RelationshipExists(testId))
                     {
                         Debug.Write(testId + " already exists.");
                         testId = imageId + (idIndex++);
@@ -287,9 +284,9 @@ namespace CustomUIEditor.Data
                 }
             }
 
-            var imageRel = this.part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);
+            var imageRel = this.Part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);
 
-            var imagePart = this.part.Package.CreatePart(
+            var imagePart = this.Part.Package.CreatePart(
                 PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri),
                 MapImageContentType(Path.GetExtension(fileName)));
 
