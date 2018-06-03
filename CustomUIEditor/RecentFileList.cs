@@ -27,6 +27,26 @@ namespace CustomUIEditor
 
     public class RecentFileList : Separator
     {
+        private Separator separator;
+
+        private List<RecentFile> recentFiles;
+
+        public RecentFileList()
+        {
+            this.Persister = new RegistryPersister();
+
+            this.MaxNumberOfFiles = 9;
+            this.MaxPathLength = 50;
+            this.MenuItemFormatOneToNine = "_{0}:  {2}";
+            this.MenuItemFormatTenPlus = "{0}:  {2}";
+
+            this.Loaded += (s, e) => this.HookFileMenu();
+        }
+        
+        public delegate string GetMenuItemTextDelegate(int index, string filepath);
+
+        public event EventHandler<MenuClickEventArgs> MenuClick;
+
         public interface IPersist
         {
             List<string> RecentFiles(int max);
@@ -34,7 +54,6 @@ namespace CustomUIEditor
             void InsertFile(string filepath, int max);
 
             void RemoveFile(string filepath, int max);
-
         }
         
         /// <summary>
@@ -60,6 +79,142 @@ namespace CustomUIEditor
         public MenuItem FileMenu { get; private set; }
         
         public GetMenuItemTextDelegate GetMenuItemTextHandler { get; set; }
+        
+        public List<string> RecentFiles => this.Persister.RecentFiles(this.MaxNumberOfFiles);
+        
+        /// <summary>
+        /// Shortens a pathname for display purposes.
+        /// This method is taken from Joe Woodbury's article at: http://www.codeproject.com/KB/cs/mrutoolstripmenu.aspx
+        /// </summary>
+        /// <param name="pathname">The pathname to shorten.</param>
+        /// <param name="maxLength">The maximum number of characters to be displayed.</param>
+        /// <remarks>Shortens a pathname by either removing consecutive components of a path
+        /// and/or by removing characters from the end of the filename and replacing
+        /// then with three elipses (...)
+        /// <para>In all cases, the root of the passed path will be preserved in it's entirety.</para>
+        /// <para>If a UNC path is used or the pathname and maxLength are particularly short,
+        /// the resulting path may be longer than maxLength.</para>
+        /// <para>This method expects fully resolved pathnames to be passed to it.
+        /// (Use Path.GetFullPath() to obtain this.)</para>
+        /// </remarks>
+        /// <returns>The shortened path</returns>
+        public static string ShortenPathname(string pathname, int maxLength)
+        {
+            if (pathname.Length <= maxLength)
+            {
+                return pathname;
+            }
+
+            var root = Path.GetPathRoot(pathname);
+            if (root.Length > 3)
+            {
+                root += Path.DirectorySeparatorChar;
+            }
+
+            var elements = pathname.Substring(root.Length).Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+
+            var filenameIndex = elements.GetLength(0) - 1;
+
+            if (elements.GetLength(0) == 1) 
+            {
+                // pathname is just a root and filename
+                if (elements[0].Length > 5)
+                {
+                    // Long enough to shorten. If path is a UNC path, root may be rather long
+                    if (root.Length + 6 >= maxLength)
+                    {
+                        return root + elements[0].Substring(0, 3) + "...";
+                    }
+                    else
+                    {
+                        return pathname.Substring(0, maxLength - 3) + "...";
+                    }
+                }
+            }
+            else if (root.Length + 4 + elements[filenameIndex].Length > maxLength)
+            {
+                // pathname is just a root and filename
+                root += "...\\";
+
+                var len = elements[filenameIndex].Length;
+                if (len < 6)
+                {
+                    return root + elements[filenameIndex];
+                }
+
+                if ((root.Length + 6) >= maxLength)
+                {
+                    len = 3;
+                }
+                else
+                {
+                    len = maxLength - root.Length - 3;
+                }
+
+                return root + elements[filenameIndex].Substring(0, len) + "...";
+            }
+            else if (elements.GetLength(0) == 2)
+            {
+                return root + "...\\" + elements[1];
+            }
+            else
+            {
+                var len = 0;
+                var begin = 0;
+
+                for (var i = 0; i < filenameIndex; i++)
+                {
+                    if (elements[i].Length > len)
+                    {
+                        begin = i;
+                        len = elements[i].Length;
+                    }
+                }
+
+                int totalLength = pathname.Length - len + 3;
+                int end = begin + 1;
+
+                while (totalLength > maxLength)
+                {
+                    if (begin > 0)
+                    {
+                        totalLength -= elements[--begin].Length - 1;
+                    }
+
+                    if (totalLength <= maxLength)
+                    {
+                        break;
+                    }
+
+                    if (end < filenameIndex)
+                    {
+                        totalLength -= elements[++end].Length - 1;
+                    }
+
+                    if (begin == 0 && end == filenameIndex)
+                    {
+                        break;
+                    }
+                }
+
+                // assemble final string
+                for (int i = 0; i < begin; i++)
+                {
+                    root += elements[i] + '\\';
+                }
+
+                root += "...\\";
+
+                for (int i = end; i < filenameIndex; i++)
+                {
+                    root += elements[i] + '\\';
+                }
+
+                return root + elements[filenameIndex];
+            }
+
+            return pathname;
+        }
 
         public void UseRegistryPersister()
         {
@@ -85,592 +240,493 @@ namespace CustomUIEditor
         {
             this.Persister = new XmlPersister(stream);
         }
-        
-        public delegate string GetMenuItemTextDelegate(int index, string filepath);
 
-        public event EventHandler<MenuClickEventArgs> MenuClick;
-
-        private Separator separator = null;
-
-        private List<RecentFile> recentFiles = null;
-
-        public RecentFileList()
+        public void RemoveFile(string filepath)
         {
-            this.Persister = new RegistryPersister();
+            this.Persister.RemoveFile(filepath, this.MaxNumberOfFiles);
+        }
 
-            this.MaxNumberOfFiles = 9;
-            this.MaxPathLength = 50;
-            this.MenuItemFormatOneToNine = "_{0}:  {2}";
-            this.MenuItemFormatTenPlus = "{0}:  {2}";
+        public void InsertFile(string filepath)
+        {
+            this.Persister.InsertFile(filepath, this.MaxNumberOfFiles);
+        }
 
-            this.Loaded += (s, e) => this.HookFileMenu();
+        protected virtual void OnMenuClick(MenuItem menuItem)
+        {
+            var filepath = this.GetFilepath(menuItem);
+
+            if (string.IsNullOrEmpty(filepath))
+            {
+                return;
+            }
+
+            this.MenuClick?.Invoke(menuItem, new MenuClickEventArgs(filepath));
         }
         
+        // ReSharper disable StyleCop.SA1126
         private void HookFileMenu()
         {
             if (!(this.Parent is MenuItem parent))
             {
                 throw new ApplicationException("Parent must be a MenuItem");
             }
-
-            if (object.ReferenceEquals(this.FileMenu, parent))
+            
+            if (ReferenceEquals(this.FileMenu, parent))
             {
                 return;
             }
 
             if (this.FileMenu != null)
             {
-                this.FileMenu.SubmenuOpened -= _FileMenu_SubmenuOpened;
+                this.FileMenu.SubmenuOpened -= this.FileMenuSubmenuOpened;
             }
 
             this.FileMenu = parent;
-            this.FileMenu.SubmenuOpened += _FileMenu_SubmenuOpened;
+            this.FileMenu.SubmenuOpened += this.FileMenuSubmenuOpened;
         }
 
-        public List<string> RecentFiles { get { return Persister.RecentFiles( MaxNumberOfFiles ); } }
-        public void RemoveFile( string filepath ) { Persister.RemoveFile( filepath, MaxNumberOfFiles ); }
-        public void InsertFile( string filepath ) { Persister.InsertFile( filepath, MaxNumberOfFiles ); }
-
-        void _FileMenu_SubmenuOpened( object sender, RoutedEventArgs e )
+        private void FileMenuSubmenuOpened(object sender, RoutedEventArgs e)
         {
-            SetMenuItems();
+            this.SetMenuItems();
         }
 
-        void SetMenuItems()
+        private void SetMenuItems()
         {
-            RemoveMenuItems();
+            this.RemoveMenuItems();
 
-            LoadRecentFiles();
+            this.LoadRecentFiles();
 
-            InsertMenuItems();
+            this.InsertMenuItems();
         }
 
-        void RemoveMenuItems()
+        private void RemoveMenuItems()
         {
-            if ( this.separator != null ) FileMenu.Items.Remove( this.separator );
+            if (this.separator != null)
+            {
+                this.FileMenu.Items.Remove(this.separator);
+            }
 
-            if ( this.recentFiles != null )
-                foreach ( RecentFile r in this.recentFiles )
-                    if ( r.MenuItem != null )
-                        FileMenu.Items.Remove( r.MenuItem );
+            if (this.recentFiles != null)
+            {
+                foreach (var r in this.recentFiles)
+                {
+                    if (r.MenuItem != null)
+                    {
+                        this.FileMenu.Items.Remove(r.MenuItem);
+                    }
+                }
+            }
 
             this.separator = null;
             this.recentFiles = null;
         }
 
-        void InsertMenuItems()
+        private void InsertMenuItems()
         {
-            if ( this.recentFiles == null ) return;
-            if ( this.recentFiles.Count == 0 ) return;
-
-            int iMenuItem = FileMenu.Items.IndexOf( this );
-            foreach ( RecentFile r in this.recentFiles )
+            if (this.recentFiles == null)
             {
-                string header = GetMenuItemText( r.Number + 1, r.Filepath, r.DisplayPath );
+                return;
+            }
+
+            if (this.recentFiles.Count == 0)
+            {
+                return;
+            }
+
+            var index = this.FileMenu.Items.IndexOf(this);
+
+            foreach (var r in this.recentFiles)
+            {
+                var header = this.GetMenuItemText(r.Number + 1, r.Filepath, r.DisplayPath);
 
                 r.MenuItem = new MenuItem { Header = header };
-                r.MenuItem.Click += MenuItem_Click;
+                r.MenuItem.Click += this.MenuItemClick;
 
-                FileMenu.Items.Insert( ++iMenuItem, r.MenuItem );
+                this.FileMenu.Items.Insert(++index, r.MenuItem);
             }
 
             this.separator = new Separator();
-            FileMenu.Items.Insert( ++iMenuItem, this.separator );
+            this.FileMenu.Items.Insert(++index, this.separator);
         }
 
-        string GetMenuItemText( int index, string filepath, string displaypath )
+        private string GetMenuItemText(int index, string filepath, string displaypath)
         {
-            GetMenuItemTextDelegate delegateGetMenuItemText = GetMenuItemTextHandler;
-            if ( delegateGetMenuItemText != null ) return delegateGetMenuItemText( index, filepath );
+            var delegateGetMenuItemText = this.GetMenuItemTextHandler;
+            if (delegateGetMenuItemText != null)
+            {
+                return delegateGetMenuItemText(index, filepath);
+            }
 
-            string format = ( index < 10 ? MenuItemFormatOneToNine : MenuItemFormatTenPlus );
+            var format = index < 10 ? this.MenuItemFormatOneToNine : this.MenuItemFormatTenPlus;
 
-            string shortPath = ShortenPathname( displaypath, MaxPathLength );
+            var shortPath = ShortenPathname(displaypath, this.MaxPathLength);
 
-            return String.Format( format, index, filepath, shortPath );
+            return string.Format(format, index, filepath, shortPath);
         }
 
-        // This method is taken from Joe Woodbury's article at: http://www.codeproject.com/KB/cs/mrutoolstripmenu.aspx
-
-        /// <summary>
-        /// Shortens a pathname for display purposes.
-        /// </summary>
-        /// <param labelName="pathname">The pathname to shorten.</param>
-        /// <param labelName="maxLength">The maximum number of characters to be displayed.</param>
-        /// <remarks>Shortens a pathname by either removing consecutive components of a path
-        /// and/or by removing characters from the end of the filename and replacing
-        /// then with three elipses (...)
-        /// <para>In all cases, the root of the passed path will be preserved in it's entirety.</para>
-        /// <para>If a UNC path is used or the pathname and maxLength are particularly short,
-        /// the resulting path may be longer than maxLength.</para>
-        /// <para>This method expects fully resolved pathnames to be passed to it.
-        /// (Use Path.GetFullPath() to obtain this.)</para>
-        /// </remarks>
-        /// <returns></returns>
-        public static string ShortenPathname( string pathname, int maxLength )
+        private void LoadRecentFiles()
         {
-            if ( pathname.Length <= maxLength )
-                return pathname;
-
-            string root = Path.GetPathRoot( pathname );
-            if ( root.Length > 3 )
-                root += Path.DirectorySeparatorChar;
-
-            string[] elements = pathname.Substring( root.Length ).Split( Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar );
-
-            int filenameIndex = elements.GetLength( 0 ) - 1;
-
-            if ( elements.GetLength( 0 ) == 1 ) // pathname is just a root and filename
-            {
-                if ( elements[ 0 ].Length > 5 ) // long enough to shorten
-                {
-                    // if path is a UNC path, root may be rather long
-                    if ( root.Length + 6 >= maxLength )
-                    {
-                        return root + elements[ 0 ].Substring( 0, 3 ) + "...";
-                    }
-                    else
-                    {
-                        return pathname.Substring( 0, maxLength - 3 ) + "...";
-                    }
-                }
-            }
-            else if ( ( root.Length + 4 + elements[ filenameIndex ].Length ) > maxLength ) // pathname is just a root and filename
-            {
-                root += "...\\";
-
-                int len = elements[ filenameIndex ].Length;
-                if ( len < 6 )
-                    return root + elements[ filenameIndex ];
-
-                if ( ( root.Length + 6 ) >= maxLength )
-                {
-                    len = 3;
-                }
-                else
-                {
-                    len = maxLength - root.Length - 3;
-                }
-                return root + elements[ filenameIndex ].Substring( 0, len ) + "...";
-            }
-            else if ( elements.GetLength( 0 ) == 2 )
-            {
-                return root + "...\\" + elements[ 1 ];
-            }
-            else
-            {
-                int len = 0;
-                int begin = 0;
-
-                for ( int i = 0 ; i < filenameIndex ; i++ )
-                {
-                    if ( elements[ i ].Length > len )
-                    {
-                        begin = i;
-                        len = elements[ i ].Length;
-                    }
-                }
-
-                int totalLength = pathname.Length - len + 3;
-                int end = begin + 1;
-
-                while ( totalLength > maxLength )
-                {
-                    if ( begin > 0 )
-                        totalLength -= elements[ --begin ].Length - 1;
-
-                    if ( totalLength <= maxLength )
-                        break;
-
-                    if ( end < filenameIndex )
-                        totalLength -= elements[ ++end ].Length - 1;
-
-                    if ( begin == 0 && end == filenameIndex )
-                        break;
-                }
-
-                // assemble final string
-
-                for ( int i = 0 ; i < begin ; i++ )
-                {
-                    root += elements[ i ] + '\\';
-                }
-
-                root += "...\\";
-
-                for ( int i = end ; i < filenameIndex ; i++ )
-                {
-                    root += elements[ i ] + '\\';
-                }
-
-                return root + elements[ filenameIndex ];
-            }
-            return pathname;
+            this.recentFiles = this.LoadRecentFilesCore();
         }
 
-        void LoadRecentFiles()
+        private List<RecentFile> LoadRecentFilesCore()
         {
-            this.recentFiles = LoadRecentFilesCore();
-        }
+            var list = this.RecentFiles;
 
-        List<RecentFile> LoadRecentFilesCore()
-        {
-            List<string> list = RecentFiles;
+            var files = new List<RecentFile>(list.Count);
 
-            List<RecentFile> files = new List<RecentFile>( list.Count );
+            var i = 0;
 
-            int i = 0;
-            foreach ( string filepath in list )
-                files.Add( new RecentFile( i++, filepath ) );
+            foreach (var filepath in list)
+            {
+                files.Add(new RecentFile(i++, filepath));
+            }
 
             return files;
         }
 
+        private void MenuItemClick(object sender, EventArgs e)
+        {
+            var menuItem = sender as MenuItem;
+
+            this.OnMenuClick(menuItem);
+        }
+
+        private string GetFilepath(MenuItem menuItem)
+        {
+            foreach (var r in this.recentFiles)
+            {
+                if (ReferenceEquals(r.MenuItem, menuItem))
+                {
+                    return r.Filepath;
+                }
+            }
+
+            return string.Empty;
+        }
+        
+        public class MenuClickEventArgs : EventArgs
+        {
+            public MenuClickEventArgs(string filepath)
+            {
+                this.Filepath = filepath;
+            }
+
+            public string Filepath { get; }
+        }
+        
+        private static class ApplicationAttributes
+        {
+            static ApplicationAttributes()
+            {
+                Title = string.Empty;
+                CompanyName = string.Empty;
+                Copyright = string.Empty;
+                ProductName = string.Empty;
+                Version = string.Empty;
+
+                try
+                {
+                    var assembly = Assembly.GetEntryAssembly();
+
+                    if (assembly == null)
+                    {
+                        return;
+                    }
+                    
+                    var attributes = assembly.GetCustomAttributes(false);
+
+                    foreach (var attribute in attributes)
+                    {
+                        if (attribute is AssemblyTitleAttribute titleAttribute)
+                        {
+                            Title = titleAttribute.Title;
+                        }
+
+                        if (attribute is AssemblyCompanyAttribute companyAttribute)
+                        {
+                            CompanyName = companyAttribute.Company;
+                        }
+
+                        if (attribute is AssemblyCopyrightAttribute copyrightAttribute)
+                        {
+                            Copyright = copyrightAttribute.Copyright;
+                        }
+
+                        if (attribute is AssemblyProductAttribute productAttribute)
+                        {
+                            ProductName = productAttribute.Product;
+                        }
+                    }
+
+                    Version = assembly.GetName().Version.ToString();
+                }
+                catch
+                {
+                    // If accessing one of the attributes fails, the remaining ones will simply be left as string.Empty
+                }
+            }
+            
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            public static string Title { get; }
+
+            public static string CompanyName { get; }
+            
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            public static string Copyright { get; }
+
+            public static string ProductName { get; }
+            
+            // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            public static string Version { get; }
+        }
+
         private class RecentFile
         {
-            public int Number = 0;
-            public string Filepath = "";
-            public MenuItem MenuItem = null;
+            public RecentFile(int number, string filepath)
+            {
+                this.Number = number;
+                this.Filepath = filepath;
+            }
+
+            public int Number { get; }
+
+            public string Filepath { get; }
+
+            public MenuItem MenuItem { get; set; }
 
             public string DisplayPath
             {
                 get
                 {
-                    return Path.Combine(
-                        Path.GetDirectoryName( Filepath ),
-                        Path.GetFileNameWithoutExtension( Filepath ) );
-                }
-            }
-
-            public RecentFile( int number, string filepath )
-            {
-                this.Number = number;
-                this.Filepath = filepath;
-            }
-        }
-
-        public class MenuClickEventArgs : EventArgs
-        {
-            public string Filepath { get; private set; }
-
-            public MenuClickEventArgs( string filepath )
-            {
-                this.Filepath = filepath;
-            }
-        }
-
-        void MenuItem_Click( object sender, EventArgs e )
-        {
-            MenuItem menuItem = sender as MenuItem;
-
-            OnMenuClick( menuItem );
-        }
-
-        protected virtual void OnMenuClick( MenuItem menuItem )
-        {
-            string filepath = GetFilepath( menuItem );
-
-            if ( String.IsNullOrEmpty( filepath ) ) return;
-
-            EventHandler<MenuClickEventArgs> dMenuClick = MenuClick;
-            if ( dMenuClick != null ) dMenuClick( menuItem, new MenuClickEventArgs( filepath ) );
-        }
-
-        string GetFilepath( MenuItem menuItem )
-        {
-            foreach ( RecentFile r in this.recentFiles )
-                if ( r.MenuItem == menuItem )
-                    return r.Filepath;
-
-            return String.Empty;
-        }
-
-        //-----------------------------------------------------------------------------------------
-
-        static class ApplicationAttributes
-        {
-            static readonly Assembly _Assembly = null;
-
-            static readonly AssemblyTitleAttribute _Title = null;
-            static readonly AssemblyCompanyAttribute _Company = null;
-            static readonly AssemblyCopyrightAttribute _Copyright = null;
-            static readonly AssemblyProductAttribute _Product = null;
-
-            public static string Title { get; private set; }
-            public static string CompanyName { get; private set; }
-            public static string Copyright { get; private set; }
-            public static string ProductName { get; private set; }
-
-            static Version _Version = null;
-            public static string Version { get; private set; }
-
-            static ApplicationAttributes()
-            {
-                try
-                {
-                    Title = String.Empty;
-                    CompanyName = String.Empty;
-                    Copyright = String.Empty;
-                    ProductName = String.Empty;
-                    Version = String.Empty;
-
-                    _Assembly = Assembly.GetEntryAssembly();
-
-                    if ( _Assembly != null )
+                    var directory = Path.GetDirectoryName(this.Filepath);
+                    var fileName = Path.GetFileName(this.Filepath);
+                    if (directory == null || fileName == null)
                     {
-                        object[] attributes = _Assembly.GetCustomAttributes( false );
-
-                        foreach ( object attribute in attributes )
-                        {
-                            Type type = attribute.GetType();
-
-                            if ( type == typeof( AssemblyTitleAttribute ) ) _Title = ( AssemblyTitleAttribute ) attribute;
-                            if ( type == typeof( AssemblyCompanyAttribute ) ) _Company = ( AssemblyCompanyAttribute ) attribute;
-                            if ( type == typeof( AssemblyCopyrightAttribute ) ) _Copyright = ( AssemblyCopyrightAttribute ) attribute;
-                            if ( type == typeof( AssemblyProductAttribute ) ) _Product = ( AssemblyProductAttribute ) attribute;
-                        }
-
-                        _Version = _Assembly.GetName().Version;
+                        // Filepath seems ill-formed for some reason, so don't try to shorten it
+                        return this.Filepath;
                     }
-
-                    if ( _Title != null ) Title = _Title.Title;
-                    if ( _Company != null ) CompanyName = _Company.Company;
-                    if ( _Copyright != null ) Copyright = _Copyright.Copyright;
-                    if ( _Product != null ) ProductName = _Product.Product;
-                    if ( _Version != null ) Version = _Version.ToString();
+                    
+                    return Path.Combine(directory, fileName);
                 }
-                catch { }
             }
         }
-
-        //-----------------------------------------------------------------------------------------
-
+        
         private class RegistryPersister : IPersist
         {
-            public string RegistryKey { get; set; }
-
             public RegistryPersister()
             {
-                RegistryKey =
+                this.RegistryKey =
                     "Software\\" +
                     ApplicationAttributes.CompanyName + "\\" +
                     ApplicationAttributes.ProductName + "\\" +
                     "RecentFileList";
             }
 
-            public RegistryPersister( string key )
+            public RegistryPersister(string key)
             {
-                RegistryKey = key;
+                this.RegistryKey = key;
             }
 
-            string Key( int i ) { return i.ToString( "00" ); }
+            public string RegistryKey { get; set; }
 
-            public List<string> RecentFiles( int max )
+            public List<string> RecentFiles(int max)
             {
-                RegistryKey k = Registry.CurrentUser.OpenSubKey( RegistryKey );
-                if ( k == null ) k = Registry.CurrentUser.CreateSubKey( RegistryKey );
+                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey) ?? Registry.CurrentUser.CreateSubKey(this.RegistryKey);
 
-                List<string> list = new List<string>( max );
+                var list = new List<string>(max);
 
-                for ( int i = 0 ; i < max ; i++ )
+                for (var i = 0; i < max; i++)
                 {
-                    string filename = ( string ) k.GetValue( Key( i ) );
+                    var filename = (string)k?.GetValue(Key(i));
 
-                    if ( String.IsNullOrEmpty( filename ) ) break;
+                    if (string.IsNullOrEmpty(filename))
+                    {
+                        break;
+                    }
 
-                    list.Add( filename );
+                    list.Add(filename);
                 }
 
                 return list;
             }
 
-            public void InsertFile( string filepath, int max )
+            public void InsertFile(string filepath, int max)
             {
-                RegistryKey k = Registry.CurrentUser.OpenSubKey( RegistryKey );
-                if ( k == null ) Registry.CurrentUser.CreateSubKey( RegistryKey );
-                k = Registry.CurrentUser.OpenSubKey( RegistryKey, true );
+                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey, true) ?? Registry.CurrentUser.CreateSubKey(this.RegistryKey, true);
 
-                RemoveFile( filepath, max );
+                this.RemoveFile(filepath, max);
 
-                for ( int i = max - 2 ; i >= 0 ; i-- )
+                for (var i = max - 2; i >= 0; i--)
                 {
-                    string sThis = Key( i );
-                    string sNext = Key( i + 1 );
+                    var thisKey = Key(i);
+                    var nextKey = Key(i + 1);
 
-                    object oThis = k.GetValue( sThis );
-                    if ( oThis == null ) continue;
+                    var thisValue = k.GetValue(thisKey);
+                    if (thisValue == null)
+                    {
+                        continue;
+                    }
 
-                    k.SetValue( sNext, oThis );
+                    k.SetValue(nextKey, thisValue);
                 }
 
-                k.SetValue( Key( 0 ), filepath );
+                k.SetValue(Key(0), filepath);
             }
 
-            public void RemoveFile( string filepath, int max )
+            public void RemoveFile(string filepath, int max)
             {
-                RegistryKey k = Registry.CurrentUser.OpenSubKey( RegistryKey );
-                if ( k == null ) return;
-
-                for ( int i = 0 ; i < max ; i++ )
+                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey);
+                if (k == null)
                 {
-again:
-                    string s = ( string ) k.GetValue( Key( i ) );
-                    if ( s != null && s.Equals( filepath, StringComparison.CurrentCultureIgnoreCase ) )
+                    return;
+                }
+
+                for (int i = 0; i < max; i++)
+                {
+                    string s = (string)k.GetValue(Key(i));
+                    if (s != null && s.Equals(filepath, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        RemoveFile( i, max );
-                        goto again;
+                        this.RemoveFile(i, max);
+                        i--; // Repeat this loop iteration again
                     }
                 }
             }
 
-            void RemoveFile( int index, int max )
+            private static string Key(int i)
             {
-                RegistryKey k = Registry.CurrentUser.OpenSubKey( RegistryKey, true );
-                if ( k == null ) return;
+                return i.ToString("00");
+            }
 
-                k.DeleteValue( Key( index ), false );
-
-                for ( int i = index ; i < max - 1 ; i++ )
+            private void RemoveFile(int index, int max)
+            {
+                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey, true);
+                if (k == null)
                 {
-                    string sThis = Key( i );
-                    string sNext = Key( i + 1 );
+                    return;
+                }
 
-                    object oNext = k.GetValue( sNext );
-                    if ( oNext == null ) break;
+                k.DeleteValue(Key(index), false);
 
-                    k.SetValue( sThis, oNext );
-                    k.DeleteValue( sNext );
+                for (var i = index; i < max - 1; i++)
+                {
+                    var thisKey = Key(i);
+                    var nextKey = Key(i + 1);
+
+                    var nextValue = k.GetValue(nextKey);
+                    if (nextValue == null)
+                    {
+                        break;
+                    }
+
+                    k.SetValue(thisKey, nextValue);
+                    k.DeleteValue(nextKey);
                 }
             }
         }
-
-        //-----------------------------------------------------------------------------------------
-
+        
         private class XmlPersister : IPersist
         {
+            public XmlPersister()
+            {
+                this.Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName + "\\" + ApplicationAttributes.ProductName + "\\" + "RecentFileList.xml");
+            }
+
+            public XmlPersister(string filepath)
+            {
+                this.Filepath = filepath;
+            }
+
+            public XmlPersister(Stream stream)
+            {
+                this.Stream = stream;
+            }
+
             public string Filepath { get; set; }
 
             public Stream Stream { get; set; }
 
-            public XmlPersister()
+            public List<string> RecentFiles(int max)
             {
-                Filepath =
-                    Path.Combine(
-                        Environment.GetFolderPath( Environment.SpecialFolder.ApplicationData ),
-                        ApplicationAttributes.CompanyName + "\\" +
-                        ApplicationAttributes.ProductName + "\\" +
-                        "RecentFileList.xml" );
+                return this.Load(max);
             }
 
-            public XmlPersister( string filepath )
+            public void InsertFile(string filepath, int max)
             {
-                Filepath = filepath;
+                this.Update(filepath, true, max);
             }
 
-            public XmlPersister( Stream stream )
+            public void RemoveFile(string filepath, int max)
             {
-                Stream = stream;
+                this.Update(filepath, false, max);
             }
 
-            public List<string> RecentFiles( int max )
+            private void Update(string filepath, bool insert, int max)
             {
-                return Load( max );
-            }
+                var old = this.Load(max);
 
-            public void InsertFile( string filepath, int max )
-            {
-                Update( filepath, true, max );
-            }
+                var list = new List<string>(old.Count + 1);
 
-            public void RemoveFile( string filepath, int max )
-            {
-                Update( filepath, false, max );
-            }
-
-            void Update( string filepath, bool insert, int max )
-            {
-                List<string> old = Load( max );
-
-                List<string> list = new List<string>( old.Count + 1 );
-
-                if ( insert ) list.Add( filepath );
-
-                CopyExcluding( old, filepath, list, max );
-
-                Save( list, max );
-            }
-
-            void CopyExcluding( List<string> source, string exclude, List<string> target, int max )
-            {
-                foreach ( string s in source )
-                    if ( !String.IsNullOrEmpty( s ) )
-                        if ( !s.Equals( exclude, StringComparison.OrdinalIgnoreCase ) )
-                            if ( target.Count < max )
-                                target.Add( s );
-            }
-
-            class SmartStream : IDisposable
-            {
-                bool _IsStreamOwned = true;
-                Stream _Stream = null;
-
-                public Stream Stream { get { return _Stream; } }
-
-                public static implicit operator Stream( SmartStream me ) { return me.Stream; }
-
-                public SmartStream( string filepath, FileMode mode )
+                if (insert)
                 {
-                    _IsStreamOwned = true;
-
-                    Directory.CreateDirectory( Path.GetDirectoryName( filepath ) );
-
-                    _Stream = File.Open( filepath, mode );
+                    list.Add(filepath);
                 }
 
-                public SmartStream( Stream stream )
-                {
-                    _IsStreamOwned = false;
-                    _Stream = stream;
-                }
+                this.CopyExcluding(old, filepath, list, max);
 
-                public void Dispose()
-                {
-                    if ( _IsStreamOwned && _Stream != null ) _Stream.Dispose();
+                this.Save(list, max);
+            }
 
-                    _Stream = null;
+            private void CopyExcluding(List<string> source, string exclude, List<string> target, int max)
+            {
+                foreach (var s in source)
+                {
+                    if (string.IsNullOrEmpty(s) || s.Equals(exclude, StringComparison.OrdinalIgnoreCase) || target.Count >= max)
+                    {
+                        break;
+                    }
+
+                    target.Add(s);
                 }
             }
 
-            SmartStream OpenStream( FileMode mode )
+            private SmartStream OpenStream(FileMode mode)
             {
-                if ( !String.IsNullOrEmpty( Filepath ) )
+                if (!string.IsNullOrEmpty(this.Filepath))
                 {
-                    return new SmartStream( Filepath, mode );
+                    return new SmartStream(this.Filepath, mode);
                 }
                 else
                 {
-                    return new SmartStream( Stream );
+                    return new SmartStream(this.Stream);
                 }
             }
 
-            List<string> Load( int max )
+            private List<string> Load(int max)
             {
-                List<string> list = new List<string>( max );
+                List<string> list = new List<string>(max);
 
-                using ( MemoryStream ms = new MemoryStream() )
+                using (var ms = new MemoryStream())
                 {
-                    using ( SmartStream ss = OpenStream( FileMode.OpenOrCreate ) )
+                    using (var ss = this.OpenStream(FileMode.OpenOrCreate))
                     {
-                        if ( ss.Stream.Length == 0 ) return list;
+                        if (ss.Stream.Length == 0)
+                        {
+                            return list;
+                        }
 
                         ss.Stream.Position = 0;
 
-                        byte[] buffer = new byte[ 1 << 20 ];
-                        for ( ; ; )
+                        var buffer = new byte[1 << 20];
+                        for (;;)
                         {
-                            int bytes = ss.Stream.Read( buffer, 0, buffer.Length );
-                            if ( bytes == 0 ) break;
-                            ms.Write( buffer, 0, bytes );
+                            var bytes = ss.Stream.Read(buffer, 0, buffer.Length);
+                            if (bytes == 0)
+                            {
+                                break;
+                            }
+
+                            ms.Write(buffer, 0, bytes);
                         }
 
                         ms.Position = 0;
@@ -680,72 +736,82 @@ again:
 
                     try
                     {
-                        x = new XmlTextReader( ms );
+                        x = new XmlTextReader(ms);
 
-                        while ( x.Read() )
+                        while (x.Read())
                         {
-                            switch ( x.NodeType )
+                            switch (x.NodeType)
                             {
                                 case XmlNodeType.XmlDeclaration:
                                 case XmlNodeType.Whitespace:
                                     break;
 
                                 case XmlNodeType.Element:
-                                    switch ( x.Name )
+                                    switch (x.Name)
                                     {
                                         case "RecentFiles": break;
 
                                         case "RecentFile":
-                                            if ( list.Count < max ) list.Add( x.GetAttribute( 0 ) );
+                                            if (list.Count < max)
+                                            {
+                                                list.Add(x.GetAttribute(0));
+                                            }
+
                                             break;
 
-                                        default: Debug.Assert( false ); break;
+                                        default:
+                                            Debug.Assert(false, "Missing an XmlNodeType.Element name");
+                                            break;
                                     }
+
                                     break;
 
                                 case XmlNodeType.EndElement:
-                                    switch ( x.Name )
+                                    switch (x.Name)
                                     {
                                         case "RecentFiles": return list;
-                                        default: Debug.Assert( false ); break;
+                                        default:
+                                            Debug.Assert(false, "Missing an XmlNodeType.EndElement name");
+                                            break;
                                     }
+
                                     break;
 
                                 default:
-                                    Debug.Assert( false );
+                                    Debug.Assert(false, "Missing an XmlNodeType");
                                     break;
                             }
                         }
                     }
                     finally
                     {
-                        if ( x != null ) x.Close();
+                        x?.Close();
                     }
                 }
+
                 return list;
             }
 
-            void Save( List<string> list, int max )
+            private void Save(List<string> list, int max)
             {
-                using ( MemoryStream ms = new MemoryStream() )
+                using (var ms = new MemoryStream())
                 {
                     XmlTextWriter x = null;
 
                     try
                     {
-                        x = new XmlTextWriter( ms, Encoding.UTF8 );
-                        if ( x == null ) { Debug.Assert( false ); return; }
+                        x = new XmlTextWriter(ms, Encoding.UTF8);
 
                         x.Formatting = Formatting.Indented;
 
                         x.WriteStartDocument();
 
-                        x.WriteStartElement( "RecentFiles" );
+                        x.WriteStartElement("RecentFiles");
 
-                        foreach ( string filepath in list )
+                        foreach (string filepath in list)
                         {
-                            x.WriteStartElement( "RecentFile" );
-                            x.WriteAttributeString( "Filepath", filepath );
+                            x.WriteStartElement("RecentFile");
+                            x.WriteAttributeString("Filepath", filepath);
                             x.WriteEndElement();
                         }
 
@@ -755,30 +821,72 @@ again:
 
                         x.Flush();
 
-                        using ( SmartStream ss = OpenStream( FileMode.Create ) )
+                        using (var ss = this.OpenStream(FileMode.Create))
                         {
-                            ss.Stream.SetLength( 0 );
+                            ss.Stream.SetLength(0);
 
                             ms.Position = 0;
 
-                            byte[] buffer = new byte[ 1 << 20 ];
-                            for ( ; ; )
+                            byte[] buffer = new byte[1 << 20];
+                            for (;;)
                             {
-                                int bytes = ms.Read( buffer, 0, buffer.Length );
-                                if ( bytes == 0 ) break;
-                                ss.Stream.Write( buffer, 0, bytes );
+                                var bytes = ms.Read(buffer, 0, buffer.Length);
+                                if (bytes == 0)
+                                {
+                                    break;
+                                }
+
+                                ss.Stream.Write(buffer, 0, bytes);
                             }
                         }
                     }
                     finally
                     {
-                        if ( x != null ) x.Close();
+                        x?.Close();
                     }
                 }
             }
+
+            private class SmartStream : IDisposable
+            {
+                private readonly bool isStreamOwned;
+
+                public SmartStream(string filepath, FileMode mode)
+                {
+                    this.isStreamOwned = true;
+
+                    var directory = Path.GetDirectoryName(filepath);
+                    if (directory != null)
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+                    this.Stream = File.Open(filepath, mode);
+                }
+
+                public SmartStream(Stream stream)
+                {
+                    this.isStreamOwned = false;
+                    this.Stream = stream;
+                }
+
+                public Stream Stream { get; private set; }
+
+                public static implicit operator Stream(SmartStream me)
+                {
+                    return me.Stream;
+                }
+
+                public void Dispose()
+                {
+                    if (this.isStreamOwned)
+                    {
+                        this.Stream?.Dispose();
+                    }
+
+                    this.Stream = null;
+                }
+            }
         }
-
-        //-----------------------------------------------------------------------------------------
-
     }
 }
