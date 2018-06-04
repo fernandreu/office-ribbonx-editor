@@ -45,5 +45,14 @@ namespace CustomUIEditor.Properties {
                 this["RecentFIles"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("16")]
+        public int IconSize {
+            get {
+                return ((int)(this["IconSize"]));
+            }
+        }
     }
 }
