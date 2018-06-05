@@ -5,10 +5,7 @@
     <Setting Name="EditorFontSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">12</Value>
     </Setting>
-    <Setting Name="RecentFIles" Type="System.Collections.Specialized.StringCollection" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="IconSize" Type="System.Int32" Scope="Application">
+    <Setting Name="IconSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">16</Value>
     </Setting>
   </Settings>

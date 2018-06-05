@@ -37,21 +37,13 @@ namespace CustomUIEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection RecentFIles {
-            get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["RecentFIles"]));
-            }
-            set {
-                this["RecentFIles"] = value;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("16")]
         public int IconSize {
             get {
                 return ((int)(this["IconSize"]));
+            }
+            set {
+                this["IconSize"] = value;
             }
         }
     }

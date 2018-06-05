@@ -14,7 +14,7 @@
             <MenuItem Header="Change ID"/>
             <MenuItem Header="Remove">
                 <MenuItem.Icon>
-                    <Image Source="/Resources/remove.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                    <Image Source="/Resources/remove.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
@@ -25,19 +25,19 @@
             <MenuItem Header="_File">
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Click="OpenClick">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/open.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/open.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Click="SaveClick">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/save.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/save.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
                 <MenuItem Header="Save All Documents" Click="SaveAllClick">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/save.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/save.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
@@ -50,28 +50,28 @@
             <MenuItem Header="_Edit">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/undo.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/undo.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Redo" InputGestureText="Ctrl+Y">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/redo.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/redo.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Cut" InputGestureText="Ctrl+X">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/cut.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/cut.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Copy" InputGestureText="Ctrl+C">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/copy.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/copy.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Paste" InputGestureText="Ctrl+V">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/paste.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/paste.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
@@ -80,45 +80,45 @@
             <MenuItem Header="_Insert">
                 <MenuItem Header="Office 2010+ Custom UI Part" Click="InsertXml14Click">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Office 2007 Custom UI Part" Click="InsertXml12Click">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Icons...">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/insertPicture.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                        <Image Source="/Resources/insertPicture.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Sample XML">
                     <MenuItem Header="Custom OutSpace">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Custom Tab">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Excel - A Custom Tab">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Repurpose">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Word - Group on Insert Tab">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png" Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -259,7 +259,7 @@
                 HorizontalAlignment="Stretch"
                 FontFamily="Consolas"
                 SelectionChanged="EditorSelectionChanged"
-                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
+                FontSize="{local:SettingBinding EditorFontSize}"
                 DataContext="{Binding SelectedItem, ElementName=DocumentView}"
                 IsEnabled="{Binding CanHaveContents}"
                 Text="{Binding Contents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
