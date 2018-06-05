@@ -8,7 +8,14 @@
         xmlns:model="clr-namespace:CustomUIEditor.Model"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         mc:Ignorable="d"
-        Title="{x:Static local:StringsResource.idsApplicationTitle}" Height="450" Width="800" Icon="Resources/ApplicationIcon.ico" Closing="MainWindow_OnClosing">
+        Title="{x:Static local:StringsResource.idsApplicationTitle}" 
+        Height="{local:SettingBinding Height}"
+        Width="{local:SettingBinding Width}" 
+        Top="{local:SettingBinding Top}"
+        Left="{local:SettingBinding Left}"
+        WindowState="{local:SettingBinding WindowState}"
+        Icon="Resources/ApplicationIcon.ico" 
+        Closing="MainWindow_OnClosing">
     <Window.Resources>
         <ContextMenu x:Key="ImageContextMenu">
             <MenuItem Header="Change ID"/>

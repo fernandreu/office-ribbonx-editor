@@ -13,5 +13,9 @@ namespace CustomUIEditor
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            CustomUIEditor.Properties.Settings.Default.Save();
+        }
     }
 }
