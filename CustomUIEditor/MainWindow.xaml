@@ -14,7 +14,8 @@
         Top="{local:SettingBinding Top}"
         Left="{local:SettingBinding Left}"
         WindowState="{local:SettingBinding WindowState}"
-        Icon="Resources/ApplicationIcon.ico" 
+        Icon="Resources/ApplicationIcon.ico"
+        ResizeMode="CanResizeWithGrip"
         Closing="MainWindow_OnClosing">
     <Window.Resources>
         <ContextMenu x:Key="ImageContextMenu">
@@ -207,7 +208,7 @@
                 <TextBlock Text="{Binding StatusMessage}"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="LineBox" Margin="0,0,3,0" Text="Line 0, Col 0"/>
+                <TextBlock Name="LineBox" Margin="0,0,20,0" Text="Line 0, Col 0"/>
             </StatusBarItem>
         </StatusBar>
 
