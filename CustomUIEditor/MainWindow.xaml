@@ -8,13 +8,21 @@
         xmlns:model="clr-namespace:CustomUIEditor.Model"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         mc:Ignorable="d"
-        Title="{x:Static local:StringsResource.idsApplicationTitle}" Height="450" Width="800" Icon="Resources/ApplicationIcon.ico" Closing="MainWindow_OnClosing">
+        Title="{x:Static local:StringsResource.idsApplicationTitle}" 
+        Height="{local:SettingBinding Height}"
+        Width="{local:SettingBinding Width}" 
+        Top="{local:SettingBinding Top}"
+        Left="{local:SettingBinding Left}"
+        WindowState="{local:SettingBinding WindowState}"
+        Icon="Resources/ApplicationIcon.ico"
+        ResizeMode="CanResizeWithGrip"
+        Closing="MainWindow_OnClosing">
     <Window.Resources>
         <ContextMenu x:Key="ImageContextMenu">
             <MenuItem Header="Change ID"/>
             <MenuItem Header="Remove">
                 <MenuItem.Icon>
-                    <Image Source="/Resources/remove.png"/>
+                    <Image Source="/Resources/remove.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
@@ -25,19 +33,19 @@
             <MenuItem Header="_File">
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Click="OpenClick">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/open.png"/>
+                        <Image Source="/Resources/open.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Click="SaveClick">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/save.png"/>
+                        <Image Source="/Resources/save.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
                 <MenuItem Header="Save All Documents" Click="SaveAllClick">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/save.png"/>
+                        <Image Source="/Resources/save.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>    
                 </MenuItem>
 
@@ -50,28 +58,28 @@
             <MenuItem Header="_Edit">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/undo.png"/>
+                        <Image Source="/Resources/undo.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Redo" InputGestureText="Ctrl+Y">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/redo.png"/>
+                        <Image Source="/Resources/redo.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Cut" InputGestureText="Ctrl+X">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/cut.png"/>
+                        <Image Source="/Resources/cut.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Copy" InputGestureText="Ctrl+C">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/copy.png"/>
+                        <Image Source="/Resources/copy.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Paste" InputGestureText="Ctrl+V">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/paste.png"/>
+                        <Image Source="/Resources/paste.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
@@ -80,45 +88,45 @@
             <MenuItem Header="_Insert">
                 <MenuItem Header="Office 2010+ Custom UI Part" Click="InsertXml14Click">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/xml.png"/>
+                        <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Office 2007 Custom UI Part" Click="InsertXml12Click">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/xml.png"/>
+                        <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Icons...">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/insertPicture.png"/>
+                        <Image Source="/Resources/insertPicture.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Sample XML">
                     <MenuItem Header="Custom OutSpace">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Custom Tab">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Excel - A Custom Tab">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Repurpose">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Word - Group on Insert Tab">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"/>
+                            <Image Source="/Resources/xml.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -200,7 +208,7 @@
                 <TextBlock Text="{Binding StatusMessage}"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="LineBox" Margin="0,0,3,0" Text="Line 0, Col 0"/>
+                <TextBlock Name="LineBox" Margin="0,0,20,0" Text="Line 0, Col 0"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -259,7 +267,7 @@
                 HorizontalAlignment="Stretch"
                 FontFamily="Consolas"
                 SelectionChanged="EditorSelectionChanged"
-                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
+                FontSize="{local:SettingBinding EditorFontSize}"
                 DataContext="{Binding SelectedItem, ElementName=DocumentView}"
                 IsEnabled="{Binding CanHaveContents}"
                 Text="{Binding Contents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

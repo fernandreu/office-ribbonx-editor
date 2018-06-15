@@ -72,6 +72,7 @@
     <Compile Include="Data\OfficeDocument.cs" />
     <Compile Include="PropertyChangedExtension.cs" />
     <Compile Include="RecentFileList.cs" />
+    <Compile Include="SettingBindingExtension.cs" />
     <Compile Include="StringsResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
