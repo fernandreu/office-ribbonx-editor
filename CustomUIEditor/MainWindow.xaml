@@ -168,7 +168,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbakcs for the current XML file">
+                <Button ToolTip="Generate callbakcs for the current XML file" Click="GenerateCallbacks">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>

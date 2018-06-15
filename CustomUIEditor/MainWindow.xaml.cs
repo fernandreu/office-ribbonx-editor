@@ -546,5 +546,10 @@ namespace CustomUIEditor
             
             this.LineBox.Text = $"Line {lineCount + 1}, Col {colCount + 1}";
         }
+
+        private void GenerateCallbacks(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("This feature is not implemented yet");
+        }
     }
 }

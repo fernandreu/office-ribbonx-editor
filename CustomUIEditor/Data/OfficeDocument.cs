@@ -10,10 +10,12 @@
 namespace CustomUIEditor.Data
 {
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.IO.Packaging;
+    using System.Security.Cryptography;
 
     public enum XmlParts
     {
@@ -68,7 +70,9 @@ namespace CustomUIEditor.Data
             }
 
             this.fileName = fileName;
-            this.isReadOnly = (int)(File.GetAttributes(this.fileName) & FileAttributes.ReadOnly) != 0;
+
+            var info = new FileInfo(fileName);
+            this.isReadOnly = info.IsReadOnly;
 
             this.tempFileName = Path.GetTempFileName();
 
@@ -142,6 +146,49 @@ namespace CustomUIEditor.Data
 
             Debug.Assert(false, "Unrecognized extension passed");
             return OfficeApplications.Xml;
+        }
+
+        /// <summary>
+        /// Determines whether the file loaded for this OFficeDocument has suffered external
+        /// modifications since this instance was created
+        /// </summary>
+        /// <returns>
+        /// Whether there were external changes or not
+        /// </returns>
+        public bool HasExternalChanges()
+        {
+            // TODO: This doesn't work, due to tempFileName being already open. For this to work properly, an extra temporary copy of tempFileName might be required
+            var first = new FileInfo(this.fileName);
+            var second = new FileInfo(this.tempFileName);
+
+            if (first.Length != second.Length)
+            {
+                return true;
+            }
+
+            const int BytesToRead = sizeof(long);
+
+            var iterations = (int)Math.Ceiling((double)first.Length / BytesToRead);
+            
+            using (var fs1 = File.Open(this.fileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            using (var fs2 = File.Open(this.tempFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                var one = new byte[BytesToRead];
+                var two = new byte[BytesToRead];
+
+                for (var i = 0; i < iterations; i++)
+                {
+                    fs1.Read(one, 0, BytesToRead);
+                    fs2.Read(two, 0, BytesToRead);
+
+                    if (BitConverter.ToInt64(one, 0) != BitConverter.ToInt64(two, 0))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         public void Save(string customFileName = null)

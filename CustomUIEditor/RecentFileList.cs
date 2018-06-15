@@ -732,12 +732,8 @@ namespace CustomUIEditor
                         ms.Position = 0;
                     }
 
-                    XmlTextReader x = null;
-
-                    try
+                    using (var x = new XmlTextReader(ms))
                     {
-                        x = new XmlTextReader(ms);
-
                         while (x.Read())
                         {
                             switch (x.NodeType)
@@ -783,66 +779,52 @@ namespace CustomUIEditor
                             }
                         }
                     }
-                    finally
-                    {
-                        x?.Close();
-                    }
                 }
 
                 return list;
             }
 
-            private void Save(List<string> list, int max)
+            private void Save(IEnumerable<string> list, int max)
             {
                 using (var ms = new MemoryStream())
+                using (var x = new XmlTextWriter(ms, Encoding.UTF8))
                 {
-                    XmlTextWriter x = null;
+                    x.Formatting = Formatting.Indented;
 
-                    try
+                    x.WriteStartDocument();
+
+                    x.WriteStartElement("RecentFiles");
+
+                    foreach (string filepath in list)
                     {
-                        x = new XmlTextWriter(ms, Encoding.UTF8);
-
-                        x.Formatting = Formatting.Indented;
-
-                        x.WriteStartDocument();
-
-                        x.WriteStartElement("RecentFiles");
-
-                        foreach (string filepath in list)
-                        {
-                            x.WriteStartElement("RecentFile");
-                            x.WriteAttributeString("Filepath", filepath);
-                            x.WriteEndElement();
-                        }
-
+                        x.WriteStartElement("RecentFile");
+                        x.WriteAttributeString("Filepath", filepath);
                         x.WriteEndElement();
-
-                        x.WriteEndDocument();
-
-                        x.Flush();
-
-                        using (var ss = this.OpenStream(FileMode.Create))
-                        {
-                            ss.Stream.SetLength(0);
-
-                            ms.Position = 0;
-
-                            byte[] buffer = new byte[1 << 20];
-                            for (;;)
-                            {
-                                var bytes = ms.Read(buffer, 0, buffer.Length);
-                                if (bytes == 0)
-                                {
-                                    break;
-                                }
-
-                                ss.Stream.Write(buffer, 0, bytes);
-                            }
-                        }
                     }
-                    finally
+
+                    x.WriteEndElement();
+
+                    x.WriteEndDocument();
+
+                    x.Flush();
+
+                    using (var ss = this.OpenStream(FileMode.Create))
                     {
-                        x?.Close();
+                        ss.Stream.SetLength(0);
+
+                        ms.Position = 0;
+
+                        byte[] buffer = new byte[1 << 20];
+                        for (;;)
+                        {
+                            var bytes = ms.Read(buffer, 0, buffer.Length);
+                            if (bytes == 0)
+                            {
+                                break;
+                            }
+
+                            ss.Stream.Write(buffer, 0, bytes);
+                        }
                     }
                 }
             }
