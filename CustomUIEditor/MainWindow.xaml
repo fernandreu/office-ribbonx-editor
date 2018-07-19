@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:CustomUIEditor"
         xmlns:data="clr-namespace:CustomUIEditor.Data"
         xmlns:model="clr-namespace:CustomUIEditor.Model"
+        xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         mc:Ignorable="d"
         Title="{x:Static local:StringsResource.idsApplicationTitle}" 
@@ -259,7 +260,7 @@
 
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
 
-            <TextBox
+            <wpfTool:RichTextBox
                 Name="Editor"
                 HorizontalScrollBarVisibility="Auto"
                 VerticalScrollBarVisibility="Auto"
@@ -270,8 +271,18 @@
                 FontSize="{local:SettingBinding EditorFontSize}"
                 DataContext="{Binding SelectedItem, ElementName=DocumentView}"
                 IsEnabled="{Binding CanHaveContents}"
-                Text="{Binding Contents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                />
+                AcceptsReturn="True"
+                AcceptsTab="True"
+                Text="{Binding Contents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <wpfTool:RichTextBox.TextFormatter>
+                    <local:XmlFormatter/>
+                </wpfTool:RichTextBox.TextFormatter>
+                <wpfTool:RichTextBox.Resources>
+                    <Style TargetType="{x:Type Paragraph}">
+                        <Setter Property="Margin" Value="0"/>
+                    </Style>
+                </wpfTool:RichTextBox.Resources>
+            </wpfTool:RichTextBox>
         </Grid>
     </DockPanel>
 </Window>

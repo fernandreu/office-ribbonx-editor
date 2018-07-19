@@ -27,6 +27,7 @@ namespace CustomUIEditor
     using Microsoft.Win32;
     using Model;
 
+    using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -510,9 +511,9 @@ namespace CustomUIEditor
 
         private void EditorSelectionChanged(object sender, RoutedEventArgs e)
         {
-            if (!(sender is TextBox editor))
+            if (!(sender is RichTextBox editor))
             {
-                Debug.Print("This should only be used with a TextBox");
+                Debug.Print("This should only be used with a RichTextBox");
                 return;
             }
             
@@ -520,31 +521,18 @@ namespace CustomUIEditor
 
             if (string.IsNullOrEmpty(txt))
             {
-                this.LineBox.Text = "Line 0, Col 0";
+                this.LineBox.Text = "Ln 0  Col 0";
                 return;
             }
+
+            editor.CaretPosition.GetLineStartPosition(-int.MaxValue, out var lineCount);
+            var colCount = editor.CaretPosition.GetLineStartPosition(0)?.GetOffsetToPosition(editor.CaretPosition) ?? 0;
+            ////if (lineCount == 0)
+            ////{
+            ////    colCount--;
+            ////}
             
-            var pos = editor.SelectionStart;
-
-            var lineCount = 0;
-            var colCount = 0;
-            for (var i = 0; i < txt.Length; i++)
-            {
-                if (i == pos)
-                {
-                    break;
-                }
-
-                if (txt[i] == '\n')
-                {
-                    colCount = -1;
-                    lineCount++;
-                }
-
-                colCount++;
-            }
-            
-            this.LineBox.Text = $"Line {lineCount + 1}, Col {colCount + 1}";
+            this.LineBox.Text = $"Ln {-lineCount + 1},  Col {colCount}";
         }
 
         private void GenerateCallbacks(object sender, RoutedEventArgs e)

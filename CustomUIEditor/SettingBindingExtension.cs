@@ -1,4 +1,13 @@
-﻿// This is taken from: http://www.thomaslevesque.com/2008/11/18/wpf-binding-to-application-settings-using-a-markup-extension/
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright company="Thomas Levesque" file="">
+//    This is taken from: http://www.thomaslevesque.com/2008/11/18/wpf-binding-to-application-settings-using-a-markup-extension/
+// </copyright>
+// <summary>
+//   
+// </summary>
+// 
+// --------------------------------------------------------------------------------------------------------------------
+
 namespace CustomUIEditor
 {
     using System.Windows.Data;
@@ -7,13 +16,13 @@ namespace CustomUIEditor
     {
         public SettingBindingExtension()
         {
-            Initialize();
+            this.Initialize();
         }
 
         public SettingBindingExtension(string path)
             : base(path)
         {
-            Initialize();
+            this.Initialize();
         }
 
         private void Initialize()
