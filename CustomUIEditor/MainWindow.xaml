@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:CustomUIEditor"
         xmlns:data="clr-namespace:CustomUIEditor.Data"
         xmlns:model="clr-namespace:CustomUIEditor.Model"
-        xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
+        xmlns:sn="http://scintillanet.codeplex.com"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+
         mc:Ignorable="d"
         Title="{x:Static local:StringsResource.idsApplicationTitle}" 
         Height="{local:SettingBinding Height}"
@@ -51,7 +53,17 @@
                 </MenuItem>
 
                 <MenuItem Header="Save As" Click="SaveAsClick"/>
+
                 <Separator/>
+
+                <MenuItem Header="Settings..." Click="ShowSettings">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/settings.png" Width="{local:SettingBinding IconSize}" Height="{local:SettingBinding IconSize}"/>
+                    </MenuItem.Icon>    
+                </MenuItem>
+
+                <Separator/>
+
                 <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
                 <local:RecentFileList x:Name="RecentFileList"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
@@ -162,6 +174,15 @@
                 </Button>
                 
                 <Separator/>
+
+                <Button ToolTip="View the editor settings" Click="ShowSettings">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/settings.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
+                    </StackPanel>
+                </Button>
+                
+                <Separator/>
                 
                 <Button ToolTip="Insert Icons">
                     <StackPanel Orientation="Horizontal">
@@ -201,12 +222,19 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
                 <TextBlock Text="{Binding StatusMessage}"/>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1" Margin="0,0,10,0">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Zoom factor:" Padding="0,0,4,0"/>
+                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding ElementName=Editor, Path=Zoom, Mode=OneWay}" Height="20" Minimum="-10" Maximum="20"/>
+                </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
                 <TextBlock Name="LineBox" Margin="0,0,20,0" Text="Line 0, Col 0"/>
@@ -224,6 +252,7 @@
                 Name="DocumentView"
                 ItemsSource="{Binding DocumentList}" 
                 Grid.Column="0"
+                SelectedItemChanged="DocumentViewSelectionChanged"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
@@ -260,29 +289,27 @@
 
             <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
 
-            <wpfTool:RichTextBox
-                Name="Editor"
-                HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Auto"
+            <sn:ScintillaWPF
+                x:Name="Editor"
                 Grid.Column="2"
                 HorizontalAlignment="Stretch"
                 FontFamily="Consolas"
-                SelectionChanged="EditorSelectionChanged"
+                UpdateUI="ScintillaUpdateUi"
                 FontSize="{local:SettingBinding EditorFontSize}"
                 DataContext="{Binding SelectedItem, ElementName=DocumentView}"
-                IsEnabled="{Binding CanHaveContents}"
-                AcceptsReturn="True"
-                AcceptsTab="True"
-                Text="{Binding Contents, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                <wpfTool:RichTextBox.TextFormatter>
-                    <local:XmlFormatter/>
-                </wpfTool:RichTextBox.TextFormatter>
-                <wpfTool:RichTextBox.Resources>
-                    <Style TargetType="{x:Type Paragraph}">
-                        <Setter Property="Margin" Value="0"/>
+                ZoomChanged="EditorZoomChanged"
+                >
+                <sn:ScintillaWPF.Resources>
+                    <Style TargetType="sn:ScintillaWPF">
+                        <Setter Property="IsEnabled" Value="False"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding CanHaveContents}" Value="True">
+                                <Setter Property="IsEnabled" Value="True"/>
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
-                </wpfTool:RichTextBox.Resources>
-            </wpfTool:RichTextBox>
+                </sn:ScintillaWPF.Resources>
+            </sn:ScintillaWPF>
         </Grid>
     </DockPanel>
 </Window>

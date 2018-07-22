@@ -1,0 +1,86 @@
+﻿<Window x:Class="CustomUIEditor.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:properties="clr-namespace:CustomUIEditor.Properties"
+        xmlns:data="clr-namespace:CustomUIEditor.Data"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="Settings" Height="309.414" Width="647.314"
+        SizeToContent="WidthAndHeight"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner"
+        Closing="WindowClosing"
+        ShowInTaskbar="False"
+        Icon="Resources/settings.png"
+        >
+    <Window.Resources>
+        <data:ColorConverter x:Key="ColorConverter"/>
+    </Window.Resources>
+    <Grid Margin="4">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Editor colors">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="150"/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" Content="Normal Text"/>
+                <xctk:ColorPicker Grid.Row="0" Grid.Column="1" x:Name="TextColorLabel" SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=TextColor, Converter={StaticResource ColorConverter}}" Height="24" DisplayColorAndName="True" MaxDropDownWidth="250"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Background"/>
+                <xctk:ColorPicker Grid.Row="1" Grid.Column="1" x:Name="BackgroundColorLabel" SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=BackgroundColor, Converter={StaticResource ColorConverter}}" Height="24" DisplayColorAndName="True" MaxDropDownWidth="250"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Attribute"/>
+                <xctk:ColorPicker Grid.Row="2" Grid.Column="1" x:Name="AttributeColorLabel" SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=AttributeColor, Converter={StaticResource ColorConverter}}" Height="24" DisplayColorAndName="True" MaxDropDownWidth="250"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Comment"/>
+                <xctk:ColorPicker Grid.Row="3" Grid.Column="1" x:Name="CommentColorLabel" SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=CommentColor, Converter={StaticResource ColorConverter}}" Height="24" DisplayColorAndName="True" MaxDropDownWidth="250"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Tag"/>
+                <xctk:ColorPicker Grid.Row="4" Grid.Column="1" x:Name="TagColorLabel" SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=TagColor, Converter={StaticResource ColorConverter}}" Height="24" DisplayColorAndName="True" MaxDropDownWidth="250"/>
+
+                <Label Grid.Row="5" Grid.Column="0" Content="String"/>
+                <xctk:ColorPicker Grid.Row="5" Grid.Column="1" x:Name="StringColorLabel" SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=StringColor, Converter={StaticResource ColorConverter}}" Height="24" DisplayColorAndName="True" MaxDropDownWidth="250"/>
+            </Grid>
+        </GroupBox>
+        <GroupBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Header="Other settings">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Content="Editor Font Size"/>
+                <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Value="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}" Minimum="1"/>
+            </Grid>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+            <Button Content="Reset Defaults" Margin="3" Padding="8,4" Click="ResetSettings"/>
+            <Button Content="Apply" Margin="3" Padding="8,4" Click="ApplySettings"/>
+            <Button Content="Accept" Margin="3" Padding="8,4" Click="AcceptSettings" IsDefault="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

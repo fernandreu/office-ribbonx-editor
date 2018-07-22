@@ -16,7 +16,7 @@ namespace CustomUIEditor
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
-    using System.Runtime.Remoting.Channels;
+    using System.Linq;
     using System.Text;
     using System.Windows;
     using System.Windows.Controls;
@@ -27,7 +27,7 @@ namespace CustomUIEditor
     using Microsoft.Win32;
     using Model;
 
-    using RichTextBox = Xceed.Wpf.Toolkit.RichTextBox;
+    using ScintillaNET;
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -43,9 +43,13 @@ namespace CustomUIEditor
         
         private bool suppressRequestBringIntoView;
         
+        private int maxLineNumberCharLength;
+
         private Hashtable customUiSchemas;
 
         private string statusMessage;
+
+        private TreeViewItemViewModel selectedItem = null;
 
         /// <summary>
         /// Used during the XML validation to flag whether there was any error during the process
@@ -58,6 +62,8 @@ namespace CustomUIEditor
         {
             this.InitializeComponent();
             this.DataContext = this;
+
+            this.SetScintillaLexer();
 
             var applicationFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
             this.LoadXmlSchemas(applicationFolder + @"\Schemas\");
@@ -118,6 +124,65 @@ namespace CustomUIEditor
         }
         
         #endregion // Properties
+        
+        public void SetScintillaLexer()
+        {
+            var scintilla = this.Editor;
+
+            // Set the XML Lexer
+            scintilla.Lexer = Lexer.Xml;
+
+            // Show line numbers (this is now done in TextChanged so that width depends on number of digits)
+            ////scintilla.Margins[0].Width = 10;
+
+            // Enable folding
+            scintilla.SetProperty("fold", "1");
+            scintilla.SetProperty("fold.compact", "1");
+            scintilla.SetProperty("fold.html", "1");
+
+            // Use Margin 2 for fold markers
+            scintilla.Margins[2].Type = MarginType.Symbol;
+            scintilla.Margins[2].Mask = Marker.MaskFolders;
+            scintilla.Margins[2].Sensitive = true;
+            scintilla.Margins[2].Width = 20;
+
+            // Reset folder markers
+            for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
+            {
+                scintilla.Markers[i].SetForeColor(System.Drawing.SystemColors.ControlLightLight);
+                scintilla.Markers[i].SetBackColor(System.Drawing.SystemColors.ControlDark);
+            }
+
+            // Style the folder markers
+            scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+            scintilla.Markers[Marker.Folder].SetBackColor(System.Drawing.SystemColors.ControlText);
+            scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+            scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+            scintilla.Markers[Marker.FolderEnd].SetBackColor(System.Drawing.SystemColors.ControlText);
+            scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+            scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+
+            // Enable automatic folding
+            scintilla.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
+
+            // Set the Styles
+            scintilla.StyleResetDefault();
+
+            scintilla.Styles[ScintillaNET.Style.Default].Font = "Consolas";
+            scintilla.Styles[ScintillaNET.Style.Default].Size = Properties.Settings.Default.EditorFontSize;
+            scintilla.Styles[ScintillaNET.Style.Default].ForeColor = Properties.Settings.Default.TextColor;
+            scintilla.Styles[ScintillaNET.Style.Default].BackColor = Properties.Settings.Default.BackgroundColor;
+            scintilla.StyleClearAll();
+            scintilla.Styles[ScintillaNET.Style.Xml.Attribute].ForeColor = Properties.Settings.Default.AttributeColor;
+            scintilla.Styles[ScintillaNET.Style.Xml.Entity].ForeColor = Properties.Settings.Default.AttributeColor;
+            scintilla.Styles[ScintillaNET.Style.Xml.Comment].ForeColor = Properties.Settings.Default.CommentColor;
+            scintilla.Styles[ScintillaNET.Style.Xml.Tag].ForeColor = Properties.Settings.Default.TagColor;
+            scintilla.Styles[ScintillaNET.Style.Xml.TagEnd].ForeColor = Properties.Settings.Default.TagColor;
+            scintilla.Styles[ScintillaNET.Style.Xml.DoubleString].ForeColor = Properties.Settings.Default.StringColor;
+            scintilla.Styles[ScintillaNET.Style.Xml.SingleString].ForeColor = Properties.Settings.Default.StringColor;
+        }
 
         private void OpenClick(object sender, RoutedEventArgs e)
         {
@@ -500,7 +565,7 @@ namespace CustomUIEditor
         private void ShowError(string errorText)
         {
             Debug.Assert(!string.IsNullOrEmpty(errorText), "Error message is empty");
-
+            
             MessageBox.Show(
                 this,
                 errorText,
@@ -509,35 +574,94 @@ namespace CustomUIEditor
                 MessageBoxImage.Error);
         }
 
-        private void EditorSelectionChanged(object sender, RoutedEventArgs e)
-        {
-            if (!(sender is RichTextBox editor))
-            {
-                Debug.Print("This should only be used with a RichTextBox");
-                return;
-            }
-            
-            var txt = editor.Text;
-
-            if (string.IsNullOrEmpty(txt))
-            {
-                this.LineBox.Text = "Ln 0  Col 0";
-                return;
-            }
-
-            editor.CaretPosition.GetLineStartPosition(-int.MaxValue, out var lineCount);
-            var colCount = editor.CaretPosition.GetLineStartPosition(0)?.GetOffsetToPosition(editor.CaretPosition) ?? 0;
-            ////if (lineCount == 0)
-            ////{
-            ////    colCount--;
-            ////}
-            
-            this.LineBox.Text = $"Ln {-lineCount + 1},  Col {colCount}";
-        }
-
         private void GenerateCallbacks(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("This feature is not implemented yet");
+            // First, check whether any text is selected
+            try
+            {
+                var customUi = new XmlDocument();
+                customUi.LoadXml(this.Editor.Text);
+
+                var callbacks = CallbacksBuilder.GenerateCallback(customUi);
+                if (callbacks == null || callbacks.Length == 0)
+                {
+                    MessageBox.Show(StringsResource.idsNoCallback, "Generate Callbacks", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+
+                var window = new CallbackWindow(callbacks.ToString()) { Owner = this };
+                window.Show();
+            }
+            catch (Exception ex)
+            {
+                Debug.Assert(false, ex.Message);
+            }
+        }
+
+        private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (this.selectedItem != null && this.selectedItem.CanHaveContents)
+            {
+                // If applicable, save the contents currently shown in the editor to that item
+                this.selectedItem.Contents = this.Editor.Text;
+            }
+
+            this.selectedItem = e.NewValue as TreeViewItemViewModel;
+
+            if (this.selectedItem == null)
+            {
+                this.Editor.Text = string.Empty;
+                return;
+            }
+
+            // Load contents of this item
+            if (this.selectedItem.CanHaveContents)
+            {
+                this.Editor.Text = this.selectedItem.Contents;
+            }
+        }
+
+        private void ScintillaUpdateUi(object sender, UpdateUIEventArgs e)
+        {
+            if (!this.Editor.IsEnabled)
+            {
+                this.LineBox.Text = "Ln 0, Col 0";
+            }
+            else
+            {
+                var pos = this.Editor.CurrentPosition;
+                var line = this.Editor.LineFromPosition(pos);
+                var col = this.Editor.GetColumn(pos);
+
+                this.LineBox.Text = $"Ln {line + 1},  Col {col + 1}";
+            }
+
+            // Did the number of characters in the line number display change?
+            // i.e. nnn VS nn, or nnnn VS nn, etc...
+            var charLength = this.Editor.Lines.Count.ToString().Length;
+            if (charLength == this.maxLineNumberCharLength)
+            {
+                return;
+            }
+
+            // Calculate the width required to display the last line number
+            // and include some padding for good measure.
+            const int LinePadding = 2;
+
+            this.Editor.Margins[0].Width = this.Editor.TextWidth(ScintillaNET.Style.LineNumber, new string('9', charLength + 1)) + LinePadding;
+            this.maxLineNumberCharLength = charLength;
+        }
+
+        private void ShowSettings(object sender, RoutedEventArgs e)
+        {
+            var dlg = new SettingsWindow { Owner = this };
+            dlg.ShowDialog();
+            this.SetScintillaLexer();  // In case settings changed
+        }
+
+        private void EditorZoomChanged(object sender, EventArgs e)
+        {
+            this.ZoomBox.Value = this.Editor.Zoom;
         }
     }
 }
