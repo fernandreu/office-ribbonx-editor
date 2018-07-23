@@ -30,7 +30,9 @@ namespace CustomUIEditor
                 nameof(Properties.Settings.Default.AttributeColor),
                 nameof(Properties.Settings.Default.CommentColor),
                 nameof(Properties.Settings.Default.StringColor),
-                nameof(Properties.Settings.Default.EditorFontSize)
+                nameof(Properties.Settings.Default.EditorFontSize),
+                nameof(Properties.Settings.Default.TabWidth),
+                nameof(Properties.Settings.Default.WrapMode)
             };
 
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
@@ -38,6 +40,8 @@ namespace CustomUIEditor
         public SettingsWindow()
         {
             this.InitializeComponent();
+
+            this.WrapModeBox.ItemsSource = Enum.GetValues(typeof(ScintillaNET.WrapMode)).Cast<ScintillaNET.WrapMode>();
 
             this.LoadCurrent();
         }

@@ -129,6 +129,10 @@ namespace CustomUIEditor
         {
             var scintilla = this.Editor;
 
+            // Other settings which are related to formatting
+            scintilla.TabWidth = Properties.Settings.Default.TabWidth;
+            scintilla.WrapMode = Properties.Settings.Default.WrapMode;
+
             // Set the XML Lexer
             scintilla.Lexer = Lexer.Xml;
 
@@ -395,11 +399,13 @@ namespace CustomUIEditor
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
+            this.ApplyCurrentText();
             this.CurrentDocument?.Save(this.ReloadOnSave);
         }
 
         private void SaveAllClick(object sender, RoutedEventArgs e)
         {
+            this.ApplyCurrentText();
             foreach (var doc in this.DocumentList)
             {
                 doc.Save(this.reloadOnSave);
@@ -598,13 +604,18 @@ namespace CustomUIEditor
             }
         }
 
-        private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void ApplyCurrentText()
         {
             if (this.selectedItem != null && this.selectedItem.CanHaveContents)
             {
                 // If applicable, save the contents currently shown in the editor to that item
                 this.selectedItem.Contents = this.Editor.Text;
             }
+        }
+
+        private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.ApplyCurrentText();
 
             this.selectedItem = e.NewValue as TreeViewItemViewModel;
 
