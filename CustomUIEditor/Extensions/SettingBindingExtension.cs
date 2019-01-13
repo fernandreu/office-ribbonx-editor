@@ -8,11 +8,11 @@
 // 
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor
+namespace CustomUIEditor.Extensions
 {
     using System.Windows.Data;
 
-    class SettingBindingExtension : Binding
+    public class SettingBindingExtension : Binding
     {
         public SettingBindingExtension()
         {

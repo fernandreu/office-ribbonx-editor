@@ -8,16 +8,20 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Model
+namespace CustomUIEditor.ViewModels
 {
     using System.Collections.ObjectModel;
     using System.ComponentModel;
+
+    using CustomUIEditor.Extensions;
+
+    using Prism.Mvvm;
 
     /// <summary>
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : INotifyPropertyChanged
+    public class TreeViewItemViewModel : BindableBase
     {
         #region Data
 
@@ -62,8 +66,6 @@ namespace CustomUIEditor.Model
 
         #endregion // Constructors
         
-        public event PropertyChangedEventHandler PropertyChanged;
-
         #region Presentation Members
         
         /// <summary>
@@ -84,7 +86,10 @@ namespace CustomUIEditor.Model
             get => this.isExpanded;
             set
             {
-                this.SetField(ref this.isExpanded, value, this.PropertyChanged, nameof(this.IsExpanded));
+                if (!this.SetProperty(ref this.isExpanded, value))
+                {
+                    return;
+                }
 
                 // Expand all the way up to the root.
                 if (this.isExpanded && this.Parent != null)
@@ -109,7 +114,7 @@ namespace CustomUIEditor.Model
             get => this.isSelected;
             set
             {
-                if (this.SetField(ref this.isSelected, value, this.PropertyChanged, nameof(this.IsSelected)) && this.isSelected)
+                if (this.SetProperty(ref this.isSelected, value) && this.isSelected)
                 {
                     this.IsExpanded = true; // To select something, you should be able to see it
                 }
@@ -122,24 +127,13 @@ namespace CustomUIEditor.Model
         public bool CanHaveContents
         {
             get => this.canHaveContents;
-            set => this.SetField(ref this.canHaveContents, value, this.PropertyChanged, nameof(this.CanHaveContents), nameof(this.CannotHaveContents));
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this TreeViewItem can have contents edited in the code control.
-        /// This is the exact opposite of CanHaveContents, in case it is needed from xaml (if only needed once, 
-        /// this is more concise than having a easier than having a bool converter)
-        /// </summary>
-        public bool CannotHaveContents
-        {
-            get => !this.CanHaveContents;
-            set => this.CanHaveContents = !value;
+            set => this.SetProperty(ref this.canHaveContents, value);
         }
 
         public string Contents
         {
             get => this.contents;
-            set => this.SetField(ref this.contents, value, this.PropertyChanged, nameof(this.Contents));
+            set => this.SetProperty(ref this.contents, value);
         }
         
         public TreeViewItemViewModel Parent { get; }

@@ -3,11 +3,11 @@
 //   Fernando Andreu
 // </copyright>
 // <summary>
-//   Defines several extension methods that simplify the applicaiton of INotifyPropertyChanged interface
+//   Defines several extension methods that simplify the application of INotifyPropertyChanged interface
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor
+namespace CustomUIEditor.Extensions
 {
     using System.Collections.Generic;
     using System.ComponentModel;

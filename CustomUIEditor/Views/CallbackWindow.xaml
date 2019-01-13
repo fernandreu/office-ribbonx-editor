@@ -1,15 +1,15 @@
-﻿<Window x:Class="CustomUIEditor.CallbackWindow"
+﻿<Window x:Class="CustomUIEditor.Views.CallbackWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CustomUIEditor"
+        xmlns:extensions="clr-namespace:CustomUIEditor.Extensions"
         xmlns:sn="http://scintillanet.codeplex.com"
         mc:Ignorable="d"
         Title="Callbacks Viewer" Height="450" Width="800"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Icon="Resources/callbacks.png">
+        Icon="/Resources/callbacks.png">
     <Grid>
         
         <sn:ScintillaWPF
@@ -17,7 +17,7 @@
             HorizontalAlignment="Stretch"
             FontFamily="Consolas"
             UpdateUI="ScintillaUpdateUi"
-            FontSize="{local:SettingBinding EditorFontSize}"
+            FontSize="{extensions:SettingBinding EditorFontSize}"
             DataContext="{Binding SelectedItem, ElementName=DocumentView}"
         />
     </Grid>

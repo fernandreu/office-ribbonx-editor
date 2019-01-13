@@ -1,4 +1,13 @@
-﻿namespace CustomUIEditor.Data
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="ColorConverter.cs" company="FA">
+//   Fernando Andreu
+// </copyright>
+// <summary>
+//   Defines the ColorConverter type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace CustomUIEditor.Data
 {
     using System;
     using System.Globalization;

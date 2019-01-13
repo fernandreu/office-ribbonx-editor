@@ -7,9 +7,9 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Model
+namespace CustomUIEditor.ViewModels
 {
-    using CustomUIEditor.Data;
+    using Data;
 
     public class OfficePartViewModel : TreeViewItemViewModel
     {
@@ -35,7 +35,7 @@ namespace CustomUIEditor.Model
         public string ImageSource => "/Resources/xml.png";  // TODO: That's probably not the only one possible
 
         /// <summary>
-        /// Reloads the OfficePart associated with this view model, but preserving the current edits if not saved
+        /// Reloads the OfficePart associated with this View model, but preserving the current edits if not saved
         /// </summary>
         /// <returns>Whether it was reloaded successfully (it might not if the corresponding part type does not 
         /// exist in the document anymore)</returns>

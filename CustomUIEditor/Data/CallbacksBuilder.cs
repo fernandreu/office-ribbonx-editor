@@ -1,4 +1,13 @@
-﻿namespace CustomUIEditor
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="CallbacksBuilder.cs" company="FA">
+//   Fernando Andreu
+// </copyright>
+// <summary>
+//   Defines the CallbacksBuilder type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace CustomUIEditor.Data
 {
     using System.Diagnostics;
     using System.Text;

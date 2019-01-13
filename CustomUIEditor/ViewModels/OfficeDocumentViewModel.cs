@@ -7,12 +7,12 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Model
+namespace CustomUIEditor.ViewModels
 {
     using System;
     using System.IO;
 
-    using CustomUIEditor.Data;
+    using Data;
 
     public class OfficeDocumentViewModel : TreeViewItemViewModel
     {
@@ -78,7 +78,7 @@ namespace CustomUIEditor.Model
             // Store the file name (otherwise, it will have been erased after calling Dispose)
             var fileName = this.document.Name;
 
-            // Dispose current document (not needed as references to its parts are stored in their view models anyway)
+            // Dispose current document (not needed as references to its parts are stored in their View models anyway)
             this.document.Dispose();
 
             // Then, reload it

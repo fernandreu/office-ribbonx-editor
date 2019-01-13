@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor
+namespace CustomUIEditor.Views
 {
     using System.Drawing;
     using System.Windows;
@@ -15,7 +15,7 @@ namespace CustomUIEditor
     using ScintillaNET;
 
     /// <summary>
-    /// Interaction logic for CallbackWindow.xaml
+    /// Interaction logic for CallbackWindow
     /// </summary>
     public partial class CallbackWindow : Window
     {

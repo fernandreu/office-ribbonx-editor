@@ -3,7 +3,7 @@
 //   This source code is licensed under The Code Project Open License (CPOL)
 // </copyright>
 // <summary>
-//   Defines the RecentFileList type. This is originary from:
+//   Defines the RecentFileList type. This is originally from:
 //      https://www.codeproject.com/Articles/23731/RecentFileList-a-WPF-MRU
 //   Modifications made:
 //   - Code has been formatted to be compatible with StyleCop
@@ -11,7 +11,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor
+namespace CustomUIEditor.Data
 {
     using System;
     using System.Collections.Generic;

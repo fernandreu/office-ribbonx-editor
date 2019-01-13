@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomUIEditor {
+namespace CustomUIEditor.Extensions {
     using System;
     
     

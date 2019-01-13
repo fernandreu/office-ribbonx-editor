@@ -16,6 +16,8 @@ namespace CustomUIEditor.Data
     using System.IO.Packaging;
     using System.Windows.Media.Imaging;
 
+    using CustomUIEditor.Extensions;
+
     public class OfficePart
     {
         private string id;
