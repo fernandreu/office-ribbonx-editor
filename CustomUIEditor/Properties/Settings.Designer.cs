@@ -178,5 +178,29 @@ namespace CustomUIEditor.Properties {
                 this["TextColor"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("4")]
+        public int TabWidth {
+            get {
+                return ((int)(this["TabWidth"]));
+            }
+            set {
+                this["TabWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::ScintillaNET.WrapMode WrapMode {
+            get {
+                return ((global::ScintillaNET.WrapMode)(this["WrapMode"]));
+            }
+            set {
+                this["WrapMode"] = value;
+            }
+        }
     }
 }

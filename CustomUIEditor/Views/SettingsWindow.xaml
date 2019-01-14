@@ -27,7 +27,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Editor colors">
+        <GroupBox Header="Colors">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -71,9 +71,14 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Label Content="Editor Font Size"/>
+                <Label Content="Font Size"/>
                 <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Value="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}" Minimum="1"/>
+                <Label Grid.Row="1" Grid.Column="0" Content="Tab Width"/>
+                <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Value="{Binding Source={x:Static properties:Settings.Default}, Path=TabWidth}" Minimum="1"/>
+                <Label Grid.Row="2" Grid.Column="0" Content="Wrap Mode"/>
+                <ComboBox x:Name="WrapModeBox"  Grid.Row="2" Grid.Column="1" SelectedItem="{Binding Source={x:Static properties:Settings.Default}, Path=WrapMode}"/>
             </Grid>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
