@@ -10,7 +10,6 @@
 namespace CustomUIEditor.Views
 {
     using System;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
@@ -29,28 +28,32 @@ namespace CustomUIEditor.Views
     /// </summary>
     public partial class MainWindow
     {
+        private readonly MainWindowViewModel viewModel;
+
         private bool suppressRequestBringIntoView;
         
         private int maxLineNumberCharLength;
 
-        private MainWindowViewModel model;
-
-        public MainWindow()
+        public MainWindow(MainWindowViewModel viewModel)
         {
             this.InitializeComponent();
 
-            this.model = (MainWindowViewModel)this.DataContext;
-            this.model.View = this;
+            this.DataContext = viewModel;
+            this.viewModel = viewModel;
+
+            this.viewModel.ShowSettings += (o, a) => this.ShowSettings();
+            this.viewModel.ApplyCurrentText += (o, a) => this.ApplyCurrentText();
+            this.viewModel.InsertRecentFile += (o, a) => this.RecentFileList.InsertFile(a.Data);
 
             this.SetScintillaLexer();
-            
-            // TODO: Can a Command be used for the menu click? So that FinishOpeningFile doesn't need to be public
-            this.RecentFileList.MenuClick += (sender, args) => this.model.FinishOpeningFile(args.Filepath);
         }
 
         public void SetScintillaLexer()
         {
             var scintilla = this.Editor;
+
+            scintilla.TabWidth = Properties.Settings.Default.TabWidth;
+            scintilla.WrapMode = Properties.Settings.Default.WrapMode;
 
             // Set the XML Lexer
             scintilla.Lexer = Lexer.Xml;
@@ -181,44 +184,6 @@ namespace CustomUIEditor.Views
             Process.Start("https://blogs.technet.microsoft.com/the_microsoft_excel_support_team_blog/2012/06/18/how-to-repurpose-a-button-in-excel-2007-or-2010/");
         }
 
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            foreach (var doc in this.model.DocumentList)
-            {
-                if (doc.HasUnsavedChanges)
-                {
-                    var result = MessageBox.Show(string.Format(StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        this.model.SaveCommand.Execute();
-                    }
-                    else if (result == MessageBoxResult.Cancel)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
-                }
-            }
-
-            // Now that it is clear we can leave the program, dispose all documents (i.e. delete the temporary unzipped files)
-            foreach (var doc in this.model.DocumentList)
-            {
-                doc.Document.Dispose();
-            }
-        }
-
-        public void ShowError(string errorText)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(errorText), "Error message is empty");
-            
-            MessageBox.Show(
-                this,
-                errorText,
-                this.Title,
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        }
-
         private void GenerateCallbacks(object sender, RoutedEventArgs e)
         {
             // First, check whether any text is selected
@@ -243,26 +208,32 @@ namespace CustomUIEditor.Views
             }
         }
 
-        private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void ApplyCurrentText()
         {
-            if (this.model.SelectedItem != null && this.model.SelectedItem.CanHaveContents)
+            // TODO: This gets called from the model, and then sets a property in the model... it should probably be defined in the model then
+            if (this.viewModel.SelectedItem != null && this.viewModel.SelectedItem.CanHaveContents)
             {
                 // If applicable, save the contents currently shown in the editor to that item
-                this.model.SelectedItem.Contents = this.Editor.Text;
+                this.viewModel.SelectedItem.Contents = this.Editor.Text;
             }
+        }
 
-            this.model.SelectedItem = e.NewValue as TreeViewItemViewModel;
+        private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.ApplyCurrentText();
 
-            if (this.model.SelectedItem == null)
+            this.viewModel.SelectedItem = e.NewValue as TreeViewItemViewModel;
+
+            if (this.viewModel.SelectedItem == null)
             {
                 this.Editor.Text = string.Empty;
                 return;
             }
 
             // Load contents of this item
-            if (this.model.SelectedItem.CanHaveContents)
+            if (this.viewModel.SelectedItem.CanHaveContents)
             {
-                this.Editor.Text = this.model.SelectedItem.Contents;
+                this.Editor.Text = this.viewModel.SelectedItem.Contents;
             }
         }
 
@@ -297,7 +268,7 @@ namespace CustomUIEditor.Views
             this.maxLineNumberCharLength = charLength;
         }
 
-        private void ShowSettings(object sender, RoutedEventArgs e)
+        private void ShowSettings()
         {
             var dlg = new SettingsWindow { Owner = this };
             dlg.ShowDialog();

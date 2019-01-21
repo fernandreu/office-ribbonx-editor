@@ -21,12 +21,19 @@ namespace CustomUIEditor.Data
     using System.Text;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
     using System.Xml;
 
     using Microsoft.Win32;
 
     public class RecentFileList : Separator
     {
+        public static DependencyProperty ClickCommandProperty = 
+            DependencyProperty.Register(
+                nameof(ClickCommand),
+                typeof(ICommand),
+                typeof(RecentFileList));
+
         private Separator separator;
 
         private List<RecentFile> recentFiles;
@@ -56,6 +63,12 @@ namespace CustomUIEditor.Data
             void RemoveFile(string filepath, int max);
         }
         
+        public ICommand ClickCommand
+        {
+            get => (ICommand)this.GetValue(ClickCommandProperty);
+            set => this.SetValue(ClickCommandProperty, value);
+        }
+
         /// <summary>
         /// Gets or sets the formatting string used for files from 1 to 9 in the list
         /// Used in: String.Format(MenuItemFormat, index, filepath, displayPath);
@@ -261,6 +274,10 @@ namespace CustomUIEditor.Data
             }
 
             this.MenuClick?.Invoke(menuItem, new MenuClickEventArgs(filepath));
+            if (this.ClickCommand?.CanExecute(filepath) ?? false)
+            {
+                this.ClickCommand?.Execute(filepath);
+            }
         }
         
         // ReSharper disable StyleCop.SA1126

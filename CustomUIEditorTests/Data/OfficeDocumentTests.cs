@@ -1,20 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CustomUIEditor.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-// ReSharper disable once CheckNamespace
+﻿// ReSharper disable once CheckNamespace
 namespace CustomUIEditor.Data.Tests
 {
     using System.IO;
+    using NUnit.Framework;
 
-    [TestClass]
+    [TestFixture]
     public class OfficeDocumentTests
     {
-        [TestMethod]
+        [Test]
         public void SaveTest()
         {
             var doc = new OfficeDocument(@"Resources\Blank.xlsx");

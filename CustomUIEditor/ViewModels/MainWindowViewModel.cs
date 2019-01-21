@@ -16,24 +16,24 @@ namespace CustomUIEditor.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
     using System.Text;
     using System.Windows;
-    using System.Windows.Input;
     using System.Xml;
     using System.Xml.Schema;
 
     using CustomUIEditor.Data;
     using CustomUIEditor.Extensions;
-    using CustomUIEditor.Views;
-
-    using Microsoft.Win32;
+    using CustomUIEditor.Services;
 
     using Prism.Commands;
     using Prism.Mvvm;
 
     public class MainWindowViewModel : BindableBase
     {
+        private readonly IMessageBoxService messageBoxService;
+
+        private readonly IFileDialogService fileDialogService;
+
         /// <summary>
         /// Whether documents should be reloaded right before being saved.
         /// </summary>
@@ -50,8 +50,11 @@ namespace CustomUIEditor.ViewModels
         /// </summary>
         private bool hasXmlError;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService)
         {
+            this.messageBoxService = messageBoxService;
+            this.fileDialogService = fileDialogService;
+
             this.OpenCommand = new DelegateCommand(this.OpenFile);
             this.SaveCommand = new DelegateCommand(this.Save);
             this.SaveAllCommand = new DelegateCommand(this.SaveAll);
@@ -59,7 +62,10 @@ namespace CustomUIEditor.ViewModels
             this.InsertXml14Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
             this.ValidateCommand = new DelegateCommand(() => this.ValidateXml(true));
-
+            this.ShowSettingsCommand = new DelegateCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
+            this.RecentFileClickCommand = new DelegateCommand<string>(this.FinishOpeningFile);
+            this.ClosingCommand = new DelegateCommand<CancelEventArgs>(this.QueryClose);
+            
             var applicationFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 #if DEBUG
             if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
@@ -69,9 +75,13 @@ namespace CustomUIEditor.ViewModels
 #endif
             this.LoadXmlSchemas(applicationFolder + @"\Schemas\");
         }
-        
-        public MainWindow View { get; set; }
 
+        public event EventHandler ShowSettings;
+
+        public event EventHandler ApplyCurrentText;
+
+        public event EventHandler<DataEventArgs<string>> InsertRecentFile;
+        
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
         /// <summary>
@@ -112,6 +122,12 @@ namespace CustomUIEditor.ViewModels
 
         public DelegateCommand ValidateCommand { get; set; }
 
+        public DelegateCommand ShowSettingsCommand { get; set; }
+
+        public DelegateCommand<string> RecentFileClickCommand { get; set; }
+
+        public DelegateCommand<CancelEventArgs> ClosingCommand { get; set; }
+
         /// <summary>
         /// Gets the View model of the OfficeDocument currently active (selected) on the application
         /// </summary>
@@ -140,11 +156,35 @@ namespace CustomUIEditor.ViewModels
             }
         }
         
+        private void QueryClose(CancelEventArgs e)
+        {
+            this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
+            foreach (var doc in this.DocumentList)
+            {
+                if (doc.HasUnsavedChanges)
+                {
+                    var result = this.messageBoxService.Show(string.Format(StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        this.SaveCommand.Execute();
+                    }
+                    else if (result == MessageBoxResult.Cancel)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+
+            // Now that it is clear we can leave the program, dispose all documents (i.e. delete the temporary unzipped files)
+            foreach (var doc in this.DocumentList)
+            {
+                doc.Document.Dispose();
+            }
+        }
+
         private void OpenFile()
         {
-            var ofd = new OpenFileDialog();
-            
-            ofd.Title = StringsResource.idsOpenDocumentDialogTitle;
             string[] filters =
                 {
                     StringsResource.idsFilterAllOfficeDocuments,
@@ -153,15 +193,11 @@ namespace CustomUIEditor.ViewModels
                     StringsResource.idsFilterPPTDocuments,
                     StringsResource.idsFilterAllFiles,
                 };
-            ofd.Filter = string.Join("|", filters);
-            ofd.FilterIndex = 0;
-            ofd.RestoreDirectory = true;
 
-            ofd.FileOk += (sender, e) => this.FinishOpeningFile(((OpenFileDialog)sender).FileName);
-            ofd.ShowDialog(this.View);
+            this.fileDialogService.OpenFileDialog(StringsResource.idsOpenDocumentDialogTitle, string.Join("|", filters), this.FinishOpeningFile);
         }
 
-        public void FinishOpeningFile(string fileName)
+        private void FinishOpeningFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
             {
@@ -180,24 +216,26 @@ namespace CustomUIEditor.ViewModels
                 }
 
                 this.DocumentList.Add(model);
-                this.View.RecentFileList.InsertFile(fileName);  // TODO: Call from View
+                this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
                 
                 // UndoRedo
                 ////_commands = new UndoRedo.Control.Commands(rtbCustomUI.Rtf);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error opening Office document");
+                this.messageBoxService.Show(ex.Message, "Error opening Office document", image: MessageBoxImage.Error);
             }
         }
 
         private void Save()
         {
+            this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
             this.CurrentDocument?.Save(this.ReloadOnSave);
         }
 
         private void SaveAll()
         {
+            this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
             foreach (var doc in this.DocumentList)
             {
                 doc.Save(this.ReloadOnSave);
@@ -225,9 +263,7 @@ namespace CustomUIEditor.ViewModels
             }
 
             filters.Add(StringsResource.idsFilterAllFiles);
-
-            var sfd = new SaveFileDialog { Title = StringsResource.idsSaveDocumentAsDialogTitle, Filter = string.Join("|", filters), FileName = doc.Name };
-
+            
             var ext = Path.GetExtension(doc.Name);
 
             // Find the appropriate FilterIndex
@@ -242,10 +278,7 @@ namespace CustomUIEditor.ViewModels
                 }
             }
 
-            sfd.FilterIndex = i + 1;
-
-            sfd.FileOk += (sender, args) => this.FinishSavingFile(((SaveFileDialog)sender).FileName);
-            sfd.ShowDialog(this.View);
+            this.fileDialogService.SaveFileDialog(StringsResource.idsSaveDocumentAsDialogTitle, string.Join("|", filters), this.FinishSavingFile, doc.Name, i + 1);
         }
 
         private void FinishSavingFile(string fileName)
@@ -270,11 +303,11 @@ namespace CustomUIEditor.ViewModels
                 Debug.WriteLine("Saving " + fileName + "...");
 
                 doc.Save(this.reloadOnSave, fileName);
-                this.View.RecentFileList.InsertFile(fileName);  // TODO: Call from View
+                this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Error saving Office document");
+                this.messageBoxService.Show(ex.Message, "Error saving Office document", image: MessageBoxImage.Error);
             }
         }
 
@@ -345,7 +378,7 @@ namespace CustomUIEditor.ViewModels
                     errorText.Append(string.Format(StringsResource.idsUnknownNamespace, xmlDoc.DocumentElement.NamespaceURI));
                     errorText.Append("\n" + string.Format(StringsResource.idsCustomUINamespace, targetSchema.TargetNamespace));
 
-                    this.View.ShowError(errorText.ToString());  // TODO: Call from View
+                    this.messageBoxService.Show(errorText.ToString(), "Error validating XML", image: MessageBoxImage.Error);
                     return false;
                 }
 
@@ -354,7 +387,7 @@ namespace CustomUIEditor.ViewModels
             }
             catch (XmlException ex)
             {
-                this.View.ShowError(StringsResource.idsInvalidXml + "\n" + ex.Message);  // TODO: Call from View
+                this.messageBoxService.Show(StringsResource.idsInvalidXml + "\n" + ex.Message, "Error validating XML", image: MessageBoxImage.Error);
                 return false;
             }
             
@@ -362,8 +395,7 @@ namespace CustomUIEditor.ViewModels
             {
                 if (showValidMessage)
                 {
-                    MessageBox.Show(
-                        this.View,
+                    this.messageBoxService.Show(
                         StringsResource.idsValidXml,
                         "XML is valid",
                         MessageBoxButton.OK,
@@ -383,8 +415,7 @@ namespace CustomUIEditor.ViewModels
                 this.hasXmlError = true;
             }
 
-            MessageBox.Show(
-                this.View,
+            this.messageBoxService.Show(
                 e.Message,
                 e.Severity.ToString(),
                 MessageBoxButton.OK,

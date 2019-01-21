@@ -9,7 +9,9 @@
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         xmlns:sn="http://scintillanet.codeplex.com"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+        xmlns:prism="http://prismlibrary.com/"
         mc:Ignorable="d"
         Title="{x:Static extensions:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -19,10 +21,12 @@
         WindowState="{Binding Source={x:Static properties:Settings.Default}, Path=WindowState}"
         Icon="/Resources/ApplicationIcon.ico"
         ResizeMode="CanResizeWithGrip"
-        Closing="MainWindow_OnClosing">
-    <Window.DataContext>
-        <model:MainWindowViewModel/>
-    </Window.DataContext>
+        d:DataContext="{d:DesignInstance model:MainWindowViewModel}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <prism:InvokeCommandAction Command="{Binding ClosingCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
     <Window.Resources>
         <ContextMenu x:Key="ImageContextMenu">
             <MenuItem Header="Change ID"/>
@@ -35,7 +39,7 @@
             </MenuItem>
         </ContextMenu>
         <data:SelectionConverter x:Key="SelectionConverter"/>
-    </Window.Resources>
+    </Window.Resources> 
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
             <MenuItem Header="_File">
@@ -67,7 +71,7 @@
 
                 <Separator/>
 
-                <MenuItem Header="Settings..." Click="ShowSettings">
+                <MenuItem Header="Settings..." Command="{Binding ShowSettingsCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/settings.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -78,7 +82,9 @@
                 <Separator/>
 
                 <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
-                <data:RecentFileList x:Name="RecentFileList"/>
+                <data:RecentFileList 
+                    x:Name="RecentFileList"
+                    ClickCommand="{Binding RecentFileClickCommand}"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit">
@@ -214,7 +220,7 @@
                 
                 <Separator/>
 
-                <Button ToolTip="View the editor settings" Click="ShowSettings">
+                <Button ToolTip="View the editor settings" Command="{Binding ShowSettingsCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/settings.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
