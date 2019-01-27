@@ -299,6 +299,7 @@
                 ItemsSource="{Binding DocumentList}" 
                 Grid.Column="0"
                 SelectedItemChanged="DocumentViewSelectionChanged"
+                PreviewMouseRightButtonDown="OnTreeViewRightClick"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
@@ -324,6 +325,13 @@
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="Save" Command="{Binding Data.SaveCommand, Source={StaticResource Proxy}}">
+                                        <MenuItem.Icon>
+                                            <Image Source="/Resources/save.png"
+                                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                                        </MenuItem.Icon>    
+                                    </MenuItem>
                                     <MenuItem Header="Save As..." Command="{Binding Data.SaveAsCommand, Source={StaticResource Proxy}}"/>
                                     <MenuItem Header="Close"/>
                                 </ContextMenu>

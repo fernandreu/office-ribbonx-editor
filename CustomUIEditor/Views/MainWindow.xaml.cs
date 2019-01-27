@@ -13,6 +13,8 @@ namespace CustomUIEditor.Views
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Input;
+    using System.Windows.Media;
     using System.Xml;
 
     using CustomUIEditor.Extensions;
@@ -108,6 +110,22 @@ namespace CustomUIEditor.Views
             scintilla.Styles[ScintillaNET.Style.Xml.TagEnd].ForeColor = Properties.Settings.Default.TagColor;
             scintilla.Styles[ScintillaNET.Style.Xml.DoubleString].ForeColor = Properties.Settings.Default.StringColor;
             scintilla.Styles[ScintillaNET.Style.Xml.SingleString].ForeColor = Properties.Settings.Default.StringColor;
+        }
+        
+        /// <summary>
+        /// Finds the first TreeViewItem which is a parent of the given source.
+        /// See <a href="https://stackoverflow.com/questions/592373/select-treeview-node-on-right-click-before-displaying-contextmenu">this</a>
+        /// </summary>
+        /// <param name="source">The starting source where the TreeViewItem will be searched</param>
+        /// <returns>The item found, or null otherwise</returns>
+        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        {
+            while (source != null && !(source is TreeViewItem))
+            {
+                source = VisualTreeHelper.GetParent(source);
+            }
+
+            return source as TreeViewItem;
         }
 
         #region Disable horizontal scrolling when selecting TreeView item
@@ -278,6 +296,23 @@ namespace CustomUIEditor.Views
         private void EditorZoomChanged(object sender, EventArgs e)
         {
             this.ZoomBox.Value = this.Editor.Zoom;
+        }
+
+        /// <summary>
+        /// Ensures that a TreeViewItem is selected before the context menu is displayed
+        /// See <a href="https://stackoverflow.com/questions/592373/select-treeview-node-on-right-click-before-displaying-contextmenu">this</a>
+        /// </summary>
+        /// <param name="sender">The sender of the right click</param>
+        /// <param name="e">The event arguments</param>
+        private void OnTreeViewRightClick(object sender, MouseButtonEventArgs e)
+        {
+            var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
+
+            if (treeViewItem != null)
+            {
+                treeViewItem.Focus();
+                e.Handled = true;
+            }
         }
     }
 }
