@@ -82,7 +82,8 @@
 
                 <Separator/>
 
-                <MenuItem Header="Close" InputGestureText="Ctrl+W"/>
+                <MenuItem Header="Close" InputGestureText="Ctrl+W" Command="{Binding CloseCommand}"/>
+
                 <data:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
@@ -333,7 +334,7 @@
                                         </MenuItem.Icon>    
                                     </MenuItem>
                                     <MenuItem Header="Save As..." Command="{Binding Data.SaveAsCommand, Source={StaticResource Proxy}}"/>
-                                    <MenuItem Header="Close"/>
+                                    <MenuItem Header="Close" Command="{Binding Data.CloseCommand, Source={StaticResource Proxy}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>

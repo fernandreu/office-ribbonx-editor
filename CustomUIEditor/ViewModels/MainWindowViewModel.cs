@@ -59,6 +59,7 @@ namespace CustomUIEditor.ViewModels
             this.SaveCommand = new DelegateCommand(this.Save);
             this.SaveAllCommand = new DelegateCommand(this.SaveAll);
             this.SaveAsCommand = new DelegateCommand(this.SaveAs);
+            this.CloseCommand = new DelegateCommand(this.CloseDocument);
             this.InsertXml14Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
             this.ValidateCommand = new DelegateCommand(() => this.ValidateXml(true));
@@ -116,6 +117,8 @@ namespace CustomUIEditor.ViewModels
 
         public DelegateCommand SaveAsCommand { get; }
 
+        public DelegateCommand CloseCommand { get; }
+
         public DelegateCommand InsertXml14Command { get; }
         
         public DelegateCommand InsertXml12Command { get; }
@@ -155,7 +158,33 @@ namespace CustomUIEditor.ViewModels
                 return null;
             }
         }
-        
+
+        private void CloseDocument()
+        {
+            var doc = this.CurrentDocument;
+            if (doc == null)
+            {
+                // Nothing to close
+                return;
+            }
+
+            if (doc.HasUnsavedChanges)
+            {
+                var result = this.messageBoxService.Show(string.Format(StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    this.SaveCommand.Execute();
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return;
+                }
+            }
+
+            doc.Document.Dispose();
+            this.DocumentList.Remove(doc);
+        }
+
         private void QueryClose(CancelEventArgs e)
         {
             this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
