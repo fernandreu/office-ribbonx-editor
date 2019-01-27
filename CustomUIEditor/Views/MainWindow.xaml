@@ -90,6 +90,8 @@
 
                 <MenuItem Header="Save As" Command="{Binding SaveAsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
+                <MenuItem Header="Close Current Document" InputGestureText="Ctrl+W" Command="{Binding CloseCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
+
                 <Separator/>
 
                 <MenuItem Header="Settings..." Command="{Binding ShowSettingsCommand}">
@@ -101,8 +103,6 @@
                 </MenuItem>
 
                 <Separator/>
-
-                <MenuItem Header="Close Current Document" InputGestureText="Ctrl+W" Command="{Binding CloseCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <data:RecentFileList 
                     x:Name="RecentFileList"

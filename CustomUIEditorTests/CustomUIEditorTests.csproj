@@ -70,6 +70,9 @@
     <Otherwise />
   </Choose>
   <ItemGroup>
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Data\OfficeDocumentTests.cs" />
     <Compile Include="Data\OfficePartTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
