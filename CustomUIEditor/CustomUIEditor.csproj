@@ -115,6 +115,7 @@
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IMessageBoxService.cs" />
     <Compile Include="Services\MessageBoxService.cs" />
+    <Compile Include="ViewModels\BindingProxy.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="Views\CallbackWindow.xaml.cs">
       <DependentUpon>CallbackWindow.xaml</DependentUpon>

@@ -1,5 +1,13 @@
-﻿// ReSharper disable once CheckNamespace
-namespace CustomUIEditor.Data.Tests
+﻿// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="OfficeDocumentTests.cs" company="FA">
+//   Fernando Andreu
+// </copyright>
+// <summary>
+//   Defines the OfficeDocumentTests type.
+// </summary>
+// --------------------------------------------------------------------------------------------------------------------
+
+namespace CustomUIEditor.Data
 {
     using System.IO;
     using NUnit.Framework;

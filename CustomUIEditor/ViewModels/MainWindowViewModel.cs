@@ -108,25 +108,25 @@ namespace CustomUIEditor.ViewModels
             set => this.SetProperty(ref this.selectedItem, value, () => this.RaisePropertyChanged(nameof(this.CurrentDocument)));
         }
 
-        public DelegateCommand OpenCommand { get; set; }
+        public DelegateCommand OpenCommand { get; }
 
-        public DelegateCommand SaveCommand { get; set; }
+        public DelegateCommand SaveCommand { get; }
 
-        public DelegateCommand SaveAllCommand { get; set; }
+        public DelegateCommand SaveAllCommand { get; }
 
-        public DelegateCommand SaveAsCommand { get; set; }
+        public DelegateCommand SaveAsCommand { get; }
 
-        public DelegateCommand InsertXml14Command { get; set; }
+        public DelegateCommand InsertXml14Command { get; }
         
-        public DelegateCommand InsertXml12Command { get; set; }
+        public DelegateCommand InsertXml12Command { get; }
 
-        public DelegateCommand ValidateCommand { get; set; }
+        public DelegateCommand ValidateCommand { get; }
 
-        public DelegateCommand ShowSettingsCommand { get; set; }
+        public DelegateCommand ShowSettingsCommand { get; }
 
-        public DelegateCommand<string> RecentFileClickCommand { get; set; }
+        public DelegateCommand<string> RecentFileClickCommand { get; }
 
-        public DelegateCommand<CancelEventArgs> ClosingCommand { get; set; }
+        public DelegateCommand<CancelEventArgs> ClosingCommand { get; }
 
         /// <summary>
         /// Gets the View model of the OfficeDocument currently active (selected) on the application

@@ -39,6 +39,7 @@
             </MenuItem>
         </ContextMenu>
         <data:SelectionConverter x:Key="SelectionConverter"/>
+        <model:BindingProxy x:Key="Proxy" Data="{Binding}"/>
     </Window.Resources> 
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
@@ -321,12 +322,23 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Save As..." Command="{Binding Data.SaveAsCommand, Source={StaticResource Proxy}}"/>
+                                    <MenuItem Header="Close"/>
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <DataTemplate DataType="{x:Type model:OfficePartViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Remove"/>
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
                         </StackPanel>
                     </DataTemplate>
                 </TreeView.Resources>

@@ -149,7 +149,7 @@ namespace CustomUIEditor.Data
         }
 
         /// <summary>
-        /// Determines whether the file loaded for this OFficeDocument has suffered external
+        /// Determines whether the file loaded for this OfficeDocument has suffered external
         /// modifications since this instance was created
         /// </summary>
         /// <returns>
@@ -201,7 +201,7 @@ namespace CustomUIEditor.Data
             Debug.Assert(this.package != null, "Failed to get packge.");
             Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
 
-            if (this.package == null || this.isReadOnly || !this.IsDirty)
+            if (this.package == null || this.isReadOnly || (!this.IsDirty && customFileName == this.fileName))
             {
                 return;
             }
