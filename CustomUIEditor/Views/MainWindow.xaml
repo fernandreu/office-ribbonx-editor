@@ -21,6 +21,7 @@
         WindowState="{Binding Source={x:Static properties:Settings.Default}, Path=WindowState}"
         Icon="/Resources/ApplicationIcon.ico"
         ResizeMode="CanResizeWithGrip"
+        x:Name="Window"
         d:DataContext="{d:DesignInstance model:MainWindowViewModel}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
@@ -41,6 +42,17 @@
         <data:SelectionConverter x:Key="SelectionConverter"/>
         <model:BindingProxy x:Key="Proxy" Data="{Binding}"/>
     </Window.Resources> 
+    <Window.InputBindings>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
+        <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
+        <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseCommand}"/>
+        <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Window, Path=CutCommand}"/>
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Window, Path=CopyCommand}"/>
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Window, Path=PasteCommand}"/>
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding ElementName=Window, Path=UndoCommand}"/>
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding ElementName=Window, Path=RedoCommand}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Window, Path=SelectAllCommand}"/>
+    </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
             <MenuItem Header="_File">
@@ -90,14 +102,14 @@
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit">
-                <MenuItem Header="Undo" InputGestureText="Ctrl+Z">
+                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Window, Path=UndoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/undo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Redo" InputGestureText="Ctrl+Y">
+                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding ElementName=Window, Path=RedoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/redo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -105,21 +117,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X">
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding ElementName=Window, Path=CutCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/cut.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C">
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding ElementName=Window, Path=CopyCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/copy.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V">
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding ElementName=Window, Path=PasteCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/paste.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -127,7 +139,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Select All" InputGestureText="Ctrl+A"/>
+                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Window, Path=SelectAllCommand}"/>
             </MenuItem>
             <MenuItem Header="_Insert">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}">

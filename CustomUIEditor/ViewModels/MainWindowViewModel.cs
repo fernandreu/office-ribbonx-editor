@@ -203,7 +203,7 @@ namespace CustomUIEditor.ViewModels
                 // This means that event handler was not listened by any view, or the view did not pass the editor contents back for some reason
                 return;
             }
-
+            
             this.SelectedItem.Contents = e.Data;
         }
 

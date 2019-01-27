@@ -226,7 +226,9 @@
       <LastGenOutput>StringsResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Samples\Custom OutSpace.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

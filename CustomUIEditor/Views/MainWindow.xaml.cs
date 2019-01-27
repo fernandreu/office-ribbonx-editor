@@ -21,6 +21,8 @@ namespace CustomUIEditor.Views
 
     using Data;
 
+    using Prism.Commands;
+
     using ScintillaNET;
 
     using ViewModels;
@@ -38,6 +40,17 @@ namespace CustomUIEditor.Views
 
         public MainWindow(MainWindowViewModel viewModel)
         {
+            // To keep things simpler, commands need to be defined before calling InitializeComponent.
+            // Otherwise, all command bindings will be set to null. The alternative is to create a
+            // DependencyProperty for each command, but it seems an overkill.
+            // Because Editor is still null, an intermediate lambda function needs to be used.
+            this.CutCommand = new DelegateCommand(() => this.Editor.Cut());
+            this.CopyCommand = new DelegateCommand(() => this.Editor.Copy());
+            this.PasteCommand = new DelegateCommand(() => this.Editor.Paste());
+            this.UndoCommand = new DelegateCommand(() => this.Editor.Undo());
+            this.RedoCommand = new DelegateCommand(() => this.Editor.Redo());
+            this.SelectAllCommand = new DelegateCommand(() => this.Editor.SelectAll());
+
             this.InitializeComponent();
 
             this.DataContext = viewModel;
@@ -49,6 +62,22 @@ namespace CustomUIEditor.Views
 
             this.SetScintillaLexer();
         }
+
+        #region View-specific commands
+
+        public ICommand CutCommand { get; }
+
+        public ICommand CopyCommand { get; }
+
+        public ICommand PasteCommand { get; }
+
+        public ICommand UndoCommand { get; }
+
+        public ICommand RedoCommand { get; }
+
+        public ICommand SelectAllCommand { get; }
+
+        #endregion
 
         public void SetScintillaLexer()
         {
