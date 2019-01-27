@@ -1,9 +1,9 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SettingsWindow.xaml.cs" company="FA">
+// <copyright file="SettingsDialog.xaml.cs" company="FA">
 //   Fernando Andreu
 // </copyright>
 // <summary>
-//   Interaction logic for SettingsWindow.xaml
+//   Interaction logic for SettingsDialog.xaml
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -16,9 +16,9 @@ namespace CustomUIEditor.Views
     using System.Windows;
     
     /// <summary>
-    /// Interaction logic for SettingsWindow
+    /// Interaction logic for SettingsDialog
     /// </summary>
-    public partial class SettingsWindow : Window
+    public partial class SettingsDialog : Window
     {
         private readonly string[] usedProperties =
             {
@@ -35,7 +35,7 @@ namespace CustomUIEditor.Views
 
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
 
-        public SettingsWindow()
+        public SettingsDialog()
         {
             this.InitializeComponent();
 

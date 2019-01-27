@@ -303,7 +303,7 @@ namespace CustomUIEditor.Views
 
         private void ShowSettings()
         {
-            var dlg = new SettingsWindow { Owner = this };
+            var dlg = new SettingsDialog { Owner = this };
             dlg.ShowDialog();
             this.SetScintillaLexer();  // In case settings changed
         }
@@ -328,6 +328,11 @@ namespace CustomUIEditor.Views
                 treeViewItem.Focus();
                 e.Handled = true;
             }
+        }
+
+        private void ShowAboutDialog(object sender, RoutedEventArgs e)
+        {
+            new AboutDialog { Owner = this }.ShowDialog();
         }
     }
 }

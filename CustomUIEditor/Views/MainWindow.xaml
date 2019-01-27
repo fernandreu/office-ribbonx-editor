@@ -45,7 +45,7 @@
         <Style TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Opacity" Value="0.25"></Setter>
+                    <Setter Property="Opacity" Value="0.25"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -219,7 +219,7 @@
                 <MenuItem Header="Creating Office add-ins using Visual Studio (VSTO)" Click="ShowHelpVsto"/>
                 <MenuItem Header="Office Dev Center" Click="ShowHelpOfficeDevCenter"/>
                 <Separator/>
-                <MenuItem Header="About"/>
+                <MenuItem Header="About" Click="ShowAboutDialog"/>
             </MenuItem>
         </Menu>
 
