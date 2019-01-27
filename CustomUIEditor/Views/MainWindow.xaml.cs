@@ -228,19 +228,17 @@ namespace CustomUIEditor.Views
 
         private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            this.viewModel.SelectedItem = e.NewValue as TreeViewItemViewModel;
+            var newItem = e.NewValue as TreeViewItemViewModel;
 
-            if (this.viewModel.SelectedItem == null)
+            this.viewModel.SelectedItem = newItem;
+
+            if (newItem == null || !newItem.CanHaveContents)
             {
                 this.Editor.Text = string.Empty;
                 return;
             }
 
-            // Load contents of this item
-            if (this.viewModel.SelectedItem.CanHaveContents)
-            {
-                this.Editor.Text = this.viewModel.SelectedItem.Contents;
-            }
+            this.Editor.Text = newItem.Contents;
         }
 
         private void ScintillaUpdateUi(object sender, UpdateUIEventArgs e)
