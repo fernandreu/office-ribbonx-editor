@@ -295,7 +295,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Text="{Binding StatusMessage}"/>
+                <TextBlock Text="{Binding CurrentDocument.Document.Name}"/>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" Margin="0,0,10,0">
                 <StackPanel Orientation="Horizontal">

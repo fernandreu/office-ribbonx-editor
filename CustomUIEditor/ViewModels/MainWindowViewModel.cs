@@ -41,8 +41,6 @@ namespace CustomUIEditor.ViewModels
         
         private Hashtable customUiSchemas;
 
-        private string statusMessage;
-
         private TreeViewItemViewModel selectedItem = null;
 
         /// <summary>
@@ -94,15 +92,6 @@ namespace CustomUIEditor.ViewModels
             set => this.SetProperty(ref this.reloadOnSave, value);
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating the message that will appear at the bottom-left corner of the main window
-        /// </summary>
-        public string StatusMessage
-        {
-            get => this.statusMessage;
-            set => this.SetProperty(ref this.statusMessage, value);
-        }
-
         public TreeViewItemViewModel SelectedItem
         {
             get => this.selectedItem;
@@ -138,7 +127,7 @@ namespace CustomUIEditor.ViewModels
         /// <summary>
         /// Gets the View model of the OfficeDocument currently active (selected) on the application
         /// </summary>
-        private OfficeDocumentViewModel CurrentDocument
+        public OfficeDocumentViewModel CurrentDocument
         {
             get
             {
