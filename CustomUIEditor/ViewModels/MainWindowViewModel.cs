@@ -79,9 +79,9 @@ namespace CustomUIEditor.ViewModels
 
         public event EventHandler ShowSettings;
 
-        public event EventHandler ApplyCurrentText;
-
         public event EventHandler<DataEventArgs<string>> InsertRecentFile;
+
+        public event EventHandler<DataEventArgs<string>> ReadCurrentText;
         
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
@@ -106,7 +106,11 @@ namespace CustomUIEditor.ViewModels
         public TreeViewItemViewModel SelectedItem
         {
             get => this.selectedItem;
-            set => this.SetProperty(ref this.selectedItem, value, () => this.RaisePropertyChanged(nameof(this.CurrentDocument)));
+            set
+            {
+                this.ApplyCurrentText();
+                this.SetProperty(ref this.selectedItem, value, () => this.RaisePropertyChanged(nameof(this.CurrentDocument)));
+            }
         }
 
         public DelegateCommand OpenCommand { get; }
@@ -185,9 +189,27 @@ namespace CustomUIEditor.ViewModels
             this.DocumentList.Remove(doc);
         }
 
+        private void ApplyCurrentText()
+        {
+            if (this.SelectedItem == null || !this.SelectedItem.CanHaveContents)
+            {
+                return;
+            }
+
+            var e = new DataEventArgs<string>();
+            this.ReadCurrentText?.Invoke(this, e);
+            if (e.Data == null)
+            {
+                // This means that event handler was not listened by any view, or the view did not pass the editor contents back for some reason
+                return;
+            }
+
+            this.SelectedItem.Contents = e.Data;
+        }
+
         private void QueryClose(CancelEventArgs e)
         {
-            this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
+            this.ApplyCurrentText();
             foreach (var doc in this.DocumentList)
             {
                 if (doc.HasUnsavedChanges)
@@ -258,13 +280,13 @@ namespace CustomUIEditor.ViewModels
 
         private void Save()
         {
-            this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
+            this.ApplyCurrentText();
             this.CurrentDocument?.Save(this.ReloadOnSave);
         }
 
         private void SaveAll()
         {
-            this.ApplyCurrentText?.Invoke(this, EventArgs.Empty);
+            this.ApplyCurrentText();
             foreach (var doc in this.DocumentList)
             {
                 doc.Save(this.ReloadOnSave);

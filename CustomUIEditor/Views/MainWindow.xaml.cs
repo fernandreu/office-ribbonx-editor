@@ -43,9 +43,9 @@ namespace CustomUIEditor.Views
             this.DataContext = viewModel;
             this.viewModel = viewModel;
 
-            this.viewModel.ShowSettings += (o, a) => this.ShowSettings();
-            this.viewModel.ApplyCurrentText += (o, a) => this.ApplyCurrentText();
-            this.viewModel.InsertRecentFile += (o, a) => this.RecentFileList.InsertFile(a.Data);
+            this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
+            this.viewModel.ReadCurrentText += (o, e) => e.Data = this.Editor.Text;
+            this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
 
             this.SetScintillaLexer();
         }
@@ -226,20 +226,8 @@ namespace CustomUIEditor.Views
             }
         }
 
-        private void ApplyCurrentText()
-        {
-            // TODO: This gets called from the model, and then sets a property in the model... it should probably be defined in the model then
-            if (this.viewModel.SelectedItem != null && this.viewModel.SelectedItem.CanHaveContents)
-            {
-                // If applicable, save the contents currently shown in the editor to that item
-                this.viewModel.SelectedItem.Contents = this.Editor.Text;
-            }
-        }
-
         private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            this.ApplyCurrentText();
-
             this.viewModel.SelectedItem = e.NewValue as TreeViewItemViewModel;
 
             if (this.viewModel.SelectedItem == null)
