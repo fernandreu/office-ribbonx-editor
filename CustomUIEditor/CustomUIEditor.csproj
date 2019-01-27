@@ -108,6 +108,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Converters\IsNotNullConverter.cs" />
     <Compile Include="Data\CallbacksBuilder.cs" />
     <Compile Include="Data\IocConfiguration.cs" />
     <Compile Include="Data\DataEventArgs.cs" />
@@ -120,9 +121,8 @@
     <Compile Include="Views\CallbackWindow.xaml.cs">
       <DependentUpon>CallbackWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Data\ColorConverter.cs" />
-    <Compile Include="Data\SelectionConverter.cs" />
-    <Compile Include="Data\DataTypeConverter.cs" />
+    <Compile Include="Converters\ColorConverter.cs" />
+    <Compile Include="Converters\DataTypeConverter.cs" />
     <Compile Include="Data\OfficePart.cs" />
     <Compile Include="ViewModels\OfficePartViewModel.cs" />
     <Compile Include="ViewModels\OfficeDocumentViewModel.cs" />

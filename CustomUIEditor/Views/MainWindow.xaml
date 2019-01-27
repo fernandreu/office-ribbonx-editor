@@ -12,6 +12,7 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:converters="clr-namespace:CustomUIEditor.Converters"
         mc:Ignorable="d"
         Title="{x:Static extensions:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -39,8 +40,15 @@
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
-        <data:SelectionConverter x:Key="SelectionConverter"/>
         <model:BindingProxy x:Key="Proxy" Data="{Binding}"/>
+        <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
+        <Style TargetType="Image">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Opacity" Value="0.25"></Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources> 
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
@@ -64,7 +72,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}">
+                <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -80,7 +88,7 @@
                     </MenuItem.Icon>    
                 </MenuItem>
 
-                <MenuItem Header="Save As" Command="{Binding SaveAsCommand}"/>
+                <MenuItem Header="Save As" Command="{Binding SaveAsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <Separator/>
 
@@ -94,14 +102,14 @@
 
                 <Separator/>
 
-                <MenuItem Header="Close" InputGestureText="Ctrl+W" Command="{Binding CloseCommand}"/>
+                <MenuItem Header="Close Current Document" InputGestureText="Ctrl+W" Command="{Binding CloseCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <data:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
-            <MenuItem Header="_Edit">
+            <MenuItem Header="_Edit" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Window, Path=UndoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/undo.png"
@@ -141,7 +149,7 @@
                 <Separator/>
                 <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Window, Path=SelectAllCommand}"/>
             </MenuItem>
-            <MenuItem Header="_Insert">
+            <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/xml.png"
@@ -225,7 +233,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Save the current Office document" Command="{Binding SaveCommand}">
+                <Button ToolTip="Save the current Office document" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/save.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
@@ -243,21 +251,21 @@
                 
                 <Separator/>
                 
-                <Button ToolTip="Insert Icons">
+                <Button ToolTip="Insert Icons" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/insertPicture.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Insert Icons</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}">
+                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/check.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbacks for the current XML file" Click="GenerateCallbacks">
+                <Button ToolTip="Generate callbacks for the current XML file" Click="GenerateCallbacks" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>

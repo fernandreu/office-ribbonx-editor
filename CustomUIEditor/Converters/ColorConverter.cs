@@ -1,29 +1,39 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataTypeConverter.cs" company="FA">
+// <copyright file="ColorConverter.cs" company="FA">
 //   Fernando Andreu
 // </copyright>
 // <summary>
-//   A value converter that gets the type of that value. This might be useful for EventTriggers and such that only need
-//   to occur when selection is of a given type.
+//   Defines the ColorConverter type.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Data
+namespace CustomUIEditor.Converters
 {
     using System;
     using System.Globalization;
     using System.Windows.Data;
+    using System.Windows.Media;
 
-    public class DataTypeConverter : IValueConverter
+    public class ColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return value?.GetType();
+            if (!(value is System.Drawing.Color color))
+            {
+                return null;
+            }
+
+            return Color.FromArgb(color.A, color.R, color.G, color.B);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            if (!(value is Color color))
+            {
+                return null;
+            }
+
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
         }
     }
 }
