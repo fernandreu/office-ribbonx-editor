@@ -102,5 +102,10 @@ namespace CustomUIEditor.Views
             }
         }
         #endregion
+
+        private void CloseWindow(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

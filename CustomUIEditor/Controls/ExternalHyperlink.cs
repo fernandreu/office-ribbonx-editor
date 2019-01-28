@@ -13,6 +13,9 @@ namespace CustomUIEditor.Controls
     using System.Windows.Documents;
     using System.Windows.Navigation;
 
+    /// <summary>
+    /// Hyperlink which automatically takes care of opening its Uri in an external browser
+    /// </summary>
     public class ExternalHyperlink : Hyperlink
     {
         public ExternalHyperlink()
