@@ -22,7 +22,7 @@
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Author:</TextBlock> Fernando Andreu</TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Version:</TextBlock> <TextBlock Text="{Binding AssemblyVersion}"/></TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">License:</TextBlock> MIT</TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://www.tbd.com">https://www.tbd.com</controls:ExternalHyperlink></TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/wpf-custom-ui-editor">https://github.com/fernandreu/wpf-custom-ui-editor</controls:ExternalHyperlink></TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4">
             The Office Custom UI Editor is a standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.
         </TextBlock>
