@@ -18,14 +18,24 @@ namespace CustomUIEditor.Data
         [Test]
         public void SaveTest()
         {
-            var doc = new OfficeDocument(@"Resources\Blank.xlsx");
+            var testFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
+            
+            var doc = new OfficeDocument(testFile);
             Assert.IsNotNull(doc);
             var part = doc.CreateCustomPart(XmlParts.RibbonX12);
             Assert.IsNotNull(part);
 
-            var path = @"Resources\BlankCopy.xlsx";
-            doc.Save(path);
-            Assert.IsTrue(File.Exists(path), "File was not saved");
+            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
+
+            if (File.Exists(savePath))
+            {
+                File.Delete(savePath);
+            }
+            
+            doc.Save(savePath);
+            Assert.IsTrue(File.Exists(savePath), "File was not saved");
         }
         
     }
