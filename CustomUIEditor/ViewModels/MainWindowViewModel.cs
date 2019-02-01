@@ -60,6 +60,8 @@ namespace CustomUIEditor.ViewModels
             this.CloseCommand = new DelegateCommand(this.CloseDocument);
             this.InsertXml14Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
+            this.InsertIconsCommand = new DelegateCommand(this.InsertIcons);
+            this.RemoveCommand = new DelegateCommand(this.RemoveItem);
             this.ValidateCommand = new DelegateCommand(() => this.ValidateXml(true));
             this.ShowSettingsCommand = new DelegateCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
             this.RecentFileClickCommand = new DelegateCommand<string>(this.FinishOpeningFile);
@@ -116,6 +118,10 @@ namespace CustomUIEditor.ViewModels
         
         public DelegateCommand InsertXml12Command { get; }
 
+        public DelegateCommand InsertIconsCommand { get; }
+
+        public DelegateCommand RemoveCommand { get; }
+
         public DelegateCommand ValidateCommand { get; }
 
         public DelegateCommand ShowSettingsCommand { get; }
@@ -138,14 +144,19 @@ namespace CustomUIEditor.ViewModels
                 }
 
                 // Find the root document
+                if (elem is IconViewModel)
+                {
+                    return (OfficeDocumentViewModel)elem.Parent.Parent;
+                }
+
                 if (elem is OfficePartViewModel)
                 {
                     return (OfficeDocumentViewModel)elem.Parent;
                 }
 
-                if (elem is OfficeDocumentViewModel doc)
+                if (elem is OfficeDocumentViewModel)
                 {
-                    return doc;
+                    return (OfficeDocumentViewModel)elem;
                 }
 
                 return null;
@@ -194,6 +205,47 @@ namespace CustomUIEditor.ViewModels
             }
             
             this.SelectedItem.Contents = e.Data;
+        }
+
+        private void InsertIcons()
+        {
+            if (!(this.SelectedItem is OfficePartViewModel))
+            {
+                return;
+            }
+
+            this.fileDialogService.OpenFilesDialog(StringsResource.idsInsertIconsDialogTitle, StringsResource.idsFilterAllSupportedImages + "|" + StringsResource.idsFilterAllFiles, this.FinishInsertingIcons);
+        }
+
+        private void FinishInsertingIcons(IEnumerable<string> filePaths)
+        {
+            if (!(this.SelectedItem is OfficePartViewModel part))
+            {
+                // If OpenFileDialog opens modally, this should not happen
+                return;
+            }
+
+            foreach (var path in filePaths)
+            {
+                part.InsertIcon(path);
+            }
+        }
+
+        private void RemoveItem()
+        {
+            if (this.SelectedItem is OfficePartViewModel)
+            {
+                var part = (OfficePartViewModel)this.SelectedItem;
+                var doc = (OfficeDocumentViewModel)part.Parent;
+                doc.RemovePart(part.Part.PartType);
+                return;
+            }
+
+            if (this.SelectedItem is IconViewModel icon)
+            {
+                var part = (OfficePartViewModel)icon.Parent;
+                part.RemoveIcon(icon.Id);
+            }
         }
 
         private void QueryClose(CancelEventArgs e)

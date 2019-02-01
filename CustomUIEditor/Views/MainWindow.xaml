@@ -165,7 +165,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Icons...">
+                <MenuItem Header="Icons..." Command="{Binding InsertIconsCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/insertPicture.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -251,7 +251,7 @@
                 
                 <Separator/>
                 
-                <Button ToolTip="Insert Icons" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/insertPicture.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Insert Icons</TextBlock>
@@ -359,13 +359,33 @@
                             </StackPanel.ContextMenu>
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                    <DataTemplate DataType="{x:Type model:OfficePartViewModel}">
+                    <HierarchicalDataTemplate
+                        DataType="{x:Type model:OfficePartViewModel}"
+                        ItemsSource="{Binding Children}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Remove"/>
+                                    <MenuItem Header="Insert icons..." Command="{Binding Data.InsertIconsCommand, Source={StaticResource Proxy}}">
+                                        <MenuItem.Icon>
+                                            <Image Source="/Resources/insertPicture.png"
+                                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Remove" Command="{Binding Data.RemoveCommand, Source={StaticResource Proxy}}"/>
+                                </ContextMenu>
+                            </StackPanel.ContextMenu>
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    <DataTemplate DataType="{x:Type model:IconViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
+                            <TextBlock Text="{Binding Id}"/>
+                            <StackPanel.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Remove" Command="{Binding Data.RemoveCommand, Source={StaticResource Proxy}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>

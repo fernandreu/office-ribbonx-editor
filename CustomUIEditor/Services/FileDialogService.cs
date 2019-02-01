@@ -10,6 +10,7 @@
 namespace CustomUIEditor.Services
 {
     using System;
+    using System.Collections.Generic;
 
     using Microsoft.Win32;
 
@@ -26,6 +27,20 @@ namespace CustomUIEditor.Services
                               FileName = fileName ?? string.Empty
                           };
             ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o).FileName);
+            return ofd.ShowDialog();
+        }
+
+        public bool? OpenFilesDialog(string title, string filter, Action<IEnumerable<string>> completedAction, string fileName = null, int filterIndex = 0)
+        {
+            var ofd = new OpenFileDialog
+                          {
+                              Title = title,
+                              Filter = filter,
+                              FilterIndex = filterIndex,
+                              RestoreDirectory = true,
+                              FileName = fileName ?? string.Empty
+                          };
+            ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o).FileNames);
             return ofd.ShowDialog();
         }
         

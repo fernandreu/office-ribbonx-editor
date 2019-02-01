@@ -11,6 +11,7 @@ namespace CustomUIEditor.ViewModels
 {
     using System;
     using System.IO;
+    using System.Windows.Media.Imaging;
 
     using Data;
 
@@ -99,7 +100,7 @@ namespace CustomUIEditor.ViewModels
                 }
 
                 this.document.SaveCustomPart(part.Part.PartType, part.OriginalContents, true);
-
+                
                 // Re-map the Part. This ensures that the PackagePart stored internally in OfficePart points to
                 // the right location, in case it is needed
                 part.Reload();
@@ -139,6 +140,25 @@ namespace CustomUIEditor.ViewModels
             var partModel = new OfficePartViewModel(part, this);
             this.Children.Add(partModel);
             partModel.IsSelected = true;
+        }
+
+        public void RemovePart(XmlParts type)
+        {
+            this.document.RemoveCustomPart(type);
+
+            for (var i = 0; i < this.Children.Count; ++i)
+            {
+                if (!(this.Children[i] is OfficePartViewModel part))
+                {
+                    continue;
+                }
+
+                if (part.Part.PartType == type)
+                {
+                    this.Children.RemoveAt(i);
+                    return;
+                }
+            }
         }
 
         protected override void LoadChildren()

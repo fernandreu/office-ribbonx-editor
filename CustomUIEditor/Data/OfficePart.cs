@@ -58,9 +58,7 @@ namespace CustomUIEditor.Data
             tw.Flush();
             tw.Close();
         }
-        
-        // TODO: Previous Windows Forms approach of returning the TreeNodes directly does not make sense in a ViewModel approach
-        // TOOD: Leading understocre  removed for
+
         public Dictionary<string, BitmapImage> GetImages()
         {
             var imageCollection = new Dictionary<string, BitmapImage>();
@@ -241,7 +239,7 @@ namespace CustomUIEditor.Data
                 throw new ArgumentNullException(nameof(fileName));
             }
 
-            Debug.Assert(File.Exists(fileName), fileName + "does not exist.");
+            Debug.Assert(File.Exists(fileName), fileName + " does not exist.");
             if (!File.Exists(fileName))
             {
                 return null;
