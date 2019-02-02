@@ -32,6 +32,17 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+# Copy Files
+# Copy files from source folder to target folder using match patterns (The match patterns will only match file paths, not folder paths)
+- task: CopyFiles@2
+  inputs:
+    sourceFolder: '${Agent.BuildDirectory}'
+    contents: '**'
+    targetFolder: $(Build.ArtifactStagingDirectory) 
+    cleanTargetFolder: true # Optional
+    #overWrite: false # Optional
+    #flattenFolders: false # Optional
+
 # Publish Build Artifacts
 # Publish build artifacts to Azure Pipelines/TFS or a file share
 - task: PublishBuildArtifacts@1
