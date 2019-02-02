@@ -121,9 +121,8 @@ namespace CustomUIEditor.ViewModels
 
                 // Load the image
                 this.InsertIcon(location, icon.Id);
-
-                // Temporary copy is not deleted because it is linked by the part
-                // TODO: This will unnecessarily increase the amount of temporary files. Delete them on the next reload
+                
+                File.Delete(location);
             }
 
             return true;

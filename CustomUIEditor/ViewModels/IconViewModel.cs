@@ -33,14 +33,15 @@ namespace CustomUIEditor.ViewModels
 
         private static BitmapImage LoadImageFromPath(string filePath)
         {
-            var stream = File.OpenRead(filePath);
-
             var image = new BitmapImage();
-            image.BeginInit();
-            image.StreamSource = stream;
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.EndInit();
-
+            using (var stream = File.OpenRead(filePath))
+            {
+                image.BeginInit();
+                image.StreamSource = stream;
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+            }
+            
             return image;
         }
     }
