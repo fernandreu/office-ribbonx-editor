@@ -2,7 +2,9 @@
 WPF's Custom UI Editor for Microsoft Office
 ===============
 
-This GitHub repo is a WPF version of [Microsoft's Custom UI Editor](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor is useful on its own, but it has some limitations. Rather than trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign of the UI in Windows Presentation Framework (WPF), taking also advantage of the benefits of the MVVM pattern and useful third-party NuGet packages. 
+This GitHub repo is a WPF version of [Microsoft's Custom UI Editor](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor
+is useful on its own, but it has some limitations. Rather than trying to address those limitations by performing small contributions to the original project, this repo
+offers a complete redesign of the UI in Windows Presentation Framework (WPF), taking also advantage of the benefits of the MVVM pattern and useful third-party NuGet packages. 
 
 Features of this overhauled editor include:
 - [ScintillaNET](https://github.com/jacobslusser/ScintillaNET) (via [SctintillaNET.WPF](https://github.com/Stumpii/ScintillaNET.WPF/tree/master/ScintillaNET.WPF)) as text editor, with seamless syntax highlighting
@@ -11,6 +13,8 @@ Features of this overhauled editor include:
 - Possibility of reloading a file's contents (i.e. those not viewed in the editor, such as spreadsheet values) before saving it. This avoids accidental loss of data. For example, 
 an Excel file could be opened in the editor first, then edited in Excel, then saved in the editor, at which point you would lose those changes
 - Plus all the features of the original Windows Forms project
+
+![Screenshot](Screenshot.png)
 
 Build status / Windows executable
 ---------------------------------
