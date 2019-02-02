@@ -37,18 +37,18 @@ steps:
 - task: CopyFiles@2
   inputs:
     sourceFolder: ''
-    contents: 'CustomUIEditor/bin/Release/**.exe'  # Only copy the main executable in case users want to download it directly
+    contents: 'CustomUIEditor/bin/$(buildConfiguration)/**.exe'  # Only copy the main executable in case users want to download it directly
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
+    flattenFolders: true # Optional
     #overWrite: false # Optional
-    #flattenFolders: false # Optional
 
 # Publish Build Artifacts
 # Publish build artifacts to Azure Pipelines/TFS or a file share
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'Binary' 
+    artifactName: 'WindowsBinary' 
     publishLocation: 'Container' # Options: container, filePath
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
