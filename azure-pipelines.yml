@@ -37,7 +37,7 @@ steps:
 - task: CopyFiles@2
   inputs:
     sourceFolder: ''
-    contents: '**/bin/**'
+    contents: 'CustomUIEditor/bin/Release/**.exe'  # Only copy the main executable in case users want to download it directly
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     #overWrite: false # Optional
@@ -48,7 +48,7 @@ steps:
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'drop' 
+    artifactName: 'Binary' 
     publishLocation: 'Container' # Options: container, filePath
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
