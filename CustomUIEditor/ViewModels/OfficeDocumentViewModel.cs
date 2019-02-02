@@ -11,6 +11,7 @@ namespace CustomUIEditor.ViewModels
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Windows.Media.Imaging;
 
     using Data;
@@ -92,13 +93,8 @@ namespace CustomUIEditor.ViewModels
             }
 
             // Instead, use the parts currently shown in the editor
-            foreach (var child in this.Children)
+            foreach (var part in this.Children.OfType<OfficePartViewModel>())
             {
-                if (!(child is OfficePartViewModel part)) 
-                {
-                    continue;  // TODO: Remember processing pictures here
-                }
-
                 this.document.SaveCustomPart(part.Part.PartType, part.OriginalContents, true);
                 
                 // Re-map the Part. This ensures that the PackagePart stored internally in OfficePart points to
@@ -115,12 +111,9 @@ namespace CustomUIEditor.ViewModels
             }
 
             // Save each individual part
-            foreach (var child in this.Children)
+            foreach (var part in this.Children.OfType<OfficePartViewModel>())
             {
-                if (child is OfficePartViewModel part)
-                {
-                    part.Save();
-                }
+                part.Save();
             }
 
             // Now save the actual document

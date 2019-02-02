@@ -14,6 +14,7 @@ namespace CustomUIEditor.ViewModels
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Windows.Media.Imaging;
     using System.Xml;
 
@@ -47,12 +48,6 @@ namespace CustomUIEditor.ViewModels
 
         public void InsertIcon(string filePath, string id = null)
         {
-            var fileName = Path.GetFileNameWithoutExtension(filePath);
-            if (id == null)
-            {
-                id = fileName == null ? null : XmlConvert.EncodeName(fileName);
-            }
-
             id = this.Part.AddImage(filePath, id);
             Debug.Assert(id != null, "Cannot create image part.");
 
@@ -99,13 +94,8 @@ namespace CustomUIEditor.ViewModels
             this.Children.Clear();
 
             // Add the icons that were already loaded
-            foreach (var tmp in children)
+            foreach (var icon in children.OfType<IconViewModel>())
             {
-                if (!(tmp is IconViewModel icon))
-                {
-                    continue;
-                }
-
                 // Save it to a temporary path file
                 // TODO: This might not coincide with the original file format
                 var encoder = new PngBitmapEncoder();

@@ -112,7 +112,9 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controls\ExternalHyperlink.cs" />
+    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IsNotNullConverter.cs" />
+    <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="Data\CallbacksBuilder.cs" />
     <Compile Include="Data\IocConfiguration.cs" />
     <Compile Include="Data\DataEventArgs.cs" />

@@ -15,11 +15,15 @@ namespace CustomUIEditor.ViewModels
 
     public class IconViewModel : TreeViewItemViewModel
     {
+        private string id;
+
+        private bool isEditingId;
+
         public IconViewModel(string id, BitmapImage image, OfficePartViewModel parent)
             : base(parent, false, false)
         {
             this.Image = image;
-            this.Id = id;
+            this.id = id;
         }
 
         public IconViewModel(string id, string filePath, OfficePartViewModel parent) 
@@ -29,7 +33,22 @@ namespace CustomUIEditor.ViewModels
 
         public BitmapImage Image { get; }
 
-        public string Id { get; }
+        public string Id
+        {
+            get => this.id;
+            set => this.SetProperty(ref this.id, value, () => this.ChangeId(value));
+        }
+
+        public bool IsEditingId
+        {
+            get => this.isEditingId;
+            set => this.SetProperty(ref this.isEditingId, value);
+        }
+        
+        protected override void SelectionLost()
+        {
+            this.IsEditingId = false;
+        }
 
         private static BitmapImage LoadImageFromPath(string filePath)
         {
@@ -43,6 +62,13 @@ namespace CustomUIEditor.ViewModels
             }
             
             return image;
+        }
+
+        private void ChangeId(string newId)
+        {
+            var viewModel = (OfficePartViewModel)this.Parent;
+            viewModel.Part.ChangeImageId(this.Id, newId);
+            this.IsEditingId = false;
         }
     }
 }

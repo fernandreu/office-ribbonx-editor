@@ -61,6 +61,7 @@ namespace CustomUIEditor.ViewModels
             this.InsertXml14Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
             this.InsertIconsCommand = new DelegateCommand(this.InsertIcons);
+            this.ChangeIconIdCommand = new DelegateCommand(this.ChangeIconId);
             this.RemoveCommand = new DelegateCommand(this.RemoveItem);
             this.ValidateCommand = new DelegateCommand(() => this.ValidateXml(true));
             this.ShowSettingsCommand = new DelegateCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
@@ -119,6 +120,8 @@ namespace CustomUIEditor.ViewModels
         public DelegateCommand InsertXml12Command { get; }
 
         public DelegateCommand InsertIconsCommand { get; }
+
+        public DelegateCommand ChangeIconIdCommand { get; }
 
         public DelegateCommand RemoveCommand { get; }
 
@@ -215,6 +218,18 @@ namespace CustomUIEditor.ViewModels
             }
 
             this.fileDialogService.OpenFilesDialog(StringsResource.idsInsertIconsDialogTitle, StringsResource.idsFilterAllSupportedImages + "|" + StringsResource.idsFilterAllFiles, this.FinishInsertingIcons);
+        }
+
+        private void ChangeIconId()
+        {
+            // This does not change the icon Id per se, just enables the possibility of doing so in the view
+
+            if (!(this.SelectedItem is IconViewModel icon))
+            {
+                return;
+            }
+
+            icon.IsEditingId = true;
         }
 
         private void FinishInsertingIcons(IEnumerable<string> filePaths)

@@ -15,6 +15,7 @@ namespace CustomUIEditor.Data
     using System.IO;
     using System.IO.Packaging;
     using System.Windows.Media.Imaging;
+    using System.Xml;
 
     using CustomUIEditor.Extensions;
 
@@ -89,21 +90,27 @@ namespace CustomUIEditor.Data
             return imageCollection;
         }
 
-        public string AddImage(string fileName, string imageId)
+        public string AddImage(string filePath, string imageId)
         {
             if (this.PartType != XmlParts.RibbonX12 && this.PartType != XmlParts.RibbonX14)
             {
                 return null;
             }
 
-            if (fileName == null)
+            if (filePath == null)
             {
-                throw new ArgumentNullException(nameof(fileName));
+                throw new ArgumentNullException(nameof(filePath));
             }
 
-            if (fileName.Length == 0)
+            if (filePath.Length == 0)
             {
                 return null;
+            }
+
+            var fileName = Path.GetFileNameWithoutExtension(filePath);
+            if (imageId == null)
+            {
+                imageId = XmlConvert.EncodeName(fileName);
             }
 
             if (imageId == null)
@@ -121,7 +128,7 @@ namespace CustomUIEditor.Data
                 imageId = "rId";
             }
 
-            return this.AddImageHelper(fileName, imageId);
+            return this.AddImageHelper(filePath, imageId);
         }
         
         public void RemoveImage(string imageId)

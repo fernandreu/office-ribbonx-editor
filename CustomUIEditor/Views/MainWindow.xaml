@@ -30,16 +30,6 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <ContextMenu x:Key="ImageContextMenu">
-            <MenuItem Header="Change ID"/>
-            <MenuItem Header="Remove">
-                <MenuItem.Icon>
-                    <Image Source="/Resources/remove.png" 
-                           Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                           Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                </MenuItem.Icon>
-            </MenuItem>
-        </ContextMenu>
         <model:BindingProxy x:Key="Proxy" Data="{Binding}"/>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
         <Style TargetType="Image">
@@ -49,6 +39,8 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
     </Window.Resources> 
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
@@ -382,9 +374,11 @@
                     <DataTemplate DataType="{x:Type model:IconViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
-                            <TextBlock Text="{Binding Id}"/>
+                            <TextBlock Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                            <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="Change ID" Command="{Binding Data.ChangeIconIdCommand, Source={StaticResource Proxy}}"/>
                                     <MenuItem Header="Remove" Command="{Binding Data.RemoveCommand, Source={StaticResource Proxy}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
