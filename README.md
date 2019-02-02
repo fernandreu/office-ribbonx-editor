@@ -18,10 +18,12 @@ Features of this overhauled editor include:
 an Excel file could be opened in the editor first, then edited in Excel, then saved in the editor, at which point you would lose those changes
 - Plus all the features of the original Windows Forms project
 
-Build status
-------------
+Build status / Windows executable
+---------------------------------
 
 [![Build Status](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_build/latest?definitionId=1&branchName=master)
+
+To download the Windows executable, click on the Artifacts menu in the top-right corner of the link above.
 
 Other info
 ----------
