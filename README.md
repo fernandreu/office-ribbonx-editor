@@ -2,13 +2,7 @@
 WPF's Custom UI Editor for Microsoft Office
 ===============
 
-This GitHub repo is a WPF version of Microsoft's Custom UI Editor (originally done in Windows Forms):
-
-https://github.com/OfficeDev/office-custom-ui-editor
-
-
-I was a user of the original Windows Forms editor on almost a daily basis and, as such, I was aware of its limitations. Rather than performing small contributions
-to the original project, I deemed it was more rewarding to start from scratch and take advantage of the benefits of WPF, the MVVM pattern and existing NuGet packages.
+This GitHub repo is a WPF version of [Microsoft's Custom UI Editor](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor is useful on its own, but it has some limitations. Rather than trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign of the UI in Windows Presentation Framework (WPF), taking also advantage of the benefits of the MVVM pattern and useful third-party NuGet packages. 
 
 Features of this overhauled editor include:
 - [ScintillaNET](https://github.com/jacobslusser/ScintillaNET) (via [SctintillaNET.WPF](https://github.com/Stumpii/ScintillaNET.WPF/tree/master/ScintillaNET.WPF)) as text editor, with seamless syntax highlighting
@@ -28,7 +22,7 @@ To download the Windows executable, click on the Artifacts menu in the top-right
 Other info
 ----------
 
-*This section has been borrowed from the original Windows Forms project.*
+*This section has been borrowed from the [original Windows Forms project](https://github.com/OfficeDev/office-custom-ui-editor).*
 
 The Office Custom UI Editor is a standalone tool to edit the Custom UI part of Office open document file format. 
 It contains both Office 2007 and Office 2010 custom UI schemas. 
