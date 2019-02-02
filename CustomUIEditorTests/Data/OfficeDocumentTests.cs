@@ -15,28 +15,32 @@ namespace CustomUIEditor.Data
     [TestFixture]
     public class OfficeDocumentTests
     {
+        private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
+
+        private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
+
+        [SetUp]
+        public void SetUp()
+        {
+            // ReSharper disable once AssignNullToNotNullAttribute
+            Directory.CreateDirectory(Path.GetDirectoryName(this.destFile));
+
+            if (File.Exists(this.destFile))
+            {
+                File.Delete(this.destFile);
+            }
+        }
+
         [Test]
         public void SaveTest()
         {
-            var testFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
-            
-            var doc = new OfficeDocument(testFile);
+            var doc = new OfficeDocument(this.sourceFile);
             Assert.IsNotNull(doc);
             var part = doc.CreateCustomPart(XmlParts.RibbonX12);
             Assert.IsNotNull(part);
-
-            var savePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Directory.CreateDirectory(Path.GetDirectoryName(savePath));
-
-            if (File.Exists(savePath))
-            {
-                File.Delete(savePath);
-            }
             
-            doc.Save(savePath);
-            Assert.IsTrue(File.Exists(savePath), "File was not saved");
+            doc.Save(this.destFile);
+            Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
         }
-        
     }
 }
