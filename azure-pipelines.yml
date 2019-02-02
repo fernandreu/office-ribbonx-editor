@@ -38,7 +38,7 @@ steps:
   inputs:
     sourceFolder: '${Agent.BuildDirectory}'
     contents: '**'
-    targetFolder: $(Build.ArtifactStagingDirectory) 
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     #overWrite: false # Optional
     #flattenFolders: false # Optional
