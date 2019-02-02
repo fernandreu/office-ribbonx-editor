@@ -36,8 +36,8 @@ steps:
 # Copy files from source folder to target folder using match patterns (The match patterns will only match file paths, not folder paths)
 - task: CopyFiles@2
   inputs:
-    sourceFolder: '${Agent.BuildDirectory}'
-    contents: '**'
+    sourceFolder: '}'
+    contents: '**/bin/**'
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     #overWrite: false # Optional
