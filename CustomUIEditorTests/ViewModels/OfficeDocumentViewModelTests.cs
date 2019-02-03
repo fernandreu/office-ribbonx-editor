@@ -64,7 +64,11 @@ namespace CustomUIEditor.ViewModels
             var part = (OfficePartViewModel)viewModel.Children[0];
             part.InsertIcon(this.undoIcon);
             part.InsertIcon(this.redoIcon);
+            part.RemoveIcon("undo");
             part = (OfficePartViewModel)viewModel.Children[1];
+            part.InsertIcon(this.redoIcon);
+            var icon = (IconViewModel)part.Children[0];
+            icon.Id = "changedId";
             part.InsertIcon(this.redoIcon);
 
             void CheckIntegrity(OfficeDocumentViewModel innerModel)
@@ -77,14 +81,14 @@ namespace CustomUIEditor.ViewModels
 
                     if (innerPart.Part.PartType == XmlParts.RibbonX12)
                     {
-                        Assert.AreEqual(2, innerPart.Children.Count);
-                        Assert.AreEqual("undo", ((IconViewModel)innerPart.Children[0]).Id);
-                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[1]).Id);
+                        Assert.AreEqual(1, innerPart.Children.Count);
+                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[0]).Id);
                     }
                     else
                     {
-                        Assert.AreEqual(1, innerPart.Children.Count);
-                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[0]).Id);
+                        Assert.AreEqual(2, innerPart.Children.Count);
+                        Assert.AreEqual("changedId", ((IconViewModel)innerPart.Children[0]).Id);
+                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[1]).Id);
                     }
                 }
             }

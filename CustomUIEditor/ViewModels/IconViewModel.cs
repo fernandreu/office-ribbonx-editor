@@ -36,7 +36,13 @@ namespace CustomUIEditor.ViewModels
         public string Id
         {
             get => this.id;
-            set => this.SetProperty(ref this.id, value, () => this.ChangeId(value));
+            set
+            {
+                // Make sure this.ChangeId() is called with the previous ID and not the new one already. Otherwise,
+                // the icon will actually not be updated inside the part
+                var previousId = this.id;
+                this.SetProperty(ref this.id, value, () => this.ChangeId(previousId, value));
+            }
         }
 
         public bool IsEditingId
@@ -64,10 +70,10 @@ namespace CustomUIEditor.ViewModels
             return image;
         }
 
-        private void ChangeId(string newId)
+        private void ChangeId(string oldId, string newId)
         {
             var viewModel = (OfficePartViewModel)this.Parent;
-            viewModel.Part.ChangeImageId(this.Id, newId);
+            viewModel.Part.ChangeImageId(oldId, newId);
             this.IsEditingId = false;
             viewModel.IconsChanged = true;
         }

@@ -36,7 +36,11 @@ namespace CustomUIEditor.ViewModels
 
         public string OriginalContents => this.originalContents;
 
-        public OfficePart Part => this.part;
+        public OfficePart Part
+        {
+            get => this.part;
+            set => this.SetProperty(ref this.part, value);
+        }
 
         public bool IconsChanged { get; set; }
 
@@ -123,6 +127,10 @@ namespace CustomUIEditor.ViewModels
             // Do not simply call Part.Save because that will not flag the part as dirty in the parent document
             var docModel = (OfficeDocumentViewModel)this.Parent;
             docModel.Document.SaveCustomPart(this.Part.PartType, this.Contents);
+
+            this.Part = docModel.Document.RetrieveCustomPart(this.Part.PartType);
+            this.LoadIcons();
+
             this.originalContents = this.Contents;
             this.IconsChanged = false;
         }
@@ -134,6 +142,7 @@ namespace CustomUIEditor.ViewModels
 
         private void LoadIcons()
         {
+            this.Children.Clear();
             foreach (var image in this.Part.GetImages())
             {
                 this.Children.Add(new IconViewModel(image.Key, image.Value, this));
