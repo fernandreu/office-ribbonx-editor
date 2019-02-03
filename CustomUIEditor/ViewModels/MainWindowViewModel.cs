@@ -101,9 +101,30 @@ namespace CustomUIEditor.ViewModels
             set
             {
                 this.ApplyCurrentText();
-                this.SetProperty(ref this.selectedItem, value, () => this.RaisePropertyChanged(nameof(this.CurrentDocument)));
+                this.SetProperty(
+                    ref this.selectedItem,
+                    value,
+                    () =>
+                        {
+                            this.RaisePropertyChanged(nameof(this.CurrentDocument));
+                            this.RaisePropertyChanged(nameof(this.IsDocumentSelected));
+                            this.RaisePropertyChanged(nameof(this.IsPartSelected));
+                            this.RaisePropertyChanged(nameof(this.IsIconSelected));
+                            this.RaisePropertyChanged(nameof(this.CanInsertXml12Part));
+                            this.RaisePropertyChanged(nameof(this.CanInsertXml14Part));
+                        });
             }
         }
+
+        public bool IsDocumentSelected => this.SelectedItem is OfficeDocumentViewModel;
+
+        public bool IsPartSelected => this.SelectedItem is OfficePartViewModel;
+
+        public bool IsIconSelected => this.SelectedItem is IconViewModel;
+        
+        public bool CanInsertXml12Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlParts.RibbonX12) == null;
+
+        public bool CanInsertXml14Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlParts.RibbonX14) == null;
 
         public DelegateCommand OpenCommand { get; }
 

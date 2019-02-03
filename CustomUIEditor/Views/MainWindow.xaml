@@ -102,7 +102,7 @@
                     ClickCommand="{Binding RecentFileClickCommand}"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
-            <MenuItem Header="_Edit" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+            <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Window, Path=UndoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/undo.png"
@@ -143,14 +143,14 @@
                 <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Window, Path=SelectAllCommand}"/>
             </MenuItem>
             <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
-                <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}">
+                <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Office 2007 Custom UI Part" Command="{Binding InsertXml12Command}">
+                <MenuItem Header="Office 2007 Custom UI Part" Command="{Binding InsertXml12Command}" IsEnabled="{Binding CanInsertXml12Part}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -158,7 +158,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Icons..." Command="{Binding InsertIconsCommand}">
+                <MenuItem Header="Icons..." Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/insertPicture.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -244,21 +244,21 @@
                 
                 <Separator/>
                 
-                <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/insertPicture.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Insert Icons</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/check.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbacks for the current XML file" Click="GenerateCallbacks" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <Button ToolTip="Generate callbacks for the current XML file" Click="GenerateCallbacks" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
@@ -339,6 +339,25 @@
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
+                                    <MenuItem Header="Insert Office 2010+ Custom UI Part" 
+                                              Command="{Binding Data.InsertXml14Command, Source={StaticResource Proxy}}" 
+                                              IsEnabled="{Binding Data.CanInsertXml14Part, Source={StaticResource Proxy}}">
+                                        <MenuItem.Icon>
+                                            <Image Source="/Resources/xml.png"
+                                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Header="Insert Office 2007 Custom UI Part" 
+                                              Command="{Binding Data.InsertXml12Command, Source={StaticResource Proxy}}"
+                                              IsEnabled="{Binding Data.CanInsertXml12Part, Source={StaticResource Proxy}}">
+                                        <MenuItem.Icon>
+                                            <Image Source="/Resources/xml.png"
+                                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator/>
                                     <MenuItem Header="Save" Command="{Binding Data.SaveCommand, Source={StaticResource Proxy}}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/save.png"
