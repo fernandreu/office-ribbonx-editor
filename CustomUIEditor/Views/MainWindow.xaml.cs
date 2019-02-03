@@ -59,6 +59,7 @@ namespace CustomUIEditor.Views
             this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
             this.viewModel.ReadCurrentText += (o, e) => e.Data = this.Editor.Text;
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
+            this.viewModel.UpdateEditor += (o, e) => this.Editor.Text = e.Data;
 
             this.SetScintillaLexer();
         }

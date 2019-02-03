@@ -60,6 +60,7 @@ namespace CustomUIEditor.ViewModels
             this.CloseCommand = new DelegateCommand(this.CloseDocument);
             this.InsertXml14Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
+            this.InsertXmlSampleCommand = new DelegateCommand<string>(this.InsertXmlSample);
             this.InsertIconsCommand = new DelegateCommand(this.InsertIcons);
             this.ChangeIconIdCommand = new DelegateCommand(this.ChangeIconId);
             this.RemoveCommand = new DelegateCommand(this.RemoveItem);
@@ -76,15 +77,20 @@ namespace CustomUIEditor.ViewModels
             }
 #endif
             this.LoadXmlSchemas(applicationFolder + @"\Schemas\");
+            this.LoadXmlSamples(applicationFolder + @"\Samples\");
         }
 
         public event EventHandler ShowSettings;
+
+        public event EventHandler<DataEventArgs<string>> UpdateEditor;
 
         public event EventHandler<DataEventArgs<string>> InsertRecentFile;
 
         public event EventHandler<DataEventArgs<string>> ReadCurrentText;
         
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
+
+        public ObservableCollection<XmlSampleViewModel> XmlSamples { get; } = new ObservableCollection<XmlSampleViewModel>();
 
         /// <summary>
         /// Gets or sets a value indicating whether documents should be reloaded right before being saved.
@@ -106,6 +112,11 @@ namespace CustomUIEditor.ViewModels
                     value,
                     () =>
                         {
+                            if (this.SelectedItem != null)
+                            {
+                                this.SelectedItem.IsSelected = true;
+                            }
+
                             this.RaisePropertyChanged(nameof(this.CurrentDocument));
                             this.RaisePropertyChanged(nameof(this.IsDocumentSelected));
                             this.RaisePropertyChanged(nameof(this.IsPartSelected));
@@ -139,6 +150,8 @@ namespace CustomUIEditor.ViewModels
         public DelegateCommand InsertXml14Command { get; }
         
         public DelegateCommand InsertXml12Command { get; }
+
+        public DelegateCommand<string> InsertXmlSampleCommand { get; set; }
 
         public DelegateCommand InsertIconsCommand { get; }
 
@@ -444,7 +457,7 @@ namespace CustomUIEditor.ViewModels
         {
             if (string.IsNullOrEmpty(folderName))
             {
-                Debug.Print("folderName is null / empty");
+                Debug.Print("path is null / empty");
                 return;
             }
 
@@ -473,7 +486,68 @@ namespace CustomUIEditor.ViewModels
                 Debug.Fail(ex.Message);
             }
         }
-        
+
+        private void LoadXmlSamples(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                Debug.Print("path is null / empty");
+                return;
+            }
+
+            string[] files;
+            try
+            {
+                files = Directory.GetFiles(path, "*.xml");
+            }
+            catch (IOException ex)
+            {
+                Debug.Fail(ex.Message);
+                return;
+            }
+
+            foreach (var file in files)
+            {
+                this.XmlSamples.Add(new XmlSampleViewModel { FilePath = file });
+            }
+        }
+
+        private void InsertXmlSample(string path)
+        {
+            Debug.Assert(!string.IsNullOrEmpty(path), "Path not passed");
+            
+            if (this.SelectedItem is OfficeDocumentViewModel doc)
+            {
+                // See if there is already a part, and otherwise insert one
+                if (doc.Children.Count == 0)
+                {
+                    doc.InsertPart(XmlParts.RibbonX12);
+                }
+
+                this.SelectedItem = doc.Children[0];
+            }
+            
+            if (!(this.SelectedItem is OfficePartViewModel part))
+            {
+                return;
+            }
+            
+            // TODO: Show message box for confirmation
+            try
+            {
+                using (var sr = new StreamReader(path))
+                {
+                    // TODO: This should be automatically raised by the ViewModel when setting the part contents
+                    this.UpdateEditor?.Invoke(this, new DataEventArgs<string> { Data = sr.ReadToEnd() });
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.Assert(false, ex.Message);
+                Debug.Fail(ex.Message);
+            }
+        }
+
         private bool ValidateXml(bool showValidMessage)
         {
             if (!(this.SelectedItem is OfficePartViewModel part))

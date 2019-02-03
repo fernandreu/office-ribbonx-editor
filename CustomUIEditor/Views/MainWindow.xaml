@@ -39,8 +39,8 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources> 
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
@@ -166,42 +166,20 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Sample XML">
-                    <MenuItem Header="Custom OutSpace">
-                        <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"
-                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Custom Tab">
-                        <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"
-                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Excel - A Custom Tab">
-                        <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"
-                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Repurpose">
-                        <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"
-                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Word - Group on Insert Tab">
-                        <MenuItem.Icon>
-                            <Image Source="/Resources/xml.png"
-                                   Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                                   Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
+                <MenuItem Header="Sample XML" ItemsSource="{Binding XmlSamples}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                    <MenuItem.Icon>
+                        <Image
+                               Source="/Resources/xml.png"
+                               Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                               Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Name}"/>
+                            <Setter Property="Command" Value="{Binding Data.InsertXmlSampleCommand, Source={StaticResource Proxy}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding FilePath}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
@@ -416,7 +394,7 @@
                 FontFamily="Consolas"
                 UpdateUI="ScintillaUpdateUi"
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
-                DataContext="{Binding SelectedItem, ElementName=DocumentView}"
+                DataContext="{Binding SelectedItem}"
                 ZoomChanged="EditorZoomChanged">
                 <sn:ScintillaWPF.Resources>
                     <Style TargetType="sn:ScintillaWPF">

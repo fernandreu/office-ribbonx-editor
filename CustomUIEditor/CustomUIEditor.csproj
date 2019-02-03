@@ -125,6 +125,7 @@
     <Compile Include="ViewModels\BindingProxy.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\XmlSampleViewModel.cs" />
     <Compile Include="Views\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
