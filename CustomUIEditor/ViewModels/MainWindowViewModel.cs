@@ -220,10 +220,11 @@ namespace CustomUIEditor.ViewModels
             this.fileDialogService.OpenFilesDialog(StringsResource.idsInsertIconsDialogTitle, StringsResource.idsFilterAllSupportedImages + "|" + StringsResource.idsFilterAllFiles, this.FinishInsertingIcons);
         }
 
+        /// <summary>
+        /// This method does not change the icon Id per se, just enables the possibility of doing so in the view
+        /// </summary>
         private void ChangeIconId()
         {
-            // This does not change the icon Id per se, just enables the possibility of doing so in the view
-
             if (!(this.SelectedItem is IconViewModel icon))
             {
                 return;

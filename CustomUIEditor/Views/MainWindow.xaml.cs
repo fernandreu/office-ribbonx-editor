@@ -334,5 +334,36 @@ namespace CustomUIEditor.Views
         {
             new AboutDialog { Owner = this }.ShowDialog();
         }
+
+        private void ChangeIdTextDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter)
+            {
+                return;
+            }
+
+            if (!(sender is TextBox textBox))
+            {
+                return;
+            }
+            
+            textBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+        }
+
+        private void IdTextVisible(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if ((bool)e.NewValue == false)
+            {
+                return;
+            }
+
+            if (!(sender is TextBox textBox))
+            {
+                return;
+            }
+
+            textBox.Focus();
+            textBox.SelectAll();
+        }
     }
 }

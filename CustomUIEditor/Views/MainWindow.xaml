@@ -46,6 +46,7 @@
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
         <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseCommand}"/>
+        <KeyBinding Key="F2" Command="{Binding ChangeIconIdCommand}"/>
         <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Window, Path=CutCommand}"/>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Window, Path=CopyCommand}"/>
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Window, Path=PasteCommand}"/>
@@ -375,10 +376,10 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
                             <TextBlock Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                            <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                            <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="ChangeIdTextDown" IsVisibleChanged="IdTextVisible"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Change ID" Command="{Binding Data.ChangeIconIdCommand, Source={StaticResource Proxy}}"/>
+                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding Data.ChangeIconIdCommand, Source={StaticResource Proxy}}"/>
                                     <MenuItem Header="Remove" Command="{Binding Data.RemoveCommand, Source={StaticResource Proxy}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>

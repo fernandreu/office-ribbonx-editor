@@ -69,6 +69,7 @@ namespace CustomUIEditor.ViewModels
             var viewModel = (OfficePartViewModel)this.Parent;
             viewModel.Part.ChangeImageId(this.Id, newId);
             this.IsEditingId = false;
+            viewModel.IconsChanged = true;
         }
     }
 }

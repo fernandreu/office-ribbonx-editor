@@ -26,8 +26,6 @@ namespace CustomUIEditor.ViewModels
 
         private OfficePart part;
 
-        private bool iconsAddedOrRemoved;
-
         public OfficePartViewModel(OfficePart part, OfficeDocumentViewModel parent) 
             : base(parent, false, contents: part.ReadContent())
         {
@@ -40,7 +38,9 @@ namespace CustomUIEditor.ViewModels
 
         public OfficePart Part => this.part;
 
-        public bool HasUnsavedChanges => this.originalContents != this.Contents || this.iconsAddedOrRemoved;
+        public bool IconsChanged { get; set; }
+
+        public bool HasUnsavedChanges => this.originalContents != this.Contents || this.IconsChanged;
 
         public string Name => this.Part.Name;
 
@@ -52,7 +52,7 @@ namespace CustomUIEditor.ViewModels
             Debug.Assert(id != null, "Cannot create image part.");
 
             this.Children.Add(new IconViewModel(id, filePath, this));
-            this.iconsAddedOrRemoved = true;
+            this.IconsChanged = true;
         }
 
         public void RemoveIcon(string id)
@@ -124,7 +124,7 @@ namespace CustomUIEditor.ViewModels
             var docModel = (OfficeDocumentViewModel)this.Parent;
             docModel.Document.SaveCustomPart(this.Part.PartType, this.Contents);
             this.originalContents = this.Contents;
-            this.iconsAddedOrRemoved = false;
+            this.IconsChanged = false;
         }
 
         protected override void LoadChildren()
