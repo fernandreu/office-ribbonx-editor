@@ -12,6 +12,7 @@ namespace CustomUIEditor.ViewModels
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Windows;
 
     using CustomUIEditor.Data;
     using CustomUIEditor.Services;
@@ -117,7 +118,33 @@ namespace CustomUIEditor.ViewModels
             this.viewModel.RemoveCommand.Execute();
             Assert.AreEqual(1, doc.Children.Count);
         }
-        
+
+        [Test]
+        public void XmlValidationTest()
+        {
+            this.viewModel.OpenCommand.Execute();
+
+            var doc = this.viewModel.DocumentList[0];
+            this.viewModel.SelectedItem = doc;
+            Assert.IsFalse(this.viewModel.SelectedItem.CanHaveContents);
+            
+            this.viewModel.InsertXml12Command.Execute();
+            this.viewModel.SelectedItem = doc.Children[0];
+            Assert.IsTrue(this.viewModel.SelectedItem.CanHaveContents);
+            
+            this.SetupAssertMessageError();
+            this.viewModel.ValidateCommand.Execute();
+            this.viewModel.SelectedItem.Contents = "asd";
+            this.viewModel.ValidateCommand.Execute();
+
+            this.SetupAssertMessageInfo();
+            this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
+            this.viewModel.ValidateCommand.Execute();
+
+            this.SetupAssertMessageError();
+            this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon><tabs></tabs></ribbon></customUI>";
+        }
+
         private void MockOpenFile(string path)
         {
             this.fileSvc.Setup(x => x.OpenFileDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<string>(), It.IsAny<int>()))
@@ -142,6 +169,23 @@ namespace CustomUIEditor.ViewModels
             this.fileSvc.Setup(x => x.SaveFileDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<string>(), It.IsAny<int>()))
                 .Returns(true)
                 .Callback<string, string, Action<string>, string, int>((title, filter, action, fileName, filterIndex) => action(path));
+        }
+
+        private void MockMessageBox(Action<string, string, MessageBoxButton, MessageBoxImage> action)
+        {
+            this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
+                .Returns(MessageBoxResult.OK)
+                .Callback(action);
+        }
+
+        private void SetupAssertMessageInfo()
+        {
+            this.MockMessageBox((text, caption, button, image) => Assert.AreEqual(MessageBoxImage.Information, image));
+        }
+
+        private void SetupAssertMessageError()
+        {
+            this.MockMessageBox((text, caption, button, image) => Assert.AreEqual(MessageBoxImage.Error, image));
         }
     }
 }

@@ -460,6 +460,8 @@ namespace CustomUIEditor.ViewModels
                 return false;
             }
             
+            this.ApplyCurrentText();
+
             // Test to see if text is XML first
             try
             {
