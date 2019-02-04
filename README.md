@@ -16,6 +16,7 @@ for copying code from one file to another)
 - Possibility of reloading a file's contents (i.e. those not viewed in the editor, such as spreadsheet values) before
 saving it. This avoids accidental loss of data. For example, an Excel file could be opened in the editor first, then
 edited in Excel, then saved in the editor, at which point you would lose those changes
+- Possibility of customizing some aspects of the editor such as font size and color
 - Plus all the features of the original Windows Forms project
 
 ![Screenshot](Screenshot.png)
