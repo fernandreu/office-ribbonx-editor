@@ -19,7 +19,9 @@ namespace CustomUIEditor.ViewModels
     public class OfficeDocumentViewModel : TreeViewItemViewModel
     {
         private OfficeDocument document;
-        
+
+        private bool filesRemoved = false;
+
         public OfficeDocumentViewModel(OfficeDocument document) 
             : base(null, false, false)
         {
@@ -38,6 +40,11 @@ namespace CustomUIEditor.ViewModels
         {
             get
             {
+                if (this.filesRemoved)
+                {
+                    return true;
+                }
+
                 foreach (var child in this.Children)
                 {
                     if (child is OfficePartViewModel part && part.HasUnsavedChanges)
@@ -118,6 +125,14 @@ namespace CustomUIEditor.ViewModels
 
             // Now save the actual document
             this.document.Save(fileName);
+
+            // The save operation closes the internal package and re-opens it. Hence, parts need to be re-mapped
+            foreach (var part in this.Children.OfType<OfficePartViewModel>())
+            {
+                part.Part = this.document.RetrieveCustomPart(part.Part.PartType);
+            }
+
+            this.filesRemoved = false;
         }
 
         public void InsertPart(XmlParts type)
@@ -138,6 +153,7 @@ namespace CustomUIEditor.ViewModels
         public void RemovePart(XmlParts type)
         {
             this.document.RemoveCustomPart(type);
+            this.filesRemoved = true;
 
             for (var i = 0; i < this.Children.Count; ++i)
             {

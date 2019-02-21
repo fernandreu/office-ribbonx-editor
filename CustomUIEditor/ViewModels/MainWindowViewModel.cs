@@ -285,6 +285,16 @@ namespace CustomUIEditor.ViewModels
         {
             if (this.SelectedItem is OfficePartViewModel)
             {
+                var result = this.messageBoxService.Show(
+                    "This action cannot be undone. Are you sure you want to continue?", 
+                    "Remove XML part", 
+                    MessageBoxButton.YesNo, 
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+
                 var part = (OfficePartViewModel)this.SelectedItem;
                 var doc = (OfficeDocumentViewModel)part.Parent;
                 doc.RemovePart(part.Part.PartType);
@@ -293,6 +303,16 @@ namespace CustomUIEditor.ViewModels
 
             if (this.SelectedItem is IconViewModel icon)
             {
+                var result = this.messageBoxService.Show(
+                    "This action cannot be undone. Are you sure you want to continue?", 
+                    "Remove Icon", 
+                    MessageBoxButton.YesNo, 
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+
                 var part = (OfficePartViewModel)icon.Parent;
                 part.RemoveIcon(icon.Id);
             }
@@ -305,7 +325,11 @@ namespace CustomUIEditor.ViewModels
             {
                 if (doc.HasUnsavedChanges)
                 {
-                    var result = this.messageBoxService.Show(string.Format(StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                    var result = this.messageBoxService.Show(
+                        string.Format(StringsResource.idsCloseWarningMessage, doc.Name), 
+                        StringsResource.idsCloseWarningTitle,
+                        MessageBoxButton.YesNoCancel, 
+                        MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
                         this.SaveCommand.Execute();
@@ -336,7 +360,10 @@ namespace CustomUIEditor.ViewModels
                     StringsResource.idsFilterAllFiles,
                 };
 
-            this.fileDialogService.OpenFileDialog(StringsResource.idsOpenDocumentDialogTitle, string.Join("|", filters), this.FinishOpeningFile);
+            this.fileDialogService.OpenFileDialog(
+                StringsResource.idsOpenDocumentDialogTitle, 
+                string.Join("|", filters), 
+                this.FinishOpeningFile);
         }
 
         private void FinishOpeningFile(string fileName)
@@ -420,7 +447,12 @@ namespace CustomUIEditor.ViewModels
                 }
             }
 
-            this.fileDialogService.SaveFileDialog(StringsResource.idsSaveDocumentAsDialogTitle, string.Join("|", filters), this.FinishSavingFile, doc.Name, i + 1);
+            this.fileDialogService.SaveFileDialog(
+                StringsResource.idsSaveDocumentAsDialogTitle, 
+                string.Join("|", filters),
+                this.FinishSavingFile, 
+                doc.Name, 
+                i + 1);
         }
 
         private void FinishSavingFile(string fileName)
@@ -491,7 +523,7 @@ namespace CustomUIEditor.ViewModels
         {
             if (string.IsNullOrEmpty(path))
             {
-                Debug.Print("path is null / empty");
+                Debug.Fail("Path to XML samples is null / empty");
                 return;
             }
 
@@ -515,13 +547,16 @@ namespace CustomUIEditor.ViewModels
         private void InsertXmlSample(string path)
         {
             Debug.Assert(!string.IsNullOrEmpty(path), "Path not passed");
-            
+
+            var newPart = false;
+
             if (this.SelectedItem is OfficeDocumentViewModel doc)
             {
                 // See if there is already a part, and otherwise insert one
                 if (doc.Children.Count == 0)
                 {
                     doc.InsertPart(XmlParts.RibbonX12);
+                    newPart = true;
                 }
 
                 this.SelectedItem = doc.Children[0];
@@ -532,7 +567,20 @@ namespace CustomUIEditor.ViewModels
                 return;
             }
             
-            // TODO: Show message box for confirmation
+            // Show message box for confirmation
+            if (!newPart)
+            {
+                var result = this.messageBoxService.Show(
+                    "This will replace the contents of the current part. Are you sure you want to continue?", 
+                    "Insert XML Sample", 
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation);
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
             try
             {
                 using (var sr = new StreamReader(path))
@@ -543,8 +591,8 @@ namespace CustomUIEditor.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.Assert(false, ex.Message);
                 Debug.Fail(ex.Message);
+                this.messageBoxService.Show(ex.Message, "Error inserting XML sample");
             }
         }
 

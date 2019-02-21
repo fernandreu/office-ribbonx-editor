@@ -198,7 +198,7 @@ namespace CustomUIEditor.Data
                 customFileName = this.fileName;
             }
 
-            Debug.Assert(this.package != null, "Failed to get packge.");
+            Debug.Assert(this.package != null, "Failed to get package.");
             Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
 
             if (this.package == null || this.isReadOnly || (!this.IsDirty && customFileName == this.fileName))

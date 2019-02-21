@@ -11,7 +11,10 @@ namespace CustomUIEditor.ViewModels
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Linq.Expressions;
     using System.Windows;
 
     using CustomUIEditor.Data;
@@ -119,6 +122,53 @@ namespace CustomUIEditor.ViewModels
             Assert.AreEqual(1, doc.Children.Count);
         }
 
+        /// <summary>
+        /// Checks if a warning is shown when removing a part and when closing the document after that
+        /// </summary>
+        [Test]
+        public void RemovePartWarningTest()
+        {
+            this.viewModel.OpenCommand.Execute();
+
+            // First check if a warning is shown when a part is removed and you then attempt to close the document
+            var doc = this.viewModel.DocumentList[0];
+            this.viewModel.SelectedItem = doc;
+            this.viewModel.InsertXml12Command.Execute();
+            var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
+            Assert.NotNull(part, "No Office part available");
+            this.viewModel.SelectedItem = part;
+            this.AssertMessage(this.viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+            Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
+            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+        }
+
+        /// <summary>
+        /// Checks if a warning is shown when removing an icon and when closing the document after that
+        /// </summary>
+        [Test]
+        public void RemoveIconWarningTest()
+        {
+            // Open a document, insert a part and select it
+            this.viewModel.OpenCommand.Execute();
+            var doc = this.viewModel.DocumentList[0];
+            this.viewModel.SelectedItem = doc;
+            this.viewModel.InsertXml12Command.Execute();
+            this.viewModel.SelectedItem = doc.Children[0];
+
+            // Insert an icon and save the document
+            this.MockOpenFiles(this.redoIcon);
+            this.viewModel.InsertIconsCommand.Execute();
+            this.viewModel.SaveAsCommand.Execute();
+            Assert.IsFalse(doc.HasUnsavedChanges, "The icon insertion was apparently not saved");
+
+            // Remove it and do the appropriate checks
+            this.viewModel.SelectedItem = doc.Children.FirstOrDefault(c => c is OfficePartViewModel)?.Children.FirstOrDefault(c => c is IconViewModel);
+            Assert.IsNotNull(this.viewModel.SelectedItem, "Icon was apparently not created");
+            this.AssertMessage(this.viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+            Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
+            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+        }
+
         [Test]
         public void XmlValidationTest()
         {
@@ -132,17 +182,15 @@ namespace CustomUIEditor.ViewModels
             this.viewModel.SelectedItem = doc.Children[0];
             Assert.IsTrue(this.viewModel.SelectedItem.CanHaveContents);
             
-            this.SetupAssertMessageError();
-            this.viewModel.ValidateCommand.Execute();
+            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
             this.viewModel.SelectedItem.Contents = "asd";
-            this.viewModel.ValidateCommand.Execute();
-
-            this.SetupAssertMessageInfo();
+            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
+            
             this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            this.viewModel.ValidateCommand.Execute();
-
-            this.SetupAssertMessageError();
+            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Information);
+            
             this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon><tabs></tabs></ribbon></customUI>";
+            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
         }
 
         private void MockOpenFile(string path)
@@ -171,21 +219,12 @@ namespace CustomUIEditor.ViewModels
                 .Callback<string, string, Action<string>, string, int>((title, filter, action, fileName, filterIndex) => action(path));
         }
 
-        private void MockMessageBox(Action<string, string, MessageBoxButton, MessageBoxImage> action)
+        private void AssertMessage(Action action, MessageBoxImage image, MessageBoxResult result = MessageBoxResult.OK)
         {
-            this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>()))
-                .Returns(MessageBoxResult.OK)
-                .Callback(action);
-        }
-
-        private void SetupAssertMessageInfo()
-        {
-            this.MockMessageBox((text, caption, button, image) => Assert.AreEqual(MessageBoxImage.Information, image));
-        }
-
-        private void SetupAssertMessageError()
-        {
-            this.MockMessageBox((text, caption, button, image) => Assert.AreEqual(MessageBoxImage.Error, image));
+            var count = 0;
+            this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), image)).Returns(result).Callback(() => ++count);
+            action();
+            Assert.AreEqual(1, count, "Message not shown");
         }
     }
 }

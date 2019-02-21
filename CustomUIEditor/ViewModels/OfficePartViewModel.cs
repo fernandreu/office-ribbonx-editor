@@ -72,6 +72,7 @@ namespace CustomUIEditor.ViewModels
                 if (icon.Id == id)
                 {
                     this.Children.RemoveAt(i);
+                    this.IconsChanged = true;
                     return;
                 }
             }
