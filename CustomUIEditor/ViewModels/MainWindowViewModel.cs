@@ -25,10 +25,10 @@ namespace CustomUIEditor.ViewModels
     using CustomUIEditor.Extensions;
     using CustomUIEditor.Services;
 
-    using Prism.Commands;
-    using Prism.Mvvm;
+    using GalaSoft.MvvmLight;
+    using GalaSoft.MvvmLight.Command;
 
-    public class MainWindowViewModel : BindableBase
+    public class MainWindowViewModel : ViewModelBase
     {
         private readonly IMessageBoxService messageBoxService;
 
@@ -53,25 +53,25 @@ namespace CustomUIEditor.ViewModels
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
 
-            this.OpenCommand = new DelegateCommand(this.OpenFile);
-            this.SaveCommand = new DelegateCommand(this.Save);
-            this.SaveAllCommand = new DelegateCommand(this.SaveAll);
-            this.SaveAsCommand = new DelegateCommand(this.SaveAs);
-            this.CloseCommand = new DelegateCommand(this.CloseDocument);
-            this.InsertXml14Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
-            this.InsertXml12Command = new DelegateCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
-            this.InsertXmlSampleCommand = new DelegateCommand<string>(this.InsertXmlSample);
-            this.InsertIconsCommand = new DelegateCommand(this.InsertIcons);
-            this.ChangeIconIdCommand = new DelegateCommand(this.ChangeIconId);
-            this.RemoveCommand = new DelegateCommand(this.RemoveItem);
-            this.ValidateCommand = new DelegateCommand(() => this.ValidateXml(true));
-            this.ShowSettingsCommand = new DelegateCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
-            this.RecentFileClickCommand = new DelegateCommand<string>(this.FinishOpeningFile);
-            this.ClosingCommand = new DelegateCommand<CancelEventArgs>(this.QueryClose);
+            this.OpenCommand = new RelayCommand(this.OpenFile);
+            this.SaveCommand = new RelayCommand(this.Save);
+            this.SaveAllCommand = new RelayCommand(this.SaveAll);
+            this.SaveAsCommand = new RelayCommand(this.SaveAs);
+            this.CloseCommand = new RelayCommand(this.CloseDocument);
+            this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
+            this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
+            this.InsertXmlSampleCommand = new RelayCommand<string>(this.InsertXmlSample);
+            this.InsertIconsCommand = new RelayCommand(this.InsertIcons);
+            this.ChangeIconIdCommand = new RelayCommand(this.ChangeIconId);
+            this.RemoveCommand = new RelayCommand(this.RemoveItem);
+            this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
+            this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
+            this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
+            this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.QueryClose);
             
             var applicationFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 #if DEBUG
-            if (DesignerProperties.GetIsInDesignMode(new DependencyObject()))
+            if (this.IsInDesignMode)
             {
                 return;
             }
@@ -98,7 +98,7 @@ namespace CustomUIEditor.ViewModels
         public bool ReloadOnSave
         {
             get => this.reloadOnSave;
-            set => this.SetProperty(ref this.reloadOnSave, value);
+            set => this.Set(ref this.reloadOnSave, value);
         }
 
         public TreeViewItemViewModel SelectedItem
@@ -107,23 +107,22 @@ namespace CustomUIEditor.ViewModels
             set
             {
                 this.ApplyCurrentText();
-                this.SetProperty(
-                    ref this.selectedItem,
-                    value,
-                    () =>
-                        {
-                            if (this.SelectedItem != null)
-                            {
-                                this.SelectedItem.IsSelected = true;
-                            }
+                if (!this.Set(ref this.selectedItem, value))
+                {
+                    return;
+                }
 
-                            this.RaisePropertyChanged(nameof(this.CurrentDocument));
-                            this.RaisePropertyChanged(nameof(this.IsDocumentSelected));
-                            this.RaisePropertyChanged(nameof(this.IsPartSelected));
-                            this.RaisePropertyChanged(nameof(this.IsIconSelected));
-                            this.RaisePropertyChanged(nameof(this.CanInsertXml12Part));
-                            this.RaisePropertyChanged(nameof(this.CanInsertXml14Part));
-                        });
+                if (this.SelectedItem != null)
+                {
+                    this.SelectedItem.IsSelected = true;
+                }
+
+                this.RaisePropertyChanged(nameof(this.CurrentDocument));
+                this.RaisePropertyChanged(nameof(this.IsDocumentSelected));
+                this.RaisePropertyChanged(nameof(this.IsPartSelected));
+                this.RaisePropertyChanged(nameof(this.IsIconSelected));
+                this.RaisePropertyChanged(nameof(this.CanInsertXml12Part));
+                this.RaisePropertyChanged(nameof(this.CanInsertXml14Part));
             }
         }
 
@@ -137,35 +136,35 @@ namespace CustomUIEditor.ViewModels
 
         public bool CanInsertXml14Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlParts.RibbonX14) == null;
 
-        public DelegateCommand OpenCommand { get; }
+        public RelayCommand OpenCommand { get; }
 
-        public DelegateCommand SaveCommand { get; }
+        public RelayCommand SaveCommand { get; }
 
-        public DelegateCommand SaveAllCommand { get; }
+        public RelayCommand SaveAllCommand { get; }
 
-        public DelegateCommand SaveAsCommand { get; }
+        public RelayCommand SaveAsCommand { get; }
 
-        public DelegateCommand CloseCommand { get; }
+        public RelayCommand CloseCommand { get; }
 
-        public DelegateCommand InsertXml14Command { get; }
+        public RelayCommand InsertXml14Command { get; }
         
-        public DelegateCommand InsertXml12Command { get; }
+        public RelayCommand InsertXml12Command { get; }
 
-        public DelegateCommand<string> InsertXmlSampleCommand { get; set; }
+        public RelayCommand<string> InsertXmlSampleCommand { get; set; }
 
-        public DelegateCommand InsertIconsCommand { get; }
+        public RelayCommand InsertIconsCommand { get; }
 
-        public DelegateCommand ChangeIconIdCommand { get; }
+        public RelayCommand ChangeIconIdCommand { get; }
 
-        public DelegateCommand RemoveCommand { get; }
+        public RelayCommand RemoveCommand { get; }
 
-        public DelegateCommand ValidateCommand { get; }
+        public RelayCommand ValidateCommand { get; }
 
-        public DelegateCommand ShowSettingsCommand { get; }
+        public RelayCommand ShowSettingsCommand { get; }
 
-        public DelegateCommand<string> RecentFileClickCommand { get; }
+        public RelayCommand<string> RecentFileClickCommand { get; }
 
-        public DelegateCommand<CancelEventArgs> ClosingCommand { get; }
+        public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
         /// <summary>
         /// Gets the View model of the OfficeDocument currently active (selected) on the application

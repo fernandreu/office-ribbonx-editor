@@ -41,14 +41,17 @@ namespace CustomUIEditor.ViewModels
                 // Make sure this.ChangeId() is called with the previous ID and not the new one already. Otherwise,
                 // the icon will actually not be updated inside the part
                 var previousId = this.id;
-                this.SetProperty(ref this.id, value, () => this.ChangeId(previousId, value));
+                if (this.Set(ref this.id, value))
+                {
+                    this.ChangeId(previousId, value);
+                }
             }
         }
 
         public bool IsEditingId
         {
             get => this.isEditingId;
-            set => this.SetProperty(ref this.isEditingId, value);
+            set => this.Set(ref this.isEditingId, value);
         }
         
         protected override void SelectionLost()

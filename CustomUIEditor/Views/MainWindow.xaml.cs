@@ -17,11 +17,9 @@ namespace CustomUIEditor.Views
     using System.Windows.Media;
     using System.Xml;
 
-    using CustomUIEditor.Extensions;
-
     using Data;
 
-    using Prism.Commands;
+    using GalaSoft.MvvmLight.CommandWpf;
 
     using ScintillaNET;
 
@@ -38,23 +36,22 @@ namespace CustomUIEditor.Views
         
         private int maxLineNumberCharLength;
 
-        public MainWindow(MainWindowViewModel viewModel)
+        public MainWindow()
         {
             // To keep things simpler, commands need to be defined before calling InitializeComponent.
             // Otherwise, all command bindings will be set to null. The alternative is to create a
             // DependencyProperty for each command, but it seems an overkill.
             // Because Editor is still null, an intermediate lambda function needs to be used.
-            this.CutCommand = new DelegateCommand(() => this.Editor.Cut());
-            this.CopyCommand = new DelegateCommand(() => this.Editor.Copy());
-            this.PasteCommand = new DelegateCommand(() => this.Editor.Paste());
-            this.UndoCommand = new DelegateCommand(() => this.Editor.Undo());
-            this.RedoCommand = new DelegateCommand(() => this.Editor.Redo());
-            this.SelectAllCommand = new DelegateCommand(() => this.Editor.SelectAll());
+            this.CutCommand = new RelayCommand(() => this.Editor.Cut());
+            this.CopyCommand = new RelayCommand(() => this.Editor.Copy());
+            this.PasteCommand = new RelayCommand(() => this.Editor.Paste());
+            this.UndoCommand = new RelayCommand(() => this.Editor.Undo());
+            this.RedoCommand = new RelayCommand(() => this.Editor.Redo());
+            this.SelectAllCommand = new RelayCommand(() => this.Editor.SelectAll());
 
             this.InitializeComponent();
 
-            this.DataContext = viewModel;
-            this.viewModel = viewModel;
+            this.viewModel = (MainWindowViewModel)this.DataContext;
 
             this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
             this.viewModel.ReadCurrentText += (o, e) => e.Data = this.Editor.Text;

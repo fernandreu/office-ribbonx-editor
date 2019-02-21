@@ -10,7 +10,6 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-        xmlns:prism="http://prismlibrary.com/"
         xmlns:converters="clr-namespace:CustomUIEditor.Converters"
         xmlns:root="clr-namespace:CustomUIEditor"
         mc:Ignorable="d"
@@ -23,10 +22,10 @@
         Icon="/Resources/ApplicationIcon.ico"
         ResizeMode="CanResizeWithGrip"
         x:Name="Window"
-        d:DataContext="{d:DesignInstance model:MainWindowViewModel}">
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <prism:InvokeCommandAction Command="{Binding ClosingCommand}"/>
+            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>

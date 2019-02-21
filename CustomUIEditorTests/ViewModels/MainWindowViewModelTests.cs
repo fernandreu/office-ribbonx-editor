@@ -14,7 +14,7 @@ namespace CustomUIEditor.ViewModels
     using System.IO;
     using System.Linq;
     using System.Windows;
-    
+    using CustomUIEditor.Extensions;
     using CustomUIEditor.Services;
 
     using Moq;

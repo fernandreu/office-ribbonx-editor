@@ -10,13 +10,11 @@
 namespace CustomUIEditor.ViewModels
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Windows.Media.Imaging;
-    using System.Xml;
 
     using Data;
 
@@ -39,7 +37,7 @@ namespace CustomUIEditor.ViewModels
         public OfficePart Part
         {
             get => this.part;
-            set => this.SetProperty(ref this.part, value);
+            set => this.Set(ref this.part, value);
         }
 
         public bool IconsChanged { get; set; }

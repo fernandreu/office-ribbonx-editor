@@ -11,17 +11,14 @@
 namespace CustomUIEditor.ViewModels
 {
     using System.Collections.ObjectModel;
-    using System.ComponentModel;
 
-    using CustomUIEditor.Extensions;
-
-    using Prism.Mvvm;
+    using GalaSoft.MvvmLight;
 
     /// <summary>
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : BindableBase
+    public class TreeViewItemViewModel : ViewModelBase
     {
         #region Data
 
@@ -86,7 +83,7 @@ namespace CustomUIEditor.ViewModels
             get => this.isExpanded;
             set
             {
-                if (!this.SetProperty(ref this.isExpanded, value))
+                if (!this.Set(ref this.isExpanded, value))
                 {
                     return;
                 }
@@ -114,7 +111,7 @@ namespace CustomUIEditor.ViewModels
             get => this.isSelected;
             set
             {
-                if (this.SetProperty(ref this.isSelected, value) && this.isSelected)
+                if (this.Set(ref this.isSelected, value) && this.isSelected)
                 {
                     this.IsExpanded = true; // To select something, you should be able to see it
                 }
@@ -127,13 +124,13 @@ namespace CustomUIEditor.ViewModels
         public bool CanHaveContents
         {
             get => this.canHaveContents;
-            set => this.SetProperty(ref this.canHaveContents, value);
+            set => this.Set(ref this.canHaveContents, value);
         }
 
         public string Contents
         {
             get => this.contents;
-            set => this.SetProperty(ref this.contents, value);
+            set => this.Set(ref this.contents, value);
         }
         
         public TreeViewItemViewModel Parent { get; }

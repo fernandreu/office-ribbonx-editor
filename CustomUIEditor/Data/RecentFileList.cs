@@ -28,7 +28,7 @@ namespace CustomUIEditor.Data
 
     public class RecentFileList : Separator
     {
-        public static DependencyProperty ClickCommandProperty = 
+        public static readonly DependencyProperty ClickCommandProperty = 
             DependencyProperty.Register(
                 nameof(ClickCommand),
                 typeof(ICommand),
