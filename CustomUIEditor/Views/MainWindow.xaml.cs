@@ -198,36 +198,6 @@ namespace CustomUIEditor.Views
         {
             this.Close();
         }
-        
-        private void ShowHelpCustomizeTheRibbon(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx");
-        }
-
-        private void ShowHelpCustomizeTheOustpace(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx");
-        }
-
-        private void ShowHelpCommandIdentifiers(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://github.com/OfficeDev/office-fluent-ui-command-identifiers");
-        }
-
-        private void ShowHelpVsto(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://msdn.microsoft.com/en-us/library/jj620922.aspx");
-        }
-
-        private void ShowHelpOfficeDevCenter(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://dev.office.com/");
-        }
-
-        private void ShowHelpRepurposingControls(object sender, RoutedEventArgs e)
-        {
-            Process.Start("https://blogs.technet.microsoft.com/the_microsoft_excel_support_team_blog/2012/06/18/how-to-repurpose-a-button-in-excel-2007-or-2010/");
-        }
 
         private void GenerateCallbacks(object sender, RoutedEventArgs e)
         {

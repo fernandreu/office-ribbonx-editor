@@ -175,19 +175,22 @@
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
                             <Setter Property="Header" Value="{Binding Name}"/>
-                            <Setter Property="Command" Value="{Binding Data.InsertXmlSampleCommand, Source={StaticResource Proxy}}"/>
+                            <Setter Property="Command" Value="{Binding Main.InsertXmlSampleCommand, Source={StaticResource Locator}}"/>
                             <Setter Property="CommandParameter" Value="{Binding FilePath}"/>
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">
-                <MenuItem Header="Customizing the Ribbon" Click="ShowHelpCustomizeTheRibbon"/>
-                <MenuItem Header="Customizing the Backstage" Click="ShowHelpCustomizeTheOustpace"/>
-                <MenuItem Header="Repurposing built-in commands" Click="ShowHelpRepurposingControls"/>
-                <MenuItem Header="Office Fluent UI Command Identifiers" Click="ShowHelpCommandIdentifiers"/>
-                <MenuItem Header="Creating Office add-ins using Visual Studio (VSTO)" Click="ShowHelpVsto"/>
-                <MenuItem Header="Office Dev Center" Click="ShowHelpOfficeDevCenter"/>
+                <MenuItem Header="Useful links" ItemsSource="{Binding HelpLinks}">
+                    <MenuItem.ItemContainerStyle>
+                        <Style TargetType="MenuItem">
+                            <Setter Property="Header" Value="{Binding Key}"/>
+                            <Setter Property="Command" Value="{Binding Main.OpenHelpLinkCommand, Source={StaticResource Locator}}"/>
+                            <Setter Property="CommandParameter" Value="{Binding Value}"/>
+                        </Style>
+                    </MenuItem.ItemContainerStyle>
+                </MenuItem>
                 <Separator/>
                 <MenuItem Header="About" Click="ShowAboutDialog"/>
             </MenuItem>

@@ -166,6 +166,21 @@ namespace CustomUIEditor.ViewModels
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
+        public RelayCommand<string> OpenHelpLinkCommand { get; } = new RelayCommand<string>(url => Process.Start(url));
+
+        /// <summary>
+        /// Gets a list of headers which will be shown in the "Useful links" menu, together with the links they point to
+        /// </summary>
+        public IDictionary<string, string> HelpLinks { get; } = new Dictionary<string, string>
+                                                                    {
+                                                                        { "Customize the Ribbon", "https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx" },
+                                                                        { "Customize the Backstage", "https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx" },
+                                                                        { "Repurposing built-in commands", "https://blogs.technet.microsoft.com/the_microsoft_excel_support_team_blog/2012/06/18/how-to-repurpose-a-button-in-excel-2007-or-2010/" },
+                                                                        { "Office Fluent UI Command Identifiers", "https://github.com/OfficeDev/office-fluent-ui-command-identifiers" },
+                                                                        { "Creating Office add-ins using Visual Studio (VSTO)", "https://msdn.microsoft.com/en-us/library/jj620922.aspx" },
+                                                                        { "Office Dev Center", "https://dev.office.com/" },
+                                                                    };
+
         /// <summary>
         /// Gets the View model of the OfficeDocument currently active (selected) on the application
         /// </summary>
