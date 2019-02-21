@@ -20,7 +20,7 @@ namespace CustomUIEditor.ViewModels
     {
         private OfficeDocument document;
 
-        private bool filesRemoved = false;
+        private bool partsAddedOrRemoved = false;
 
         public OfficeDocumentViewModel(OfficeDocument document) 
             : base(null, false, false)
@@ -40,7 +40,7 @@ namespace CustomUIEditor.ViewModels
         {
             get
             {
-                if (this.filesRemoved)
+                if (this.partsAddedOrRemoved)
                 {
                     return true;
                 }
@@ -132,7 +132,7 @@ namespace CustomUIEditor.ViewModels
                 part.Part = this.document.RetrieveCustomPart(part.Part.PartType);
             }
 
-            this.filesRemoved = false;
+            this.partsAddedOrRemoved = false;
         }
 
         public void InsertPart(XmlParts type)
@@ -148,12 +148,13 @@ namespace CustomUIEditor.ViewModels
             var partModel = new OfficePartViewModel(part, this);
             this.Children.Add(partModel);
             partModel.IsSelected = true;
+            this.partsAddedOrRemoved = true;
         }
 
         public void RemovePart(XmlParts type)
         {
             this.document.RemoveCustomPart(type);
-            this.filesRemoved = true;
+            this.partsAddedOrRemoved = true;
 
             for (var i = 0; i < this.Children.Count; ++i)
             {

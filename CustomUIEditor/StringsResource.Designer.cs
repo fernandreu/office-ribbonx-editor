@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Extensions {
+namespace CustomUIEditor {
     using System;
     
     
@@ -88,7 +88,7 @@ namespace CustomUIEditor.Extensions {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to File {0} has unsaved changes. Do you want to save them before exiting the program?.
+        ///   Looks up a localized string similar to File {0} has unsaved changes. Do you want to save them before closing it?.
         /// </summary>
         public static string idsCloseWarningMessage {
             get {

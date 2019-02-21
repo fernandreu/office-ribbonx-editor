@@ -127,7 +127,7 @@
     <value>Change ID</value>
   </data>
   <data name="idsCloseWarningMessage" xml:space="preserve">
-    <value>File {0} has unsaved changes. Do you want to save them before exiting the program?</value>
+    <value>File {0} has unsaved changes. Do you want to save them before closing it?</value>
   </data>
   <data name="idsCloseWarningTitle" xml:space="preserve">
     <value>Unsaved Changes</value>

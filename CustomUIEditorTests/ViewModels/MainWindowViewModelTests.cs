@@ -11,13 +11,10 @@ namespace CustomUIEditor.ViewModels
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics;
     using System.IO;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Windows;
-
-    using CustomUIEditor.Data;
+    
     using CustomUIEditor.Services;
 
     using Moq;
@@ -123,6 +120,19 @@ namespace CustomUIEditor.ViewModels
         }
 
         /// <summary>
+        /// Checks if a warning is shown after inserting a part in a document and then trying to close it
+        /// </summary>
+        [Test]
+        public void InsertPartCloseDocumentWarningTest()
+        {
+            this.viewModel.OpenCommand.Execute();
+            var doc = this.viewModel.DocumentList[0];
+            this.viewModel.SelectedItem = doc;
+            this.viewModel.InsertXml12Command.Execute();
+            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
+        }
+
+        /// <summary>
         /// Checks if a warning is shown when removing a part and when closing the document after that
         /// </summary>
         [Test]
@@ -219,12 +229,12 @@ namespace CustomUIEditor.ViewModels
                 .Callback<string, string, Action<string>, string, int>((title, filter, action, fileName, filterIndex) => action(path));
         }
 
-        private void AssertMessage(Action action, MessageBoxImage image, MessageBoxResult result = MessageBoxResult.OK)
+        private void AssertMessage(Action action, MessageBoxImage image, MessageBoxResult result = MessageBoxResult.OK, string message = "Message not shown")
         {
             var count = 0;
             this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), image)).Returns(result).Callback(() => ++count);
             action();
-            Assert.AreEqual(1, count, "Message not shown");
+            Assert.AreEqual(1, count, message);
         }
     }
 }
