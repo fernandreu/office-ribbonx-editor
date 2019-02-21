@@ -23,7 +23,7 @@ namespace CustomUIEditor.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new InvalidOperationException($"{nameof(IsNotNullConverter)} can only be used OneWay.");
+            throw new InvalidOperationException($"{nameof(DataTypeConverter)} can only be used OneWay.");
         }
     }
 }
