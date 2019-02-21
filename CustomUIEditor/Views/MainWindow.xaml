@@ -29,7 +29,6 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
-        <model:BindingProxy x:Key="Proxy" Data="{Binding}"/>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
         <Style TargetType="Image">
             <Style.Triggers>
@@ -174,6 +173,9 @@
                     </MenuItem.Icon>
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
+                            <d:Style.DataContext>
+                                <x:Type Type="model:XmlSampleViewModel"/>
+                            </d:Style.DataContext>
                             <Setter Property="Header" Value="{Binding Name}"/>
                             <Setter Property="Command" Value="{Binding Main.InsertXmlSampleCommand, Source={StaticResource Locator}}"/>
                             <Setter Property="CommandParameter" Value="{Binding FilePath}"/>
@@ -297,6 +299,9 @@
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
+                        <d:Style.DataContext>
+                            <x:Type Type="model:TreeViewItemViewModel"/>
+                        </d:Style.DataContext>
                         <EventSetter Event="RequestBringIntoView" Handler="TreeViewItemRequestBringIntoView"/>
                         <EventSetter Event="Selected" Handler="TreeViewItem_OnSelected"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
@@ -320,8 +325,8 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Insert Office 2010+ Custom UI Part" 
-                                              Command="{Binding Data.InsertXml14Command, Source={StaticResource Proxy}}" 
-                                              IsEnabled="{Binding Data.CanInsertXml14Part, Source={StaticResource Proxy}}">
+                                              Command="{Binding Main.InsertXml14Command, Source={StaticResource Locator}}" 
+                                              IsEnabled="{Binding Main.CanInsertXml14Part, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -329,8 +334,8 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Header="Insert Office 2007 Custom UI Part" 
-                                              Command="{Binding Data.InsertXml12Command, Source={StaticResource Proxy}}"
-                                              IsEnabled="{Binding Data.CanInsertXml12Part, Source={StaticResource Proxy}}">
+                                              Command="{Binding Main.InsertXml12Command, Source={StaticResource Locator}}"
+                                              IsEnabled="{Binding Main.CanInsertXml12Part, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -338,15 +343,15 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <Separator/>
-                                    <MenuItem Header="Save" Command="{Binding Data.SaveCommand, Source={StaticResource Proxy}}">
+                                    <MenuItem Header="Save" Command="{Binding Main.SaveCommand, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>    
                                     </MenuItem>
-                                    <MenuItem Header="Save As..." Command="{Binding Data.SaveAsCommand, Source={StaticResource Proxy}}"/>
-                                    <MenuItem Header="Close" Command="{Binding Data.CloseCommand, Source={StaticResource Proxy}}"/>
+                                    <MenuItem Header="Save As..." Command="{Binding Main.SaveAsCommand, Source={StaticResource Locator}}"/>
+                                    <MenuItem Header="Close" Command="{Binding Main.CloseCommand, Source={StaticResource Locator}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -359,14 +364,14 @@
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Insert icons..." Command="{Binding Data.InsertIconsCommand, Source={StaticResource Proxy}}">
+                                    <MenuItem Header="Insert icons..." Command="{Binding Main.InsertIconsCommand, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/insertPicture.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Remove" Command="{Binding Data.RemoveCommand, Source={StaticResource Proxy}}"/>
+                                    <MenuItem Header="Remove" Command="{Binding Main.RemoveCommand, Source={StaticResource Locator}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -378,8 +383,8 @@
                             <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="ChangeIdTextDown" IsVisibleChanged="IdTextVisible"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding Data.ChangeIconIdCommand, Source={StaticResource Proxy}}"/>
-                                    <MenuItem Header="Remove" Command="{Binding Data.RemoveCommand, Source={StaticResource Proxy}}"/>
+                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding Main.ChangeIconIdCommand, Source={StaticResource Locator}}"/>
+                                    <MenuItem Header="Remove" Command="{Binding Main.RemoveCommand, Source={StaticResource Locator}}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
