@@ -30,6 +30,7 @@
     </i:Interaction.Triggers>
     <Window.Resources>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
+        <converters:MethodToCommandConverter x:Key="MethodToCommandConverter"/>
         <Style TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -45,12 +46,12 @@
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
         <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ChangeIconIdCommand}"/>
-        <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Window, Path=CutCommand}"/>
-        <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Window, Path=CopyCommand}"/>
-        <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Window, Path=PasteCommand}"/>
-        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding ElementName=Window, Path=UndoCommand}"/>
-        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding ElementName=Window, Path=RedoCommand}"/>
-        <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Window, Path=SelectAllCommand}"/>
+        <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}"/>
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}"/>
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}"/>
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}"/>
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
@@ -101,14 +102,14 @@
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
-                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Window, Path=UndoCommand}">
+                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/undo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding ElementName=Window, Path=RedoCommand}">
+                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/redo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -116,21 +117,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding ElementName=Window, Path=CutCommand}">
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/cut.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding ElementName=Window, Path=CopyCommand}">
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/copy.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding ElementName=Window, Path=PasteCommand}">
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/paste.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -138,7 +139,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Window, Path=SelectAllCommand}"/>
+                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
             </MenuItem>
             <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">

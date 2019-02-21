@@ -19,8 +19,6 @@ namespace CustomUIEditor.Views
 
     using Data;
 
-    using GalaSoft.MvvmLight.CommandWpf;
-
     using ScintillaNET;
 
     using ViewModels;
@@ -38,17 +36,6 @@ namespace CustomUIEditor.Views
 
         public MainWindow()
         {
-            // To keep things simpler, commands need to be defined before calling InitializeComponent.
-            // Otherwise, all command bindings will be set to null. The alternative is to create a
-            // DependencyProperty for each command, but it seems an overkill.
-            // Because Editor is still null, an intermediate lambda function needs to be used.
-            this.CutCommand = new RelayCommand(() => this.Editor.Cut());
-            this.CopyCommand = new RelayCommand(() => this.Editor.Copy());
-            this.PasteCommand = new RelayCommand(() => this.Editor.Paste());
-            this.UndoCommand = new RelayCommand(() => this.Editor.Undo());
-            this.RedoCommand = new RelayCommand(() => this.Editor.Redo());
-            this.SelectAllCommand = new RelayCommand(() => this.Editor.SelectAll());
-
             this.InitializeComponent();
 
             this.viewModel = (MainWindowViewModel)this.DataContext;
@@ -60,22 +47,6 @@ namespace CustomUIEditor.Views
 
             this.SetScintillaLexer();
         }
-
-        #region View-specific commands
-
-        public ICommand CutCommand { get; }
-
-        public ICommand CopyCommand { get; }
-
-        public ICommand PasteCommand { get; }
-
-        public ICommand UndoCommand { get; }
-
-        public ICommand RedoCommand { get; }
-
-        public ICommand SelectAllCommand { get; }
-
-        #endregion
 
         public void SetScintillaLexer()
         {
