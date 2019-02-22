@@ -53,7 +53,7 @@ namespace CustomUIEditor.Converters
 
         /// <summary>
         /// Tailored implementation of ICommand so that it holds the reference to the method and the sender. This
-        /// avoids possible capture issues in lambdas
+        /// avoids possible capture scope issues in lambdas
         /// </summary>
         private class MethodProxy : ICommand
         {
@@ -67,8 +67,19 @@ namespace CustomUIEditor.Converters
                 this.sender = sender;
             }
 
-            public event EventHandler CanExecuteChanged;
-            
+            /// <summary>
+            /// The CanExecute property of this command will never change, but we still need
+            /// to define the corresponding event. The explicit add / remove declaration
+            /// avoids wasting the space of the backing field while suppressing warning C0067.
+            /// Do not throw an exception in the add block, because WPF will automatically
+            /// subscribe to it anyway.
+            /// </summary>
+            public event EventHandler CanExecuteChanged
+            {
+                add { }
+                remove { }
+            }
+
             public bool CanExecute(object parameter)
             {
                 return this.sender != null;
