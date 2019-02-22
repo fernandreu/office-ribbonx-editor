@@ -17,6 +17,8 @@ namespace CustomUIEditor.Models
     using System.Windows.Media.Imaging;
     using System.Xml;
 
+    using CustomUIEditor.Resources;
+
     public class OfficePart
     {
         private string id;

@@ -9,7 +9,7 @@
         Title="Callbacks Viewer" Height="450" Width="800"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Icon="/Resources/callbacks.png">
+        Icon="/Resources/Images/callbacks.png">
     <Grid>
         
         <sn:ScintillaWPF

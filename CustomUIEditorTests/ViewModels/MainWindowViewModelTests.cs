@@ -229,6 +229,23 @@ namespace CustomUIEditor.ViewModels
             this.viewModel.ShowCallbacks -= Handler;  // Just in case we add other checks later
         }
 
+        /// <summary>
+        /// Checks whether the sample XML files are inserted as we would expect
+        /// </summary>
+        [Test]
+        public void InsertSampleTest()
+        {
+            this.viewModel.OpenCommand.Execute();
+            var doc = this.viewModel.DocumentList[0];
+            this.viewModel.SelectedItem = doc;
+
+            var sample = this.viewModel.XmlSamples.First();  // This shouldn't be null; if it is, the test will be a means to detect that too
+            this.viewModel.InsertXmlSampleCommand.Execute(sample.ResourceName);
+            var part = doc.Children.First(); // Again, this should not be null
+
+            var contents = sample.ReadContents();
+            Assert.AreEqual(contents, part.Contents, "Sample XML file not created with the expected contents");
+        }
 
         private void MockOpenFile(string path)
         {

@@ -52,7 +52,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\ApplicationIcon.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
@@ -134,6 +134,16 @@
     <Compile Include="Models\ScintillaLexer.cs" />
     <Compile Include="Models\VbaLexer.cs" />
     <Compile Include="Models\XmlLexer.cs" />
+    <Compile Include="Resources\ImagesResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImagesResource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\SchemasResource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SchemasResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\FileDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IMessageBoxService.cs" />
@@ -155,11 +165,6 @@
     <Compile Include="ViewModels\OfficePartViewModel.cs" />
     <Compile Include="ViewModels\OfficeDocumentViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
-    <Compile Include="ImagesResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ImagesResource.resx</DependentUpon>
-    </Compile>
     <Compile Include="Models\OfficeDocument.cs" />
     <Compile Include="Views\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
@@ -167,7 +172,7 @@
     <Compile Include="Extensions\PropertyChangedExtension.cs" />
     <Compile Include="Models\RecentFileList.cs" />
     <Compile Include="Extensions\SettingBindingExtension.cs" />
-    <Compile Include="StringsResource.Designer.cs">
+    <Compile Include="Resources\StringsResource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StringsResource.resx</DependentUpon>
@@ -211,48 +216,50 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Resource Include="Resources\settings.png" />
+    <Resource Include="Resources\Images\settings.png" />
     <Resource Include="FodyWeavers.xml" />
-    <Content Include="Schemas\customUI.xsd">
+    <Resource Include="Resources\Schemas\customUI.xsd">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Schemas\customui14.xsd">
+    </Resource>
+    <Resource Include="Resources\Schemas\customui14.xsd">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\ApplicationIcon.ico" />
-    <Resource Include="Resources\check.png" />
-    <Resource Include="Resources\copy.png" />
-    <Resource Include="Resources\cut.png" />
-    <Resource Include="Resources\insertPicture.png" />
-    <Resource Include="Resources\open.png" />
-    <Resource Include="Resources\paste.png" />
-    <Resource Include="Resources\redo.png" />
-    <Resource Include="Resources\remove.png" />
-    <Resource Include="Resources\save.png" />
-    <Resource Include="Resources\undo.png" />
-    <Resource Include="Resources\xml.png" />
+    <Resource Include="Resources\Images\ApplicationIcon.ico" />
+    <Resource Include="Resources\Images\check.png" />
+    <Resource Include="Resources\Images\copy.png" />
+    <Resource Include="Resources\Images\cut.png" />
+    <Resource Include="Resources\Images\insertPicture.png" />
+    <Resource Include="Resources\Images\open.png" />
+    <Resource Include="Resources\Images\paste.png" />
+    <Resource Include="Resources\Images\redo.png" />
+    <Resource Include="Resources\Images\remove.png" />
+    <Resource Include="Resources\Images\save.png" />
+    <Resource Include="Resources\Images\undo.png" />
+    <Resource Include="Resources\Images\xml.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\callbacks.png" />
+    <Resource Include="Resources\Images\callbacks.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\excelwkb.png" />
-    <Resource Include="Resources\pptpre.png" />
-    <Resource Include="Resources\worddoc.png" />
+    <Resource Include="Resources\Images\excelwkb.png" />
+    <Resource Include="Resources\Images\pptpre.png" />
+    <Resource Include="Resources\Images\worddoc.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ImagesResource.resx">
+    <EmbeddedResource Include="Resources\ImagesResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ImagesResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="StringsResource.resx">
+    <EmbeddedResource Include="Resources\SchemasResource.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SchemasResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\StringsResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>StringsResource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
@@ -270,21 +277,11 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Samples\Custom OutSpace.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\Custom Tab.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\Excel - A Custom Tab.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\Repurpose.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Samples\Word - Group on Insert Tab.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Resources\Samples\Custom OutSpace.xml" />
+    <EmbeddedResource Include="Resources\Samples\Custom Tab.xml" />
+    <EmbeddedResource Include="Resources\Samples\Excel - A Custom Tab.xml" />
+    <EmbeddedResource Include="Resources\Samples\Repurpose.xml" />
+    <EmbeddedResource Include="Resources\Samples\Word - Group on Insert Tab.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

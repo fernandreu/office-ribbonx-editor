@@ -63,13 +63,13 @@ namespace CustomUIEditor.ViewModels
                 switch (this.document.FileType)
                 {
                     case OfficeApplications.Excel:
-                        return "/Resources/excelwkb.png";
+                        return "/Resources/Images/excelwkb.png";
                     case OfficeApplications.PowerPoint:
-                        return "/Resources/pptpre.png";
+                        return "/Resources/Images/pptpre.png";
                     case OfficeApplications.Word:
-                        return "/Resources/worddoc.png";
+                        return "/Resources/Images/worddoc.png";
                     case OfficeApplications.Xml:
-                        return "/Resources/xml.png";
+                        return "/Resources/Images/xml.png";
                     default:
                         return null;
                 }

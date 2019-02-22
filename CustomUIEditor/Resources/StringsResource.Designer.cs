@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomUIEditor {
+namespace CustomUIEditor.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CustomUIEditor {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomUIEditor.StringsResource", typeof(StringsResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomUIEditor.Resources.StringsResource", typeof(StringsResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

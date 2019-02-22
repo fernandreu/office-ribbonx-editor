@@ -10,16 +10,16 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:converters="clr-namespace:CustomUIEditor.Converters"
-        xmlns:root="clr-namespace:CustomUIEditor"
+        xmlns:resources="clr-namespace:CustomUIEditor.Resources"
         xmlns:models="clr-namespace:CustomUIEditor.Models"
         mc:Ignorable="d"
-        Title="{x:Static root:StringsResource.idsApplicationTitle}" 
+        Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
         Width="{Binding Source={x:Static properties:Settings.Default}, Path=Width}" 
         Top="{Binding Source={x:Static properties:Settings.Default}, Path=Top}"
         Left="{Binding Source={x:Static properties:Settings.Default}, Path=Left}"
         WindowState="{Binding Source={x:Static properties:Settings.Default}, Path=WindowState}"
-        Icon="/Resources/ApplicationIcon.ico"
+        Icon="/Resources/Images/ApplicationIcon.ico"
         ResizeMode="CanResizeWithGrip"
         x:Name="Window"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
@@ -58,7 +58,7 @@
             <MenuItem Header="_File">
                 <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/open.png"
+                        <Image Source="/Resources/Images/open.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
@@ -66,7 +66,7 @@
                 <Separator/>
                 <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/save.png"
+                        <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>    
@@ -74,7 +74,7 @@
 
                 <MenuItem Header="Save All Documents" Command="{Binding SaveAllCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/save.png"
+                        <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>    
@@ -88,7 +88,7 @@
 
                 <MenuItem Header="Settings..." Command="{Binding ShowSettingsCommand}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/settings.png"
+                        <Image Source="/Resources/Images/settings.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>    
@@ -104,14 +104,14 @@
             <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/undo.png"
+                        <Image Source="/Resources/Images/undo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/redo.png"
+                        <Image Source="/Resources/Images/redo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
@@ -119,21 +119,21 @@
                 <Separator/>
                 <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/cut.png"
+                        <Image Source="/Resources/Images/cut.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/copy.png"
+                        <Image Source="/Resources/Images/copy.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/paste.png"
+                        <Image Source="/Resources/Images/paste.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
@@ -144,14 +144,14 @@
             <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/xml.png"
+                        <Image Source="/Resources/Images/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Office 2007 Custom UI Part" Command="{Binding InsertXml12Command}" IsEnabled="{Binding CanInsertXml12Part}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/xml.png"
+                        <Image Source="/Resources/Images/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
@@ -159,7 +159,7 @@
                 <Separator/>
                 <MenuItem Header="Icons..." Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <MenuItem.Icon>
-                        <Image Source="/Resources/insertPicture.png"
+                        <Image Source="/Resources/Images/insertPicture.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
@@ -168,7 +168,7 @@
                 <MenuItem Header="Sample XML" ItemsSource="{Binding XmlSamples}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <MenuItem.Icon>
                         <Image
-                               Source="/Resources/xml.png"
+                               Source="/Resources/Images/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
@@ -179,7 +179,7 @@
                             </d:Style.DataContext>
                             <Setter Property="Header" Value="{Binding Name}"/>
                             <Setter Property="Command" Value="{Binding Main.InsertXmlSampleCommand, Source={StaticResource Locator}}"/>
-                            <Setter Property="CommandParameter" Value="{Binding FilePath}"/>
+                            <Setter Property="CommandParameter" Value="{Binding ResourceName}"/>
                         </Style>
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
@@ -204,14 +204,14 @@
 
                 <Button ToolTip="Open an Office document" Command="{Binding OpenCommand}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/open.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/open.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Open</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button ToolTip="Save the current Office document" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/save.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/save.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
                     </StackPanel>
                 </Button>
@@ -220,7 +220,7 @@
 
                 <Button ToolTip="View the editor settings" Command="{Binding ShowSettingsCommand}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/settings.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/settings.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
                     </StackPanel>
                 </Button>
@@ -229,28 +229,28 @@
                 
                 <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/insertPicture.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/insertPicture.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Insert Icons</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/check.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/check.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
                     </StackPanel>
                 </Button>
 
                 <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/callbacks.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
                     </StackPanel>
                 </Button>
                 
                 <CheckBox IsChecked="{Binding ReloadOnSave}" ToolTip="To ensure you do not delete changes made externally, you can reload the documents right before they are to be saved">
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="/Resources/redo.png" Width="16" Height="16"/>
+                        <Image Source="/Resources/Images/redo.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
                     </StackPanel>
                 </CheckBox>
@@ -329,7 +329,7 @@
                                               Command="{Binding Main.InsertXml14Command, Source={StaticResource Locator}}" 
                                               IsEnabled="{Binding Main.CanInsertXml14Part, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
-                                            <Image Source="/Resources/xml.png"
+                                            <Image Source="/Resources/Images/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
@@ -338,7 +338,7 @@
                                               Command="{Binding Main.InsertXml12Command, Source={StaticResource Locator}}"
                                               IsEnabled="{Binding Main.CanInsertXml12Part, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
-                                            <Image Source="/Resources/xml.png"
+                                            <Image Source="/Resources/Images/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
@@ -346,7 +346,7 @@
                                     <Separator/>
                                     <MenuItem Header="Save" Command="{Binding Main.SaveCommand, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
-                                            <Image Source="/Resources/save.png"
+                                            <Image Source="/Resources/Images/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>    
@@ -367,7 +367,7 @@
                                 <ContextMenu>
                                     <MenuItem Header="Insert icons..." Command="{Binding Main.InsertIconsCommand, Source={StaticResource Locator}}">
                                         <MenuItem.Icon>
-                                            <Image Source="/Resources/insertPicture.png"
+                                            <Image Source="/Resources/Images/insertPicture.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>

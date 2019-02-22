@@ -46,7 +46,7 @@ namespace CustomUIEditor.ViewModels
 
         public string Name => this.Part.Name;
 
-        public string ImageSource => "/Resources/xml.png";  // TODO: That's probably not the only one possible
+        public string ImageSource => "/Resources/Images/xml.png";  // TODO: That's probably not the only one possible
 
         public void InsertIcon(string filePath, string id = null)
         {

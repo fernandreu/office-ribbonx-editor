@@ -16,6 +16,8 @@ namespace CustomUIEditor.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Windows;
     using System.Xml;
@@ -23,6 +25,7 @@ namespace CustomUIEditor.ViewModels
 
     using CustomUIEditor.Extensions;
     using CustomUIEditor.Models;
+    using CustomUIEditor.Resources;
     using CustomUIEditor.Services;
 
     using GalaSoft.MvvmLight;
@@ -70,15 +73,14 @@ namespace CustomUIEditor.ViewModels
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.QueryClose);
             
-            var applicationFolder = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
 #if DEBUG
             if (this.IsInDesignMode)
             {
                 return;
             }
 #endif
-            this.LoadXmlSchemas(applicationFolder + @"\Schemas\");
-            this.LoadXmlSamples(applicationFolder + @"\Samples\");
+            this.LoadXmlSchemas();
+            this.LoadXmlSamples();
         }
 
         public event EventHandler ShowSettings;
@@ -510,32 +512,20 @@ namespace CustomUIEditor.ViewModels
             }
         }
 
-        private void LoadXmlSchemas(string folderName)
+        private void LoadXmlSchemas()
         {
-            if (string.IsNullOrEmpty(folderName))
-            {
-                Debug.Print("path is null / empty");
-                return;
-            }
-
             try
             {
-                var schemas = Directory.GetFiles(folderName, "CustomUI*.xsd");
+                this.customUiSchemas = new Hashtable(2);
 
-                if (schemas.Length == 0)
+                using (var reader = new StringReader(SchemasResource.customUI))
                 {
-                    return;
+                    this.customUiSchemas.Add(XmlParts.RibbonX12, XmlSchema.Read(reader, null));
                 }
-
-                this.customUiSchemas = new Hashtable(schemas.Length);
-
-                foreach (var schema in schemas)
+                    
+                using (var reader = new StringReader(SchemasResource.customui14))
                 {
-                    var partType = schema.Contains("14") ? XmlParts.RibbonX14 : XmlParts.RibbonX12;
-                    var reader = new StreamReader(schema);
-                    this.customUiSchemas.Add(partType, XmlSchema.Read(reader, null));
-
-                    reader.Close();
+                    this.customUiSchemas.Add(XmlParts.RibbonX14, XmlSchema.Read(reader, null));
                 }
             }
             catch (Exception ex)
@@ -544,34 +534,17 @@ namespace CustomUIEditor.ViewModels
             }
         }
 
-        private void LoadXmlSamples(string path)
+        private void LoadXmlSamples()
         {
-            if (string.IsNullOrEmpty(path))
+            foreach (var sample in XmlSampleViewModel.GetFromAssembly())
             {
-                Debug.Fail("Path to XML samples is null / empty");
-                return;
-            }
-
-            string[] files;
-            try
-            {
-                files = Directory.GetFiles(path, "*.xml");
-            }
-            catch (IOException ex)
-            {
-                Debug.Fail(ex.Message);
-                return;
-            }
-
-            foreach (var file in files)
-            {
-                this.XmlSamples.Add(new XmlSampleViewModel { FilePath = file });
+                this.XmlSamples.Add(sample);
             }
         }
 
-        private void InsertXmlSample(string path)
+        private void InsertXmlSample(string resourceName)
         {
-            Debug.Assert(!string.IsNullOrEmpty(path), "Path not passed");
+            Debug.Assert(!string.IsNullOrEmpty(resourceName), "resourceName not passed");
 
             var newPart = false;
 
@@ -605,14 +578,14 @@ namespace CustomUIEditor.ViewModels
                     return;
                 }
             }
-
+                
             try
             {
-                using (var sr = new StreamReader(path))
-                {
-                    // TODO: This should be automatically raised by the ViewModel when setting the part contents
-                    this.UpdateEditor?.Invoke(this, new DataEventArgs<string> { Data = sr.ReadToEnd() });
-                }
+                var data = XmlSampleViewModel.ReadContents(resourceName);
+                part.Contents = data;
+
+                // TODO: This should be automatically raised by the ViewModel when setting the part contents
+                this.UpdateEditor?.Invoke(this, new DataEventArgs<string> { Data = data });
             }
             catch (Exception ex)
             {

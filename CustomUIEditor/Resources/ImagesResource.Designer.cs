@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Extensions {
+namespace CustomUIEditor.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CustomUIEditor.Extensions {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomUIEditor.ImagesResource", typeof(ImagesResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomUIEditor.Resources.ImagesResource", typeof(ImagesResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -176,6 +176,16 @@ namespace CustomUIEditor.Extensions {
         public static System.Drawing.Bitmap save {
             get {
                 object obj = ResourceManager.GetObject("save", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap settings {
+            get {
+                object obj = ResourceManager.GetObject("settings", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

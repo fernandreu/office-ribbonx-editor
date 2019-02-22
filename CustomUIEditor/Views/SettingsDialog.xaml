@@ -13,7 +13,7 @@
         WindowStartupLocation="CenterOwner"
         Closing="WindowClosing"
         ShowInTaskbar="False"
-        Icon="/Resources/settings.png">
+        Icon="/Resources/Images/settings.png">
     <Window.Resources>
         <converters:ColorConverter x:Key="ColorConverter"/>
     </Window.Resources>
