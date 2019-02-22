@@ -144,6 +144,9 @@ namespace CustomUIEditor.ViewModels
 
         public RelayCommand SaveAsCommand { get; }
 
+        /// <summary>
+        /// Gets the command that triggers the closing of a single document
+        /// </summary>
         public RelayCommand CloseCommand { get; }
 
         public RelayCommand InsertXml14Command { get; }
@@ -164,6 +167,9 @@ namespace CustomUIEditor.ViewModels
 
         public RelayCommand<string> RecentFileClickCommand { get; }
 
+        /// <summary>
+        /// Gets the command that triggers the (cancellable) closing of the entire application
+        /// </summary>
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
         public RelayCommand<string> OpenHelpLinkCommand { get; } = new RelayCommand<string>(url => Process.Start(url));

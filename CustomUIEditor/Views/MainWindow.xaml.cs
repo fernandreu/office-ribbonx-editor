@@ -30,9 +30,9 @@ namespace CustomUIEditor.Views
     {
         private readonly MainWindowViewModel viewModel;
 
+        private readonly XmlLexer lexer;
+
         private bool suppressRequestBringIntoView;
-        
-        private int maxLineNumberCharLength;
 
         public MainWindow()
         {
@@ -45,69 +45,7 @@ namespace CustomUIEditor.Views
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
             this.viewModel.UpdateEditor += (o, e) => this.Editor.Text = e.Data;
 
-            this.SetScintillaLexer();
-        }
-
-        public void SetScintillaLexer()
-        {
-            var scintilla = this.Editor;
-
-            scintilla.TabWidth = Properties.Settings.Default.TabWidth;
-            scintilla.WrapMode = Properties.Settings.Default.WrapMode;
-
-            // Set the XML Lexer
-            scintilla.Lexer = Lexer.Xml;
-
-            // Show line numbers (this is now done in TextChanged so that width depends on number of digits)
-            ////scintilla.Margins[0].Width = 10;
-
-            // Enable folding
-            scintilla.SetProperty("fold", "1");
-            scintilla.SetProperty("fold.compact", "1");
-            scintilla.SetProperty("fold.html", "1");
-
-            // Use Margin 2 for fold markers
-            scintilla.Margins[2].Type = MarginType.Symbol;
-            scintilla.Margins[2].Mask = Marker.MaskFolders;
-            scintilla.Margins[2].Sensitive = true;
-            scintilla.Margins[2].Width = 20;
-
-            // Reset folder markers
-            for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
-            {
-                scintilla.Markers[i].SetForeColor(System.Drawing.SystemColors.ControlLightLight);
-                scintilla.Markers[i].SetBackColor(System.Drawing.SystemColors.ControlDark);
-            }
-
-            // Style the folder markers
-            scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
-            scintilla.Markers[Marker.Folder].SetBackColor(System.Drawing.SystemColors.ControlText);
-            scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
-            scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
-            scintilla.Markers[Marker.FolderEnd].SetBackColor(System.Drawing.SystemColors.ControlText);
-            scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
-            scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
-            scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
-            scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
-
-            // Enable automatic folding
-            scintilla.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
-
-            // Set the Styles
-            scintilla.StyleResetDefault();
-
-            scintilla.Styles[ScintillaNET.Style.Default].Font = "Consolas";
-            scintilla.Styles[ScintillaNET.Style.Default].Size = Properties.Settings.Default.EditorFontSize;
-            scintilla.Styles[ScintillaNET.Style.Default].ForeColor = Properties.Settings.Default.TextColor;
-            scintilla.Styles[ScintillaNET.Style.Default].BackColor = Properties.Settings.Default.BackgroundColor;
-            scintilla.StyleClearAll();
-            scintilla.Styles[ScintillaNET.Style.Xml.Attribute].ForeColor = Properties.Settings.Default.AttributeColor;
-            scintilla.Styles[ScintillaNET.Style.Xml.Entity].ForeColor = Properties.Settings.Default.AttributeColor;
-            scintilla.Styles[ScintillaNET.Style.Xml.Comment].ForeColor = Properties.Settings.Default.CommentColor;
-            scintilla.Styles[ScintillaNET.Style.Xml.Tag].ForeColor = Properties.Settings.Default.TagColor;
-            scintilla.Styles[ScintillaNET.Style.Xml.TagEnd].ForeColor = Properties.Settings.Default.TagColor;
-            scintilla.Styles[ScintillaNET.Style.Xml.DoubleString].ForeColor = Properties.Settings.Default.StringColor;
-            scintilla.Styles[ScintillaNET.Style.Xml.SingleString].ForeColor = Properties.Settings.Default.StringColor;
+            this.lexer = new XmlLexer { Editor = this.Editor };
         }
         
         /// <summary>
@@ -223,28 +161,12 @@ namespace CustomUIEditor.Views
 
                 this.LineBox.Text = $"Ln {line + 1},  Col {col + 1}";
             }
-
-            // Did the number of characters in the line number display change?
-            // i.e. nnn VS nn, or nnnn VS nn, etc...
-            var charLength = this.Editor.Lines.Count.ToString().Length;
-            if (charLength == this.maxLineNumberCharLength)
-            {
-                return;
-            }
-
-            // Calculate the width required to display the last line number
-            // and include some padding for good measure.
-            const int LinePadding = 2;
-
-            this.Editor.Margins[0].Width = this.Editor.TextWidth(ScintillaNET.Style.LineNumber, new string('9', charLength + 1)) + LinePadding;
-            this.maxLineNumberCharLength = charLength;
         }
 
         private void ShowSettings()
         {
-            var dlg = new SettingsDialog { Owner = this };
+            var dlg = new SettingsDialog(this.lexer) { Owner = this };
             dlg.ShowDialog();
-            this.SetScintillaLexer();  // In case settings changed
         }
 
         private void EditorZoomChanged(object sender, EventArgs e)

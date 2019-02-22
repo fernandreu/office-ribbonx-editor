@@ -16,7 +16,6 @@
             x:Name="Editor"
             HorizontalAlignment="Stretch"
             FontFamily="Consolas"
-            UpdateUI="ScintillaUpdateUi"
             FontSize="{extensions:SettingBinding EditorFontSize}"
             DataContext="{Binding SelectedItem, ElementName=DocumentView}"
         />

@@ -14,12 +14,16 @@ namespace CustomUIEditor.Views
     using System.ComponentModel;
     using System.Linq;
     using System.Windows;
-    
+
+    using CustomUIEditor.Models;
+
     /// <summary>
     /// Interaction logic for SettingsDialog
     /// </summary>
     public partial class SettingsDialog : Window
     {
+        private readonly ScintillaLexer lexer;
+
         private readonly string[] usedProperties =
             {
                 nameof(Properties.Settings.Default.TextColor),
@@ -35,9 +39,11 @@ namespace CustomUIEditor.Views
 
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
 
-        public SettingsDialog()
+        public SettingsDialog(ScintillaLexer lexer)
         {
             this.InitializeComponent();
+
+            this.lexer = lexer;
 
             this.WrapModeBox.ItemsSource = Enum.GetValues(typeof(ScintillaNET.WrapMode)).Cast<ScintillaNET.WrapMode>();
 
@@ -83,10 +89,7 @@ namespace CustomUIEditor.Views
         {
             Properties.Settings.Default.Save();
             this.LoadCurrent();
-            if (this.Owner is MainWindow window)
-            {
-                window.SetScintillaLexer();
-            }
+            this.lexer.Update();
         }
 
         private void ApplySettings(object sender, RoutedEventArgs e)
@@ -98,6 +101,7 @@ namespace CustomUIEditor.Views
         {
             Properties.Settings.Default.Save();
             this.IsAccepted = true;
+            this.lexer.Update();
             this.Close();
         }
 

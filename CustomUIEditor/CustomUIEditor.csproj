@@ -131,6 +131,9 @@
     <Compile Include="Models\CallbacksBuilder.cs" />
     <Compile Include="Models\DataEventArgs.cs" />
     <Compile Include="Extensions\RelayCommandExtensions.cs" />
+    <Compile Include="Models\ScintillaLexer.cs" />
+    <Compile Include="Models\VbaLexer.cs" />
+    <Compile Include="Models\XmlLexer.cs" />
     <Compile Include="Services\FileDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IMessageBoxService.cs" />
