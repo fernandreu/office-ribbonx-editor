@@ -13,7 +13,7 @@ namespace CustomUIEditor.ViewModels
     using System.IO;
     using System.Linq;
 
-    using Data;
+    using CustomUIEditor.Models;
 
     public class OfficeDocumentViewModel : TreeViewItemViewModel
     {

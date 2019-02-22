@@ -17,7 +17,7 @@ namespace CustomUIEditor.Views
     using System.Windows.Media;
     using System.Xml;
 
-    using Data;
+    using CustomUIEditor.Models;
 
     using ScintillaNET;
 

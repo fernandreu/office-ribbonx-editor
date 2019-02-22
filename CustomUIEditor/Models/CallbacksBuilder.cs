@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Data
+namespace CustomUIEditor.Models
 {
     using System.Diagnostics;
     using System.Text;

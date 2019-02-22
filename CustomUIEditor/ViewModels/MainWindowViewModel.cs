@@ -21,8 +21,8 @@ namespace CustomUIEditor.ViewModels
     using System.Xml;
     using System.Xml.Schema;
 
-    using CustomUIEditor.Data;
     using CustomUIEditor.Extensions;
+    using CustomUIEditor.Models;
     using CustomUIEditor.Services;
 
     using GalaSoft.MvvmLight;

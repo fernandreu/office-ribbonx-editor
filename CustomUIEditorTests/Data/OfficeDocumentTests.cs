@@ -10,6 +10,9 @@
 namespace CustomUIEditor.Data
 {
     using System.IO;
+
+    using CustomUIEditor.Models;
+
     using NUnit.Framework;
 
     [TestFixture]

@@ -128,8 +128,8 @@
     <Compile Include="Converters\IsNotNullConverter.cs" />
     <Compile Include="Converters\MethodToCommandConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
-    <Compile Include="Data\CallbacksBuilder.cs" />
-    <Compile Include="Data\DataEventArgs.cs" />
+    <Compile Include="Models\CallbacksBuilder.cs" />
+    <Compile Include="Models\DataEventArgs.cs" />
     <Compile Include="Extensions\RelayCommandExtensions.cs" />
     <Compile Include="Services\FileDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
@@ -148,7 +148,7 @@
     </Compile>
     <Compile Include="Converters\ColorConverter.cs" />
     <Compile Include="Converters\DataTypeConverter.cs" />
-    <Compile Include="Data\OfficePart.cs" />
+    <Compile Include="Models\OfficePart.cs" />
     <Compile Include="ViewModels\OfficePartViewModel.cs" />
     <Compile Include="ViewModels\OfficeDocumentViewModel.cs" />
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
@@ -157,12 +157,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ImagesResource.resx</DependentUpon>
     </Compile>
-    <Compile Include="Data\OfficeDocument.cs" />
+    <Compile Include="Models\OfficeDocument.cs" />
     <Compile Include="Views\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Extensions\PropertyChangedExtension.cs" />
-    <Compile Include="Data\RecentFileList.cs" />
+    <Compile Include="Models\RecentFileList.cs" />
     <Compile Include="Extensions\SettingBindingExtension.cs" />
     <Compile Include="StringsResource.Designer.cs">
       <AutoGen>True</AutoGen>

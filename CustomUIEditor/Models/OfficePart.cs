@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Data
+namespace CustomUIEditor.Models
 {
     using System;
     using System.Collections.Generic;
@@ -16,8 +16,6 @@ namespace CustomUIEditor.Data
     using System.IO.Packaging;
     using System.Windows.Media.Imaging;
     using System.Xml;
-
-    using CustomUIEditor.Extensions;
 
     public class OfficePart
     {

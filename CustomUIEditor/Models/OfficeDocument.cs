@@ -7,15 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Data
+namespace CustomUIEditor.Models
 {
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.IO.Packaging;
-    using System.Security.Cryptography;
 
     public enum XmlParts
     {

@@ -10,8 +10,8 @@
 namespace CustomUIEditor.ViewModels
 {
     using System.IO;
-
-    using CustomUIEditor.Data;
+    
+    using CustomUIEditor.Models;
 
     using NUnit.Framework;
 

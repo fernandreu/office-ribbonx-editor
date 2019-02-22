@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
-        xmlns:data="clr-namespace:CustomUIEditor.Data"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:converters="clr-namespace:CustomUIEditor.Converters"
         mc:Ignorable="d"

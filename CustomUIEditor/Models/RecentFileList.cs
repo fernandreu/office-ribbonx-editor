@@ -11,7 +11,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Data
+namespace CustomUIEditor.Models
 {
     using System;
     using System.Collections.Generic;

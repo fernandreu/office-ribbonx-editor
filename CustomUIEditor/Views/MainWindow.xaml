@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:data="clr-namespace:CustomUIEditor.Data"
         xmlns:model="clr-namespace:CustomUIEditor.ViewModels"
         xmlns:properties="clr-namespace:CustomUIEditor.Properties"
         xmlns:sn="http://scintillanet.codeplex.com"
@@ -12,6 +11,7 @@
         xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:converters="clr-namespace:CustomUIEditor.Converters"
         xmlns:root="clr-namespace:CustomUIEditor"
+        xmlns:models="clr-namespace:CustomUIEditor.Models"
         mc:Ignorable="d"
         Title="{x:Static root:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -96,7 +96,7 @@
 
                 <Separator/>
 
-                <data:RecentFileList 
+                <models:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
