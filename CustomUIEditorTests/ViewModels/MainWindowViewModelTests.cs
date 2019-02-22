@@ -15,6 +15,7 @@ namespace CustomUIEditor.ViewModels
     using System.Linq;
     using System.Windows;
     using CustomUIEditor.Extensions;
+    using CustomUIEditor.Models;
     using CustomUIEditor.Services;
 
     using Moq;
@@ -202,6 +203,32 @@ namespace CustomUIEditor.ViewModels
             this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon><tabs></tabs></ribbon></customUI>";
             this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
         }
+
+        /// <summary>
+        /// Checks whether the callbacks window would show the callbacks we would expect
+        /// </summary>
+        [Test]
+        public void GenerateCallbacksTest()
+        {
+            this.viewModel.OpenCommand.Execute();
+            var doc = this.viewModel.DocumentList[0];
+            this.viewModel.SelectedItem = doc;
+            this.viewModel.InsertXml12Command.Execute();
+            var part = doc.Children[0];
+            this.viewModel.SelectedItem = part;
+
+            // This should show a message saying there are no callbacks to be generated
+            part.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
+            this.AssertMessage(this.viewModel.GenerateCallbacksCommand.Execute, MessageBoxImage.Information);
+
+            // This should contain a single callback for the onLoad event
+            part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
+            void Handler(object o, DataEventArgs<string> e) => Assert.IsTrue(e.Data.StartsWith("'Callback for customUI.onLoad"), "Expected callback not generated");
+            this.viewModel.ShowCallbacks += Handler;
+            this.viewModel.GenerateCallbacksCommand.Execute();
+            this.viewModel.ShowCallbacks -= Handler;  // Just in case we add other checks later
+        }
+
 
         private void MockOpenFile(string path)
         {

@@ -10,12 +10,10 @@
 namespace CustomUIEditor.Views
 {
     using System;
-    using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Input;
     using System.Windows.Media;
-    using System.Xml;
 
     using CustomUIEditor.Models;
 
@@ -41,6 +39,7 @@ namespace CustomUIEditor.Views
             this.viewModel = (MainWindowViewModel)this.DataContext;
 
             this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
+            this.viewModel.ShowCallbacks += (o, e) => this.ShowCallbacks(e.Data);
             this.viewModel.ReadCurrentText += (o, e) => e.Data = this.Editor.Text;
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
             this.viewModel.UpdateEditor += (o, e) => this.Editor.Text = e.Data;
@@ -108,30 +107,6 @@ namespace CustomUIEditor.Views
             this.Close();
         }
 
-        private void GenerateCallbacks(object sender, RoutedEventArgs e)
-        {
-            // First, check whether any text is selected
-            try
-            {
-                var customUi = new XmlDocument();
-                customUi.LoadXml(this.Editor.Text);
-
-                var callbacks = CallbacksBuilder.GenerateCallback(customUi);
-                if (callbacks == null || callbacks.Length == 0)
-                {
-                    MessageBox.Show(StringsResource.idsNoCallback, "Generate Callbacks", MessageBoxButton.OK, MessageBoxImage.Information);
-                    return;
-                }
-
-                var window = new CallbackWindow(callbacks.ToString()) { Owner = this };
-                window.Show();
-            }
-            catch (Exception ex)
-            {
-                Debug.Assert(false, ex.Message);
-            }
-        }
-
         private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
@@ -165,8 +140,12 @@ namespace CustomUIEditor.Views
 
         private void ShowSettings()
         {
-            var dlg = new SettingsDialog(this.lexer) { Owner = this };
-            dlg.ShowDialog();
+            new SettingsDialog(this.lexer) { Owner = this }.ShowDialog();
+        }
+
+        private void ShowCallbacks(string code)
+        {
+            new CallbackWindow(code) { Owner = this }.ShowDialog();
         }
 
         private void EditorZoomChanged(object sender, EventArgs e)

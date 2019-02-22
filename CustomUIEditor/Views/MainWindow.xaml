@@ -241,7 +241,7 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbacks for the current XML file" Click="GenerateCallbacks" IsEnabled="{Binding IsPartSelected}">
+                <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>

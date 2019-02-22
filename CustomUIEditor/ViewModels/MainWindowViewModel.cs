@@ -65,6 +65,7 @@ namespace CustomUIEditor.ViewModels
             this.ChangeIconIdCommand = new RelayCommand(this.ChangeIconId);
             this.RemoveCommand = new RelayCommand(this.RemoveItem);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
+            this.GenerateCallbacksCommand = new RelayCommand(this.GenerateCallbacks);
             this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.QueryClose);
@@ -81,6 +82,8 @@ namespace CustomUIEditor.ViewModels
         }
 
         public event EventHandler ShowSettings;
+
+        public event EventHandler<DataEventArgs<string>> ShowCallbacks;
 
         public event EventHandler<DataEventArgs<string>> UpdateEditor;
 
@@ -164,6 +167,8 @@ namespace CustomUIEditor.ViewModels
         public RelayCommand ValidateCommand { get; }
 
         public RelayCommand ShowSettingsCommand { get; }
+
+        public RelayCommand GenerateCallbacksCommand { get; }
 
         public RelayCommand<string> RecentFileClickCommand { get; }
 
@@ -693,6 +698,37 @@ namespace CustomUIEditor.ViewModels
                 e.Severity.ToString(),
                 MessageBoxButton.OK,
                 e.Severity == XmlSeverityType.Error ? MessageBoxImage.Error : MessageBoxImage.Warning);
+        }
+
+        private void GenerateCallbacks()
+        {
+            // TODO: Check whether any text is selected, and generate callbacks only for that text
+            this.ApplyCurrentText();
+
+            if (!(this.SelectedItem is OfficePartViewModel part))
+            {
+                return;
+            }
+
+            try
+            {
+                var customUi = new XmlDocument();
+
+                customUi.LoadXml(part.Contents);
+
+                var callbacks = CallbacksBuilder.GenerateCallback(customUi);
+                if (callbacks == null || callbacks.Length == 0)
+                {
+                    this.messageBoxService.Show(StringsResource.idsNoCallback, "Generate Callbacks", MessageBoxButton.OK, MessageBoxImage.Information);
+                    return;
+                }
+                
+                this.ShowCallbacks?.Invoke(this, new DataEventArgs<string> { Data = callbacks.ToString() });
+            }
+            catch (Exception ex)
+            {
+                this.messageBoxService.Show(ex.Message, "Error Generating Callbacks", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
