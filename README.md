@@ -21,15 +21,21 @@ edited in Excel, then saved in the editor, at which point you would lose those c
 
 ![Screenshot](Screenshot.png)
 
-Build status / Windows executable
----------------------------------
+
+Download / Build status
+-------------------------------
+
+To download the latest release, go to the following link:
+
+https://github.com/fernandreu/wpf-custom-ui-editor/releases/latest
+
+To download the latest development build instead, click on the icon below, then go to the Artifacts menu at the top-right corner:
 
 [![Build Status](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_build/latest?definitionId=1&branchName=master)
 
-To download the Windows executable, click on the Artifacts menu in the top-right corner of the link above.
 
 Other info
-----------
+---------------------------
 
 *This section has been borrowed from the [original Windows Forms project](https://github.com/OfficeDev/office-custom-ui-editor).*
 
