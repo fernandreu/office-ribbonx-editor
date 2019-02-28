@@ -1,8 +1,8 @@
 Bugs / enhancements
 -------------------
 
-If you find a bug in the tool or want a new feature implemented, please create an
-[issue](/issues) and I will have a look at it.
+If you find a bug in the tool or want a new feature implemented, feel more than welcome
+to create an [issue](/issues) and I will have a look at it.
 
 
 Pull requests
@@ -37,5 +37,6 @@ request:
   `d:DataContext` attributes in those cases where it is not automatically inferred.
 - It is always better to have at least one unit test that ensures that a bug is
   fixed or a new feature works as intended.
-- All resources should be embedded in the executable (I want the tool to be able to
-  run from anywhere without installation or a special folder structure).
+- All resources should be embedded in the executable (my objective is to have a
+  standalone tool which does not require installation or a special folder
+  structure).
