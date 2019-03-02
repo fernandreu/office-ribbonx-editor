@@ -3,11 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CustomUIEditor.Views"
         xmlns:controls="clr-namespace:CustomUIEditor.Controls"
         mc:Ignorable="d"
         Width="431.296"
-        Height="317.803"
+        Height="374.47"
         SizeToContent="Height"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
@@ -19,18 +18,27 @@
         </Style>
     </Window.Resources>
     <DockPanel LastChildFill="False" Margin="12">
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Author:</TextBlock> Fernando Andreu</TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Version:</TextBlock> <TextBlock Text="{Binding AssemblyVersion}"/></TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">License:</TextBlock> MIT</TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2"><TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/wpf-custom-ui-editor">https://github.com/fernandreu/wpf-custom-ui-editor</controls:ExternalHyperlink></TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
+            <TextBlock FontWeight="Bold">Author:</TextBlock> Fernando Andreu
+        </TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
+            <TextBlock FontWeight="Bold">Version:</TextBlock> <TextBlock Text="{Binding AssemblyVersion}"/>
+        </TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
+            <TextBlock FontWeight="Bold">License:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/wpf-custom-ui-editor/blob/master/LICENSE">MIT</controls:ExternalHyperlink>
+        </TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
+            <TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/wpf-custom-ui-editor">https://github.com/fernandreu/wpf-custom-ui-editor</controls:ExternalHyperlink>
+        </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4">
             The Office Custom UI Editor is a standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4">
             The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including Office 2013, Office 2016 and Office 365.
         </TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4">
-            This is a WPF port of the original Windows Forms version by Microsoft: <controls:ExternalHyperlink NavigateUri="https://github.com/OfficeDev/office-custom-ui-editor">https://github.com/OfficeDev/office-custom-ui-editor</controls:ExternalHyperlink>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" FontStyle="Italic">
+            This tool is a fork of the original <controls:ExternalHyperlink NavigateUri="https://github.com/OfficeDev/office-custom-ui-editor">Custom UI Editor by Microsoft</controls:ExternalHyperlink>.
+            However, the tool is not affiliated with, endorsed by, sponsored by, or in any way officially connected with Microsoft Corporation, or any of its subsidiaries or its affiliates.
         </TextBlock>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Close" Padding="10,2" Margin="8,0,0,0" Click="CloseWindow"/>
