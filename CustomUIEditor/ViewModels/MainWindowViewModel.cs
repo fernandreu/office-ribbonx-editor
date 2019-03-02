@@ -16,8 +16,6 @@ namespace CustomUIEditor.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
-    using System.Linq;
-    using System.Reflection;
     using System.Text;
     using System.Windows;
     using System.Xml;
@@ -71,6 +69,7 @@ namespace CustomUIEditor.ViewModels
             this.InsertXmlSampleCommand = new RelayCommand<string>(this.InsertXmlSample);
             this.InsertIconsCommand = new RelayCommand(this.InsertIcons);
             this.ChangeIconIdCommand = new RelayCommand(this.ChangeIconId);
+            this.ToggleCommentCommand = new RelayCommand(this.ToggleComment);
             this.RemoveCommand = new RelayCommand(this.RemoveItem);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.GenerateCallbacks);
@@ -90,21 +89,29 @@ namespace CustomUIEditor.ViewModels
 
         public event EventHandler ShowSettings;
 
+
         public event EventHandler<DataEventArgs<string>> ShowCallbacks;
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
         /// </summary>
-        public event EventHandler<DataEventArgs<string>> UpdateEditor;
+        public event EventHandler<EditorChangeEventArgs> UpdateEditor;
 
         /// <summary>
         /// This event will be fired when the styling of the editor needs to be updated
         /// </summary>
         public event EventHandler UpdateLexer;
 
+        /// <summary>
+        /// This event will be fired when a file needs to be added to the recent list. The argument will be the path to the file itself.
+        /// </summary>
         public event EventHandler<DataEventArgs<string>> InsertRecentFile;
 
-        public event EventHandler<DataEventArgs<string>> ReadCurrentText;
+        /// <summary>
+        /// This event will be fired whenever key editor properties (including current text and selection) need to be known. It is the
+        /// listener who will need to specify the argument.
+        /// </summary>
+        public event EventHandler<DataEventArgs<EditorInfo>> ReadEditorInfo;
         
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
@@ -191,6 +198,8 @@ namespace CustomUIEditor.ViewModels
         public RelayCommand InsertIconsCommand { get; }
 
         public RelayCommand ChangeIconIdCommand { get; }
+
+        public RelayCommand ToggleCommentCommand { get; }
 
         public RelayCommand RemoveCommand { get; }
 
@@ -288,15 +297,15 @@ namespace CustomUIEditor.ViewModels
                 return;
             }
 
-            var e = new DataEventArgs<string>();
-            this.ReadCurrentText?.Invoke(this, e);
+            var e = new DataEventArgs<EditorInfo>();
+            this.ReadEditorInfo?.Invoke(this, e);
             if (e.Data == null)
             {
                 // This means that event handler was not listened by any view, or the view did not pass the editor contents back for some reason
                 return;
             }
             
-            this.SelectedItem.Contents = e.Data;
+            this.SelectedItem.Contents = e.Data.Text;
         }
 
         private void InsertIcons()
@@ -613,7 +622,7 @@ namespace CustomUIEditor.ViewModels
                 part.Contents = data;
 
                 // TODO: This should be automatically raised by the ViewModel when setting the part contents
-                this.UpdateEditor?.Invoke(this, new DataEventArgs<string> { Data = data });
+                this.UpdateEditor?.Invoke(this, new EditorChangeEventArgs { Start = -1, End = -1, NewText = data });
             }
             catch (Exception ex)
             {
@@ -730,6 +739,60 @@ namespace CustomUIEditor.ViewModels
             {
                 this.messageBoxService.Show(ex.Message, "Error Generating Callbacks", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ToggleComment()
+        {
+            var e = new DataEventArgs<EditorInfo>();
+            this.ReadEditorInfo?.Invoke(this, e);
+
+            if (e.Data == null)
+            {
+                // Nothing is probably listening to this event
+                return;
+            }
+            
+            // Extend the selection to pick full lines
+            const string NewLine = "\n";
+            var start = e.Data.Text.LastIndexOf(NewLine, e.Data.Selection.Item1, StringComparison.Ordinal) + 1;
+
+            var end = e.Data.Text.IndexOf(NewLine, e.Data.Selection.Item2, StringComparison.Ordinal);
+            if (end < 0)
+            {
+                end = e.Data.Text.Length;
+            }
+
+            // TODO: Use a StringBuilder
+            var lines = e.Data.Text.Substring(start, end - start).Split(new[] { NewLine }, StringSplitOptions.None);
+            for (var i = 0; i < lines.Length; ++i)
+            {
+                var trimmed = lines[i].Trim();
+                if (trimmed.Length == 0)
+                {
+                    // Leave blank lines untouched
+                    continue;
+                }
+
+                var index = lines[i].IndexOf(trimmed, StringComparison.Ordinal);
+                if (trimmed.StartsWith("<!--") && trimmed.EndsWith("-->"))
+                {
+                    // Remove the comment characters
+                    lines[i] = lines[i].Substring(0, index) + trimmed.Substring(4, trimmed.Length - 7) + lines[i].Substring(index + trimmed.Length);
+                }
+                else
+                {
+                    // Add the comment characters
+                    lines[i] = lines[i].Substring(0, index) + "<!--" + trimmed + "-->" + lines[i].Substring(index + trimmed.Length);
+                }
+            }
+
+            // Combine the lines and put them back
+            var combined = string.Join(NewLine, lines);
+            var result = e.Data.Text.Substring(0, start) + combined + e.Data.Text.Substring(end);
+
+            // Update the selected item's current contents to that, and notify the editor
+            this.SelectedItem.Contents = result;
+            this.UpdateEditor?.Invoke(this, new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
         }
     }
 }

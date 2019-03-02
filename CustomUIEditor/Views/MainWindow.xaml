@@ -46,6 +46,7 @@
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
         <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ChangeIconIdCommand}"/>
+        <KeyBinding Key="Divide" Modifiers="Control" Command="{Binding ToggleCommentCommand}"/>
         <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}"/>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}"/>
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}"/>
@@ -222,6 +223,12 @@
                           ToolTip="Show space, tab and line end characters in the editor">
                     <Image Source="/Resources/Images/pilcrow.png" Width="16" Height="16"/>
                 </CheckBox>
+                
+                <Button Command="{Binding ToggleCommentCommand}" 
+                        IsEnabled="{Binding IsPartSelected}"
+                        ToolTip="Comment / uncomment the currently selected lines">
+                    <Image Source="/Resources/Images/tag.png" Width="16" Height="16"/>
+                </Button>
 
                 <Separator/>
 

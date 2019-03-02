@@ -12,6 +12,7 @@ namespace CustomUIEditor.Views
     using System;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media;
 
@@ -20,6 +21,9 @@ namespace CustomUIEditor.Views
     using ScintillaNET;
 
     using ViewModels;
+
+    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+    using TextBox = System.Windows.Controls.TextBox;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -40,12 +44,64 @@ namespace CustomUIEditor.Views
 
             this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
             this.viewModel.ShowCallbacks += (o, e) => this.ShowCallbacks(e.Data);
-            this.viewModel.ReadCurrentText += (o, e) => e.Data = this.Editor.Text;
+            this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
-            this.viewModel.UpdateEditor += (o, e) => this.Editor.Text = e.Data;
             this.viewModel.UpdateLexer += (o, e) => this.lexer.Update();
+            this.viewModel.UpdateEditor += (o, e) =>
+                {
+                    this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
+                    this.Editor.InsertText(e.Start, e.NewText);
+                    if (e.UpdateSelection)
+                    {
+                        this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
+                    }
+
+                    if (e.ResetUndoHistory)
+                    {
+                        this.Editor.EmptyUndoBuffer();
+                    }
+                };
 
             this.lexer = new XmlLexer { Editor = this.Editor };
+            
+            this.Editor.Scintilla.KeyDown += (o, e) =>
+                {
+                    // For some reason, the Scintilla editor always has preference over the input gestures.
+                    // The only solution (so far) is to execute those when appropriate from this event handler.
+                    foreach (var ib in this.InputBindings)
+                    {
+                        if (!(ib is KeyBinding kb))
+                        {
+                            return;
+                        }
+                        
+                        var inputKey = KeyInterop.KeyFromVirtualKey(e.KeyValue);
+                        if (kb.Key != inputKey)
+                        {
+                            continue;
+                        }
+
+                        if (kb.Modifiers.HasFlag(ModifierKeys.Control) != e.Control)
+                        {
+                            continue;
+                        }
+                        
+                        if (kb.Modifiers.HasFlag(ModifierKeys.Shift) != e.Shift)
+                        {
+                            continue;
+                        }
+                        
+                        if (kb.Modifiers.HasFlag(ModifierKeys.Alt) != e.Alt)
+                        {
+                            continue;
+                        }
+                        
+                        e.SuppressKeyPress = true;
+                        e.Handled = true;
+                        kb.Command.Execute(null);
+                        return;
+                    }
+                };
         }
         
         /// <summary>
@@ -117,10 +173,14 @@ namespace CustomUIEditor.Views
             if (newItem == null || !newItem.CanHaveContents)
             {
                 this.Editor.Text = string.Empty;
-                return;
+            }
+            else
+            {
+                this.Editor.Text = newItem.Contents;
             }
 
-            this.Editor.Text = newItem.Contents;
+            // In any case, reset the undo history
+            this.Editor.EmptyUndoBuffer();
         }
 
         private void ScintillaUpdateUi(object sender, UpdateUIEventArgs e)
