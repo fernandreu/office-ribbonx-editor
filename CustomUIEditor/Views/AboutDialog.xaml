@@ -31,7 +31,7 @@
             <TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/wpf-custom-ui-editor">https://github.com/fernandreu/wpf-custom-ui-editor</controls:ExternalHyperlink>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4">
-            The Office Custom UI Editor is a standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.
+            The Office Custom UI Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4">
             The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including Office 2013, Office 2016 and Office 365.
