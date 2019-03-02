@@ -21,17 +21,23 @@ edited in Excel, then saved in the editor, at which point you would lose those c
 
 ![Screenshot](Screenshot.png)
 
-Build status / Windows executable
----------------------------------
+
+Download / Build status
+-------------------------------
+
+To download the latest release, go to the following link:
+
+https://github.com/fernandreu/wpf-custom-ui-editor/releases/latest
+
+To download the latest development build instead, click on the icon below, then go to the Artifacts menu at the top-right corner:
 
 [![Build Status](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_build/latest?definitionId=1&branchName=master)
 
-To download the Windows executable, click on the Artifacts menu in the top-right corner of the link above.
 
 Other info
-----------
+---------------------------
 
-*This section has been borrowed from the [original Windows Forms project](https://github.com/OfficeDev/office-custom-ui-editor).*
+*This section has been partially borrowed from the [original Windows Forms project](https://github.com/OfficeDev/office-custom-ui-editor).*
 
 The Office Custom UI Editor is a standalone tool to edit the Custom UI part of Office open document file format. 
 It contains both Office 2007 and Office 2010 custom UI schemas.
@@ -40,6 +46,7 @@ The Office 2010 custom UI schema is the latest schema and it's still being used 
 Office 2013, Office 2016 and Office 365.
 
 To learn more about how to use these identifiers to customize the Office ribbon, backstage, and context menus visit:
+ - [Change the Ribbon in Excel 2007-2016](https://www.rondebruin.nl/win/s2/win001.htm)
  - [Customizing the Office Fluent Ribbon for Developers](https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx)
  - [Introduction to the Office Backstage View for Developers](https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx)
  - [Office Fluent User Interface Control Identifiers](https://github.com/OfficeDev/office-fluent-ui-command-identifiers)
