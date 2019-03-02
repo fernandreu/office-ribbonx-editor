@@ -38,81 +38,86 @@ namespace CustomUIEditor.Models
                 return;
             }
 
-            var scintilla = this.Editor;
+            var editor = this.Editor;
+            
+            editor.TabWidth = Properties.Settings.Default.TabWidth;
+            editor.WrapMode = Properties.Settings.Default.WrapMode;
+            editor.ViewEol = Properties.Settings.Default.ShowWhitespace;
+            editor.ViewWhitespace = Properties.Settings.Default.ShowWhitespace ? WhitespaceMode.VisibleAlways : WhitespaceMode.Invisible;
 
             // Set the VB Lexer
-            scintilla.Lexer = Lexer.Vb;
+            editor.Lexer = Lexer.Vb;
 
             // Enable folding
-            scintilla.SetProperty("fold", "1");
-            scintilla.SetProperty("fold.compact", "1");
-            scintilla.SetProperty("fold.html", "1");
+            editor.SetProperty("fold", "1");
+            editor.SetProperty("fold.compact", "1");
+            editor.SetProperty("fold.html", "1");
 
             // Use Margin 2 for fold markers
-            scintilla.Margins[2].Type = MarginType.Symbol;
-            scintilla.Margins[2].Mask = Marker.MaskFolders;
-            scintilla.Margins[2].Sensitive = true;
-            scintilla.Margins[2].Width = 20;
+            editor.Margins[2].Type = MarginType.Symbol;
+            editor.Margins[2].Mask = Marker.MaskFolders;
+            editor.Margins[2].Sensitive = true;
+            editor.Margins[2].Width = 20;
 
             // Reset folder markers
             for (int i = Marker.FolderEnd; i <= Marker.FolderOpen; i++)
             {
-                scintilla.Markers[i].SetForeColor(SystemColors.ControlLightLight);
-                scintilla.Markers[i].SetBackColor(SystemColors.ControlDark);
+                editor.Markers[i].SetForeColor(SystemColors.ControlLightLight);
+                editor.Markers[i].SetBackColor(SystemColors.ControlDark);
             }
 
             // Style the folder markers
-            scintilla.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
-            scintilla.Markers[Marker.Folder].SetBackColor(SystemColors.ControlText);
-            scintilla.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
-            scintilla.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
-            scintilla.Markers[Marker.FolderEnd].SetBackColor(SystemColors.ControlText);
-            scintilla.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
-            scintilla.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
-            scintilla.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
-            scintilla.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
+            editor.Markers[Marker.Folder].Symbol = MarkerSymbol.BoxPlus;
+            editor.Markers[Marker.Folder].SetBackColor(SystemColors.ControlText);
+            editor.Markers[Marker.FolderOpen].Symbol = MarkerSymbol.BoxMinus;
+            editor.Markers[Marker.FolderEnd].Symbol = MarkerSymbol.BoxPlusConnected;
+            editor.Markers[Marker.FolderEnd].SetBackColor(SystemColors.ControlText);
+            editor.Markers[Marker.FolderMidTail].Symbol = MarkerSymbol.TCorner;
+            editor.Markers[Marker.FolderOpenMid].Symbol = MarkerSymbol.BoxMinusConnected;
+            editor.Markers[Marker.FolderSub].Symbol = MarkerSymbol.VLine;
+            editor.Markers[Marker.FolderTail].Symbol = MarkerSymbol.LCorner;
 
             // Enable automatic folding
-            scintilla.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
+            editor.AutomaticFold = AutomaticFold.Show | AutomaticFold.Click | AutomaticFold.Change;
 
             // Set the Styles
-            scintilla.StyleResetDefault();
+            editor.StyleResetDefault();
 
-            scintilla.Styles[Style.Default].Font = "Consolas";
-            scintilla.Styles[Style.Default].Size = Properties.Settings.Default.EditorFontSize;
-            scintilla.Styles[Style.Default].ForeColor = Color.Black;
-            scintilla.Styles[Style.Default].BackColor = Color.White;
-            scintilla.StyleClearAll();
+            editor.Styles[Style.Default].Font = "Consolas";
+            editor.Styles[Style.Default].Size = Properties.Settings.Default.EditorFontSize;
+            editor.Styles[Style.Default].ForeColor = Color.Black;
+            editor.Styles[Style.Default].BackColor = Color.White;
+            editor.StyleClearAll();
             
-            scintilla.Styles[Style.Vb.BinNumber].ForeColor = Color.OrangeRed;
-            scintilla.Styles[Style.Vb.Comment].ForeColor = Color.Green;
-            scintilla.Styles[Style.Vb.CommentBlock].ForeColor = Color.Green;
-            scintilla.Styles[Style.Vb.Constant].ForeColor = Color.DarkMagenta;
-            scintilla.Styles[Style.Vb.Date].ForeColor = Color.DarkMagenta;
-            scintilla.Styles[Style.Vb.Default].ForeColor = Color.Black;
-            scintilla.Styles[Style.Vb.DocBlock].ForeColor = Color.Green;
-            scintilla.Styles[Style.Vb.DocKeyword].ForeColor = Color.FromArgb(255, 64, 47, 241);
-            scintilla.Styles[Style.Vb.DocLine].ForeColor = Color.Green;
-            scintilla.Styles[Style.Vb.Error].ForeColor = Color.DarkRed;
-            scintilla.Styles[Style.Vb.Error].Bold = true;
-            scintilla.Styles[Style.Vb.HexNumber].ForeColor = Color.DarkOrange;
-            scintilla.Styles[Style.Vb.Identifier].ForeColor = Color.Black;
-            scintilla.Styles[Style.Vb.Keyword].ForeColor = Color.FromArgb(255, 72, 64, 213);
-            scintilla.Styles[Style.Vb.Keyword2].ForeColor = Color.DarkCyan;
-            scintilla.Styles[Style.Vb.Keyword3].ForeColor = Color.OrangeRed;
-            scintilla.Styles[Style.Vb.Keyword4].ForeColor = Color.DarkRed;
-            scintilla.Styles[Style.Vb.Label].ForeColor = Color.FromArgb(255, 72, 64, 213);
-            scintilla.Styles[Style.Vb.Number].ForeColor = Color.OrangeRed;
-            scintilla.Styles[Style.Vb.Operator].ForeColor = Color.Gray;
-            scintilla.Styles[Style.Vb.Operator].Bold = true;
-            scintilla.Styles[Style.Vb.Preprocessor].ForeColor = Color.Gray;
-            scintilla.Styles[Style.Vb.String].ForeColor = Color.Brown;
-            scintilla.Styles[Style.Vb.StringEol].ForeColor = Color.Black;
-            scintilla.Styles[Style.Vb.StringEol].FillLine = true;
+            editor.Styles[Style.Vb.BinNumber].ForeColor = Color.OrangeRed;
+            editor.Styles[Style.Vb.Comment].ForeColor = Color.Green;
+            editor.Styles[Style.Vb.CommentBlock].ForeColor = Color.Green;
+            editor.Styles[Style.Vb.Constant].ForeColor = Color.DarkMagenta;
+            editor.Styles[Style.Vb.Date].ForeColor = Color.DarkMagenta;
+            editor.Styles[Style.Vb.Default].ForeColor = Color.Black;
+            editor.Styles[Style.Vb.DocBlock].ForeColor = Color.Green;
+            editor.Styles[Style.Vb.DocKeyword].ForeColor = Color.FromArgb(255, 64, 47, 241);
+            editor.Styles[Style.Vb.DocLine].ForeColor = Color.Green;
+            editor.Styles[Style.Vb.Error].ForeColor = Color.DarkRed;
+            editor.Styles[Style.Vb.Error].Bold = true;
+            editor.Styles[Style.Vb.HexNumber].ForeColor = Color.DarkOrange;
+            editor.Styles[Style.Vb.Identifier].ForeColor = Color.Black;
+            editor.Styles[Style.Vb.Keyword].ForeColor = Color.FromArgb(255, 72, 64, 213);
+            editor.Styles[Style.Vb.Keyword2].ForeColor = Color.DarkCyan;
+            editor.Styles[Style.Vb.Keyword3].ForeColor = Color.OrangeRed;
+            editor.Styles[Style.Vb.Keyword4].ForeColor = Color.DarkRed;
+            editor.Styles[Style.Vb.Label].ForeColor = Color.FromArgb(255, 72, 64, 213);
+            editor.Styles[Style.Vb.Number].ForeColor = Color.OrangeRed;
+            editor.Styles[Style.Vb.Operator].ForeColor = Color.Gray;
+            editor.Styles[Style.Vb.Operator].Bold = true;
+            editor.Styles[Style.Vb.Preprocessor].ForeColor = Color.Gray;
+            editor.Styles[Style.Vb.String].ForeColor = Color.Brown;
+            editor.Styles[Style.Vb.StringEol].ForeColor = Color.Black;
+            editor.Styles[Style.Vb.StringEol].FillLine = true;
 
-            scintilla.SetKeywords(0, Keywords);
-            scintilla.SetKeywords(2, Literals);
-            scintilla.SetKeywords(3, Other);
+            editor.SetKeywords(0, Keywords);
+            editor.SetKeywords(2, Literals);
+            editor.SetKeywords(3, Other);
         }
     }
 }

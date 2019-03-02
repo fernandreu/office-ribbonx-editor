@@ -217,6 +217,13 @@
                 </Button>
                 
                 <Separator/>
+                
+                <CheckBox IsChecked="{Binding ShowWhitespaces}" 
+                          ToolTip="Show space, tab and line end characters in the editor">
+                    <Image Source="/Resources/Images/pilcrow.png" Width="16" Height="16"/>
+                </CheckBox>
+
+                <Separator/>
 
                 <Button ToolTip="View the editor settings" Command="{Binding ShowSettingsCommand}">
                     <StackPanel Orientation="Horizontal">
@@ -254,7 +261,6 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
                     </StackPanel>
                 </CheckBox>
-
             </ToolBar>
         </ToolBarTray>
 

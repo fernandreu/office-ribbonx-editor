@@ -202,5 +202,17 @@ namespace CustomUIEditor.Properties {
                 this["WrapMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ShowWhitespace {
+            get {
+                return ((bool)(this["ShowWhitespace"]));
+            }
+            set {
+                this["ShowWhitespace"] = value;
+            }
+        }
     }
 }

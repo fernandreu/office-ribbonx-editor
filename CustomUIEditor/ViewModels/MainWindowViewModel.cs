@@ -41,7 +41,12 @@ namespace CustomUIEditor.ViewModels
         /// Whether documents should be reloaded right before being saved.
         /// </summary>
         private bool reloadOnSave = true;
-        
+
+        /// <summary>
+        /// Whether the editor should make the whitespace / EOL characters visible.
+        /// </summary>
+        private bool showWhitespaces = false;
+
         private Hashtable customUiSchemas;
 
         private TreeViewItemViewModel selectedItem = null;
@@ -87,7 +92,15 @@ namespace CustomUIEditor.ViewModels
 
         public event EventHandler<DataEventArgs<string>> ShowCallbacks;
 
+        /// <summary>
+        /// This event will be fired when the contents of the editor need to be updated
+        /// </summary>
         public event EventHandler<DataEventArgs<string>> UpdateEditor;
+
+        /// <summary>
+        /// This event will be fired when the styling of the editor needs to be updated
+        /// </summary>
+        public event EventHandler UpdateLexer;
 
         public event EventHandler<DataEventArgs<string>> InsertRecentFile;
 
@@ -104,6 +117,21 @@ namespace CustomUIEditor.ViewModels
         {
             get => this.reloadOnSave;
             set => this.Set(ref this.reloadOnSave, value);
+        }
+
+        public bool ShowWhitespaces
+        {
+            get => this.showWhitespaces;
+            set
+            {
+                if (!this.Set(ref this.showWhitespaces, value))
+                {
+                    return;
+                }
+
+                Properties.Settings.Default.ShowWhitespace = value;
+                this.UpdateLexer?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public TreeViewItemViewModel SelectedItem

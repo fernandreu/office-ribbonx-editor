@@ -24,6 +24,8 @@ namespace CustomUIEditor.Models
 
             editor.TabWidth = Properties.Settings.Default.TabWidth;
             editor.WrapMode = Properties.Settings.Default.WrapMode;
+            editor.ViewEol = Properties.Settings.Default.ShowWhitespace;
+            editor.ViewWhitespace = Properties.Settings.Default.ShowWhitespace ? WhitespaceMode.VisibleAlways : WhitespaceMode.Invisible;
 
             // Set the XML Lexer
             editor.Lexer = Lexer.Xml;

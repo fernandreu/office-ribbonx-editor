@@ -47,5 +47,8 @@
     <Setting Name="WrapMode" Type="ScintillaNET.WrapMode" Scope="User">
       <Value Profile="(Default)">None</Value>
     </Setting>
+    <Setting Name="ShowWhitespace" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

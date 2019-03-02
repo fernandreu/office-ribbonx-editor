@@ -43,6 +43,7 @@ namespace CustomUIEditor.Views
             this.viewModel.ReadCurrentText += (o, e) => e.Data = this.Editor.Text;
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
             this.viewModel.UpdateEditor += (o, e) => this.Editor.Text = e.Data;
+            this.viewModel.UpdateLexer += (o, e) => this.lexer.Update();
 
             this.lexer = new XmlLexer { Editor = this.Editor };
         }

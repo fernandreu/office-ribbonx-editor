@@ -283,6 +283,9 @@
     <EmbeddedResource Include="Resources\Samples\Repurpose.xml" />
     <EmbeddedResource Include="Resources\Samples\Word - Group on Insert Tab.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\pilcrow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
