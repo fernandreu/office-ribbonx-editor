@@ -100,7 +100,7 @@
                 <models:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
-                <MenuItem Header="Exit" Click="ExitClick"/>
+                <MenuItem Header="Exit" Click="OnExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}">
@@ -196,7 +196,7 @@
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="About" Click="ShowAboutDialog"/>
+                <MenuItem Header="About" Click="OnShowAboutDialog"/>
             </MenuItem>
         </Menu>
 
@@ -308,7 +308,7 @@
                 Name="DocumentView"
                 ItemsSource="{Binding DocumentList}" 
                 Grid.Column="0"
-                SelectedItemChanged="DocumentViewSelectionChanged"
+                SelectedItemChanged="OnDocumentViewSelectionChanged"
                 PreviewMouseRightButtonDown="OnTreeViewRightClick"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
@@ -316,8 +316,8 @@
                         <d:Style.DataContext>
                             <x:Type Type="model:TreeViewItemViewModel"/>
                         </d:Style.DataContext>
-                        <EventSetter Event="RequestBringIntoView" Handler="TreeViewItemRequestBringIntoView"/>
-                        <EventSetter Event="Selected" Handler="TreeViewItem_OnSelected"/>
+                        <EventSetter Event="RequestBringIntoView" Handler="OnTreeViewItemRequestBringIntoView"/>
+                        <EventSetter Event="Selected" Handler="OnTreeViewItemSelected"/>
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
                         <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
                         <Setter Property="FontWeight" Value="Normal"/>
@@ -394,7 +394,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
                             <TextBlock Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                            <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="ChangeIdTextDown" IsVisibleChanged="IdTextVisible"/>
+                            <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding Main.ChangeIconIdCommand, Source={StaticResource Locator}}"/>
@@ -413,10 +413,11 @@
                 Grid.Column="2"
                 HorizontalAlignment="Stretch"
                 FontFamily="Consolas"
-                UpdateUI="ScintillaUpdateUi"
+                UpdateUI="OnScintillaUpdateUi"
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
                 DataContext="{Binding SelectedItem}"
-                ZoomChanged="EditorZoomChanged">
+                KeyDown="OnEditorKeyDown"
+                ZoomChanged="OnEditorZoomChanged">
                 <sn:ScintillaWPF.Resources>
                     <Style TargetType="sn:ScintillaWPF">
                         <Setter Property="IsEnabled" Value="False"/>

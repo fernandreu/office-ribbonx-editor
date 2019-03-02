@@ -12,7 +12,6 @@ namespace CustomUIEditor.Views
     using System;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media;
 
@@ -21,9 +20,6 @@ namespace CustomUIEditor.Views
     using ScintillaNET;
 
     using ViewModels;
-
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using TextBox = System.Windows.Controls.TextBox;
 
     /// <summary>
     /// Interaction logic for MainWindow
@@ -63,45 +59,6 @@ namespace CustomUIEditor.Views
                 };
 
             this.lexer = new XmlLexer { Editor = this.Editor };
-            
-            this.Editor.Scintilla.KeyDown += (o, e) =>
-                {
-                    // For some reason, the Scintilla editor always has preference over the input gestures.
-                    // The only solution (so far) is to execute those when appropriate from this event handler.
-                    foreach (var ib in this.InputBindings)
-                    {
-                        if (!(ib is KeyBinding kb))
-                        {
-                            return;
-                        }
-                        
-                        var inputKey = KeyInterop.KeyFromVirtualKey(e.KeyValue);
-                        if (kb.Key != inputKey)
-                        {
-                            continue;
-                        }
-
-                        if (kb.Modifiers.HasFlag(ModifierKeys.Control) != e.Control)
-                        {
-                            continue;
-                        }
-                        
-                        if (kb.Modifiers.HasFlag(ModifierKeys.Shift) != e.Shift)
-                        {
-                            continue;
-                        }
-                        
-                        if (kb.Modifiers.HasFlag(ModifierKeys.Alt) != e.Alt)
-                        {
-                            continue;
-                        }
-                        
-                        e.SuppressKeyPress = true;
-                        e.Handled = true;
-                        kb.Command.Execute(null);
-                        return;
-                    }
-                };
         }
         
         /// <summary>
@@ -122,7 +79,7 @@ namespace CustomUIEditor.Views
 
         #region Disable horizontal scrolling when selecting TreeView item
 
-        private void TreeViewItemRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        private void OnTreeViewItemRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             // Ignore re-entrant calls
             if (this.suppressRequestBringIntoView)
@@ -147,8 +104,8 @@ namespace CustomUIEditor.Views
             this.suppressRequestBringIntoView = false;
         }
 
-        // The call to BringIntoView() in TreeViewItem_OnSelected is also important
-        private void TreeViewItem_OnSelected(object sender, RoutedEventArgs e)
+        // The call to BringIntoView() in OnTreeViewItemSelected is also important
+        private void OnTreeViewItemSelected(object sender, RoutedEventArgs e)
         {
             var item = (TreeViewItem)sender;
 
@@ -159,12 +116,12 @@ namespace CustomUIEditor.Views
 
         #endregion
 
-        private void ExitClick(object sender, RoutedEventArgs e)
+        private void OnExitClick(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
 
-        private void DocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
 
@@ -183,7 +140,7 @@ namespace CustomUIEditor.Views
             this.Editor.EmptyUndoBuffer();
         }
 
-        private void ScintillaUpdateUi(object sender, UpdateUIEventArgs e)
+        private void OnScintillaUpdateUi(object sender, UpdateUIEventArgs e)
         {
             if (!this.Editor.IsEnabled)
             {
@@ -209,7 +166,7 @@ namespace CustomUIEditor.Views
             new CallbackWindow(code) { Owner = this }.ShowDialog();
         }
 
-        private void EditorZoomChanged(object sender, EventArgs e)
+        private void OnEditorZoomChanged(object sender, EventArgs e)
         {
             this.ZoomBox.Value = this.Editor.Zoom;
         }
@@ -231,12 +188,12 @@ namespace CustomUIEditor.Views
             }
         }
 
-        private void ShowAboutDialog(object sender, RoutedEventArgs e)
+        private void OnShowAboutDialog(object sender, RoutedEventArgs e)
         {
             new AboutDialog { Owner = this }.ShowDialog();
         }
 
-        private void ChangeIdTextDown(object sender, KeyEventArgs e)
+        private void OnChangeIdTextDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Enter)
             {
@@ -251,7 +208,7 @@ namespace CustomUIEditor.Views
             textBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
         }
 
-        private void IdTextVisible(object sender, DependencyPropertyChangedEventArgs e)
+        private void OnIdTextVisible(object sender, DependencyPropertyChangedEventArgs e)
         {
             if ((bool)e.NewValue == false)
             {
@@ -265,6 +222,45 @@ namespace CustomUIEditor.Views
 
             textBox.Focus();
             textBox.SelectAll();
+        }
+        
+        // For some reason, the Scintilla editor always seems to have preference over the input gestures.
+        // The only solution (so far) is to execute those when appropriate from this event handler.
+        private void OnEditorKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            foreach (var ib in this.InputBindings)
+            {
+                if (!(ib is KeyBinding kb))
+                {
+                    return;
+                }
+                        
+                var inputKey = KeyInterop.KeyFromVirtualKey(e.KeyValue);
+                if (kb.Key != inputKey)
+                {
+                    continue;
+                }
+
+                if (kb.Modifiers.HasFlag(ModifierKeys.Control) != e.Control)
+                {
+                    continue;
+                }
+                        
+                if (kb.Modifiers.HasFlag(ModifierKeys.Shift) != e.Shift)
+                {
+                    continue;
+                }
+                        
+                if (kb.Modifiers.HasFlag(ModifierKeys.Alt) != e.Alt)
+                {
+                    continue;
+                }
+                        
+                e.SuppressKeyPress = true;
+                e.Handled = true;
+                kb.Command.Execute(null);
+                return;
+            }
         }
     }
 }
