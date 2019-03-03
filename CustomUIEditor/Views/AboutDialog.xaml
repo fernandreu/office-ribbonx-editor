@@ -16,7 +16,7 @@
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="12"/>
         </Style>
-    </Window.Resources>
+    </Window.Resources>  
     <DockPanel LastChildFill="False" Margin="12">
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
             <TextBlock FontWeight="Bold">Author:</TextBlock> Fernando Andreu
