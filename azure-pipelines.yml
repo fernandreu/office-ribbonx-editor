@@ -36,7 +36,7 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArgs: '/p:AssemblyBuildNumber="$(Date:yyyyMMdd)" /p:AssemblyRevision="$(Rev)"'
+    msbuildArgs: '/p:AssemblyBuildNumber="$(Build.BuildNumber)"'
 
 - task: VSTest@2
   inputs:
