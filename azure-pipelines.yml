@@ -7,6 +7,9 @@ trigger:
   branches:
     include:
     - master
+  tags:
+    include:
+    - 'v*'
   paths:
     exclude:
     - LICENSE
