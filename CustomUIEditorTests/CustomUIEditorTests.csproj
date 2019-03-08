@@ -21,8 +21,8 @@
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <AssemblyBuildNumber>1</AssemblyBuildNumber>
-    <AssemblyRevision>1</AssemblyRevision>
+    <AssemblyBuildNumber>0</AssemblyBuildNumber>
+    <AssemblyRevision>0</AssemblyRevision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
