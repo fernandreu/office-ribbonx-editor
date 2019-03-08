@@ -67,7 +67,7 @@ steps:
   inputs:
     action: 'create'
     target: '${Build.SourceVersion}'
-    githubConnection: 'fernandreu'
+    githubConnection: 'fernandreu-pat'
     repositoryName: 'fernandreu/wpf-custom-ui-editor'
     assets: '$(Build.ArtifactStagingDirectory)/*.exe'
     tagSource: 'Git tag'
