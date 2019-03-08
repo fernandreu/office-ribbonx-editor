@@ -4,7 +4,14 @@
 # https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
-- master
+  branches:
+    include:
+    - master
+  paths:
+    exclude:
+    - LICENSE
+    - THIRD-PARTY-NOTICES
+    - '**/*.md'
 
 pool:
   vmImage: 'VS2017-Win2016'
@@ -53,3 +60,19 @@ steps:
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
     #parallelCount: # Optional
+
+- task: GithubRelease@0 
+  displayName: 'Create GitHub Release'   
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
+  inputs:
+    action: 'create'
+    target: '${Build.SourceVersion}'
+    githubConnection: 'fernandreu'
+    repositoryName: 'fernandreu/wpf-custom-ui-editor'
+    assets: '$(Build.ArtifactStagingDirectory)/*.exe'
+    tagSource: 'Git tag'
+    # tag: ''
+    title: 'Custom UI Editor ${Build.SourceBranchName}'
+    releaseNotesSource: 'input'
+    addChangelog: true
+    isDraft: true
