@@ -25,17 +25,14 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- task: PowerShell@2
-  inputs:
-    env:
-      buildNumber: $(Build.BuildNumber)
-    targetType: 'inline'
-    script: |
-      Write-Host "Build number is: $env:buildNumber"
-      $parts = $env:buildNumber.split(".")
-      Write-Host "Split into MSBuildNumber=$parts[0]; MSRevision=$parts[1]"
-      Write-Host "##vso[task.setvariable variable=MSBuildNumber;]$parts[0]"
-      Write-Host "##vso[task.setvariable variable=MSRevision;]$parts[1]"
+- env:
+    buildNumber: $(Build.BuildNumber) 
+  powershell: |
+    Write-Host "Build number is: $env:buildNumber"
+    $parts = $env:buildNumber.split(".")
+    Write-Host "Split into MSBuildNumber=$parts[0]; MSRevision=$parts[1]"
+    Write-Host "##vso[task.setvariable variable=MSBuildNumber;]$parts[0]"
+    Write-Host "##vso[task.setvariable variable=MSBuildNumber;]$parts[1]"
 
 - task: NuGetToolInstaller@0
 
@@ -48,7 +45,7 @@ steps:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
-    msbuildArgs: '/p:AssemblyBuildNumber="$(MSBuildNumber)" /p:AssemblyRevision="$(MSRevision)"'
+    msbuildArgs: '/p:AssemblyBuildNumber="$(Build.BuildNumber)"'
 
 - task: VSTest@2
   inputs:
