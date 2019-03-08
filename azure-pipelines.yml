@@ -25,6 +25,10 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- powershell: 'Write-Host "Build number is: $env:buildNumber"'
+  env:
+    buildNumber: $(Build.BuildNumber) 
+
 - task: NuGetToolInstaller@0
 
 - task: NuGetCommand@2
