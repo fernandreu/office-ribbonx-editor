@@ -69,7 +69,7 @@ steps:
   condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
   inputs:
     action: 'create'
-    target: '${Build.SourceVersion}'
+    target: '$(Build.SourceVersion)'
     githubConnection: 'fernandreu-pat'
     repositoryName: 'fernandreu/wpf-custom-ui-editor'
     assets: '$(Build.ArtifactStagingDirectory)/*.exe'
