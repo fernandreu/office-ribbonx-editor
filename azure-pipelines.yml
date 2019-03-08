@@ -26,10 +26,11 @@ variables:
 
 steps:
 - task: PowerShell@2
-  targetType: 'filePath'
-  filePath: 'PreBuild.ps1'
-- env:
-    buildNumber: $(Build.BuildNumber)
+  inputs:
+    targetType: 'filePath'
+    filePath: 'PreBuild.ps1'
+    env:
+      buildNumber: $(Build.BuildNumber)
 
 - task: NuGetToolInstaller@0
 
