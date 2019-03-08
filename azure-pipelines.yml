@@ -29,7 +29,7 @@ steps:
   inputs:
     targetType: 'filePath'
     filePath: 'PreBuild.ps1'
-    arguments: $(Build.BuildNumber)
+    arguments: '"$(Build.BuildNumber)"'
 
 - task: NuGetToolInstaller@0
 
