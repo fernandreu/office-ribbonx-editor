@@ -73,9 +73,9 @@ steps:
     githubConnection: 'fernandreu-pat'
     repositoryName: 'fernandreu/wpf-custom-ui-editor'
     assets: '$(Build.ArtifactStagingDirectory)/*.exe'
-    tagSource: 'Git tag'
-    # tag: ''
-    title: 'Custom UI Editor ${Build.SourceBranchName}'
+    tagSource: 'manual'
+    tag: '$(Build.SourceBranchName)'
+    title: 'Custom UI Editor $(Build.SourceBranchName)'
     releaseNotesSource: 'input'
     addChangelog: true
     isDraft: true
