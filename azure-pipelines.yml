@@ -25,14 +25,11 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
+- task: PowerShell@2
+  targetType: 'filePath'
+  filePath: 'PreBuild.ps1'
 - env:
-    buildNumber: $(Build.BuildNumber) 
-  powershell: |
-    Write-Host "Build number is: $env:buildNumber"
-    $parts = $env:buildNumber.split(".")
-    Write-Host "Split into MSBuildNumber=$parts[0]; MSRevision=$parts[1]"
-    Write-Host "##vso[task.setvariable variable=MSBuildNumber;]$parts[0]"
-    Write-Host "##vso[task.setvariable variable=MSBuildNumber;]$parts[1]"
+    buildNumber: $(Build.BuildNumber)
 
 - task: NuGetToolInstaller@0
 
