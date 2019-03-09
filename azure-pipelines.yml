@@ -81,7 +81,7 @@ steps:
     assets: '$(Build.ArtifactStagingDirectory)/*.exe'
     tagSource: 'manual'
     tag: '$(Build.SourceBranchName)'
-    title: 'Custom UI Editor $(Build.SourceBranchName) - Build $(Build.BuildNumber)'
+    title: 'Custom UI Editor $(Build.SourceBranchName) - Build $(MSBuildNumber).$(MSRevision)'
     releaseNotesSource: 'input'
     addChangelog: true
     isDraft: true
