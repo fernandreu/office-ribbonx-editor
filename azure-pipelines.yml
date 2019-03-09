@@ -84,4 +84,9 @@ steps:
     title: 'Custom UI Editor $(Build.SourceBranchName).$(MSBuildNumber).$(MSRevision)'
     releaseNotesSource: 'input'
     addChangelog: true
-    releaseNotes: This release was automatically generated from Azure Pipelines (build $(Build.BuildNumber)). 
+    isDraft: true  # The release notes will need tweaks anyway, so there is no point in releasing it directly
+    releaseNotes: |
+      ## What's New
+      - TBD
+      
+      For a full list of changes, see below. 
