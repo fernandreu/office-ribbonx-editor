@@ -81,7 +81,7 @@ steps:
     assets: '$(Build.ArtifactStagingDirectory)/*.exe'
     tagSource: 'manual'
     tag: '$(Build.SourceBranchName)'
-    title: 'Custom UI Editor $(Build.SourceBranchName) - Build $(MSBuildNumber).$(MSRevision)'
+    title: 'Custom UI Editor $(Build.SourceBranchName).$(MSBuildNumber).$(MSRevision)'
     releaseNotesSource: 'input'
     addChangelog: true
-    isDraft: true
+    releaseNotes: This release was automatically generated from Azure Pipelines (build $(Build.BuildNumber)). 
