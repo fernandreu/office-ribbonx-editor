@@ -7,5 +7,7 @@ Get-ChildItem "SharedAssemblyInfo.cs" |
 ForEach-Object {
     $c = ($_ | Get-Content)
     $c = $c -replace '(AssemblyVersion\(\"\d?.\d?)\.(\*)(\"\))', "`$1.$($parts[0]).$($parts[1])`$3"
-    [IO.File]::WriteAllText($_.FullName, ($c -join "`r`n"))
+    $joined = $c -join "`r`n"
+    Write-Host "Resulting assembly:`n$joined"
+    [IO.File]::WriteAllText($_.FullName, $joined)
 }
