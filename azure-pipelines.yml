@@ -84,7 +84,6 @@ steps:
     #parallel: false # Optional
     #parallelCount: # Optional
     
-steps:
 - task: PowerShell@2
   # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
   inputs:
