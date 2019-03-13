@@ -5,7 +5,7 @@
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
         
         <MajorUpgrade Schedule="afterInstallInitialize"
-                      AllowSameVersionUpgrades="yes"
+                      AllowSameVersionUpgrades="no"
                       DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
 
 		<MediaTemplate EmbedCab="yes" />
