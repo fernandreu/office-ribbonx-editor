@@ -26,7 +26,7 @@ variables:
 
 steps:
 - task: PowerShell@2
-  displayName: 'Pre-build steps'
+  displayName: 'PreBuildSteps'
   inputs:
     targetType: 'filePath'
     filePath: 'PreBuild.ps1'
@@ -45,12 +45,14 @@ steps:
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
+  displayName: 'RunTests'
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
 # Copy main executable and installer into the staging directory
 - task: CopyFiles@2
+  displayName: 'CopyBinary'
   inputs:
     sourceFolder: ''
     contents: 'CustomUIEditor/bin/$(buildConfiguration)/**.exe'
@@ -59,6 +61,7 @@ steps:
     flattenFolders: true # Optional
     #overWrite: false # Optional
 - task: CopyFiles@2
+  displayName: 'CopyInstaller'
   inputs:
     sourceFolder: ''
     contents: 'Installer/bin/$(buildConfiguration)/**.msi'
@@ -69,6 +72,7 @@ steps:
 
 # Publish Build Artifacts
 - task: PublishBuildArtifacts@1
+  displayName: 'PublishBinary'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/Binary' 
     artifactName: 'WindowsBinary' 
@@ -77,6 +81,7 @@ steps:
     #parallel: false # Optional
     #parallelCount: # Optional
 - task: PublishBuildArtifacts@1
+  displayName: 'PublishInstaller'
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/Installer' 
     artifactName: 'WindowsInstaller' 
@@ -86,13 +91,13 @@ steps:
     #parallelCount: # Optional
     
 - task: PowerShell@2
-  displayName: 'Post-build steps'
+  displayName: 'PostBuildSteps'
   # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
   inputs:
     targetType: 'filePath'
     filePath: 'PostBuild.ps1'
     # arguments: '"$(Build.SourceBranchName)"'
-    arguments: '"v1.2.3.4" "$(GitHubPAT)"'
+    arguments: '"v1.2.3.4" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
 
 - task: GithubRelease@0 
   displayName: 'Create GitHub Release'
