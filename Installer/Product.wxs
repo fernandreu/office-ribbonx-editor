@@ -3,8 +3,11 @@
 	<Product Id="*" Name="Custom UI Editor" Language="1033" Version="!(bind.FileVersion.MainExecutable)" Manufacturer="Fernando Andreu" UpgradeCode="9b513a4b-1dc3-43ce-a81e-6dbee7f36099">
 
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+        
+        <MajorUpgrade Schedule="afterInstallInitialize"
+                      AllowSameVersionUpgrades="yes"
+                      DowngradeErrorMessage="A newer version of [ProductName] is already installed."/>
 
-		<MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
 		<MediaTemplate EmbedCab="yes" />
 
 		<Feature Id="ProductFeature" Title="Installer" Level="1">
