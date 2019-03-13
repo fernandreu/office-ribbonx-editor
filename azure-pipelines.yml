@@ -26,6 +26,7 @@ variables:
 
 steps:
 - task: PowerShell@2
+  displayName: 'Pre-build steps'
   inputs:
     targetType: 'filePath'
     filePath: 'PreBuild.ps1'
@@ -85,12 +86,13 @@ steps:
     #parallelCount: # Optional
     
 - task: PowerShell@2
+  displayName: 'Post-build steps'
   # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
   inputs:
     targetType: 'filePath'
     filePath: 'PostBuild.ps1'
     # arguments: '"$(Build.SourceBranchName)"'
-    arguments: '"v1.2.3.4"'
+    arguments: '"v1.2.3.4" "$(GitHubPAT)"'
 
 - task: GithubRelease@0 
   displayName: 'Create GitHub Release'
