@@ -229,6 +229,7 @@ namespace CustomUIEditor.ViewModels
                                                                         { "Office Fluent UI Command Identifiers", "https://github.com/OfficeDev/office-fluent-ui-command-identifiers" },
                                                                         { "Creating Office add-ins using Visual Studio (VSTO)", "https://msdn.microsoft.com/en-us/library/jj620922.aspx" },
                                                                         { "Office Dev Center", "https://dev.office.com/" },
+                                                                        { "BERT | ImageMSO List Reference", "https://bert-toolkit.com/imagemso-list.html" },
                                                                     };
 
         /// <summary>
