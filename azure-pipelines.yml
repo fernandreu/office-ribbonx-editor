@@ -89,15 +89,6 @@ steps:
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
     #parallelCount: # Optional
-    
-- task: PowerShell@2
-  displayName: 'PostBuildSteps'
-  # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
-  inputs:
-    targetType: 'filePath'
-    filePath: 'PostBuild.ps1'
-    # arguments: '"$(Build.SourceBranchName)"'
-    arguments: '"v1.2.3.4" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
 
 - task: GithubRelease@0 
   displayName: 'Create GitHub Release'
@@ -123,3 +114,11 @@ steps:
       The tool can be installed / used in two ways:
       - By running the `.msi` installer provided in the `Assets` section below. This will create an entry in the control panel's programs list
       - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list      
+          
+- task: PowerShell@2
+  displayName: 'PostBuildSteps'
+  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
+  inputs:
+    targetType: 'filePath'
+    filePath: 'PostBuild.ps1'
+    arguments: '"$(Build.SourceBranchName)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
