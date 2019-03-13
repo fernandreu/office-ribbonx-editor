@@ -464,7 +464,20 @@ namespace CustomUIEditor.ViewModels
         private void Save()
         {
             this.ApplyCurrentText();
-            this.CurrentDocument?.Save(this.ReloadOnSave);
+
+            if (this.CurrentDocument == null)
+            {
+                return;
+            }
+
+            try
+            {
+                this.CurrentDocument.Save(this.ReloadOnSave);
+            }
+            catch (IOException ex)
+            {
+                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void SaveAll()

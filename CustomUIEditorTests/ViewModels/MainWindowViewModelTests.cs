@@ -247,6 +247,47 @@ namespace CustomUIEditor.ViewModels
             Assert.AreEqual(contents, part.Contents, "Sample XML file not created with the expected contents");
         }
 
+        /// <summary>
+        /// Checks whether a file being saved while opened in another program is detected correctly and does not cause any crash
+        /// </summary>
+        [Test]
+        public void SaveInUseTest()
+        {
+            File.Copy(this.sourceFile, this.destFile);
+            this.MockOpenFile(this.destFile);
+            this.viewModel.OpenCommand.Execute();
+            this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
+            
+            // Open the same file in exclusive mode
+            Assert.DoesNotThrow(() =>
+            {
+                using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+                {
+                    this.viewModel.SaveCommand.Execute();
+                }
+            });
+        }
+
+        /// <summary>
+        /// Checks whether a file being saved with the Save As... option while opened in another program is detected correctly and does not cause any crash
+        /// </summary>
+        [Test]
+        public void SaveAsInUseTest()
+        {
+            this.viewModel.OpenCommand.Execute();
+            this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
+            this.viewModel.SaveAsCommand.Execute();
+            
+            // Open the same file in exclusive mode
+            Assert.DoesNotThrow(() =>
+                {
+                    using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+                    {
+                        this.viewModel.SaveAsCommand.Execute();
+                    }
+                });
+        }
+
         private void MockOpenFile(string path)
         {
             this.fileSvc.Setup(x => x.OpenFileDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<string>(), It.IsAny<int>()))
