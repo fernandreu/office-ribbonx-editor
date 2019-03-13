@@ -87,6 +87,11 @@ steps:
     isDraft: true  # The release notes will need tweaks anyway, so there is no point in releasing it directly
     releaseNotes: |
       ## What's New
-      - TBD
-      
+
       For a full list of changes, see below. 
+
+      ## How to install / use
+      The tool can be installed / used in two ways:
+      - By running the `.msi` installer provided in the `Assets` section below. This will create an entry in the control panel's programs list
+      - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list      
+      
