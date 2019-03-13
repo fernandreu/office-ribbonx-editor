@@ -214,5 +214,17 @@ namespace CustomUIEditor.Properties {
                 this["ShowWhitespace"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool AutoIndent {
+            get {
+                return ((bool)(this["AutoIndent"]));
+            }
+            set {
+                this["AutoIndent"] = value;
+            }
+        }
     }
 }

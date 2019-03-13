@@ -415,6 +415,7 @@
                 FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
                 DataContext="{Binding SelectedItem}"
                 KeyDown="OnEditorKeyDown"
+                InsertCheck="OnEditorInsertCheck"
                 ZoomChanged="OnEditorZoomChanged">
                 <sn:ScintillaWPF.Resources>
                     <Style TargetType="sn:ScintillaWPF">

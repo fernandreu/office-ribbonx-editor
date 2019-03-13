@@ -34,7 +34,8 @@ namespace CustomUIEditor.Views
                 nameof(Properties.Settings.Default.StringColor),
                 nameof(Properties.Settings.Default.EditorFontSize),
                 nameof(Properties.Settings.Default.TabWidth),
-                nameof(Properties.Settings.Default.WrapMode)
+                nameof(Properties.Settings.Default.WrapMode),
+                nameof(Properties.Settings.Default.AutoIndent),
             };
 
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();

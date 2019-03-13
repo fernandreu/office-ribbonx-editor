@@ -10,6 +10,7 @@
 namespace CustomUIEditor.Views
 {
     using System;
+    using System.Text.RegularExpressions;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Forms;
@@ -268,6 +269,30 @@ namespace CustomUIEditor.Views
                 this.Dispatcher.InvokeAsync(() => kb.Command.Execute(null));
 
                 return;
+            }
+        }
+
+        private void OnEditorInsertCheck(object sender, InsertCheckEventArgs e)
+        {
+            if (!Properties.Settings.Default.AutoIndent)
+            {
+                return;
+            }
+
+            if (!e.Text.EndsWith("\r") && !e.Text.EndsWith("\n"))
+            {
+                return;
+            }
+
+            var startPos = this.Editor.Lines[this.Editor.LineFromPosition(this.Editor.CurrentPosition)].Position;
+            var endPos = e.Position;
+            var curLineText = this.Editor.GetTextRange(startPos, endPos - startPos); // Text until the caret
+            var indent = Regex.Match(curLineText, "^[ \\t]*");
+            e.Text += indent.Value;
+            if (Regex.IsMatch(curLineText, "[^/]>\\s*$"))
+            {
+                // If the previous line finished with an open tag, add an indentation level to the next one 
+                e.Text += new string(' ', Properties.Settings.Default.TabWidth);
             }
         }
     }
