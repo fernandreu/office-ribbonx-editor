@@ -95,8 +95,6 @@
                     </MenuItem.Icon>    
                 </MenuItem>
 
-                <Separator/>
-
                 <models:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
