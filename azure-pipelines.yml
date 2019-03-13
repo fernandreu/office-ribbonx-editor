@@ -84,8 +84,17 @@ steps:
     #parallel: false # Optional
     #parallelCount: # Optional
     
+steps:
+- task: PowerShell@2
+  # condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
+  inputs:
+    targetType: 'filePath'
+    filePath: 'PostBuild.ps1'
+    # arguments: '"$(Build.SourceBranchName)"'
+    arguments: '"v1.2.3.4"'
+
 - task: GithubRelease@0 
-  displayName: 'Create GitHub Release'   
+  displayName: 'Create GitHub Release'
   condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
   inputs:
     action: 'create'
@@ -108,4 +117,3 @@ steps:
       The tool can be installed / used in two ways:
       - By running the `.msi` installer provided in the `Assets` section below. This will create an entry in the control panel's programs list
       - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list      
-      
