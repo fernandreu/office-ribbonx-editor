@@ -6,5 +6,7 @@ $version = [string]$args[0]
 $pat = [string]$args[1]
 Write-Host "Version passed is: $version"
 $version | Out-File -Encoding UTF8 -FilePath .\RELEASE-VERSION
+git config --global user.email "2480661+fernandreu@users.noreply.github.com"
+git config --global user.name "Fernando Andreu"
 git commit -a -m "Update release version to $version" -q
 git push https://$($pat)@github.com/fernandreu/wpf-custom-ui-editor.git info -q
