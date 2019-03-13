@@ -29,7 +29,7 @@ steps:
   inputs:
     targetType: 'filePath'
     filePath: 'PreBuild.ps1'
-    arguments: '"$(Build.BuildNumber)"'
+    arguments: '"$(Build.BuildId)" "$(Build.SourceBranchName)"'
 
 - task: NuGetToolInstaller@0
 
@@ -48,7 +48,7 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-# Copy main executable into the staging directory
+# Copy main executable and installer into the staging directory
 - task: CopyFiles@2
   inputs:
     sourceFolder: ''
@@ -57,8 +57,6 @@ steps:
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
     #overWrite: false # Optional
-
-# Copy installer into the staging directory
 - task: CopyFiles@2
   inputs:
     sourceFolder: ''
@@ -69,7 +67,6 @@ steps:
     #overWrite: false # Optional
 
 # Publish Build Artifacts
-# Publish build artifacts to Azure Pipelines/TFS or a file share
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/Binary' 
@@ -78,7 +75,6 @@ steps:
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
     #parallelCount: # Optional
-    
 - task: PublishBuildArtifacts@1
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/Installer' 
@@ -99,7 +95,7 @@ steps:
     assets: '$(Build.ArtifactStagingDirectory)/**/*.@(exe|msi)'
     tagSource: 'manual'
     tag: '$(Build.SourceBranchName)'
-    title: 'Custom UI Editor $(Build.SourceBranchName).$(MSBuildNumber).$(MSRevision)'
+    title: 'Custom UI Editor $(ThreeDigitVersion).$(Build.BuildId)'
     releaseNotesSource: 'input'
     addChangelog: true
     isDraft: true  # The release notes will need tweaks anyway, so there is no point in releasing it directly
