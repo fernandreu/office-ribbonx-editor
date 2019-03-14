@@ -55,9 +55,9 @@ steps:
   displayName: 'CopyArtifacts'
   inputs:
     sourceFolder: ''
-    contents: 
-    - 'CustomUIEditor/bin/$(buildConfiguration)/**.exe'
-    - 'Installer/bin/$(buildConfiguration)/**.msi'
+    contents: |
+      CustomUIEditor/bin/$(buildConfiguration)/**.exe
+      Installer/bin/$(buildConfiguration)/**.msi
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
