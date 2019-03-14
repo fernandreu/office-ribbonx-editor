@@ -52,39 +52,23 @@ steps:
 
 # Copy main executable and installer into the staging directory
 - task: CopyFiles@2
-  displayName: 'CopyBinary'
+  displayName: 'CopyArtifacts'
   inputs:
     sourceFolder: ''
-    contents: 'CustomUIEditor/bin/$(buildConfiguration)/**.exe'
-    targetFolder: '$(Build.ArtifactStagingDirectory)/Binary'
-    cleanTargetFolder: true # Optional
-    flattenFolders: true # Optional
-    #overWrite: false # Optional
-- task: CopyFiles@2
-  displayName: 'CopyInstaller'
-  inputs:
-    sourceFolder: ''
-    contents: 'Installer/bin/$(buildConfiguration)/**.msi'
-    targetFolder: '$(Build.ArtifactStagingDirectory)/Installer'
+    contents: 
+    - 'CustomUIEditor/bin/$(buildConfiguration)/**.exe'
+    - 'Installer/bin/$(buildConfiguration)/**.msi'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
     #overWrite: false # Optional
 
 # Publish Build Artifacts
 - task: PublishBuildArtifacts@1
-  displayName: 'PublishBinary'
+  displayName: 'PublishArtifacts'
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/Binary' 
-    artifactName: 'WindowsBinary' 
-    publishLocation: 'Container' # Options: container, filePath
-    #targetPath: # Required when publishLocation == FilePath
-    #parallel: false # Optional
-    #parallelCount: # Optional
-- task: PublishBuildArtifacts@1
-  displayName: 'PublishInstaller'
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)/Installer' 
-    artifactName: 'WindowsInstaller' 
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: 'Binaries'
     publishLocation: 'Container' # Options: container, filePath
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
