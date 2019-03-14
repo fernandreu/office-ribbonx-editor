@@ -30,7 +30,7 @@ steps:
   inputs:
     targetType: 'filePath'
     filePath: 'PreBuild.ps1'
-    arguments: '"$(Build.BuildId)" "$(Build.SourceBranchName)"'
+    arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
 
 - task: NuGetToolInstaller@0
 
