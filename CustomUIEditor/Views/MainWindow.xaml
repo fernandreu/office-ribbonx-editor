@@ -40,6 +40,7 @@
         </Style>
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources> 
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
@@ -266,6 +267,17 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
                     </StackPanel>
                 </CheckBox>
+                
+                <Separator Visibility="{Binding NewerVersion, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+                <Button FontWeight="Bold"
+                        Visibility="{Binding NewerVersion, Converter={StaticResource StringToVisibilityConverter}}"
+                        Command="{Binding NewerVersionCommand}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="/Resources/Images/bricks.png" Width="16" Height="16"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{Binding NewerVersion, StringFormat={}v{0} Available!}"/>
+                    </StackPanel>
+                </Button>
             </ToolBar>
         </ToolBarTray>
 

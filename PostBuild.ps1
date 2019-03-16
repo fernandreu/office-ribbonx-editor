@@ -3,6 +3,7 @@ cd tmp
 git clone --single-branch --branch info https://github.com/fernandreu/wpf-custom-ui-editor.git -q
 cd wpf-custom-ui-editor
 $version = [string]$args[0]
+$version = $version.Substring(1)
 $pat = [string]$args[1]
 $name = [string]$args[2]
 $email = [string]$args[3]

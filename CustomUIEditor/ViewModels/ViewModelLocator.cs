@@ -24,6 +24,7 @@ namespace CustomUIEditor.ViewModels
             SimpleIoc.Default.Register<MainWindowViewModel>();
             SimpleIoc.Default.Register<IMessageBoxService, MessageBoxService>();
             SimpleIoc.Default.Register<IFileDialogService, FileDialogService>();
+            SimpleIoc.Default.Register<IVersionChecker, VersionChecker>();
         }
         
         public MainWindowViewModel Main => ServiceLocator.Current.GetInstance<MainWindowViewModel>();

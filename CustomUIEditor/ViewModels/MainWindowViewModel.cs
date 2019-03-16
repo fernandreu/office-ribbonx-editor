@@ -45,6 +45,11 @@ namespace CustomUIEditor.ViewModels
         /// </summary>
         private bool showWhitespaces = false;
 
+        /// <summary>
+        /// The version string of a newer release, if available
+        /// </summary>
+        private string newerVersion = null;
+
         private Hashtable customUiSchemas;
 
         private TreeViewItemViewModel selectedItem = null;
@@ -54,7 +59,7 @@ namespace CustomUIEditor.ViewModels
         /// </summary>
         private bool hasXmlError;
 
-        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService)
+        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker)
         {
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
@@ -76,6 +81,7 @@ namespace CustomUIEditor.ViewModels
             this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.QueryClose);
+            this.NewerVersionCommand = new RelayCommand(this.ShowNewerVersionMessage);
             
 #if DEBUG
             if (this.IsInDesignMode)
@@ -85,6 +91,8 @@ namespace CustomUIEditor.ViewModels
 #endif
             this.LoadXmlSchemas();
             this.LoadXmlSamples();
+
+            this.CheckVersionAsync(versionChecker);
         }
 
         public event EventHandler ShowSettings;
@@ -139,6 +147,12 @@ namespace CustomUIEditor.ViewModels
                 Properties.Settings.Default.ShowWhitespace = value;
                 this.UpdateLexer?.Invoke(this, EventArgs.Empty);
             }
+        }
+
+        public string NewerVersion
+        {
+            get => this.newerVersion;
+            set => this.Set(ref this.newerVersion, value);
         }
 
         public TreeViewItemViewModel SelectedItem
@@ -210,6 +224,8 @@ namespace CustomUIEditor.ViewModels
         public RelayCommand GenerateCallbacksCommand { get; }
 
         public RelayCommand<string> RecentFileClickCommand { get; }
+
+        public RelayCommand NewerVersionCommand { get; }
 
         /// <summary>
         /// Gets the command that triggers the (cancellable) closing of the entire application
@@ -807,6 +823,27 @@ namespace CustomUIEditor.ViewModels
             // Update the selected item's current contents to that, and notify the editor
             this.SelectedItem.Contents = result;
             this.UpdateEditor?.Invoke(this, new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
+        }
+
+        private async void CheckVersionAsync(IVersionChecker versionChecker)
+        {
+            this.NewerVersion = await versionChecker.CheckVersionAsync();
+        }
+
+        private void ShowNewerVersionMessage()
+        {
+            var result = this.messageBoxService.Show(
+                $"Release version {this.newerVersion} is now available. Do you want to download it?", 
+                "Newer Version Available", 
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Information);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
+            Process.Start("https://github.com/fernandreu/wpf-custom-ui-editor/releases/latest");
         }
     }
 }
