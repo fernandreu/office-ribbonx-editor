@@ -23,11 +23,14 @@ namespace CustomUIEditor.ViewModels
     using NUnit.Framework;
 
     [TestFixture]
+    [Category("Integration")]
     public class MainWindowViewModelTests
     {
         private readonly Mock<IMessageBoxService> msgSvc = new Mock<IMessageBoxService>();
 
         private readonly Mock<IFileDialogService> fileSvc = new Mock<IFileDialogService>();
+
+        private readonly Mock<IVersionChecker> versionChecker = new Mock<IVersionChecker>();
 
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
@@ -53,7 +56,7 @@ namespace CustomUIEditor.ViewModels
                 File.Delete(this.destFile);
             }
 
-            this.viewModel = new MainWindowViewModel(this.msgSvc.Object, this.fileSvc.Object);
+            this.viewModel = new MainWindowViewModel(this.msgSvc.Object, this.fileSvc.Object, this.versionChecker.Object);
         }
 
         [Test]
