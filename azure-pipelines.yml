@@ -107,4 +107,4 @@ steps:
   inputs:
     targetType: 'filePath'
     filePath: 'PostBuild.ps1'
-    arguments: '"$(Build.SourceBranchName)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
+    arguments: '"$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
