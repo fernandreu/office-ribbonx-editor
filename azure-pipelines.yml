@@ -88,7 +88,7 @@ steps:
     title: 'Custom UI Editor $(ThreeDigitVersion).$(Build.BuildId)'
     releaseNotesSource: 'input'
     addChangelog: true
-    isDraft: true  # The release notes will need tweaks anyway, so there is no point in releasing it directly
+    isDraft: false  # The release notes will need some tweaking but are self-sufficient. Hence, better to release this directly and edit them later
     releaseNotes: |
       Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_build/results?buildId=$(Build.BuildId))
 
