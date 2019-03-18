@@ -10,6 +10,7 @@
         SizeToContent="Height"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
+        ShowInTaskbar="False"
         DataContext="{Binding RelativeSource={RelativeSource Self}}"
         Title="About Custom UI Editor for Microsoft Office">
     <Window.Resources>
