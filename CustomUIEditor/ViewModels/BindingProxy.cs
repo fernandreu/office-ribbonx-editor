@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System.Windows;
 

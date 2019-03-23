@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="Custom UI Editor" Language="1033" Version="!(bind.FileVersion.MainExecutable)" Manufacturer="Fernando Andreu" UpgradeCode="9b513a4b-1dc3-43ce-a81e-6dbee7f36099">
+	<Product Id="*" Name="Office RibbonX Editor" Language="1033" Version="!(bind.FileVersion.MainExecutable)" Manufacturer="Fernando Andreu" UpgradeCode="9b513a4b-1dc3-43ce-a81e-6dbee7f36099">
 
         <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
         
@@ -14,7 +14,7 @@
 			<ComponentGroupRef Id="ProductComponents" />
 		</Feature>
         
-        <Icon Id="icon.ico" SourceFile="$(var.CustomUIEditor.ProjectDir)\Resources\Images\ApplicationIcon.ico"/>
+        <Icon Id="icon.ico" SourceFile="$(var.OfficeRibbonXEditor.ProjectDir)\Resources\Images\ApplicationIcon.ico"/>
         <Property Id="ARPPRODUCTICON" Value="icon.ico" />
 
         <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
@@ -102,7 +102,7 @@
 	<Fragment>
 		<Directory Id="TARGETDIR" Name="SourceDir">
             <Directory Id="ProgramFilesFolder">
-				<Directory Id="INSTALLFOLDER" Name="Custom UI Editor" />
+				<Directory Id="INSTALLFOLDER" Name="Office RibbonX Editor" />
 			</Directory>
             <Directory Id="DesktopFolder" SourceName="Desktop"/>
             <Directory Id="ProgramMenuFolder"/>
@@ -112,27 +112,27 @@
 	<Fragment>
 		<ComponentGroup Id="ProductComponents" Directory="INSTALLFOLDER">
 			 <Component Id="ProductComponent">
-                 <File Id="MainExecutable" Name="$(var.CustomUIEditor.TargetFileName)" Source="$(var.CustomUIEditor.TargetPath)" DiskId="1"/>
+                 <File Id="MainExecutable" Name="$(var.OfficeRibbonXEditor.TargetFileName)" Source="$(var.OfficeRibbonXEditor.TargetPath)" DiskId="1"/>
              </Component>
              <Component Id="DesktopShortcut" Guid="B5B8796C-90EB-4823-B3FB-B37D79F37C28">
                  <Condition>INSTALLDESKTOPSHORTCUT</Condition>
                  <Shortcut Id="ProductDesktopShortcut" 
-                           Name="Custom UI Editor" 
-                           Target="[INSTALLFOLDER]\$(var.CustomUIEditor.TargetFileName)"
+                           Name="Office RibbonX Editor" 
+                           Target="[INSTALLFOLDER]\$(var.OfficeRibbonXEditor.TargetFileName)"
                            Directory="DesktopFolder"
                            WorkingDirectory="INSTALLFOLDER"
                            Description="Custom UI Editor for Microsoft Office"/>
-                 <RegistryValue Root="HKCU" Key="Software\Fernando Andreu\Custom UI Editor" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+                 <RegistryValue Root="HKCU" Key="Software\Fernando Andreu\Office RibbonX Editor" Name="installed" Type="integer" Value="1" KeyPath="yes" />
              </Component>
              <Component Id="StartMenuShortcut" Guid="3A87A0CB-8306-43AF-B059-D4613C0CD619">
                 <Condition>INSTALLSTARTMENUSHORTCUT</Condition>
                 <Shortcut Id="ProductMenuShortcut" 
-                          Name="Custom UI Editor" 
-                          Target="[INSTALLFOLDER]\$(var.CustomUIEditor.TargetFileName)"
+                          Name="Office RibbonX Editor" 
+                          Target="[INSTALLFOLDER]\$(var.OfficeRibbonXEditor.TargetFileName)"
                           Directory="ProgramMenuFolder"
                           WorkingDirectory="INSTALLFOLDER"
                           Description="Custom UI Editor for Microsoft Office"/>
-                <RegistryValue Root="HKCU" Key="Software\Fernando Andreu\Custom UI Editor" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+                <RegistryValue Root="HKCU" Key="Software\Fernando Andreu\Office RibbonX Editor" Name="installed" Type="integer" Value="1" KeyPath="yes" />
             </Component>
 		</ComponentGroup>
 	</Fragment>

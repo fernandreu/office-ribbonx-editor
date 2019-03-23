@@ -7,21 +7,19 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Views
+namespace OfficeRibbonXEditor.Views
 {
     using System;
     using System.Text.RegularExpressions;
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Forms;
     using System.Windows.Input;
     using System.Windows.Media;
 
-    using CustomUIEditor.Models;
+    using OfficeRibbonXEditor.Models;
+    using OfficeRibbonXEditor.ViewModels;
 
     using ScintillaNET;
-
-    using ViewModels;
 
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
     using TextBox = System.Windows.Controls.TextBox;
@@ -265,7 +263,7 @@ namespace CustomUIEditor.Views
                 e.Handled = true;
 
                 // If this is not async, the lines above seem to be ignored and the character is still printed when
-                // launching a dialog (e.g. Ctrl-O). See: https://github.com/fernandreu/wpf-custom-ui-editor/issues/20
+                // launching a dialog (e.g. Ctrl-O). See: https://github.com/fernandreu/office-ribbonx-editor/issues/20
                 this.Dispatcher.InvokeAsync(() => kb.Command.Execute(null));
 
                 return;

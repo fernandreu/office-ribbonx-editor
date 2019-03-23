@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Models
+namespace OfficeRibbonXEditor.Models
 {
     using ScintillaNET;
     using ScintillaNET.WPF;

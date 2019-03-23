@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Models
+namespace OfficeRibbonXEditor.Models
 {
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace CustomUIEditor.Models
     using System.Windows.Media.Imaging;
     using System.Xml;
 
-    using CustomUIEditor.Resources;
+    using OfficeRibbonXEditor.Resources;
 
     public class OfficePart
     {

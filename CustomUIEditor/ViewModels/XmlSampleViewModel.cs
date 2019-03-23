@@ -7,19 +7,18 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
-    using System.Collections;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Reflection;
 
     using GalaSoft.MvvmLight;
-    
+
     public class XmlSampleViewModel : ViewModelBase
     {
-        private const string SamplesNamespace = "CustomUIEditor.Resources.Samples";
+        private static readonly string SamplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";
 
         public string ResourceName { get; set; }
 

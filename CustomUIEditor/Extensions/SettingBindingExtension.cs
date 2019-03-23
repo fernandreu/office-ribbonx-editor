@@ -8,7 +8,7 @@
 // 
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Extensions
+namespace OfficeRibbonXEditor.Extensions
 {
     using System.Windows.Data;
 

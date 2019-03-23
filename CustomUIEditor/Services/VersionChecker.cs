@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Services
+namespace OfficeRibbonXEditor.Services
 {
     using System;
     using System.Diagnostics;
@@ -19,7 +19,7 @@ namespace CustomUIEditor.Services
 
     public class VersionChecker : IVersionChecker
     {
-        private const string CheckUrl = "https://raw.githubusercontent.com/fernandreu/wpf-custom-ui-editor/info/RELEASE-VERSION";
+        private const string CheckUrl = "https://raw.githubusercontent.com/fernandreu/office-ribbonx-editor/info/RELEASE-VERSION";
 
         public async Task<string> CheckVersionAsync(CancellationToken cancelToken = default(CancellationToken))
         {

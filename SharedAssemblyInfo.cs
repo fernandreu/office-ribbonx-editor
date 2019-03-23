@@ -5,7 +5,7 @@
 // associated with an assembly.
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Fernando Andreu")]
-[assembly: AssemblyProduct("CustomUIEditor")]
+[assembly: AssemblyProduct("OfficeRibbonXEditor")]
 [assembly: AssemblyCopyright("Copyright © Fernando Andreu 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

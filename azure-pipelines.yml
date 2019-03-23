@@ -56,7 +56,7 @@ steps:
   inputs:
     sourceFolder: ''
     contents: |
-      CustomUIEditor/bin/$(buildConfiguration)/**.exe
+      OfficeRibbonXEditor/bin/$(buildConfiguration)/**.exe
       Installer/bin/$(buildConfiguration)/**.msi
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
@@ -81,7 +81,7 @@ steps:
     action: 'create'
     target: '$(Build.SourceVersion)'
     githubConnection: 'fernandreu-pat'
-    repositoryName: 'fernandreu/wpf-custom-ui-editor'
+    repositoryName: 'fernandreu/office-ribbonx-editor'
     assets: '$(Build.ArtifactStagingDirectory)/**/*.@(exe|msi)'
     tagSource: 'manual'
     tag: '$(Build.SourceBranchName)'

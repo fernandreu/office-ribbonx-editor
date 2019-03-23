@@ -7,20 +7,21 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Windows;
-    using CustomUIEditor.Extensions;
-    using CustomUIEditor.Models;
-    using CustomUIEditor.Services;
 
     using Moq;
 
     using NUnit.Framework;
+
+    using OfficeRibbonXEditor.Extensions;
+    using OfficeRibbonXEditor.Models;
+    using OfficeRibbonXEditor.Services;
 
     [TestFixture]
     [Category("Integration")]

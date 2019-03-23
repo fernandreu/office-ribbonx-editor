@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using CommonServiceLocator;
 
-    using CustomUIEditor.Services;
-
     using GalaSoft.MvvmLight.Ioc;
+
+    using OfficeRibbonXEditor.Services;
 
     public class ViewModelLocator
     {

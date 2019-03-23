@@ -8,7 +8,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Converters
+namespace OfficeRibbonXEditor.Converters
 {
     using System;
     using System.Globalization;

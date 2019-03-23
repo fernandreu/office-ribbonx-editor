@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Controls
+namespace OfficeRibbonXEditor.Controls
 {
     using System.Diagnostics;
     using System.Windows.Documents;

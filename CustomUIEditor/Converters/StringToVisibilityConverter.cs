@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Converters
+namespace OfficeRibbonXEditor.Converters
 {
     using System;
     using System.Globalization;
     using System.Windows;
     using System.Windows.Data;
-    
+
     [ValueConversion(typeof(string), typeof(Visibility))]
     public class StringToVisibilityConverter : IValueConverter
     {

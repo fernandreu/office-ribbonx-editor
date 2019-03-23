@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Extensions
+namespace OfficeRibbonXEditor.Extensions
 {
     using GalaSoft.MvvmLight.Command;
 

@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System;
     using System.IO;
     using System.Linq;
 
-    using CustomUIEditor.Models;
+    using OfficeRibbonXEditor.Models;
 
     public class OfficeDocumentViewModel : TreeViewItemViewModel
     {

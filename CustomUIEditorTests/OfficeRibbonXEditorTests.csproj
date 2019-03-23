@@ -8,8 +8,8 @@
     <ProjectGuid>{D4F06196-AE8D-4DF5-BE6B-49490919A67B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CustomUIEditor</RootNamespace>
-    <AssemblyName>CustomUIEditorTests</AssemblyName>
+    <RootNamespace>OfficeRibbonXEditor</RootNamespace>
+    <AssemblyName>OfficeRibbonXEditorTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -105,9 +105,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomUIEditor\CustomUIEditor.csproj">
+    <ProjectReference Include="..\CustomUIEditor\OfficeRibbonXEditor.csproj">
       <Project>{87EFED6B-45A1-425F-B63B-5894E4FC0C03}</Project>
-      <Name>CustomUIEditor</Name>
+      <Name>OfficeRibbonXEditor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

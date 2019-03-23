@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Views
+namespace OfficeRibbonXEditor.Views
 {
     using System.Reflection;
     using System.Windows;

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Resources {
+namespace OfficeRibbonXEditor.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CustomUIEditor.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomUIEditor.Resources.ImagesResource", typeof(ImagesResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OfficeRibbonXEditor.Resources.ImagesResource", typeof(ImagesResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

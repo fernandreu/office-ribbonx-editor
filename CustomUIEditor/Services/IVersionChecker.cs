@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Services
+namespace OfficeRibbonXEditor.Services
 {
     using System.Threading;
     using System.Threading.Tasks;

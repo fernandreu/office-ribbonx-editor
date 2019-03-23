@@ -7,11 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System.IO;
     using System.Windows.Media.Imaging;
-    
 
     public class IconViewModel : TreeViewItemViewModel
     {

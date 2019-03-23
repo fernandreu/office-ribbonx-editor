@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,7 @@ namespace CustomUIEditor.ViewModels
     using System.Linq;
     using System.Windows.Media.Imaging;
 
-    using CustomUIEditor.Models;
+    using OfficeRibbonXEditor.Models;
 
     public class OfficePartViewModel : TreeViewItemViewModel
     {

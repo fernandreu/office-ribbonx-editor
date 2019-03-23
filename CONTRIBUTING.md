@@ -2,7 +2,7 @@ Bugs / enhancements
 -------------------
 
 If you find a bug in the tool or want a new feature implemented, feel more than welcome
-to create an [issue](https://github.com/fernandreu/wpf-custom-ui-editor/issues) and I will have a look at it.
+to create an [issue](https://github.com/fernandreu/office-ribbonx-editor/issues) and I will have a look at it.
 
 
 Pull requests

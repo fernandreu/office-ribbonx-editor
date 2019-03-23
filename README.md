@@ -1,10 +1,10 @@
 
-WPF's Custom UI Editor for Microsoft Office
+Office RibbonX Editor
 ===============
 
-This GitHub repo is a WPF version of [Microsoft's Custom UI Editor](https://github.com/OfficeDev/office-custom-ui-editor).
-Built on Windows Forms, the original editor is useful on its own, but it has some limitations. Rather than trying to
-address those limitations by performing small contributions to the original project, this repo offers a complete redesign
+This GitHub repo is a WPF version of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor),
+developed by Microsoft. Built on Windows Forms, the original editor is useful on its own, but it has some limitations. Rather than
+trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign
 of the project in WPF.
 
 Features of this overhauled editor include:
@@ -27,7 +27,7 @@ Download / Build status
 
 To download the latest release, go to the following link:
 
-https://github.com/fernandreu/wpf-custom-ui-editor/releases/latest
+https://github.com/fernandreu/office-ribbonx-editor/releases/latest
 
 To download the latest development build instead, click on the icon below, then go to the Artifacts menu at the top-right corner:
 

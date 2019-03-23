@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Data
+namespace OfficeRibbonXEditor.Data
 {
     using NUnit.Framework;
 

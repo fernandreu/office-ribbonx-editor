@@ -1,12 +1,13 @@
-﻿<Application x:Class="CustomUIEditor.App"
+﻿<Application x:Class="OfficeRibbonXEditor.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels"
              mc:Ignorable="d"
              StartupUri="Views/MainWindow.xaml"
              Exit="ApplicationExit">
     <Application.Resources>
-         <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:CustomUIEditor.ViewModels"/>
+         <viewModels:ViewModelLocator x:Key="Locator" d:IsDataSource="True" />
     </Application.Resources>
 </Application>

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Views
+namespace OfficeRibbonXEditor.Views
 {
     using System;
     using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace CustomUIEditor.Views
     using System.Linq;
     using System.Windows;
 
-    using CustomUIEditor.Models;
+    using OfficeRibbonXEditor.Models;
 
     /// <summary>
     /// Interaction logic for SettingsDialog

@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System;
     using System.Collections;
@@ -21,13 +21,13 @@ namespace CustomUIEditor.ViewModels
     using System.Xml;
     using System.Xml.Schema;
 
-    using CustomUIEditor.Extensions;
-    using CustomUIEditor.Models;
-    using CustomUIEditor.Resources;
-    using CustomUIEditor.Services;
-
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
+
+    using OfficeRibbonXEditor.Extensions;
+    using OfficeRibbonXEditor.Models;
+    using OfficeRibbonXEditor.Resources;
+    using OfficeRibbonXEditor.Services;
 
     public class MainWindowViewModel : ViewModelBase
     {
@@ -843,7 +843,7 @@ namespace CustomUIEditor.ViewModels
                 return;
             }
 
-            Process.Start("https://github.com/fernandreu/wpf-custom-ui-editor/releases/latest");
+            Process.Start("https://github.com/fernandreu/office-ribbonx-editor/releases/latest");
         }
     }
 }

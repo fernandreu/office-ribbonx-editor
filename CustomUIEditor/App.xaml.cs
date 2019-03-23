@@ -7,10 +7,10 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor
+namespace OfficeRibbonXEditor
 {
     using System.Windows;
-    
+
     /// <summary>
     /// Interaction logic for App
     /// </summary>
@@ -18,7 +18,7 @@ namespace CustomUIEditor
     {
         private void ApplicationExit(object sender, ExitEventArgs e)
         {
-            CustomUIEditor.Properties.Settings.Default.Save();
+            OfficeRibbonXEditor.Properties.Settings.Default.Save();
         }
     }
 }

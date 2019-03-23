@@ -11,7 +11,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Models
+namespace OfficeRibbonXEditor.Models
 {
     using System;
     using System.Collections.Generic;

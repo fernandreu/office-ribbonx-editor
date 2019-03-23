@@ -7,13 +7,13 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace CustomUIEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels
 {
     using System.IO;
-    
-    using CustomUIEditor.Models;
 
     using NUnit.Framework;
+
+    using OfficeRibbonXEditor.Models;
 
     [TestFixture]
     public class OfficeDocumentViewModelTests

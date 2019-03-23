@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace CustomUIEditor.Resources {
+namespace OfficeRibbonXEditor.Resources {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace CustomUIEditor.Resources {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("CustomUIEditor.Resources.StringsResource", typeof(StringsResource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OfficeRibbonXEditor.Resources.StringsResource", typeof(StringsResource).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace CustomUIEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Custom UI Editor for Microsoft Office.
+        ///   Looks up a localized string similar to Office RibbonX Editor.
         /// </summary>
         public static string idsApplicationTitle {
             get {
