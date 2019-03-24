@@ -28,7 +28,7 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomUIEditor\OfficeRibbonXEditor.csproj">
+    <ProjectReference Include="..\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj">
       <Name>OfficeRibbonXEditor</Name>
       <Project>{87efed6b-45a1-425f-b63b-5894e4fc0c03}</Project>
       <Private>True</Private>

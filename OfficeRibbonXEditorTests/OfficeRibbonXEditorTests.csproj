@@ -105,7 +105,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomUIEditor\OfficeRibbonXEditor.csproj">
+    <ProjectReference Include="..\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj">
       <Project>{87EFED6B-45A1-425F-B63B-5894E4FC0C03}</Project>
       <Name>OfficeRibbonXEditor</Name>
     </ProjectReference>
