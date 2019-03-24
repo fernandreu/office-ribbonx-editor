@@ -103,8 +103,7 @@ steps:
           
 - task: PowerShell@2
   displayName: 'PostBuildSteps'
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
   inputs:
     targetType: 'filePath'
     filePath: 'PostBuild.ps1'
-    arguments: '"$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
+    arguments: '"$(Build.SourceBranch)" "$(Build.ArtifactStagingDirectory)" "$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
