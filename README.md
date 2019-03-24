@@ -2,10 +2,9 @@
 Office RibbonX Editor
 ===============
 
-This GitHub repo is a WPF version of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor),
-developed by Microsoft. Built on Windows Forms, the original editor is useful on its own, but it has some limitations. Rather than
+This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than
 trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign
-of the project in WPF.
+of the project in Windows Presentation Foundation (WPF).
 
 Features of this overhauled editor include:
 - [ScintillaNET](https://github.com/jacobslusser/ScintillaNET) (via [SctintillaNET.WPF](https://github.com/Stumpii/ScintillaNET.WPF/tree/master/ScintillaNET.WPF)) as text editor, with seamless syntax highlighting
