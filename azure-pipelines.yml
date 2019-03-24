@@ -85,7 +85,7 @@ steps:
     assets: '$(Build.ArtifactStagingDirectory)/**/*.@(exe|msi)'
     tagSource: 'manual'
     tag: '$(Build.SourceBranchName)'
-    title: 'Custom UI Editor $(ThreeDigitVersion).$(Build.BuildId)'
+    title: 'Office RibbonX Editor $(ThreeDigitVersion).$(Build.BuildId)'
     releaseNotesSource: 'input'
     addChangelog: true
     isDraft: false  # The release notes will need some tweaking but are self-sufficient. Hence, better to release this directly and edit them later
