@@ -238,15 +238,15 @@ namespace OfficeRibbonXEditor.ViewModels
         /// Gets a list of headers which will be shown in the "Useful links" menu, together with the links they point to
         /// </summary>
         public IDictionary<string, string> HelpLinks { get; } = new Dictionary<string, string>
-                                                                    {
-                                                                        { "Customize the Ribbon", "https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx" },
-                                                                        { "Customize the Backstage", "https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx" },
-                                                                        { "Repurposing built-in commands", "https://blogs.technet.microsoft.com/the_microsoft_excel_support_team_blog/2012/06/18/how-to-repurpose-a-button-in-excel-2007-or-2010/" },
-                                                                        { "Office Fluent UI Command Identifiers", "https://github.com/OfficeDev/office-fluent-ui-command-identifiers" },
-                                                                        { "Creating Office add-ins using Visual Studio (VSTO)", "https://msdn.microsoft.com/en-us/library/jj620922.aspx" },
-                                                                        { "Office Dev Center", "https://dev.office.com/" },
-                                                                        { "BERT | ImageMSO List Reference", "https://bert-toolkit.com/imagemso-list.html" },
-                                                                    };
+        {
+            { "Change the Ribbon in Excel 2007 and up | Ron de Bruin Excel Automation", "http://www.rondebruin.nl/win/s2/win001.htm" },
+            { "Customize the 2007 Office Fluent Ribbon for Developers | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx" },
+            { "Introduction to the Office 2010 Backstage View for Developers | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx" },
+            { "Office Fluent UI Command Identifiers | OfficeDev on GitHub", "https://github.com/OfficeDev/office-fluent-ui-command-identifiers" },
+            { "Creating VSTO Add-ins for Office by using Visual Studio | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/jj620922.aspx" },
+            { "ImageMSO List Reference | BERT", "https://bert-toolkit.com/imagemso-list.html" },
+            { "Office Dev Center", "https://developer.microsoft.com/en-us/office" },
+        };
 
         /// <summary>
         /// Gets the View model of the OfficeDocument currently active (selected) on the application
