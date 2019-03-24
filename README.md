@@ -1,6 +1,6 @@
 
 Office RibbonX Editor
-===============
+=====================
 
 This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than
 trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign
@@ -12,15 +12,14 @@ Features of this overhauled editor include:
 for copying code from one file to another)
 - List of recently opened files showing up on the file menu (thanks to 
 [RecentFileList](https://www.codeproject.com/Articles/23731/RecentFileList-a-WPF-MRU))
-- A `Reload on Save` option that avoids losing any external changes (for more info, see section below)
+- A `Reload on Save` option that avoids losing any external changes (for more info, see [the section below](#how-does-the-reload-on-save-option-work))
 - Possibility of customizing some aspects of the editor such as font size and color
 - Plus all the features of the original Windows Forms project
 
 ![Screenshot](Screenshot.png)
 
 
-Download / Build status
--------------------------------
+## Download / Build status
 
 To download the latest release, go to the following link:
 
@@ -31,8 +30,7 @@ To download the latest development build instead, click on the icon below, then 
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 
 
-How does the `Reload on Save` option work?
-----------------------------------------
+## How does the `Reload on Save` option work?
 
 An Office 2007+ file (`.xlsm`, `.xlam`, `.pptm`, `.docx`, etc.) is nothing more than a `.zip` file with a
 custom extension. When the Office RibbonX Editor opens one of those files, it unzips it into a temporary
@@ -67,8 +65,7 @@ but will generate a new one instead. As a consequence, any external changes you 
 won’t have any noticeable impact for you.
 
 
-Other info
----------------------------
+## Other info
 
 *This section has been partially borrowed from the [original Windows Forms project](https://github.com/OfficeDev/office-custom-ui-editor).*
 
