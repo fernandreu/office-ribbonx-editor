@@ -31,7 +31,7 @@ https://github.com/fernandreu/office-ribbonx-editor/releases/latest
 
 To download the latest development build instead, click on the icon below, then go to the Artifacts menu at the top-right corner:
 
-[![Build Status](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/Custom%20UI%20Editor/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 
 
 Other info
