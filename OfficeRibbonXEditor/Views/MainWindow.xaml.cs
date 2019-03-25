@@ -198,17 +198,24 @@ namespace OfficeRibbonXEditor.Views
 
         private void OnChangeIdTextDown(object sender, KeyEventArgs e)
         {
-            if (e.Key != Key.Enter)
-            {
-                return;
-            }
-
             if (!(sender is TextBox textBox))
             {
                 return;
             }
-            
-            textBox.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+
+            if (!(textBox.DataContext is IconViewModel icon))
+            {
+                return;
+            }
+
+            if (e.Key == Key.Enter)
+            {
+                icon.CommitIdChange();
+            }
+            else if (e.Key == Key.Escape)
+            {
+                icon.DiscardIdChange();
+            }
         }
 
         private void OnIdTextVisible(object sender, DependencyPropertyChangedEventArgs e)

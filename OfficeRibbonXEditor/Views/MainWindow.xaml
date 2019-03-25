@@ -404,7 +404,7 @@
                         <StackPanel Orientation="Horizontal">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
                             <TextBlock Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                            <TextBox Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
+                            <TextBox Text="{Binding NewId, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding Main.ChangeIconIdCommand, Source={StaticResource Locator}}"/>

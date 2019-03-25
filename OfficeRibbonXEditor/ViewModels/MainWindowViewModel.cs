@@ -171,7 +171,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 {
                     // Stop showing the editing textbox when the focus changes to something else.
                     // See: https://github.com/fernandreu/office-ribbonx-editor/issues/32
-                    icon.IsEditingId = false;
+                    icon.CommitIdChange();
                 }
 
                 if (this.SelectedItem != null)
