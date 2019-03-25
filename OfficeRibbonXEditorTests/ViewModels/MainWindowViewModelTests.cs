@@ -63,9 +63,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void OpenFileTest()
         {
-            this.viewModel.OpenCommand.Execute();
-            Assert.IsNotEmpty(this.viewModel.DocumentList);
-            var doc = this.viewModel.DocumentList[0];
+            var doc = this.OpenSource();
             Assert.AreEqual("Blank.xlsx", doc.Name);
         }
 
@@ -85,12 +83,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void InsertAndRemoveTest()
         {
-            this.viewModel.OpenCommand.Execute();
-
-            Assert.IsNotEmpty(this.viewModel.DocumentList);
-
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            var doc = this.OpenSource();
 
             this.viewModel.InsertXml12Command.Execute();
             Assert.AreEqual(1, doc.Children.Count);
@@ -130,9 +123,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void InsertPartCloseDocumentWarningTest()
         {
-            this.viewModel.OpenCommand.Execute();
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            this.OpenSource();
             this.viewModel.InsertXml12Command.Execute();
             this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
         }
@@ -143,11 +134,8 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void RemovePartWarningTest()
         {
-            this.viewModel.OpenCommand.Execute();
-
             // First check if a warning is shown when a part is removed and you then attempt to close the document
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            var doc = this.OpenSource();
             this.viewModel.InsertXml12Command.Execute();
             var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
             Assert.NotNull(part, "No Office part available");
@@ -164,9 +152,7 @@ namespace OfficeRibbonXEditor.ViewModels
         public void RemoveIconWarningTest()
         {
             // Open a document, insert a part and select it
-            this.viewModel.OpenCommand.Execute();
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            var doc = this.OpenSource();
             this.viewModel.InsertXml12Command.Execute();
             this.viewModel.SelectedItem = doc.Children[0];
 
@@ -187,10 +173,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void XmlValidationTest()
         {
-            this.viewModel.OpenCommand.Execute();
-
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            var doc = this.OpenSource();
             Assert.IsFalse(this.viewModel.SelectedItem.CanHaveContents);
             
             this.viewModel.InsertXml12Command.Execute();
@@ -214,9 +197,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void GenerateCallbacksTest()
         {
-            this.viewModel.OpenCommand.Execute();
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            var doc = this.OpenSource();
             this.viewModel.InsertXml12Command.Execute();
             var part = doc.Children[0];
             this.viewModel.SelectedItem = part;
@@ -239,9 +220,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void InsertSampleTest()
         {
-            this.viewModel.OpenCommand.Execute();
-            var doc = this.viewModel.DocumentList[0];
-            this.viewModel.SelectedItem = doc;
+            var doc = this.OpenSource();
 
             var sample = this.viewModel.XmlSamples.First();  // This shouldn't be null; if it is, the test will be a means to detect that too
             this.viewModel.InsertXmlSampleCommand.Execute(sample.ResourceName);
@@ -278,8 +257,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void SaveAsInUseTest()
         {
-            this.viewModel.OpenCommand.Execute();
-            this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
+            this.OpenSource();
             this.viewModel.SaveAsCommand.Execute();
             
             // Open the same file in exclusive mode
@@ -290,6 +268,24 @@ namespace OfficeRibbonXEditor.ViewModels
                         this.viewModel.SaveAsCommand.Execute();
                     }
                 });
+        }
+        
+        /// <summary>
+        /// Opens the document given by sourceFile
+        /// </summary>
+        /// <param name="select">Whether the document should be selected once it has been opened</param>
+        /// <returns>The opened document</returns>
+        private OfficeDocumentViewModel OpenSource(bool select = true)
+        {
+            this.viewModel.OpenCommand.Execute();
+            Assert.IsNotEmpty(this.viewModel.DocumentList);
+            var doc = this.viewModel.DocumentList[this.viewModel.DocumentList.Count - 1];
+            if (select)
+            {
+                this.viewModel.SelectedItem = doc;
+            }
+
+            return doc;
         }
 
         private void MockOpenFile(string path)
