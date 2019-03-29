@@ -23,6 +23,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
+  GitHubPAT: ''
+  GitHubName: ''
+  GitHubEmail: ''
 
 steps:
 - task: PowerShell@2
