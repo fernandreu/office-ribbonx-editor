@@ -24,11 +24,19 @@ namespace OfficeRibbonXEditor.Services
         public async Task<string> CheckVersionAsync(CancellationToken cancelToken = default(CancellationToken))
         {
             string latest;
-            using (var httpClient = new HttpClient())
+            try
             {
-                var uri = new Uri(CheckUrl);
-                var response = await httpClient.GetAsync(uri, cancelToken);
-                latest = await response.Content.ReadAsStringAsync();
+                using (var httpClient = new HttpClient())
+                {
+                    var uri = new Uri(CheckUrl);
+                    var response = await httpClient.GetAsync(uri, cancelToken);
+                    latest = await response.Content.ReadAsStringAsync();
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.Fail(e.Message); 
+                return null;
             }
 
             if (!Regex.IsMatch(latest, @"^\d+\.\d+\.\d+\.\d+$"))
