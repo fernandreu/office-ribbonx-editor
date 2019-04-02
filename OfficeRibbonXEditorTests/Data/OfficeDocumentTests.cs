@@ -35,14 +35,38 @@ namespace OfficeRibbonXEditor.Data
         }
 
         [Test]
-        public void SaveTest()
+        public void DocumentShouldBeOpened()
         {
+            // Arrange / act
             var doc = new OfficeDocument(this.sourceFile);
-            Assert.IsNotNull(doc);
+
+            // Assert
+            Assert.IsNotNull(doc.UnderlyingPackage, "Package was not opened");
+        }
+
+        [Test]
+        public void PartShouldBeCreated()
+        {
+            // Arrange
+            var doc = new OfficeDocument(this.sourceFile);
+
+            // Act
             var part = doc.CreateCustomPart(XmlParts.RibbonX12);
-            Assert.IsNotNull(part);
-            
+
+            // Assert
+            Assert.IsNotNull(part, "Part was not inserted");
+        }
+
+        [Test]
+        public void DocumentShouldBeSaved()
+        {
+            // Arrange
+            var doc = new OfficeDocument(this.sourceFile);
+
+            // Act
             doc.Save(this.destFile);
+
+            // Assert
             Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
         }
     }

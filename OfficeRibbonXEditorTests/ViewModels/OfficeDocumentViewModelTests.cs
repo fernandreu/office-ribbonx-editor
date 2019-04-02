@@ -39,15 +39,32 @@ namespace OfficeRibbonXEditor.ViewModels
         }
 
         [Test]
-        public void SaveTest()
+        public void PartShouldBeInserted()
         {
+            // Arrange
+            var doc = new OfficeDocument(this.sourceFile);
+            var viewModel = new OfficeDocumentViewModel(doc);
+
+            // Act
+            viewModel.InsertPart(XmlParts.RibbonX12);
+
+            // Assert
+            Assert.AreEqual(1, viewModel.Children.Count);
+        }
+
+        [Test]
+        public void DocumentShouldBeSaved()
+        {
+            // Arrange
             var doc = new OfficeDocument(this.sourceFile);
             var viewModel = new OfficeDocumentViewModel(doc);
             viewModel.InsertPart(XmlParts.RibbonX12);
-            Assert.AreEqual(1, viewModel.Children.Count);
-            
-            Assert.IsFalse(File.Exists(this.destFile), "File was not deleted before test");
+            Assume.That(File.Exists(this.destFile), Is.False, "File was not deleted before test");
+
+            // Act
             doc.Save(this.destFile);
+
+            // Assert
             Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
         }
         
@@ -57,6 +74,7 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void ReloadOnSaveTest()
         {
+            // Arrange
             var viewModel = new OfficeDocumentViewModel(new OfficeDocument(this.sourceFile));
             viewModel.InsertPart(XmlParts.RibbonX12);
             viewModel.InsertPart(XmlParts.RibbonX14);
@@ -93,6 +111,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
             }
 
+            // Act / assert
             CheckIntegrity(viewModel);
 
             viewModel.Save(false, this.destFile);

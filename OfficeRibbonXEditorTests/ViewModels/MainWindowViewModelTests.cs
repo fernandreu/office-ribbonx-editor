@@ -61,86 +61,197 @@ namespace OfficeRibbonXEditor.ViewModels
         }
 
         [Test]
-        public void OpenFileTest()
+        public void DocumentShouldBeOpened()
         {
+            // Arrange / act
             var doc = this.OpenSource();
+
+            // Assert
             Assert.AreEqual("Blank.xlsx", doc.Name);
         }
 
         [Test]
-        public void SaveAsTest()
+        public void DocumentShouldBeSaved()
         {
-            this.viewModel.OpenCommand.Execute();
-            Assert.IsFalse(File.Exists(this.destFile), "Output file was not deleted before unit test");
-            this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
+            // Arrange
+            this.OpenSource();
+            Assume.That(File.Exists(this.destFile), Is.False, "Output file was not deleted before unit test");
+            
+            // Act
             this.viewModel.SaveAsCommand.Execute();
+            
+            // Assert
             Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
         }
 
-        /// <summary>
-        /// Checks that both parts and icons can be inserted and removed correctly
-        /// </summary>
         [Test]
-        public void InsertAndRemoveTest()
+        public void Xml12PartShouldBeInserted()
         {
+            // Arrange
             var doc = this.OpenSource();
 
+            // Act
             this.viewModel.InsertXml12Command.Execute();
+
+            // Assert
             Assert.AreEqual(1, doc.Children.Count);
+            Assert.IsInstanceOf<OfficePartViewModel>(doc.Children[0]);
+            Assert.AreEqual(XmlParts.RibbonX12, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
+        }
 
+        [Test]
+        public void Xml14PartShouldBeInserted()
+        {
+            // Arrange
+            var doc = this.OpenSource();
+
+            // Act
             this.viewModel.InsertXml14Command.Execute();
-            Assert.AreEqual(2, doc.Children.Count);
 
-            this.viewModel.InsertXml14Command.Execute();  // This should do nothing because it is already added
-            Assert.AreEqual(2, doc.Children.Count);
+            // Assert
+            Assert.AreEqual(1, doc.Children.Count);
+            Assert.IsInstanceOf<OfficePartViewModel>(doc.Children[0]);
+            Assert.AreEqual(XmlParts.RibbonX14, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
+        }
 
-            var part = doc.Children[0] as OfficePartViewModel;
-            Assert.IsNotNull(part, "Part is null");
-            this.viewModel.SelectedItem = part;
-            
+        [Test]
+        public void Xml12PartShouldNotBeInsertedIfAlreadyExists()
+        {
+            // Arrange
+            var (doc, _) = this.OpenAndInsertPart(XmlParts.RibbonX12, false);
+
+            // Act
+            this.viewModel.InsertXml12Command.Execute();
+
+            // Assert
+            Assert.AreEqual(1, doc.Children.Count, "Part was inserted twice");
+        }
+        
+        [Test]
+        public void Xml14PartShouldNotBeInsertedIfAlreadyExists()
+        {
+            // Arrange
+            var (doc, _) = this.OpenAndInsertPart(XmlParts.RibbonX14, false);
+
+            // Act
+            this.viewModel.InsertXml14Command.Execute();
+
+            // Assert
+            Assert.AreEqual(1, doc.Children.Count, "Part was inserted twice");
+        }
+
+        [Test]
+        public void PartShouldBeRemoved()
+        {
+            // Arrange
+            var (doc, _) = this.OpenAndInsertPart();
+
+            // Act
+            this.viewModel.RemoveCommand.Execute();
+
+            // Assert
+            Assert.IsEmpty(doc.Children, "Part was not removed");
+
+        }
+
+        [Test]
+        public void IconShouldBeInserted()
+        {
+            // Arrange
+            var (_, part) = this.OpenAndInsertPart();
             this.MockOpenFiles(this.undoIcon);
+
+            // Act
             this.viewModel.InsertIconsCommand.Execute();
+
+            // Assert
             Assert.AreEqual(1, part.Children.Count);
             Assert.AreEqual("undo", ((IconViewModel)part.Children[0]).Id);
-            
+        }
+
+        [Test]
+        public void MultipleIconsShouldBeInserted()
+        {
+            // Arrange
+            var (_, part) = this.OpenAndInsertPart();
+
+            // Act
+            this.MockOpenFiles(this.undoIcon);
+            this.viewModel.InsertIconsCommand.Execute();
             this.MockOpenFiles(this.redoIcon);
             this.viewModel.InsertIconsCommand.Execute();
+
+            // Assert
             Assert.AreEqual(2, part.Children.Count);
+            Assert.AreEqual("undo", ((IconViewModel)part.Children[0]).Id);
             Assert.AreEqual("redo", ((IconViewModel)part.Children[1]).Id);
+        }
 
+        [Test]
+        public void IconShouldBeRemoved()
+        {
+            // Arrange
+            var (_, part) = this.OpenAndInsertPart();
+            this.MockOpenFiles(this.undoIcon);
+            this.viewModel.InsertIconsCommand.Execute();
+            Assume.That(part.Children, Is.Not.Empty, "Icon was not inserted");
             this.viewModel.SelectedItem = part.Children[0];
-            this.viewModel.RemoveCommand.Execute();
-            Assert.AreEqual(1, part.Children.Count);
 
-            this.viewModel.SelectedItem = part;
+            // Act
             this.viewModel.RemoveCommand.Execute();
-            Assert.AreEqual(1, doc.Children.Count);
+
+            // Assert
+            Assert.IsEmpty(part.Children, "Icon was not removed");
         }
 
         /// <summary>
         /// Checks if a warning is shown after inserting a part in a document and then trying to close it
         /// </summary>
         [Test]
-        public void InsertPartCloseDocumentWarningTest()
+        public void ClosingDocumentAfterInsertingPartShouldGiveWarningMessage()
         {
+            // Arrange
             this.OpenSource();
             this.viewModel.InsertXml12Command.Execute();
+
+            // Act / assert
             this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
         }
-
+        
         /// <summary>
-        /// Checks if a warning is shown when removing a part and when closing the document after that
+        /// Checks if a warning is shown when a part is removed
         /// </summary>
         [Test]
-        public void RemovePartWarningTest()
+        public void RemovingPartShouldGiveWarningMessage()
         {
-            // First check if a warning is shown when a part is removed and you then attempt to close the document
+            // Arrange
             var doc = this.OpenSource();
             this.viewModel.InsertXml12Command.Execute();
             var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
-            Assert.NotNull(part, "No Office part available");
+            Assume.That(part, Is.Not.Null, "No Office part available");
             this.viewModel.SelectedItem = part;
+
+            // Act / assert
             this.AssertMessage(this.viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+        }
+
+        /// <summary>
+        /// Checks if a warning is shown when a part is removed and the document is about to be closed
+        /// </summary>
+        [Test]
+        public void ClosingDocumentAfterRemovingPartShouldGiveWarningMessage()
+        {
+            // Arrange
+            var doc = this.OpenSource();
+            this.viewModel.InsertXml12Command.Execute();
+            var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
+            Assume.That(part, Is.Not.Null, "No Office part available");
+            this.viewModel.SelectedItem = part;
+
+            // Act
+            this.viewModel.RemoveCommand.Execute();
+
+            // Assert
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
             this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
@@ -236,12 +347,13 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void SaveInUseTest()
         {
+            // Arrange
             File.Copy(this.sourceFile, this.destFile);
             this.MockOpenFile(this.destFile);
             this.viewModel.OpenCommand.Execute();
             this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
             
-            // Open the same file in exclusive mode
+            // Act / assert: Open the same file in exclusive mode
             Assert.DoesNotThrow(() =>
             {
                 using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
@@ -257,10 +369,11 @@ namespace OfficeRibbonXEditor.ViewModels
         [Test]
         public void SaveAsInUseTest()
         {
+            // Arrange
             this.OpenSource();
             this.viewModel.SaveAsCommand.Execute();
             
-            // Open the same file in exclusive mode
+            // Act / assert: Open the same file in exclusive mode
             Assert.DoesNotThrow(() =>
                 {
                     using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
@@ -278,7 +391,7 @@ namespace OfficeRibbonXEditor.ViewModels
         private OfficeDocumentViewModel OpenSource(bool select = true)
         {
             this.viewModel.OpenCommand.Execute();
-            Assert.IsNotEmpty(this.viewModel.DocumentList);
+            Assume.That(this.viewModel.DocumentList, Is.Not.Empty);
             var doc = this.viewModel.DocumentList[this.viewModel.DocumentList.Count - 1];
             if (select)
             {
@@ -286,6 +399,29 @@ namespace OfficeRibbonXEditor.ViewModels
             }
 
             return doc;
+        }
+
+        private Tuple<OfficeDocumentViewModel, OfficePartViewModel> OpenAndInsertPart(XmlParts partType = XmlParts.RibbonX12, bool select = true)
+        {
+            var doc = this.OpenSource();
+            if (partType == XmlParts.RibbonX12)
+            {
+                this.viewModel.InsertXml12Command.Execute();
+            }
+            else
+            {
+                this.viewModel.InsertXml14Command.Execute();
+            }
+
+            Assume.That(doc.Children, Is.Not.Empty, "XML part was not inserted");
+            Assume.That(doc.Children[0], Is.InstanceOf<OfficePartViewModel>(), "Wrong class was inserted");
+
+            if (select)
+            {
+                this.viewModel.SelectedItem = doc.Children[0];
+            }
+
+            return Tuple.Create(doc, (OfficePartViewModel)doc.Children[0]);
         }
 
         private void MockOpenFile(string path)
