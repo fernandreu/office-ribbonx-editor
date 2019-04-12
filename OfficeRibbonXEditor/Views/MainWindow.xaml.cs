@@ -16,10 +16,14 @@ namespace OfficeRibbonXEditor.Views
     using System.Windows.Input;
     using System.Windows.Media;
 
+    using GalaSoft.MvvmLight.Command;
+
     using OfficeRibbonXEditor.Models;
     using OfficeRibbonXEditor.ViewModels;
 
     using ScintillaNET;
+
+    using ScintillaNET_FindReplaceDialog;
 
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
     using TextBox = System.Windows.Controls.TextBox;
@@ -37,9 +41,16 @@ namespace OfficeRibbonXEditor.Views
 
         public MainWindow()
         {
+            // This needs to exist prior to the InitializeComponent() call; otherwise, key binding (Ctrl-G) will not work
+            this.GoToCommand = new RelayCommand(this.ExecuteGoTo);
+
             this.InitializeComponent();
 
             this.viewModel = (MainWindowViewModel)this.DataContext;
+
+            // Initialize find / replace / goto dialogs
+            this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
+            this.FindReplaceDialog.KeyPressed += this.OnEditorKeyDown;
 
             this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
             this.viewModel.ShowCallbacks += (o, e) => this.ShowCallbacks(e.Data);
@@ -64,6 +75,11 @@ namespace OfficeRibbonXEditor.Views
             this.lexer = new XmlLexer { Editor = this.Editor };
         }
         
+        // This needs to exist prior to the InitializeComponent() call; otherwise, keys will be bound to a null reference
+        public FindReplace FindReplaceDialog { get; } = new FindReplace();
+
+        public ICommand GoToCommand { get; }
+
         /// <summary>
         /// Finds the first TreeViewItem which is a parent of the given source.
         /// See <a href="https://stackoverflow.com/questions/592373/select-treeview-node-on-right-click-before-displaying-contextmenu">this</a>
@@ -118,6 +134,12 @@ namespace OfficeRibbonXEditor.Views
         }
 
         #endregion
+
+        private void ExecuteGoTo()
+        {
+            var goTo = new GoTo(this.Editor.Scintilla);
+            goTo.ShowGoToDialog();
+        }
 
         private void OnExitClick(object sender, RoutedEventArgs e)
         {

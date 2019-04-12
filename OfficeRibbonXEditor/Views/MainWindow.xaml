@@ -48,12 +48,24 @@
         <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ChangeIconIdCommand}"/>
         <KeyBinding Key="Divide" Modifiers="Control" Command="{Binding ToggleCommentCommand}"/>
+
+        <!--Key bindings directly mapped to Scintilla's actions-->
         <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}"/>
         <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}"/>
         <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}"/>
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}"/>
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}"/>
         <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
+
+        <!--Find / replace dialog controls-->
+        <KeyBinding Key="F" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}"/>
+        <KeyBinding Key="F3" Modifiers="Shift" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindPrevious'}"/>
+        <KeyBinding Key="F3" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindNext'}"/>
+        <KeyBinding Key="H" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowReplace'}"/>
+        <KeyBinding Key="I" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
+        
+        <!--GoTo dialog control-->
+        <KeyBinding Key="G" Modifiers="Control" Command="{Binding ElementName=Window, Path=GoToCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
