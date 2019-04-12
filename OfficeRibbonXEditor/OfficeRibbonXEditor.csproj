@@ -91,14 +91,14 @@
       <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="ScintillaNET FindReplaceDialog, Version=1.4.0.17540, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScintillaNet.SearchBox.1.0.3\lib\net45\ScintillaNET FindReplaceDialog.dll</HintPath>
-    </Reference>
     <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
     </Reference>
     <Reference Include="ScintillaNET.WPF, Version=1.0.0.16559, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\estebano.ScintillaNET.WPF.2.6.0\lib\net40\ScintillaNET.WPF.dll</HintPath>
+    </Reference>
+    <Reference Include="ScintillaNET_FindReplaceDialog, Version=1.0.3.3, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ScintillaNET_FindReplaceDialog.1.0.3.3\lib\net40-client\ScintillaNET_FindReplaceDialog.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -317,6 +317,32 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\bricks.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\find_next.png" />
+    <Resource Include="Resources\Images\find_previous.png" />
+    <Resource Include="Resources\Images\go_to.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\XToCloseButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\UpButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Highlighter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\DownButton.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Clock.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Clock.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />

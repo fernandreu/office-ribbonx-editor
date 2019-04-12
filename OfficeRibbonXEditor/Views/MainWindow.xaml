@@ -114,6 +114,38 @@
                 <MenuItem Header="Exit" Click="OnExitClick"/>
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
+                <MenuItem Header="Find..." InputGestureText="Ctrl+F" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/find.png"
+                               Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                               Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Replace..." InputGestureText="Ctrl+H" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowReplace'}"/>
+                <MenuItem Header="Incremental Search..." InputGestureText="Ctrl+I" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
+                <MenuItem Header="Find Previous" InputGestureText="Shift+F3" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindPrevious'}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/find_previous.png"
+                               Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                               Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Find Next" InputGestureText="F3" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindNext'}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/find_next.png"
+                               Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                               Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Go To Line..." InputGestureText="Ctrl+G" Command="{Binding ElementName=Window, Path=GoToCommand}">
+                    <MenuItem.Icon>
+                        <Image Source="/Resources/Images/go_to.png"
+                               Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                               Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
                 <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/undo.png"
