@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace OfficeRibbonXEditor.Data
+namespace OfficeRibbonXEditor.Models
 {
     using NUnit.Framework;
 

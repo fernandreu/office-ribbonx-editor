@@ -7,13 +7,11 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace OfficeRibbonXEditor.Data
+namespace OfficeRibbonXEditor.Models
 {
     using System.IO;
 
     using NUnit.Framework;
-
-    using OfficeRibbonXEditor.Models;
 
     [TestFixture]
     public class OfficeDocumentTests
