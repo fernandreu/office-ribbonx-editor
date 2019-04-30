@@ -455,7 +455,8 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.FinishOpeningFile);
         }
 
-        private void FinishOpeningFile(string fileName)
+        // TODO: This is only temporarily public so that the 
+        public void FinishOpeningFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
             {

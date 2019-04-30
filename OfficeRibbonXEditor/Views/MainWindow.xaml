@@ -22,6 +22,9 @@
         Icon="/Resources/Images/ApplicationIcon.ico"
         ResizeMode="CanResizeWithGrip"
         x:Name="Window"
+        PreviewDragEnter="OnPreviewDragEnter"
+        Drop="OnDrop"
+        AllowDrop="True"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">

@@ -10,6 +10,8 @@
 namespace OfficeRibbonXEditor.Views
 {
     using System;
+    using System.IO;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Windows;
     using System.Windows.Controls;
@@ -320,6 +322,46 @@ namespace OfficeRibbonXEditor.Views
             {
                 // If the previous line finished with an open tag, add an indentation level to the next one 
                 e.Text += new string(' ', Properties.Settings.Default.TabWidth);
+            }
+        }
+
+        private void OnPreviewDragEnter(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                return;
+            }
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files == null)
+            {
+                return;
+            }
+
+            if (!files.Any(File.Exists))
+            {
+                return;
+            }
+
+            e.Handled = true;
+        }
+
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                return;
+            }
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files == null)
+            {
+                return;
+            }
+
+            foreach (var file in files)
+            {
+                this.viewModel.FinishOpeningFile(file);
             }
         }
     }
