@@ -65,26 +65,26 @@ namespace OfficeRibbonXEditor.ViewModels
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
 
-            this.OpenCommand = new RelayCommand(this.OpenFile);
-            this.SaveCommand = new RelayCommand(this.Save);
-            this.SaveAllCommand = new RelayCommand(this.SaveAll);
-            this.SaveAsCommand = new RelayCommand(this.SaveAs);
+            this.OpenCommand = new RelayCommand(this.ExecuteOpenCommand);
+            this.SaveCommand = new RelayCommand(this.ExecuteSaveCommand);
+            this.SaveAllCommand = new RelayCommand(this.ExecuteSaveAllCommand);
+            this.SaveAsCommand = new RelayCommand(this.ExecuteSaveAsCommand);
             this.CloseCommand = new RelayCommand(this.CloseDocument);
             this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
-            this.InsertXmlSampleCommand = new RelayCommand<string>(this.InsertXmlSample);
-            this.InsertIconsCommand = new RelayCommand(this.InsertIcons);
-            this.ChangeIconIdCommand = new RelayCommand(this.ChangeIconId);
-            this.ToggleCommentCommand = new RelayCommand(this.ToggleComment);
-            this.RemoveCommand = new RelayCommand(this.RemoveItem);
+            this.InsertXmlSampleCommand = new RelayCommand<string>(this.ExecuteInsertXmlSampleCommand);
+            this.InsertIconsCommand = new RelayCommand(this.ExecuteInsertIconsCommand);
+            this.ChangeIconIdCommand = new RelayCommand(this.ExecuteChangeIconIdCommand);
+            this.ToggleCommentCommand = new RelayCommand(this.ExecuteToggleCommentCommand);
+            this.RemoveCommand = new RelayCommand(this.ExecuteRemoveItemCommand);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
-            this.GenerateCallbacksCommand = new RelayCommand(this.GenerateCallbacks);
+            this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
             this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
-            this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.QueryClose);
+            this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
-            this.NewerVersionCommand = new RelayCommand(this.ShowNewerVersionMessage);
+            this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
             
 #if DEBUG
             if (this.IsInDesignMode)
@@ -346,7 +346,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.SelectedItem.Contents = e.Data.Text;
         }
 
-        private void InsertIcons()
+        private void ExecuteInsertIconsCommand()
         {
             if (!(this.SelectedItem is OfficePartViewModel))
             {
@@ -359,7 +359,7 @@ namespace OfficeRibbonXEditor.ViewModels
         /// <summary>
         /// This method does not change the icon Id per se, just enables the possibility of doing so in the view
         /// </summary>
-        private void ChangeIconId()
+        private void ExecuteChangeIconIdCommand()
         {
             if (!(this.SelectedItem is IconViewModel icon))
             {
@@ -383,7 +383,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void RemoveItem()
+        private void ExecuteRemoveItemCommand()
         {
             if (this.SelectedItem is OfficePartViewModel)
             {
@@ -420,7 +420,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void QueryClose(CancelEventArgs e)
+        private void ExecuteClosingCommand(CancelEventArgs e)
         {
             this.ApplyCurrentText();
             foreach (var doc in this.DocumentList)
@@ -491,7 +491,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void OpenFile()
+        private void ExecuteOpenCommand()
         {
             string[] filters =
                 {
@@ -538,7 +538,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void Save()
+        private void ExecuteSaveCommand()
         {
             this.ApplyCurrentText();
 
@@ -557,7 +557,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void SaveAll()
+        private void ExecuteSaveAllCommand()
         {
             this.ApplyCurrentText();
             foreach (var doc in this.DocumentList)
@@ -566,7 +566,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void SaveAs()
+        private void ExecuteSaveAsCommand()
         {
             var doc = this.CurrentDocument;
             if (doc == null)
@@ -670,7 +670,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void InsertXmlSample(string resourceName)
+        private void ExecuteInsertXmlSampleCommand(string resourceName)
         {
             Debug.Assert(!string.IsNullOrEmpty(resourceName), "resourceName not passed");
 
@@ -801,7 +801,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 e.Severity == XmlSeverityType.Error ? MessageBoxImage.Error : MessageBoxImage.Warning);
         }
 
-        private void GenerateCallbacks()
+        private void ExecuteGenerateCallbacksCommand()
         {
             // TODO: Check whether any text is selected, and generate callbacks only for that text
             this.ApplyCurrentText();
@@ -832,7 +832,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void ToggleComment()
+        private void ExecuteToggleCommentCommand()
         {
             var e = new DataEventArgs<EditorInfo>();
             this.ReadEditorInfo?.Invoke(this, e);
@@ -891,7 +891,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.NewerVersion = await versionChecker.CheckVersionAsync();
         }
 
-        private void ShowNewerVersionMessage()
+        private void ExecuteNewerVersionCommand()
         {
             var result = this.messageBoxService.Show(
                 $"Release version {this.newerVersion} is now available. Do you want to download it?", 
