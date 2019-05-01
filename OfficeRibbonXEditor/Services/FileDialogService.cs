@@ -38,7 +38,8 @@ namespace OfficeRibbonXEditor.Services
                               Filter = filter,
                               FilterIndex = filterIndex,
                               RestoreDirectory = true,
-                              FileName = fileName ?? string.Empty
+                              FileName = fileName ?? string.Empty,
+                              Multiselect = true
                           };
             ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o).FileNames);
             return ofd.ShowDialog();
