@@ -7,11 +7,11 @@
         xmlns:sn="http://scintillanet.codeplex.com"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-        xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
         xmlns:resources="clr-namespace:OfficeRibbonXEditor.Resources"
         xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
         xmlns:models="clr-namespace:OfficeRibbonXEditor.Models"
         xmlns:model="clr-namespace:OfficeRibbonXEditor.ViewModels"
+        xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -22,13 +22,17 @@
         Icon="/Resources/Images/ApplicationIcon.ico"
         ResizeMode="CanResizeWithGrip"
         x:Name="Window"
-        PreviewDragEnter="OnPreviewDragEnter"
-        Drop="OnDrop"
         AllowDrop="True"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
-            <i:InvokeCommandAction Command="{Binding ClosingCommand}"/>
+            <mvvmlight:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="PreviewDragEnter">
+            <mvvmlight:EventToCommand Command="{Binding PreviewDragEnterCommand}" PassEventArgsToCommand="True"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Drop">
+            <mvvmlight:EventToCommand Command="{Binding DropCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>

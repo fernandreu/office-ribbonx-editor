@@ -16,6 +16,7 @@ namespace OfficeRibbonXEditor.ViewModels
     using System.ComponentModel;
     using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Windows;
     using System.Xml;
@@ -81,6 +82,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.QueryClose);
+            this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
+            this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ShowNewerVersionMessage);
             
 #if DEBUG
@@ -239,6 +242,16 @@ namespace OfficeRibbonXEditor.ViewModels
         /// Gets the command that triggers the (cancellable) closing of the entire application
         /// </summary>
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
+
+        /// <summary>
+        /// Gets the command that starts the drag / drop action for opening files
+        /// </summary>
+        public RelayCommand<DragEventArgs> PreviewDragEnterCommand { get; }
+
+        /// <summary>
+        /// Gets the command that finishes the drag / drop action for opening files
+        /// </summary>
+        public RelayCommand<DragEventArgs> DropCommand { get; }
 
         public RelayCommand<string> OpenHelpLinkCommand { get; } = new RelayCommand<string>(url => Process.Start(url));
 
@@ -438,6 +451,46 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
+        private void ExecutePreviewDragCommand(DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                return;
+            }
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files == null)
+            {
+                return;
+            }
+
+            if (!files.Any(File.Exists))
+            {
+                return;
+            }
+
+            e.Handled = true;
+        }
+
+        private void ExecuteDropCommand(DragEventArgs e)
+        {
+            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                return;
+            }
+
+            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (files == null)
+            {
+                return;
+            }
+
+            foreach (var file in files)
+            {
+                this.FinishOpeningFile(file);
+            }
+        }
+
         private void OpenFile()
         {
             string[] filters =
@@ -455,8 +508,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.FinishOpeningFile);
         }
 
-        // TODO: This is only temporarily public so that the 
-        public void FinishOpeningFile(string fileName)
+        private void FinishOpeningFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
             {

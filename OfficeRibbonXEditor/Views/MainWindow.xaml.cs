@@ -324,45 +324,5 @@ namespace OfficeRibbonXEditor.Views
                 e.Text += new string(' ', Properties.Settings.Default.TabWidth);
             }
         }
-
-        private void OnPreviewDragEnter(object sender, DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                return;
-            }
-
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files == null)
-            {
-                return;
-            }
-
-            if (!files.Any(File.Exists))
-            {
-                return;
-            }
-
-            e.Handled = true;
-        }
-
-        private void OnDrop(object sender, DragEventArgs e)
-        {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                return;
-            }
-
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files == null)
-            {
-                return;
-            }
-
-            foreach (var file in files)
-            {
-                this.viewModel.FinishOpeningFile(file);
-            }
-        }
     }
 }
