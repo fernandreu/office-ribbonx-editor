@@ -95,6 +95,16 @@ namespace OfficeRibbonXEditor.ViewModels
             this.LoadXmlSchemas();
             this.LoadXmlSamples();
 
+            foreach (var file in Environment.GetCommandLineArgs().Skip(1))
+            {
+                if (!File.Exists(file))
+                {
+                    continue;
+                }
+
+                this.FinishOpeningFile(file);
+            }
+
             this.CheckVersionAsync(versionChecker);
         }
 
