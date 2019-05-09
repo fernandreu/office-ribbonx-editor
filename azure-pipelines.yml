@@ -20,12 +20,9 @@ pool:
   vmImage: 'windows-2019'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  GitHubPAT: ''
-  GitHubName: ''
-  GitHubEmail: ''
+- group: GitHubPATGroup
+- name: solution
+  value: '**/*.sln'
 
 steps:
 - task: PowerShell@2
@@ -34,7 +31,7 @@ steps:
     targetType: 'filePath'
     filePath: 'PreBuild.ps1'
     arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
-
+    
 - task: NuGetToolInstaller@0
 
 - task: NuGetCommand@2
@@ -76,6 +73,13 @@ steps:
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
     #parallelCount: # Optional
+    
+- task: PowerShell@2
+  displayName: 'PostBuildSteps'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'PostBuild.ps1'
+    arguments: '"$(Build.SourceBranch)" "$(Build.ArtifactStagingDirectory)" "$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
 
 - task: GithubRelease@0 
   displayName: 'Create GitHub Release'
@@ -102,11 +106,4 @@ steps:
       ## How to install / use
       The tool can be installed / used in two ways:
       - By running the `.msi` installer provided in the `Assets` section below. This will create an entry in the control panel's programs list
-      - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list      
-          
-- task: PowerShell@2
-  displayName: 'PostBuildSteps'
-  inputs:
-    targetType: 'filePath'
-    filePath: 'PostBuild.ps1'
-    arguments: '"$(Build.SourceBranch)" "$(Build.ArtifactStagingDirectory)" "$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
+      - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list
