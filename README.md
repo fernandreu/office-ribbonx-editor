@@ -2,6 +2,8 @@
 Office RibbonX Editor
 =====================
 
+[![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
+
 This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than
 trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign
 of the project in Windows Presentation Foundation (WPF).
@@ -25,9 +27,9 @@ To download the latest release, go to the following link:
 
 https://github.com/fernandreu/office-ribbonx-editor/releases/latest
 
-To download the latest development build instead, click on the icon below, then go to the Artifacts menu at the top-right corner:
+To download the latest development build instead, go to the Artifacts section on Azure Pipelines:
 
-[![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
+https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1?branchName=master
 
 
 ## How does the `Reload on Save` option work?
