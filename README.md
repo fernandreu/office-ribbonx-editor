@@ -29,7 +29,7 @@ https://github.com/fernandreu/office-ribbonx-editor/releases/latest
 
 To download the latest development build instead, go to the Artifacts section on Azure Pipelines:
 
-https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1?branchName=master
+https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master
 
 
 ## How does the `Reload on Save` option work?
