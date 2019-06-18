@@ -96,9 +96,6 @@
     <Reference Include="ScintillaNET.WPF, Version=1.0.0.16559, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\estebano.ScintillaNET.WPF.2.6.0\lib\net40\ScintillaNET.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="ScintillaNET_FindReplaceDialog, Version=1.0.3.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScintillaNET_FindReplaceDialog.1.0.3.3\lib\net40-client\ScintillaNET_FindReplaceDialog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -149,6 +146,44 @@
     <Compile Include="Converters\MethodToCommandConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
+    <Compile Include="Dialogs\FindReplace\CharacterRange.cs" />
+    <Compile Include="Dialogs\FindReplace\FindAllResults\FindAllResultsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindAllResults\FindAllResultsPanel.Designer.cs">
+      <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindReplace\FindOption.cs" />
+    <Compile Include="Dialogs\FindReplace\FindReplace\FindReplace.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindReplace\FindReplaceDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindReplace\FindReplaceDialog.Designer.cs">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindReplace\IncrementalSearcher.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindReplace\IncrementalSearcher.Designer.cs">
+      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\FindReplace\ToolStripIncrementalSearcher.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Dialogs\GoTo\GoTo.cs" />
+    <Compile Include="Dialogs\GoTo\GoToDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\GoTo\GoToDialog.Designer.cs">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\FindReplace\Properties\FindReplaceResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FindReplaceResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Models\CallbacksBuilder.cs" />
     <Compile Include="Models\DataEventArgs.cs" />
     <Compile Include="Extensions\RelayCommandExtensions.cs" />
@@ -276,6 +311,22 @@
     <Resource Include="Resources\Images\worddoc.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Dialogs\FindReplace\FindAllResults\FindAllResultsPanel.resx">
+      <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\FindReplace\FindReplace\FindReplaceDialog.resx">
+      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\FindReplace\FindReplace\IncrementalSearcher.resx">
+      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\GoTo\GoToDialog.resx">
+      <DependentUpon>GoToDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\FindReplace\Properties\FindReplaceResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImagesResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ImagesResource.Designer.cs</LastGenOutput>
@@ -326,22 +377,12 @@
     <Resource Include="Resources\Images\go_to.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\XToCloseButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\UpButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Highlighter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\DownButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Clock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Clock.ico" />
+    <Resource Include="Dialogs\FindReplace\Resources\Clock.ico" />
+    <Resource Include="Dialogs\FindReplace\Resources\Clock.png" />
+    <Resource Include="Dialogs\FindReplace\Resources\DeleteHS.png" />
+    <Resource Include="Dialogs\FindReplace\Resources\GoToNextMessage.png" />
+    <Resource Include="Dialogs\FindReplace\Resources\GoToPreviousMessage.png" />
+    <Resource Include="Dialogs\FindReplace\Resources\LineColorHS.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />

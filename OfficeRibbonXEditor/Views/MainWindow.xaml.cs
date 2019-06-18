@@ -19,14 +19,12 @@ namespace OfficeRibbonXEditor.Views
     using System.Windows.Media;
 
     using GalaSoft.MvvmLight.Command;
-
+    using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
+    using OfficeRibbonXEditor.Dialogs.GoTo;
     using OfficeRibbonXEditor.Models;
     using OfficeRibbonXEditor.ViewModels;
 
     using ScintillaNET;
-
-    using ScintillaNET_FindReplaceDialog;
-
     using KeyEventArgs = System.Windows.Input.KeyEventArgs;
     using TextBox = System.Windows.Controls.TextBox;
 
