@@ -149,6 +149,10 @@
     <Compile Include="Converters\MethodToCommandConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
+    <Compile Include="Dialogs\DialogHost.xaml.cs">
+      <DependentUpon>DialogHost.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\DialogHostViewModel.cs" />
     <Compile Include="Models\CallbacksBuilder.cs" />
     <Compile Include="Models\DataEventArgs.cs" />
     <Compile Include="Extensions\RelayCommandExtensions.cs" />
@@ -167,7 +171,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SchemasResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\FileDialogService.cs" />
+    <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IFileDialogService.cs" />
     <Compile Include="Services\IMessageBoxService.cs" />
     <Compile Include="Services\IVersionChecker.cs" />
@@ -202,6 +208,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringsResource.resx</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\DialogHost.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\AboutDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -324,24 +334,6 @@
     <Resource Include="Resources\Images\find_next.png" />
     <Resource Include="Resources\Images\find_previous.png" />
     <Resource Include="Resources\Images\go_to.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\XToCloseButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\UpButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Highlighter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\DownButton.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Clock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Clock.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.0.2\build\Fody.targets" Condition="Exists('..\packages\Fody.4.0.2\build\Fody.targets')" />
