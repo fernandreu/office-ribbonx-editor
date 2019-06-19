@@ -7,7 +7,7 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
-namespace OfficeRibbonXEditor.Services
+namespace OfficeRibbonXEditor.Interfaces
 {
     using System.Windows;
 

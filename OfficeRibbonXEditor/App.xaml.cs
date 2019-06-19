@@ -10,15 +10,65 @@
 namespace OfficeRibbonXEditor
 {
     using System.Windows;
+    using Autofac;
+    using GalaSoft.MvvmLight.Ioc;
+    using OfficeRibbonXEditor.Dialogs;
+    using OfficeRibbonXEditor.Interfaces;
+    using OfficeRibbonXEditor.Services;
+    using OfficeRibbonXEditor.ViewModels;
+    using OfficeRibbonXEditor.Views;
 
     /// <summary>
     /// Interaction logic for App
     /// </summary>
     public partial class App : Application
     {
+        private readonly IContainer container;
+
+        public App()
+        {
+            var builder = new ContainerBuilder();
+
+            builder.RegisterType<MessageBoxService>().As<IMessageBoxService>();
+            builder.RegisterType<FileDialogService>().As<IFileDialogService>();
+            builder.RegisterType<VersionChecker>().As<IVersionChecker>();
+            builder.RegisterType<DialogService>().As<IDialogService>();
+
+            builder.RegisterType<MainWindowViewModel>();
+            builder.RegisterType<DialogHostViewModel>();
+
+            this.container = builder.Build();
+        }
+
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+
+            this.LaunchMainWindow();
+        }
+
         private void ApplicationExit(object sender, ExitEventArgs e)
         {
             OfficeRibbonXEditor.Properties.Settings.Default.Save();
+        }
+
+        private void LaunchMainWindow()
+        {
+            var windowModel = this.container.Resolve<MainWindowViewModel>();
+            var window = new MainWindow {DataContext = windowModel};
+            windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Data);
+            windowModel.Closed += (o, e) => window.Close();
+            window.Show();
+        }
+        
+        private void LaunchDialog(Window mainWindow, IContentDialogBase content)
+        {
+            var dialogModel = this.container.Resolve<DialogHostViewModel>();
+            var dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
+            dialogModel.Content = content;
+            content.Closed += (o, e) => dialog.Close();
+            dialogModel.Closed += (o, e) => dialog.Close();
+            dialog.ShowDialog();
         }
     }
 }

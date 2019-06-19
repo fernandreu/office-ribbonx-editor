@@ -20,6 +20,7 @@ namespace OfficeRibbonXEditor.ViewModels
     using NUnit.Framework;
 
     using OfficeRibbonXEditor.Extensions;
+    using OfficeRibbonXEditor.Interfaces;
     using OfficeRibbonXEditor.Models;
     using OfficeRibbonXEditor.Services;
 
@@ -215,7 +216,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.InsertXml12Command.Execute();
 
             // Act / assert
-            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
+            this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
         }
         
         /// <summary>
@@ -253,7 +254,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // Assert
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         /// <summary>
@@ -278,7 +279,7 @@ namespace OfficeRibbonXEditor.ViewModels
             Assert.IsNotNull(this.viewModel.SelectedItem, "Icon was apparently not created");
             this.AssertMessage(this.viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         [Test]

@@ -23,7 +23,7 @@
         ResizeMode="CanResizeWithGrip"
         x:Name="Window"
         AllowDrop="True"
-        DataContext="{Binding Main, Source={StaticResource Locator}}">
+        d:DataContext="{d:DesignInstance model:MainWindowViewModel}">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <mvvmlight:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
@@ -118,7 +118,7 @@
                 <models:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
-                <MenuItem Header="Exit" Click="OnExitClick"/>
+                <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
                 <MenuItem Header="Find..." InputGestureText="Ctrl+F" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}">
@@ -229,7 +229,7 @@
                                 <x:Type Type="model:XmlSampleViewModel"/>
                             </d:Style.DataContext>
                             <Setter Property="Header" Value="{Binding Name}"/>
-                            <Setter Property="Command" Value="{Binding Main.InsertXmlSampleCommand, Source={StaticResource Locator}}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.InsertXmlSampleCommand, ElementName=Window}"/>
                             <Setter Property="CommandParameter" Value="{Binding ResourceName}"/>
                         </Style>
                     </MenuItem.ItemContainerStyle>
@@ -240,7 +240,7 @@
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
                             <Setter Property="Header" Value="{Binding Key}"/>
-                            <Setter Property="Command" Value="{Binding Main.OpenHelpLinkCommand, Source={StaticResource Locator}}"/>
+                            <Setter Property="Command" Value="{Binding DataContext.OpenHelpLinkCommand, ElementName=Window}"/>
                             <Setter Property="CommandParameter" Value="{Binding Value}"/>
                         </Style>
                     </MenuItem.ItemContainerStyle>
@@ -400,8 +400,8 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Insert Office 2010+ Custom UI Part" 
-                                              Command="{Binding Main.InsertXml14Command, Source={StaticResource Locator}}" 
-                                              IsEnabled="{Binding Main.CanInsertXml14Part, Source={StaticResource Locator}}">
+                                              Command="{Binding DataContext.InsertXml14Command, ElementName=Window}" 
+                                              IsEnabled="{Binding DataContext.CanInsertXml14Part, ElementName=Window}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -409,8 +409,8 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Header="Insert Office 2007 Custom UI Part" 
-                                              Command="{Binding Main.InsertXml12Command, Source={StaticResource Locator}}"
-                                              IsEnabled="{Binding Main.CanInsertXml12Part, Source={StaticResource Locator}}">
+                                              Command="{Binding DataContext.InsertXml12Command, ElementName=Window}"
+                                              IsEnabled="{Binding DataContext.CanInsertXml12Part, ElementName=Window}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -418,15 +418,15 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <Separator/>
-                                    <MenuItem Header="Save" Command="{Binding Main.SaveCommand, Source={StaticResource Locator}}">
+                                    <MenuItem Header="Save" Command="{Binding DataContext.SaveCommand, ElementName=Window}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>    
                                     </MenuItem>
-                                    <MenuItem Header="Save As..." Command="{Binding Main.SaveAsCommand, Source={StaticResource Locator}}"/>
-                                    <MenuItem Header="Close" Command="{Binding Main.CloseCommand, Source={StaticResource Locator}}"/>
+                                    <MenuItem Header="Save As..." Command="{Binding DataContext.SaveAsCommand, ElementName=Window}"/>
+                                    <MenuItem Header="Close" Command="{Binding DataContext.CloseCommand, ElementName=Window}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -439,14 +439,14 @@
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Insert icons..." Command="{Binding Main.InsertIconsCommand, Source={StaticResource Locator}}">
+                                    <MenuItem Header="Insert icons..." Command="{Binding DataContext.InsertIconsCommand, ElementName=Window}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/insertPicture.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Remove" Command="{Binding Main.RemoveCommand, Source={StaticResource Locator}}"/>
+                                    <MenuItem Header="Remove" Command="{Binding DataContext.RemoveCommand, ElementName=Window}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -458,8 +458,8 @@
                             <TextBox Text="{Binding NewId, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding Main.ChangeIconIdCommand, Source={StaticResource Locator}}"/>
-                                    <MenuItem Header="Remove" Command="{Binding Main.RemoveCommand, Source={StaticResource Locator}}"/>
+                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding DataContext.ChangeIconIdCommand, ElementName=Window}"/>
+                                    <MenuItem Header="Remove" Command="{Binding DataContext.RemoveCommand, ElementName=Window}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>

@@ -10,8 +10,6 @@
 namespace OfficeRibbonXEditor.Views
 {
     using System;
-    using System.IO;
-    using System.Linq;
     using System.Text.RegularExpressions;
     using System.Windows;
     using System.Windows.Controls;
@@ -35,9 +33,9 @@ namespace OfficeRibbonXEditor.Views
     /// </summary>
     public partial class MainWindow
     {
-        private readonly MainWindowViewModel viewModel;
-
         private readonly XmlLexer lexer;
+        
+        private MainWindowViewModel viewModel;
 
         private bool suppressRequestBringIntoView;
 
@@ -48,7 +46,19 @@ namespace OfficeRibbonXEditor.Views
 
             this.InitializeComponent();
 
-            this.viewModel = (MainWindowViewModel)this.DataContext;
+            this.lexer = new XmlLexer { Editor = this.Editor };
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.Property != DataContextProperty || !(args.NewValue is MainWindowViewModel model))
+            {
+                return;
+            }
+
+            this.viewModel = model;
 
             // Initialize find / replace / goto dialogs
             this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
@@ -60,23 +70,21 @@ namespace OfficeRibbonXEditor.Views
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
             this.viewModel.UpdateLexer += (o, e) => this.lexer.Update();
             this.viewModel.UpdateEditor += (o, e) =>
+            {
+                this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
+                this.Editor.InsertText(e.Start, e.NewText);
+                if (e.UpdateSelection)
                 {
-                    this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
-                    this.Editor.InsertText(e.Start, e.NewText);
-                    if (e.UpdateSelection)
-                    {
-                        this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
-                    }
+                    this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
+                }
 
-                    if (e.ResetUndoHistory)
-                    {
-                        this.Editor.EmptyUndoBuffer();
-                    }
-                };
-
-            this.lexer = new XmlLexer { Editor = this.Editor };
+                if (e.ResetUndoHistory)
+                {
+                    this.Editor.EmptyUndoBuffer();
+                }
+            };
         }
-        
+
         // This needs to exist prior to the InitializeComponent() call; otherwise, keys will be bound to a null reference
         public FindReplace FindReplaceDialog { get; } = new FindReplace();
 
@@ -141,11 +149,6 @@ namespace OfficeRibbonXEditor.Views
         {
             var goTo = new GoTo(this.Editor.Scintilla);
             goTo.ShowGoToDialog();
-        }
-
-        private void OnExitClick(object sender, RoutedEventArgs e)
-        {
-            this.Close();
         }
 
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

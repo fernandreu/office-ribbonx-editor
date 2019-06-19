@@ -13,6 +13,7 @@ namespace OfficeRibbonXEditor.Services
     using System.Collections.Generic;
 
     using Microsoft.Win32;
+    using OfficeRibbonXEditor.Interfaces;
 
     public class FileDialogService : IFileDialogService
     {

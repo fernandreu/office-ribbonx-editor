@@ -26,9 +26,9 @@ namespace OfficeRibbonXEditor.ViewModels
     using GalaSoft.MvvmLight.Command;
 
     using OfficeRibbonXEditor.Extensions;
+    using OfficeRibbonXEditor.Interfaces;
     using OfficeRibbonXEditor.Models;
     using OfficeRibbonXEditor.Resources;
-    using OfficeRibbonXEditor.Services;
 
     public class MainWindowViewModel : ViewModelBase
     {
@@ -69,7 +69,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.SaveCommand = new RelayCommand(this.ExecuteSaveCommand);
             this.SaveAllCommand = new RelayCommand(this.ExecuteSaveAllCommand);
             this.SaveAsCommand = new RelayCommand(this.ExecuteSaveAsCommand);
-            this.CloseCommand = new RelayCommand(this.CloseDocument);
+            this.CloseDocumentCommand = new RelayCommand(this.ExecuteCloseDocumentCommand);
             this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
             this.InsertXmlSampleCommand = new RelayCommand<string>(this.ExecuteInsertXmlSampleCommand);
@@ -82,10 +82,11 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
+            this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
-            
+
 #if DEBUG
             if (this.IsInDesignMode)
             {
@@ -110,6 +111,12 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public event EventHandler ShowSettings;
 
+        /// <summary>
+        /// This gets raised when there is a closed event originated from the ViewModel (e.g. programmatically)
+        /// </summary>
+        public event EventHandler Closed;
+
+        public event EventHandler<DataEventArgs<IContentDialogBase>> LaunchingDialog; 
 
         public event EventHandler<DataEventArgs<string>> ShowCallbacks;
 
@@ -219,10 +226,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand SaveAsCommand { get; }
 
-        /// <summary>
-        /// Gets the command that triggers the closing of a single document
-        /// </summary>
-        public RelayCommand CloseCommand { get; }
+        public RelayCommand CloseDocumentCommand { get; }
 
         public RelayCommand InsertXml14Command { get; }
         
@@ -249,9 +253,15 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand NewerVersionCommand { get; }
 
         /// <summary>
-        /// Gets the command that triggers the (cancellable) closing of the entire application
+        /// Gets the command that handles the (cancellable) closing of the entire application, getting typically triggered by the view
         /// </summary>
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
+
+        /// <summary>
+        /// Gets the command that triggers the closing of the view. If linked with the view, this will also trigger the ClosingCommand,
+        /// and hence no checks of whether documents should be saved first will be done.
+        /// </summary>
+        public RelayCommand CloseCommand { get; }
 
         /// <summary>
         /// Gets the command that starts the drag / drop action for opening files
@@ -312,7 +322,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void CloseDocument()
+        private void ExecuteCloseDocumentCommand()
         {
             var doc = this.CurrentDocument;
             if (doc == null)
@@ -459,6 +469,11 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 doc.Document.Dispose();
             }
+        }
+
+        private void ExecuteCloseCommand()
+        {
+            this.Closed?.Invoke(this, EventArgs.Empty);
         }
 
         private void ExecutePreviewDragCommand(DragEventArgs e)
