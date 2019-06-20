@@ -158,11 +158,15 @@
     <Compile Include="Converters\MethodToCommandConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
-    <Compile Include="Dialogs\DialogHost.xaml.cs">
+    <Compile Include="ViewModels\DialogBase.cs" />
+    <Compile Include="ViewModels\AboutDialogViewModel.cs" />
+    <Compile Include="Views\DialogHost.xaml.cs">
       <DependentUpon>DialogHost.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\DialogHostViewModel.cs" />
+    <Compile Include="ViewModels\DialogHostViewModel.cs" />
+    <Compile Include="Extensions\BitmapExtensions.cs" />
     <Compile Include="Interfaces\IContentDialog.cs" />
+    <Compile Include="Interfaces\IDialogProvider.cs" />
     <Compile Include="Models\CallbacksBuilder.cs" />
     <Compile Include="Models\DataEventArgs.cs" />
     <Compile Include="Extensions\RelayCommandExtensions.cs" />
@@ -181,6 +185,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>SchemasResource.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\DialogProvider.cs" />
     <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\FileDialogService.cs" />
     <Compile Include="Interfaces\IDialogService.cs" />
@@ -192,6 +197,7 @@
     <Compile Include="ViewModels\BindingProxy.cs" />
     <Compile Include="ViewModels\IconViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\SettingsDialogViewModel.cs" />
     <Compile Include="ViewModels\XmlSampleViewModel.cs" />
     <Compile Include="Views\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
@@ -217,7 +223,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringsResource.resx</DependentUpon>
     </Compile>
-    <Page Include="Dialogs\DialogHost.xaml">
+    <Page Include="Views\DialogHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -343,6 +349,9 @@
     <Resource Include="Resources\Images\find_next.png" />
     <Resource Include="Resources\Images\find_previous.png" />
     <Resource Include="Resources\Images\go_to.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Dialogs\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

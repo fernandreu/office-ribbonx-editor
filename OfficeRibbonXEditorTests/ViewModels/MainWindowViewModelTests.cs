@@ -34,6 +34,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private readonly Mock<IVersionChecker> versionChecker = new Mock<IVersionChecker>();
 
+        private readonly Mock<IDialogProvider> dialogProvider = new Mock<IDialogProvider>();
+
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
         private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
@@ -58,7 +60,11 @@ namespace OfficeRibbonXEditor.ViewModels
                 File.Delete(this.destFile);
             }
 
-            this.viewModel = new MainWindowViewModel(this.msgSvc.Object, this.fileSvc.Object, this.versionChecker.Object);
+            this.viewModel = new MainWindowViewModel(
+                this.msgSvc.Object, 
+                this.fileSvc.Object, 
+                this.versionChecker.Object, 
+                this.dialogProvider.Object);
         }
 
         [Test]

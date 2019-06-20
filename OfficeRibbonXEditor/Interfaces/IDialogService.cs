@@ -7,7 +7,6 @@
     /// </summary>
     public interface IDialogService
     {
-        Task<TResult> ShowDialogAsync<TDialog, TPayload, TResult>(TPayload payload)
-            where TDialog : IContentDialog<TPayload, TResult>;
+        void ShowDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>;
     }
 }

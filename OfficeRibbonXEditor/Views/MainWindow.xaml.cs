@@ -33,8 +33,6 @@ namespace OfficeRibbonXEditor.Views
     /// </summary>
     public partial class MainWindow
     {
-        private readonly XmlLexer lexer;
-        
         private MainWindowViewModel viewModel;
 
         private bool suppressRequestBringIntoView;
@@ -45,8 +43,6 @@ namespace OfficeRibbonXEditor.Views
             this.GoToCommand = new RelayCommand(this.ExecuteGoTo);
 
             this.InitializeComponent();
-
-            this.lexer = new XmlLexer { Editor = this.Editor };
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
@@ -64,11 +60,9 @@ namespace OfficeRibbonXEditor.Views
             this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
             this.FindReplaceDialog.KeyPressed += this.OnEditorKeyDown;
 
-            this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
             this.viewModel.ShowCallbacks += (o, e) => this.ShowCallbacks(e.Data);
             this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
-            this.viewModel.UpdateLexer += (o, e) => this.lexer.Update();
             this.viewModel.UpdateEditor += (o, e) =>
             {
                 this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
@@ -186,11 +180,6 @@ namespace OfficeRibbonXEditor.Views
             }
         }
 
-        private void ShowSettings()
-        {
-            new SettingsDialog(this.lexer) { Owner = this }.ShowDialog();
-        }
-
         private void ShowCallbacks(string code)
         {
             new CallbackWindow(code) { Owner = this }.ShowDialog();
@@ -216,11 +205,6 @@ namespace OfficeRibbonXEditor.Views
                 treeViewItem.Focus();
                 e.Handled = true;
             }
-        }
-
-        private void OnShowAboutDialog(object sender, RoutedEventArgs e)
-        {
-            new AboutDialog { Owner = this }.ShowDialog();
         }
 
         private void OnChangeIdTextDown(object sender, KeyEventArgs e)

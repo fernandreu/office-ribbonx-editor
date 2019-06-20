@@ -5,7 +5,7 @@
 
     public class DialogService : IDialogService
     {
-        public Task<TResult> ShowDialogAsync<TDialog, TPayload, TResult>(TPayload payload) where TDialog : IContentDialog<TPayload, TResult>
+        public void ShowDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
         {
             throw new System.NotImplementedException();
         }

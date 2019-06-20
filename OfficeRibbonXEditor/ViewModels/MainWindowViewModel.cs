@@ -36,6 +36,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private readonly IFileDialogService fileDialogService;
 
+        private readonly IDialogProvider dialogProvider;
+
         /// <summary>
         /// Whether documents should be reloaded right before being saved.
         /// </summary>
@@ -60,10 +62,11 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         private bool hasXmlError;
 
-        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker)
+        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker, IDialogProvider dialogProvider)
         {
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
+            this.dialogProvider = dialogProvider;
 
             this.OpenCommand = new RelayCommand(this.ExecuteOpenCommand);
             this.SaveCommand = new RelayCommand(this.ExecuteSaveCommand);
@@ -79,7 +82,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.RemoveCommand = new RelayCommand(this.ExecuteRemoveItemCommand);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
-            this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
+            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
+            this.ShowAboutCommand = new RelayCommand(this.LaunchDialog<AboutDialogViewModel>);
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
@@ -109,8 +113,6 @@ namespace OfficeRibbonXEditor.ViewModels
             this.CheckVersionAsync(versionChecker);
         }
 
-        public event EventHandler ShowSettings;
-
         /// <summary>
         /// This gets raised when there is a closed event originated from the ViewModel (e.g. programmatically)
         /// </summary>
@@ -124,11 +126,6 @@ namespace OfficeRibbonXEditor.ViewModels
         /// This event will be fired when the contents of the editor need to be updated
         /// </summary>
         public event EventHandler<EditorChangeEventArgs> UpdateEditor;
-
-        /// <summary>
-        /// This event will be fired when the styling of the editor needs to be updated
-        /// </summary>
-        public event EventHandler UpdateLexer;
 
         /// <summary>
         /// This event will be fired when a file needs to be added to the recent list. The argument will be the path to the file itself.
@@ -165,7 +162,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 Properties.Settings.Default.ShowWhitespace = value;
-                this.UpdateLexer?.Invoke(this, EventArgs.Empty);
+                this.Lexer?.Update();
             }
         }
 
@@ -174,6 +171,9 @@ namespace OfficeRibbonXEditor.ViewModels
             get => this.newerVersion;
             set => this.Set(ref this.newerVersion, value);
         }
+
+        
+        public ScintillaLexer Lexer { get; set; }
 
         public TreeViewItemViewModel SelectedItem
         {
@@ -245,6 +245,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand ValidateCommand { get; }
 
         public RelayCommand ShowSettingsCommand { get; }
+
+        public RelayCommand ShowAboutCommand { get; }
 
         public RelayCommand GenerateCallbacksCommand { get; }
 
@@ -320,6 +322,19 @@ namespace OfficeRibbonXEditor.ViewModels
 
                 return null;
             }
+        }
+
+        public void LaunchDialog<TDialog>() where TDialog : IContentDialogBase
+        {
+            var content = this.dialogProvider.ResolveDialog<TDialog>();
+            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+        }
+
+        public void LaunchDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
+        {
+            var content = this.dialogProvider.ResolveDialog<TDialog>();
+            content.OnLoaded(payload);
+            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
         }
 
         private void ExecuteCloseDocumentCommand()

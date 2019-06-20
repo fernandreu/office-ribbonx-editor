@@ -9,11 +9,13 @@
 
 namespace OfficeRibbonXEditor
 {
+    using System;
     using System.Windows;
+    using System.Windows.Data;
     using Autofac;
     using GalaSoft.MvvmLight.Ioc;
-    using OfficeRibbonXEditor.Dialogs;
     using OfficeRibbonXEditor.Interfaces;
+    using OfficeRibbonXEditor.Models;
     using OfficeRibbonXEditor.Services;
     using OfficeRibbonXEditor.ViewModels;
     using OfficeRibbonXEditor.Views;
@@ -33,9 +35,12 @@ namespace OfficeRibbonXEditor
             builder.RegisterType<FileDialogService>().As<IFileDialogService>();
             builder.RegisterType<VersionChecker>().As<IVersionChecker>();
             builder.RegisterType<DialogService>().As<IDialogService>();
+            builder.RegisterType<DialogProvider>().As<IDialogProvider>();
 
             builder.RegisterType<MainWindowViewModel>();
             builder.RegisterType<DialogHostViewModel>();
+            builder.RegisterType<SettingsDialogViewModel>();
+            builder.RegisterType<AboutDialogViewModel>();
 
             this.container = builder.Build();
         }
@@ -55,7 +60,9 @@ namespace OfficeRibbonXEditor
         private void LaunchMainWindow()
         {
             var windowModel = this.container.Resolve<MainWindowViewModel>();
-            var window = new MainWindow {DataContext = windowModel};
+            var window = new MainWindow();
+            windowModel.Lexer = new XmlLexer {Editor = window.Editor};
+            window.DataContext = windowModel;
             windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Data);
             windowModel.Closed += (o, e) => window.Close();
             window.Show();
