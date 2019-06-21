@@ -26,17 +26,22 @@ developing the tool. Please adhere to these as much as possible when creating a 
 request:
 
 - Follow the [StyleCop](https://github.com/StyleCop/StyleCop) rules to ensure the
-  code formatting / structure / etc. is consistent.
-- Follow the MVVM pattern, clearly separating the view from the viewmodel (I have not
-  been particularly good at this with the smaller views, but it is in my TODO list).
+  code formatting / structure / etc. is consistent. There are a few exceptions to 
+  this, such as:
+    - Order of private / public class members and types: just put them in the order
+	  that might make navigation easier. For example, I usually prefer having a 
+	  private field defined right above its associated public property.
+	- Documentation for every file / class / member: there is no strong reason to
+	  increase the size of the source code files if the comments are not going
+	  to be meaningful and / or the element might be self-explanatory.
+- Follow the MVVM pattern, clearly separating the view from the view model.
 - Use dependency injection when actions need to be mocked during unit test (e.g. 
   displaying a message box or a file dialog).
-- If you need to call a view method from its viewmodel, declare an event in the
-  viewmodel and listen to it from the view.
+- If you need to call a view method from its view model, declare an event in the
+  view model and listen to it from the view.
 - To ensure code completion / refactoring actions work in XAML files too, specify
   `d:DataContext` attributes in those cases where it is not automatically inferred.
 - It is always better to have at least one unit test that ensures that a bug is
   fixed or a new feature works as intended.
 - All resources should be embedded in the executable (my objective is to have a
-  standalone tool which does not require installation or a special folder
-  structure).
+  standalone tool which does not require installation or a special folder structure).
