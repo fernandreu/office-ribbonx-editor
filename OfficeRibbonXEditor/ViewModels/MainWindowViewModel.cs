@@ -120,8 +120,6 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public event EventHandler<DataEventArgs<IContentDialogBase>> LaunchingDialog; 
 
-        public event EventHandler<DataEventArgs<string>> ShowCallbacks;
-
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
         /// </summary>
@@ -864,7 +862,7 @@ namespace OfficeRibbonXEditor.ViewModels
                     return;
                 }
                 
-                this.ShowCallbacks?.Invoke(this, new DataEventArgs<string> { Data = callbacks.ToString() });
+                this.LaunchDialog<CallbackDialogViewModel, string>(callbacks.ToString());
             }
             catch (Exception ex)
             {

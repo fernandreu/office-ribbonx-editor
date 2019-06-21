@@ -5,11 +5,6 @@ namespace OfficeRibbonXEditor.ViewModels
 
     public class AboutDialogViewModel : DialogBase
     {
-        public AboutDialogViewModel()
-            : base("About Office RibbonX Editor")
-        {
-        }
-
         public string AssemblyTitle
         {
             get

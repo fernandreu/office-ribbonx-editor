@@ -34,13 +34,13 @@ namespace OfficeRibbonXEditor
             builder.RegisterType<MessageBoxService>().As<IMessageBoxService>();
             builder.RegisterType<FileDialogService>().As<IFileDialogService>();
             builder.RegisterType<VersionChecker>().As<IVersionChecker>();
-            builder.RegisterType<DialogService>().As<IDialogService>();
             builder.RegisterType<DialogProvider>().As<IDialogProvider>();
 
             builder.RegisterType<MainWindowViewModel>();
             builder.RegisterType<DialogHostViewModel>();
             builder.RegisterType<SettingsDialogViewModel>();
             builder.RegisterType<AboutDialogViewModel>();
+            builder.RegisterType<CallbackDialogViewModel>();
 
             this.container = builder.Build();
         }

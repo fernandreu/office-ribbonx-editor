@@ -7,6 +7,8 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using OfficeRibbonXEditor.Controls;
+
 namespace OfficeRibbonXEditor.Views
 {
     using System;
@@ -20,7 +22,7 @@ namespace OfficeRibbonXEditor.Views
     /// <summary>
     /// Interaction logic for SettingsDialog
     /// </summary>
-    public partial class SettingsDialog : UserControl  // TODO: Move all this code to viewmodel
+    public partial class SettingsDialog : DialogControl
     {
         public SettingsDialog()
         {

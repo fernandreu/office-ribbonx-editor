@@ -60,7 +60,6 @@ namespace OfficeRibbonXEditor.Views
             this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
             this.FindReplaceDialog.KeyPressed += this.OnEditorKeyDown;
 
-            this.viewModel.ShowCallbacks += (o, e) => this.ShowCallbacks(e.Data);
             this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
             this.viewModel.UpdateEditor += (o, e) =>
@@ -178,11 +177,6 @@ namespace OfficeRibbonXEditor.Views
 
                 this.LineBox.Text = $"Ln {line + 1},  Col {col + 1}";
             }
-        }
-
-        private void ShowCallbacks(string code)
-        {
-            new CallbackWindow(code) { Owner = this }.ShowDialog();
         }
 
         private void OnEditorZoomChanged(object sender, EventArgs e)

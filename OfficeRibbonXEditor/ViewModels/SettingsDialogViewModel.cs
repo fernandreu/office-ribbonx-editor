@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Media;
 using GalaSoft.MvvmLight.Command;
-using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 
@@ -28,7 +26,6 @@ namespace OfficeRibbonXEditor.ViewModels
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
 
         public SettingsDialogViewModel()
-            : base("Settings", Resources.ImagesResource.settings)
         {
             this.ResetCommand = new RelayCommand(this.ResetToDefault);
             this.ApplyCommand = new RelayCommand(this.ApplySettings);

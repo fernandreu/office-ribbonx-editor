@@ -5,7 +5,7 @@ namespace OfficeRibbonXEditor.Views
     /// <summary>
     /// Interaction logic for DialogHost.xaml
     /// </summary>
-    public partial class DialogHost : Window
+    public partial class DialogHost : DialogHostBase
     {
         public DialogHost()
         {

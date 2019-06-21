@@ -7,24 +7,34 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Windows;
+using OfficeRibbonXEditor.Controls;
+using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.ViewModels;
+
 namespace OfficeRibbonXEditor.Views
 {
-    using System.Windows;
-
-    using OfficeRibbonXEditor.Models;
 
     /// <summary>
     /// Interaction logic for CallbackWindow
     /// </summary>
-    public partial class CallbackWindow : Window
+    public partial class CallbackDialog : DialogControl
     {
-        private readonly VbaLexer lexer;
-
-        public CallbackWindow(string code)
+        public CallbackDialog()
         {
             this.InitializeComponent();
-            this.lexer = new VbaLexer { Editor = this.Editor };
-            this.Editor.Text = code;
+        }
+
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.Property != DataContextProperty || !(args.NewValue is CallbackDialogViewModel model))
+            {
+                return;
+            }
+
+            model.Lexer = new VbaLexer {Editor = this.Editor};
         }
     }
 }
