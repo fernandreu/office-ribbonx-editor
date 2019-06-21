@@ -16,6 +16,7 @@ namespace OfficeRibbonXEditor.Services
     using System.Text.RegularExpressions;
     using System.Threading;
     using System.Threading.Tasks;
+    using OfficeRibbonXEditor.Interfaces;
 
     public class VersionChecker : IVersionChecker
     {

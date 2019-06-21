@@ -10,6 +10,7 @@
 namespace OfficeRibbonXEditor.Services
 {
     using System.Windows;
+    using OfficeRibbonXEditor.Interfaces;
 
     public class MessageBoxService : IMessageBoxService
     {

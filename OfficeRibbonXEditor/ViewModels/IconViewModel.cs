@@ -16,7 +16,7 @@ namespace OfficeRibbonXEditor.ViewModels
     using System.Xml;
 
     using CommonServiceLocator;
-
+    using OfficeRibbonXEditor.Interfaces;
     using OfficeRibbonXEditor.Services;
 
     public class IconViewModel : TreeViewItemViewModel

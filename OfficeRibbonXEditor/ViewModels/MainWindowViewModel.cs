@@ -26,15 +26,17 @@ namespace OfficeRibbonXEditor.ViewModels
     using GalaSoft.MvvmLight.Command;
 
     using OfficeRibbonXEditor.Extensions;
+    using OfficeRibbonXEditor.Interfaces;
     using OfficeRibbonXEditor.Models;
     using OfficeRibbonXEditor.Resources;
-    using OfficeRibbonXEditor.Services;
 
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IMessageBoxService messageBoxService;
 
         private readonly IFileDialogService fileDialogService;
+
+        private readonly IDialogProvider dialogProvider;
 
         /// <summary>
         /// Whether documents should be reloaded right before being saved.
@@ -60,16 +62,17 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         private bool hasXmlError;
 
-        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker)
+        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker, IDialogProvider dialogProvider)
         {
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
+            this.dialogProvider = dialogProvider;
 
             this.OpenCommand = new RelayCommand(this.ExecuteOpenCommand);
             this.SaveCommand = new RelayCommand(this.ExecuteSaveCommand);
             this.SaveAllCommand = new RelayCommand(this.ExecuteSaveAllCommand);
             this.SaveAsCommand = new RelayCommand(this.ExecuteSaveAsCommand);
-            this.CloseCommand = new RelayCommand(this.CloseDocument);
+            this.CloseDocumentCommand = new RelayCommand(this.ExecuteCloseDocumentCommand);
             this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
             this.InsertXmlSampleCommand = new RelayCommand<string>(this.ExecuteInsertXmlSampleCommand);
@@ -79,13 +82,15 @@ namespace OfficeRibbonXEditor.ViewModels
             this.RemoveCommand = new RelayCommand(this.ExecuteRemoveItemCommand);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
-            this.ShowSettingsCommand = new RelayCommand(() => this.ShowSettings?.Invoke(this, EventArgs.Empty));
+            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
+            this.ShowAboutCommand = new RelayCommand(this.LaunchDialog<AboutDialogViewModel>);
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
+            this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
-            
+
 #if DEBUG
             if (this.IsInDesignMode)
             {
@@ -108,20 +113,17 @@ namespace OfficeRibbonXEditor.ViewModels
             this.CheckVersionAsync(versionChecker);
         }
 
-        public event EventHandler ShowSettings;
+        /// <summary>
+        /// This gets raised when there is a closed event originated from the ViewModel (e.g. programmatically)
+        /// </summary>
+        public event EventHandler Closed;
 
-
-        public event EventHandler<DataEventArgs<string>> ShowCallbacks;
+        public event EventHandler<DataEventArgs<IContentDialogBase>> LaunchingDialog; 
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
         /// </summary>
         public event EventHandler<EditorChangeEventArgs> UpdateEditor;
-
-        /// <summary>
-        /// This event will be fired when the styling of the editor needs to be updated
-        /// </summary>
-        public event EventHandler UpdateLexer;
 
         /// <summary>
         /// This event will be fired when a file needs to be added to the recent list. The argument will be the path to the file itself.
@@ -158,7 +160,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 Properties.Settings.Default.ShowWhitespace = value;
-                this.UpdateLexer?.Invoke(this, EventArgs.Empty);
+                this.Lexer?.Update();
             }
         }
 
@@ -167,6 +169,9 @@ namespace OfficeRibbonXEditor.ViewModels
             get => this.newerVersion;
             set => this.Set(ref this.newerVersion, value);
         }
+
+        
+        public ScintillaLexer Lexer { get; set; }
 
         public TreeViewItemViewModel SelectedItem
         {
@@ -219,10 +224,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand SaveAsCommand { get; }
 
-        /// <summary>
-        /// Gets the command that triggers the closing of a single document
-        /// </summary>
-        public RelayCommand CloseCommand { get; }
+        public RelayCommand CloseDocumentCommand { get; }
 
         public RelayCommand InsertXml14Command { get; }
         
@@ -242,6 +244,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand ShowSettingsCommand { get; }
 
+        public RelayCommand ShowAboutCommand { get; }
+
         public RelayCommand GenerateCallbacksCommand { get; }
 
         public RelayCommand<string> RecentFileClickCommand { get; }
@@ -249,9 +253,15 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand NewerVersionCommand { get; }
 
         /// <summary>
-        /// Gets the command that triggers the (cancellable) closing of the entire application
+        /// Gets the command that handles the (cancellable) closing of the entire application, getting typically triggered by the view
         /// </summary>
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
+
+        /// <summary>
+        /// Gets the command that triggers the closing of the view. If linked with the view, this will also trigger the ClosingCommand,
+        /// and hence no checks of whether documents should be saved first will be done.
+        /// </summary>
+        public RelayCommand CloseCommand { get; }
 
         /// <summary>
         /// Gets the command that starts the drag / drop action for opening files
@@ -312,7 +322,20 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void CloseDocument()
+        public void LaunchDialog<TDialog>() where TDialog : IContentDialogBase
+        {
+            var content = this.dialogProvider.ResolveDialog<TDialog>();
+            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+        }
+
+        public void LaunchDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
+        {
+            var content = this.dialogProvider.ResolveDialog<TDialog>();
+            content.OnLoaded(payload);
+            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+        }
+
+        private void ExecuteCloseDocumentCommand()
         {
             var doc = this.CurrentDocument;
             if (doc == null)
@@ -459,6 +482,11 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 doc.Document.Dispose();
             }
+        }
+
+        private void ExecuteCloseCommand()
+        {
+            this.Closed?.Invoke(this, EventArgs.Empty);
         }
 
         private void ExecutePreviewDragCommand(DragEventArgs e)
@@ -834,7 +862,7 @@ namespace OfficeRibbonXEditor.ViewModels
                     return;
                 }
                 
-                this.ShowCallbacks?.Invoke(this, new DataEventArgs<string> { Data = callbacks.ToString() });
+                this.LaunchDialog<CallbackDialogViewModel, string>(callbacks.ToString());
             }
             catch (Exception ex)
             {
