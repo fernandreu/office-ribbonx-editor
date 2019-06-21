@@ -71,8 +71,9 @@ namespace OfficeRibbonXEditor.ViewModels
             this.RemoveCommand = new RelayCommand(this.ExecuteRemoveItemCommand);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
+            this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
-            this.ShowAboutCommand = new RelayCommand(this.LaunchDialog<AboutDialogViewModel>);
+            this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>());
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
@@ -237,6 +238,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand GenerateCallbacksCommand { get; }
 
+        public RelayCommand GoToCommand { get; }
+
         public RelayCommand<string> RecentFileClickCommand { get; }
 
         public RelayCommand NewerVersionCommand { get; }
@@ -311,17 +314,19 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public void LaunchDialog<TDialog>() where TDialog : IContentDialogBase
+        public IContentDialogBase LaunchDialog<TDialog>() where TDialog : IContentDialogBase
         {
             var content = this.dialogProvider.ResolveDialog<TDialog>();
             this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+            return content;
         }
 
-        public void LaunchDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
+        public IContentDialog<TPayload> LaunchDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
         {
             var content = this.dialogProvider.ResolveDialog<TDialog>();
             content.OnLoaded(payload);
             this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+            return content;
         }
 
         private void ExecuteCloseDocumentCommand()
@@ -857,6 +862,11 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 this.messageBoxService.Show(ex.Message, "Error Generating Callbacks", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ExecuteGoToCommand()
+        {
+            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer);
         }
 
         private void ExecuteToggleCommentCommand()

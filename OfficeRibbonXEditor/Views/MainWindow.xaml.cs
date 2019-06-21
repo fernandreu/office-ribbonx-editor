@@ -28,9 +28,6 @@ namespace OfficeRibbonXEditor.Views
 
         public MainWindow()
         {
-            // This needs to exist prior to the InitializeComponent() call; otherwise, key binding (Ctrl-G) will not work
-            this.GoToCommand = new RelayCommand(this.ExecuteGoTo);
-
             this.InitializeComponent();
         }
 
@@ -69,8 +66,6 @@ namespace OfficeRibbonXEditor.Views
 
         // This needs to exist prior to the InitializeComponent() call; otherwise, keys will be bound to a null reference
         public FindReplace FindReplaceDialog { get; } = new FindReplace();
-
-        public ICommand GoToCommand { get; }
 
         /// <summary>
         /// Finds the first TreeViewItem which is a parent of the given source.
@@ -126,12 +121,6 @@ namespace OfficeRibbonXEditor.Views
         }
 
         #endregion
-
-        private void ExecuteGoTo()
-        {
-            var goTo = new GoTo(this.Editor.Scintilla);
-            goTo.ShowGoToDialog();
-        }
 
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

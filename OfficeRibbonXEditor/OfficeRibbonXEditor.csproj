@@ -149,6 +149,7 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controls\ClickSelectTextBox.cs" />
     <Compile Include="Controls\DialogControl.cs" />
     <Compile Include="Controls\ExternalHyperlink.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
@@ -194,6 +195,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\UiElementExtensions.cs" />
+    <Compile Include="ViewModels\GoToDialogViewModel.cs" />
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogBase.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
@@ -248,6 +251,9 @@
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Models\OfficeDocument.cs" />
     <Compile Include="Views\DialogHostBase.cs" />
+    <Compile Include="Views\GoToDialog.xaml.cs">
+      <DependentUpon>GoToDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
@@ -268,6 +274,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CallbackDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GoToDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

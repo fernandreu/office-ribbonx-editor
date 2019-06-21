@@ -72,7 +72,7 @@
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
         
         <!--GoTo dialog control-->
-        <KeyBinding Key="G" Modifiers="Control" Command="{Binding ElementName=Window, Path=GoToCommand}"/>
+        <KeyBinding Key="G" Modifiers="Control" Command="{Binding GoToCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
@@ -145,7 +145,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Go To Line..." InputGestureText="Ctrl+G" Command="{Binding ElementName=Window, Path=GoToCommand}">
+                <MenuItem Header="Go To Line..." InputGestureText="Ctrl+G" Command="{Binding GoToCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/go_to.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 

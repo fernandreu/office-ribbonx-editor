@@ -83,6 +83,11 @@ namespace OfficeRibbonXEditor.Views
                 return new SettingsDialog();
             }
 
+            if (contentDialogType == typeof(GoToDialogViewModel))
+            {
+                return new GoToDialog();
+            }
+
             throw new ArgumentException($"Type {contentDialogType.Name} does not have an registered control");
         }
 
