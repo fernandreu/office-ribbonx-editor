@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ExternalHyperlink.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the ExternalHyperlink type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Diagnostics;
+using System.Windows.Documents;
+using System.Windows.Navigation;
 
 namespace OfficeRibbonXEditor.Controls
 {
-    using System.Diagnostics;
-    using System.Windows.Documents;
-    using System.Windows.Navigation;
-
     /// <summary>
     /// Hyperlink which automatically takes care of opening its Uri in an external browser
     /// </summary>

@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="BindingProxy.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the BindingProxy type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Windows;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System.Windows;
-
     public class BindingProxy : Freezable
     {
         // Using a DependencyProperty as the backing store for Data.

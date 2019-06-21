@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IsNotNullConverter.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the IsNotNullConverter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Globalization;
+using System.Windows.Data;
 
 namespace OfficeRibbonXEditor.Converters
 {
-    using System;
-    using System.Globalization;
-    using System.Windows.Data;
-
     public class IsNotNullConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

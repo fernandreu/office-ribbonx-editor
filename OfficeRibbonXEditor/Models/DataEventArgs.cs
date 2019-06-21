@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DataEventArgs.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-// An EventArgs with a Data property of any type
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System;
-
     /// <inheritdoc />
     /// <summary>
     /// An EventArgs with a Data property of any type

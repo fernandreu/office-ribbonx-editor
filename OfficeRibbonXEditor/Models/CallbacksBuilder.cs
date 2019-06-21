@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CallbacksBuilder.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the CallbacksBuilder type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Diagnostics;
+using System.Text;
+using System.Xml;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System.Diagnostics;
-    using System.Text;
-    using System.Xml;
-
     public class CallbacksBuilder
     {
         private const string ControlString = "control As IRibbonControl";

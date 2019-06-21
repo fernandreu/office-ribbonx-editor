@@ -1,17 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ScintillaLexer.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the ScintillaLexer type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using ScintillaNET;
+using ScintillaNET.WPF;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using ScintillaNET;
-    using ScintillaNET.WPF;
-
     /// <summary>
     /// Abstract class to handle any update in syntax highlighting (or formatting in general) of the Scintilla editor
     /// without having to explicitly reference the editor itself. This is useful for ViewModels, as they  

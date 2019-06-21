@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OfficeDocumentViewModelTests.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficeDocumentViewModelTests type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.IO;
+
+using NUnit.Framework;
+
+using OfficeRibbonXEditor.Models;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System.IO;
-
-    using NUnit.Framework;
-
-    using OfficeRibbonXEditor.Models;
-
     [TestFixture]
     public class OfficeDocumentViewModelTests
     {

@@ -1,28 +1,19 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainWindowViewModelTests.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the MainWindowViewModelTests type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
+
+using Moq;
+
+using NUnit.Framework;
+
+using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Windows;
-
-    using Moq;
-
-    using NUnit.Framework;
-
-    using OfficeRibbonXEditor.Extensions;
-    using OfficeRibbonXEditor.Models;
-    using OfficeRibbonXEditor.Services;
-
     [TestFixture]
     [Category("Integration")]
     public class MainWindowViewModelTests
@@ -32,6 +23,8 @@ namespace OfficeRibbonXEditor.ViewModels
         private readonly Mock<IFileDialogService> fileSvc = new Mock<IFileDialogService>();
 
         private readonly Mock<IVersionChecker> versionChecker = new Mock<IVersionChecker>();
+
+        private readonly Mock<IDialogProvider> dialogProvider = new Mock<IDialogProvider>();
 
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
@@ -57,7 +50,11 @@ namespace OfficeRibbonXEditor.ViewModels
                 File.Delete(this.destFile);
             }
 
-            this.viewModel = new MainWindowViewModel(this.msgSvc.Object, this.fileSvc.Object, this.versionChecker.Object);
+            this.viewModel = new MainWindowViewModel(
+                this.msgSvc.Object, 
+                this.fileSvc.Object, 
+                this.versionChecker.Object, 
+                this.dialogProvider.Object);
         }
 
         [Test]
@@ -215,7 +212,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.InsertXml12Command.Execute();
 
             // Act / assert
-            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
+            this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
         }
         
         /// <summary>
@@ -253,7 +250,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // Assert
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         /// <summary>
@@ -278,7 +275,7 @@ namespace OfficeRibbonXEditor.ViewModels
             Assert.IsNotNull(this.viewModel.SelectedItem, "Icon was apparently not created");
             this.AssertMessage(this.viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            this.AssertMessage(this.viewModel.CloseCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         [Test]
@@ -319,10 +316,15 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // This should contain a single callback for the onLoad event
             part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            void Handler(object o, DataEventArgs<string> e) => Assert.IsTrue(e.Data.StartsWith("'Callback for customUI.onLoad"), "Expected callback not generated");
-            this.viewModel.ShowCallbacks += Handler;
+            void Handler(object o, DataEventArgs<IContentDialogBase> e)
+            {
+                Assert.IsTrue(e.Data is CallbackDialogViewModel, $"Unexpected dialog launched: {e.Data.GetType().Name}");
+                Assert.IsTrue(((CallbackDialogViewModel) e.Data).Code.StartsWith("'Callback for customUI.onLoad"), "Expected callback not generated");
+            }
+
+            this.viewModel.LaunchingDialog += Handler;
             this.viewModel.GenerateCallbacksCommand.Execute();
-            this.viewModel.ShowCallbacks -= Handler;  // Just in case we add other checks later
+            this.viewModel.LaunchingDialog -= Handler;  // Just in case we add other checks later
         }
 
         /// <summary>

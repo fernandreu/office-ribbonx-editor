@@ -1,22 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VersionChecker.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the VersionChecker type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Diagnostics;
+using System.Net.Http;
+using System.Reflection;
+using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
+using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services
 {
-    using System;
-    using System.Diagnostics;
-    using System.Net.Http;
-    using System.Reflection;
-    using System.Text.RegularExpressions;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public class VersionChecker : IVersionChecker
     {
         private const string CheckUrl = "https://raw.githubusercontent.com/fernandreu/office-ribbonx-editor/info/RELEASE-VERSION";

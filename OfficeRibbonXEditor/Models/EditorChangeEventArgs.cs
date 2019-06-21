@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EditorChangeEventArgs.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the EditorChangeEventArgs type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System;
-
     public class EditorChangeEventArgs : EventArgs
     {
         public int Start { get; set; } = 0;

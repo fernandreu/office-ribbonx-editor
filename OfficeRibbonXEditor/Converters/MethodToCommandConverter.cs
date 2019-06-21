@@ -1,21 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MethodToCommandConverter.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the MethodToCommandConverter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Diagnostics;
+using System.Globalization;
+using System.Reflection;
+using System.Windows.Data;
+using System.Windows.Input;
 
 namespace OfficeRibbonXEditor.Converters
 {
-    using System;
-    using System.Diagnostics;
-    using System.Globalization;
-    using System.Reflection;
-    using System.Windows.Data;
-    using System.Windows.Input;
-
     /// <summary>
     /// This converter takes a method name as an argument and returns an ICommand with a call to it. This a bit hacky,
     /// but useful to bind commands to methods.

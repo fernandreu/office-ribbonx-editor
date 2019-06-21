@@ -1,21 +1,12 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlSampleViewModel.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the XmlSampleViewModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
+using GalaSoft.MvvmLight;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Reflection;
-
-    using GalaSoft.MvvmLight;
-
     public class XmlSampleViewModel : ViewModelBase
     {
         private static readonly string SamplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";

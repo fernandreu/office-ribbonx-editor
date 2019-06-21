@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="StringToVisibilityConverter.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the StringToVisibilityConverter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 
 namespace OfficeRibbonXEditor.Converters
 {
-    using System;
-    using System.Globalization;
-    using System.Windows;
-    using System.Windows.Data;
-
     [ValueConversion(typeof(string), typeof(Visibility))]
     public class StringToVisibilityConverter : IValueConverter
     {

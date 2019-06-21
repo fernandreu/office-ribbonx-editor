@@ -1,41 +1,28 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainWindow.xaml.cs" company="Fernando Andreu">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Interaction logic for MainWindow.xaml
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+
+using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
+using OfficeRibbonXEditor.Dialogs.GoTo;
+using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.ViewModels;
+
+using ScintillaNET;
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace OfficeRibbonXEditor.Views
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-    using System.Text.RegularExpressions;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Input;
-    using System.Windows.Media;
-
-    using GalaSoft.MvvmLight.Command;
-    using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
-    using OfficeRibbonXEditor.Dialogs.GoTo;
-    using OfficeRibbonXEditor.Models;
-    using OfficeRibbonXEditor.ViewModels;
-
-    using ScintillaNET;
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using TextBox = System.Windows.Controls.TextBox;
-
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>
     public partial class MainWindow
     {
-        private readonly MainWindowViewModel viewModel;
-
-        private readonly XmlLexer lexer;
+        private MainWindowViewModel viewModel;
 
         private bool suppressRequestBringIntoView;
 
@@ -45,36 +32,41 @@ namespace OfficeRibbonXEditor.Views
             this.GoToCommand = new RelayCommand(this.ExecuteGoTo);
 
             this.InitializeComponent();
+        }
 
-            this.viewModel = (MainWindowViewModel)this.DataContext;
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        {
+            base.OnPropertyChanged(args);
+
+            if (args.Property != DataContextProperty || !(args.NewValue is MainWindowViewModel model))
+            {
+                return;
+            }
+
+            this.viewModel = model;
 
             // Initialize find / replace / goto dialogs
             this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
             this.FindReplaceDialog.KeyPressed += this.OnEditorKeyDown;
 
-            this.viewModel.ShowSettings += (o, e) => this.ShowSettings();
-            this.viewModel.ShowCallbacks += (o, e) => this.ShowCallbacks(e.Data);
             this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
-            this.viewModel.UpdateLexer += (o, e) => this.lexer.Update();
             this.viewModel.UpdateEditor += (o, e) =>
+            {
+                this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
+                this.Editor.InsertText(e.Start, e.NewText);
+                if (e.UpdateSelection)
                 {
-                    this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
-                    this.Editor.InsertText(e.Start, e.NewText);
-                    if (e.UpdateSelection)
-                    {
-                        this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
-                    }
+                    this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
+                }
 
-                    if (e.ResetUndoHistory)
-                    {
-                        this.Editor.EmptyUndoBuffer();
-                    }
-                };
-
-            this.lexer = new XmlLexer { Editor = this.Editor };
+                if (e.ResetUndoHistory)
+                {
+                    this.Editor.EmptyUndoBuffer();
+                }
+            };
         }
-        
+
         // This needs to exist prior to the InitializeComponent() call; otherwise, keys will be bound to a null reference
         public FindReplace FindReplaceDialog { get; } = new FindReplace();
 
@@ -141,11 +133,6 @@ namespace OfficeRibbonXEditor.Views
             goTo.ShowGoToDialog();
         }
 
-        private void OnExitClick(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
@@ -181,16 +168,6 @@ namespace OfficeRibbonXEditor.Views
             }
         }
 
-        private void ShowSettings()
-        {
-            new SettingsDialog(this.lexer) { Owner = this }.ShowDialog();
-        }
-
-        private void ShowCallbacks(string code)
-        {
-            new CallbackWindow(code) { Owner = this }.ShowDialog();
-        }
-
         private void OnEditorZoomChanged(object sender, EventArgs e)
         {
             this.ZoomBox.Value = this.Editor.Zoom;
@@ -211,11 +188,6 @@ namespace OfficeRibbonXEditor.Views
                 treeViewItem.Focus();
                 e.Handled = true;
             }
-        }
-
-        private void OnShowAboutDialog(object sender, RoutedEventArgs e)
-        {
-            new AboutDialog { Owner = this }.ShowDialog();
         }
 
         private void OnChangeIdTextDown(object sender, KeyEventArgs e)

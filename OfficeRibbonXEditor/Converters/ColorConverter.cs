@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="ColorConverter.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the ColorConverter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Globalization;
+using System.Windows.Data;
+using System.Windows.Media;
 
 namespace OfficeRibbonXEditor.Converters
 {
-    using System;
-    using System.Globalization;
-    using System.Windows.Data;
-    using System.Windows.Media;
-
     public class ColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

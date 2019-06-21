@@ -1,19 +1,10 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="InverseBooleanToVisibilityConverter.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the InverseBooleanToVisibilityConverter type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Globalization;
+using System.Windows;
+using System.Windows.Data;
 
 namespace OfficeRibbonXEditor.Converters
 {
-    using System;
-    using System.Globalization;
-    using System.Windows;
-    using System.Windows.Data;
-
     public class InverseBooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

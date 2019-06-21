@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OfficeDocumentViewModel.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficeDocumentViewModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.IO;
+using System.Linq;
+
+using OfficeRibbonXEditor.Models;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System;
-    using System.IO;
-    using System.Linq;
-
-    using OfficeRibbonXEditor.Models;
-
     public class OfficeDocumentViewModel : TreeViewItemViewModel
     {
         private OfficeDocument document;
