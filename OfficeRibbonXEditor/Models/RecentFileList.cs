@@ -11,21 +11,21 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Reflection;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Xml;
+
+using Microsoft.Win32;
+
 namespace OfficeRibbonXEditor.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Reflection;
-    using System.Text;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Input;
-    using System.Xml;
-
-    using Microsoft.Win32;
-
     public class RecentFileList : Separator
     {
         public static readonly DependencyProperty ClickCommandProperty = 

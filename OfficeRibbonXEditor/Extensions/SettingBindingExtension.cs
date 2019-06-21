@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright company="Thomas Levesque" file="">
+// <copyright company="Thomas Levesque" file="SettingBindingExtension.cs">
 //    This is taken from: http://www.thomaslevesque.com/2008/11/18/wpf-binding-to-application-settings-using-a-markup-extension/
 // </copyright>
 // <summary>
@@ -8,10 +8,10 @@
 // 
 // --------------------------------------------------------------------------------------------------------------------
 
+using System.Windows.Data;
+
 namespace OfficeRibbonXEditor.Extensions
 {
-    using System.Windows.Data;
-
     public class SettingBindingExtension : Binding
     {
         public SettingBindingExtension()

@@ -1,24 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="SettingsDialog.xaml.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Interaction logic for SettingsDialog.xaml
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
+﻿using System;
+using System.Linq;
 using OfficeRibbonXEditor.Controls;
 
 namespace OfficeRibbonXEditor.Views
 {
-    using System;
-    using System.Collections.Generic;
-    using System.ComponentModel;
-    using System.Linq;
-    using System.Windows;
-    using System.Windows.Controls;
-    using OfficeRibbonXEditor.Models;
-
     /// <summary>
     /// Interaction logic for SettingsDialog
     /// </summary>

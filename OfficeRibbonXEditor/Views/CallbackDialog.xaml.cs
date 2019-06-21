@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="CallbackWindow.xaml.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Simple viewer of the callbacks automatically generated
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using System.Windows;
+﻿using System.Windows;
 using OfficeRibbonXEditor.Controls;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;

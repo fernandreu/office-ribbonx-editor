@@ -1,35 +1,26 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainWindowViewModel.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the MainWindowViewModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Xml;
+using System.Xml.Schema;
+
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+
+using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.ComponentModel;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Text;
-    using System.Windows;
-    using System.Xml;
-    using System.Xml.Schema;
-
-    using GalaSoft.MvvmLight;
-    using GalaSoft.MvvmLight.Command;
-
-    using OfficeRibbonXEditor.Extensions;
-    using OfficeRibbonXEditor.Interfaces;
-    using OfficeRibbonXEditor.Models;
-    using OfficeRibbonXEditor.Resources;
-
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IMessageBoxService messageBoxService;

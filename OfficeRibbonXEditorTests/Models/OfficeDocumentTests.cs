@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OfficeDocumentTests.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficeDocumentTests type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.IO;
+
+using NUnit.Framework;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System.IO;
-
-    using NUnit.Framework;
-
     [TestFixture]
     public class OfficeDocumentTests
     {

@@ -1,17 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IFileDialogService.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the IFileDialogService type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
 
 namespace OfficeRibbonXEditor.Interfaces
 {
-    using System;
-    using System.Collections.Generic;
-
     public interface IFileDialogService
     {
         bool? OpenFileDialog(string title, string filter, Action<string> completedAction, string fileName = null, int filterIndex = 0);

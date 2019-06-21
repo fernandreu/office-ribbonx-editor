@@ -10,16 +10,16 @@
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Globalization;
+using System.Windows.Data;
+
 namespace OfficeRibbonXEditor.Converters
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Collections.Specialized;
-    using System.Globalization;
-    using System.Windows.Data;
-
     /// <summary>
     /// A value converter which contains a list of IValueConverters and invokes their Convert or ConvertBack methods
     /// in the order that they exist in the list.  The output of one converter is piped into the next converter

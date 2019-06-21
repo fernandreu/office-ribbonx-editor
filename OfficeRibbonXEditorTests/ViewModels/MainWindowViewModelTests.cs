@@ -1,29 +1,19 @@
-// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainWindowViewModelTests.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the MainWindowViewModelTests type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows;
+
+using Moq;
+
+using NUnit.Framework;
+
+using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Windows;
-
-    using Moq;
-
-    using NUnit.Framework;
-
-    using OfficeRibbonXEditor.Extensions;
-    using OfficeRibbonXEditor.Interfaces;
-    using OfficeRibbonXEditor.Models;
-    using OfficeRibbonXEditor.Services;
-
     [TestFixture]
     [Category("Integration")]
     public class MainWindowViewModelTests

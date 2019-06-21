@@ -1,33 +1,24 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="MainWindow.xaml.cs" company="Fernando Andreu">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Interaction logic for MainWindow.xaml
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+
+using GalaSoft.MvvmLight.Command;
+
+using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.ViewModels;
+
+using ScintillaNET;
+
+using ScintillaNET_FindReplaceDialog;
+
+using KeyEventArgs = System.Windows.Input.KeyEventArgs;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace OfficeRibbonXEditor.Views
 {
-    using System;
-    using System.Text.RegularExpressions;
-    using System.Windows;
-    using System.Windows.Controls;
-    using System.Windows.Input;
-    using System.Windows.Media;
-
-    using GalaSoft.MvvmLight.Command;
-
-    using OfficeRibbonXEditor.Models;
-    using OfficeRibbonXEditor.ViewModels;
-
-    using ScintillaNET;
-
-    using ScintillaNET_FindReplaceDialog;
-
-    using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-    using TextBox = System.Windows.Controls.TextBox;
-
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>

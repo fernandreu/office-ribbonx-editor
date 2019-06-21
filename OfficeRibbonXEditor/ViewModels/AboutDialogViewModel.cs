@@ -2,7 +2,6 @@
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-
     public class AboutDialogViewModel : DialogBase
     {
         public string AssemblyTitle

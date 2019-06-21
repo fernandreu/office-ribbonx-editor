@@ -1,17 +1,8 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="PropertyChangedExtension.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines several extension methods that simplify the application of INotifyPropertyChanged interface
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace OfficeRibbonXEditor.Extensions
 {
-    using System.Collections.Generic;
-    using System.ComponentModel;
-
     public static class PropertyChangedExtension
     {
         public static void OnPropertyChanged(this INotifyPropertyChanged entity, PropertyChangedEventHandler handler, string propertyName)

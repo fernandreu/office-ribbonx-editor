@@ -1,20 +1,11 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OfficeDocument.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficeDocument type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Packaging;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.IO.Packaging;
-
     public enum XmlParts
     {
         Qat12,

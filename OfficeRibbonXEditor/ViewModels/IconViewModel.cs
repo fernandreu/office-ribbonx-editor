@@ -1,24 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="IconViewModel.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficePartViewModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.IO;
+using System.Windows;
+using System.Windows.Media.Imaging;
+using System.Xml;
+
+using CommonServiceLocator;
+using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Windows;
-    using System.Windows.Media.Imaging;
-    using System.Xml;
-
-    using CommonServiceLocator;
-    using OfficeRibbonXEditor.Interfaces;
-    using OfficeRibbonXEditor.Services;
-
     public class IconViewModel : TreeViewItemViewModel
     {
         private string id;

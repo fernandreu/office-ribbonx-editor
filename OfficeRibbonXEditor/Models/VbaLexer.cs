@@ -1,18 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="VbaLexer.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the VbaLexer type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Drawing;
+
+using ScintillaNET;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System.Drawing;
-
-    using ScintillaNET;
-
     public class VbaLexer : ScintillaLexer
     {
         private const string Keywords = 

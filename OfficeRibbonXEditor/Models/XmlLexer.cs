@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="XmlLexer.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the XmlLexer type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using ScintillaNET;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using ScintillaNET;
-
     public class XmlLexer : ScintillaLexer
     {
         protected override void UpdateImplementation()

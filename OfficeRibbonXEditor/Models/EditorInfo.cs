@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="EditorInfo.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the EditorInfo type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System;
-
     public class EditorInfo
     {
         /// <summary>

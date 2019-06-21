@@ -1,25 +1,13 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="App.xaml.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Interaction logic for App.xaml
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Windows;
+using Autofac;
+using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Services;
+using OfficeRibbonXEditor.ViewModels;
+using OfficeRibbonXEditor.Views;
 
 namespace OfficeRibbonXEditor
 {
-    using System;
-    using System.Windows;
-    using System.Windows.Data;
-    using Autofac;
-    using GalaSoft.MvvmLight.Ioc;
-    using OfficeRibbonXEditor.Interfaces;
-    using OfficeRibbonXEditor.Models;
-    using OfficeRibbonXEditor.Services;
-    using OfficeRibbonXEditor.ViewModels;
-    using OfficeRibbonXEditor.Views;
-
     /// <summary>
     /// Interaction logic for App
     /// </summary>

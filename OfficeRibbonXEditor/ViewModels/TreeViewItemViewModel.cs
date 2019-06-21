@@ -1,19 +1,9 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="TreeViewItemViewModel.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Base class for all ViewModel classes displayed by TreeViewItems.
-//   This acts as an adapter between a raw data object and a TreeViewItem.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System.Collections.ObjectModel;
+
+using GalaSoft.MvvmLight;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System.Collections.ObjectModel;
-
-    using GalaSoft.MvvmLight;
-
     /// <summary>
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.

@@ -1,9 +1,9 @@
-﻿namespace OfficeRibbonXEditor.Interfaces
-{
-    using System;
-    using System.ComponentModel;
-    using GalaSoft.MvvmLight.Command;
+﻿using System;
+using System.ComponentModel;
+using GalaSoft.MvvmLight.Command;
 
+namespace OfficeRibbonXEditor.Interfaces
+{
     public interface IContentDialogBase
     {
         bool Cancelled { get; }

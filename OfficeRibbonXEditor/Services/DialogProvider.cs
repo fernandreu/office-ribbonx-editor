@@ -1,8 +1,8 @@
-﻿namespace OfficeRibbonXEditor.Services
-{
-    using Autofac;
-    using OfficeRibbonXEditor.Interfaces;
+﻿using Autofac;
+using OfficeRibbonXEditor.Interfaces;
 
+namespace OfficeRibbonXEditor.Services
+{
     public class DialogProvider : IDialogProvider
     {
         private readonly ILifetimeScope container;

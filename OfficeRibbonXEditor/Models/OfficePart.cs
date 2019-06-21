@@ -1,24 +1,15 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OfficePart.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficePart type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.IO.Packaging;
+using System.Windows.Media.Imaging;
+using System.Xml;
+
+using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.Models
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.IO.Packaging;
-    using System.Windows.Media.Imaging;
-    using System.Xml;
-
-    using OfficeRibbonXEditor.Resources;
-
     public class OfficePart
     {
         private string id;

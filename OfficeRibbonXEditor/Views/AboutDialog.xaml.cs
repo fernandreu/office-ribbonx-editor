@@ -1,13 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="AboutDialog.xaml.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Interaction logic for AboutDialog.xaml
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
-
-using OfficeRibbonXEditor.Controls;
+﻿using OfficeRibbonXEditor.Controls;
 
 namespace OfficeRibbonXEditor.Views
 {

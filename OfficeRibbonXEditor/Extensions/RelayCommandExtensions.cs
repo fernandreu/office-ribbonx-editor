@@ -1,16 +1,7 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="RelayCommandExtensions.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the RelayCommandExtensions type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using GalaSoft.MvvmLight.Command;
 
 namespace OfficeRibbonXEditor.Extensions
 {
-    using GalaSoft.MvvmLight.Command;
-
     public static class RelayCommandExtensions
     {
         /// <summary>

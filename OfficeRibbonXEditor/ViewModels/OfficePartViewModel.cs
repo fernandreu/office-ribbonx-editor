@@ -1,23 +1,14 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
-// <copyright file="OfficePartViewModel.cs" company="FA">
-//   Fernando Andreu
-// </copyright>
-// <summary>
-//   Defines the OfficePartViewModel type.
-// </summary>
-// --------------------------------------------------------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows.Media.Imaging;
+
+using OfficeRibbonXEditor.Models;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.IO;
-    using System.Linq;
-    using System.Windows.Media.Imaging;
-
-    using OfficeRibbonXEditor.Models;
-
     public class OfficePartViewModel : TreeViewItemViewModel
     {
         private string originalContents;
