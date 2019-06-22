@@ -58,7 +58,7 @@
                      x:Name="TargetBox"
                      Margin="4"
                      VerticalAlignment="Center"
-                     Text="{Binding Target}"
+                     Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
                      TextAlignment="Center"/>
         </Grid>
         <DockPanel Margin="0,4,0,0"

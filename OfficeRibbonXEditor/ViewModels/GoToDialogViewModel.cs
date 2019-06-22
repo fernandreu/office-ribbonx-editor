@@ -66,9 +66,9 @@ namespace OfficeRibbonXEditor.ViewModels
             // Translate it to 0-based line number
             line--;
 
-            if (line >= this.MaximumLineNumber)
+            if (line > this.MaximumLineNumber)
             {
-                line = this.MaximumLineNumber - 1;
+                line = this.MaximumLineNumber;
             }
 
             if (line < 0)
