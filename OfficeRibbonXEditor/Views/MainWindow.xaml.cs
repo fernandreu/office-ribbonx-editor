@@ -4,10 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-
-using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
-using OfficeRibbonXEditor.Dialogs.GoTo;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 

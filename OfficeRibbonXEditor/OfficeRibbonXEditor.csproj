@@ -183,13 +183,6 @@
     <Compile Include="Dialogs\FindReplace\FindReplace\ToolStripIncrementalSearcher.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Dialogs\GoTo\GoTo.cs" />
-    <Compile Include="Dialogs\GoTo\GoToDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\GoTo\GoToDialog.Designer.cs">
-      <DependentUpon>GoToDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Dialogs\FindReplace\Properties\FindReplaceResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -355,9 +348,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FindReplace\FindReplace\IncrementalSearcher.resx">
       <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\GoTo\GoToDialog.resx">
-      <DependentUpon>GoToDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\FindReplace\Properties\FindReplaceResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>

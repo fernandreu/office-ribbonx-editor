@@ -53,14 +53,6 @@ namespace OfficeRibbonXEditor.ViewModels
             set => this.Set(ref this.target, value);
         }
 
-        private string error;
-
-        public string Error
-        {
-            get => this.error;
-            set => this.Set(ref this.error, value);
-        }
-
         public void OnLoaded(ScintillaLexer payload)
         {
             this.Lexer = payload;
