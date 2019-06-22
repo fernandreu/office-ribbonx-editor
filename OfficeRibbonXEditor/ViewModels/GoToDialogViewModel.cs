@@ -34,20 +34,31 @@ namespace OfficeRibbonXEditor.ViewModels
                     return;
                 }
 
-                this.Target = this.CurrentLineNumber.ToString();
+                this.Target = this.CurrentLineNumber;
+                this.LexerChanged?.Invoke(this, EventArgs.Empty);
             }
         }
+
+        public event EventHandler LexerChanged;
 
         public int CurrentLineNumber => (this.Lexer?.Editor.CurrentLine ?? -1) + 1;
 
         public int MaximumLineNumber => this.Lexer?.Editor.Lines.Count ?? 0;
 
-        private string target;
+        private int target;
 
-        public string Target
+        public int Target
         {
             get => this.target;
             set => this.Set(ref this.target, value);
+        }
+
+        private string error;
+
+        public string Error
+        {
+            get => this.error;
+            set => this.Set(ref this.error, value);
         }
 
         public void OnLoaded(ScintillaLexer payload)
@@ -57,21 +68,15 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteAcceptCommand()
         {
-            if (!int.TryParse(this.Target, out var line))
-            {
-                // TODO: Error message (original dialog shows an icon with a tooltip)
-                return;
-            }
-
             // Translate it to 0-based line number
-            line--;
+            var line = this.Target - 1;
 
+            // This trimming might not be necessary due to how the IntegerUpDown control will clamp the target 
             if (line > this.MaximumLineNumber)
             {
                 line = this.MaximumLineNumber;
             }
-
-            if (line < 0)
+            else if (line < 0)
             {
                 line = 0;
             }

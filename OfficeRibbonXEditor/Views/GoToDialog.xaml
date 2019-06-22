@@ -7,6 +7,7 @@
          xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
          xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels"
          xmlns:extensions="clr-namespace:OfficeRibbonXEditor.Extensions"
+         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
          mc:Ignorable="d" 
          Title="Go To Line"
          Icon="../Resources/Images/go_to.png"
@@ -53,13 +54,17 @@
             <Label Grid.Row="2"
                    Grid.Column="0"
                    Content="Go to line number"/>
-            <controls:ClickSelectTextBox Grid.Row="2"
-                     Grid.Column="1"
-                     x:Name="TargetBox"
-                     Margin="4"
-                     VerticalAlignment="Center"
-                     Text="{Binding Target, UpdateSourceTrigger=PropertyChanged}"
-                     TextAlignment="Center"/>
+            <xctk:IntegerUpDown Grid.Row="2"
+                                Grid.Column="1"
+                                x:Name="TargetBox"
+                                Margin="4"
+                                VerticalAlignment="Center"
+                                TextAlignment="Center"
+                                AutoMoveFocus="True"
+                                Minimum="1"
+                                Maximum="{Binding MaximumLineNumber}"
+                                AutoSelectBehavior="OnFocus"
+                                Value="{Binding Target, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <DockPanel Margin="0,4,0,0"
                    LastChildFill="False">

@@ -1,4 +1,9 @@
-﻿using OfficeRibbonXEditor.Controls;
+﻿using System;
+using System.Threading.Tasks;
+using System.Windows;
+using OfficeRibbonXEditor.Controls;
+using OfficeRibbonXEditor.ViewModels;
+using Xceed.Wpf.Toolkit;
 
 namespace OfficeRibbonXEditor.Views
 {
@@ -10,6 +15,15 @@ namespace OfficeRibbonXEditor.Views
         public GoToDialog()
         {
             this.InitializeComponent();
+
+            // This will set the focus on the TargetBox with the value selected when it first gets initialized. Calling
+            // Focus() directly may cause issues due to the ordering of the text set, the dialog displayed, etc
+            this.TargetBox.ValueChanged += this.OnValueChanged;
+        }
+
+        private void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            this.TargetBox.ValueChanged -= this.OnValueChanged;
             this.TargetBox.Focus();
         }
     }
