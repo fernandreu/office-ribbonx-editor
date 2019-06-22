@@ -189,6 +189,7 @@
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UiElementExtensions.cs" />
+    <Compile Include="Models\LaunchDialogEventArgs.cs" />
     <Compile Include="ViewModels\GoToDialogViewModel.cs" />
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogBase.cs" />

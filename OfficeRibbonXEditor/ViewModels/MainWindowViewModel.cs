@@ -108,7 +108,7 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         public event EventHandler Closed;
 
-        public event EventHandler<DataEventArgs<IContentDialogBase>> LaunchingDialog; 
+        public event EventHandler<LaunchDialogEventArgs> LaunchingDialog; 
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
@@ -314,18 +314,18 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public IContentDialogBase LaunchDialog<TDialog>() where TDialog : IContentDialogBase
+        public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = true) where TDialog : IContentDialogBase
         {
             var content = this.dialogProvider.ResolveDialog<TDialog>();
-            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
             return content;
         }
 
-        public IContentDialog<TPayload> LaunchDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
+        public IContentDialog<TPayload> LaunchDialog<TDialog, TPayload>(TPayload payload, bool showDialog = true) where TDialog : IContentDialog<TPayload>
         {
             var content = this.dialogProvider.ResolveDialog<TDialog>();
             content.OnLoaded(payload);
-            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
             return content;
         }
 
@@ -866,7 +866,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteGoToCommand()
         {
-            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer);
+            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer, false);
         }
 
         private void ExecuteToggleCommentCommand()

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using OfficeRibbonXEditor.Controls;
-using OfficeRibbonXEditor.ViewModels;
-using Xceed.Wpf.Toolkit;
 
 namespace OfficeRibbonXEditor.Views
 {

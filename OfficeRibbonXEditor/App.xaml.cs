@@ -52,19 +52,26 @@ namespace OfficeRibbonXEditor
             var window = new MainWindow();
             windowModel.Lexer = new XmlLexer {Editor = window.Editor};
             window.DataContext = windowModel;
-            windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Data);
+            windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
             windowModel.Closed += (o, e) => window.Close();
             window.Show();
         }
-        
-        private void LaunchDialog(Window mainWindow, IContentDialogBase content)
+
+        private void LaunchDialog(Window mainWindow, IContentDialogBase content, bool showDialog)
         {
             var dialogModel = this.container.Resolve<DialogHostViewModel>();
             var dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
             dialogModel.Content = content;
             content.Closed += (o, e) => dialog.Close();
             dialogModel.Closed += (o, e) => dialog.Close();
-            dialog.ShowDialog();
+            if (showDialog)
+            {
+                dialog.ShowDialog();
+            }
+            else
+            {
+                dialog.Show();
+            }
         }
     }
 }

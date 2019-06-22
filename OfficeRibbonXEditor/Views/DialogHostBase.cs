@@ -3,6 +3,7 @@ using System.Windows;
 using OfficeRibbonXEditor.Controls;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.ViewModels;
+using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace OfficeRibbonXEditor.Views
 {
@@ -33,37 +34,43 @@ namespace OfficeRibbonXEditor.Views
 
         private static void OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (!(sender is DialogHost control))
+            if (!(sender is DialogHost host))
             {
                 return;
             }
 
             if (e.NewValue == null)
             {
-                control.View = null;
+                host.View = null;
                 return;
             }
 
             var view = GenerateControl(e.NewValue.GetType());
             view.DataContext = e.NewValue;
-            control.View = view;
-            control.Content = view;
-            control.SizeToContent = SizeToContent.Manual;
+            host.View = view;
+            host.Content = view;
+            host.SizeToContent = SizeToContent.Manual;
+            // TODO: This does not work as expected in WPF (as opposed to Windows Forms), so disabled for now
+            // The main reason is that the window can only be made transparent if it has WindowStyle set to None,
+            // which means the dialog will need its own border, close controls, etc, and would lose the look and
+            // feel of the main window.
+            ////host.Deactivated += (o, args) => host.Opacity = view.InactiveOpacity;
+            ////host.Activated += (o, args) => host.Opacity = 1.0;
 
             // What follows is done here and not in XAML bindings because there can be sizing issues otherwise
 
             if (view.PreferredWidth > 0)
             {
-                control.Width = view.PreferredWidth;
+                host.Width = view.PreferredWidth;
             }
 
             if (view.PreferredHeight > 0)
             {
-                control.Height = view.PreferredHeight;
+                host.Height = view.PreferredHeight;
             }
 
-            control.SizeToContent = view.SizeToContent;
-            control.CenterInOwner();
+            host.SizeToContent = view.SizeToContent;
+            host.CenterInOwner();
         }
 
         private static DialogControl GenerateControl(Type contentDialogType)

@@ -13,6 +13,7 @@
          Icon="../Resources/Images/go_to.png"
          SizeToContent="Height"
          PreferredWidth="280" 
+         InactiveOpacity="0.5"
          d:DesignWidth="280"
          d:DesignHeight="150"
          d:DataContext="{d:DesignInstance viewModels:GoToDialogViewModel}">
