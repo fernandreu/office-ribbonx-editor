@@ -89,16 +89,14 @@ namespace OfficeRibbonXEditor.ViewModels
         private void AcceptSettings()
         {
             Properties.Settings.Default.Save();
-            this.Cancelled = false;
+            this.IsCancelled = false;
             this.Lexer.Update();
             this.Close();
         }
 
-        protected override void ExecuteClosingCommand(CancelEventArgs args)
+        protected override void OnClosing(CancelEventArgs args)
         {
-            base.ExecuteClosingCommand(args);
-
-            if (!args.Cancel && this.Cancelled)
+            if (!args.Cancel && this.IsCancelled)
             {
                 this.ResetToCurrent();
             }

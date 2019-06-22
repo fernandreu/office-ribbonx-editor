@@ -14,7 +14,11 @@ namespace OfficeRibbonXEditor.ViewModels
             this.CloseCommand = new RelayCommand(this.Close);
         }
 
-        public bool Cancelled { get; protected set; } = true;
+        public bool IsUnique => true;
+
+        public bool IsClosed { get; protected set; } = false;
+
+        public bool IsCancelled { get; protected set; } = true;
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
@@ -27,7 +31,18 @@ namespace OfficeRibbonXEditor.ViewModels
             this.Closed?.Invoke(this, EventArgs.Empty);
         }
 
-        protected virtual void ExecuteClosingCommand(CancelEventArgs args)
+        private void ExecuteClosingCommand(CancelEventArgs args)
+        {
+            this.OnClosing(args);
+            if (args.Cancel)
+            {
+                return;
+            }
+
+            this.IsClosed = true;
+        }
+
+        protected virtual void OnClosing(CancelEventArgs args)
         {
         }
     }

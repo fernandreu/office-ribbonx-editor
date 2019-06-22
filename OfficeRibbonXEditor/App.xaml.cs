@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using Autofac;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
@@ -14,6 +15,8 @@ namespace OfficeRibbonXEditor
     public partial class App : Application
     {
         private readonly IContainer container;
+
+        private readonly Dictionary<IContentDialogBase, DialogHost> dialogs = new Dictionary<IContentDialogBase, DialogHost>();
 
         public App()
         {
@@ -59,11 +62,23 @@ namespace OfficeRibbonXEditor
 
         private void LaunchDialog(Window mainWindow, IContentDialogBase content, bool showDialog)
         {
+            if (content.IsUnique && !content.IsClosed && this.dialogs.TryGetValue(content, out var dialog))
+            {
+                dialog.Activate();
+                return;
+            }
+
             var dialogModel = this.container.Resolve<DialogHostViewModel>();
-            var dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
+            dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
             dialogModel.Content = content;
             content.Closed += (o, e) => dialog.Close();
             dialogModel.Closed += (o, e) => dialog.Close();
+
+            if (content.IsUnique)
+            {
+                this.dialogs[content] = dialog;
+            }
+
             if (showDialog)
             {
                 dialog.ShowDialog();

@@ -27,6 +27,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private readonly IDialogProvider dialogProvider;
 
+        private readonly Dictionary<Type, IContentDialogBase> dialogs = new Dictionary<Type, IContentDialogBase>();
+
         /// <summary>
         /// Whether documents should be reloaded right before being saved.
         /// </summary>
@@ -73,7 +75,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
             this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
-            this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>());
+            this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
@@ -314,18 +316,41 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = true) where TDialog : IContentDialogBase
+        public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = false) where TDialog : IContentDialogBase
         {
-            var content = this.dialogProvider.ResolveDialog<TDialog>();
+            if (!this.dialogs.TryGetValue(typeof(TDialog), out var content) || content.IsClosed)
+            {
+                // Resolve a new dialog, as any potentially existing one is not suitable
+                content = this.dialogProvider.ResolveDialog<TDialog>();
+            }
+            
             this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
+            if (content.IsUnique)
+            {
+                // Keep track of the new content
+                this.dialogs[typeof(TDialog)] = content;
+            }
+
             return content;
         }
 
-        public IContentDialog<TPayload> LaunchDialog<TDialog, TPayload>(TPayload payload, bool showDialog = true) where TDialog : IContentDialog<TPayload>
+        public IContentDialog<TPayload> LaunchDialog<TDialog, TPayload>(TPayload payload, bool showDialog = false) where TDialog : IContentDialog<TPayload>
         {
-            var content = this.dialogProvider.ResolveDialog<TDialog>();
+            if (!this.dialogs.TryGetValue(typeof(TDialog), out var baseContent) || baseContent.IsClosed)
+            {
+                // Resolve a new dialog, as any potentially existing one is not suitable
+                baseContent = this.dialogProvider.ResolveDialog<TDialog>();
+            }
+
+            var content = (TDialog) baseContent;
             content.OnLoaded(payload);
             this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
+            if (content.IsUnique)
+            {
+                // Keep track of the new content
+                this.dialogs[typeof(TDialog)] = content;
+            }
+
             return content;
         }
 
@@ -866,7 +891,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteGoToCommand()
         {
-            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer, false);
+            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer);
         }
 
         private void ExecuteToggleCommentCommand()
