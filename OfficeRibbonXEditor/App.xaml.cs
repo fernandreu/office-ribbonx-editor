@@ -28,11 +28,7 @@ namespace OfficeRibbonXEditor
             builder.RegisterType<DialogProvider>().As<IDialogProvider>();
 
             builder.RegisterType<MainWindowViewModel>();
-            builder.RegisterType<DialogHostViewModel>();
-            builder.RegisterType<SettingsDialogViewModel>();
-            builder.RegisterType<AboutDialogViewModel>();
-            builder.RegisterType<CallbackDialogViewModel>();
-            builder.RegisterType<GoToDialogViewModel>();
+            DialogHostBase.RegisterDialogViewModels(builder);
 
             this.container = builder.Build();
         }

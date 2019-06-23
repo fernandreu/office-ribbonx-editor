@@ -190,6 +190,7 @@
     </Compile>
     <Compile Include="Extensions\UiElementExtensions.cs" />
     <Compile Include="Models\LaunchDialogEventArgs.cs" />
+    <Compile Include="ViewModels\FindReplaceDialogViewModel.cs" />
     <Compile Include="ViewModels\GoToDialogViewModel.cs" />
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogBase.cs" />
@@ -245,6 +246,9 @@
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Models\OfficeDocument.cs" />
     <Compile Include="Views\DialogHostBase.cs" />
+    <Compile Include="Views\FindReplaceDialog.xaml.cs">
+      <DependentUpon>FindReplaceDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\GoToDialog.xaml.cs">
       <DependentUpon>GoToDialog.xaml</DependentUpon>
     </Compile>
@@ -268,6 +272,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CallbackDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindReplaceDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -410,6 +418,9 @@
     <Resource Include="Dialogs\FindReplace\Resources\GoToNextMessage.png" />
     <Resource Include="Dialogs\FindReplace\Resources\GoToPreviousMessage.png" />
     <Resource Include="Dialogs\FindReplace\Resources\LineColorHS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\clock.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

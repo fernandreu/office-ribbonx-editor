@@ -1,0 +1,211 @@
+﻿<controls:DialogControl x:Class="OfficeRibbonXEditor.Views.FindReplaceDialog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:OfficeRibbonXEditor.Views"
+             xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
+             xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels"
+             Title="Find and Replace"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance viewModels:FindReplaceDialogViewModel}"
+             d:DesignHeight="300"
+             d:DesignWidth="600">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Find"
+                     Padding="8,0,8,0">
+                <DockPanel Margin="4"
+                           Name="FindTabContents"
+                           MinHeight="{Binding ElementName=ReplaceTabContents, Path=ActualHeight}">
+                    <DockPanel Name="FindLine"
+                               DockPanel.Dock="Top">
+                        <Label DockPanel.Dock="Left"
+                               MinWidth="60"
+                               Content="_Find"/>
+                        <Button DockPanel.Dock="Right"
+                                Width="24"
+                                Height="20"
+                                Content=">"/>
+                        <Button DockPanel.Dock="Right"
+                                Margin="4,0,4,0"
+                                Width="24"
+                                Height="20">
+                            <Image Source="../Resources/Images/clock.png" 
+                                   Width="16"
+                                   Height="16"/>
+                        </Button>
+                        <TextBox VerticalAlignment="Center"/>
+                    </DockPanel>
+                    <Control Visibility="Hidden"
+                             DockPanel.Dock="Top"
+                             MinHeight="{Binding ElementName=FindLine, Path=ActualHeight}"/>
+                    <DockPanel DockPanel.Dock="Top">
+                        <StackPanel DockPanel.Dock="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="8,0,0,0">
+                            <CheckBox Content="_Wrap"
+                                      IsChecked="{Binding Wrap}"/>
+                            <CheckBox Content="Search Selection"
+                                      IsChecked="{Binding SearchSelection}"/>
+                        </StackPanel>
+                        <Label DockPanel.Dock="Top"
+                               Content="Search Type"/>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <RadioButton Content="_Standard"
+                                         IsChecked="{Binding IsStandardSearch}"
+                                         Margin="0,0,8,0"/>
+                            <RadioButton Content="E_xtended (\n, \r, \t, \0)"
+                                         IsChecked="{Binding IsExtendedSearch}"/>
+                            <RadioButton Content="Regular _Expression"
+                                         IsChecked="{Binding IsRegExSearch}"
+                                         Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <GroupBox Header="Options"
+                              DockPanel.Dock="Top">
+                        <StackPanel Margin="4">
+                            <CheckBox Content="Match _Case"
+                                      IsChecked="{Binding MatchCase}"/>
+                            <CheckBox Content="Whole Wor_d"
+                                      IsChecked="{Binding WholeWord}"/>
+                            <CheckBox Content="W_ord Start"
+                                      IsChecked="{Binding WordStart}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <DockPanel LastChildFill="False"
+                               VerticalAlignment="Bottom"
+                               Name="BottomFindPanel">
+                        <StackPanel DockPanel.Dock="Right"
+                                    VerticalAlignment="Center"
+                                    MinWidth="100">
+                            <Button Content="Find _Previous"
+                                    Margin="0,0,0,4"/>
+                            <Button Content="Find _Next"/>
+                        </StackPanel>
+                        <GroupBox DockPanel.Dock="Left"
+                                  Header="Find All"
+                                  Margin="4">
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel VerticalAlignment="Center"
+                                            Margin="0,0,4,0">
+                                    <CheckBox Content="_Mark Line"
+                                              IsChecked="{Binding MarkLine}"
+                                              Margin="0,0,0,4"/>
+                                    <CheckBox Content="_Highlight Matches"
+                                              IsChecked="{Binding HighlightMatches}"/>
+                                </StackPanel>
+                                <StackPanel VerticalAlignment="Center"
+                                            MinWidth="80">
+                                    <Button Content="Find _All"
+                                            Margin="0,0,0,4"/>
+                                    <Button Content="C_lear"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </GroupBox>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Replace"
+                     Padding="8,0,8,0">
+                <DockPanel Margin="4"
+                           Name="ReplaceTabContents"
+                           MinHeight="{Binding ElementName=FindTabContents, Path=ActualHeight}">
+                    <DockPanel DockPanel.Dock="Top">
+                        <Label DockPanel.Dock="Left"
+                               Content="_Find"
+                               MinWidth="60"/>
+                        <Button DockPanel.Dock="Right"
+                                Width="24"
+                                Height="20"
+                                Content=">"/>
+                        <Button DockPanel.Dock="Right"
+                                Margin="4,0,4,0"
+                                Width="24"
+                                Height="20">
+                            <Image Source="../Resources/Images/clock.png" 
+                                   Width="16"
+                                   Height="16"/>
+                        </Button>
+                        <TextBox VerticalAlignment="Center"/>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Top">
+                        <Label DockPanel.Dock="Left"
+                               Content="_Replace"
+                               MinWidth="60"/>
+                        <Button DockPanel.Dock="Right"
+                                Width="24"
+                                Height="20"
+                                Content=">"/>
+                        <Button DockPanel.Dock="Right"
+                                Margin="4,0,4,0"
+                                Width="24"
+                                Height="20">
+                            <Image Source="../Resources/Images/clock.png" 
+                                   Width="16"
+                                   Height="16"/>
+                        </Button>
+                        <TextBox VerticalAlignment="Center"/>
+                    </DockPanel>
+                    <DockPanel DockPanel.Dock="Top">
+                        <StackPanel DockPanel.Dock="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="8,0,0,0">
+                            <CheckBox Content="_Wrap"
+                                      IsChecked="{Binding Wrap}"/>
+                            <CheckBox Content="Search Selection"
+                                      IsChecked="{Binding SearchSelection}"/>
+                        </StackPanel>
+                        <Label DockPanel.Dock="Top"
+                               Content="Search Type"/>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Center">
+                            <RadioButton Content="_Standard"
+                                         IsChecked="{Binding IsStandardSearch}"
+                                         Margin="0,0,8,0"/>
+                            <RadioButton Content="E_xtended (\n, \r, \t, \0)"
+                                         IsChecked="{Binding IsExtendedSearch}"/>
+                            <RadioButton Content="Regular _Expression"
+                                         IsChecked="{Binding IsRegExSearch}"
+                                         Margin="8,0,0,0"/>
+                        </StackPanel>
+                    </DockPanel>
+                    <GroupBox Header="Options"
+                              DockPanel.Dock="Top">
+                        <StackPanel Margin="4">
+                            <CheckBox Content="Match _Case"
+                                      IsChecked="{Binding MatchCase}"/>
+                            <CheckBox Content="Whole Wor_d"
+                                      IsChecked="{Binding WholeWord}"/>
+                            <CheckBox Content="W_ord Start"
+                                      IsChecked="{Binding WordStart}"/>
+                        </StackPanel>
+                    </GroupBox>
+                    <DockPanel LastChildFill="False"
+                               VerticalAlignment="Bottom">
+                        <StackPanel DockPanel.Dock="Right"
+                                    VerticalAlignment="Bottom"
+                                    Margin="8,0,0,0"
+                                    MinWidth="100">
+                            <Button Content="Replace _Previous"
+                                    Margin="0,0,0,4"/>
+                            <Button Content="Replace _Next"/>
+                        </StackPanel>
+                        <StackPanel DockPanel.Dock="Right"
+                                    VerticalAlignment="Bottom"
+                                    MinWidth="100">
+                            <Button Content="Find Previous"
+                                    Margin="0,0,0,4"/>
+                            <Button Content="Find Next"/>
+                        </StackPanel>
+                        <Button DockPanel.Dock="Left" 
+                                VerticalAlignment="Bottom"
+                                MinWidth="100"
+                                Content="Replace _All"/>
+                    </DockPanel>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</controls:DialogControl>

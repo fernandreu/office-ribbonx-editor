@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Windows;
+using Autofac;
 using OfficeRibbonXEditor.Controls;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.ViewModels;
-using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace OfficeRibbonXEditor.Views
 {
@@ -73,6 +73,16 @@ namespace OfficeRibbonXEditor.Views
             host.CenterInOwner();
         }
 
+        public static void RegisterDialogViewModels(ContainerBuilder builder)
+        {
+            builder.RegisterType<DialogHostViewModel>();
+            builder.RegisterType<SettingsDialogViewModel>();
+            builder.RegisterType<AboutDialogViewModel>();
+            builder.RegisterType<CallbackDialogViewModel>();
+            builder.RegisterType<GoToDialogViewModel>();
+            builder.RegisterType<FindReplaceDialogViewModel>();
+        }
+
         private static DialogControl GenerateControl(Type contentDialogType)
         {
             if (contentDialogType == typeof(AboutDialogViewModel))
@@ -93,6 +103,11 @@ namespace OfficeRibbonXEditor.Views
             if (contentDialogType == typeof(GoToDialogViewModel))
             {
                 return new GoToDialog();
+            }
+
+            if (contentDialogType == typeof(FindReplaceDialogViewModel))
+            {
+                return new FindReplaceDialog();
             }
 
             throw new ArgumentException($"Type {contentDialogType.Name} does not have an registered control");

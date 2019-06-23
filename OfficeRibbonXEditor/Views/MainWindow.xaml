@@ -65,6 +65,8 @@
         <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
 
         <!--Find / replace dialog controls-->
+        <!--TODO: This binding is temporary until the new FindReplaceDialog is fully implemented-->
+        <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding ShowFindReplaceCommand}"/>
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}"/>
         <KeyBinding Key="F3" Modifiers="Shift" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindPrevious'}"/>
         <KeyBinding Key="F3" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindNext'}"/>
