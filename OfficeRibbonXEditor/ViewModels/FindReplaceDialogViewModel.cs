@@ -10,7 +10,7 @@ namespace OfficeRibbonXEditor.ViewModels
 {
     public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction>>
     {
-        private CharacterRange searchRange;
+        private CharacterRange searchRange = new CharacterRange();
 
         public FindReplaceDialogViewModel()
         {
@@ -576,11 +576,10 @@ namespace OfficeRibbonXEditor.ViewModels
             return sf;
         }
 
-        public void OnLoaded((Scintilla, FindReplaceAction) payload)
+        public bool OnLoaded((Scintilla, FindReplaceAction) payload)
         {
             var (editor, action) = payload;
             this.Scintilla = editor;
-            this.searchRange = new CharacterRange();
 
             switch (action)
             {
@@ -592,13 +591,13 @@ namespace OfficeRibbonXEditor.ViewModels
                     break;
                 case FindReplaceAction.FindNext:
                     this.FindWrapper(false);
-                    this.Close();
-                    break;
+                    return false;
                 case FindReplaceAction.FindPrevious:
                     this.FindWrapper(true);
-                    this.Close();
-                    break;
+                    return false;
             }
+
+            return true;
         }
 
         public virtual void MoveDialogAwayFromSelection()

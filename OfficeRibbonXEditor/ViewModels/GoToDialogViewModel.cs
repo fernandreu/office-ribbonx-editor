@@ -53,9 +53,10 @@ namespace OfficeRibbonXEditor.ViewModels
             set => this.Set(ref this.target, value);
         }
 
-        public void OnLoaded(ScintillaLexer payload)
+        public bool OnLoaded(ScintillaLexer payload)
         {
             this.Lexer = payload;
+            return true;
         }
 
         private void ExecuteAcceptCommand()

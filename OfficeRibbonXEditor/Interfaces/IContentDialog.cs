@@ -32,6 +32,6 @@ namespace OfficeRibbonXEditor.Interfaces
 
     public interface IContentDialog<in TPayload> : IContentDialogBase
     {
-        void OnLoaded(TPayload payload);
+        bool OnLoaded(TPayload payload);
     }
 }

@@ -76,7 +76,11 @@ namespace OfficeRibbonXEditor.ViewModels
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
             this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
             this.FindCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.Find)));
+            this.FindNextCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.FindNext)));
+            this.FindPreviousCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.FindPrevious)));
+            
             this.ReplaceCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.Replace)));
+            
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
@@ -247,6 +251,10 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand FindCommand { get; }
 
+        public RelayCommand FindNextCommand { get; }
+
+        public RelayCommand FindPreviousCommand { get; }
+
         public RelayCommand ReplaceCommand { get; }
 
         public RelayCommand<string> RecentFileClickCommand { get; }
@@ -350,7 +358,12 @@ namespace OfficeRibbonXEditor.ViewModels
             }
 
             var content = (TDialog) baseContent;
-            content.OnLoaded(payload);
+            if (!content.OnLoaded(payload))
+            {
+                // This might happen if the dialog has an associated instant action for which it doesn't need to stay open, e.g. 'Find Next' in a FindReplaceDialog
+                return content;
+            }
+            
             this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
             if (content.IsUnique)
             {

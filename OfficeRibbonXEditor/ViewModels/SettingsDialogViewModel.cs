@@ -32,10 +32,11 @@ namespace OfficeRibbonXEditor.ViewModels
             this.AcceptCommand = new RelayCommand(this.AcceptSettings);
         }
 
-        public void OnLoaded(ScintillaLexer payload)
+        public bool OnLoaded(ScintillaLexer payload)
         {
             this.Lexer = payload;
             this.LoadCurrent();
+            return true;
         }
 
         public ScintillaLexer Lexer { get; private set; }
