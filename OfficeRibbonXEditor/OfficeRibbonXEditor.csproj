@@ -165,32 +165,11 @@
     <Compile Include="Controls\Forms\FindAllResultsPanel.Designer.cs">
       <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Dialogs\FindReplace\FindReplace\FindOption.cs" />
-    <Compile Include="Dialogs\FindReplace\FindReplace\FindReplace.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Dialogs\FindReplace\FindReplace\FindReplaceDialog.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Dialogs\FindReplace\FindReplace\FindReplaceDialog.Designer.cs">
-      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Forms\IncrementalSearcher.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\Forms\IncrementalSearcher.Designer.cs">
       <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\FindReplace\IncrementalSearcher.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Dialogs\FindReplace\IncrementalSearcher.Designer.cs">
-      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Dialogs\FindReplace\Properties\FindReplaceResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UiElementExtensions.cs" />
     <Compile Include="Models\FindReplace.cs" />
@@ -360,18 +339,8 @@
     <EmbeddedResource Include="Controls\Forms\FindAllResultsPanel.resx">
       <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\FindReplace\FindReplace\FindReplaceDialog.resx">
-      <DependentUpon>FindReplaceDialog.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Forms\IncrementalSearcher.resx">
       <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\FindReplace\IncrementalSearcher.resx">
-      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Dialogs\FindReplace\Properties\FindReplaceResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>FindReplaceResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImagesResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -423,19 +392,12 @@
     <Resource Include="Resources\Images\go_to.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Dialogs\FindReplace\Resources\Clock.ico" />
-    <Resource Include="Dialogs\FindReplace\Resources\Clock.png" />
-    <Resource Include="Dialogs\FindReplace\Resources\DeleteHS.png" />
-    <Resource Include="Dialogs\FindReplace\Resources\GoToNextMessage.png" />
-    <Resource Include="Dialogs\FindReplace\Resources\GoToPreviousMessage.png" />
-    <Resource Include="Dialogs\FindReplace\Resources\LineColorHS.png" />
+    <Resource Include="Resources\Images\highlight.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\clock.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dialogs\FindReplace\FindAllResults\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

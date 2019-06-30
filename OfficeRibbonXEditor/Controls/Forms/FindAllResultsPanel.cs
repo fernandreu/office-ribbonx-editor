@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
+using OfficeRibbonXEditor.Models;
 using ScintillaNET;
 using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 

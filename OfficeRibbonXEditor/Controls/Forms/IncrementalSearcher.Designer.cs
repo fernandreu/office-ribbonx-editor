@@ -43,6 +43,7 @@ namespace OfficeRibbonXEditor.Controls.Forms
             // lblFind
             // 
             this.lblFind.AutoSize = true;
+            this.lblFind.BackColor = System.Drawing.Color.Transparent;
             this.lblFind.Dock = System.Windows.Forms.DockStyle.Left;
             this.lblFind.Location = new System.Drawing.Point(0, 0);
             this.lblFind.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
@@ -66,6 +67,7 @@ namespace OfficeRibbonXEditor.Controls.Forms
             // 
             this.flowLayoutPanel1.AutoSize = true;
             this.flowLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.Control;
             this.flowLayoutPanel1.Controls.Add(this.lblFind);
             this.flowLayoutPanel1.Controls.Add(this.txtFind);
             this.flowLayoutPanel1.Controls.Add(this.btnNext);
@@ -84,10 +86,10 @@ namespace OfficeRibbonXEditor.Controls.Forms
             // 
             this.btnNext.AutoSize = true;
             this.btnNext.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnNext.BackgroundImage = global::OfficeRibbonXEditor.Dialogs.FindReplace.Properties.FindReplaceResources.GoToNextMessage;
+            this.btnNext.BackgroundImage = global::OfficeRibbonXEditor.Resources.ImagesResource.find_next;
             this.btnNext.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.btnNext.FlatAppearance.BorderSize = 0;
-            this.btnNext.Image = global::OfficeRibbonXEditor.Dialogs.FindReplace.Properties.FindReplaceResources.GoToNextMessage;
+            this.btnNext.Image = global::OfficeRibbonXEditor.Resources.ImagesResource.find_next;
             this.btnNext.Location = new System.Drawing.Point(171, 0);
             this.btnNext.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.btnNext.Name = "btnNext";
@@ -102,7 +104,7 @@ namespace OfficeRibbonXEditor.Controls.Forms
             this.brnPrevious.AutoSize = true;
             this.brnPrevious.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.brnPrevious.FlatAppearance.BorderSize = 0;
-            this.brnPrevious.Image = global::OfficeRibbonXEditor.Dialogs.FindReplace.Properties.FindReplaceResources.GoToPreviousMessage;
+            this.brnPrevious.Image = global::OfficeRibbonXEditor.Resources.ImagesResource.find_previous;
             this.brnPrevious.Location = new System.Drawing.Point(193, 0);
             this.brnPrevious.Margin = new System.Windows.Forms.Padding(0);
             this.brnPrevious.Name = "brnPrevious";
@@ -116,11 +118,11 @@ namespace OfficeRibbonXEditor.Controls.Forms
             // 
             this.btnHighlightAll.AutoSize = true;
             this.btnHighlightAll.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.btnHighlightAll.BackgroundImage = global::OfficeRibbonXEditor.Dialogs.FindReplace.Properties.FindReplaceResources.LineColorHS;
+            this.btnHighlightAll.BackgroundImage = global::OfficeRibbonXEditor.Resources.ImagesResource.highlight;
             this.btnHighlightAll.FlatAppearance.BorderSize = 0;
             this.btnHighlightAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 1.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnHighlightAll.ForeColor = System.Drawing.Color.SkyBlue;
-            this.btnHighlightAll.Image = global::OfficeRibbonXEditor.Dialogs.FindReplace.Properties.FindReplaceResources.LineColorHS;
+            this.btnHighlightAll.Image = global::OfficeRibbonXEditor.Resources.ImagesResource.highlight;
             this.btnHighlightAll.Location = new System.Drawing.Point(215, 0);
             this.btnHighlightAll.Margin = new System.Windows.Forms.Padding(0);
             this.btnHighlightAll.Name = "btnHighlightAll";
@@ -137,7 +139,7 @@ namespace OfficeRibbonXEditor.Controls.Forms
             this.btnClearHighlights.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.btnClearHighlights.FlatAppearance.BorderSize = 0;
             this.btnClearHighlights.Font = new System.Drawing.Font("Microsoft Sans Serif", 1.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnClearHighlights.Image = global::OfficeRibbonXEditor.Dialogs.FindReplace.Properties.FindReplaceResources.DeleteHS;
+            this.btnClearHighlights.Image = global::OfficeRibbonXEditor.Resources.ImagesResource.remove;
             this.btnClearHighlights.Location = new System.Drawing.Point(237, 0);
             this.btnClearHighlights.Margin = new System.Windows.Forms.Padding(0);
             this.btnClearHighlights.Name = "btnClearHighlights";
