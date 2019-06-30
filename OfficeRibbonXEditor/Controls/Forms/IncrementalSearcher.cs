@@ -1,12 +1,13 @@
-namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
-{
-    using System;
-    using System.ComponentModel;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using ScintillaNET;
-    using CharacterRange = OfficeRibbonXEditor.Dialogs.FindReplace.CharacterRange;
+using System;
+using System.ComponentModel;
+using System.Drawing;
+using System.Windows.Forms;
+using OfficeRibbonXEditor.ViewModels;
+using ScintillaNET;
+using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 
+namespace OfficeRibbonXEditor.Controls.Forms
+{
     public partial class IncrementalSearcher : UserControl
     {
         #region Fields
@@ -14,7 +15,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
         private bool _autoPosition = true;
         private Scintilla _scintilla;
         private bool _toolItem = false;
-        private FindReplace _findReplace;
+        private FindReplaceDialogViewModel _findReplace;
 
         #endregion Fields
 
@@ -59,7 +60,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public FindReplace FindReplace
+        public FindReplaceDialogViewModel FindReplace
         {
             get
             {
@@ -70,7 +71,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
                 this._findReplace = value;
                 if (value!=null)
                 {
-                this._scintilla = this._findReplace.Scintilla;
+                    this._scintilla = this._findReplace.Scintilla;
                 }
                 else
                 {
@@ -118,7 +119,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
         {
             if (this._scintilla == null)
                 return;
-            this._findReplace.ClearAllHighlights();
+            this._findReplace.FindReplace.ClearAllHighlights();
         }
 
         private void btnHighlightAll_Click(object sender, EventArgs e)
@@ -128,7 +129,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
             if (this._scintilla == null)
                 return;
 
-            int foundCount = this._findReplace.FindAll(this.txtFind.Text, false, true).Count;
+            int foundCount = this._findReplace.FindReplace.FindAll(this.txtFind.Text, false, true).Count;
         }
 
         private void btnNext_Click(object sender, EventArgs e)
@@ -225,7 +226,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
             if (this._scintilla == null)
                 return;
 
-            CharacterRange r = this._findReplace.FindNext(this.txtFind.Text, true, this._findReplace.Window.GetSearchFlags());
+            CharacterRange r = this._findReplace.FindReplace.FindNext(this.txtFind.Text, true, this._findReplace.GetSearchFlags());
             if (r.cpMin != r.cpMax)
                 this._scintilla.SetSel(r.cpMin, r.cpMax);
 
@@ -239,7 +240,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
             if (this._scintilla == null)
                 return;
 
-            CharacterRange r = this._findReplace.FindPrevious(this.txtFind.Text, true, this._findReplace.Window.GetSearchFlags());
+            CharacterRange r = this._findReplace.FindReplace.FindPrevious(this.txtFind.Text, true, this._findReplace.GetSearchFlags());
             if (r.cpMin != r.cpMax)
                 this._scintilla.SetSel(r.cpMin, r.cpMax);
 
@@ -277,9 +278,9 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
                 return;
 
             int pos = Math.Min(this._scintilla.CurrentPosition, this._scintilla.AnchorPosition);
-            CharacterRange r = this._findReplace.Find(pos, this._scintilla.TextLength, this.txtFind.Text, this._findReplace.Window.GetSearchFlags());
+            CharacterRange r = this._findReplace.FindReplace.Find(pos, this._scintilla.TextLength, this.txtFind.Text, this._findReplace.GetSearchFlags());
             if (r.cpMin == r.cpMax)
-                r = this._findReplace.Find(0, pos, this.txtFind.Text, this._findReplace.Window.GetSearchFlags());
+                r = this._findReplace.FindReplace.Find(0, pos, this.txtFind.Text, this._findReplace.GetSearchFlags());
 
             if (r.cpMin != r.cpMax)
                 this._scintilla.SetSel(r.cpMin, r.cpMax);

@@ -1,11 +1,13 @@
-﻿namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindAllResults
+﻿using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
+using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
+using ScintillaNET;
+using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
+
+namespace OfficeRibbonXEditor.Controls.Forms
 {
-    using System.Collections.Generic;
-    using System.Drawing;
-    using System.Windows.Forms;
-    using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
-    using ScintillaNET;
-    using CharacterRange = OfficeRibbonXEditor.Dialogs.FindReplace.CharacterRange;
+    using CharacterRange = CharacterRange;
 
     public partial class FindAllResultsPanel : UserControl
     {

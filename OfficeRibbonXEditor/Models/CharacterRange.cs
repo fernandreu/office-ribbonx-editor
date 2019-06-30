@@ -3,10 +3,10 @@
 #endregion Using Directives
 
 
-namespace OfficeRibbonXEditor.Dialogs.FindReplace
-{
-    using System.Runtime.InteropServices;
+using System.Runtime.InteropServices;
 
+namespace OfficeRibbonXEditor.Models
+{
     /// <summary>
     /// Specifies a range of characters. If the cpMin and cpMax members are equal, the range is empty.
     /// The range includes everything if cpMin is 0 and cpMax is –1.

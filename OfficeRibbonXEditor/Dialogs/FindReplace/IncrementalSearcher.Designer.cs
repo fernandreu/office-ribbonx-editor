@@ -1,4 +1,4 @@
-namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
+namespace OfficeRibbonXEditor.Dialogs.FindReplace
 {
     partial class IncrementalSearcher
     {

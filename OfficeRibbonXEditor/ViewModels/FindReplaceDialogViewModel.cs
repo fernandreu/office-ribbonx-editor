@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
-using OfficeRibbonXEditor.Dialogs.FindReplace;
+using OfficeRibbonXEditor.Controls.Forms;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 using ScintillaNET;
@@ -24,6 +24,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public FindReplace FindReplace { get; private set; }
 
+        public IncrementalSearcher IncrementalSearcher { get; private set; }
+
         private Scintilla scintilla;
 
         public Scintilla Scintilla
@@ -31,12 +33,26 @@ namespace OfficeRibbonXEditor.ViewModels
             get => this.scintilla;
             set
             {
+                var previous = this.scintilla;
                 if (!this.Set(ref this.scintilla, value))
                 {
                     return;
                 }
 
+                if (previous != null && this.IncrementalSearcher != null)
+                {
+                    previous.Controls.Remove(this.IncrementalSearcher);
+                }
+
                 this.FindReplace = new FindReplace(this.scintilla);
+
+                this.IncrementalSearcher = new IncrementalSearcher
+                {
+                    Scintilla = this.Scintilla,
+                    FindReplace = this,
+                    Visible = false
+                };
+                this.Scintilla.Controls.Add(this.IncrementalSearcher);
             }
         }
 
@@ -595,6 +611,11 @@ namespace OfficeRibbonXEditor.ViewModels
                 case FindReplaceAction.FindPrevious:
                     this.FindWrapper(true);
                     return false;
+                case FindReplaceAction.IncrementalSearch:
+                    this.IncrementalSearcher?.Show();
+                    return false;
+                default:
+                    throw new NotImplementedException($"Unhandled loading action: {action}");
             }
 
             return true;

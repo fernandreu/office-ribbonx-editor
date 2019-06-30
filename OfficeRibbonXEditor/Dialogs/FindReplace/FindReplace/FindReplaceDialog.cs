@@ -1,3 +1,5 @@
+using OfficeRibbonXEditor.Models;
+
 namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
 {
     using System;
@@ -6,7 +8,7 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
     using System.Text.RegularExpressions;
     using System.Windows.Forms;
     using ScintillaNET;
-    using CharacterRange = OfficeRibbonXEditor.Dialogs.FindReplace.CharacterRange;
+    using CharacterRange = CharacterRange;
 
     public partial class FindReplaceDialog : Form
     {

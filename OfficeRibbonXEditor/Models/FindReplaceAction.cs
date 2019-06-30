@@ -9,5 +9,6 @@
         ReplaceNext,
         ReplacePrevious,
         FindAll,
+        IncrementalSearch,
     }
 }

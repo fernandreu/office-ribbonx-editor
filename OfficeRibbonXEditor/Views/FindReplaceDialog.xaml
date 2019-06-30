@@ -24,7 +24,7 @@
         <TabControl>
             <TabItem Header="Find"
                      Padding="8,0,8,0"
-                     IsSelected="{Binding IsFindTabSelected}">
+                     IsSelected="{Binding IsFindTabSelected}" Height="16" VerticalAlignment="Top">
                 <DockPanel Margin="4"
                            Name="FindTabContents"
                            MinHeight="{Binding ElementName=ReplaceTabContents, Path=ActualHeight}">
@@ -33,7 +33,7 @@
                         <Label DockPanel.Dock="Left"
                                MinWidth="60"
                                Content="_Find"/>
-                        <Button DockPanel.Dock="Right"
+                        <!--<Button DockPanel.Dock="Right"
                                 Width="24"
                                 Height="20"
                                 Content=">"/>
@@ -44,7 +44,7 @@
                             <Image Source="../Resources/Images/clock.png" 
                                    Width="16"
                                    Height="16"/>
-                        </Button>
+                        </Button>-->
                         <controls:ClickSelectTextBox VerticalAlignment="Center"
                                                      x:Name="FindBox"
                                                      Text="{Binding FindText}"/>
@@ -164,7 +164,7 @@
                         <Label DockPanel.Dock="Left"
                                Content="_Find"
                                MinWidth="60"/>
-                        <Button DockPanel.Dock="Right"
+                        <!--<Button DockPanel.Dock="Right"
                                 Width="24"
                                 Height="20"
                                 Content=">"/>
@@ -175,7 +175,7 @@
                             <Image Source="../Resources/Images/clock.png" 
                                    Width="16"
                                    Height="16"/>
-                        </Button>
+                        </Button>-->
                         <controls:ClickSelectTextBox VerticalAlignment="Center"
                                                      x:Name="ReplaceBox"
                                                      Text="{Binding FindText}"/>
@@ -184,7 +184,7 @@
                         <Label DockPanel.Dock="Left"
                                Content="_Replace"
                                MinWidth="60"/>
-                        <Button DockPanel.Dock="Right"
+                        <!--<Button DockPanel.Dock="Right"
                                 Width="24"
                                 Height="20"
                                 Content=">"/>
@@ -195,7 +195,7 @@
                             <Image Source="../Resources/Images/clock.png" 
                                    Width="16"
                                    Height="16"/>
-                        </Button>
+                        </Button>-->
                         <controls:ClickSelectTextBox VerticalAlignment="Center"
                                                      Text="{Binding ReplaceText}"/>
                     </DockPanel>

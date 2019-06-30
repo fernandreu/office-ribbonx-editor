@@ -75,11 +75,11 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
             this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
-            this.FindCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.Find)));
-            this.FindNextCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.FindNext)));
-            this.FindPreviousCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.FindPrevious)));
-            
-            this.ReplaceCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.Replace)));
+            this.FindCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Find));
+            this.FindNextCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.FindNext));
+            this.FindPreviousCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.FindPrevious));
+            this.IncrementalSearchCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.IncrementalSearch));
+            this.ReplaceCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Replace));
             
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
@@ -255,6 +255,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand FindPreviousCommand { get; }
 
+        public RelayCommand IncrementalSearchCommand { get; }
+
         public RelayCommand ReplaceCommand { get; }
 
         public RelayCommand<string> RecentFileClickCommand { get; }
@@ -356,6 +358,12 @@ namespace OfficeRibbonXEditor.ViewModels
                 // Resolve a new dialog, as any potentially existing one is not suitable
                 baseContent = this.dialogProvider.ResolveDialog<TDialog>();
             }
+            
+            if (baseContent.IsUnique)
+            {
+                // Keep track of the new content
+                this.dialogs[typeof(TDialog)] = baseContent;
+            }
 
             var content = (TDialog) baseContent;
             if (!content.OnLoaded(payload))
@@ -365,13 +373,13 @@ namespace OfficeRibbonXEditor.ViewModels
             }
             
             this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
-            if (content.IsUnique)
-            {
-                // Keep track of the new content
-                this.dialogs[typeof(TDialog)] = content;
-            }
 
             return content;
+        }
+
+        public void PerformFindReplaceAction(FindReplaceAction action)
+        {
+            this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, action));
         }
 
         private void ExecuteCloseDocumentCommand()

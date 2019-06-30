@@ -1,4 +1,4 @@
-﻿namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindAllResults
+﻿namespace OfficeRibbonXEditor.Controls.Forms
 {
     partial class FindAllResultsPanel
     {

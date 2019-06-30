@@ -66,12 +66,10 @@
 
         <!--Find / replace dialog controls-->
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
-        <!--TODO: This binding is temporary until the new FindReplaceDialog is fully implemented-->
-        <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}"/>
         <KeyBinding Key="F3" Modifiers="Shift" Command="{Binding FindPreviousCommand}"/>
         <KeyBinding Key="F3" Command="{Binding FindNextCommand}"/>
         <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}"/>
-        <KeyBinding Key="I" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
+        <KeyBinding Key="I" Modifiers="Control" Command="{Binding IncrementalSearchCommand}"/>
         
         <!--GoTo dialog control-->
         <KeyBinding Key="G" Modifiers="Control" Command="{Binding GoToCommand}"/>
@@ -131,7 +129,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <MenuItem Header="Replace..." InputGestureText="Ctrl+H" Command="{Binding ReplaceCommand}"/>
-                <MenuItem Header="Incremental Search..." InputGestureText="Ctrl+I" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
+                <MenuItem Header="Incremental Search..." InputGestureText="Ctrl+I" Command="{Binding IncrementalSearchCommand}"/>
                 <MenuItem Header="Find Previous" InputGestureText="Shift+F3" Command="{Binding FindPreviousCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/find_previous.png"

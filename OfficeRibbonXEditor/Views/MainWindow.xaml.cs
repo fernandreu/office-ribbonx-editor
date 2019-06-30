@@ -4,12 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 
 using ScintillaNET;
-using FindReplace = OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace.FindReplace;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -40,10 +38,6 @@ namespace OfficeRibbonXEditor.Views
 
             this.viewModel = model;
 
-            // Initialize find / replace / goto dialogs
-            this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
-            this.FindReplaceDialog.KeyPressed += this.OnEditorKeyDown;
-
             this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
             this.viewModel.UpdateEditor += (o, e) =>
@@ -61,9 +55,6 @@ namespace OfficeRibbonXEditor.Views
                 }
             };
         }
-
-        // This needs to exist prior to the InitializeComponent() call; otherwise, keys will be bound to a null reference
-        public FindReplace FindReplaceDialog { get; } = new FindReplace();
 
         /// <summary>
         /// Finds the first TreeViewItem which is a parent of the given source.
