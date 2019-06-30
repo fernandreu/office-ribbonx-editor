@@ -6,15 +6,25 @@
              xmlns:local="clr-namespace:OfficeRibbonXEditor.Views"
              xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
              xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels"
+             xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
              Title="Find and Replace"
              mc:Ignorable="d" 
              d:DataContext="{d:DesignInstance viewModels:FindReplaceDialogViewModel}"
              d:DesignHeight="300"
              d:DesignWidth="600">
-    <Grid>
+    <controls:DialogControl.Resources>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
+    </controls:DialogControl.Resources>
+    <DockPanel>
+        <Label DockPanel.Dock="Bottom"
+               Content="{Binding StatusText}"
+               Margin="4"/>
         <TabControl>
             <TabItem Header="Find"
-                     Padding="8,0,8,0">
+                     Padding="8,0,8,0"
+                     IsSelected="{Binding IsFindTabSelected}">
                 <DockPanel Margin="4"
                            Name="FindTabContents"
                            MinHeight="{Binding ElementName=ReplaceTabContents, Path=ActualHeight}">
@@ -35,7 +45,9 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>
-                        <TextBox VerticalAlignment="Center"/>
+                        <TextBox VerticalAlignment="Center"
+                                 x:Name="FindBox"
+                                 Text="{Binding FindText}"/>
                     </DockPanel>
                     <Control Visibility="Hidden"
                              DockPanel.Dock="Top"
@@ -65,14 +77,45 @@
                     </DockPanel>
                     <GroupBox Header="Options"
                               DockPanel.Dock="Top">
-                        <StackPanel Margin="4">
-                            <CheckBox Content="Match _Case"
-                                      IsChecked="{Binding MatchCase}"/>
-                            <CheckBox Content="Whole Wor_d"
-                                      IsChecked="{Binding WholeWord}"/>
-                            <CheckBox Content="W_ord Start"
-                                      IsChecked="{Binding WordStart}"/>
-                        </StackPanel>
+                        <Grid>
+                            <StackPanel Margin="4" 
+                                        Visibility="{Binding IsStandardSearch, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <CheckBox Content="Ignore _Case"
+                                          IsChecked="{Binding IgnoreCase}"/>
+                                <CheckBox Content="Whole Wor_d"
+                                          IsChecked="{Binding WholeWord}"/>
+                                <CheckBox Content="W_ord Start"
+                                          IsChecked="{Binding WordStart}"/>
+                            </StackPanel>
+                            <StackPanel Margin="4" 
+                                        Orientation="Horizontal"
+                                        Visibility="{Binding IsStandardSearch, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                <StackPanel>
+                                    <CheckBox Content="_Compiled"
+                                              IsChecked="{Binding IsCompiled}"/>
+                                    <CheckBox Content="C_ulture Invariant"
+                                              IsChecked="{Binding IsCultureInvariant}"/>
+                                    <CheckBox Content="ECMAScript"
+                                              IsChecked="{Binding IsEcmaScript}"/>
+                                </StackPanel>
+                                <StackPanel Margin="8,0,8,0">
+                                    <CheckBox Content="E_xplicit Capture"
+                                              IsChecked="{Binding IsExplicitCapture}"/>
+                                    <CheckBox Content="I_gnore Case"
+                                              IsChecked="{Binding IgnoreCase}"/>
+                                    <CheckBox Content="Ignore Pattern Whitespace"
+                                              IsChecked="{Binding IgnorePatternWhitespace}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <CheckBox Content="Multiline"
+                                              IsChecked="{Binding IsMultiline}"/>
+                                    <CheckBox Content="Right To Left"
+                                              IsChecked="{Binding IsRightToLeft}"/>
+                                    <CheckBox Content="Singleline"
+                                              IsChecked="{Binding IsSingleLine}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
                     </GroupBox>
                     <DockPanel LastChildFill="False"
                                VerticalAlignment="Bottom"
@@ -81,8 +124,10 @@
                                     VerticalAlignment="Center"
                                     MinWidth="100">
                             <Button Content="Find _Previous"
-                                    Margin="0,0,0,4"/>
-                            <Button Content="Find _Next"/>
+                                    Margin="0,0,0,4"
+                                    Command="{Binding FindPreviousCommand}"/>
+                            <Button Content="Find _Next"
+                                    Command="{Binding FindNextCommand}"/>
                         </StackPanel>
                         <GroupBox DockPanel.Dock="Left"
                                   Header="Find All"
@@ -99,8 +144,10 @@
                                 <StackPanel VerticalAlignment="Center"
                                             MinWidth="80">
                                     <Button Content="Find _All"
-                                            Margin="0,0,0,4"/>
-                                    <Button Content="C_lear"/>
+                                            Margin="0,0,0,4"
+                                            Command="{Binding FindAllCommand}"/>
+                                    <Button Content="C_lear"
+                                            Command="{Binding ClearCommand}"/>
                                 </StackPanel>
                             </StackPanel>
                         </GroupBox>
@@ -108,7 +155,8 @@
                 </DockPanel>
             </TabItem>
             <TabItem Header="Replace"
-                     Padding="8,0,8,0">
+                     Padding="8,0,8,0"
+                     IsSelected="{Binding IsFindTabSelected, Converter={StaticResource InverseBooleanConverter}}">
                 <DockPanel Margin="4"
                            Name="ReplaceTabContents"
                            MinHeight="{Binding ElementName=FindTabContents, Path=ActualHeight}">
@@ -128,7 +176,9 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>
-                        <TextBox VerticalAlignment="Center"/>
+                        <TextBox VerticalAlignment="Center"
+                                 x:Name="ReplaceBox"
+                                 Text="{Binding FindText}"/>
                     </DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <Label DockPanel.Dock="Left"
@@ -146,7 +196,8 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>
-                        <TextBox VerticalAlignment="Center"/>
+                        <TextBox VerticalAlignment="Center"
+                                 Text="{Binding ReplaceText}"/>
                     </DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <StackPanel DockPanel.Dock="Right"
@@ -173,14 +224,45 @@
                     </DockPanel>
                     <GroupBox Header="Options"
                               DockPanel.Dock="Top">
-                        <StackPanel Margin="4">
-                            <CheckBox Content="Match _Case"
-                                      IsChecked="{Binding MatchCase}"/>
-                            <CheckBox Content="Whole Wor_d"
-                                      IsChecked="{Binding WholeWord}"/>
-                            <CheckBox Content="W_ord Start"
-                                      IsChecked="{Binding WordStart}"/>
-                        </StackPanel>
+                        <Grid>
+                            <StackPanel Margin="4" 
+                                        Visibility="{Binding IsStandardSearch, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                <CheckBox Content="Ignore _Case"
+                                          IsChecked="{Binding IgnoreCase}"/>
+                                <CheckBox Content="Whole Wor_d"
+                                          IsChecked="{Binding WholeWord}"/>
+                                <CheckBox Content="W_ord Start"
+                                          IsChecked="{Binding WordStart}"/>
+                            </StackPanel>
+                            <StackPanel Margin="4" 
+                                        Orientation="Horizontal"
+                                        Visibility="{Binding IsStandardSearch, Converter={StaticResource InverseBooleanToVisibilityConverter}}">
+                                <StackPanel>
+                                    <CheckBox Content="_Compiled"
+                                              IsChecked="{Binding IsCompiled}"/>
+                                    <CheckBox Content="C_ulture Invariant"
+                                              IsChecked="{Binding IsCultureInvariant}"/>
+                                    <CheckBox Content="ECMAScript"
+                                              IsChecked="{Binding IsEcmaScript}"/>
+                                </StackPanel>
+                                <StackPanel Margin="8,0,8,0">
+                                    <CheckBox Content="E_xplicit Capture"
+                                              IsChecked="{Binding IsExplicitCapture}"/>
+                                    <CheckBox Content="I_gnore Case"
+                                              IsChecked="{Binding IgnoreCase}"/>
+                                    <CheckBox Content="Ignore Pattern Whitespace"
+                                              IsChecked="{Binding IgnorePatternWhitespace}"/>
+                                </StackPanel>
+                                <StackPanel>
+                                    <CheckBox Content="Multiline"
+                                              IsChecked="{Binding IsMultiline}"/>
+                                    <CheckBox Content="Right To Left"
+                                              IsChecked="{Binding IsRightToLeft}"/>
+                                    <CheckBox Content="Singleline"
+                                              IsChecked="{Binding IsSingleLine}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
                     </GroupBox>
                     <DockPanel LastChildFill="False"
                                VerticalAlignment="Bottom">
@@ -189,15 +271,19 @@
                                     Margin="8,0,0,0"
                                     MinWidth="100">
                             <Button Content="Replace _Previous"
-                                    Margin="0,0,0,4"/>
-                            <Button Content="Replace _Next"/>
+                                    Margin="0,0,0,4"
+                                    Command="{Binding ReplacePreviousCommand}"/>
+                            <Button Content="Replace _Next"
+                                    Command="{Binding ReplaceNextCommand}"/>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right"
                                     VerticalAlignment="Bottom"
                                     MinWidth="100">
                             <Button Content="Find Previous"
-                                    Margin="0,0,0,4"/>
-                            <Button Content="Find Next"/>
+                                    Margin="0,0,0,4"
+                                    Command="{Binding FindPreviousCommand}"/>
+                            <Button Content="Find Next"
+                                    Command="{Binding FindNextCommand}"/>
                         </StackPanel>
                         <Button DockPanel.Dock="Left" 
                                 VerticalAlignment="Bottom"
@@ -207,5 +293,5 @@
                 </DockPanel>
             </TabItem>
         </TabControl>
-    </Grid>
+    </DockPanel>
 </controls:DialogControl>

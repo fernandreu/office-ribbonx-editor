@@ -382,8 +382,8 @@ namespace OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace
             // 
             this.grpOptionsF.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.grpOptionsF.Controls.Add(this.pnlStandardOptionsF);
             this.grpOptionsF.Controls.Add(this.pnlRegexpOptionsF);
+            this.grpOptionsF.Controls.Add(this.pnlStandardOptionsF);
             this.grpOptionsF.Location = new System.Drawing.Point(4, 94);
             this.grpOptionsF.Name = "grpOptionsF";
             this.grpOptionsF.Size = new System.Drawing.Size(470, 77);

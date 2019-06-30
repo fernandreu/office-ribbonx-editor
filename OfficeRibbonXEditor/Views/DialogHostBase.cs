@@ -80,7 +80,10 @@ namespace OfficeRibbonXEditor.Views
             builder.RegisterType<AboutDialogViewModel>();
             builder.RegisterType<CallbackDialogViewModel>();
             builder.RegisterType<GoToDialogViewModel>();
-            builder.RegisterType<FindReplaceDialogViewModel>();
+
+            // Using a singleton for this one ensures that the search criteria is preserved, which is especially
+            // important for find next / previous commands
+            builder.RegisterType<FindReplaceDialogViewModel>().SingleInstance();
         }
 
         private static DialogControl GenerateControl(Type contentDialogType)

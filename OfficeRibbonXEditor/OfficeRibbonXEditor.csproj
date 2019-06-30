@@ -152,6 +152,7 @@
     <Compile Include="Controls\ClickSelectTextBox.cs" />
     <Compile Include="Controls\DialogControl.cs" />
     <Compile Include="Controls\ExternalHyperlink.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IsNotNullConverter.cs" />
     <Compile Include="Converters\MethodToCommandConverter.cs" />
@@ -189,7 +190,10 @@
       <DependentUpon>FindReplaceResources.resx</DependentUpon>
     </Compile>
     <Compile Include="Extensions\UiElementExtensions.cs" />
+    <Compile Include="Models\FindReplace.cs" />
+    <Compile Include="Models\FindResultsEventArgs.cs" />
     <Compile Include="Models\LaunchDialogEventArgs.cs" />
+    <Compile Include="Models\ReplaceResultsEeventArgs.cs" />
     <Compile Include="ViewModels\FindReplaceDialogViewModel.cs" />
     <Compile Include="ViewModels\GoToDialogViewModel.cs" />
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />

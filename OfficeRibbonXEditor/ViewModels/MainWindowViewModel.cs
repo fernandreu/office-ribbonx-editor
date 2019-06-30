@@ -16,6 +16,7 @@ using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.Resources;
+using ScintillaNET;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
@@ -74,7 +75,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
             this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
-            this.ShowFindReplaceCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel>());
+            this.FindCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, bool)>((this.Lexer.Editor.Scintilla, true)));
+            this.ReplaceCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, bool)>((this.Lexer.Editor.Scintilla, false)));
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
@@ -243,7 +245,9 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand GoToCommand { get; }
 
-        public RelayCommand ShowFindReplaceCommand { get; }
+        public RelayCommand FindCommand { get; }
+
+        public RelayCommand ReplaceCommand { get; }
 
         public RelayCommand<string> RecentFileClickCommand { get; }
 

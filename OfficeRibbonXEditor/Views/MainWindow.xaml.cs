@@ -9,6 +9,7 @@ using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 
 using ScintillaNET;
+using FindReplace = OfficeRibbonXEditor.Dialogs.FindReplace.FindReplace.FindReplace;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 

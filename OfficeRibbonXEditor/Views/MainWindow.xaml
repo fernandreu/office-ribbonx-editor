@@ -65,12 +65,12 @@
         <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
 
         <!--Find / replace dialog controls-->
+        <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
         <!--TODO: This binding is temporary until the new FindReplaceDialog is fully implemented-->
-        <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding ShowFindReplaceCommand}"/>
-        <KeyBinding Key="F" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}"/>
+        <KeyBinding Key="F" Modifiers="Control+Shift" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}"/>
         <KeyBinding Key="F3" Modifiers="Shift" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindPrevious'}"/>
         <KeyBinding Key="F3" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindNext'}"/>
-        <KeyBinding Key="H" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowReplace'}"/>
+        <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}"/>
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
         
         <!--GoTo dialog control-->
@@ -123,14 +123,14 @@
                 <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
             </MenuItem>
             <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
-                <MenuItem Header="Find..." InputGestureText="Ctrl+F" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowFind'}">
+                <MenuItem Header="Find..." InputGestureText="Ctrl+F" Command="{Binding FindCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/find.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Replace..." InputGestureText="Ctrl+H" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowReplace'}"/>
+                <MenuItem Header="Replace..." InputGestureText="Ctrl+H" Command="{Binding ReplaceCommand}"/>
                 <MenuItem Header="Incremental Search..." InputGestureText="Ctrl+I" Command="{Binding ElementName=Window, Path=FindReplaceDialog, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='ShowIncrementalSearch'}"/>
                 <MenuItem Header="Find Previous" InputGestureText="Shift+F3" Command="{Binding ElementName=Window, Path=FindReplaceDialog.Window, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='FindPrevious'}">
                     <MenuItem.Icon>
