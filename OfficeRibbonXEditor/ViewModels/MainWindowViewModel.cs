@@ -10,14 +10,13 @@ using System.Text;
 using System.Windows;
 using System.Xml;
 using System.Xml.Schema;
-
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
-
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.Resources;
+using ScintillaNET;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
@@ -28,6 +27,8 @@ namespace OfficeRibbonXEditor.ViewModels
         private readonly IFileDialogService fileDialogService;
 
         private readonly IDialogProvider dialogProvider;
+
+        private readonly Dictionary<Type, IContentDialogBase> dialogs = new Dictionary<Type, IContentDialogBase>();
 
         /// <summary>
         /// Whether documents should be reloaded right before being saved.
@@ -73,8 +74,15 @@ namespace OfficeRibbonXEditor.ViewModels
             this.RemoveCommand = new RelayCommand(this.ExecuteRemoveItemCommand);
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
+            this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
+            this.FindCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Find));
+            this.FindNextCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.FindNext));
+            this.FindPreviousCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.FindPrevious));
+            this.IncrementalSearchCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.IncrementalSearch));
+            this.ReplaceCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Replace));
+            
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
-            this.ShowAboutCommand = new RelayCommand(this.LaunchDialog<AboutDialogViewModel>);
+            this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
@@ -109,7 +117,7 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         public event EventHandler Closed;
 
-        public event EventHandler<DataEventArgs<IContentDialogBase>> LaunchingDialog; 
+        public event EventHandler<LaunchDialogEventArgs> LaunchingDialog; 
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
@@ -239,6 +247,18 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand GenerateCallbacksCommand { get; }
 
+        public RelayCommand GoToCommand { get; }
+
+        public RelayCommand FindCommand { get; }
+
+        public RelayCommand FindNextCommand { get; }
+
+        public RelayCommand FindPreviousCommand { get; }
+
+        public RelayCommand IncrementalSearchCommand { get; }
+
+        public RelayCommand ReplaceCommand { get; }
+
         public RelayCommand<string> RecentFileClickCommand { get; }
 
         public RelayCommand NewerVersionCommand { get; }
@@ -313,17 +333,53 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public void LaunchDialog<TDialog>() where TDialog : IContentDialogBase
+        public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = false) where TDialog : IContentDialogBase
         {
-            var content = this.dialogProvider.ResolveDialog<TDialog>();
-            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+            if (!this.dialogs.TryGetValue(typeof(TDialog), out var content) || content.IsClosed)
+            {
+                // Resolve a new dialog, as any potentially existing one is not suitable
+                content = this.dialogProvider.ResolveDialog<TDialog>();
+            }
+            
+            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
+            if (content.IsUnique)
+            {
+                // Keep track of the new content
+                this.dialogs[typeof(TDialog)] = content;
+            }
+
+            return content;
         }
 
-        public void LaunchDialog<TDialog, TPayload>(TPayload payload) where TDialog : IContentDialog<TPayload>
+        public IContentDialog<TPayload> LaunchDialog<TDialog, TPayload>(TPayload payload, bool showDialog = false) where TDialog : IContentDialog<TPayload>
         {
-            var content = this.dialogProvider.ResolveDialog<TDialog>();
-            content.OnLoaded(payload);
-            this.LaunchingDialog?.Invoke(this, new DataEventArgs<IContentDialogBase> { Data = content });
+            if (!this.dialogs.TryGetValue(typeof(TDialog), out var baseContent) || baseContent.IsClosed)
+            {
+                // Resolve a new dialog, as any potentially existing one is not suitable
+                baseContent = this.dialogProvider.ResolveDialog<TDialog>();
+            }
+            
+            if (baseContent.IsUnique)
+            {
+                // Keep track of the new content
+                this.dialogs[typeof(TDialog)] = baseContent;
+            }
+
+            var content = (TDialog) baseContent;
+            if (!content.OnLoaded(payload))
+            {
+                // This might happen if the dialog has an associated instant action for which it doesn't need to stay open, e.g. 'Find Next' in a FindReplaceDialog
+                return content;
+            }
+            
+            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
+
+            return content;
+        }
+
+        public void PerformFindReplaceAction(FindReplaceAction action)
+        {
+            this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, action));
         }
 
         private void ExecuteCloseDocumentCommand()
@@ -859,6 +915,11 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 this.messageBoxService.Show(ex.Message, "Error Generating Callbacks", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void ExecuteGoToCommand()
+        {
+            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer);
         }
 
         private void ExecuteToggleCommentCommand()

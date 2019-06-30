@@ -4,16 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-
-using GalaSoft.MvvmLight.Command;
-
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 
 using ScintillaNET;
-
-using ScintillaNET_FindReplaceDialog;
-
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 using TextBox = System.Windows.Controls.TextBox;
 
@@ -30,10 +24,21 @@ namespace OfficeRibbonXEditor.Views
 
         public MainWindow()
         {
-            // This needs to exist prior to the InitializeComponent() call; otherwise, key binding (Ctrl-G) will not work
-            this.GoToCommand = new RelayCommand(this.ExecuteGoTo);
-
             this.InitializeComponent();
+        }
+
+        public int Zoom
+        {
+            get => this.Editor?.Zoom ?? 0;
+            set
+            {
+                if (this.Editor == null || this.Editor.Zoom == value)
+                {
+                    return;
+                }
+
+                this.Editor.Zoom = value;
+            }
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
@@ -46,10 +51,6 @@ namespace OfficeRibbonXEditor.Views
             }
 
             this.viewModel = model;
-
-            // Initialize find / replace / goto dialogs
-            this.FindReplaceDialog.Scintilla = this.Editor.Scintilla;
-            this.FindReplaceDialog.KeyPressed += this.OnEditorKeyDown;
 
             this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
@@ -68,11 +69,6 @@ namespace OfficeRibbonXEditor.Views
                 }
             };
         }
-
-        // This needs to exist prior to the InitializeComponent() call; otherwise, keys will be bound to a null reference
-        public FindReplace FindReplaceDialog { get; } = new FindReplace();
-
-        public ICommand GoToCommand { get; }
 
         /// <summary>
         /// Finds the first TreeViewItem which is a parent of the given source.
@@ -129,12 +125,6 @@ namespace OfficeRibbonXEditor.Views
 
         #endregion
 
-        private void ExecuteGoTo()
-        {
-            var goTo = new GoTo(this.Editor.Scintilla);
-            goTo.ShowGoToDialog();
-        }
-
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
@@ -172,7 +162,7 @@ namespace OfficeRibbonXEditor.Views
 
         private void OnEditorZoomChanged(object sender, EventArgs e)
         {
-            this.ZoomBox.Value = this.Editor.Zoom;
+            this.Zoom = this.Editor.Zoom;
         }
 
         /// <summary>

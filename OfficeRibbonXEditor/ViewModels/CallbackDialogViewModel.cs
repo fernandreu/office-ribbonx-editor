@@ -38,9 +38,10 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public void OnLoaded(string payload)
+        public bool OnLoaded(string payload)
         {
             this.Code = payload;
+            return true;
         }
     }
 }

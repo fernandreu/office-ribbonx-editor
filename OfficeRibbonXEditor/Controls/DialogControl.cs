@@ -73,5 +73,17 @@ namespace OfficeRibbonXEditor.Controls
             get => (ResizeMode) this.GetValue(ResizeModeProperty);
             set => this.SetValue(ResizeModeProperty, value);
         }
+
+        public static readonly DependencyProperty InactiveOpacityProperty = DependencyProperty.Register(
+            nameof(InactiveOpacity),
+            typeof(double),
+            typeof(DialogControl),
+            new FrameworkPropertyMetadata(1.0));
+
+        public double InactiveOpacity
+        {
+            get => (double) this.GetValue(InactiveOpacityProperty);
+            set => this.SetValue(InactiveOpacityProperty, value);
+        }
     }
 }

@@ -105,9 +105,6 @@
     <Reference Include="ScintillaNET.WPF, Version=1.0.0.16559, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\estebano.ScintillaNET.WPF.2.6.0\lib\net40\ScintillaNET.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="ScintillaNET_FindReplaceDialog, Version=1.0.3.3, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ScintillaNET_FindReplaceDialog.1.0.3.3\lib\net40-client\ScintillaNET_FindReplaceDialog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
@@ -152,13 +149,36 @@
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Controls\ClickSelectTextBox.cs" />
     <Compile Include="Controls\DialogControl.cs" />
     <Compile Include="Controls\ExternalHyperlink.cs" />
+    <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IsNotNullConverter.cs" />
     <Compile Include="Converters\MethodToCommandConverter.cs" />
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
+    <Compile Include="Models\CharacterRange.cs" />
+    <Compile Include="Controls\Forms\FindAllResultsPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Forms\FindAllResultsPanel.Designer.cs">
+      <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\Forms\IncrementalSearcher.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\Forms\IncrementalSearcher.Designer.cs">
+      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Extensions\UiElementExtensions.cs" />
+    <Compile Include="Models\FindReplace.cs" />
+    <Compile Include="Models\FindReplaceAction.cs" />
+    <Compile Include="Models\FindResultsEventArgs.cs" />
+    <Compile Include="Models\LaunchDialogEventArgs.cs" />
+    <Compile Include="Models\ReplaceResultsEeventArgs.cs" />
+    <Compile Include="ViewModels\FindReplaceDialogViewModel.cs" />
+    <Compile Include="ViewModels\GoToDialogViewModel.cs" />
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogBase.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
@@ -213,6 +233,12 @@
     <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
     <Compile Include="Models\OfficeDocument.cs" />
     <Compile Include="Views\DialogHostBase.cs" />
+    <Compile Include="Views\FindReplaceDialog.xaml.cs">
+      <DependentUpon>FindReplaceDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\GoToDialog.xaml.cs">
+      <DependentUpon>GoToDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsDialog.xaml.cs">
       <DependentUpon>SettingsDialog.xaml</DependentUpon>
     </Compile>
@@ -233,6 +259,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CallbackDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindReplaceDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\GoToDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -302,6 +336,12 @@
     <Resource Include="Resources\Images\worddoc.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\Forms\FindAllResultsPanel.resx">
+      <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\Forms\IncrementalSearcher.resx">
+      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ImagesResource.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ImagesResource.Designer.cs</LastGenOutput>
@@ -350,6 +390,12 @@
     <Resource Include="Resources\Images\find_next.png" />
     <Resource Include="Resources\Images\find_previous.png" />
     <Resource Include="Resources\Images\go_to.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\highlight.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\clock.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

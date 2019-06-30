@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 using Autofac;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
@@ -15,6 +16,8 @@ namespace OfficeRibbonXEditor
     {
         private readonly IContainer container;
 
+        private readonly Dictionary<IContentDialogBase, DialogHost> dialogs = new Dictionary<IContentDialogBase, DialogHost>();
+
         public App()
         {
             var builder = new ContainerBuilder();
@@ -25,10 +28,7 @@ namespace OfficeRibbonXEditor
             builder.RegisterType<DialogProvider>().As<IDialogProvider>();
 
             builder.RegisterType<MainWindowViewModel>();
-            builder.RegisterType<DialogHostViewModel>();
-            builder.RegisterType<SettingsDialogViewModel>();
-            builder.RegisterType<AboutDialogViewModel>();
-            builder.RegisterType<CallbackDialogViewModel>();
+            DialogHostBase.RegisterDialogViewModels(builder);
 
             this.container = builder.Build();
         }
@@ -51,19 +51,38 @@ namespace OfficeRibbonXEditor
             var window = new MainWindow();
             windowModel.Lexer = new XmlLexer {Editor = window.Editor};
             window.DataContext = windowModel;
-            windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Data);
+            windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
             windowModel.Closed += (o, e) => window.Close();
             window.Show();
         }
-        
-        private void LaunchDialog(Window mainWindow, IContentDialogBase content)
+
+        private void LaunchDialog(Window mainWindow, IContentDialogBase content, bool showDialog)
         {
+            if (content.IsUnique && !content.IsClosed && this.dialogs.TryGetValue(content, out var dialog))
+            {
+                dialog.Activate();
+                return;
+            }
+
             var dialogModel = this.container.Resolve<DialogHostViewModel>();
-            var dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
+            dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
             dialogModel.Content = content;
             content.Closed += (o, e) => dialog.Close();
             dialogModel.Closed += (o, e) => dialog.Close();
-            dialog.ShowDialog();
+
+            if (content.IsUnique)
+            {
+                this.dialogs[content] = dialog;
+            }
+
+            if (showDialog)
+            {
+                dialog.ShowDialog();
+            }
+            else
+            {
+                dialog.Show();
+            }
         }
     }
 }
