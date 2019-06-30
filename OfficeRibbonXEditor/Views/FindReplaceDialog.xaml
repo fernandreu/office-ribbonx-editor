@@ -45,9 +45,9 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>
-                        <TextBox VerticalAlignment="Center"
-                                 x:Name="FindBox"
-                                 Text="{Binding FindText}"/>
+                        <controls:ClickSelectTextBox VerticalAlignment="Center"
+                                                     x:Name="FindBox"
+                                                     Text="{Binding FindText}"/>
                     </DockPanel>
                     <Control Visibility="Hidden"
                              DockPanel.Dock="Top"
@@ -176,9 +176,9 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>
-                        <TextBox VerticalAlignment="Center"
-                                 x:Name="ReplaceBox"
-                                 Text="{Binding FindText}"/>
+                        <controls:ClickSelectTextBox VerticalAlignment="Center"
+                                                     x:Name="ReplaceBox"
+                                                     Text="{Binding FindText}"/>
                     </DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <Label DockPanel.Dock="Left"
@@ -196,8 +196,8 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>
-                        <TextBox VerticalAlignment="Center"
-                                 Text="{Binding ReplaceText}"/>
+                        <controls:ClickSelectTextBox VerticalAlignment="Center"
+                                                     Text="{Binding ReplaceText}"/>
                     </DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <StackPanel DockPanel.Dock="Right"

@@ -14,21 +14,34 @@ namespace OfficeRibbonXEditor.Views
         {
             this.InitializeComponent();
 
-            this.FindBox.TextChanged += this.OnValueChanged;
-            this.ReplaceBox.TextChanged += this.OnValueChanged;
+            this.FindBox.TextChanged += this.OnTextChanged;
+            this.ReplaceBox.TextChanged += this.OnTextChanged;
         }
 
-        private void OnValueChanged(object sender, TextChangedEventArgs e)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            var vm = (FindReplaceDialogViewModel) this.DataContext;
+            base.OnPropertyChanged(e);
 
-            var txt = (TextBox) sender;
-            txt.TextChanged -= this.OnValueChanged;
-            txt.SelectAll();
-            if (txt == this.FindBox && vm.IsFindTabSelected || txt == this.ReplaceBox && !vm.IsFindTabSelected)
+            if (e.Property != DataContextProperty || !(e.NewValue is FindReplaceDialogViewModel vm))
             {
-                txt.Focus();
+                return;
             }
+
+            if (vm.IsFindTabSelected)
+            {
+                this.FindBox.Focus();
+            }
+            else
+            {
+                this.ReplaceBox.Focus();
+            }
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            var txt = (TextBox) sender;
+            txt.TextChanged -= this.OnTextChanged;
+            txt.Focus();
         }
     }
 }

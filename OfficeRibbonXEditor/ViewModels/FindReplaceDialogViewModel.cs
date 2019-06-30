@@ -8,7 +8,7 @@ using ScintillaNET;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, bool>>
+    public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction>>
     {
         private CharacterRange searchRange;
 
@@ -576,12 +576,29 @@ namespace OfficeRibbonXEditor.ViewModels
             return sf;
         }
 
-        public void OnLoaded((Scintilla, bool) payload)
+        public void OnLoaded((Scintilla, FindReplaceAction) payload)
         {
-            var (editor, selected) = payload;
+            var (editor, action) = payload;
             this.Scintilla = editor;
-            this.isFindTabSelected = selected;
             this.searchRange = new CharacterRange();
+
+            switch (action)
+            {
+                case FindReplaceAction.Find:
+                    this.IsFindTabSelected = true;
+                    break;
+                case FindReplaceAction.Replace:
+                    this.IsFindTabSelected = false;
+                    break;
+                case FindReplaceAction.FindNext:
+                    this.FindWrapper(false);
+                    this.Close();
+                    break;
+                case FindReplaceAction.FindPrevious:
+                    this.FindWrapper(true);
+                    this.Close();
+                    break;
+            }
         }
 
         public virtual void MoveDialogAwayFromSelection()

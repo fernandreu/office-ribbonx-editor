@@ -75,8 +75,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ValidateCommand = new RelayCommand(() => this.ValidateXml(true));
             this.GenerateCallbacksCommand = new RelayCommand(this.ExecuteGenerateCallbacksCommand);
             this.GoToCommand = new RelayCommand(this.ExecuteGoToCommand);
-            this.FindCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, bool)>((this.Lexer.Editor.Scintilla, true)));
-            this.ReplaceCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, bool)>((this.Lexer.Editor.Scintilla, false)));
+            this.FindCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.Find)));
+            this.ReplaceCommand = new RelayCommand(() => this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, FindReplaceAction.Replace)));
             this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
