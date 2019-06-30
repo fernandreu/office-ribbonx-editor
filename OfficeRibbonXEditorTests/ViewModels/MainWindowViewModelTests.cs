@@ -316,10 +316,10 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // This should contain a single callback for the onLoad event
             part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            void Handler(object o, DataEventArgs<IContentDialogBase> e)
+            void Handler(object o, LaunchDialogEventArgs e)
             {
-                Assert.IsTrue(e.Data is CallbackDialogViewModel, $"Unexpected dialog launched: {e.Data.GetType().Name}");
-                Assert.IsTrue(((CallbackDialogViewModel) e.Data).Code.StartsWith("'Callback for customUI.onLoad"), "Expected callback not generated");
+                Assert.IsTrue(e.Content is CallbackDialogViewModel, $"Unexpected dialog launched: {e.Content.GetType().Name}");
+                Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code.StartsWith("'Callback for customUI.onLoad"), "Expected callback not generated");
             }
 
             this.viewModel.LaunchingDialog += Handler;
