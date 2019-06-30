@@ -350,7 +350,7 @@
             <StatusBarItem Grid.Column="1" Margin="0,0,10,0">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Zoom factor:" Padding="0,0,4,0"/>
-                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding ElementName=Editor, Path=Zoom, Mode=OneWay}" Height="20" Minimum="-10" Maximum="20"/>
+                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding ElementName=Window, Path=Zoom, Mode=TwoWay}" Height="20" Minimum="-10" Maximum="20"/>
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">

@@ -27,6 +27,20 @@ namespace OfficeRibbonXEditor.Views
             this.InitializeComponent();
         }
 
+        public int Zoom
+        {
+            get => this.Editor?.Zoom ?? 0;
+            set
+            {
+                if (this.Editor == null || this.Editor.Zoom == value)
+                {
+                    return;
+                }
+
+                this.Editor.Zoom = value;
+            }
+        }
+
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
         {
             base.OnPropertyChanged(args);
@@ -148,7 +162,7 @@ namespace OfficeRibbonXEditor.Views
 
         private void OnEditorZoomChanged(object sender, EventArgs e)
         {
-            this.ZoomBox.Value = this.Editor.Zoom;
+            this.Zoom = this.Editor.Zoom;
         }
 
         /// <summary>
