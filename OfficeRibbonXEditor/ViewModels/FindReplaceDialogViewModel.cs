@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Controls.Forms;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 using ScintillaNET;
+using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
@@ -21,6 +23,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ReplacePreviousCommand = new RelayCommand(() => this.ReplaceWrapper(true));
             this.ClearCommand = new RelayCommand(this.ExecuteClearCommand);
         }
+
+        public event EventHandler<DataEventArgs<Point>> MoveDialogAway;
 
         public RecentListViewModel<string> RecentFinds { get; } = new RecentListViewModel<string>();
 
@@ -71,6 +75,14 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand ReplacePreviousCommand { get; }
 
         public RelayCommand ClearCommand { get; }
+
+        private bool autoPosition = true;
+
+        public bool AutoPosition
+        {
+            get => this.autoPosition;
+            set => this.Set(ref this.autoPosition, value);
+        }
 
         private bool isFindTabSelected = true;
 
@@ -636,8 +648,17 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public virtual void MoveDialogAwayFromSelection()
         {
-            // TODO: This might be tricky to implement in MVVM
-            // Most sensible solution would be moving the code to the view, and invoke it via an event
+            if (!this.AutoPosition)
+            {
+                return;
+            }
+
+            var pos = this.Scintilla.CurrentPosition;
+            var x = this.Scintilla.PointXFromPosition(pos);
+            var y = this.Scintilla.PointYFromPosition(pos);
+
+            var cursorPoint = this.Scintilla.PointToScreen(new Point(x, y));
+            this.MoveDialogAway?.Invoke(this, new DataEventArgs<Point> { Data = cursorPoint });
         }
     }
 }

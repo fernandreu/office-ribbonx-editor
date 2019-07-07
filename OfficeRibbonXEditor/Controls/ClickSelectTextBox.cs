@@ -30,7 +30,7 @@ namespace OfficeRibbonXEditor.Controls
                 var textBox = (TextBox)parent;
                 if (!textBox.IsKeyboardFocusWithin)
                 {
-                    // If the text box is not yet focussed, give it the focus and
+                    // If the text box is not yet focused, give it the focus and
                     // stop further processing of this click event.
                     textBox.Focus();
                     e.Handled = true;

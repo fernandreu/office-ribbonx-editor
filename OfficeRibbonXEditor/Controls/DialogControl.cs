@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using OfficeRibbonXEditor.Views;
 
 namespace OfficeRibbonXEditor.Controls
 {
@@ -85,5 +86,7 @@ namespace OfficeRibbonXEditor.Controls
             get => (double) this.GetValue(InactiveOpacityProperty);
             set => this.SetValue(InactiveOpacityProperty, value);
         }
+
+        public DialogHostBase Host { get; set; }
     }
 }

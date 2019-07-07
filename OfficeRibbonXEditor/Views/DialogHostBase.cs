@@ -48,6 +48,7 @@ namespace OfficeRibbonXEditor.Views
             var view = GenerateControl(e.NewValue.GetType());
             view.DataContext = e.NewValue;
             host.View = view;
+            view.Host = host;
             host.Content = view;
             host.SizeToContent = SizeToContent.Manual;
             // TODO: This does not work as expected in WPF (as opposed to Windows Forms), so disabled for now

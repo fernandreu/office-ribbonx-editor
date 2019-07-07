@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -7,12 +8,30 @@ namespace OfficeRibbonXEditor.Controls
 {
     public class EditableComboBox : ComboBox
     {
+        public EditableComboBox()
+        {
+            this.IsEditable = true;
+        }
+
+        private TextBox textBox;
+
         public TextBox TextBox
         {
             get
             {
+                if (this.textBox != null)
+                {
+                    return this.textBox;
+                }
+
                 this.ApplyTemplate();
-                return this.Template.FindName("PART_EditableTextBox", this) as TextBox;
+                this.textBox = this.Template.FindName("PART_EditableTextBox", this) as TextBox;
+                if (this.textBox == null)
+                {
+                    throw new InvalidOperationException($"Make sure IsEditable is set to true when using an {nameof(EditableComboBox)}");
+                }
+
+                return this.textBox;
             }
         }
 
@@ -41,7 +60,7 @@ namespace OfficeRibbonXEditor.Controls
                 var textBox = (TextBox)parent;
                 if (!textBox.IsKeyboardFocusWithin)
                 {
-                    // If the text box is not yet focussed, give it the focus and
+                    // If the text box is not yet focused, give it the focus and
                     // stop further processing of this click event.
                     textBox.Focus();
                     e.Handled = true;
