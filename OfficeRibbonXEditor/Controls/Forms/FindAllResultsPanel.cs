@@ -7,8 +7,6 @@ using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 
 namespace OfficeRibbonXEditor.Controls.Forms
 {
-    using CharacterRange = CharacterRange;
-
     public partial class FindAllResultsPanel : UserControl
     {
         #region Fields

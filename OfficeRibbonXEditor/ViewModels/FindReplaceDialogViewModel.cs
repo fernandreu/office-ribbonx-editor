@@ -22,6 +22,10 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ClearCommand = new RelayCommand(this.ExecuteClearCommand);
         }
 
+        public RecentListViewModel<string> RecentFinds { get; } = new RecentListViewModel<string>();
+
+        public RecentListViewModel<string> RecentReplaces { get; } = new RecentListViewModel<string>();
+
         public FindReplace FindReplace { get; private set; }
 
         public IncrementalSearcher IncrementalSearcher { get; private set; }
@@ -302,6 +306,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
 
             this.StatusText = $"Total found: {foundCount}";
+            this.RecentFinds.Add(this.FindText);
         }
 
         private void ExecuteClearCommand()
@@ -345,6 +350,8 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.Scintilla.SetSel(foundRange.cpMin, foundRange.cpMax);
                 this.MoveDialogAwayFromSelection();
             }
+
+            this.RecentFinds.Add(this.FindText);
         }
 
         private CharacterRange FindNext(bool searchUp)
@@ -449,6 +456,9 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.Scintilla.SetSel(nextRange.cpMin, nextRange.cpMax);
                 this.MoveDialogAwayFromSelection();
             }
+
+            this.RecentFinds.Add(this.FindText);
+            this.RecentReplaces.Add(this.ReplaceText);
         }
 
         private CharacterRange ReplaceNext(bool searchUp)
@@ -514,6 +524,9 @@ namespace OfficeRibbonXEditor.ViewModels
                     }
                 }
             }
+
+            this.RecentFinds.Add(this.FindText);
+            this.RecentReplaces.Add(this.ReplaceText);
 
             return this.FindNext(searchUp, ref rr);
         }

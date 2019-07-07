@@ -45,9 +45,14 @@
                                    Width="16"
                                    Height="16"/>
                         </Button>-->
-                        <controls:ClickSelectTextBox VerticalAlignment="Center"
+                        <!--<controls:ClickSelectTextBox VerticalAlignment="Center"
                                                      x:Name="FindBox"
-                                                     Text="{Binding FindText}"/>
+                                                     Text="{Binding FindText}"/>-->
+                        <controls:EditableComboBox VerticalAlignment="Center"
+                                                   IsEditable="True" 
+                                                   x:Name="FindBox"
+                                                   ItemsSource="{Binding RecentFinds.Values}"
+                                                   Text="{Binding FindText}"/>
                     </DockPanel>
                     <Control Visibility="Hidden"
                              DockPanel.Dock="Top"
@@ -164,40 +169,20 @@
                         <Label DockPanel.Dock="Left"
                                Content="_Find"
                                MinWidth="60"/>
-                        <!--<Button DockPanel.Dock="Right"
-                                Width="24"
-                                Height="20"
-                                Content=">"/>
-                        <Button DockPanel.Dock="Right"
-                                Margin="4,0,4,0"
-                                Width="24"
-                                Height="20">
-                            <Image Source="../Resources/Images/clock.png" 
-                                   Width="16"
-                                   Height="16"/>
-                        </Button>-->
-                        <controls:ClickSelectTextBox VerticalAlignment="Center"
-                                                     x:Name="ReplaceBox"
-                                                     Text="{Binding FindText}"/>
+                        <controls:EditableComboBox VerticalAlignment="Center"
+                                                   IsEditable="True" 
+                                                   x:Name="ReplaceBox"
+                                                   ItemsSource="{Binding RecentFinds.Values}"
+                                                   Text="{Binding FindText}"/>
                     </DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <Label DockPanel.Dock="Left"
                                Content="_Replace"
                                MinWidth="60"/>
-                        <!--<Button DockPanel.Dock="Right"
-                                Width="24"
-                                Height="20"
-                                Content=">"/>
-                        <Button DockPanel.Dock="Right"
-                                Margin="4,0,4,0"
-                                Width="24"
-                                Height="20">
-                            <Image Source="../Resources/Images/clock.png" 
-                                   Width="16"
-                                   Height="16"/>
-                        </Button>-->
-                        <controls:ClickSelectTextBox VerticalAlignment="Center"
-                                                     Text="{Binding ReplaceText}"/>
+                        <controls:EditableComboBox VerticalAlignment="Center"
+                                                   IsEditable="True"
+                                                   ItemsSource="{Binding RecentReplaces.Values}"
+                                                   Text="{Binding ReplaceText}"/>
                     </DockPanel>
                     <DockPanel DockPanel.Dock="Top">
                         <StackPanel DockPanel.Dock="Right"

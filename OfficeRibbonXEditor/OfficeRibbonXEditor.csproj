@@ -151,6 +151,7 @@
     </Compile>
     <Compile Include="Controls\ClickSelectTextBox.cs" />
     <Compile Include="Controls\DialogControl.cs" />
+    <Compile Include="Controls\EditableComboBox.cs" />
     <Compile Include="Controls\ExternalHyperlink.cs" />
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
     <Compile Include="ViewModels\DialogBase.cs" />
     <Compile Include="ViewModels\AboutDialogViewModel.cs" />
+    <Compile Include="ViewModels\RecentListViewModel.cs" />
     <Compile Include="Views\DialogHost.xaml.cs">
       <DependentUpon>DialogHost.xaml</DependentUpon>
     </Compile>

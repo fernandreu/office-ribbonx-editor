@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using OfficeRibbonXEditor.Controls;
+using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 
 namespace OfficeRibbonXEditor.Views
@@ -13,9 +15,6 @@ namespace OfficeRibbonXEditor.Views
         public FindReplaceDialog()
         {
             this.InitializeComponent();
-
-            this.FindBox.TextChanged += this.OnTextChanged;
-            this.ReplaceBox.TextChanged += this.OnTextChanged;
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -27,21 +26,18 @@ namespace OfficeRibbonXEditor.Views
                 return;
             }
 
+            EditableComboBox target;
             if (vm.IsFindTabSelected)
             {
-                this.FindBox.Focus();
+                target = this.FindBox;
             }
             else
             {
-                this.ReplaceBox.Focus();
+                target = this.ReplaceBox;
             }
-        }
 
-        private void OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            var txt = (TextBox) sender;
-            txt.TextChanged -= this.OnTextChanged;
-            txt.Focus();
+            target.TextBox?.Focus();
+            target.TextBox?.SelectAll();
         }
     }
 }
