@@ -132,7 +132,17 @@
                                     Margin="0,0,0,4"
                                     Command="{Binding FindPreviousCommand}"/>
                             <Button Content="Find _Next"
-                                    Command="{Binding FindNextCommand}"/>
+                                    Command="{Binding FindNextCommand}">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFindTabSelected}" Value="True">
+                                                <Setter Property="IsDefault" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </StackPanel>
                         <GroupBox DockPanel.Dock="Left"
                                   Header="Find All"
@@ -259,7 +269,17 @@
                                     Margin="0,0,0,4"
                                     Command="{Binding ReplacePreviousCommand}"/>
                             <Button Content="Replace _Next"
-                                    Command="{Binding ReplaceNextCommand}"/>
+                                    Command="{Binding ReplaceNextCommand}">
+                                <Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsFindTabSelected}" Value="False">
+                                                <Setter Property="IsDefault" Value="True"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
                         </StackPanel>
                         <StackPanel DockPanel.Dock="Right"
                                     VerticalAlignment="Bottom"
