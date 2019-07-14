@@ -12,6 +12,7 @@
         xmlns:models="clr-namespace:OfficeRibbonXEditor.Models"
         xmlns:model="clr-namespace:OfficeRibbonXEditor.ViewModels"
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
+        xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -467,30 +468,64 @@
                 </TreeView.Resources>
             </TreeView>
 
-            <GridSplitter Grid.Column="1" Width="4" HorizontalAlignment="Stretch"/>
+            <GridSplitter Grid.Column="1" 
+                          Width="4" 
+                          VerticalAlignment="Stretch"
+                          ResizeBehavior="PreviousAndNext"/>
 
-            <sn:ScintillaWPF
-                x:Name="Editor"
-                Grid.Column="2"
-                HorizontalAlignment="Stretch"
-                FontFamily="Consolas"
-                UpdateUI="OnScintillaUpdateUi"
-                FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
-                DataContext="{Binding SelectedItem}"
-                KeyDown="OnEditorKeyDown"
-                InsertCheck="OnEditorInsertCheck"
-                ZoomChanged="OnEditorZoomChanged">
-                <sn:ScintillaWPF.Resources>
-                    <Style TargetType="sn:ScintillaWPF">
-                        <Setter Property="IsEnabled" Value="False"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding CanHaveContents}" Value="True">
-                                <Setter Property="IsEnabled" Value="True"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </sn:ScintillaWPF.Resources>
-            </sn:ScintillaWPF>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="0" x:Name="FindResultsRow"/>
+                </Grid.RowDefinitions>
+
+                <sn:ScintillaWPF
+                    x:Name="Editor"
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    FontFamily="Consolas"
+                    UpdateUI="OnScintillaUpdateUi"
+                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
+                    DataContext="{Binding SelectedItem}"
+                    KeyDown="OnEditorKeyDown"
+                    InsertCheck="OnEditorInsertCheck"
+                    ZoomChanged="OnEditorZoomChanged">
+                    <sn:ScintillaWPF.Resources>
+                        <Style TargetType="sn:ScintillaWPF">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding CanHaveContents}" Value="True">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </sn:ScintillaWPF.Resources>
+                </sn:ScintillaWPF>
+
+                <GridSplitter Grid.Row="1" 
+                              Height="4" 
+                              x:Name="FindResultsSplitter"
+                              HorizontalAlignment="Stretch"
+                              Visibility="Collapsed"
+                              ResizeBehavior="PreviousAndNext"/>
+
+                <DockPanel Grid.Row="2">
+                    <Button DockPanel.Dock="Top"
+                            Width="16"
+                            Height="16"
+                            Margin="2"
+                            HorizontalAlignment="Right"
+                            Click="OnCloseFindResults">
+                        <Button.Content>
+                            <Image Source="../Resources/Images/cross.png"/>
+                        </Button.Content>
+                    </Button>
+                    <controls:FindAllResultsPanel 
+                        x:Name="FindResultsPanel"/>
+                </DockPanel>
+
+            </Grid>
         </Grid>
     </DockPanel>
 </Window>

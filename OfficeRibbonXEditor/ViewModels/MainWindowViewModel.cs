@@ -117,7 +117,9 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         public event EventHandler Closed;
 
-        public event EventHandler<LaunchDialogEventArgs> LaunchingDialog; 
+        public event EventHandler<LaunchDialogEventArgs> LaunchingDialog;
+
+        public event FindReplace.FindAllResultsEventHandler FindAllResults;
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
@@ -379,7 +381,10 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
-            this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction)>((this.Lexer.Editor.Scintilla, action));
+            this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler)>((
+                this.Lexer.Editor.Scintilla,
+                action,
+                (o, e) => this.FindAllResults?.Invoke(this, e)));
         }
 
         private void ExecuteCloseDocumentCommand()

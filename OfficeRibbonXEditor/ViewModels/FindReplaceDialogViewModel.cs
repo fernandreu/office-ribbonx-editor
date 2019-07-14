@@ -10,7 +10,7 @@ using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction>>
+    public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
     {
         private CharacterRange searchRange = new CharacterRange();
 
@@ -53,6 +53,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 this.FindReplace = new FindReplace(this.scintilla);
+                this.FindReplace.FindAllResults += this.FindAllHandler;
 
                 this.IncrementalSearcher = new IncrementalSearcher
                 {
@@ -75,6 +76,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand ReplacePreviousCommand { get; }
 
         public RelayCommand ClearCommand { get; }
+
+        private FindReplace.FindAllResultsEventHandler FindAllHandler { get; set; }
 
         private bool autoPosition = true;
 
@@ -626,9 +629,10 @@ namespace OfficeRibbonXEditor.ViewModels
             return sf;
         }
 
-        public bool OnLoaded((Scintilla, FindReplaceAction) payload)
+        public bool OnLoaded((Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler) payload)
         {
-            var (editor, action) = payload;
+            var (editor, action, handler) = payload;
+            this.FindAllHandler = handler;
             this.Scintilla = editor;
 
             switch (action)

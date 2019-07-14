@@ -153,6 +153,9 @@
     <Compile Include="Controls\DialogControl.cs" />
     <Compile Include="Controls\EditableComboBox.cs" />
     <Compile Include="Controls\ExternalHyperlink.cs" />
+    <Compile Include="Controls\FindAllResultsPanel.xaml.cs">
+      <DependentUpon>FindAllResultsPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="Converters\IsNotNullConverter.cs" />
@@ -160,12 +163,6 @@
     <Compile Include="Converters\StringToVisibilityConverter.cs" />
     <Compile Include="Converters\ValueConverterGroup.cs" />
     <Compile Include="Models\CharacterRange.cs" />
-    <Compile Include="Controls\Forms\FindAllResultsPanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Forms\FindAllResultsPanel.Designer.cs">
-      <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\Forms\IncrementalSearcher.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -252,6 +249,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringsResource.resx</DependentUpon>
     </Compile>
+    <Page Include="Controls\FindAllResultsPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DialogHost.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -338,9 +339,6 @@
     <Resource Include="Resources\Images\worddoc.png" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Controls\Forms\FindAllResultsPanel.resx">
-      <DependentUpon>FindAllResultsPanel.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\Forms\IncrementalSearcher.resx">
       <DependentUpon>IncrementalSearcher.cs</DependentUpon>
     </EmbeddedResource>
@@ -399,7 +397,9 @@
   <ItemGroup>
     <Resource Include="Resources\Images\clock.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\Images\cross.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

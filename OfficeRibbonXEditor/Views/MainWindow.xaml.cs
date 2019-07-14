@@ -22,6 +22,8 @@ namespace OfficeRibbonXEditor.Views
 
         private bool suppressRequestBringIntoView;
 
+        private GridLength lastResultsHeight = new GridLength(150);
+
         public MainWindow()
         {
             this.InitializeComponent();
@@ -67,6 +69,12 @@ namespace OfficeRibbonXEditor.Views
                 {
                     this.Editor.EmptyUndoBuffer();
                 }
+            };
+            this.viewModel.FindAllResults += (o, e) =>
+            {
+                this.FindResultsSplitter.Visibility = Visibility.Visible;
+                this.FindResultsRow.Height = this.lastResultsHeight;
+                this.FindResultsPanel.UpdateFindAllResults(e.FindReplace, e.FindAllResults);
             };
         }
 
@@ -285,6 +293,13 @@ namespace OfficeRibbonXEditor.Views
                 // If the previous line finished with an open tag, add an indentation level to the next one 
                 e.Text += new string(' ', Properties.Settings.Default.TabWidth);
             }
+        }
+
+        private void OnCloseFindResults(object sender, RoutedEventArgs e)
+        {
+            this.lastResultsHeight = this.FindResultsRow.Height;
+            this.FindResultsRow.Height = new GridLength(0);
+            this.FindResultsSplitter.Visibility = Visibility.Collapsed;
         }
     }
 }
