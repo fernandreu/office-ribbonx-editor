@@ -359,6 +359,10 @@ namespace OfficeRibbonXEditor.ViewModels
                     this.StatusText = $"Search match wrapped to the beginning of the {(this.SearchSelection ? "selection" : "document")}";
                 }
 
+                // This should ensure the entire text is visible before it is selected
+                this.Scintilla.GotoPosition(foundRange.cpMax);
+                this.Scintilla.GotoPosition(foundRange.cpMin);
+
                 this.Scintilla.SetSel(foundRange.cpMin, foundRange.cpMax);
                 this.MoveDialogAwayFromSelection();
             }
@@ -464,8 +468,13 @@ namespace OfficeRibbonXEditor.ViewModels
                 {
                     this.StatusText = $"Search match wrapped to the beginning of the {(this.SearchSelection ? "selection" : "document")}";
                 }
+                
+                // This should ensure the entire text is visible before it is selected
+                this.Scintilla.GotoPosition(nextRange.cpMax);
+                this.Scintilla.GotoPosition(nextRange.cpMin);
 
                 this.Scintilla.SetSel(nextRange.cpMin, nextRange.cpMax);
+
                 this.MoveDialogAwayFromSelection();
             }
 
