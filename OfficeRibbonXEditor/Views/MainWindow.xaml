@@ -477,7 +477,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="0" x:Name="FindResultsRow"/>
+                    <RowDefinition Height="0" x:Name="ResultsRow"/>
                 </Grid.RowDefinitions>
 
                 <sn:ScintillaWPF
@@ -505,7 +505,7 @@
 
                 <GridSplitter Grid.Row="1" 
                               Height="4" 
-                              x:Name="FindResultsSplitter"
+                              x:Name="ResultsSplitter"
                               HorizontalAlignment="Stretch"
                               Visibility="Collapsed"
                               ResizeBehavior="PreviousAndNext"/>
@@ -521,8 +521,8 @@
                             <Image Source="../Resources/Images/cross.png"/>
                         </Button.Content>
                     </Button>
-                    <controls:FindAllResultsPanel 
-                        x:Name="FindResultsPanel"/>
+                    <controls:ResultsPanel 
+                        x:Name="ResultsPanel"/>
                 </DockPanel>
 
             </Grid>

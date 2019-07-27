@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
@@ -21,6 +20,8 @@ using ScintillaNET;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
+    using ResultsEventArgs = DataEventArgs<IResultCollection>;
+
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IMessageBoxService messageBoxService;
@@ -49,11 +50,6 @@ namespace OfficeRibbonXEditor.ViewModels
         private Hashtable customUiSchemas;
 
         private TreeViewItemViewModel selectedItem = null;
-
-        /// <summary>
-        /// Used during the XML validation to flag whether there was any error during the process
-        /// </summary>
-        private bool hasXmlError;
 
         public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker, IDialogProvider dialogProvider)
         {
@@ -120,9 +116,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public event EventHandler<LaunchDialogEventArgs> LaunchingDialog;
 
-        public event FindReplace.FindAllResultsEventHandler FindAllResults;
-
-        public event EventHandler<HighlightEventArgs> HighlightEditor;
+        public event EventHandler<ResultsEventArgs> ShowResults;
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
@@ -387,7 +381,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler)>((
                 this.Lexer.Editor.Scintilla,
                 action,
-                (o, e) => this.FindAllResults?.Invoke(this, e)));
+                (o, e) => this.ShowResults?.Invoke(this, e)));
         }
 
         private void ExecuteCloseDocumentCommand()
@@ -836,58 +830,56 @@ namespace OfficeRibbonXEditor.ViewModels
                     part.Contents, 
                     LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
                 
-                this.hasXmlError = false;
-
                 var schemaSet = new XmlSchemaSet();
                 schemaSet.Add(targetSchema);
 
-                xmlDoc.Validate(schemaSet, this.XmlValidationEventHandler);
+                var errorList = new List<XmlError>();
+                void ValidateHandler(object o, ValidationEventArgs e)
+                {
+                    errorList.Add(new XmlError
+                    {
+                        LineNumber = e.Exception.LineNumber,
+                        LinePosition = e.Exception.LinePosition,
+                        Message = e.Message,
+                    });
+                }
+
+                xmlDoc.Validate(schemaSet, ValidateHandler);
+
+                if (!errorList.Any())
+                {
+                    if (showValidMessage)
+                    {
+                        this.messageBoxService.Show(
+                            StringsResource.idsValidXml,
+                            "XML is Valid",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Information);
+                    }
+
+                    return true;
+                }
+                
+                this.ShowResults?.Invoke(this, new ResultsEventArgs(new XmlErrorResults(errorList)));
+                return false;
             }
             catch (XmlException ex)
             {
-                this.HandleValidationException(ex.LineNumber, ex.LinePosition, ex.Message);
+                var errorList = new[]
+                {
+                    new XmlError
+                    {
+                        LineNumber = ex.LineNumber,
+                        LinePosition = ex.LinePosition,
+                        Message = ex.Message,
+                    }
+                };
+
+                this.ShowResults?.Invoke(this, new ResultsEventArgs(new XmlErrorResults(errorList)));
                 return false;
             }
-            
-            if (!this.hasXmlError)
-            {
-                if (showValidMessage)
-                {
-                    this.messageBoxService.Show(
-                        StringsResource.idsValidXml,
-                        "XML is valid",
-                        MessageBoxButton.OK,
-                        MessageBoxImage.Information);
-                }
-
-                return true;
-            }
-
-            return false;
         }
         
-        private void XmlValidationEventHandler(object sender, ValidationEventArgs e)
-        {
-            lock (this)
-            {
-                this.hasXmlError = true;
-            }
-
-            this.HandleValidationException(e.Exception.LineNumber, e.Exception.LinePosition, e.Exception.Message);
-        }
-
-        private void HandleValidationException(int lineNumber, int linePosition, string message)
-        {
-            if (lineNumber > 0)
-            {
-                // line numbers and positions passed from the XML validation methods are 0-based, but the Scintilla editor works with 1-based positions instead
-                this.HighlightEditor?.Invoke(this, new HighlightEventArgs(lineNumber - 1, linePosition - 1));
-            }
-
-            var msg = lineNumber > 0 ? $"Error in line {lineNumber}, position {linePosition}:\n\n{message}" : $"Error validating XML:\n\n{message}";
-            this.messageBoxService.Show(msg, "XML is not valid", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-
         private void ExecuteGenerateCallbacksCommand()
         {
             // TODO: Check whether any text is selected, and generate callbacks only for that text

@@ -50,6 +50,8 @@ namespace OfficeRibbonXEditor.Services
 
             var current = Assembly.GetExecutingAssembly().GetName().Version;
 
+            Debug.WriteLine($"Latest version: {latestVersion}; current: {current}");
+
             // Now convert the latest string into something comparable to current
             return latestVersion > current ? latestVersion.ToString(3) : null;
         }

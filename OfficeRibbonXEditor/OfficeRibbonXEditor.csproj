@@ -153,8 +153,8 @@
     <Compile Include="Controls\DialogControl.cs" />
     <Compile Include="Controls\EditableComboBox.cs" />
     <Compile Include="Controls\ExternalHyperlink.cs" />
-    <Compile Include="Controls\FindAllResultsPanel.xaml.cs">
-      <DependentUpon>FindAllResultsPanel.xaml</DependentUpon>
+    <Compile Include="Controls\ResultsPanel.xaml.cs">
+      <DependentUpon>ResultsPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="Converters\InverseBooleanConverter.cs" />
     <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
@@ -172,10 +172,13 @@
     <Compile Include="Extensions\UiElementExtensions.cs" />
     <Compile Include="Models\FindReplace.cs" />
     <Compile Include="Models\FindReplaceAction.cs" />
-    <Compile Include="Models\FindResultsEventArgs.cs" />
+    <Compile Include="Models\XmlError.cs" />
+    <Compile Include="Models\XmlErrorResults.cs" />
+    <Compile Include="Models\FindResults.cs" />
     <Compile Include="Models\HighlightEventArgs.cs" />
     <Compile Include="Models\LaunchDialogEventArgs.cs" />
     <Compile Include="Models\ReplaceResultsEeventArgs.cs" />
+    <Compile Include="Interfaces\IResultCollection.cs" />
     <Compile Include="ViewModels\FindReplaceDialogViewModel.cs" />
     <Compile Include="ViewModels\GoToDialogViewModel.cs" />
     <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
@@ -250,7 +253,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>StringsResource.resx</DependentUpon>
     </Compile>
-    <Page Include="Controls\FindAllResultsPanel.xaml">
+    <Page Include="Controls\ResultsPanel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

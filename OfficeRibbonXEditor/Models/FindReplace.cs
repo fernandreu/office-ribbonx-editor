@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
-using OfficeRibbonXEditor.Controls.Forms;
+using OfficeRibbonXEditor.Interfaces;
 using ScintillaNET;
-using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 
 namespace OfficeRibbonXEditor.Models
 {
+	using ResultsEventArgs = DataEventArgs<IResultCollection>;
+
     public class FindReplace
     {
 	    private const SearchFlags Flags = SearchFlags.None;
@@ -42,7 +43,7 @@ namespace OfficeRibbonXEditor.Models
 
 		public event ReplaceAllResultsEventHandler ReplaceAllResults;
 
-		public delegate void FindAllResultsEventHandler(object sender, FindResultsEventArgs findAllResults);
+		public delegate void FindAllResultsEventHandler(object sender, ResultsEventArgs findAllResults);
 
 		public delegate void ReplaceAllResultsEventHandler(object sender, ReplaceResultsEventArgs findAllResults);
 
@@ -384,7 +385,7 @@ namespace OfficeRibbonXEditor.Models
 				startPos = r.cpMax;
 			}
 
-            this.FindAllResults?.Invoke(this, new FindResultsEventArgs(this, results));
+            this.FindAllResults?.Invoke(this, new ResultsEventArgs(new FindResults(results)));
 
             return results;
 		}
@@ -424,7 +425,7 @@ namespace OfficeRibbonXEditor.Models
 				rangeToSearch = new CharacterRange(r.cpMax, rangeToSearch.cpMax);
 			}
 
-            this.FindAllResults?.Invoke(this, new FindResultsEventArgs(this, results));
+            this.FindAllResults?.Invoke(this, new ResultsEventArgs(new FindResults(results)));
 
             return results;
 		}

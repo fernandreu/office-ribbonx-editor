@@ -27,6 +27,8 @@ namespace OfficeRibbonXEditor.Views
         public MainWindow()
         {
             this.InitializeComponent();
+
+            this.ResultsPanel.Scintilla = this.Editor.Scintilla;
         }
 
         public int Zoom
@@ -70,22 +72,11 @@ namespace OfficeRibbonXEditor.Views
                     this.Editor.EmptyUndoBuffer();
                 }
             };
-            this.viewModel.FindAllResults += (o, e) =>
+            this.viewModel.ShowResults += (o, e) =>
             {
-                this.FindResultsSplitter.Visibility = Visibility.Visible;
-                this.FindResultsRow.Height = this.lastResultsHeight;
-                this.FindResultsPanel.UpdateFindAllResults(e.FindReplace, e.FindAllResults);
-            };
-            this.viewModel.HighlightEditor += (o, e) =>
-            {
-                if (e.LineNumber >= this.Editor.Lines.Count)
-                {
-                    return;
-                }
-
-                var line = this.Editor.Lines[e.LineNumber];
-                this.Editor.SetSelection(line.Position, line.Position + line.Length);
-                this.Editor.ScrollCaret();
+                this.ResultsSplitter.Visibility = Visibility.Visible;
+                this.ResultsRow.Height = this.lastResultsHeight;
+                this.ResultsPanel.UpdateFindAllResults(e.Data);
             };
         }
 
@@ -308,9 +299,9 @@ namespace OfficeRibbonXEditor.Views
 
         private void OnCloseFindResults(object sender, RoutedEventArgs e)
         {
-            this.lastResultsHeight = this.FindResultsRow.Height;
-            this.FindResultsRow.Height = new GridLength(0);
-            this.FindResultsSplitter.Visibility = Visibility.Collapsed;
+            this.lastResultsHeight = this.ResultsRow.Height;
+            this.ResultsRow.Height = new GridLength(0);
+            this.ResultsSplitter.Visibility = Visibility.Collapsed;
         }
     }
 }

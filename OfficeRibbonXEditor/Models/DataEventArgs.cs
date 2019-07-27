@@ -9,6 +9,15 @@ namespace OfficeRibbonXEditor.Models
     /// <typeparam name="T">The type of the Data property</typeparam>
     public class DataEventArgs<T> : EventArgs
     {
+        public DataEventArgs()
+        {
+        }
+
+        public DataEventArgs(T data)
+        {
+            this.Data = data;
+        }
+
         /// <summary>
         /// Gets or sets the data passed by the event
         /// </summary>
