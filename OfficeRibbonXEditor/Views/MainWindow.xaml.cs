@@ -76,6 +76,17 @@ namespace OfficeRibbonXEditor.Views
                 this.FindResultsRow.Height = this.lastResultsHeight;
                 this.FindResultsPanel.UpdateFindAllResults(e.FindReplace, e.FindAllResults);
             };
+            this.viewModel.HighlightEditor += (o, e) =>
+            {
+                if (e.LineNumber >= this.Editor.Lines.Count)
+                {
+                    return;
+                }
+
+                var line = this.Editor.Lines[e.LineNumber];
+                this.Editor.SetSelection(line.Position, line.Position + line.Length);
+                this.Editor.ScrollCaret();
+            };
         }
 
         /// <summary>

@@ -173,6 +173,7 @@
     <Compile Include="Models\FindReplace.cs" />
     <Compile Include="Models\FindReplaceAction.cs" />
     <Compile Include="Models\FindResultsEventArgs.cs" />
+    <Compile Include="Models\HighlightEventArgs.cs" />
     <Compile Include="Models\LaunchDialogEventArgs.cs" />
     <Compile Include="Models\ReplaceResultsEeventArgs.cs" />
     <Compile Include="ViewModels\FindReplaceDialogViewModel.cs" />

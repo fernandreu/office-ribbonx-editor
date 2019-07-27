@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Schema;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -120,6 +121,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public event EventHandler<LaunchDialogEventArgs> LaunchingDialog;
 
         public event FindReplace.FindAllResultsEventHandler FindAllResults;
+
+        public event EventHandler<HighlightEventArgs> HighlightEditor;
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
@@ -824,39 +827,25 @@ namespace OfficeRibbonXEditor.ViewModels
             // Test to see if text is XML first
             try
             {
-                var xmlDoc = new XmlDocument();
-
                 if (!(this.customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
                 {
                     return false;
                 }
 
-                xmlDoc.Schemas.Add(targetSchema);
-
-                xmlDoc.LoadXml(part.Contents);
-
-                if (xmlDoc.DocumentElement == null)
-                {
-                    // TODO: ShowError call with an actual message perhaps? Will this ever be null
-                    return false;
-                }
-
-                if (xmlDoc.DocumentElement.NamespaceURI != targetSchema.TargetNamespace)
-                {
-                    var errorText = new StringBuilder();
-                    errorText.Append(string.Format(StringsResource.idsUnknownNamespace, xmlDoc.DocumentElement.NamespaceURI));
-                    errorText.Append("\n" + string.Format(StringsResource.idsCustomUINamespace, targetSchema.TargetNamespace));
-
-                    this.messageBoxService.Show(errorText.ToString(), "Error validating XML", image: MessageBoxImage.Error);
-                    return false;
-                }
-
+                var xmlDoc = XDocument.Parse(
+                    part.Contents, 
+                    LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
+                
                 this.hasXmlError = false;
-                xmlDoc.Validate(this.XmlValidationEventHandler);
+
+                var schemaSet = new XmlSchemaSet();
+                schemaSet.Add(targetSchema);
+
+                xmlDoc.Validate(schemaSet, this.XmlValidationEventHandler);
             }
             catch (XmlException ex)
             {
-                this.messageBoxService.Show(StringsResource.idsInvalidXml + "\n" + ex.Message, "Error validating XML", image: MessageBoxImage.Error);
+                this.HandleValidationException(ex.LineNumber, ex.LinePosition, ex.Message);
                 return false;
             }
             
@@ -884,11 +873,19 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.hasXmlError = true;
             }
 
-            this.messageBoxService.Show(
-                e.Message,
-                e.Severity.ToString(),
-                MessageBoxButton.OK,
-                e.Severity == XmlSeverityType.Error ? MessageBoxImage.Error : MessageBoxImage.Warning);
+            this.HandleValidationException(e.Exception.LineNumber, e.Exception.LinePosition, e.Exception.Message);
+        }
+
+        private void HandleValidationException(int lineNumber, int linePosition, string message)
+        {
+            if (lineNumber > 0)
+            {
+                // line numbers and positions passed from the XML validation methods are 0-based, but the Scintilla editor works with 1-based positions instead
+                this.HighlightEditor?.Invoke(this, new HighlightEventArgs(lineNumber - 1, linePosition - 1));
+            }
+
+            var msg = lineNumber > 0 ? $"Error in line {lineNumber}, position {linePosition}:\n\n{message}" : $"Error validating XML:\n\n{message}";
+            this.messageBoxService.Show(msg, "XML is not valid", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void ExecuteGenerateCallbacksCommand()
