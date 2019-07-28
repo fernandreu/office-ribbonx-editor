@@ -13,6 +13,8 @@ namespace OfficeRibbonXEditor.Models
             this.Items = new List<XmlError>(items);
         }
 
+        public string Header { get; } = "XML Validation Results";
+
         public List<XmlError> Items { get; }
 
         public void AddToPanel(Scintilla editor, Scintilla resultsPanel)

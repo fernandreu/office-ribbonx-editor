@@ -76,6 +76,7 @@ namespace OfficeRibbonXEditor.Views
             {
                 this.ResultsSplitter.Visibility = Visibility.Visible;
                 this.ResultsRow.Height = this.lastResultsHeight;
+                this.ResultsHeader.Content = e.Data.Header;
                 this.ResultsPanel.UpdateFindAllResults(e.Data);
             };
         }

@@ -12,6 +12,8 @@ namespace OfficeRibbonXEditor.Models
             this.Items = new List<CharacterRange>(items);
         }
 
+        public string Header { get; } = "Find Results";
+
         public List<CharacterRange> Items { get; }
 
         public void AddToPanel(Scintilla editor, Scintilla resultsPanel)

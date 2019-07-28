@@ -278,6 +278,9 @@ namespace OfficeRibbonXEditor.ViewModels
             this.AssertMessage(this.viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
+        /// <summary>
+        /// Checks if the XML validation provides the expected result for a few sample cases
+        /// </summary>
         [Test]
         public void XmlValidationTest()
         {

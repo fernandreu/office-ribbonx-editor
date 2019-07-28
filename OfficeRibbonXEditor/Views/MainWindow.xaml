@@ -511,16 +511,19 @@
                               ResizeBehavior="PreviousAndNext"/>
 
                 <DockPanel Grid.Row="2">
-                    <Button DockPanel.Dock="Top"
-                            Width="16"
-                            Height="16"
-                            Margin="2"
-                            HorizontalAlignment="Right"
-                            Click="OnCloseFindResults">
-                        <Button.Content>
-                            <Image Source="../Resources/Images/cross.png"/>
-                        </Button.Content>
-                    </Button>
+                    <DockPanel DockPanel.Dock="Top">
+                        <Label Name="ResultsHeader"/>
+                        <Button DockPanel.Dock="Right"
+                                Width="16"
+                                Height="16"
+                                Margin="2"
+                                HorizontalAlignment="Right"
+                                Click="OnCloseFindResults">
+                            <Button.Content>
+                                <Image Source="../Resources/Images/cross.png"/>
+                            </Button.Content>
+                        </Button>
+                    </DockPanel>
                     <controls:ResultsPanel 
                         x:Name="ResultsPanel"/>
                 </DockPanel>
