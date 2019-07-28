@@ -40,7 +40,7 @@ namespace OfficeRibbonXEditor.Models
 
         public RecentFileList()
         {
-            this.Persister = new RegistryPersister();
+            this.UseXmlPersister();
 
             this.MaxNumberOfFiles = 9;
             this.MaxPathLength = 50;
