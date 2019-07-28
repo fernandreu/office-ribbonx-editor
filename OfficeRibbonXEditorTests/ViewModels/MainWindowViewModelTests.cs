@@ -287,16 +287,31 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.InsertXml12Command.Execute();
             this.viewModel.SelectedItem = doc.Children[0];
             Assert.IsTrue(this.viewModel.SelectedItem.CanHaveContents);
-            
-            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
+
+            void AssertIsValid(bool expected, string message = null)
+            {
+                var actual = true;
+                void Handler(object o, DataEventArgs<IResultCollection> e)
+                {
+                    actual = false;
+                }
+
+                this.viewModel.ShowResults += Handler;
+                this.viewModel.ValidateCommand.Execute();
+                this.viewModel.ShowResults -= Handler;
+
+                Assert.AreEqual(expected, actual, message);
+            }
+
+            AssertIsValid(false);
             this.viewModel.SelectedItem.Contents = "asd";
-            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
+            AssertIsValid(false);
             
             this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Information);
+            AssertIsValid(true);
             
             this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon><tabs></tabs></ribbon></customUI>";
-            this.AssertMessage(this.viewModel.ValidateCommand.Execute, MessageBoxImage.Error);
+            AssertIsValid(false);
         }
 
         /// <summary>
