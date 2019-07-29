@@ -73,7 +73,7 @@ steps:
     #targetPath: # Required when publishLocation == FilePath
     #parallel: false # Optional
     #parallelCount: # Optional
-    
+
 - task: PowerShell@2
   displayName: 'PostBuildSteps'
   inputs:

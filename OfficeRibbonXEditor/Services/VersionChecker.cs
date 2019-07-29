@@ -5,55 +5,44 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services
 {
     public class VersionChecker : IVersionChecker
     {
-        private const string CheckUrl = "https://raw.githubusercontent.com/fernandreu/office-ribbonx-editor/info/RELEASE-VERSION";
+        private const string CheckUrl = "https://api.github.com/repos/fernandreu/office-ribbonx-editor/releases/latest";
 
         public async Task<string> CheckVersionAsync(CancellationToken cancelToken = default(CancellationToken))
         {
-            string latest;
             try
             {
-                using (var httpClient = new HttpClient())
-                {
-                    var uri = new Uri(CheckUrl);
-                    var response = await httpClient.GetAsync(uri, cancelToken);
-                    latest = await response.Content.ReadAsStringAsync();
-                }
+                var latestVersion = await this.GetVersionAsync(cancelToken);
+                var current = Assembly.GetExecutingAssembly().GetName().Version;
+                Debug.WriteLine($"Latest version: {latestVersion}; current: {current}");
+                return latestVersion > current ? latestVersion.ToString() : null;
             }
             catch (Exception e)
             {
                 Debug.Fail(e.Message); 
                 return null;
             }
+        }
 
-            if (!Regex.IsMatch(latest, @"^\d+\.\d+\.\d+\.\d+$"))
+        private async Task<Version> GetVersionAsync(CancellationToken cancelToken)
+        {
+            using (var httpClient = new HttpClient())
             {
-                Debug.Fail($"Version '{latest}' has an unrecognized format");
-                return null;
+                httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+                httpClient.DefaultRequestHeaders.Add("User-Agent", "request");
+                var uri = new Uri(CheckUrl);
+                var response = await httpClient.GetAsync(uri, cancelToken);
+                var contentString = await response.Content.ReadAsStringAsync();
+                var content = JsonConvert.DeserializeObject<dynamic>(contentString);
+                string tag = content.tag_name;
+                return new Version(tag.Substring(1));
             }
-
-            Version latestVersion;
-            try
-            {
-                latestVersion = new Version(latest);
-            }
-            catch (FormatException e)
-            {
-                Debug.Fail(e.Message);
-                return null;
-            }
-
-            var current = Assembly.GetExecutingAssembly().GetName().Version;
-
-            Debug.WriteLine($"Latest version: {latestVersion}; current: {current}");
-
-            // Now convert the latest string into something comparable to current
-            return latestVersion > current ? latestVersion.ToString(3) : null;
         }
     }
 }
