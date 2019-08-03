@@ -20,6 +20,11 @@ if (-not (Test-Path "$stagingDir\OfficeRibbonXEditor.exe")) {
     exit 1
 }
 
+# TODO: The following steps are deprecated, as latest release version is now read directly 
+# from the GitHub API. This is only kept for legacy purposes (i.e. until enough time 
+# passes for users to update to a more recent tool). Once this is removed, the corresponding
+# pipeline variables will no longer be needed.
+
 if (-not $branch.StartsWith("refs/tags/v")) {
     Write-Host "Not a release build; skipping remaining steps"
     exit 0
