@@ -1,9 +1,23 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Windows;
+using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
     public class AboutDialogViewModel : DialogBase
     {
+        private readonly IMessageBoxService messageBoxService;
+
+        public AboutDialogViewModel(IMessageBoxService messageBoxService)
+        {
+            this.messageBoxService = messageBoxService;
+            this.SubmitIssueCommand = new RelayCommand(ExecuteSubmitIssueCommand);
+            this.CopyInfoCommand = new RelayCommand(this.ExecuteCopyInfoCommand);
+        }
+
         public string AssemblyTitle
         {
             get
@@ -78,6 +92,33 @@ namespace OfficeRibbonXEditor.ViewModels
 
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
+        }
+
+        public string RuntimeVersion => RuntimeInformation.FrameworkDescription;
+
+        public string OperatingSystemVersion => RuntimeInformation.OSDescription;
+
+        public RelayCommand SubmitIssueCommand { get; }
+
+        public RelayCommand CopyInfoCommand { get; }
+
+        private static void ExecuteSubmitIssueCommand()
+        {
+            Process.Start("https://github.com/fernandreu/office-ribbonx-editor/issues/new/choose");
+        }
+
+        private void ExecuteCopyInfoCommand()
+        {
+            Clipboard.SetText(
+                $"Version: {this.AssemblyVersion}\n" +
+                $"Runtime:\n {this.RuntimeVersion}\n " +
+                $"Operating System: {this.OperatingSystemVersion}");
+
+            this.messageBoxService.Show(
+                "The version information has been copied to the clipboard.",
+                "Version Information Copied",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
         }
     }
 }
