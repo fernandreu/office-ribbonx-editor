@@ -395,14 +395,16 @@
                     <HierarchicalDataTemplate
                         DataType="{x:Type model:OfficeDocumentViewModel}"
                         ItemsSource="{Binding Children}">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal"
+                                    Tag="{Binding ElementName=Window, Path=DataContext}">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
-                                <ContextMenu>
+                                <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
+                                             DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem Header="Insert Office 2010+ Custom UI Part" 
-                                              Command="{Binding DataContext.InsertXml14Command, ElementName=Window}" 
-                                              IsEnabled="{Binding DataContext.CanInsertXml14Part, ElementName=Window}">
+                                              Command="{Binding InsertXml14Command}" 
+                                              IsEnabled="{Binding CanInsertXml14Part}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -410,8 +412,8 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Header="Insert Office 2007 Custom UI Part" 
-                                              Command="{Binding DataContext.InsertXml12Command, ElementName=Window}"
-                                              IsEnabled="{Binding DataContext.CanInsertXml12Part, ElementName=Window}">
+                                              Command="{Binding InsertXml12Command}"
+                                              IsEnabled="{Binding CanInsertXml12Part}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/xml.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -419,15 +421,15 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <Separator/>
-                                    <MenuItem Header="Save" Command="{Binding DataContext.SaveCommand, ElementName=Window}">
+                                    <MenuItem Header="Save" Command="{Binding SaveCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>    
                                     </MenuItem>
-                                    <MenuItem Header="Save As..." Command="{Binding DataContext.SaveAsCommand, ElementName=Window}"/>
-                                    <MenuItem Header="Close" Command="{Binding DataContext.CloseCommand, ElementName=Window}"/>
+                                    <MenuItem Header="Save As..." Command="{Binding SaveAsCommand}"/>
+                                    <MenuItem Header="Close" Command="{Binding CloseCommand}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -435,32 +437,36 @@
                     <HierarchicalDataTemplate
                         DataType="{x:Type model:OfficePartViewModel}"
                         ItemsSource="{Binding Children}">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal"
+                                    Tag="{Binding ElementName=Window, Path=DataContext}">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>
                             <TextBlock Text="{Binding Name}"/>
                             <StackPanel.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Insert icons..." Command="{Binding DataContext.InsertIconsCommand, ElementName=Window}">
+                                <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
+                                             DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Insert icons..." Command="{Binding InsertIconsCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/insertPicture.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Remove" Command="{Binding DataContext.RemoveCommand, ElementName=Window}"/>
+                                    <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
                     </HierarchicalDataTemplate>
                     <DataTemplate DataType="{x:Type model:IconViewModel}">
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal"
+                                    Tag="{Binding ElementName=Window, Path=DataContext}">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
                             <TextBlock Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
                             <TextBox Text="{Binding NewId, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
                             <StackPanel.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding DataContext.ChangeIconIdCommand, ElementName=Window}"/>
-                                    <MenuItem Header="Remove" Command="{Binding DataContext.RemoveCommand, ElementName=Window}"/>
+                                <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
+                                             DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding ChangeIconIdCommand}"/>
+                                    <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
