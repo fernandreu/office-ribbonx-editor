@@ -8,7 +8,8 @@
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <AssemblyName>OfficeRibbonXEditor</AssemblyName>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>   
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <DependsOnNETStandard>false</DependsOnNETStandard>
     <!--<PublishSingleFile>true</PublishSingleFile>    
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
