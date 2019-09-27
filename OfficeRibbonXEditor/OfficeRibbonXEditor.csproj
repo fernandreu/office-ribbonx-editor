@@ -8,40 +8,42 @@
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <AssemblyName>OfficeRibbonXEditor</AssemblyName>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>   
+    <!--<PublishSingleFile>true</PublishSingleFile>    
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <PublishTrimmed>true</PublishTrimmed>-->
+    <_InstallerTargetFramework>net461</_InstallerTargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="2.1.1" />
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.5.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
     <PackageReference Include="log4net" Version="1.2.10" />
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
-    <PackageReference Include="MicrosoftExpressionInteractions" Version="3.0.40218" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
-
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="**\*.png" />
     <Resource Include="**\*.ico" />
-    <Resource Include="Resources\**\*.xml" />
+    <EmbeddedResource Include="Resources\**\*.xml" />   
     <Resource Include="Resources\**\*.xsd" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
-    <PackageReference Include="Fody">
-      <Version>5.0.6</Version>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Costura.Fody" Version="4.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ScintillaNET.WPF\ScintillaNET.WPF.csproj" />
   </ItemGroup>
+
+  <!-- This is a workaround for Wix (see https://github.com/wixtoolset/issues/issues/5705) -->
+  <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(OutputPath)\$(_InstallerTargetFramework)\$(AssemblyName).exe" />
+    </ItemGroup>
+  </Target>
 </Project>

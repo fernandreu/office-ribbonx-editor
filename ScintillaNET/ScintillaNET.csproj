@@ -45,9 +45,6 @@
     <AssemblyOriginatorKeyFile>..\ScintillaNET.snk</AssemblyOriginatorKeyFile>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
-    <BaseAddress>4194304</BaseAddress>
-  </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="x64\SciLexer.dll.gz" />
     <EmbeddedResource Include="x86\SciLexer.dll.gz" />
