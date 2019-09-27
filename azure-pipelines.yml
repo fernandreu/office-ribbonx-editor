@@ -46,7 +46,7 @@ steps:
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    msbuildArgs: '/p:TargetFramework=$(targetFramework)'
+    msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
