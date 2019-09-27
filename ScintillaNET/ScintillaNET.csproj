@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{22AE2386-60F1-476E-9303-61CDB0AAC4CF}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ScintillaNET</RootNamespace>
+    <AssemblyName>ScintillaNET</AssemblyName>
+    <TargetFrameworks>netcoreapp3.0;net40</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
+    <FileAlignment>512</FileAlignment>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\$(TargetFramework)\ScintillaNET.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\$(TargetFramework)\ScintillaNET.xml</DocumentationFile>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Signed|AnyCPU'">
+    <OutputPath>bin\Signed\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Signed\$(TargetFramework)\ScintillaNET.xml</DocumentationFile>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\ScintillaNET.snk</AssemblyOriginatorKeyFile>
+    <ErrorReport>prompt</ErrorReport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|netcoreapp3.0|AnyCPU'">
+    <BaseAddress>4194304</BaseAddress>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="x64\SciLexer.dll.gz" />
+    <EmbeddedResource Include="x86\SciLexer.dll.gz" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x64\License.txt" />
+    <Content Include="x64\SciLexer.dll" />
+    <Content Include="x64\SciLexer.pdb" />
+    <Content Include="x64\version.txt" />
+    <Content Include="x86\License.txt" />
+    <Content Include="x86\version.txt" />
+    <Content Include="x86\SciLexer.dll" />
+    <Content Include="x86\SciLexer.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="x64\SciLexer.exp" />
+    <Content Include="x64\SciLexer.lib" />
+    <Content Include="x86\SciLexer.exp" />
+    <Content Include="x86\SciLexer.lib" />
+    <LicenseFile Include="$(SolutionDir)\..\LICENSE" />
+  </ItemGroup>
+  <Target Name="CopyFiles" AfterTargets="AfterBuild">
+    <!--<Copy SourceFiles="@(LicenseFile)" DestinationFolder="$(TargetDir)"/>-->
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
