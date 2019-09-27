@@ -10,11 +10,12 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ScintillaNET.WPF</RootNamespace>
     <AssemblyName>ScintillaNET.WPF</AssemblyName>
-    <TargetFrameworks>net40;netcoreapp3.0</TargetFrameworks>
+    <TargetFrameworks>net461;netcoreapp3.0</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <FileAlignment>512</FileAlignment>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,9 +34,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\$(TargetFramework)\ScintillaNET.WPF.xml</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net40|AnyCPU'">
-    <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\ScintillaNET\ScintillaNET.csproj" />
