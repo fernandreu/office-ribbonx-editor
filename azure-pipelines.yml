@@ -29,12 +29,6 @@ variables:
 
 steps:
 
-- task: DotNetCoreInstaller@0
-  displayName: Install .NET Core SDK
-  inputs:
-    packageType: 'sdk'
-    version: '3.0.100'
-
 - task: PowerShell@2
   displayName: 'PreBuildSteps'
   inputs:
