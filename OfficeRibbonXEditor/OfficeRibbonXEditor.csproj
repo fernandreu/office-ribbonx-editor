@@ -9,7 +9,6 @@
     <AssemblyName>OfficeRibbonXEditor</AssemblyName>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <DependsOnNETStandard>false</DependsOnNETStandard>
     <!--<PublishSingleFile>true</PublishSingleFile>    
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
@@ -35,6 +34,9 @@
     <Resource Include="**\*.ico" />
     <EmbeddedResource Include="Resources\**\*.xml" />   
     <Resource Include="Resources\**\*.xsd" />
+    <Compile Include="..\SharedAssemblyInfo.cs">
+      <Link>Properties\SharedAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
