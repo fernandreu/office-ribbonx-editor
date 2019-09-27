@@ -49,6 +49,7 @@ steps:
 
 - task: VSTest@2
   displayName: 'RunTests'
+  condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
   inputs:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
