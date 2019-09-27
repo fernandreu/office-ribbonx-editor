@@ -24,8 +24,6 @@ variables:
 - group: GitHubPATGroup
 - name: solution
   value: '**/*.sln'
-- name: targetFramework
-  value: net461
 
 steps:
 
