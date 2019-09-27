@@ -62,7 +62,7 @@ steps:
     sourceFolder: ''
     contents: |
       OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
-      Installer/bin/$(buildConfiguration)/**.msi
+      Installer/bin/$(buildConfiguration)/$(targetFramework)/**.msi
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
