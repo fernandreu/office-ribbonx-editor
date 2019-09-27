@@ -24,7 +24,7 @@ variables:
 - group: GitHubPATGroup
 - name: solution
   value: '**/*.sln'
-- name: targetFrameworks
+- name: targetFramework
   value: net461;netcoreapp3.0
 
 steps:
@@ -45,7 +45,7 @@ steps:
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    msbuildArgs: '/p:TargetFrameworks=$(targetFrameworks) /p:AppendTargetFrameworkToOutputPath=false'
+    msbuildArgs: '/p:TargetFramework=$(targetFramework)'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
@@ -60,7 +60,7 @@ steps:
   inputs:
     sourceFolder: ''
     contents: |
-      OfficeRibbonXEditor/bin/$(buildConfiguration)/**.exe
+      OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
       Installer/bin/$(buildConfiguration)/**.msi
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
