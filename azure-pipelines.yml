@@ -24,8 +24,8 @@ variables:
 - group: GitHubPATGroup
 - name: solution
   value: '**/*.sln'
-- name: targetFramework
-  value: net461
+- name: targetFrameworks
+  value: net461;netcoreapp3.0
 
 steps:
 - task: PowerShell@2
@@ -45,7 +45,7 @@ steps:
   inputs:
     solution: '$(solution)'
     platform: '$(buildPlatform)'
-    msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:AppendTargetFrameworkToOutputPath=false'
+    msbuildArgs: '/p:TargetFrameworks=$(targetFrameworks) /p:AppendTargetFrameworkToOutputPath=false'
     configuration: '$(buildConfiguration)'
 
 - task: VSTest@2
