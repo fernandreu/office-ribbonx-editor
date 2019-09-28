@@ -151,6 +151,7 @@ jobs:
     displayName: 'dotnet test'
     inputs:
       command: test
+      projects: '**/*Tests.csproj'
       arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
       configuration: '$(buildConfiguration)'
 
@@ -158,6 +159,7 @@ jobs:
     displayName: 'dotnet publish'
     inputs:
       command: publish
+      projects: '**/OfficeRibbonXEditor.csproj'
       publishWebProjects: false
       arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
       configuration: '$(buildConfiguration)'
