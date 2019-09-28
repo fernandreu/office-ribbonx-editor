@@ -21,7 +21,7 @@ ForEach-Object {
         Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $error"
         exit 1
     }
-    $c = $c -replace '(AssemblyVersion\(\"\d+.\d+.\d+)\.(\*)(\"\))', "`$1.$buildId`$3"
+    $c = $c -replace '(AssemblyVersion\(\"\d+.\d+.\d+)\.(\d)(\"\))', "`$1.$buildId`$3"
     $joined = $c -join "`r`n"
     Write-Host "Resulting assembly:`n$joined"
     [IO.File]::WriteAllText($_.FullName, $joined)
