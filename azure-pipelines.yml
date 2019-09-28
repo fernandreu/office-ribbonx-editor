@@ -78,7 +78,7 @@ jobs:
     displayName: 'PublishArtifacts'
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Framework Binaries / Installer'
+      artifactName: '.NET Framework Binaries & Installer'
       publishLocation: 'Container' # Options: container, filePath
       #targetPath: # Required when publishLocation == FilePath
       #parallel: false # Optional
@@ -161,6 +161,7 @@ jobs:
         OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
         OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.dll
         OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.json
+        OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/runtime/**/*.*
       targetFolder: '$(Build.ArtifactStagingDirectory)'
       cleanTargetFolder: true # Optional
       flattenFolders: true # Optional
@@ -196,10 +197,3 @@ jobs:
       #targetPath: # Required when publishLocation == FilePath
       #parallel: false # Optional
       #parallelCount: # Optional
-
-  - task: PowerShell@2
-    displayName: 'PostBuildSteps'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'PostBuild.ps1'
-      arguments: '"$(Build.SourceBranch)" "$(Build.ArtifactStagingDirectory)" "$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
