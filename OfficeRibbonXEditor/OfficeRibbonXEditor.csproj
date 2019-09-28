@@ -1,416 +1,52 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" />
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{87EFED6B-45A1-425F-B63B-5894E4FC0C03}</ProjectGuid>
     <OutputType>WinExe</OutputType>
+    <TargetFrameworks>net461;netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <AssemblyName>OfficeRibbonXEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <AutorunEnabled>true</AutorunEnabled>
-    <ApplicationRevision>1</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <PublishWizardCompleted>true</PublishWizardCompleted>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!--<PublishSingleFile>true</PublishSingleFile>    
+    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <PublishTrimmed>true</PublishTrimmed>-->
+    <_InstallerTargetFramework>net461</_InstallerTargetFramework>
   </PropertyGroup>
-  <PropertyGroup>
-    <ManifestCertificateThumbprint>15C8009991D2EC2858A4B0710C6C0188BE465D14</ManifestCertificateThumbprint>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ManifestKeyFile>CustomUIEditor_TemporaryKey.pfx</ManifestKeyFile>
-  </PropertyGroup>
-  <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignManifests>false</SignManifests>
-  </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="AsyncAwaitBestPractices, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AsyncAwaitBestPractices.2.1.1\lib\netstandard\AsyncAwaitBestPractices.dll</HintPath>
-    </Reference>
-    <Reference Include="AsyncAwaitBestPractices.MVVM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\AsyncAwaitBestPractices.MVVM.2.1.1\lib\netstandard\AsyncAwaitBestPractices.MVVM.dll</HintPath>
-    </Reference>
-    <Reference Include="Autofac, Version=4.9.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <HintPath>..\packages\Autofac.4.9.2\lib\net45\Autofac.dll</HintPath>
-    </Reference>
-    <Reference Include="CommonServiceLocator, Version=2.0.4.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommonServiceLocator.2.0.4\lib\net46\CommonServiceLocator.dll</HintPath>
-    </Reference>
-    <Reference Include="Costura, Version=4.0.0.0, Culture=neutral, PublicKeyToken=9919ef960d84173d, processorArchitecture=MSIL">
-      <HintPath>..\packages\Costura.Fody.4.0.0\lib\net40\Costura.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
-    </Reference>
-    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
-    </Reference>
-    <Reference Include="JetBrains.Annotations, Version=2019.1.1.0, Culture=neutral, PublicKeyToken=1010a0d8d6380325, processorArchitecture=MSIL">
-      <HintPath>..\packages\JetBrains.Annotations.2019.1.1\lib\net20\JetBrains.Annotations.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <HintPath>..\packages\log4net.1.2.10\lib\2.0\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="ScintillaNET, Version=3.6.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\jacobslusser.ScintillaNET.3.6.3\lib\net40\ScintillaNET.dll</HintPath>
-    </Reference>
-    <Reference Include="ScintillaNET.WPF, Version=1.0.0.16559, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\estebano.ScintillaNET.WPF.2.6.0\lib\net40\ScintillaNET.WPF.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Xml" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xaml">
-      <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
-    </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=3.5.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.5.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
-    </Reference>
+    <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="2.1.1" />
+    <PackageReference Include="Autofac" Version="4.9.2" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="3.5.0" />
+    <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
+    <PackageReference Include="log4net" Version="1.2.10" />
+    <PackageReference Include="Microsoft.Windows.Compatibility" Version="3.0.0" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+    <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
   </ItemGroup>
+
   <ItemGroup>
-    <ApplicationDefinition Include="App.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </ApplicationDefinition>
+    <Resource Include="**\*.png" />
+    <Resource Include="**\*.ico" />
+    <EmbeddedResource Include="Resources\**\*.xml" />   
+    <Resource Include="Resources\**\*.xsd" />
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Controls\ClickSelectTextBox.cs" />
-    <Compile Include="Controls\DialogControl.cs" />
-    <Compile Include="Controls\EditableComboBox.cs" />
-    <Compile Include="Controls\ExternalHyperlink.cs" />
-    <Compile Include="Controls\ResultsPanel.xaml.cs">
-      <DependentUpon>ResultsPanel.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\InverseBooleanConverter.cs" />
-    <Compile Include="Converters\InverseBooleanToVisibilityConverter.cs" />
-    <Compile Include="Converters\IsNotNullConverter.cs" />
-    <Compile Include="Converters\MethodToCommandConverter.cs" />
-    <Compile Include="Converters\StringToVisibilityConverter.cs" />
-    <Compile Include="Converters\ValueConverterGroup.cs" />
-    <Compile Include="Models\CharacterRange.cs" />
-    <Compile Include="Controls\Forms\IncrementalSearcher.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Controls\Forms\IncrementalSearcher.Designer.cs">
-      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\UiElementExtensions.cs" />
-    <Compile Include="Models\FindReplace.cs" />
-    <Compile Include="Models\FindReplaceAction.cs" />
-    <Compile Include="Models\XmlError.cs" />
-    <Compile Include="Models\XmlErrorResults.cs" />
-    <Compile Include="Models\FindResults.cs" />
-    <Compile Include="Models\HighlightEventArgs.cs" />
-    <Compile Include="Models\LaunchDialogEventArgs.cs" />
-    <Compile Include="Models\ReplaceResultsEeventArgs.cs" />
-    <Compile Include="Interfaces\IResultCollection.cs" />
-    <Compile Include="ViewModels\FindReplaceDialogViewModel.cs" />
-    <Compile Include="ViewModels\GoToDialogViewModel.cs" />
-    <Compile Include="ViewModels\CallbackDialogViewModel.cs" />
-    <Compile Include="ViewModels\DialogBase.cs" />
-    <Compile Include="ViewModels\AboutDialogViewModel.cs" />
-    <Compile Include="ViewModels\RecentListViewModel.cs" />
-    <Compile Include="Views\DialogHost.xaml.cs">
-      <DependentUpon>DialogHost.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\DialogHostViewModel.cs" />
-    <Compile Include="Extensions\BitmapExtensions.cs" />
-    <Compile Include="Interfaces\IContentDialog.cs" />
-    <Compile Include="Interfaces\IDialogProvider.cs" />
-    <Compile Include="Models\CallbacksBuilder.cs" />
-    <Compile Include="Models\DataEventArgs.cs" />
-    <Compile Include="Extensions\RelayCommandExtensions.cs" />
-    <Compile Include="Models\EditorChangeEventArgs.cs" />
-    <Compile Include="Models\EditorInfo.cs" />
-    <Compile Include="Models\ScintillaLexer.cs" />
-    <Compile Include="Models\VbaLexer.cs" />
-    <Compile Include="Models\XmlLexer.cs" />
-    <Compile Include="Resources\ImagesResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ImagesResource.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Resources\SchemasResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SchemasResource.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Services\DialogProvider.cs" />
-    <Compile Include="Services\FileDialogService.cs" />
-    <Compile Include="Interfaces\IFileDialogService.cs" />
-    <Compile Include="Interfaces\IMessageBoxService.cs" />
-    <Compile Include="Interfaces\IVersionChecker.cs" />
-    <Compile Include="Services\MessageBoxService.cs" />
-    <Compile Include="Services\VersionChecker.cs" />
-    <Compile Include="ViewModels\BindingProxy.cs" />
-    <Compile Include="ViewModels\IconViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\SettingsDialogViewModel.cs" />
-    <Compile Include="ViewModels\XmlSampleViewModel.cs" />
-    <Compile Include="Views\AboutDialog.xaml.cs">
-      <DependentUpon>AboutDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CallbackDialog.xaml.cs">
-      <DependentUpon>CallbackDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Converters\ColorConverter.cs" />
-    <Compile Include="Converters\DataTypeConverter.cs" />
-    <Compile Include="Models\OfficePart.cs" />
-    <Compile Include="ViewModels\OfficePartViewModel.cs" />
-    <Compile Include="ViewModels\OfficeDocumentViewModel.cs" />
-    <Compile Include="ViewModels\TreeViewItemViewModel.cs" />
-    <Compile Include="Models\OfficeDocument.cs" />
-    <Compile Include="Views\DialogHostBase.cs" />
-    <Compile Include="Views\FindReplaceDialog.xaml.cs">
-      <DependentUpon>FindReplaceDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\GoToDialog.xaml.cs">
-      <DependentUpon>GoToDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SettingsDialog.xaml.cs">
-      <DependentUpon>SettingsDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Extensions\PropertyChangedExtension.cs" />
-    <Compile Include="Models\RecentFileList.cs" />
-    <Compile Include="Extensions\SettingBindingExtension.cs" />
-    <Compile Include="Resources\StringsResource.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>StringsResource.resx</DependentUpon>
-    </Compile>
-    <Page Include="Controls\ResultsPanel.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DialogHost.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\AboutDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\CallbackDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\FindReplaceDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\GoToDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\MainWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="App.xaml.cs">
-      <DependentUpon>App.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Views\MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Views\SettingsDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <None Include="packages.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Resource Include="Resources\Images\settings.png" />
-    <Resource Include="FodyWeavers.xml" />
-    <Resource Include="Resources\Schemas\customUI.xsd">
-      <SubType>Designer</SubType>
-    </Resource>
-    <Resource Include="Resources\Schemas\customui14.xsd">
-      <SubType>Designer</SubType>
-    </Resource>
+    <ProjectReference Include="..\ScintillaNET.WPF\ScintillaNET.WPF.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\ApplicationIcon.ico" />
-    <Resource Include="Resources\Images\check.png" />
-    <Resource Include="Resources\Images\copy.png" />
-    <Resource Include="Resources\Images\cut.png" />
-    <Resource Include="Resources\Images\insertPicture.png" />
-    <Resource Include="Resources\Images\open.png" />
-    <Resource Include="Resources\Images\paste.png" />
-    <Resource Include="Resources\Images\redo.png" />
-    <Resource Include="Resources\Images\remove.png" />
-    <Resource Include="Resources\Images\save.png" />
-    <Resource Include="Resources\Images\undo.png" />
-    <Resource Include="Resources\Images\xml.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\callbacks.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\excelwkb.png" />
-    <Resource Include="Resources\Images\pptpre.png" />
-    <Resource Include="Resources\Images\worddoc.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Controls\Forms\IncrementalSearcher.resx">
-      <DependentUpon>IncrementalSearcher.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ImagesResource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ImagesResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\SchemasResource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>SchemasResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\StringsResource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>StringsResource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Resources\Samples\Custom OutSpace.xml" />
-    <EmbeddedResource Include="Resources\Samples\Custom Tab.xml" />
-    <EmbeddedResource Include="Resources\Samples\Excel - A Custom Tab.xml" />
-    <EmbeddedResource Include="Resources\Samples\Repurpose.xml" />
-    <EmbeddedResource Include="Resources\Samples\Word - Group on Insert Tab.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\pilcrow.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\tag.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\bricks.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\find.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\find_next.png" />
-    <Resource Include="Resources\Images\find_previous.png" />
-    <Resource Include="Resources\Images\go_to.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\highlight.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\clock.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\cross.png" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Fody.5.0.6\build\Fody.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Fody.5.0.6\build\Fody.targets'))" />
-    <Error Condition="!Exists('..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Costura.Fody.4.0.0\build\Costura.Fody.props'))" />
+
+  <!-- This is a workaround for Wix (see https://github.com/wixtoolset/issues/issues/5705) -->
+  <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
+    <ItemGroup>
+      <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(OutputPath)\$(_InstallerTargetFramework)\$(AssemblyName).exe" />
+    </ItemGroup>
   </Target>
-  <Import Project="..\packages\Fody.5.0.6\build\Fody.targets" Condition="Exists('..\packages\Fody.5.0.6\build\Fody.targets')" />
 </Project>

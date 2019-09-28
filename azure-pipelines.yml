@@ -1,12 +1,9 @@
-# .NET Desktop
-# Build and run tests for .NET Desktop or Windows classic desktop solutions.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
   branches:
     include:
     - master
+    - multitarget
   tags:
     include:
     - 'v*'
@@ -24,86 +21,144 @@ variables:
 - name: solution
   value: '**/*.sln'
 
-steps:
-- task: PowerShell@2
-  displayName: 'PreBuildSteps'
-  inputs:
-    targetType: 'filePath'
-    filePath: 'PreBuild.ps1'
-    arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
-    
-- task: NuGetToolInstaller@0
+jobs:
+- job: NetFramework
+  displayName: .NET Framework
+  variables:
+    targetFramework: net461
 
-- task: NuGetCommand@2
-  inputs:
-    restoreSolution: '$(solution)'
+  steps:
 
-- task: VSBuild@1
-  inputs:
-    solution: '$(solution)'
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: PowerShell@2
+    displayName: 'PreBuildSteps'
+    inputs:
+      targetType: 'filePath'
+      filePath: 'PreBuild.ps1'
+      arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+      
+  - task: NuGetToolInstaller@0
 
-- task: VSTest@2
-  displayName: 'RunTests'
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
 
-# Copy main executable and installer into the staging directory
-- task: CopyFiles@2
-  displayName: 'CopyArtifacts'
-  inputs:
-    sourceFolder: ''
-    contents: |
-      OfficeRibbonXEditor/bin/$(buildConfiguration)/**.exe
-      Installer/bin/$(buildConfiguration)/**.msi
-    targetFolder: '$(Build.ArtifactStagingDirectory)'
-    cleanTargetFolder: true # Optional
-    flattenFolders: true # Optional
-    #overWrite: false # Optional
+  - task: VSBuild@1
+    inputs:
+      solution: '$(solution)'
+      platform: '$(buildPlatform)'
+      msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
+      configuration: '$(buildConfiguration)'
 
-# Publish Build Artifacts
-- task: PublishBuildArtifacts@1
-  displayName: 'PublishArtifacts'
-  inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: 'Binaries'
-    publishLocation: 'Container' # Options: container, filePath
-    #targetPath: # Required when publishLocation == FilePath
-    #parallel: false # Optional
-    #parallelCount: # Optional
+  - task: VSTest@2
+    displayName: 'RunTests'
+    condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
+    inputs:
+      platform: '$(buildPlatform)'
+      configuration: '$(buildConfiguration)'
 
-- task: PowerShell@2
-  displayName: 'PostBuildSteps'
-  inputs:
-    targetType: 'filePath'
-    filePath: 'PostBuild.ps1'
-    arguments: '"$(Build.SourceBranch)" "$(Build.ArtifactStagingDirectory)" "$(ThreeDigitVersion).$(Build.BuildId)" "$(GitHubPAT)" "$(GitHubName)" "$(GitHubEmail)"'
+  - task: CopyFiles@2
+    displayName: 'Copy Executable'
+    inputs:
+      sourceFolder: ''
+      contents: |
+        OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      cleanTargetFolder: true # Optional
+      flattenFolders: true # Optional
 
-- task: GithubRelease@0 
-  displayName: 'Create GitHub Release'
-  condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
-  inputs:
-    action: 'create'
-    target: '$(Build.SourceVersion)'
-    githubConnection: 'fernandreu-pat'
-    repositoryName: 'fernandreu/office-ribbonx-editor'
-    assets: '$(Build.ArtifactStagingDirectory)/**/*.@(exe|msi)'
-    tagSource: 'manual'
-    tag: '$(Build.SourceBranchName)'
-    title: 'Office RibbonX Editor $(ThreeDigitVersion).$(Build.BuildId)'
-    releaseNotesSource: 'input'
-    addChangelog: true
-    isDraft: false  # The release notes will need some tweaking but are self-sufficient. Hence, better to release this directly and edit them later
-    releaseNotes: |
-      Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
+  - task: PowerShell@2
+    displayName: 'Check if executable is really copied'
+    inputs:
+      targetType: inline
+      script: |
+        if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\OfficeRibbonXEditor.exe")) {
+          Write-Host "##vso[task.LogIssue type=error;]Missing executable in staging directory"
+          exit 1
+        }
 
-      ## What's New
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Executable'
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: '.NET Framework Executable'
+      publishLocation: 'Container' # Options: container, filePath
 
-      For a full list of changes, see below. 
+  - task: CopyFiles@2
+    displayName: 'Copy Installer'
+    inputs:
+      sourceFolder: ''
+      contents: |
+        Installer/bin/$(buildConfiguration)/$(targetFramework)/**.msi
+      targetFolder: '$(Build.ArtifactStagingDirectory)'
+      cleanTargetFolder: true # Optional
+      flattenFolders: true # Optional
 
-      ## How to install / use
-      The tool can be installed / used in two ways:
-      - By running the `.msi` installer provided in the `Assets` section below. This will create an entry in the control panel's programs list
-      - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list
+  - task: PowerShell@2
+    displayName: 'Check if installer is really copied'
+    inputs:
+      targetType: inline
+      script: |
+        if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\OfficeRibbonXEditor.msi")) {
+          Write-Host "##vso[task.LogIssue type=error;]Missing installer in staging directory"
+          exit 1
+        }
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Installer'
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: '.NET Framework Installer'
+      publishLocation: 'Container' # Options: container, filePath
+
+- job: NetCore
+  displayName: .NET Core
+  variables:
+    targetFramework: netcoreapp3.0
+
+  steps:
+
+  - task: PowerShell@2
+    displayName: 'PreBuildSteps'
+    inputs:
+      targetType: 'filePath'
+      filePath: 'PreBuild.ps1'
+      arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+      
+  - task: NuGetToolInstaller@0
+
+  - task: NuGetCommand@2
+    inputs:
+      restoreSolution: '$(solution)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet build'
+    inputs:
+      command: build
+      projects: '**/*.csproj'
+      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
+      configuration: '$(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet test'
+    inputs:
+      command: test
+      projects: '**/*Tests.csproj'
+      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
+      configuration: '$(buildConfiguration)'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'dotnet publish'
+    inputs:
+      command: publish
+      projects: '**/OfficeRibbonXEditor.csproj'
+      publishWebProjects: false
+      zipAfterPublish: false
+      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
+      configuration: '$(buildConfiguration)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Binaries'
+    inputs:
+      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+      artifactName: '.NET Core Binaries'
+      publishLocation: 'Container' # Options: container, filePath
