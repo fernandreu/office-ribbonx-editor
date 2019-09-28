@@ -158,6 +158,7 @@ jobs:
     displayName: 'dotnet publish'
     inputs:
       command: publish
+      publishWebProjects: false
       arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
       configuration: '$(buildConfiguration)'
 
