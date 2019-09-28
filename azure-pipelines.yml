@@ -161,6 +161,7 @@ jobs:
       command: publish
       projects: '**/OfficeRibbonXEditor.csproj'
       publishWebProjects: false
+      zipAfterPublish: false
       arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) -p:PublishSingleFile=true -p:AppendRuntimeIdentifierToOutputPath=false -p:PublishTrimmed=true -p:RuntimeIdentifier=win-x64 --output $(Build.ArtifactStagingDirectory)'
       configuration: '$(buildConfiguration)'
 
