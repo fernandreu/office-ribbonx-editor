@@ -1,7 +1,3 @@
-# .NET Desktop
-# Build and run tests for .NET Desktop or Windows classic desktop solutions.
-# Add steps that publish symbols, save build artifacts, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
 
 trigger:
   branches:
@@ -114,35 +110,6 @@ jobs:
       artifactName: '.NET Framework Installer'
       publishLocation: 'Container' # Options: container, filePath
 
-  # This is disabled for now and will have its own release pipeline in the future
-  # - task: GithubRelease@0 
-  #   displayName: 'Create GitHub Release'
-  #   condition: startsWith(variables['Build.SourceBranch'], 'refs/tags/v')   
-  #   inputs:
-  #     action: 'create'
-  #     target: '$(Build.SourceVersion)'
-  #     githubConnection: 'fernandreu-pat'
-  #     repositoryName: 'fernandreu/office-ribbonx-editor'
-  #     assets: '$(Build.ArtifactStagingDirectory)/**/*.@(exe|msi)'
-  #     tagSource: 'manual'
-  #     tag: '$(Build.SourceBranchName)'
-  #     title: 'Office RibbonX Editor $(ThreeDigitVersion).$(Build.BuildId)'
-  #     releaseNotesSource: 'input'
-  #     addChangelog: true
-  #     isDraft: false  # The release notes will need some tweaking but are self-sufficient. Hence, better to release this directly and edit them later
-  #     releaseNotes: |
-  #       Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
-
-  #       ## What's New
-
-  #       For a full list of changes, see below. 
-
-  #       ## How to install / use
-  #       The tool can be installed / used in two ways:
-  #       - By running the `.msi` installer provided in the `Assets` section below. This will create an entry in the control panel's programs list
-  #       - By directly running the `.exe` provided in the `Assets` section below. This will not create any entry in the control panel's programs list
-
-
 - job: NetCore
   displayName: .NET Core
   variables:
@@ -186,22 +153,8 @@ jobs:
       projects: '**/OfficeRibbonXEditor.csproj'
       publishWebProjects: false
       zipAfterPublish: false
-      # arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) -p:PublishSingleFile=true -p:AppendRuntimeIdentifierToOutputPath=false -p:PublishTrimmed=true -p:RuntimeIdentifier=win-x64 --output $(Build.ArtifactStagingDirectory)'
       arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
       configuration: '$(buildConfiguration)'
-
-  # - task: CopyFiles@2
-  #   displayName: 'Copy Binaries'
-  #   inputs:
-  #     sourceFolder: ''
-  #     contents: |
-  #       OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**/*.exe
-  #       OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**/*.dll
-  #       OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**/*.json
-  #     targetFolder: '$(Build.ArtifactStagingDirectory)'
-  #     cleanTargetFolder: true # Optional
-  #     flattenFolders: true # Optional
-  #     #overWrite: false # Optional
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Binaries'
@@ -209,6 +162,3 @@ jobs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
       artifactName: '.NET Core Binaries'
       publishLocation: 'Container' # Options: container, filePath
-      #targetPath: # Required when publishLocation == FilePath
-      #parallel: false # Optional
-      #parallelCount: # Optional

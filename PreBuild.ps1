@@ -17,8 +17,8 @@ Get-ChildItem "SharedAssemblyInfo.cs" |
 ForEach-Object {
     $c = ($_ | Get-Content -encoding UTF8)
     if ($version -and -not ($c -match [Regex]::Escape("AssemblyVersion(`"$($version.Substring(1)).*`")"))) {
-        $error = "Tag version $version does not coincide with assembly version"
-        Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $error"
+        $message = "Tag version $version does not coincide with assembly version"
+        Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
         exit 1
     }
     $c = $c -replace '(AssemblyVersion\(\"\d+.\d+.\d+)\.(\d)(\"\))', "`$1.$buildId`$3"
