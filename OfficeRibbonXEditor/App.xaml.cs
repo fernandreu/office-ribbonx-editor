@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
+using System.Windows.Threading;
 using Autofac;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
@@ -31,6 +33,8 @@ namespace OfficeRibbonXEditor
             DialogHostBase.RegisterDialogViewModels(builder);
 
             this.container = builder.Build();
+
+            this.Dispatcher.UnhandledException += this.OnUnhandledException;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -82,6 +86,29 @@ namespace OfficeRibbonXEditor
             else
             {
                 dialog.Show();
+            }
+        }
+
+        private void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        {
+            e.Handled = true;
+
+            var ex = e.Exception;
+
+            if (ex is TargetInvocationException targetEx && targetEx.InnerException != null)
+            {
+                ex = targetEx.InnerException;
+            }
+
+            var result = MessageBox.Show(
+                $"An unexpected error occurred:\n\n{ex.GetType().FullName}: {ex.Message}\n\n" +
+                $"Continue using the tool after this? If Yes, the tool might start to malfunction. If No, any unsaved changes will be lost.",
+                "Unexpected Error Occurred", 
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Error);
+            if (result != MessageBoxResult.Yes)
+            {
+                this.Shutdown();
             }
         }
     }
