@@ -188,9 +188,9 @@ namespace OfficeRibbonXEditor.Models
             }
 
             Debug.Assert(this.package != null, "Failed to get package.");
-            Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
+            this.CheckIsReadOnly();
 
-            if (this.package == null || this.isReadOnly || (!this.IsDirty && customFileName == this.fileName))
+            if (!this.IsDirty && customFileName == this.fileName)
             {
                 return;
             }
@@ -212,13 +212,9 @@ namespace OfficeRibbonXEditor.Models
 
         public void RemoveCustomPart(XmlParts partType)
         {
-            Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
-            if (this.isReadOnly)
-            {
-                return;
-            }
+            this.CheckIsReadOnly();
 
-            for (int i = this.xmlParts.Count - 1; i >= 0; i--)
+            for (var i = this.xmlParts.Count - 1; i >= 0; i--)
             {
                 if (this.xmlParts[i].PartType != partType)
                 {
@@ -242,11 +238,7 @@ namespace OfficeRibbonXEditor.Models
 
         public void SaveCustomPart(XmlParts partType, string text, bool isCreatingNewPart)
         {
-            Debug.Assert(!this.isReadOnly, "File is ReadOnly!");
-            if (this.isReadOnly)
-            {
-                return;
-            }
+            this.CheckIsReadOnly();
 
             var targetPart = this.RetrieveCustomPart(partType);
 
@@ -388,11 +380,21 @@ namespace OfficeRibbonXEditor.Models
             this.disposed = true;
         }
 
+        private void CheckIsReadOnly()
+        {
+            if (!this.isReadOnly)
+            {
+                return;
+            }
+
+            throw new IOException("The file is read-only");
+        }
+
         private void Init()
         {
             this.package = Package.Open(this.tempFileName, FileMode.Open, this.isReadOnly ? FileAccess.Read : FileAccess.ReadWrite);
 
-            Debug.Assert(this.package != null, "Failed to get packge.");
+            Debug.Assert(this.package != null, "Failed to get package.");
             if (this.package == null)
             {
                 return;
