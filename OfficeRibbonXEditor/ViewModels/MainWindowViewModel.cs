@@ -638,7 +638,7 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 this.CurrentDocument.Save(this.ReloadOnSave);
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
             }
