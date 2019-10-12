@@ -15,6 +15,7 @@ using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.Resources;
 using ScintillaNET;
 
@@ -636,7 +637,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
             try
             {
-                this.CurrentDocument.Save(this.ReloadOnSave);
+                this.CurrentDocument.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
             }
             catch (Exception ex)
             {
@@ -649,7 +650,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ApplyCurrentText();
             foreach (var doc in this.DocumentList)
             {
-                doc.Save(this.ReloadOnSave);
+                doc.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
             }
         }
 
@@ -718,7 +719,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
                 Debug.WriteLine("Saving " + fileName + "...");
 
-                doc.Save(this.reloadOnSave, fileName);
+                doc.Save(this.reloadOnSave, fileName, Settings.Default.PreserveAttributes);
                 this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
             }
             catch (Exception ex)
