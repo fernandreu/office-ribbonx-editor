@@ -100,7 +100,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public void Save(bool reloadFirst = false, string fileName = null)
+        public void Save(bool reloadFirst = false, string fileName = null, bool preserveAttributes = true)
         {
             if (reloadFirst)
             {
@@ -114,7 +114,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
 
             // Now save the actual document
-            this.document.Save(fileName);
+            this.document.Save(fileName, preserveAttributes);
 
             // The save operation closes the internal package and re-opens it. Hence, parts need to be re-mapped
             foreach (var part in this.Children.OfType<OfficePartViewModel>())

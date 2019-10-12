@@ -21,6 +21,7 @@ namespace OfficeRibbonXEditor.ViewModels
             nameof(Properties.Settings.Default.TabWidth),
             nameof(Properties.Settings.Default.WrapMode),
             nameof(Properties.Settings.Default.AutoIndent),
+            nameof(Properties.Settings.Default.PreserveAttributes),
         };
         
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();

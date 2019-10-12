@@ -24,10 +24,11 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <GroupBox Header="Colors">
-            <Grid>
+        <GroupBox Header="Editor colors">
+            <Grid Margin="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -97,8 +98,8 @@
                                   MaxDropDownWidth="250"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Header="Other settings">
-            <Grid>
+        <GroupBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Header="Other editor settings">
+            <Grid Margin="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -118,7 +119,15 @@
                 <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Auto-indent new lines" Margin="8" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=AutoIndent}"/>
             </Grid>
         </GroupBox>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2">
+        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Header="Misc">
+            <Grid Margin="2">
+                <CheckBox 
+                    Content="Preserve file attributes when saving an already existing document" 
+                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=PreserveAttributes}"
+                    ToolTip="If checked, read-only files will keep to be read-only after saving them for example"/>
+            </Grid>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2">
             <Button Content="Reset Defaults" Margin="3" Padding="8,4" Command="{Binding ResetCommand}"/>
             <Button Content="Apply" Margin="3" Padding="8,4" Command="{Binding ApplyCommand}"/>
             <Button Content="Accept" Margin="3" Padding="8,4" Command="{Binding AcceptCommand}" IsDefault="True"/>
