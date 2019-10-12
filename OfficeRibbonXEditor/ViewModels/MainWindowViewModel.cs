@@ -797,6 +797,13 @@ namespace OfficeRibbonXEditor.ViewModels
             try
             {
                 var data = XmlSampleViewModel.ReadContents(resourceName);
+
+                // Make sure the xml schema is not for the wrong part type
+                if (this.customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && this.customUiSchemas[part.Part.PartType == XmlParts.RibbonX12 ? XmlParts.RibbonX14 : XmlParts.RibbonX12] is XmlSchema otherSchema)
+                {
+                    data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
+                }
+
                 part.Contents = data;
 
                 // TODO: This should be automatically raised by the ViewModel when setting the part contents
