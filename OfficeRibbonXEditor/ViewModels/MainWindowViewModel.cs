@@ -834,6 +834,18 @@ namespace OfficeRibbonXEditor.ViewModels
                 schemaSet.Add(targetSchema);
 
                 var errorList = new List<XmlError>();
+
+                var ns = xmlDoc.Root?.GetDefaultNamespace().ToString();
+                if (ns != targetSchema.TargetNamespace)
+                {
+                    errorList.Add(new XmlError
+                    {
+                        LineNumber = 1,
+                        LinePosition = 1,
+                        Message = $"Unknown namespace \"{ns}\". Custom UI XML namespace must be \"{targetSchema.TargetNamespace}\"",
+                    });
+                }
+
                 void ValidateHandler(object o, ValidationEventArgs e)
                 {
                     errorList.Add(new XmlError
