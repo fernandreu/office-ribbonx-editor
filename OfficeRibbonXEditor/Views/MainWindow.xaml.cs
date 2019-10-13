@@ -156,7 +156,7 @@ namespace OfficeRibbonXEditor.Views
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-            this.viewModel.OpenTab();
+            this.viewModel.OpenTabCommand.Execute(null);
         }
         
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

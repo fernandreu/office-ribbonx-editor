@@ -291,7 +291,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.SelectedItem = doc.Children[0];
             Assert.IsTrue(this.viewModel.SelectedItem.CanHaveContents);
 
-            var tab = this.viewModel.OpenTab();
+            var tab = this.viewModel.OpenPartTab();
             Assert.NotNull(tab);
 
             void AssertIsValid(bool expected, string message = null)
@@ -331,7 +331,7 @@ namespace OfficeRibbonXEditor.ViewModels
             var part = doc.Children[0];
             this.viewModel.SelectedItem = part;
 
-            var tab = this.viewModel.OpenTab();
+            var tab = this.viewModel.OpenPartTab();
             Assert.NotNull(tab);
 
             // This should show a message saying there are no callbacks to be generated
@@ -378,7 +378,7 @@ namespace OfficeRibbonXEditor.ViewModels
             // Arrange
             File.Copy(this.sourceFile, this.destFile);
             this.MockOpenFile(this.destFile);
-            this.viewModel.OpenCommand.Execute();
+            this.viewModel.OpenDocumentCommand.Execute();
             this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
             
             // Act / assert: Open the same file in exclusive mode
@@ -418,7 +418,7 @@ namespace OfficeRibbonXEditor.ViewModels
         /// <returns>The opened document</returns>
         private OfficeDocumentViewModel OpenSource(bool select = true)
         {
-            this.viewModel.OpenCommand.Execute();
+            this.viewModel.OpenDocumentCommand.Execute();
             Assume.That(this.viewModel.DocumentList, Is.Not.Empty);
             var doc = this.viewModel.DocumentList[this.viewModel.DocumentList.Count - 1];
             if (select)

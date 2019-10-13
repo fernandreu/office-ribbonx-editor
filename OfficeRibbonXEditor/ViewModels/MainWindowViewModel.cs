@@ -59,7 +59,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.fileDialogService = fileDialogService;
             this.dialogProvider = dialogProvider;
 
-            this.OpenCommand = new RelayCommand(this.ExecuteOpenCommand);
+            this.OpenDocumentCommand = new RelayCommand(this.ExecuteOpenDocumentCommand);
+            this.OpenTabCommand = new RelayCommand<TreeViewItemViewModel>(this.ExecuteOpenTabCommand);
             this.SaveCommand = new RelayCommand(this.ExecuteSaveCommand);
             this.SaveAllCommand = new RelayCommand(this.ExecuteSaveAllCommand);
             this.SaveAsCommand = new RelayCommand(this.ExecuteSaveAsCommand);
@@ -223,7 +224,9 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public bool CanInsertXml14Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlParts.RibbonX14) == null;
 
-        public RelayCommand OpenCommand { get; }
+        public RelayCommand OpenDocumentCommand { get; }
+
+        public RelayCommand<TreeViewItemViewModel> OpenTabCommand { get; }
 
         public RelayCommand SaveCommand { get; }
 
@@ -436,6 +439,19 @@ namespace OfficeRibbonXEditor.ViewModels
             this.DocumentList.Remove(doc);
         }
 
+        private void ExecuteOpenTabCommand(TreeViewItemViewModel viewModel = null)
+        {
+            if (viewModel == null)
+            {
+                viewModel = this.SelectedItem;
+            }
+
+            if (viewModel is OfficePartViewModel part)
+            {
+                this.OpenPartTab(part);
+            }
+        }
+
         public void ExecuteCloseTabCommand(EditorTabViewModel tab = null)
         {
             if (tab == null)
@@ -612,7 +628,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void ExecuteOpenCommand()
+        private void ExecuteOpenDocumentCommand()
         {
             string[] filters =
                 {
@@ -659,7 +675,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public EditorTabViewModel OpenTab(OfficePartViewModel part = null)
+        public EditorTabViewModel OpenPartTab(OfficePartViewModel part = null)
         {
             if (part == null)
             {
@@ -873,7 +889,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
             }
 
-            var tab = this.OpenTabs.FirstOrDefault(x => x.Part == part) ?? this.OpenTab(part);
+            var tab = this.OpenTabs.FirstOrDefault(x => x.Part == part) ?? this.OpenPartTab(part);
 
             try
             {

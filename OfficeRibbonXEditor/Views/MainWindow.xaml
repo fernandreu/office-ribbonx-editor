@@ -52,7 +52,7 @@
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenDocumentCommand}"/>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
         <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseDocumentCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ChangeIconIdCommand}"/>
@@ -79,7 +79,7 @@
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
             <MenuItem Header="_File">
-                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}">
+                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenDocumentCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/open.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -255,7 +255,7 @@
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
 
-                <Button ToolTip="Open an Office document" Command="{Binding OpenCommand}">
+                <Button ToolTip="Open an Office document" Command="{Binding OpenDocumentCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/open.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Open</TextBlock>
@@ -447,6 +447,7 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Open" Command="{Binding OpenTabCommand}"/>
                                     <MenuItem Header="Insert icons..." Command="{Binding InsertIconsCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/insertPicture.png"
