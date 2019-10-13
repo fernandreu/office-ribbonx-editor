@@ -833,6 +833,11 @@ namespace OfficeRibbonXEditor.ViewModels
         /// <param name="resourceName"></param>
         private void ExecuteInsertXmlSampleCommand(string resourceName)
         {
+            // TODO: This command should be clearer with its target
+            // Right now, it is the selected item, but users might find it more intuitive to insert the sample in
+            // the already opened tab. To fix this, the easiest thing to do would be to have a separate command for
+            // each (i.e. a context menu action for the tree view and a menu action for the editor)
+
             Debug.Assert(!string.IsNullOrEmpty(resourceName), "resourceName not passed");
 
             var newPart = false;
@@ -880,9 +885,6 @@ namespace OfficeRibbonXEditor.ViewModels
                     data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
                 }
 
-                part.Contents = data;
-
-                // TODO: This should be automatically raised by the ViewModel when setting the part contents
                 tab.RaiseUpdateEditor(new EditorChangeEventArgs { Start = -1, End = -1, NewText = data });
             }
             catch (Exception ex)
@@ -1039,6 +1041,12 @@ namespace OfficeRibbonXEditor.ViewModels
                 end = data.Text.Length;
             }
 
+            if (end < start)
+            {
+                // This should only happen in blank lines, which do not need to be toggled
+                return;
+            }
+
             // TODO: Use a StringBuilder
             var lines = data.Text.Substring(start, end - start).Split(new[] { NewLine }, StringSplitOptions.None);
             for (var i = 0; i < lines.Length; ++i)
@@ -1065,10 +1073,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // Combine the lines and put them back
             var combined = string.Join(NewLine, lines);
-            var result = data.Text.Substring(0, start) + combined + data.Text.Substring(end);
 
             // Update the selected item's current contents to that, and notify the editor
-            this.SelectedItem.Contents = result;
             tab.RaiseUpdateEditor(new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
         }
 
