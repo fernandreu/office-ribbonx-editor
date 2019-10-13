@@ -28,7 +28,7 @@
             FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
             KeyDown="OnEditorKeyDown"
             InsertCheck="OnEditorInsertCheck"
-            ZoomChanged="OnEditorZoomChanged"/>
+            Zoom="{Binding Zoom}"/>
 
         <GridSplitter Grid.Row="1" 
                       Height="4" 

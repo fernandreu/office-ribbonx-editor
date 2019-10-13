@@ -13,6 +13,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 using ScintillaNET;
 
@@ -25,23 +27,79 @@ namespace OfficeRibbonXEditor.Controls
     {
         private GridLength lastResultsHeight = new GridLength(150);
 
+        private EditorTabViewModel viewModel;
+
         public EditorTab()
         {
             this.InitializeComponent();
+            this.ResultsPanel.Scintilla = this.Editor.Scintilla;
         }
         
-        public int Zoom
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
         {
-            get => this.Editor?.Zoom ?? 0;
-            set
-            {
-                if (this.Editor == null || this.Editor.Zoom == value)
-                {
-                    return;
-                }
+            base.OnPropertyChanged(args);
 
-                this.Editor.Zoom = value;
+            if (args.Property != DataContextProperty)
+            {
+                return;
             }
+
+            if (args.OldValue is EditorTabViewModel previousModel)
+            {
+                previousModel.MainWindow.ReadEditorInfo -= this.OnReadEditorInfo;
+                previousModel.MainWindow.UpdateEditor -= this.OnUpdateEditor;
+                previousModel.MainWindow.ShowResults -= this.OnShowResults;
+            }
+
+            if (!(args.NewValue is EditorTabViewModel model))
+            {
+                this.viewModel = null;
+                return;
+            }
+
+            this.viewModel = model;
+            this.viewModel.Lexer = new XmlLexer
+            {
+                Editor = this.Editor,
+            };
+
+            this.Editor.Text = this.viewModel.Part.Contents;
+
+            this.viewModel.MainWindow.ReadEditorInfo += this.OnReadEditorInfo;
+            this.viewModel.MainWindow.UpdateEditor += this.OnUpdateEditor;
+            this.viewModel.MainWindow.ShowResults += this.OnShowResults;
+        }
+
+        private void OnReadEditorInfo(object sender, DataEventArgs<EditorInfo> e)
+        {
+            e.Data = new EditorInfo
+            {
+                Text = this.Editor.Text,
+                Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd),
+            };
+        }
+
+        private void OnUpdateEditor(object sender, EditorChangeEventArgs e)
+        {
+            this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
+            this.Editor.InsertText(e.Start, e.NewText);
+            if (e.UpdateSelection)
+            {
+                this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
+            }
+
+            if (e.ResetUndoHistory)
+            {
+                this.Editor.EmptyUndoBuffer();
+            }
+        }
+
+        private void OnShowResults(object sender, DataEventArgs<IResultCollection> e)
+        {
+            this.ResultsSplitter.Visibility = Visibility.Visible;
+            this.ResultsRow.Height = this.lastResultsHeight;
+            this.ResultsHeader.Content = e.Data.Header;
+            this.ResultsPanel.UpdateFindAllResults(e.Data);
         }
 
         private void OnScintillaUpdateUi(object sender, UpdateUIEventArgs e)
@@ -63,11 +121,6 @@ namespace OfficeRibbonXEditor.Controls
 
                 vm.LineStatus = $"Ln {line + 1},  Col {col + 1}";
             }
-        }
-
-        private void OnEditorZoomChanged(object sender, EventArgs e)
-        {
-            this.Zoom = this.Editor.Zoom;
         }
 
         // For some reason, the Scintilla editor always seems to have preference over the input gestures.

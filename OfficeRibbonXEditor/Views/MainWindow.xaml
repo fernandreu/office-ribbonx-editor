@@ -13,6 +13,7 @@
         xmlns:model="clr-namespace:OfficeRibbonXEditor.ViewModels"
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -49,7 +50,7 @@
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-    </Window.Resources> 
+    </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
@@ -71,7 +72,7 @@
         <KeyBinding Key="F3" Command="{Binding FindNextCommand}"/>
         <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}"/>
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding IncrementalSearchCommand}"/>
-        
+
         <!--GoTo dialog control-->
         <KeyBinding Key="G" Modifiers="Control" Command="{Binding GoToCommand}"/>
     </Window.InputBindings>
@@ -91,7 +92,7 @@
                         <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                    </MenuItem.Icon>    
+                    </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem Header="Save All Documents" Command="{Binding SaveAllCommand}">
@@ -99,7 +100,7 @@
                         <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                    </MenuItem.Icon>    
+                    </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem Header="Save As" Command="{Binding SaveAsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
@@ -113,7 +114,7 @@
                         <Image Source="/Resources/Images/settings.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                    </MenuItem.Icon>    
+                    </MenuItem.Icon>
                 </MenuItem>
 
                 <models:RecentFileList 
@@ -267,14 +268,14 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
                     </StackPanel>
                 </Button>
-                
+
                 <Separator/>
-                
+
                 <CheckBox IsChecked="{Binding ShowWhitespaces}" 
                           ToolTip="Show space, tab and line end characters in the editor">
                     <Image Source="/Resources/Images/pilcrow.png" Width="16" Height="16"/>
                 </CheckBox>
-                
+
                 <Button Command="{Binding ToggleCommentCommand}" 
                         IsEnabled="{Binding IsPartSelected}"
                         ToolTip="Comment / uncomment the currently selected lines">
@@ -289,9 +290,9 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
                     </StackPanel>
                 </Button>
-                
+
                 <Separator/>
-                
+
                 <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/insertPicture.png" Width="16" Height="16"/>
@@ -299,27 +300,27 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsPartSelected}">
+                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsEditorTabSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/check.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsPartSelected}">
+                <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsEditorTabSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
                     </StackPanel>
                 </Button>
-                
+
                 <CheckBox IsChecked="{Binding ReloadOnSave}" ToolTip="To ensure you do not delete changes made externally, you can reload the documents right before they are to be saved">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/redo.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
                     </StackPanel>
                 </CheckBox>
-                
+
                 <Separator Visibility="{Binding NewerVersion, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <Button FontWeight="Bold"
@@ -351,11 +352,11 @@
             <StatusBarItem Grid.Column="1" Margin="0,0,10,0">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Zoom factor:" Padding="0,0,4,0"/>
-                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding ElementName=Window, Path=Zoom, Mode=TwoWay}" Height="20" Minimum="-10" Maximum="20"/>
+                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding SelectedTab.Zoom}" Height="20" Minimum="-10" Maximum="20"/>
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="LineBox" Margin="0,0,20,0" Text="Line 0, Col 0"/>
+                <TextBlock Margin="0,0,20,0" Text="{Binding SelectedTab.LineStatus}"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -363,15 +364,17 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="34*"/>
+                <ColumnDefinition Width="397*"/>
             </Grid.ColumnDefinitions>
 
             <TreeView
                 Name="DocumentView"
                 ItemsSource="{Binding DocumentList}" 
                 Grid.Column="0"
-                SelectedItemChanged="OnDocumentViewSelectionChanged"
                 PreviewMouseRightButtonDown="OnTreeViewRightClick"
+                PreviewMouseDoubleClick="OnPreviewMouseDoubleClick"
+                SelectedItemChanged="OnDocumentViewSelectionChanged"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
@@ -426,7 +429,7 @@
                                             <Image Source="/Resources/Images/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                                        </MenuItem.Icon>    
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Header="Save As..." Command="{Binding SaveAsCommand}"/>
                                     <MenuItem Header="Close" Command="{Binding CloseDocumentCommand}"/>
@@ -474,67 +477,37 @@
                 </TreeView.Resources>
             </TreeView>
 
-            <GridSplitter Grid.Column="1" 
-                          Width="4" 
-                          VerticalAlignment="Stretch"
-                          ResizeBehavior="PreviousAndNext"/>
+            <GridSplitter
+                Grid.Column="1" 
+                Width="4" 
+                VerticalAlignment="Stretch"
+                ResizeBehavior="PreviousAndNext"/>
 
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="0" x:Name="ResultsRow"/>
-                </Grid.RowDefinitions>
+            <dragablz:TabablzControl 
+                Grid.Column="2"
+                ShowDefaultCloseButton="True"
+                ItemsSource="{Binding OpenTabs}"
+                SelectedItem="{Binding SelectedTab}" Grid.ColumnSpan="2">
+                <dragablz:TabablzControl.HeaderItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Title}"/>
+                            <Button Style="{StaticResource CloseItemCommandButtonStyle}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </dragablz:TabablzControl.HeaderItemTemplate>
+                <dragablz:TabablzControl.ContentTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}"/>
+                    </DataTemplate>
+                </dragablz:TabablzControl.ContentTemplate>
+                <dragablz:TabablzControl.Resources>
+                    <DataTemplate DataType="{x:Type model:EditorTabViewModel}">
+                        <controls:EditorTab/>
+                    </DataTemplate>
+                </dragablz:TabablzControl.Resources>
+            </dragablz:TabablzControl>
 
-                <sn:ScintillaWPF
-                    x:Name="Editor"
-                    Grid.Row="0"
-                    HorizontalAlignment="Stretch"
-                    FontFamily="Consolas"
-                    UpdateUI="OnScintillaUpdateUi"
-                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
-                    DataContext="{Binding SelectedItem}"
-                    KeyDown="OnEditorKeyDown"
-                    InsertCheck="OnEditorInsertCheck"
-                    ZoomChanged="OnEditorZoomChanged">
-                    <sn:ScintillaWPF.Resources>
-                        <Style TargetType="sn:ScintillaWPF">
-                            <Setter Property="IsEnabled" Value="False"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CanHaveContents}" Value="True">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </sn:ScintillaWPF.Resources>
-                </sn:ScintillaWPF>
-
-                <GridSplitter Grid.Row="1" 
-                              Height="4" 
-                              x:Name="ResultsSplitter"
-                              HorizontalAlignment="Stretch"
-                              Visibility="Collapsed"
-                              ResizeBehavior="PreviousAndNext"/>
-
-                <DockPanel Grid.Row="2">
-                    <DockPanel DockPanel.Dock="Top">
-                        <Label Name="ResultsHeader"/>
-                        <Button DockPanel.Dock="Right"
-                                Width="16"
-                                Height="16"
-                                Margin="2"
-                                HorizontalAlignment="Right"
-                                Click="OnCloseFindResults">
-                            <Button.Content>
-                                <Image Source="../Resources/Images/cross.png"/>
-                            </Button.Content>
-                        </Button>
-                    </DockPanel>
-                    <controls:ResultsPanel 
-                        x:Name="ResultsPanel"/>
-                </DockPanel>
-
-            </Grid>
         </Grid>
     </DockPanel>
 </Window>

@@ -79,7 +79,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.IncrementalSearchCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.IncrementalSearch));
             this.ReplaceCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Replace));
             
-            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ScintillaLexer>(this.Lexer));
+            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ICollection<EditorTabViewModel>>(this.OpenTabs));
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
@@ -139,6 +139,24 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public ObservableCollection<XmlSampleViewModel> XmlSamples { get; } = new ObservableCollection<XmlSampleViewModel>();
 
+        public ObservableCollection<EditorTabViewModel> OpenTabs { get; } = new ObservableCollection<EditorTabViewModel>();
+
+        private EditorTabViewModel selectedTab;
+
+        public EditorTabViewModel SelectedTab
+        {
+            get => this.selectedTab;
+            set
+            {
+                if (!this.Set(ref this.selectedTab, value))
+                {
+                    return;
+                }
+
+                this.RaisePropertyChanged(nameof(this.IsEditorTabSelected));
+            }
+        }
+
         /// <summary>
         /// Gets or sets a value indicating whether documents should be reloaded right before being saved.
         /// </summary>
@@ -159,7 +177,10 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 Properties.Settings.Default.ShowWhitespace = value;
-                this.Lexer?.Update();
+                foreach (var tab in this.OpenTabs)
+                {
+                    tab.Lexer?.Update();
+                }
             }
         }
 
@@ -168,9 +189,6 @@ namespace OfficeRibbonXEditor.ViewModels
             get => this.newerVersion;
             set => this.Set(ref this.newerVersion, value);
         }
-
-        
-        public ScintillaLexer Lexer { get; set; }
 
         public TreeViewItemViewModel SelectedItem
         {
@@ -208,6 +226,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public bool IsDocumentSelected => this.SelectedItem is OfficeDocumentViewModel;
 
         public bool IsPartSelected => this.SelectedItem is OfficePartViewModel;
+
+        public bool IsEditorTabSelected => this.SelectedTab != null;
 
         public bool IsIconSelected => this.SelectedItem is IconViewModel;
         
@@ -379,8 +399,14 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
+            var lexer = this.SelectedTab?.Lexer;
+            if (lexer == null)
+            {
+                return;
+            }
+
             this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler)>((
-                this.Lexer.Editor.Scintilla,
+                lexer.Editor.Scintilla,
                 action,
                 (o, e) => this.ShowResults?.Invoke(this, e)));
         }
@@ -933,7 +959,13 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteGoToCommand()
         {
-            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(this.Lexer);
+            var lexer = this.SelectedTab?.Lexer;
+            if (lexer == null)
+            {
+                return;
+            }
+
+            this.LaunchDialog<GoToDialogViewModel, ScintillaLexer>(lexer);
         }
 
         private void ExecuteToggleCommentCommand()

@@ -7,7 +7,7 @@ using OfficeRibbonXEditor.Models;
 namespace OfficeRibbonXEditor.ViewModels
 {
 
-    public class SettingsDialogViewModel : DialogBase, IContentDialog<ScintillaLexer>
+    public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<EditorTabViewModel>>
     {
         private readonly string[] usedProperties =
         {
@@ -33,14 +33,14 @@ namespace OfficeRibbonXEditor.ViewModels
             this.AcceptCommand = new RelayCommand(this.AcceptSettings);
         }
 
-        public bool OnLoaded(ScintillaLexer payload)
+        public bool OnLoaded(ICollection<EditorTabViewModel> payload)
         {
-            this.Lexer = payload;
+            this.Tabs = payload;
             this.LoadCurrent();
             return true;
         }
 
-        public ScintillaLexer Lexer { get; private set; }
+        public ICollection<EditorTabViewModel> Tabs { get; private set; }
 
         public RelayCommand ResetCommand { get; }
 
@@ -85,14 +85,20 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             Properties.Settings.Default.Save();
             this.LoadCurrent();
-            this.Lexer.Update();
+            foreach (var tab in this.Tabs)
+            {
+                tab.Lexer?.Update();
+            }
         }
 
         private void AcceptSettings()
         {
             Properties.Settings.Default.Save();
             this.IsCancelled = false;
-            this.Lexer.Update();
+            foreach (var tab in this.Tabs)
+            {
+                tab.Lexer?.Update();
+            }
             this.Close();
         }
 
