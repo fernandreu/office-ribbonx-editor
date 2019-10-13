@@ -46,9 +46,10 @@ namespace OfficeRibbonXEditor.Controls
 
             if (args.OldValue is EditorTabViewModel previousModel)
             {
-                previousModel.MainWindow.ReadEditorInfo -= this.OnReadEditorInfo;
-                previousModel.MainWindow.UpdateEditor -= this.OnUpdateEditor;
-                previousModel.MainWindow.ShowResults -= this.OnShowResults;
+                previousModel.ReadEditorInfo -= this.OnReadEditorInfo;
+                previousModel.UpdateEditor -= this.OnUpdateEditor;
+                previousModel.ShowResults -= this.OnShowResults;
+                previousModel.Part.Contents = this.Editor.Text;
             }
 
             if (!(args.NewValue is EditorTabViewModel model))
@@ -65,9 +66,9 @@ namespace OfficeRibbonXEditor.Controls
 
             this.Editor.Text = this.viewModel.Part.Contents;
 
-            this.viewModel.MainWindow.ReadEditorInfo += this.OnReadEditorInfo;
-            this.viewModel.MainWindow.UpdateEditor += this.OnUpdateEditor;
-            this.viewModel.MainWindow.ShowResults += this.OnShowResults;
+            this.viewModel.ReadEditorInfo += this.OnReadEditorInfo;
+            this.viewModel.UpdateEditor += this.OnUpdateEditor;
+            this.viewModel.ShowResults += this.OnShowResults;
         }
 
         private void OnReadEditorInfo(object sender, DataEventArgs<EditorInfo> e)
@@ -127,7 +128,13 @@ namespace OfficeRibbonXEditor.Controls
         // The only solution (so far) is to execute those when appropriate from this event handler.
         private void OnEditorKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
-            foreach (var ib in this.InputBindings)
+            var window = Window.GetWindow(this);
+            if (window == null)
+            {
+                return;
+            }
+
+            foreach (var ib in window.InputBindings)
             {
                 if (!(ib is KeyBinding kb))
                 {

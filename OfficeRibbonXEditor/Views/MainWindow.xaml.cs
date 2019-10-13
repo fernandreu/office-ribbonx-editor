@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Dragablz;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 
@@ -155,26 +156,7 @@ namespace OfficeRibbonXEditor.Views
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-
-            if (!(this.viewModel.SelectedItem is OfficePartViewModel part))
-            {
-                return;
-            }
-
-            var tab = this.viewModel.OpenTabs.FirstOrDefault(x => x.Part == part);
-            if (tab == null)
-            {
-                var doc = (OfficeDocumentViewModel) part.Parent;
-                tab = new EditorTabViewModel
-                {
-                    Part = part,
-                    MainWindow = this.viewModel,
-                    Title = $"{doc.Name} - {part.Name}",
-                };
-                this.viewModel.OpenTabs.Add(tab);
-            }
-
-            this.viewModel.SelectedTab = tab;
+            this.viewModel.OpenTab();
         }
         
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

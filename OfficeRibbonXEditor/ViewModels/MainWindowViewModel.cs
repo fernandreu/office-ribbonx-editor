@@ -10,6 +10,7 @@ using System.Windows;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using Dragablz;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Extensions;
@@ -84,6 +85,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
+            this.CloseTabCommand = new RelayCommand<EditorTabViewModel>(this.ExecuteCloseTabCommand);
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
@@ -117,24 +119,11 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public event EventHandler<LaunchDialogEventArgs> LaunchingDialog;
 
-        public event EventHandler<ResultsEventArgs> ShowResults;
-
-        /// <summary>
-        /// This event will be fired when the contents of the editor need to be updated
-        /// </summary>
-        public event EventHandler<EditorChangeEventArgs> UpdateEditor;
-
         /// <summary>
         /// This event will be fired when a file needs to be added to the recent list. The argument will be the path to the file itself.
         /// </summary>
         public event EventHandler<DataEventArgs<string>> InsertRecentFile;
 
-        /// <summary>
-        /// This event will be fired whenever key editor properties (including current text and selection) need to be known. It is the
-        /// listener who will need to specify the argument.
-        /// </summary>
-        public event EventHandler<DataEventArgs<EditorInfo>> ReadEditorInfo;
-        
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
         public ObservableCollection<XmlSampleViewModel> XmlSamples { get; } = new ObservableCollection<XmlSampleViewModel>();
@@ -195,7 +184,6 @@ namespace OfficeRibbonXEditor.ViewModels
             get => this.selectedItem;
             set
             {
-                this.ApplyCurrentText();
                 var previousItem = this.selectedItem;
                 if (!this.Set(ref this.selectedItem, value))
                 {
@@ -294,6 +282,8 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         public RelayCommand CloseCommand { get; }
 
+        public RelayCommand<EditorTabViewModel> CloseTabCommand { get; }
+
         /// <summary>
         /// Gets the command that starts the drag / drop action for opening files
         /// </summary>
@@ -305,6 +295,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand<DragEventArgs> DropCommand { get; }
 
         public RelayCommand<string> OpenHelpLinkCommand { get; } = new RelayCommand<string>(url => Process.Start(url));
+
+        public ItemActionCallback CloseTabCallback { get; }
 
         /// <summary>
         /// Gets a list of headers which will be shown in the "Useful links" menu, together with the links they point to
@@ -399,7 +391,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
-            var lexer = this.SelectedTab?.Lexer;
+            var tab = this.SelectedTab;
+            var lexer = tab?.Lexer;
             if (lexer == null)
             {
                 return;
@@ -408,7 +401,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler)>((
                 lexer.Editor.Scintilla,
                 action,
-                (o, e) => this.ShowResults?.Invoke(this, e)));
+                (o, e) => tab.RaiseShowResults(e)));
         }
 
         private void ExecuteCloseDocumentCommand()
@@ -437,22 +430,26 @@ namespace OfficeRibbonXEditor.ViewModels
             this.DocumentList.Remove(doc);
         }
 
-        private void ApplyCurrentText()
+        public void ExecuteCloseTabCommand(EditorTabViewModel tab = null)
         {
-            if (this.SelectedItem == null || !this.SelectedItem.CanHaveContents)
+            if (tab == null)
+            {
+                tab = this.SelectedTab;
+            }
+
+            var index = this.OpenTabs.IndexOf(tab);
+            if (index == -1)
             {
                 return;
             }
 
-            var e = new DataEventArgs<EditorInfo>();
-            this.ReadEditorInfo?.Invoke(this, e);
-            if (e.Data == null)
+            tab.ApplyCurrentText();
+
+            this.OpenTabs.RemoveAt(index);
+            if (this.SelectedTab == tab)
             {
-                // This means that event handler was not listened by any view, or the view did not pass the editor contents back for some reason
-                return;
+                this.SelectedTab = index < this.OpenTabs.Count ? this.OpenTabs[index] : index > 0 ? this.OpenTabs[index - 1] : null;
             }
-            
-            this.SelectedItem.Contents = e.Data.Text;
         }
 
         private void ExecuteInsertIconsCommand()
@@ -531,7 +528,11 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteClosingCommand(CancelEventArgs e)
         {
-            this.ApplyCurrentText();
+            foreach (var tab in this.OpenTabs)
+            {
+                tab.ApplyCurrentText();
+            }
+
             foreach (var doc in this.DocumentList)
             {
                 if (doc.HasUnsavedChanges)
@@ -652,9 +653,38 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
+        public EditorTabViewModel OpenTab(OfficePartViewModel part = null)
+        {
+            if (part == null)
+            {
+                part = this.SelectedItem as OfficePartViewModel;
+            }
+
+            if (part == null)
+            {
+                return null;
+            }
+
+            var tab = this.OpenTabs.FirstOrDefault(x => x.Part == part);
+            if (tab == null)
+            {
+                var doc = (OfficeDocumentViewModel) part.Parent;
+                tab = new EditorTabViewModel
+                {
+                    Part = part,
+                    MainWindow = this,
+                    Title = $"{doc.Name} - {part.Name}",
+                };
+                this.OpenTabs.Add(tab);
+            }
+
+            this.SelectedTab = tab;
+            return tab;
+        }
+
         private void ExecuteSaveCommand()
         {
-            this.ApplyCurrentText();
+            // TODO: Should this save the open tab or the selected document? There should probably be a separate command for each
 
             if (this.CurrentDocument == null)
             {
@@ -673,7 +703,11 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteSaveAllCommand()
         {
-            this.ApplyCurrentText();
+            foreach (var tab in this.OpenTabs)
+            {
+                tab.ApplyCurrentText();
+            }
+
             foreach (var doc in this.DocumentList)
             {
                 doc.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
@@ -784,11 +818,17 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
+        /// <summary>
+        /// Inserts an XML sample to the selected document in the tree
+        /// </summary>
+        /// <param name="resourceName"></param>
         private void ExecuteInsertXmlSampleCommand(string resourceName)
         {
             Debug.Assert(!string.IsNullOrEmpty(resourceName), "resourceName not passed");
 
             var newPart = false;
+            
+            // TODO: Check if there is a suitable editor tab opened first and, if not, open it
 
             if (this.SelectedItem is OfficeDocumentViewModel doc)
             {
@@ -820,7 +860,9 @@ namespace OfficeRibbonXEditor.ViewModels
                     return;
                 }
             }
-                
+
+            var tab = this.OpenTabs.FirstOrDefault(x => x.Part == part) ?? this.OpenTab(part);
+
             try
             {
                 var data = XmlSampleViewModel.ReadContents(resourceName);
@@ -834,7 +876,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 part.Contents = data;
 
                 // TODO: This should be automatically raised by the ViewModel when setting the part contents
-                this.UpdateEditor?.Invoke(this, new EditorChangeEventArgs { Start = -1, End = -1, NewText = data });
+                tab.RaiseUpdateEditor(new EditorChangeEventArgs { Start = -1, End = -1, NewText = data });
             }
             catch (Exception ex)
             {
@@ -845,12 +887,14 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private bool ValidateXml(bool showValidMessage)
         {
-            if (!(this.SelectedItem is OfficePartViewModel part))
+            var tab = this.SelectedTab;
+            if (tab == null)
             {
                 return false;
             }
-            
-            this.ApplyCurrentText();
+
+            tab.ApplyCurrentText();
+            var part = tab.Part;
 
             // Test to see if text is XML first
             try
@@ -905,8 +949,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
                     return true;
                 }
-                
-                this.ShowResults?.Invoke(this, new ResultsEventArgs(new XmlErrorResults(errorList)));
+
+                tab.RaiseShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
                 return false;
             }
             catch (XmlException ex)
@@ -921,7 +965,7 @@ namespace OfficeRibbonXEditor.ViewModels
                     }
                 };
 
-                this.ShowResults?.Invoke(this, new ResultsEventArgs(new XmlErrorResults(errorList)));
+                tab.RaiseShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
                 return false;
             }
         }
@@ -929,12 +973,13 @@ namespace OfficeRibbonXEditor.ViewModels
         private void ExecuteGenerateCallbacksCommand()
         {
             // TODO: Check whether any text is selected, and generate callbacks only for that text
-            this.ApplyCurrentText();
-
-            if (!(this.SelectedItem is OfficePartViewModel part))
+            if (this.SelectedTab == null)
             {
                 return;
             }
+
+            this.SelectedTab.ApplyCurrentText();
+            var part = this.SelectedTab.Part;
 
             try
             {
@@ -970,27 +1015,25 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteToggleCommentCommand()
         {
-            var e = new DataEventArgs<EditorInfo>();
-            this.ReadEditorInfo?.Invoke(this, e);
-
-            if (e.Data == null)
+            var tab = this.SelectedTab;
+            var data = tab?.EditorInfo;
+            if (data == null)
             {
-                // Nothing is probably listening to this event
                 return;
             }
-            
+
             // Extend the selection to pick full lines
             const string NewLine = "\n";
-            var start = e.Data.Text.LastIndexOf(NewLine, e.Data.Selection.Item1, StringComparison.Ordinal) + 1;
+            var start = data.Text.LastIndexOf(NewLine, data.Selection.Item1, StringComparison.Ordinal) + 1;
 
-            var end = e.Data.Text.IndexOf(NewLine, e.Data.Selection.Item2, StringComparison.Ordinal);
+            var end = data.Text.IndexOf(NewLine, data.Selection.Item2, StringComparison.Ordinal);
             if (end < 0)
             {
-                end = e.Data.Text.Length;
+                end = data.Text.Length;
             }
 
             // TODO: Use a StringBuilder
-            var lines = e.Data.Text.Substring(start, end - start).Split(new[] { NewLine }, StringSplitOptions.None);
+            var lines = data.Text.Substring(start, end - start).Split(new[] { NewLine }, StringSplitOptions.None);
             for (var i = 0; i < lines.Length; ++i)
             {
                 var trimmed = lines[i].Trim();
@@ -1015,11 +1058,11 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // Combine the lines and put them back
             var combined = string.Join(NewLine, lines);
-            var result = e.Data.Text.Substring(0, start) + combined + e.Data.Text.Substring(end);
+            var result = data.Text.Substring(0, start) + combined + data.Text.Substring(end);
 
             // Update the selected item's current contents to that, and notify the editor
             this.SelectedItem.Contents = result;
-            this.UpdateEditor?.Invoke(this, new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
+            tab.RaiseUpdateEditor(new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
         }
 
         private async void CheckVersionAsync(IVersionChecker versionChecker)

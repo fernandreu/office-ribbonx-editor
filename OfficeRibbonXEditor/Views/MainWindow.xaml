@@ -483,30 +483,34 @@
                 VerticalAlignment="Stretch"
                 ResizeBehavior="PreviousAndNext"/>
 
-            <dragablz:TabablzControl 
+            <TabControl
                 Grid.Column="2"
-                ShowDefaultCloseButton="True"
+                Grid.ColumnSpan="2"
                 ItemsSource="{Binding OpenTabs}"
-                SelectedItem="{Binding SelectedTab}" Grid.ColumnSpan="2">
-                <dragablz:TabablzControl.HeaderItemTemplate>
+                SelectedItem="{Binding SelectedTab}">
+                <TabControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
+                        <StackPanel
+                            Orientation="Horizontal">
                             <TextBlock Text="{Binding Title}"/>
-                            <Button Style="{StaticResource CloseItemCommandButtonStyle}"/>
+                            <Button
+                                Style="{StaticResource CloseItemCommandButtonStyle}"
+                                Command="{Binding MainWindow.CloseTabCommand}"
+                                CommandParameter="{Binding}"/>
                         </StackPanel>
                     </DataTemplate>
-                </dragablz:TabablzControl.HeaderItemTemplate>
-                <dragablz:TabablzControl.ContentTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
                     <DataTemplate>
                         <ContentControl Content="{Binding}"/>
                     </DataTemplate>
-                </dragablz:TabablzControl.ContentTemplate>
-                <dragablz:TabablzControl.Resources>
+                </TabControl.ContentTemplate>
+                <TabControl.Resources>
                     <DataTemplate DataType="{x:Type model:EditorTabViewModel}">
                         <controls:EditorTab/>
                     </DataTemplate>
-                </dragablz:TabablzControl.Resources>
-            </dragablz:TabablzControl>
+                </TabControl.Resources>
+            </TabControl>
 
         </Grid>
     </DockPanel>
