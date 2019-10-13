@@ -837,8 +837,6 @@ namespace OfficeRibbonXEditor.ViewModels
 
             var newPart = false;
             
-            // TODO: Check if there is a suitable editor tab opened first and, if not, open it
-
             if (this.SelectedItem is OfficeDocumentViewModel doc)
             {
                 // See if there is already a part, and otherwise insert one

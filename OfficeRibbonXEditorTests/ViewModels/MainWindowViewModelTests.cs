@@ -291,6 +291,9 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.SelectedItem = doc.Children[0];
             Assert.IsTrue(this.viewModel.SelectedItem.CanHaveContents);
 
+            var tab = this.viewModel.OpenTab();
+            Assert.NotNull(tab);
+
             void AssertIsValid(bool expected, string message = null)
             {
                 var actual = true;
@@ -299,21 +302,21 @@ namespace OfficeRibbonXEditor.ViewModels
                     actual = false;
                 }
 
-                this.viewModel.ShowResults += Handler;
+                tab.ShowResults += Handler;
                 this.viewModel.ValidateCommand.Execute();
-                this.viewModel.ShowResults -= Handler;
+                tab.ShowResults -= Handler;
 
                 Assert.AreEqual(expected, actual, message);
             }
 
             AssertIsValid(false);
-            this.viewModel.SelectedItem.Contents = "asd";
+            tab.Part.Contents = "asd";
             AssertIsValid(false);
             
-            this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
+            tab.Part.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
             AssertIsValid(true);
             
-            this.viewModel.SelectedItem.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon><tabs></tabs></ribbon></customUI>";
+            tab.Part.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon><tabs></tabs></ribbon></customUI>";
             AssertIsValid(false);
         }
 
@@ -327,6 +330,9 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.InsertXml12Command.Execute();
             var part = doc.Children[0];
             this.viewModel.SelectedItem = part;
+
+            var tab = this.viewModel.OpenTab();
+            Assert.NotNull(tab);
 
             // This should show a message saying there are no callbacks to be generated
             part.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
@@ -349,7 +355,7 @@ namespace OfficeRibbonXEditor.ViewModels
         /// Checks whether the sample XML files are inserted as we would expect
         /// </summary>
         [Test]
-        public void InsertSampleTest()
+        public void InsertSampleInNonExistingPart()
         {
             var doc = this.OpenSource();
 
@@ -357,7 +363,9 @@ namespace OfficeRibbonXEditor.ViewModels
             this.viewModel.InsertXmlSampleCommand.Execute(sample.ResourceName);
             var part = doc.Children.First(); // Again, this should not be null
 
-            var contents = sample.ReadContents();
+            // It is expected that the part created will be an Office 2007 one, but the templates are for Office 2010+. This gets automatically replaced
+            // at insertion time
+            var contents = sample.ReadContents().Replace("2009/07", "2006/01");
             Assert.AreEqual(contents, part.Contents, "Sample XML file not created with the expected contents");
         }
 
