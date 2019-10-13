@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 
@@ -13,6 +14,40 @@ namespace OfficeRibbonXEditor.ViewModels
 
     public class EditorTabViewModel : ViewModelBase
     {
+        public EditorTabViewModel()
+        {
+            this.CutCommand = new RelayCommand(() => this.Cut?.Invoke(this, EventArgs.Empty));
+            this.CopyCommand = new RelayCommand(() => this.Copy?.Invoke(this, EventArgs.Empty));
+            this.PasteCommand = new RelayCommand(() => this.Paste?.Invoke(this, EventArgs.Empty));
+            this.UndoCommand = new RelayCommand(() => this.Undo?.Invoke(this, EventArgs.Empty));
+            this.RedoCommand = new RelayCommand(() => this.Redo?.Invoke(this, EventArgs.Empty));
+            this.SelectAllCommand = new RelayCommand(() => this.SelectAll?.Invoke(this, EventArgs.Empty));
+        }
+
+        public RelayCommand CutCommand { get; }
+
+        public RelayCommand CopyCommand { get; }
+
+        public RelayCommand PasteCommand { get; }
+
+        public RelayCommand UndoCommand { get; }
+
+        public RelayCommand RedoCommand { get; }
+
+        public RelayCommand SelectAllCommand { get; }
+
+        public event EventHandler Cut;
+
+        public event EventHandler Copy;
+
+        public event EventHandler Paste;
+
+        public event EventHandler Undo;
+
+        public event EventHandler Redo;
+
+        public event EventHandler SelectAll;
+
         private string title;
 
         public string Title

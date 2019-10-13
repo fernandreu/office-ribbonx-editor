@@ -32,6 +32,7 @@ namespace OfficeRibbonXEditor.Controls
         public EditorTab()
         {
             this.InitializeComponent();
+
             this.ResultsPanel.Scintilla = this.Editor.Scintilla;
         }
         
@@ -46,10 +47,20 @@ namespace OfficeRibbonXEditor.Controls
 
             if (args.OldValue is EditorTabViewModel previousModel)
             {
+                // The way the DataTemplate works means the same control can be re-used for the different tabs, just with a different
+                // DataContext. It is important to ensure the previous part is saved first 
+                previousModel.Part.Contents = this.Editor.Text;
+
                 previousModel.ReadEditorInfo -= this.OnReadEditorInfo;
                 previousModel.UpdateEditor -= this.OnUpdateEditor;
                 previousModel.ShowResults -= this.OnShowResults;
-                previousModel.Part.Contents = this.Editor.Text;
+
+                previousModel.Cut -= this.OnCut;
+                previousModel.Copy -= this.OnCopy;
+                previousModel.Paste -= this.OnPaste;
+                previousModel.Undo -= this.OnUndo;
+                previousModel.Redo -= this.OnRedo;
+                previousModel.SelectAll -= this.OnSelectAll;
             }
 
             if (!(args.NewValue is EditorTabViewModel model))
@@ -69,6 +80,13 @@ namespace OfficeRibbonXEditor.Controls
             this.viewModel.ReadEditorInfo += this.OnReadEditorInfo;
             this.viewModel.UpdateEditor += this.OnUpdateEditor;
             this.viewModel.ShowResults += this.OnShowResults;
+
+            this.viewModel.Cut += this.OnCut;
+            this.viewModel.Copy += this.OnCopy;
+            this.viewModel.Paste += this.OnPaste;
+            this.viewModel.Undo += this.OnUndo;
+            this.viewModel.Redo += this.OnRedo;
+            this.viewModel.SelectAll += this.OnSelectAll;
         }
 
         private void OnReadEditorInfo(object sender, DataEventArgs<EditorInfo> e)
@@ -101,6 +119,36 @@ namespace OfficeRibbonXEditor.Controls
             this.ResultsRow.Height = this.lastResultsHeight;
             this.ResultsHeader.Content = e.Data.Header;
             this.ResultsPanel.UpdateFindAllResults(e.Data);
+        }
+
+        private void OnCut(object sender, EventArgs e)
+        {
+            this.Editor.Cut();
+        }
+
+        private void OnCopy(object sender, EventArgs e)
+        {
+            this.Editor.Copy();
+        }
+
+        private void OnPaste(object sender, EventArgs e)
+        {
+            this.Editor.Paste();
+        }
+
+        private void OnUndo(object sender, EventArgs e)
+        {
+            this.Editor.Undo();
+        }
+
+        private void OnRedo(object sender, EventArgs e)
+        {
+            this.Editor.Redo();
+        }
+
+        private void OnSelectAll(object sender, EventArgs e)
+        {
+            this.Editor.SelectAll();
         }
 
         private void OnScintillaUpdateUi(object sender, UpdateUIEventArgs e)
@@ -162,12 +210,17 @@ namespace OfficeRibbonXEditor.Controls
                     continue;
                 }
 
+                if (kb.Command == null)
+                {
+                    return;
+                }
+
                 e.SuppressKeyPress = true;
                 e.Handled = true;
 
                 // If this is not async, the lines above seem to be ignored and the character is still printed when
                 // launching a dialog (e.g. Ctrl-O). See: https://github.com/fernandreu/office-ribbonx-editor/issues/20
-                this.Dispatcher.InvokeAsync(() => kb.Command.Execute(null));
+                this.Dispatcher?.InvokeAsync(() => kb.Command?.Execute(null));
 
                 return;
             }

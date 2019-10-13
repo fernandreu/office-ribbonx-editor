@@ -14,6 +14,7 @@
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:behaviors="clr-namespace:OfficeRibbonXEditor.Behaviors"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -39,7 +40,6 @@
     </i:Interaction.Triggers>
     <Window.Resources>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
-        <converters:MethodToCommandConverter x:Key="MethodToCommandConverter"/>
         <Style TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -59,12 +59,12 @@
         <KeyBinding Key="Divide" Modifiers="Control" Command="{Binding ToggleCommentCommand}"/>
 
         <!--Key bindings directly mapped to Scintilla's actions-->
-        <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}"/>
-        <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}"/>
-        <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}"/>
-        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}"/>
-        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}"/>
-        <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
+        <KeyBinding Key="X" Modifiers="Control" Command="{Binding SelectedTab.CutCommand}"/>
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding SelectedTab.CopyCommand}"/>
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding SelectedTab.PasteCommand}"/>
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding SelectedTab.UndoCommand}"/>
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding SelectedTab.RedoCommand}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectedTab.SelectAllCommand}"/>
 
         <!--Find / replace dialog controls-->
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
@@ -155,14 +155,14 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}">
+                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding SelectedTab.UndoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/undo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}">
+                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding SelectedTab.RedoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/redo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -170,21 +170,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}">
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding SelectedTab.CutCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/cut.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}">
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding SelectedTab.CopyCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/copy.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}">
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding SelectedTab.PasteCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/paste.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -192,7 +192,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
+                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding SelectedTab.SelectAllCommand}"/>
             </MenuItem>
             <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
@@ -483,9 +483,11 @@
                 VerticalAlignment="Stretch"
                 ResizeBehavior="PreviousAndNext"/>
 
+            <!--The IsCached="True" prevents tab templates from being reused, which would otherwise mess up the undo history-->
             <TabControl
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
+                behaviors:TabContent.IsCached="True"
                 ItemsSource="{Binding OpenTabs}"
                 SelectedItem="{Binding SelectedTab}">
                 <TabControl.ItemTemplate>
@@ -500,11 +502,11 @@
                         </StackPanel>
                     </DataTemplate>
                 </TabControl.ItemTemplate>
-                <TabControl.ContentTemplate>
+                <behaviors:TabContent.Template>
                     <DataTemplate>
                         <ContentControl Content="{Binding}"/>
                     </DataTemplate>
-                </TabControl.ContentTemplate>
+                </behaviors:TabContent.Template>
                 <TabControl.Resources>
                     <DataTemplate DataType="{x:Type model:EditorTabViewModel}">
                         <controls:EditorTab/>

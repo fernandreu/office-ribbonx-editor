@@ -426,6 +426,12 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
             }
 
+            var tabs = this.OpenTabs.Where(x => doc.Children.Contains(x.Part)).ToList();
+            foreach (var tab in tabs)
+            {
+                this.ExecuteCloseTabCommand(tab);
+            }
+
             doc.Document.Dispose();
             this.DocumentList.Remove(doc);
         }
@@ -684,11 +690,14 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteSaveCommand()
         {
-            // TODO: Should this save the open tab or the selected document? There should probably be a separate command for each
-
             if (this.CurrentDocument == null)
             {
                 return;
+            }
+            
+            foreach (var tab in this.OpenTabs)
+            {
+                tab.ApplyCurrentText();
             }
 
             try
