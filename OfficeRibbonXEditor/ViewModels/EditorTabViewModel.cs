@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.ViewModels
 {
     using ResultsEventArgs = DataEventArgs<IResultCollection>;
 
-    public class EditorTabViewModel : ViewModelBase
+    public class EditorTabViewModel : ViewModelBase, ITabItemViewModel
     {
         public EditorTabViewModel()
         {
@@ -56,12 +56,12 @@ namespace OfficeRibbonXEditor.ViewModels
             set => this.Set(ref this.title, value);
         }
 
-        private string lineStatus;
+        private string statusText;
 
-        public string LineStatus
+        public string StatusText
         {
-            get => this.lineStatus;
-            set => this.Set(ref this.lineStatus, value);
+            get => this.statusText;
+            set => this.Set(ref this.statusText, value);
         }
 
         private int zoom;
@@ -111,7 +111,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.UpdateEditor?.Invoke(this, e);
         }
 
-        public void ApplyCurrentText()
+        public void ApplyChanges()
         {
             if (!this.Part.CanHaveContents)
             {

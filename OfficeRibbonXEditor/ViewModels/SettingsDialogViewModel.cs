@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
@@ -7,7 +8,7 @@ using OfficeRibbonXEditor.Models;
 namespace OfficeRibbonXEditor.ViewModels
 {
 
-    public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<EditorTabViewModel>>
+    public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
     {
         private readonly string[] usedProperties =
         {
@@ -33,14 +34,14 @@ namespace OfficeRibbonXEditor.ViewModels
             this.AcceptCommand = new RelayCommand(this.AcceptSettings);
         }
 
-        public bool OnLoaded(ICollection<EditorTabViewModel> payload)
+        public bool OnLoaded(ICollection<ITabItemViewModel> payload)
         {
             this.Tabs = payload;
             this.LoadCurrent();
             return true;
         }
 
-        public ICollection<EditorTabViewModel> Tabs { get; private set; }
+        public ICollection<ITabItemViewModel> Tabs { get; private set; }
 
         public RelayCommand ResetCommand { get; }
 
@@ -85,7 +86,7 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             Properties.Settings.Default.Save();
             this.LoadCurrent();
-            foreach (var tab in this.Tabs)
+            foreach (var tab in this.Tabs.OfType<EditorTabViewModel>())
             {
                 tab.Lexer?.Update();
             }
@@ -95,7 +96,7 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             Properties.Settings.Default.Save();
             this.IsCancelled = false;
-            foreach (var tab in this.Tabs)
+            foreach (var tab in this.Tabs.OfType<EditorTabViewModel>())
             {
                 tab.Lexer?.Update();
             }

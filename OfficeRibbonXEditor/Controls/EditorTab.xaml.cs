@@ -160,7 +160,7 @@ namespace OfficeRibbonXEditor.Controls
 
             if (!this.Editor.IsEnabled)
             {
-                vm.LineStatus = "Ln 0, Col 0";
+                vm.StatusText = "Ln 0, Col 0";
             }
             else
             {
@@ -168,7 +168,7 @@ namespace OfficeRibbonXEditor.Controls
                 var line = this.Editor.LineFromPosition(pos);
                 var col = this.Editor.GetColumn(pos);
 
-                vm.LineStatus = $"Ln {line + 1},  Col {col + 1}";
+                vm.StatusText = $"Ln {line + 1},  Col {col + 1}";
             }
         }
 

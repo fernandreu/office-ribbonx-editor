@@ -356,7 +356,7 @@
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Margin="0,0,20,0" Text="{Binding SelectedTab.LineStatus}"/>
+                <TextBlock Margin="0,0,20,0" Text="{Binding SelectedTab.StatusText}"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -469,6 +469,7 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Open" Command="{Binding OpenTabCommand}"/>
                                     <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding ChangeIconIdCommand}"/>
                                     <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>
                                 </ContextMenu>
@@ -511,6 +512,9 @@
                 <TabControl.Resources>
                     <DataTemplate DataType="{x:Type model:EditorTabViewModel}">
                         <controls:EditorTab/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type model:IconTabViewModel}">
+                        <controls:IconTab/>
                     </DataTemplate>
                 </TabControl.Resources>
             </TabControl>

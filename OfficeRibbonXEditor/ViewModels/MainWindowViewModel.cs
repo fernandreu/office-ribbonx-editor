@@ -81,12 +81,12 @@ namespace OfficeRibbonXEditor.ViewModels
             this.IncrementalSearchCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.IncrementalSearch));
             this.ReplaceCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Replace));
             
-            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ICollection<EditorTabViewModel>>(this.OpenTabs));
+            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ICollection<ITabItemViewModel>>(this.OpenTabs));
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
-            this.CloseTabCommand = new RelayCommand<EditorTabViewModel>(this.ExecuteCloseTabCommand);
+            this.CloseTabCommand = new RelayCommand<ITabItemViewModel>(this.ExecuteCloseTabCommand);
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
@@ -129,11 +129,11 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public ObservableCollection<XmlSampleViewModel> XmlSamples { get; } = new ObservableCollection<XmlSampleViewModel>();
 
-        public ObservableCollection<EditorTabViewModel> OpenTabs { get; } = new ObservableCollection<EditorTabViewModel>();
+        public ObservableCollection<ITabItemViewModel> OpenTabs { get; } = new ObservableCollection<ITabItemViewModel>();
 
-        private EditorTabViewModel selectedTab;
+        private ITabItemViewModel selectedTab;
 
-        public EditorTabViewModel SelectedTab
+        public ITabItemViewModel SelectedTab
         {
             get => this.selectedTab;
             set
@@ -167,7 +167,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 Properties.Settings.Default.ShowWhitespace = value;
-                foreach (var tab in this.OpenTabs)
+                foreach (var tab in this.OpenTabs.OfType<EditorTabViewModel>())
                 {
                     tab.Lexer?.Update();
                 }
@@ -285,7 +285,7 @@ namespace OfficeRibbonXEditor.ViewModels
         /// </summary>
         public RelayCommand CloseCommand { get; }
 
-        public RelayCommand<EditorTabViewModel> CloseTabCommand { get; }
+        public RelayCommand<ITabItemViewModel> CloseTabCommand { get; }
 
         /// <summary>
         /// Gets the command that starts the drag / drop action for opening files
@@ -394,7 +394,11 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
-            var tab = this.SelectedTab;
+            if (!(this.SelectedTab is EditorTabViewModel tab))
+            {
+                return;
+            }
+
             var lexer = tab?.Lexer;
             if (lexer == null)
             {
@@ -429,7 +433,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
             }
 
-            var tabs = this.OpenTabs.Where(x => doc.Children.Contains(x.Part)).ToList();
+            var tabs = this.OpenTabs.OfType<EditorTabViewModel>().Where(x => doc.Children.Contains(x.Part)).ToList();
             foreach (var tab in tabs)
             {
                 this.ExecuteCloseTabCommand(tab);
@@ -450,9 +454,13 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 this.OpenPartTab(part);
             }
+            else if (viewModel is IconViewModel icon)
+            {
+                this.OpenIconTab(icon);
+            }
         }
 
-        public void ExecuteCloseTabCommand(EditorTabViewModel tab = null)
+        public void ExecuteCloseTabCommand(ITabItemViewModel tab = null)
         {
             if (tab == null)
             {
@@ -465,7 +473,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 return;
             }
 
-            tab.ApplyCurrentText();
+            tab.ApplyChanges();
 
             this.OpenTabs.RemoveAt(index);
             if (this.SelectedTab == tab)
@@ -552,7 +560,7 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             foreach (var tab in this.OpenTabs)
             {
-                tab.ApplyCurrentText();
+                tab.ApplyChanges();
             }
 
             foreach (var doc in this.DocumentList)
@@ -687,7 +695,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 return null;
             }
 
-            var tab = this.OpenTabs.FirstOrDefault(x => x.Part == part);
+            var tab = this.OpenTabs.OfType<EditorTabViewModel>().FirstOrDefault(x => x.Part == part);
             if (tab == null)
             {
                 var doc = (OfficeDocumentViewModel) part.Parent;
@@ -696,6 +704,35 @@ namespace OfficeRibbonXEditor.ViewModels
                     Part = part,
                     MainWindow = this,
                     Title = $"{doc.Name} - {part.Name}",
+                };
+                this.OpenTabs.Add(tab);
+            }
+
+            this.SelectedTab = tab;
+            return tab;
+        }
+
+        public IconTabViewModel OpenIconTab(IconViewModel icon = null)
+        {
+            if (icon == null)
+            {
+                icon = this.SelectedItem as IconViewModel;
+            }
+
+            if (icon == null)
+            {
+                return null;
+            }
+
+            var tab = this.OpenTabs.OfType<IconTabViewModel>().FirstOrDefault(x => x.Icon == icon);
+            if (tab == null)
+            {
+                var part = (OfficePartViewModel) icon.Parent;
+                tab = new IconTabViewModel
+                {
+                    Icon = icon,
+                    MainWindow = this,
+                    Title = $"{part.Name} - {icon.Id}",
                 };
                 this.OpenTabs.Add(tab);
             }
@@ -713,7 +750,7 @@ namespace OfficeRibbonXEditor.ViewModels
             
             foreach (var tab in this.OpenTabs)
             {
-                tab.ApplyCurrentText();
+                tab.ApplyChanges();
             }
 
             try
@@ -730,7 +767,7 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             foreach (var tab in this.OpenTabs)
             {
-                tab.ApplyCurrentText();
+                tab.ApplyChanges();
             }
 
             foreach (var doc in this.DocumentList)
@@ -889,7 +926,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
             }
 
-            var tab = this.OpenTabs.FirstOrDefault(x => x.Part == part) ?? this.OpenPartTab(part);
+            var tab = this.OpenTabs.OfType<EditorTabViewModel>().FirstOrDefault(x => x.Part == part) ?? this.OpenPartTab(part);
 
             try
             {
@@ -912,13 +949,12 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private bool ValidateXml(bool showValidMessage)
         {
-            var tab = this.SelectedTab;
-            if (tab == null)
+            if (!(this.SelectedTab is EditorTabViewModel tab))
             {
                 return false;
             }
 
-            tab.ApplyCurrentText();
+            tab.ApplyChanges();
             var part = tab.Part;
 
             // Test to see if text is XML first
@@ -1003,8 +1039,14 @@ namespace OfficeRibbonXEditor.ViewModels
                 return;
             }
 
-            this.SelectedTab.ApplyCurrentText();
-            var part = this.SelectedTab.Part;
+            this.SelectedTab.ApplyChanges();
+            
+            if (!(this.SelectedTab is EditorTabViewModel tab))
+            {
+                return;
+            }
+
+            var part = tab.Part;
 
             try
             {
@@ -1029,7 +1071,12 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteGoToCommand()
         {
-            var lexer = this.SelectedTab?.Lexer;
+            if (!(this.SelectedTab is EditorTabViewModel tab))
+            {
+                return;
+            }
+
+            var lexer = tab.Lexer;
             if (lexer == null)
             {
                 return;
@@ -1040,8 +1087,12 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ExecuteToggleCommentCommand()
         {
-            var tab = this.SelectedTab;
-            var data = tab?.EditorInfo;
+            if (!(this.SelectedTab is EditorTabViewModel tab))
+            {
+                return;
+            }
+
+            var data = tab.EditorInfo;
             if (data == null)
             {
                 return;
