@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight;
 using OfficeRibbonXEditor.Interfaces;
 
@@ -18,12 +19,17 @@ namespace OfficeRibbonXEditor.ViewModels
             set => this.Set(ref this.title, value);
         }
 
-        private string statusText;
-
         public string StatusText
         {
-            get => this.statusText;
-            set => this.Set(ref this.statusText, value);
+            get
+            {
+                if (this.Icon?.Image == null)
+                {
+                    return null;
+                }
+
+                return $"Size: {this.Icon.Image.Width:F0}x{(int) this.Icon.Image.Height:F0}";
+            }
         }
 
         private IconViewModel icon;
@@ -31,7 +37,15 @@ namespace OfficeRibbonXEditor.ViewModels
         public IconViewModel Icon
         {
             get => this.icon;
-            set => this.Set(ref this.icon, value);
+            set
+            {
+                if (!this.Set(ref this.icon, value))
+                {
+                    return;
+                }
+
+                this.RaisePropertyChanged(nameof(StatusText));
+            }
         }
 
         private int zoom;

@@ -13,13 +13,50 @@
         <converters:PowerConverter x:Key="PowerConverter"/>
     </UserControl.Resources>
     <ScrollViewer
-        HorizontalScrollBarVisibility="Auto">
-        <Image Stretch="None" Source="{Binding Icon.Image}">
-            <Image.LayoutTransform>
-                <ScaleTransform
-                    ScaleX="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"
-                    ScaleY="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"/>
-            </Image.LayoutTransform>
-        </Image>
+        x:Name="ScrollViewer"
+        HorizontalScrollBarVisibility="Auto"
+        PreviewMouseLeftButtonDown="OnPreviewMouseLeftButtonDown"
+        PreviewMouseMove="OnPreviewMouseMove"
+        PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"
+        PreviewMouseWheel="OnPreviewMouseWheel">
+        <Border
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            BorderBrush="Black"
+            BorderThickness="1">
+            <Border.Background>
+                <DrawingBrush 
+                    Viewport="0,0,16,16" 
+                    ViewportUnits="Absolute"
+                    TileMode="Tile">
+                    <DrawingBrush.Drawing>
+                        <DrawingGroup>
+                            <GeometryDrawing Brush="White">
+                                <GeometryDrawing.Geometry>
+                                    <RectangleGeometry Rect="0,0,100,100" />
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+
+                            <GeometryDrawing
+                                Brush="Gray">
+                                <GeometryDrawing.Geometry>
+                                    <GeometryGroup>
+                                        <RectangleGeometry Rect="0,0,50,50" />
+                                        <RectangleGeometry Rect="50,50,50,50" />
+                                    </GeometryGroup>
+                                </GeometryDrawing.Geometry>
+                            </GeometryDrawing>
+                        </DrawingGroup>
+                    </DrawingBrush.Drawing>
+                </DrawingBrush>
+            </Border.Background>
+            <Image Stretch="None" Source="{Binding Icon.Image}">
+                <Image.LayoutTransform>
+                    <ScaleTransform
+                        ScaleX="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"
+                        ScaleY="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"/>
+                </Image.LayoutTransform>
+            </Image>
+        </Border>
     </ScrollViewer>
 </UserControl>

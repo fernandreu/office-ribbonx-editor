@@ -728,11 +728,12 @@ namespace OfficeRibbonXEditor.ViewModels
             if (tab == null)
             {
                 var part = (OfficePartViewModel) icon.Parent;
+                var doc = (OfficeDocumentViewModel) part.Parent;
                 tab = new IconTabViewModel
                 {
                     Icon = icon,
                     MainWindow = this,
-                    Title = $"{part.Name} - {icon.Id}",
+                    Title = $"{doc.Name} - {part.Name} - {icon.Id}",
                 };
                 this.OpenTabs.Add(tab);
             }
