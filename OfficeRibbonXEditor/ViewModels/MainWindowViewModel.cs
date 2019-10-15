@@ -6,7 +6,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -534,12 +536,30 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 var part = (OfficePartViewModel)this.SelectedItem;
+
+                foreach (var tab in this.OpenTabs.OfType<EditorTabViewModel>())
+                {
+                    if (tab.Part == part)
+                    {
+                        this.ExecuteCloseTabCommand(tab);
+                        break;
+                    }
+                }
+
+                foreach (var tab in this.OpenTabs.OfType<IconTabViewModel>().ToList())
+                {
+                    if (part.Children.Any(x => x == tab.Icon))
+                    {
+                        this.ExecuteCloseTabCommand(tab);
+                    }
+                }
+
                 var doc = (OfficeDocumentViewModel)part.Parent;
                 doc.RemovePart(part.Part.PartType);
                 return;
             }
 
-            if (this.SelectedItem is IconViewModel icon)
+            if (this.SelectedItem is IconViewModel)
             {
                 var result = this.messageBoxService.Show(
                     "This action cannot be undone. Are you sure you want to continue?", 
@@ -549,6 +569,17 @@ namespace OfficeRibbonXEditor.ViewModels
                 if (result == MessageBoxResult.No)
                 {
                     return;
+                }
+
+                var icon = (IconViewModel) this.SelectedItem;
+
+                foreach (var tab in this.OpenTabs.OfType<IconTabViewModel>())
+                {
+                    if (tab.Icon == icon)
+                    {
+                        this.ExecuteCloseTabCommand(tab);
+                        break;
+                    }
                 }
 
                 var part = (OfficePartViewModel)icon.Parent;
@@ -939,7 +970,9 @@ namespace OfficeRibbonXEditor.ViewModels
                     data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
                 }
 
-                tab.RaiseUpdateEditor(new EditorChangeEventArgs { Start = -1, End = -1, NewText = data });
+                // Event might be raised too soon (when the view still does not exist). Hence, update part as well
+                part.Contents = data;
+                tab.RaiseUpdateEditor(new EditorChangeEventArgs {Start = -1, End = -1, NewText = data});
             }
             catch (Exception ex)
             {
