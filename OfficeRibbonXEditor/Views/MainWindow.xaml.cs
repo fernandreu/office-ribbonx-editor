@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using Dragablz;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels;
 
@@ -22,27 +24,9 @@ namespace OfficeRibbonXEditor.Views
 
         private bool suppressRequestBringIntoView;
 
-        private GridLength lastResultsHeight = new GridLength(150);
-
         public MainWindow()
         {
             this.InitializeComponent();
-
-            this.ResultsPanel.Scintilla = this.Editor.Scintilla;
-        }
-
-        public int Zoom
-        {
-            get => this.Editor?.Zoom ?? 0;
-            set
-            {
-                if (this.Editor == null || this.Editor.Zoom == value)
-                {
-                    return;
-                }
-
-                this.Editor.Zoom = value;
-            }
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
@@ -56,29 +40,7 @@ namespace OfficeRibbonXEditor.Views
 
             this.viewModel = model;
 
-            this.viewModel.ReadEditorInfo += (o, e) => e.Data = new EditorInfo { Text = this.Editor.Text, Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd) };
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
-            this.viewModel.UpdateEditor += (o, e) =>
-            {
-                this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
-                this.Editor.InsertText(e.Start, e.NewText);
-                if (e.UpdateSelection)
-                {
-                    this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
-                }
-
-                if (e.ResetUndoHistory)
-                {
-                    this.Editor.EmptyUndoBuffer();
-                }
-            };
-            this.viewModel.ShowResults += (o, e) =>
-            {
-                this.ResultsSplitter.Visibility = Visibility.Visible;
-                this.ResultsRow.Height = this.lastResultsHeight;
-                this.ResultsHeader.Content = e.Data.Header;
-                this.ResultsPanel.UpdateFindAllResults(e.Data);
-            };
         }
 
         /// <summary>
@@ -136,46 +98,6 @@ namespace OfficeRibbonXEditor.Views
 
         #endregion
 
-        private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            var newItem = e.NewValue as TreeViewItemViewModel;
-
-            this.viewModel.SelectedItem = newItem;
-
-            if (newItem == null || !newItem.CanHaveContents)
-            {
-                this.Editor.Text = string.Empty;
-            }
-            else
-            {
-                this.Editor.Text = newItem.Contents;
-            }
-
-            // In any case, reset the undo history
-            this.Editor.EmptyUndoBuffer();
-        }
-
-        private void OnScintillaUpdateUi(object sender, UpdateUIEventArgs e)
-        {
-            if (!this.Editor.IsEnabled)
-            {
-                this.LineBox.Text = "Ln 0, Col 0";
-            }
-            else
-            {
-                var pos = this.Editor.CurrentPosition;
-                var line = this.Editor.LineFromPosition(pos);
-                var col = this.Editor.GetColumn(pos);
-
-                this.LineBox.Text = $"Ln {line + 1},  Col {col + 1}";
-            }
-        }
-
-        private void OnEditorZoomChanged(object sender, EventArgs e)
-        {
-            this.Zoom = this.Editor.Zoom;
-        }
-
         /// <summary>
         /// Ensures that a TreeViewItem is selected before the context menu is displayed
         /// See <a href="https://stackoverflow.com/questions/592373/select-treeview-node-on-right-click-before-displaying-contextmenu">this</a>
@@ -230,79 +152,17 @@ namespace OfficeRibbonXEditor.Views
             textBox.Focus();
             textBox.SelectAll();
         }
+
+        private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+            this.viewModel.OpenTabCommand.Execute(null);
+        }
         
-        // For some reason, the Scintilla editor always seems to have preference over the input gestures.
-        // The only solution (so far) is to execute those when appropriate from this event handler.
-        private void OnEditorKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            foreach (var ib in this.InputBindings)
-            {
-                if (!(ib is KeyBinding kb))
-                {
-                    return;
-                }
-                        
-                var inputKey = KeyInterop.KeyFromVirtualKey(e.KeyValue);
-                if (kb.Key != inputKey)
-                {
-                    continue;
-                }
-
-                if (kb.Modifiers.HasFlag(ModifierKeys.Control) != e.Control)
-                {
-                    continue;
-                }
-                        
-                if (kb.Modifiers.HasFlag(ModifierKeys.Shift) != e.Shift)
-                {
-                    continue;
-                }
-                        
-                if (kb.Modifiers.HasFlag(ModifierKeys.Alt) != e.Alt)
-                {
-                    continue;
-                }
-
-                e.SuppressKeyPress = true;
-                e.Handled = true;
-
-                // If this is not async, the lines above seem to be ignored and the character is still printed when
-                // launching a dialog (e.g. Ctrl-O). See: https://github.com/fernandreu/office-ribbonx-editor/issues/20
-                this.Dispatcher.InvokeAsync(() => kb.Command.Execute(null));
-
-                return;
-            }
-        }
-
-        private void OnEditorInsertCheck(object sender, InsertCheckEventArgs e)
-        {
-            if (!Properties.Settings.Default.AutoIndent)
-            {
-                return;
-            }
-
-            if (!e.Text.EndsWith("\r") && !e.Text.EndsWith("\n"))
-            {
-                return;
-            }
-
-            var startPos = this.Editor.Lines[this.Editor.LineFromPosition(this.Editor.CurrentPosition)].Position;
-            var endPos = e.Position;
-            var curLineText = this.Editor.GetTextRange(startPos, endPos - startPos); // Text until the caret
-            var indent = Regex.Match(curLineText, "^[ \\t]*");
-            e.Text += indent.Value;
-            if (Regex.IsMatch(curLineText, "[^/]>\\s*$"))
-            {
-                // If the previous line finished with an open tag, add an indentation level to the next one 
-                e.Text += new string(' ', Properties.Settings.Default.TabWidth);
-            }
-        }
-
-        private void OnCloseFindResults(object sender, RoutedEventArgs e)
-        {
-            this.lastResultsHeight = this.ResultsRow.Height;
-            this.ResultsRow.Height = new GridLength(0);
-            this.ResultsSplitter.Visibility = Visibility.Collapsed;
+            var newItem = e.NewValue as TreeViewItemViewModel;
+            this.viewModel.SelectedItem = newItem;
         }
     }
 }

@@ -35,6 +35,14 @@ namespace ScintillaNET.WPF
             this.mInnerScintilla = new SN.Scintilla();
             this.winFormsHost.Child = this.mInnerScintilla;
             this.mWPFConfig = new ScintillaWPFConfigItemCollection(this);
+
+            this.mInnerScintilla.ZoomChanged += (o, e) =>
+            {
+                if (this.Zoom != this.mInnerScintilla.Zoom)
+                {
+                    this.Zoom = this.mInnerScintilla.Zoom;
+                }
+            };
         }
 
         private readonly ScintillaWPFConfigItemCollection mWPFConfig;
@@ -1762,8 +1770,28 @@ namespace ScintillaNET.WPF
         [Description("Zoom factor in points applied to the displayed text.")]
         public int Zoom
         {
-            get { return mInnerScintilla.Zoom; }
-            set { mInnerScintilla.Zoom = value; }
+            get => (int) this.GetValue(ZoomProperty);
+            set => this.SetValue(ZoomProperty, value);
+        }
+        
+        public static readonly DependencyProperty ZoomProperty = DependencyProperty.Register(
+            nameof(Zoom),
+            typeof(int),
+            typeof(ScintillaWPF),
+            new FrameworkPropertyMetadata(0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnZoomChanged));
+
+        private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            (d as ScintillaWPF)?.OnZoomChanged(e);
+        }
+
+        private void OnZoomChanged(DependencyPropertyChangedEventArgs e)
+        {
+            var newValue = (int) e.NewValue;
+            if (this.mInnerScintilla.Zoom != newValue)
+            {
+                this.mInnerScintilla.Zoom = newValue;
+            }
         }
 
         #endregion Properties

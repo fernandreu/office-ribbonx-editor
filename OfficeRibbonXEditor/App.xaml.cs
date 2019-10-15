@@ -53,7 +53,6 @@ namespace OfficeRibbonXEditor
         {
             var windowModel = this.container.Resolve<MainWindowViewModel>();
             var window = new MainWindow();
-            windowModel.Lexer = new XmlLexer {Editor = window.Editor};
             window.DataContext = windowModel;
             windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
             windowModel.Closed += (o, e) => window.Close();

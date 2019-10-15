@@ -13,6 +13,8 @@
         xmlns:model="clr-namespace:OfficeRibbonXEditor.ViewModels"
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
+        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        xmlns:behaviors="clr-namespace:OfficeRibbonXEditor.Behaviors"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -38,7 +40,6 @@
     </i:Interaction.Triggers>
     <Window.Resources>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
-        <converters:MethodToCommandConverter x:Key="MethodToCommandConverter"/>
         <Style TargetType="Image">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -49,21 +50,21 @@
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
-    </Window.Resources> 
+    </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenCommand}"/>
+        <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenDocumentCommand}"/>
         <KeyBinding Key="S" Modifiers="Control" Command="{Binding SaveCommand}"/>
         <KeyBinding Key="W" Modifiers="Control" Command="{Binding CloseDocumentCommand}"/>
         <KeyBinding Key="F2" Command="{Binding ChangeIconIdCommand}"/>
         <KeyBinding Key="Divide" Modifiers="Control" Command="{Binding ToggleCommentCommand}"/>
 
         <!--Key bindings directly mapped to Scintilla's actions-->
-        <KeyBinding Key="X" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}"/>
-        <KeyBinding Key="C" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}"/>
-        <KeyBinding Key="V" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}"/>
-        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}"/>
-        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}"/>
-        <KeyBinding Key="A" Modifiers="Control" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
+        <KeyBinding Key="X" Modifiers="Control" Command="{Binding SelectedTab.CutCommand}"/>
+        <KeyBinding Key="C" Modifiers="Control" Command="{Binding SelectedTab.CopyCommand}"/>
+        <KeyBinding Key="V" Modifiers="Control" Command="{Binding SelectedTab.PasteCommand}"/>
+        <KeyBinding Key="Z" Modifiers="Control" Command="{Binding SelectedTab.UndoCommand}"/>
+        <KeyBinding Key="Y" Modifiers="Control" Command="{Binding SelectedTab.RedoCommand}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectedTab.SelectAllCommand}"/>
 
         <!--Find / replace dialog controls-->
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
@@ -71,14 +72,14 @@
         <KeyBinding Key="F3" Command="{Binding FindNextCommand}"/>
         <KeyBinding Key="H" Modifiers="Control" Command="{Binding ReplaceCommand}"/>
         <KeyBinding Key="I" Modifiers="Control" Command="{Binding IncrementalSearchCommand}"/>
-        
+
         <!--GoTo dialog control-->
         <KeyBinding Key="G" Modifiers="Control" Command="{Binding GoToCommand}"/>
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
             <MenuItem Header="_File">
-                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenCommand}">
+                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenDocumentCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/open.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -91,7 +92,7 @@
                         <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                    </MenuItem.Icon>    
+                    </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem Header="Save All Documents" Command="{Binding SaveAllCommand}">
@@ -99,7 +100,7 @@
                         <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                    </MenuItem.Icon>    
+                    </MenuItem.Icon>
                 </MenuItem>
 
                 <MenuItem Header="Save As" Command="{Binding SaveAsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
@@ -113,7 +114,7 @@
                         <Image Source="/Resources/Images/settings.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                    </MenuItem.Icon>    
+                    </MenuItem.Icon>
                 </MenuItem>
 
                 <models:RecentFileList 
@@ -154,14 +155,14 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Undo'}">
+                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding SelectedTab.UndoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/undo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Redo'}">
+                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding SelectedTab.RedoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/redo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -169,21 +170,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Cut'}">
+                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding SelectedTab.CutCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/cut.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Copy'}">
+                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding SelectedTab.CopyCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/copy.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='Paste'}">
+                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding SelectedTab.PasteCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/paste.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -191,7 +192,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding ElementName=Editor, Converter={StaticResource MethodToCommandConverter}, ConverterParameter='SelectAll'}"/>
+                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding SelectedTab.SelectAllCommand}"/>
             </MenuItem>
             <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
@@ -254,7 +255,7 @@
         <ToolBarTray DockPanel.Dock="Top">
             <ToolBar>
 
-                <Button ToolTip="Open an Office document" Command="{Binding OpenCommand}">
+                <Button ToolTip="Open an Office document" Command="{Binding OpenDocumentCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/open.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Open</TextBlock>
@@ -267,14 +268,14 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
                     </StackPanel>
                 </Button>
-                
+
                 <Separator/>
-                
+
                 <CheckBox IsChecked="{Binding ShowWhitespaces}" 
                           ToolTip="Show space, tab and line end characters in the editor">
                     <Image Source="/Resources/Images/pilcrow.png" Width="16" Height="16"/>
                 </CheckBox>
-                
+
                 <Button Command="{Binding ToggleCommentCommand}" 
                         IsEnabled="{Binding IsPartSelected}"
                         ToolTip="Comment / uncomment the currently selected lines">
@@ -289,9 +290,9 @@
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
                     </StackPanel>
                 </Button>
-                
+
                 <Separator/>
-                
+
                 <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/insertPicture.png" Width="16" Height="16"/>
@@ -299,27 +300,27 @@
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsPartSelected}">
+                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsEditorTabSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/check.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsPartSelected}">
+                <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsEditorTabSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/callbacks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
                     </StackPanel>
                 </Button>
-                
+
                 <CheckBox IsChecked="{Binding ReloadOnSave}" ToolTip="To ensure you do not delete changes made externally, you can reload the documents right before they are to be saved">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/redo.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
                     </StackPanel>
                 </CheckBox>
-                
+
                 <Separator Visibility="{Binding NewerVersion, Converter={StaticResource StringToVisibilityConverter}}"/>
 
                 <Button FontWeight="Bold"
@@ -351,11 +352,11 @@
             <StatusBarItem Grid.Column="1" Margin="0,0,10,0">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Zoom factor:" Padding="0,0,4,0"/>
-                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding ElementName=Window, Path=Zoom, Mode=TwoWay}" Height="20" Minimum="-10" Maximum="20"/>
+                    <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding SelectedTab.Zoom}" Height="20" Minimum="-10" Maximum="20"/>
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <TextBlock Name="LineBox" Margin="0,0,20,0" Text="Line 0, Col 0"/>
+                <TextBlock Margin="0,0,20,0" Text="{Binding SelectedTab.StatusText}"/>
             </StatusBarItem>
         </StatusBar>
 
@@ -363,15 +364,17 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="150"/>
                 <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="34*"/>
+                <ColumnDefinition Width="397*"/>
             </Grid.ColumnDefinitions>
 
             <TreeView
                 Name="DocumentView"
                 ItemsSource="{Binding DocumentList}" 
                 Grid.Column="0"
-                SelectedItemChanged="OnDocumentViewSelectionChanged"
                 PreviewMouseRightButtonDown="OnTreeViewRightClick"
+                PreviewMouseDoubleClick="OnPreviewMouseDoubleClick"
+                SelectedItemChanged="OnDocumentViewSelectionChanged"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
                     <Style TargetType="{x:Type TreeViewItem}">
@@ -426,7 +429,7 @@
                                             <Image Source="/Resources/Images/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
-                                        </MenuItem.Icon>    
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Header="Save As..." Command="{Binding SaveAsCommand}"/>
                                     <MenuItem Header="Close" Command="{Binding CloseDocumentCommand}"/>
@@ -444,6 +447,7 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Open" Command="{Binding OpenTabCommand}"/>
                                     <MenuItem Header="Insert icons..." Command="{Binding InsertIconsCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/insertPicture.png"
@@ -465,6 +469,7 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
+                                    <MenuItem Header="Open" Command="{Binding OpenTabCommand}"/>
                                     <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding ChangeIconIdCommand}"/>
                                     <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>
                                 </ContextMenu>
@@ -474,67 +479,46 @@
                 </TreeView.Resources>
             </TreeView>
 
-            <GridSplitter Grid.Column="1" 
-                          Width="4" 
-                          VerticalAlignment="Stretch"
-                          ResizeBehavior="PreviousAndNext"/>
+            <GridSplitter
+                Grid.Column="1" 
+                Width="4" 
+                VerticalAlignment="Stretch"
+                ResizeBehavior="PreviousAndNext"/>
 
-            <Grid Grid.Column="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="0" x:Name="ResultsRow"/>
-                </Grid.RowDefinitions>
+            <!--The IsCached="True" prevents tab templates from being reused, which would otherwise mess up the undo history-->
+            <TabControl
+                Grid.Column="2"
+                Grid.ColumnSpan="2"
+                behaviors:TabContent.IsCached="True"
+                ItemsSource="{Binding OpenTabs}"
+                SelectedItem="{Binding SelectedTab}">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel
+                            Orientation="Horizontal">
+                            <TextBlock Text="{Binding Title}"/>
+                            <Button
+                                Style="{StaticResource CloseItemCommandButtonStyle}"
+                                Command="{Binding MainWindow.CloseTabCommand}"
+                                CommandParameter="{Binding}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <behaviors:TabContent.Template>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}"/>
+                    </DataTemplate>
+                </behaviors:TabContent.Template>
+                <TabControl.Resources>
+                    <DataTemplate DataType="{x:Type model:EditorTabViewModel}">
+                        <controls:EditorTab/>
+                    </DataTemplate>
+                    <DataTemplate DataType="{x:Type model:IconTabViewModel}">
+                        <controls:IconTab/>
+                    </DataTemplate>
+                </TabControl.Resources>
+            </TabControl>
 
-                <sn:ScintillaWPF
-                    x:Name="Editor"
-                    Grid.Row="0"
-                    HorizontalAlignment="Stretch"
-                    FontFamily="Consolas"
-                    UpdateUI="OnScintillaUpdateUi"
-                    FontSize="{Binding Source={x:Static properties:Settings.Default}, Path=EditorFontSize}"
-                    DataContext="{Binding SelectedItem}"
-                    KeyDown="OnEditorKeyDown"
-                    InsertCheck="OnEditorInsertCheck"
-                    ZoomChanged="OnEditorZoomChanged">
-                    <sn:ScintillaWPF.Resources>
-                        <Style TargetType="sn:ScintillaWPF">
-                            <Setter Property="IsEnabled" Value="False"/>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding CanHaveContents}" Value="True">
-                                    <Setter Property="IsEnabled" Value="True"/>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </sn:ScintillaWPF.Resources>
-                </sn:ScintillaWPF>
-
-                <GridSplitter Grid.Row="1" 
-                              Height="4" 
-                              x:Name="ResultsSplitter"
-                              HorizontalAlignment="Stretch"
-                              Visibility="Collapsed"
-                              ResizeBehavior="PreviousAndNext"/>
-
-                <DockPanel Grid.Row="2">
-                    <DockPanel DockPanel.Dock="Top">
-                        <Label Name="ResultsHeader"/>
-                        <Button DockPanel.Dock="Right"
-                                Width="16"
-                                Height="16"
-                                Margin="2"
-                                HorizontalAlignment="Right"
-                                Click="OnCloseFindResults">
-                            <Button.Content>
-                                <Image Source="../Resources/Images/cross.png"/>
-                            </Button.Content>
-                        </Button>
-                    </DockPanel>
-                    <controls:ResultsPanel 
-                        x:Name="ResultsPanel"/>
-                </DockPanel>
-
-            </Grid>
         </Grid>
     </DockPanel>
 </Window>

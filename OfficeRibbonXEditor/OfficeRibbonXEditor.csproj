@@ -21,6 +21,7 @@
     <PackageReference Include="Autofac" Version="4.9.2" />
     <PackageReference Include="CommonServiceLocator" Version="2.0.4" />
     <PackageReference Include="Costura.Fody" Version="4.1.0" />
+    <PackageReference Include="Dragablz" Version="0.0.3.203" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.5.0" />
     <PackageReference Include="JetBrains.Annotations" Version="2019.1.1" />
     <PackageReference Include="log4net" Version="1.2.10" />
