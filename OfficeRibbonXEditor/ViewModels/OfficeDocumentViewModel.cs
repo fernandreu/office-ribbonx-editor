@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public OfficeDocument Document => this.document;
 
-        public string Name => Path.GetFileName(this.document.Name);
+        public override string Name => Path.GetFileName(this.document.Name);
 
         /// <summary>
         /// Gets a value indicating whether any of the parts of this document has unsaved changes.

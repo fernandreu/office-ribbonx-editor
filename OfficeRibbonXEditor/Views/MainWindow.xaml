@@ -508,8 +508,8 @@
                         <StackPanel Orientation="Horizontal"
                                     Tag="{Binding ElementName=Window, Path=DataContext}">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding Image}"/>
-                            <TextBlock Text="{Binding Id}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
-                            <TextBox Text="{Binding NewId, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
+                            <TextBlock Text="{Binding Name}" Visibility="{Binding IsEditingId, Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                            <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding IsEditingId, Converter={StaticResource BooleanToVisibilityConverter}}" KeyDown="OnChangeIdTextDown" IsVisibleChanged="OnIdTextVisible"/>
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">

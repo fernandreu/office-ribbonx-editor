@@ -6,6 +6,8 @@ namespace OfficeRibbonXEditor.Interfaces
     {
         string Title { get; set; }
 
+        TreeViewItemViewModel Item { get; }
+
         string StatusText { get; }
 
         int Zoom { get; }

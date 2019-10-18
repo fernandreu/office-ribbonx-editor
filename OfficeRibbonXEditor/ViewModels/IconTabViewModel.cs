@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,14 +40,28 @@ namespace OfficeRibbonXEditor.ViewModels
             get => this.icon;
             set
             {
+                var previous = this.icon;
                 if (!this.Set(ref this.icon, value))
                 {
                     return;
                 }
 
-                this.RaisePropertyChanged(nameof(StatusText));
+                if (previous != null)
+                {
+                    previous.PropertyChanged -= this.OnIconPropertyChanged;
+                }
+
+                if (value != null)
+                {
+                    value.PropertyChanged += this.OnIconPropertyChanged;
+                }
+
+                this.RaisePropertyChanged(nameof(this.StatusText));
+                this.RaisePropertyChanged(nameof(this.Item));
             }
         }
+
+        public TreeViewItemViewModel Item => this.Icon;
 
         private int zoom;
 
@@ -60,6 +75,16 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void ApplyChanges()
         {
+        }
+        
+        private void OnIconPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName != nameof(IconViewModel.Name))
+            {
+                return;
+            }
+
+            this.MainWindow.AdjustTabTitles();
         }
     }
 }

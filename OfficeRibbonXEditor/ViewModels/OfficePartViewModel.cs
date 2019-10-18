@@ -35,7 +35,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public bool HasUnsavedChanges => this.originalContents != this.Contents || this.IconsChanged;
 
-        public string Name => this.Part.Name;
+        public override string Name => this.Part.Name;
 
         public string ImageSource => "/Resources/Images/xml.png";  // TODO: That's probably not the only one possible
 
@@ -58,7 +58,7 @@ namespace OfficeRibbonXEditor.ViewModels
                     continue;
                 }
 
-                if (icon.Id == id)
+                if (icon.Name == id)
                 {
                     this.Children.RemoveAt(i);
                     this.IconsChanged = true;
@@ -104,7 +104,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 // Load the image
-                this.InsertIcon(location, icon.Id);
+                this.InsertIcon(location, icon.Name);
                 
                 File.Delete(location);
             }

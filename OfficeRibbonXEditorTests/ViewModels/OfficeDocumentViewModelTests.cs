@@ -77,7 +77,7 @@ namespace OfficeRibbonXEditor.ViewModels
             part = (OfficePartViewModel)viewModel.Children[1];
             part.InsertIcon(this.redoIcon);
             var icon = (IconViewModel)part.Children[0];
-            icon.Id = "changedId";
+            icon.Name = "changedId";
             part.InsertIcon(this.redoIcon);
 
             void CheckIntegrity(OfficeDocumentViewModel innerModel)
@@ -91,13 +91,13 @@ namespace OfficeRibbonXEditor.ViewModels
                     if (innerPart.Part.PartType == XmlParts.RibbonX12)
                     {
                         Assert.AreEqual(1, innerPart.Children.Count);
-                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[0]).Id);
+                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[0]).Name);
                     }
                     else
                     {
                         Assert.AreEqual(2, innerPart.Children.Count);
-                        Assert.AreEqual("changedId", ((IconViewModel)innerPart.Children[0]).Id);
-                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[1]).Id);
+                        Assert.AreEqual("changedId", ((IconViewModel)innerPart.Children[0]).Name);
+                        Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[1]).Name);
                     }
                 }
             }

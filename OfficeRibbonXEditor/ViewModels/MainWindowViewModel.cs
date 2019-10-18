@@ -308,8 +308,6 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public RelayCommand<string> OpenHelpLinkCommand { get; } = new RelayCommand<string>(url => Process.Start(url));
 
-        public ItemActionCallback CloseTabCallback { get; }
-
         /// <summary>
         /// Gets a list of headers which will be shown in the "Useful links" menu, together with the links they point to
         /// </summary>
@@ -590,7 +588,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 var part = (OfficePartViewModel)icon.Parent;
-                part.RemoveIcon(icon.Id);
+                part.RemoveIcon(icon.Name);
             }
         }
 
@@ -741,9 +739,9 @@ namespace OfficeRibbonXEditor.ViewModels
                 {
                     Part = part,
                     MainWindow = this,
-                    Title = $"{doc.Name} - {part.Name}",
                 };
                 this.OpenTabs.Add(tab);
+                this.AdjustTabTitles();
             }
 
             this.SelectedTab = tab;
@@ -771,13 +769,62 @@ namespace OfficeRibbonXEditor.ViewModels
                 {
                     Icon = icon,
                     MainWindow = this,
-                    Title = $"{doc.Name} - {part.Name} - {icon.Id}",
                 };
                 this.OpenTabs.Add(tab);
+                this.AdjustTabTitles();
             }
 
             this.SelectedTab = tab;
             return tab;
+        }
+
+        public void AdjustTabTitles()
+        {
+            var targetItems = new Dictionary<ITabItemViewModel, TreeViewItemViewModel>();
+
+            // First pass: Give each tab just its name
+            foreach (var tab in this.OpenTabs)
+            {
+                tab.Title = tab.Item.Name;
+                targetItems[tab] = tab.Item;
+            }
+
+            // Second pass: Detect duplicates and add their parents to their titles
+            for (;;)
+            {
+                var checkedTabs = new List<ITabItemViewModel>();
+                var duplicates = new List<List<ITabItemViewModel>>();
+                foreach (var tab in this.OpenTabs)
+                {
+                    if (checkedTabs.Contains(tab))
+                    {
+                        continue;
+                    }
+                    
+                    var sample = this.OpenTabs.Where(x => x.Title == tab.Title).ToList();
+                    if (sample.Count > 1 && sample.All(x => targetItems[x].Parent != null))
+                    {
+                        duplicates.Add(sample);
+                    }
+
+                    checkedTabs.AddRange(sample);
+                }
+
+                if (duplicates.Count == 0)
+                {
+                    break;
+                }
+
+                foreach (var list in duplicates)
+                {
+                    foreach (var tab in list)
+                    {
+                        var item = targetItems[tab];
+                        tab.Title = $"{item.Parent.Name}\\{tab.Title}";
+                        targetItems[tab] = item.Parent;
+                    }
+                }
+            }
         }
 
         private void ExecuteSaveCommand()

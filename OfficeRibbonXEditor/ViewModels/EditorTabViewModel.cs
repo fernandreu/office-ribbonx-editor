@@ -74,7 +74,24 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public ScintillaLexer Lexer { get; set; }
 
-        public OfficePartViewModel Part { get; set; }
+        private OfficePartViewModel part;
+
+        public OfficePartViewModel Part
+        {
+            get => this.part;
+            set
+            {
+                if (!this.Set(ref this.part, value))
+                {
+                    return;
+                }
+
+                this.RaisePropertyChanged(nameof(this.StatusText));
+                this.RaisePropertyChanged(nameof(this.Item));
+            }
+        }
+
+        public TreeViewItemViewModel Item => this.Part;
 
         public MainWindowViewModel MainWindow { get; set; }
 

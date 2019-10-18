@@ -10,22 +10,22 @@ namespace OfficeRibbonXEditor.ViewModels
 {
     public class IconViewModel : TreeViewItemViewModel
     {
-        private string id;
+        private string name;
 
-        private string newId;
+        private string newName;
         
         private bool isEditingId;
 
-        public IconViewModel(string id, BitmapImage image, OfficePartViewModel parent)
+        public IconViewModel(string name, BitmapImage image, OfficePartViewModel parent)
             : base(parent, false, false)
         {
             this.Image = image;
-            this.id = id;
-            this.newId = id;
+            this.name = name;
+            this.newName = name;
         }
 
-        public IconViewModel(string id, string filePath, OfficePartViewModel parent) 
-            : this(id, LoadImageFromPath(filePath), parent)
+        public IconViewModel(string name, string filePath, OfficePartViewModel parent) 
+            : this(name, LoadImageFromPath(filePath), parent)
         {
         }
 
@@ -34,9 +34,9 @@ namespace OfficeRibbonXEditor.ViewModels
         /// <summary>
         /// Gets or sets the Id of the icon, applying the changes directly to the underlying model
         /// </summary>
-        public string Id
+        public override string Name
         {
-            get => this.id;
+            get => this.name;
             set
             {
                 if (!IsValidId(value))
@@ -46,9 +46,9 @@ namespace OfficeRibbonXEditor.ViewModels
                 
                 // Make sure this.ChangeId() is later called with the previous ID and not the new one
                 // already. Otherwise, the icon will actually not be updated inside the part
-                var previousId = this.id;
+                var previousId = this.name;
 
-                if (!this.Set(ref this.id, value))
+                if (!this.Set(ref this.name, value))
                 {
                     return;
                 }
@@ -61,10 +61,10 @@ namespace OfficeRibbonXEditor.ViewModels
         /// Gets or sets the potentially new ID to be used for the icon. This is used, for example, in
         /// editing mode before committing to use the new ID (in case the user discard the changes)
         /// </summary>
-        public string NewId
+        public string NewName
         {
-            get => this.newId;
-            set => this.Set(ref this.newId, value);
+            get => this.newName;
+            set => this.Set(ref this.newName, value);
         }
 
         public bool IsEditingId
@@ -74,16 +74,16 @@ namespace OfficeRibbonXEditor.ViewModels
         }
 
         /// <summary>
-        /// Attempts to apply the NewId property to the Id one, but cancels the action if the ID is invalid
+        /// Attempts to apply the NewName property to the Id one, but cancels the action if the ID is invalid
         /// </summary>
         public void CommitIdChange()
         {
             this.IsEditingId = false;
 
-            if (!IsValidId(this.NewId, out var errorMessage))
+            if (!IsValidId(this.NewName, out var errorMessage))
             {
                 // Revert back the change
-                this.NewId = this.Id;
+                this.NewName = this.Name;
                 ServiceLocator.Current.GetInstance<IMessageBoxService>()?.Show(
                     errorMessage, 
                     "Error Changing Icon ID", 
@@ -92,15 +92,15 @@ namespace OfficeRibbonXEditor.ViewModels
                 return;
             }
 
-            this.Id = this.NewId;
+            this.Name = this.NewName;
         }
 
         /// <summary>
-        /// Ignores the current value of NewId, setting it back to be equal to Id
+        /// Ignores the current value of NewName, setting it back to be equal to Id
         /// </summary>
         public void DiscardIdChange()
         {
-            this.NewId = this.Id;
+            this.NewName = this.Name;
             this.IsEditingId = false;
         }
 

@@ -30,6 +30,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         #region Constructors
 
+        public virtual string Name { get; set; }
+
         protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren, bool canHaveContents = true, string contents = null)
         {
             this.Parent = parent;

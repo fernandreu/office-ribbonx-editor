@@ -164,7 +164,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // Assert
             Assert.AreEqual(1, part.Children.Count);
-            Assert.AreEqual("undo", ((IconViewModel)part.Children[0]).Id);
+            Assert.AreEqual("undo", ((IconViewModel)part.Children[0]).Name);
         }
 
         [Test]
@@ -181,8 +181,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
             // Assert
             Assert.AreEqual(2, part.Children.Count);
-            Assert.AreEqual("undo", ((IconViewModel)part.Children[0]).Id);
-            Assert.AreEqual("redo", ((IconViewModel)part.Children[1]).Id);
+            Assert.AreEqual("undo", ((IconViewModel)part.Children[0]).Name);
+            Assert.AreEqual("redo", ((IconViewModel)part.Children[1]).Name);
         }
 
         [Test]
