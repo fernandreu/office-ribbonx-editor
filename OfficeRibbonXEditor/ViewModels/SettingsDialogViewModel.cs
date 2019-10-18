@@ -23,6 +23,8 @@ namespace OfficeRibbonXEditor.ViewModels
             nameof(Properties.Settings.Default.WrapMode),
             nameof(Properties.Settings.Default.AutoIndent),
             nameof(Properties.Settings.Default.PreserveAttributes),
+            nameof(Properties.Settings.Default.ShowDefaultSamples),
+            nameof(Properties.Settings.Default.CustomSamples),
         };
         
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();

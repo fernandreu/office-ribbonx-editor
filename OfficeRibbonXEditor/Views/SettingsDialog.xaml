@@ -120,12 +120,26 @@
             </Grid>
         </GroupBox>
         <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Header="Misc">
-            <Grid Margin="2">
+            <StackPanel Margin="2">
                 <CheckBox 
+                    Margin="0,0,0,4"
                     Content="Preserve file attributes when saving an already existing document" 
                     IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=PreserveAttributes}"
                     ToolTip="If checked, read-only files will keep to be read-only after saving them for example"/>
-            </Grid>
+                <CheckBox
+                    Content="Show default XML templates in the Insert menu"
+                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=ShowDefaultSamples}"/>
+                <TextBlock
+                    Margin="0,8,0,0"
+                    Text="Additional XML templates to load:"/>
+                <TextBox
+                    ToolTip="One path per line. Paths can be either XML files or folders containing those. They can also be relative to the tool's folder"
+                    TextWrapping="Wrap"
+                    VerticalScrollBarVisibility="Auto"
+                    AcceptsReturn="True"
+                    Text="{Binding Source={x:Static properties:Settings.Default}, Path=CustomSamples}"
+                    MinHeight="60"/>
+            </StackPanel>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2">
             <Button Content="Reset Defaults" Margin="3" Padding="8,4" Command="{Binding ResetCommand}"/>

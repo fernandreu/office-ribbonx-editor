@@ -238,5 +238,29 @@ namespace OfficeRibbonXEditor.Properties {
                 this["PreserveAttributes"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool ShowDefaultSamples {
+            get {
+                return ((bool)(this["ShowDefaultSamples"]));
+            }
+            set {
+                this["ShowDefaultSamples"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string CustomSamples {
+            get {
+                return ((string)(this["CustomSamples"]));
+            }
+            set {
+                this["CustomSamples"] = value;
+            }
+        }
     }
 }

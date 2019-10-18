@@ -34,7 +34,8 @@
     <Resource Include="**\*.png" />
     <Resource Include="**\*.ico" />
     <EmbeddedResource Include="Resources\**\*.xml" />   
-    <Resource Include="Resources\**\*.xsd" />
+    <Resource Include="Resources\**\*.xsd" />   
+    <None Remove="Resources\Images\folder.png" />
     <Compile Include="..\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>

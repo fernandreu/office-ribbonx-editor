@@ -15,6 +15,7 @@
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Controls"
         xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         xmlns:behaviors="clr-namespace:OfficeRibbonXEditor.Behaviors"
+        xmlns:samples="clr-namespace:OfficeRibbonXEditor.ViewModels.Samples"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -50,6 +51,8 @@
         <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+        <converters:IsOfTypeConverter x:Key="IsOfTypeConverter"/>
+        
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Key="O" Modifiers="Control" Command="{Binding OpenDocumentCommand}"/>
@@ -218,23 +221,64 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Sample XML" ItemsSource="{Binding XmlSamples}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <MenuItem 
+                    Header="Sample XML"
+                    ItemsSource="{Binding XmlSamples.Items}"
+                    ToolTipService.ShowOnDisabled="True">
+                    <MenuItem.Style>
+                        <Style TargetType="{x:Type MenuItem}">
+                            <Setter Property="IsEnabled" Value="False"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding SelectedTab, Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type model:EditorTabViewModel}}" Value="True">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}" Value="True">
+                                    <Setter Property="IsEnabled" Value="True"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding XmlSamples}" Value="{x:Null}">
+                                    <Setter Property="IsEnabled" Value="False"/>
+                                    <Setter Property="ToolTip" Value="No XML samples were detected; please check the tool's settings"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </MenuItem.Style>
                     <MenuItem.Icon>
                         <Image
-                               Source="/Resources/Images/xml.png"
-                               Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
-                               Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+                            Source="/Resources/Images/xml.png"
+                            Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                            Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
-                    <MenuItem.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
-                            <d:Style.DataContext>
-                                <x:Type Type="model:XmlSampleViewModel"/>
-                            </d:Style.DataContext>
+                    <MenuItem.Resources>
+
+                        <Image
+                            x:Key="SampleIcon"
+                            x:Shared="False"
+                            Source="/Resources/Images/xml.png"
+                            Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                            Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+
+                        <Image
+                            x:Key="SampleFolder"
+                            x:Shared="False"
+                            Source="/Resources/Images/folder.png"
+                            Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
+                            Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
+
+                        <Style TargetType="{x:Type MenuItem}">
                             <Setter Property="Header" Value="{Binding Name}"/>
-                            <Setter Property="Command" Value="{Binding DataContext.InsertXmlSampleCommand, ElementName=Window}"/>
-                            <Setter Property="CommandParameter" Value="{Binding ResourceName}"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type samples:SampleFolderViewModel}}" Value="True">
+                                    <Setter Property="Icon" Value="{StaticResource SampleFolder}"/>
+                                    <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type samples:XmlSampleViewModel}}" Value="True">
+                                    <Setter Property="Icon" Value="{StaticResource SampleIcon}"/>
+                                    <Setter Property="Command" Value="{Binding DataContext.InsertXmlSampleCommand, ElementName=Window}"/>
+                                    <Setter Property="CommandParameter" Value="{Binding}"/>
+                                </DataTrigger>
+                            </Style.Triggers>
                         </Style>
-                    </MenuItem.ItemContainerStyle>
+                    </MenuItem.Resources>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="_Help">

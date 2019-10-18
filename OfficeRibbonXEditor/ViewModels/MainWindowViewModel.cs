@@ -20,6 +20,7 @@ using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.Resources;
+using OfficeRibbonXEditor.ViewModels.Samples;
 using ScintillaNET;
 
 namespace OfficeRibbonXEditor.ViewModels
@@ -69,7 +70,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.CloseDocumentCommand = new RelayCommand(this.ExecuteCloseDocumentCommand);
             this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
-            this.InsertXmlSampleCommand = new RelayCommand<string>(this.ExecuteInsertXmlSampleCommand);
+            this.InsertXmlSampleCommand = new RelayCommand<XmlSampleViewModel>(this.ExecuteInsertXmlSampleCommand);
             this.InsertIconsCommand = new RelayCommand(this.ExecuteInsertIconsCommand);
             this.ChangeIconIdCommand = new RelayCommand(this.ExecuteChangeIconIdCommand);
             this.ToggleCommentCommand = new RelayCommand(this.ExecuteToggleCommentCommand);
@@ -83,7 +84,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.IncrementalSearchCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.IncrementalSearch));
             this.ReplaceCommand = new RelayCommand(() => this.PerformFindReplaceAction(FindReplaceAction.Replace));
             
-            this.ShowSettingsCommand = new RelayCommand(() => this.LaunchDialog<SettingsDialogViewModel, ICollection<ITabItemViewModel>>(this.OpenTabs));
+            this.ShowSettingsCommand = new RelayCommand(this.ExecuteShowSettingsCommand);
             this.ShowAboutCommand = new RelayCommand(() => this.LaunchDialog<AboutDialogViewModel>(true));
             this.RecentFileClickCommand = new RelayCommand<string>(this.FinishOpeningFile);
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
@@ -129,7 +130,13 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
-        public ObservableCollection<XmlSampleViewModel> XmlSamples { get; } = new ObservableCollection<XmlSampleViewModel>();
+        private SampleFolderViewModel xmlSamples;
+
+        public SampleFolderViewModel XmlSamples
+        {
+            get => this.xmlSamples;
+            set => this.Set(ref this.xmlSamples, value);
+        }
 
         public ObservableCollection<ITabItemViewModel> OpenTabs { get; } = new ObservableCollection<ITabItemViewModel>();
 
@@ -242,7 +249,7 @@ namespace OfficeRibbonXEditor.ViewModels
         
         public RelayCommand InsertXml12Command { get; }
 
-        public RelayCommand<string> InsertXmlSampleCommand { get; set; }
+        public RelayCommand<XmlSampleViewModel> InsertXmlSampleCommand { get; set; }
 
         public RelayCommand InsertIconsCommand { get; }
 
@@ -904,26 +911,96 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
+        private static SampleFolderViewModel ScanSampleFolder(string path)
+        {
+            var result = new SampleFolderViewModel
+            {
+                Name = Path.GetDirectoryName(path),
+            };
+
+            foreach (var directory in Directory.GetDirectories(path))
+            {
+                var folder = ScanSampleFolder(directory);
+                if (folder == null)
+                {
+                    continue;
+                }
+
+                result.Items.Add(folder);
+            }
+
+            foreach (var file in Directory.GetFiles(path, "*.xml"))
+            {
+                result.Items.Add(new FileSampleViewModel
+                {
+                    Path = file,
+                });
+            }
+
+            return result.Items.Count > 0 ? result : null;
+        }
+
         private void LoadXmlSamples()
         {
-            foreach (var sample in XmlSampleViewModel.GetFromAssembly())
+            var root = new SampleFolderViewModel
             {
-                this.XmlSamples.Add(sample);
+                Name = "XML Sample",
+            };
+
+            foreach (var source in Settings.Default.CustomSamples.Split('\n'))
+            {
+                if (string.IsNullOrWhiteSpace(source))
+                {
+                    continue;
+                }
+
+                var trimmed = source.Trim();
+
+                if (trimmed.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase) && File.Exists(trimmed))
+                {
+                    root.Items.Add(new FileSampleViewModel
+                    {
+                        Path = trimmed,
+                    });
+                }
+
+                if (!Directory.Exists(trimmed))
+                {
+                    continue;
+                }
+
+                var folder = ScanSampleFolder(trimmed);
+                if (folder == null)
+                {
+                    continue;
+                }
+
+                foreach (var item in folder.Items)
+                {
+                    root.Items.Add(item);
+                }
             }
+
+            if (Settings.Default.ShowDefaultSamples)
+            {
+                foreach (var sample in EmbeddedSampleViewModel.GetFromAssembly())
+                {
+                    root.Items.Add(sample);
+                }
+            }
+
+            this.XmlSamples = root.Items.Count > 0 ? root : null;
         }
 
         /// <summary>
         /// Inserts an XML sample to the selected document in the tree
         /// </summary>
-        /// <param name="resourceName"></param>
-        private void ExecuteInsertXmlSampleCommand(string resourceName)
+        private void ExecuteInsertXmlSampleCommand(XmlSampleViewModel sample)
         {
             // TODO: This command should be clearer with its target
             // Right now, it is the selected item, but users might find it more intuitive to insert the sample in
             // the already opened tab. To fix this, the easiest thing to do would be to have a separate command for
             // each (i.e. a context menu action for the tree view and a menu action for the editor)
-
-            Debug.Assert(!string.IsNullOrEmpty(resourceName), "resourceName not passed");
 
             var newPart = false;
             
@@ -962,7 +1039,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
             try
             {
-                var data = XmlSampleViewModel.ReadContents(resourceName);
+                var data = sample.ReadContents();
 
                 // Make sure the xml schema is not for the wrong part type
                 if (this.customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && this.customUiSchemas[part.Part.PartType == XmlParts.RibbonX12 ? XmlParts.RibbonX14 : XmlParts.RibbonX12] is XmlSchema otherSchema)
@@ -971,8 +1048,16 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 // Event might be raised too soon (when the view still does not exist). Hence, update part as well
-                part.Contents = data;
-                tab.RaiseUpdateEditor(new EditorChangeEventArgs {Start = -1, End = -1, NewText = data});
+                var info = tab.EditorInfo;
+                if (info == null)
+                {
+                    part.Contents = data;
+                    tab.RaiseUpdateEditor(new EditorChangeEventArgs {Start = -1, End = -1, NewText = data});
+                }
+                else
+                {
+                    tab.RaiseUpdateEditor(new EditorChangeEventArgs {Start = info.Selection.Item1, End = info.Selection.Item2, NewText = data});
+                }
             }
             catch (Exception ex)
             {
@@ -1198,6 +1283,20 @@ namespace OfficeRibbonXEditor.ViewModels
             }
 
             Process.Start("https://github.com/fernandreu/office-ribbonx-editor/releases/latest");
+        }
+
+        private void ExecuteShowSettingsCommand()
+        {
+            var dialog = this.LaunchDialog<SettingsDialogViewModel, ICollection<ITabItemViewModel>>(this.OpenTabs);
+            dialog.Closed += (o, e) =>
+            {
+                if (dialog.IsCancelled)
+                {
+                    return;
+                }
+
+                this.LoadXmlSamples();
+            };
         }
     }
 }

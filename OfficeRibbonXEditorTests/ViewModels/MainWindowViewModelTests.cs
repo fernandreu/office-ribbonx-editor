@@ -11,6 +11,7 @@ using NUnit.Framework;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.ViewModels.Samples;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
@@ -359,8 +360,8 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             var doc = this.OpenSource();
 
-            var sample = this.viewModel.XmlSamples.First();  // This shouldn't be null; if it is, the test will be a means to detect that too
-            this.viewModel.InsertXmlSampleCommand.Execute(sample.ResourceName);
+            var sample = this.viewModel.XmlSamples.Items.OfType<XmlSampleViewModel>().First();  // This shouldn't be null; if it is, the test will be a means to detect that too
+            this.viewModel.InsertXmlSampleCommand.Execute(sample);
             var part = doc.Children.First(); // Again, this should not be null
 
             // It is expected that the part created will be an Office 2007 one, but the templates are for Office 2010+. This gets automatically replaced

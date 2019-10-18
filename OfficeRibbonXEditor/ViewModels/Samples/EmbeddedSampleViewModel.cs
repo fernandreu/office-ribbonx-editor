@@ -3,28 +3,26 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-using GalaSoft.MvvmLight;
-
-namespace OfficeRibbonXEditor.ViewModels
+namespace OfficeRibbonXEditor.ViewModels.Samples
 {
-    public class XmlSampleViewModel : ViewModelBase
+    public class EmbeddedSampleViewModel : XmlSampleViewModel
     {
-        private static readonly string SamplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";
-
         public string ResourceName { get; set; }
 
-        public string Name => this.ResourceName?.Substring(SamplesNamespace.Length + 1);
+        private static readonly string samplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";
+
+        public override string Name => this.ResourceName?.Substring(samplesNamespace.Length + 1);
 
         public static IEnumerable<XmlSampleViewModel> GetFromAssembly()
         {
             var assembly = Assembly.GetExecutingAssembly();
             return assembly
                 .GetManifestResourceNames()
-                .Where(r => r.StartsWith(SamplesNamespace) && r.EndsWith(".xml"))
-                .Select(r => new XmlSampleViewModel { ResourceName = r });
+                .Where(r => r.StartsWith(samplesNamespace) && r.EndsWith(".xml"))
+                .Select(r => new EmbeddedSampleViewModel { ResourceName = r });
         }
 
-        public static string ReadContents(string resourceName)
+        private static string ReadContents(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
             // ReSharper disable once AssignNullToNotNullAttribute
@@ -34,7 +32,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        public string ReadContents()
+        public override string ReadContents()
         {
             return ReadContents(this.ResourceName);
         }
