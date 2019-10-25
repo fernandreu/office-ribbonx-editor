@@ -293,7 +293,8 @@
                         <Button DockPanel.Dock="Left" 
                                 VerticalAlignment="Bottom"
                                 MinWidth="100"
-                                Content="Replace _All"/>
+                                Content="Replace _All"
+                                Command="{Binding ReplaceAllCommand}"/>
                     </DockPanel>
                 </DockPanel>
             </TabItem>

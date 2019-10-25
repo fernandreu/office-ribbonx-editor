@@ -45,7 +45,7 @@ namespace OfficeRibbonXEditor.Models
 
 		public delegate void FindAllResultsEventHandler(object sender, ResultsEventArgs findAllResults);
 
-		public delegate void ReplaceAllResultsEventHandler(object sender, ReplaceResultsEventArgs findAllResults);
+		public delegate void ReplaceAllResultsEventHandler(object sender, ResultsEventArgs replaceAllResults);
 
 		public void ClearAllHighlights()
 		{
@@ -92,7 +92,7 @@ namespace OfficeRibbonXEditor.Models
 			// the entire range because it could potentially match the
 			// entire range.
 
-			var text = this.Scintilla.GetTextRange(r.cpMin, r.cpMax - r.cpMin + 1);
+			var text = this.Scintilla.GetTextRange(r.cpMin, r.cpMax - r.cpMin);
 
 			var m = findExpression.Match(text);
 
@@ -346,11 +346,6 @@ namespace OfficeRibbonXEditor.Models
 			return this.FindPrevious(searchString, true, flags);
 		}
 
-		public List<CharacterRange> FindAll(int startPos, int endPos, Regex findExpression, bool mark, bool highlight)
-		{
-			return this.FindAll(new CharacterRange(startPos, endPos), findExpression, mark, highlight);
-		}
-
 		public List<CharacterRange> FindAll(int startPos, int endPos, string searchString, SearchFlags flags, bool mark, bool highlight)
 		{
 			var results = new List<CharacterRange>();
@@ -430,6 +425,11 @@ namespace OfficeRibbonXEditor.Models
             return results;
 		}
 
+		public List<CharacterRange> FindAll(int startPos, int endPos, Regex findExpression, bool mark, bool highlight)
+		{
+			return this.FindAll(new CharacterRange(startPos, endPos), findExpression, mark, highlight);
+		}
+
 		public List<CharacterRange> FindAll(CharacterRange rangeToSearch, string searchString, SearchFlags flags, bool mark, bool highlight)
 		{
 			return this.FindAll(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, Flags, mark, highlight);
@@ -453,6 +453,140 @@ namespace OfficeRibbonXEditor.Models
 		public List<CharacterRange> FindAll(string searchString, SearchFlags flags, bool mark, bool highlight)
 		{
 			return this.FindAll(0, this.Scintilla.TextLength, searchString, flags, mark, highlight);
+		}
+
+		public List<CharacterRange> ReplaceAll(int startPos, int endPos, string searchString, string replaceString, SearchFlags flags, bool mark, bool highlight)
+		{
+			var results = new List<CharacterRange>();
+
+			this.Scintilla.IndicatorCurrent = this.Indicator.Index;
+
+			var findCount = 0;
+			var lastLine = -1;
+
+			this.Scintilla.BeginUndoAction();
+
+			var diff = replaceString.Length - searchString.Length;
+			while (true)
+			{
+				var r = this.Find(startPos, endPos, searchString, flags);
+				if (r.cpMin == r.cpMax)
+				{
+					break;
+				}
+
+				this.Scintilla.SelectionStart = r.cpMin;
+				this.Scintilla.SelectionEnd = r.cpMax;
+				this.Scintilla.ReplaceSelection(replaceString);
+				r.cpMax = startPos = r.cpMin + replaceString.Length;
+				endPos += diff;
+
+				results.Add(r);
+				findCount++;
+
+				if (mark)
+				{
+					//	We can of course have multiple instances of a find on a single
+					//	line. We don't want to mark this line more than once.
+					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.cpMin));
+					if (line.Position > lastLine)
+						line.MarkerAdd(this.Marker.Index);
+					lastLine = line.Position;
+				}
+				if (highlight)
+				{
+					this.Scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
+				}
+			}
+
+			this.Scintilla.EndUndoAction();
+
+			this.ReplaceAllResults?.Invoke(this, new ResultsEventArgs(new FindResults(results)));
+
+			return results;
+		}
+		
+		public List<CharacterRange> ReplaceAll(CharacterRange rangeToSearch, Regex findExpression, string replaceExpression, bool mark, bool highlight)
+		{
+			var results = new List<CharacterRange>();
+
+			this.Scintilla.IndicatorCurrent = this.Indicator.Index;
+
+			var findCount = 0;
+			var lastLine = -1;
+
+			this.Scintilla.BeginUndoAction();
+
+			while (true)
+			{
+				var r = this.Find(rangeToSearch, findExpression);
+				if (r.cpMin == r.cpMax)
+				{
+					break;
+				}
+
+				var findString = this.Scintilla.GetTextRange(r.cpMin, r.cpMax - r.cpMin);
+				var replaceString = findExpression.Replace(findString, replaceExpression);
+				this.Scintilla.SelectionStart = r.cpMin;
+				this.Scintilla.SelectionEnd = r.cpMax;
+				this.Scintilla.ReplaceSelection(replaceString);
+				r.cpMax = rangeToSearch.cpMin = r.cpMin + replaceString.Length;
+				rangeToSearch.cpMax += replaceString.Length - findString.Length;
+
+				results.Add(r);
+				findCount++;
+
+				if (mark)
+				{
+					//	We can of course have multiple instances of a find on a single
+					//	line. We don't want to mark this line more than once.
+					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.cpMin));
+					if (line.Position > lastLine)
+						line.MarkerAdd(this.Marker.Index);
+					lastLine = line.Position;
+				}
+				if (highlight)
+				{
+					this.Scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
+				}
+				rangeToSearch = new CharacterRange(r.cpMax, rangeToSearch.cpMax);
+			}
+
+			this.Scintilla.EndUndoAction();
+
+			this.ReplaceAllResults?.Invoke(this, new ResultsEventArgs(new FindResults(results)));
+
+			return results;
+		}
+		
+		public List<CharacterRange> ReplaceAll(int startPos, int endPos, Regex findExpression, string replaceExpression, bool mark, bool highlight)
+		{
+			return this.ReplaceAll(new CharacterRange(startPos, endPos), findExpression, replaceExpression, mark, highlight);
+		}
+
+		public List<CharacterRange> ReplaceAll(CharacterRange rangeToSearch, string searchString, string replaceString, SearchFlags flags, bool mark, bool highlight)
+		{
+			return this.ReplaceAll(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, replaceString, Flags, mark, highlight);
+		}
+
+		public List<CharacterRange> ReplaceAll(Regex findExpression, string replaceExpression, bool mark, bool highlight)
+		{
+			return this.ReplaceAll(0, this.Scintilla.TextLength, findExpression, replaceExpression, mark, highlight);
+		}
+
+		public List<CharacterRange> ReplaceAll(string searchString, string replaceString, bool mark, bool highlight)
+		{
+			return this.ReplaceAll(searchString, replaceString, Flags, mark, highlight);
+		}
+
+		public List<CharacterRange> ReplaceAll(string searchString, string replaceString)
+		{
+			return this.ReplaceAll(searchString, replaceString, Flags, false, false);
+		}
+
+		public List<CharacterRange> ReplaceAll(string searchString, string replaceString, SearchFlags flags, bool mark, bool highlight)
+		{
+			return this.ReplaceAll(0, this.Scintilla.TextLength, searchString, replaceString, flags, mark, highlight);
 		}
 
 		public string Transform(string data)

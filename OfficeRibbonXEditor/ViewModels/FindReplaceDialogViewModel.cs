@@ -21,6 +21,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.FindAllCommand = new RelayCommand(this.ExecuteFindAllCommand);
             this.ReplaceNextCommand = new RelayCommand(() => this.ReplaceWrapper(false));
             this.ReplacePreviousCommand = new RelayCommand(() => this.ReplaceWrapper(true));
+            this.ReplaceAllCommand = new RelayCommand(this.ExecuteReplaceAllCommand);
             this.ClearCommand = new RelayCommand(this.ExecuteClearCommand);
         }
 
@@ -74,6 +75,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand ReplaceNextCommand { get; }
 
         public RelayCommand ReplacePreviousCommand { get; }
+
+        public RelayCommand ReplaceAllCommand { get; }
 
         public RelayCommand ClearCommand { get; }
 
@@ -273,7 +276,7 @@ namespace OfficeRibbonXEditor.ViewModels
             this.StatusText = string.Empty;
 
             this.ExecuteClearCommand();
-            var foundCount = 0;
+            int foundCount;
 
             if (this.IsRegExSearch)
             {
@@ -305,23 +308,83 @@ namespace OfficeRibbonXEditor.ViewModels
             }
             else
             {
+                var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
                 if (this.SearchSelection)
                 {
                     if (this.searchRange.cpMin == this.searchRange.cpMax) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
-
-                    var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
                     foundCount = this.FindReplace.FindAll(this.searchRange, textToFind, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
                 }
                 else
                 {
                     this.searchRange = new CharacterRange();
-                    var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
                     foundCount = this.FindReplace.FindAll(textToFind, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
                 }
             }
 
             this.StatusText = $"Total found: {foundCount}";
             this.AddRecentFind();
+        }
+
+        private void ExecuteReplaceAllCommand()
+        {
+            if (string.IsNullOrEmpty(this.FindText))
+            {
+                return;
+            }
+
+            this.StatusText = string.Empty;
+
+            this.ExecuteClearCommand();
+            int foundCount;
+
+            var textToReplace = this.IsExtendedSearch ? this.FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
+
+            if (this.IsRegExSearch)
+            {
+                Regex rr;
+                try
+                {
+                    rr = new Regex(this.FindText, this.GetRegexOptions());
+                }
+                catch (ArgumentException ex)
+                {
+                    this.StatusText = $"Error in Regular Expression: {ex.Message}";
+                    return;
+                }
+
+                if (this.SearchSelection)
+                {
+                    if (this.searchRange.cpMin == this.searchRange.cpMax)
+                    {
+                        this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    }
+
+                    foundCount = this.FindReplace.ReplaceAll(this.searchRange, rr, textToReplace, this.MarkLine, this.HighlightMatches).Count;
+                }
+                else
+                {
+                    this.searchRange = new CharacterRange();
+                    foundCount = this.FindReplace.ReplaceAll(rr, textToReplace, this.MarkLine, this.HighlightMatches).Count;
+                }
+            }
+            else
+            {
+                var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                if (this.SearchSelection)
+                {
+                    if (this.searchRange.cpMin == this.searchRange.cpMax) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    foundCount = this.FindReplace.ReplaceAll(this.searchRange, textToFind, textToReplace, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
+                }
+                else
+                {
+                    this.searchRange = new CharacterRange();
+                    foundCount = this.FindReplace.ReplaceAll(textToFind, textToReplace, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
+                }
+            }
+
+            this.StatusText = $"Total replaced: {foundCount}";
+            this.AddRecentFind();
+            this.AddRecentReplace();
         }
 
         private void ExecuteClearCommand()
@@ -387,7 +450,7 @@ namespace OfficeRibbonXEditor.ViewModels
             // The way a ComboBox works, there is a chance this resets the ReplaceText. This is due to removing the item from the list
             // just temporarily before putting it at the top
             var text = this.ReplaceText;
-            this.RecentReplaces.Add(ReplaceText);
+            this.RecentReplaces.Add(text);
             this.ReplaceText = text;
         }
 
@@ -515,7 +578,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 if (this.IsRegExSearch)
                 {
                     rr = new Regex(this.FindText, this.GetRegexOptions());
-                    var selRangeText = this.Scintilla.GetTextRange(selRange.cpMin, selRange.cpMax - selRange.cpMin + 1);
+                    var selRangeText = this.Scintilla.GetTextRange(selRange.cpMin, selRange.cpMax - selRange.cpMin);
 
                     if (selRange.Equals(this.FindReplace.Find(selRange, rr, false)))
                     {
@@ -547,7 +610,7 @@ namespace OfficeRibbonXEditor.ViewModels
                         //	we use the range the caret is positioned before the replaced
                         //	text. Conversely if we use the selection object the caret will
                         //	be positioned after the replaced text. This is very important
-                        //	becuase we don't want the new text to be potentially matched
+                        //	because we don't want the new text to be potentially matched
                         //	in the next search.
                         if (searchUp)
                         {
