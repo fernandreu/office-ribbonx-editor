@@ -321,7 +321,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
 
             this.StatusText = $"Total found: {foundCount}";
-            this.RecentFinds.Add(this.FindText);
+            this.AddRecentFind();
         }
 
         private void ExecuteClearCommand()
@@ -370,7 +370,25 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.MoveDialogAwayFromSelection();
             }
 
-            this.RecentFinds.Add(this.FindText);
+            this.AddRecentFind();
+        }
+
+        private void AddRecentFind()
+        {
+            // The way a ComboBox works, there is a chance this resets the FindText. This is due to removing the item from the list
+            // just temporarily before putting it at the top
+            var text = this.FindText;
+            this.RecentFinds.Add(text);
+            this.FindText = text;
+        }
+
+        private void AddRecentReplace()
+        {
+            // The way a ComboBox works, there is a chance this resets the ReplaceText. This is due to removing the item from the list
+            // just temporarily before putting it at the top
+            var text = this.ReplaceText;
+            this.RecentReplaces.Add(ReplaceText);
+            this.ReplaceText = text;
         }
 
         private CharacterRange FindNext(bool searchUp)
@@ -481,8 +499,8 @@ namespace OfficeRibbonXEditor.ViewModels
                 this.MoveDialogAwayFromSelection();
             }
 
-            this.RecentFinds.Add(this.FindText);
-            this.RecentReplaces.Add(this.ReplaceText);
+            this.AddRecentFind();
+            this.AddRecentReplace();
         }
 
         private CharacterRange ReplaceNext(bool searchUp)
@@ -549,8 +567,8 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
             }
 
-            this.RecentFinds.Add(this.FindText);
-            this.RecentReplaces.Add(this.ReplaceText);
+            this.AddRecentFind();
+            this.AddRecentReplace();
 
             return this.FindNext(searchUp, ref rr);
         }
