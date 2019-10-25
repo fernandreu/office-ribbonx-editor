@@ -152,6 +152,12 @@ namespace OfficeRibbonXEditor.ViewModels
                     return;
                 }
 
+                if (value != null)
+                {
+                    // This should help the user locate the item in the tree view
+                    this.SelectedItem = value.Item;
+                }
+
                 this.RaisePropertyChanged(nameof(this.IsEditorTabSelected));
             }
         }
@@ -734,7 +740,6 @@ namespace OfficeRibbonXEditor.ViewModels
             var tab = this.OpenTabs.OfType<EditorTabViewModel>().FirstOrDefault(x => x.Part == part);
             if (tab == null)
             {
-                var doc = (OfficeDocumentViewModel) part.Parent;
                 tab = new EditorTabViewModel
                 {
                     Part = part,
@@ -763,8 +768,6 @@ namespace OfficeRibbonXEditor.ViewModels
             var tab = this.OpenTabs.OfType<IconTabViewModel>().FirstOrDefault(x => x.Icon == icon);
             if (tab == null)
             {
-                var part = (OfficePartViewModel) icon.Parent;
-                var doc = (OfficeDocumentViewModel) part.Parent;
                 tab = new IconTabViewModel
                 {
                     Icon = icon,
