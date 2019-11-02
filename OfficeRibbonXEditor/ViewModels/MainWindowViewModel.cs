@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -93,6 +94,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
+
+            this.DocumentList.CollectionChanged += OnTreeViewItemCollectionChanged;
 
 #if DEBUG
             if (this.IsInDesignMode)
@@ -702,20 +705,19 @@ namespace OfficeRibbonXEditor.ViewModels
                 return;
             }
 
+            OfficeDocumentViewModel model = null;
+
             try
             {
                 Debug.WriteLine("Opening " + fileName + "...");
 
                 var doc = new OfficeDocument(fileName);
-                var model = new OfficeDocumentViewModel(doc);
+                model = new OfficeDocumentViewModel(doc);
                 if (model.Children.Count > 0)
                 {
                     model.Children[0].IsSelected = true;
                 }
 
-                this.DocumentList.Add(model);
-                this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
-                
                 // UndoRedo
                 ////_commands = new UndoRedo.Control.Commands(rtbCustomUI.Rtf);
             }
@@ -723,6 +725,9 @@ namespace OfficeRibbonXEditor.ViewModels
             {
                 this.messageBoxService.Show(ex.Message, "Error opening Office document", image: MessageBoxImage.Error);
             }
+
+            this.DocumentList.Add(model);
+            this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
         }
 
         public EditorTabViewModel OpenPartTab(OfficePartViewModel part = null)
@@ -746,7 +751,7 @@ namespace OfficeRibbonXEditor.ViewModels
                     MainWindow = this,
                 };
                 this.OpenTabs.Add(tab);
-                this.AdjustTabTitles();
+                this.AdjustTabTitle(tab);
             }
 
             this.SelectedTab = tab;
@@ -774,7 +779,7 @@ namespace OfficeRibbonXEditor.ViewModels
                     MainWindow = this,
                 };
                 this.OpenTabs.Add(tab);
-                this.AdjustTabTitles();
+                this.AdjustTabTitle(tab);
             }
 
             this.SelectedTab = tab;
@@ -783,51 +788,39 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void AdjustTabTitles()
         {
-            var targetItems = new Dictionary<ITabItemViewModel, TreeViewItemViewModel>();
-
-            // First pass: Give each tab just its name
             foreach (var tab in this.OpenTabs)
             {
-                tab.Title = tab.Item.Name;
-                targetItems[tab] = tab.Item;
+                this.AdjustTabTitle(tab);
+            }
+        }
+
+        public void AdjustTabTitle(ITabItemViewModel tab)
+        {
+            var result = tab.Item.Name;
+            var targets = this.DocumentList.FindItemsByName(tab.Item).ToList();
+            if (targets.Count == 0)
+            {
+                tab.Title = result;
+                return;
             }
 
-            // Second pass: Detect duplicates and add their parents to their titles
-            for (;;)
+            // Keep adding their parent names until there is no match or there is no parent
+            for (var target = tab.Item.Parent; target != null; target = target.Parent)
             {
-                var checkedTabs = new List<ITabItemViewModel>();
-                var duplicates = new List<List<ITabItemViewModel>>();
-                foreach (var tab in this.OpenTabs)
-                {
-                    if (checkedTabs.Contains(tab))
-                    {
-                        continue;
-                    }
-                    
-                    var sample = this.OpenTabs.Where(x => x.Title == tab.Title).ToList();
-                    if (sample.Count > 1 && sample.All(x => targetItems[x].Parent != null))
-                    {
-                        duplicates.Add(sample);
-                    }
+                result = $"{target.Name}\\{result}";
+                targets = targets
+                    .Select(x => x.Parent)
+                    .Where(x => x.Name == target.Name)
+                    .ToList();
 
-                    checkedTabs.AddRange(sample);
-                }
-
-                if (duplicates.Count == 0)
+                if (targets.Count == 0)
                 {
+                    // No other items with the same name at this level: we can stop traversing the tree upwards
                     break;
                 }
-
-                foreach (var list in duplicates)
-                {
-                    foreach (var tab in list)
-                    {
-                        var item = targetItems[tab];
-                        tab.Title = $"{item.Parent.Name}\\{tab.Title}";
-                        targetItems[tab] = item.Parent;
-                    }
-                }
             }
+
+            tab.Title = result;
         }
 
         private void ExecuteSaveCommand()
@@ -1347,6 +1340,60 @@ namespace OfficeRibbonXEditor.ViewModels
 
                 this.LoadXmlSamples();
             };
+        }
+
+        private void OnTreeViewItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.Action == NotifyCollectionChangedAction.Move)
+            {
+                return;
+            }
+
+            this.AdjustTabTitles();
+
+            if (e.NewItems != null)
+            {
+                foreach (TreeViewItemViewModel item in e.NewItems)
+                {
+                    this.AddNotifyEvent(item);
+                }
+            }
+
+            if (e.OldItems != null)
+            {
+                foreach (TreeViewItemViewModel item in e.OldItems)
+                {
+                    this.RemoveNotifyEvent(item);
+                }
+            }
+        }
+
+        private void AddNotifyEvent(TreeViewItemViewModel item)
+        {
+            if (item.Children == null)
+            {
+                return;
+            }
+
+            item.Children.CollectionChanged += this.OnTreeViewItemCollectionChanged;
+            foreach (var child in item.Children)
+            {
+                this.AddNotifyEvent(child);
+            }
+        }
+
+        private void RemoveNotifyEvent(TreeViewItemViewModel item)
+        {
+            if (item.Children == null)
+            {
+                return;
+            }
+
+            item.Children.CollectionChanged -= this.OnTreeViewItemCollectionChanged;
+            foreach (var child in item.Children)
+            {
+                this.AddNotifyEvent(child);
+            }
         }
     }
 }
