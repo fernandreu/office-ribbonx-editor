@@ -705,6 +705,22 @@ namespace OfficeRibbonXEditor.ViewModels
                 return;
             }
 
+            var normalized = Path.GetFullPath(fileName);
+            var existing = this.DocumentList.FirstOrDefault(x => Path.GetFullPath(x.Document.Name).Equals(normalized, StringComparison.InvariantCultureIgnoreCase));
+            if (existing != null)
+            {
+                var result = this.messageBoxService.Show(
+                    $"The document '{existing.Name}' is already open. Opening a document more than once is dangerous and can lead to loss of data, " +
+                    $"unless you save it with a different name straight away.\n\nAre you completely sure you want to open this document again?",
+                    "Document Already Open",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes)
+                {
+                    return;
+                }
+            }
+
             OfficeDocumentViewModel model = null;
 
             try
