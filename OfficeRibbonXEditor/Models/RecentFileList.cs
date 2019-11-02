@@ -698,7 +698,12 @@ namespace OfficeRibbonXEditor.Models
             {
                 foreach (var s in source)
                 {
-                    if (string.IsNullOrEmpty(s) || s.Equals(exclude, StringComparison.OrdinalIgnoreCase) || target.Count >= max)
+                    if (string.IsNullOrEmpty(s) || s.Equals(exclude, StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;
+                    }
+                    
+                    if (target.Count >= max)
                     {
                         break;
                     }
