@@ -730,21 +730,38 @@ namespace OfficeRibbonXEditor.ViewModels
 
                 var doc = new OfficeDocument(fileName);
                 model = new OfficeDocumentViewModel(doc);
-                if (model.Children.Count > 0)
-                {
-                    model.Children[0].IsSelected = true;
-                }
-
-                // UndoRedo
-                ////_commands = new UndoRedo.Control.Commands(rtbCustomUI.Rtf);
             }
             catch (Exception ex)
             {
                 this.messageBoxService.Show(ex.Message, "Error opening Office document", image: MessageBoxImage.Error);
+                return;
             }
 
             this.DocumentList.Add(model);
             this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
+            
+            // Expand the tree view
+            void Expand(TreeViewItemViewModel vm)
+            {
+                vm.IsExpanded = true;
+                foreach (var child in vm.Children)
+                {
+                    Expand(child);
+                }
+            }
+
+            Expand(model);
+
+            if (model.Children.Count == 1 && model.Children[0].Children.Count == 0)
+            {
+                // A document with a single custom UI xml file and no icons: open it automatically. This will also select it on the TreeView
+                this.ExecuteOpenTabCommand(model.Children[0]);
+            }
+            else if (model.Children.Count > 0)
+            {
+                // Select the document on the TreeView
+                this.SelectedItem = model;
+            }
         }
 
         public EditorTabViewModel OpenPartTab(OfficePartViewModel part = null)
