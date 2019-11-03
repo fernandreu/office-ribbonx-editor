@@ -81,11 +81,11 @@ namespace OfficeRibbonXEditor.Models
             return imageCollection;
         }
 
-        public string AddImage(string filePath, string imageId)
+        public string AddImage(string filePath, string imageId, Func<string, string, bool> alreadyExistingAction = null)
         {
             if (this.PartType != XmlParts.RibbonX12 && this.PartType != XmlParts.RibbonX14)
             {
-                return null;
+                throw new NotSupportedException($"The part type must be either RibbonX12 or RibbonX14, not {this.PartType}");
             }
 
             if (filePath == null)
@@ -95,7 +95,7 @@ namespace OfficeRibbonXEditor.Models
 
             if (filePath.Length == 0)
             {
-                return null;
+                throw new ArgumentException("File path cannot be empty");
             }
 
             var fileName = Path.GetFileNameWithoutExtension(filePath);
@@ -114,12 +114,7 @@ namespace OfficeRibbonXEditor.Models
                 throw new ArgumentException(StringsResource.idsNonEmptyId);
             }
 
-            if (this.Part.RelationshipExists(imageId))
-            {
-                imageId = "rId";
-            }
-
-            return this.AddImageHelper(filePath, imageId);
+            return this.AddImageHelper(filePath, imageId, alreadyExistingAction);
         }
         
         public void RemoveImage(string imageId)
@@ -230,7 +225,7 @@ namespace OfficeRibbonXEditor.Models
             }
         }
 
-        private string AddImageHelper(string fileName, string imageId)
+        private string AddImageHelper(string fileName, string imageId, Func<string, string, bool> alreadyExistingAction = null)
         {
             if (fileName == null)
             {
@@ -264,6 +259,7 @@ namespace OfficeRibbonXEditor.Models
                 break;
             }
 
+            var originalId = imageId;
             if (imageId != null)
             {
                 int idIndex = 0;
@@ -280,6 +276,11 @@ namespace OfficeRibbonXEditor.Models
                     imageId = testId;
                     break;
                 }
+            }
+
+            if (imageId != originalId && !(alreadyExistingAction?.Invoke(originalId, imageId) ?? true))
+            {
+                return null;
             }
 
             var imageRel = this.Part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);

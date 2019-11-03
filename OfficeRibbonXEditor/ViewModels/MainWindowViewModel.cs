@@ -530,9 +530,20 @@ namespace OfficeRibbonXEditor.ViewModels
                 return;
             }
 
+            bool AlreadyExistingAction(string existingId, string newId)
+            {
+                var result = this.messageBoxService.Show(
+                    $"This custom UI file already has an icon with id {existingId}. Do you want to insert the new icon with id {newId} instead?",
+                    "Icon Already Exists",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Exclamation);
+
+                return result == MessageBoxResult.Yes;
+            }
+
             foreach (var path in filePaths)
             {
-                part.InsertIcon(path);
+                part.InsertIcon(path, alreadyExistingAction: AlreadyExistingAction);
             }
         }
 

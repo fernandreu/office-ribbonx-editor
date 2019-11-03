@@ -39,10 +39,14 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public string ImageSource => "/Resources/Images/xml.png";  // TODO: That's probably not the only one possible
 
-        public void InsertIcon(string filePath, string id = null)
+        public void InsertIcon(string filePath, string id = null, Func<string, string, bool> alreadyExistingAction = null)
         {
-            id = this.Part.AddImage(filePath, id);
-            Debug.Assert(id != null, "Cannot create image part.");
+            id = this.Part.AddImage(filePath, id, alreadyExistingAction);
+            if (id == null)
+            {
+                // This probably means it was cancelled due to alreadyExistingAction
+                return;
+            }
 
             this.Children.Add(new IconViewModel(id, filePath, this));
             this.IconsChanged = true;
