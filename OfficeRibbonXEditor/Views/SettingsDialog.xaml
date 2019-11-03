@@ -137,14 +137,14 @@
                     TextWrapping="Wrap"
                     VerticalScrollBarVisibility="Auto"
                     AcceptsReturn="True"
-                    Text="{Binding Source={x:Static properties:Settings.Default}, Path=CustomSamples}"
+                    Text="{Binding Source={x:Static properties:Settings.Default}, Path=CustomSamples, UpdateSourceTrigger=PropertyChanged}"
                     MinHeight="60"/>
             </StackPanel>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2">
             <Button Content="Reset Defaults" Margin="3" Padding="8,4" Command="{Binding ResetCommand}"/>
-            <Button Content="Apply" Margin="3" Padding="8,4" Command="{Binding ApplyCommand}"/>
-            <Button Content="Accept" Margin="3" Padding="8,4" Command="{Binding AcceptCommand}" IsDefault="True"/>
+            <Button Content="Apply" Margin="3" Padding="8,4" Command="{Binding ApplyCommand}" IsEnabled="{Binding SettingsChanged}"/>
+            <Button Content="Accept" Margin="3" Padding="8,4" Command="{Binding AcceptCommand}" IsDefault="True" IsEnabled="{Binding SettingsChanged}"/>
         </StackPanel>
     </Grid>
 </controls:DialogControl>

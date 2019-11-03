@@ -4,6 +4,7 @@ using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Properties;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
@@ -12,19 +13,19 @@ namespace OfficeRibbonXEditor.ViewModels
     {
         private readonly string[] usedProperties =
         {
-            nameof(Properties.Settings.Default.TextColor),
-            nameof(Properties.Settings.Default.BackgroundColor),
-            nameof(Properties.Settings.Default.TagColor),
-            nameof(Properties.Settings.Default.AttributeColor),
-            nameof(Properties.Settings.Default.CommentColor),
-            nameof(Properties.Settings.Default.StringColor),
-            nameof(Properties.Settings.Default.EditorFontSize),
-            nameof(Properties.Settings.Default.TabWidth),
-            nameof(Properties.Settings.Default.WrapMode),
-            nameof(Properties.Settings.Default.AutoIndent),
-            nameof(Properties.Settings.Default.PreserveAttributes),
-            nameof(Properties.Settings.Default.ShowDefaultSamples),
-            nameof(Properties.Settings.Default.CustomSamples),
+            nameof(Settings.Default.TextColor),
+            nameof(Settings.Default.BackgroundColor),
+            nameof(Settings.Default.TagColor),
+            nameof(Settings.Default.AttributeColor),
+            nameof(Settings.Default.CommentColor),
+            nameof(Settings.Default.StringColor),
+            nameof(Settings.Default.EditorFontSize),
+            nameof(Settings.Default.TabWidth),
+            nameof(Settings.Default.WrapMode),
+            nameof(Settings.Default.AutoIndent),
+            nameof(Settings.Default.PreserveAttributes),
+            nameof(Settings.Default.ShowDefaultSamples),
+            nameof(Settings.Default.CustomSamples),
         };
         
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
@@ -34,6 +35,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.ResetCommand = new RelayCommand(this.ResetToDefault);
             this.ApplyCommand = new RelayCommand(this.ApplySettings);
             this.AcceptCommand = new RelayCommand(this.AcceptSettings);
+
+            Settings.Default.PropertyChanged += (o, e) => this.SettingsChanged = true;
         }
 
         public bool OnLoaded(ICollection<ITabItemViewModel> payload)
@@ -41,6 +44,14 @@ namespace OfficeRibbonXEditor.ViewModels
             this.Tabs = payload;
             this.LoadCurrent();
             return true;
+        }
+
+        private bool settingsChanged;
+
+        public bool SettingsChanged
+        {
+            get => this.settingsChanged;
+            set => this.Set(ref this.settingsChanged, value);
         }
 
         public ICollection<ITabItemViewModel> Tabs { get; private set; }
@@ -57,7 +68,7 @@ namespace OfficeRibbonXEditor.ViewModels
 
             foreach (var name in this.usedProperties)
             {
-                this.currentValues[name] = Properties.Settings.Default[name];
+                this.currentValues[name] = Settings.Default[name];
             }
         }
 
@@ -65,7 +76,7 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             foreach (var pair in this.currentValues)
             {
-                Properties.Settings.Default[pair.Key] = pair.Value;
+                Settings.Default[pair.Key] = pair.Value;
             }
         }
 
@@ -73,12 +84,12 @@ namespace OfficeRibbonXEditor.ViewModels
         {
             foreach (var name in this.usedProperties)
             {
-                var propertyValue = Properties.Settings.Default.PropertyValues[name];
+                var propertyValue = Settings.Default.PropertyValues[name];
 
                 propertyValue.PropertyValue = propertyValue.Property.DefaultValue;
                 propertyValue.Deserialized = false;
 
-                Properties.Settings.Default[name] = propertyValue.PropertyValue;
+                Settings.Default[name] = propertyValue.PropertyValue;
             }
 
             this.ApplySettings();
@@ -86,17 +97,19 @@ namespace OfficeRibbonXEditor.ViewModels
 
         private void ApplySettings()
         {
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
             this.LoadCurrent();
             foreach (var tab in this.Tabs.OfType<EditorTabViewModel>())
             {
                 tab.Lexer?.Update();
             }
+
+            this.SettingsChanged = false;
         }
 
         private void AcceptSettings()
         {
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
             this.IsCancelled = false;
             foreach (var tab in this.Tabs.OfType<EditorTabViewModel>())
             {
