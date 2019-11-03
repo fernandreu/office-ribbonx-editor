@@ -296,8 +296,8 @@
             </MenuItem>
         </Menu>
 
-        <ToolBarTray DockPanel.Dock="Top">
-            <ToolBar>
+        <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
+            <ToolBar OverflowMode="Never" Loaded="OnToolBarLoaded">
 
                 <Button ToolTip="Open an Office document" Command="{Binding OpenDocumentCommand}">
                     <StackPanel Orientation="Horizontal">

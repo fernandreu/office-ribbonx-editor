@@ -164,5 +164,19 @@ namespace OfficeRibbonXEditor.Views
             var newItem = e.NewValue as TreeViewItemViewModel;
             this.viewModel.SelectedItem = newItem;
         }
+
+        private void OnToolBarLoaded(object sender, RoutedEventArgs e)
+        {
+            // This removes overflow icon at the right (see https://stackoverflow.com/questions/1050953)
+            var toolBar = sender as ToolBar;
+            if (toolBar?.Template.FindName("OverflowGrid", toolBar) is FrameworkElement overflowGrid)
+            {
+                overflowGrid.Visibility = Visibility.Collapsed;
+            }
+            if (toolBar?.Template.FindName("MainPanelBorder", toolBar) is FrameworkElement mainPanelBorder)
+            {
+                mainPanelBorder.Margin = new Thickness();
+            }
+        }
     }
 }
