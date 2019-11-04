@@ -68,7 +68,7 @@ namespace OfficeRibbonXEditor.Models
 
         public List<OfficePart> Parts { get; private set; }
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
 
         public bool IsDirty { get; set; }
 

@@ -68,7 +68,8 @@ namespace OfficeRibbonXEditor.ViewModels
             this.OpenTabCommand = new RelayCommand<TreeViewItemViewModel>(this.ExecuteOpenTabCommand);
             this.SaveCommand = new RelayCommand(this.ExecuteSaveCommand);
             this.SaveAllCommand = new RelayCommand(this.ExecuteSaveAllCommand);
-            this.SaveAsCommand = new RelayCommand(this.ExecuteSaveAsCommand);
+            this.SaveAsCommand = new RelayCommand(() => this.ExecuteSaveAsCommand(true));
+            this.SaveACopyAsCommand = new RelayCommand(() => this.ExecuteSaveAsCommand(false));
             this.CloseDocumentCommand = new RelayCommand(this.ExecuteCloseDocumentCommand);
             this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
             this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
@@ -252,6 +253,8 @@ namespace OfficeRibbonXEditor.ViewModels
         public RelayCommand SaveAllCommand { get; }
 
         public RelayCommand SaveAsCommand { get; }
+
+        public RelayCommand SaveACopyAsCommand { get; }
 
         public RelayCommand CloseDocumentCommand { get; }
 
@@ -903,7 +906,7 @@ namespace OfficeRibbonXEditor.ViewModels
             }
         }
 
-        private void ExecuteSaveAsCommand()
+        private void ExecuteSaveAsCommand(bool renameCurrent)
         {
             var doc = this.CurrentDocument;
             if (doc == null)
@@ -942,38 +945,48 @@ namespace OfficeRibbonXEditor.ViewModels
             this.fileDialogService.SaveFileDialog(
                 StringsResource.idsSaveDocumentAsDialogTitle, 
                 string.Join("|", filters),
-                this.FinishSavingFile, 
+                path => this.FinishSavingFile(path, renameCurrent), 
                 doc.Name, 
                 i + 1);
         }
 
-        private void FinishSavingFile(string fileName)
+        private void FinishSavingFile(string fileName, bool renameCurrent)
         {
             if (string.IsNullOrEmpty(fileName))
             {
                 return;
             }
+            
+            // Note: We are assuming that no UI events happen between the SaveFileDialog was
+            // shown and this is called. Otherwise, selection might have changed
+            var doc = this.CurrentDocument;
+            Debug.Assert(doc != null, "Selected document seems to have changed between showing file dialog and closing it");
+            
+            if (!Path.HasExtension(fileName))
+            {
+                fileName = Path.ChangeExtension(fileName, Path.GetExtension(doc.Name));
+            }
+
+            Debug.WriteLine("Saving " + fileName + "...");
 
             try
             {
-                // Note: We are assuming that no UI events happen between the SaveFileDialog was
-                // shown and this is called. Otherwise, selection might have changed
-                var doc = this.CurrentDocument;
-                Debug.Assert(doc != null, "Selected document seems to have changed between showing file dialog and closing it");
-
-                if (!Path.HasExtension(fileName))
-                {
-                    fileName = Path.ChangeExtension(fileName, Path.GetExtension(doc.Name));
-                }
-
-                Debug.WriteLine("Saving " + fileName + "...");
-
                 doc.Save(this.reloadOnSave, fileName, Settings.Default.PreserveAttributes);
-                this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
             }
             catch (Exception ex)
             {
                 this.messageBoxService.Show(ex.Message, "Error saving Office document", image: MessageBoxImage.Error);
+                return;
+            }
+            
+            this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
+
+            if (renameCurrent)
+            {
+                doc.Document.Name = fileName;
+
+                // Ensure name is updated in the TreeView
+                doc.RaisePropertyChanged(nameof(doc.Name));
             }
         }
 

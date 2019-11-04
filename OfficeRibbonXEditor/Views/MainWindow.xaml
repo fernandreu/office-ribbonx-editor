@@ -106,9 +106,23 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <MenuItem Header="Save As" Command="{Binding SaveAsCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
+                <MenuItem
+                    Header="Save As..." 
+                    Command="{Binding SaveAsCommand}"
+                    ToolTip="Save the current document with a different name"
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
-                <MenuItem Header="Close Current Document" InputGestureText="Ctrl+W" Command="{Binding CloseDocumentCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
+                <MenuItem 
+                    Header="Save a Copy As..." 
+                    Command="{Binding SaveACopyAsCommand}"
+                    ToolTip="Save a completely separate copy of the current document"
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
+
+                <MenuItem 
+                    Header="Close Current Document"
+                    InputGestureText="Ctrl+W" 
+                    Command="{Binding CloseDocumentCommand}" 
+                    IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <Separator/>
 
