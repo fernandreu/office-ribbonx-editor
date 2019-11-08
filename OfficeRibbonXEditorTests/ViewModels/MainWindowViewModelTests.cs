@@ -300,7 +300,7 @@ namespace OfficeRibbonXEditor.ViewModels
                 var actual = true;
                 void Handler(object o, DataEventArgs<IResultCollection> e)
                 {
-                    actual = false;
+                    actual = e.Data.IsEmpty;
                 }
 
                 tab.ShowResults += Handler;
