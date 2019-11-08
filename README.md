@@ -15,6 +15,7 @@ Features of this overhauled editor include:
 - [ScintillaNET](https://github.com/jacobslusser/ScintillaNET) (via [SctintillaNET.WPF](https://github.com/Stumpii/ScintillaNET.WPF/tree/master/ScintillaNET.WPF)) as text editor, with seamless syntax highlighting
 - The TreeView allows you to have more than one file open, easily switching between different customUI files (for example,
 for copying code from one file to another)
+- A multi-tab layout, allowing to have multiple files open simultaneously (including icon previews)
 - List of recently opened files showing up on the file menu (thanks to 
 [RecentFileList](https://www.codeproject.com/Articles/23731/RecentFileList-a-WPF-MRU))
 - A `Reload on Save` option that avoids losing any external changes (for more info, see [the section below](#how-does-the-reload-on-save-option-work))
