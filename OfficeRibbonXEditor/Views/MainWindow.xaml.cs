@@ -41,6 +41,7 @@ namespace OfficeRibbonXEditor.Views
             this.viewModel = model;
 
             this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
+            this.viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
         }
 
         /// <summary>

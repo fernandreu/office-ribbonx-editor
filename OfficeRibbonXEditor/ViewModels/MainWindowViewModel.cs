@@ -5,16 +5,13 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Threading;
+using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
-using Dragablz;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Extensions;
@@ -132,6 +129,8 @@ namespace OfficeRibbonXEditor.ViewModels
         /// This event will be fired when a file needs to be added to the recent list. The argument will be the path to the file itself.
         /// </summary>
         public event EventHandler<DataEventArgs<string>> InsertRecentFile;
+
+        public event EventHandler<DataEventArgs<Cursor>> SetGlobalCursor; 
 
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
@@ -885,7 +884,10 @@ namespace OfficeRibbonXEditor.ViewModels
 
             try
             {
-                this.CurrentDocument.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                using (new CursorOverride(this, Cursors.Wait))
+                {
+                    this.CurrentDocument.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                }
             }
             catch (Exception ex)
             {
@@ -971,7 +973,10 @@ namespace OfficeRibbonXEditor.ViewModels
 
             try
             {
-                doc.Save(this.reloadOnSave, fileName, Settings.Default.PreserveAttributes);
+                using (new CursorOverride(this, Cursors.Wait))
+                {
+                    doc.Save(this.reloadOnSave, fileName, Settings.Default.PreserveAttributes);
+                }
             }
             catch (Exception ex)
             {
@@ -1452,6 +1457,42 @@ namespace OfficeRibbonXEditor.ViewModels
             foreach (var child in item.Children)
             {
                 this.AddNotifyEvent(child);
+            }
+        }
+
+        /// <summary>
+        /// Manages temporary cursors (such as the wait one) via the disposable pattern.
+        /// Adapted from: https://stackoverflow.com/a/675686/1712861
+        /// </summary>
+        private class CursorOverride : IDisposable
+        {
+            private readonly MainWindowViewModel viewModel;
+
+            private static readonly Stack<Cursor> stack = new Stack<Cursor>();
+
+            public CursorOverride(MainWindowViewModel viewModel, Cursor cursor)
+            {
+                this.viewModel = viewModel;
+
+                var current = stack.Count > 0 ? stack.Peek() : null;
+                stack.Push(cursor);
+
+                if (cursor != current)
+                {
+                    this.viewModel.SetGlobalCursor?.Invoke(this.viewModel, new DataEventArgs<Cursor>(cursor));
+                }
+            }
+
+            public void Dispose()
+            {
+                var current = stack.Pop();
+
+                var cursor = stack.Count > 0 ? stack.Peek() : null;
+
+                if (cursor != current)
+                {
+                    this.viewModel.SetGlobalCursor?.Invoke(this.viewModel, new DataEventArgs<Cursor>(cursor));
+                }
             }
         }
     }
