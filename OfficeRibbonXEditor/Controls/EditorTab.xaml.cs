@@ -115,6 +115,14 @@ namespace OfficeRibbonXEditor.Controls
 
         private void OnShowResults(object sender, DataEventArgs<IResultCollection> e)
         {
+            if (e.Data.IsEmpty && (this.ResultsSplitter.Visibility == Visibility.Collapsed || e.Data.GetType() == this.ResultsPanel.Results.GetType()))
+            {
+                // If the result list is empty, there is no reason to show the panel, unless
+                // it was showing information of a different type previously
+                this.OnCloseFindResults(sender, e);
+                return;
+            }
+
             this.ResultsSplitter.Visibility = Visibility.Visible;
             this.ResultsRow.Height = this.lastResultsHeight;
             this.ResultsHeader.Content = e.Data.Header;
@@ -250,9 +258,13 @@ namespace OfficeRibbonXEditor.Controls
             }
         }
 
-        private void OnCloseFindResults(object sender, RoutedEventArgs e)
+        private void OnCloseFindResults(object sender, EventArgs e)
         {
-            this.lastResultsHeight = this.ResultsRow.Height;
+            if (this.ResultsRow.Height.Value > new GridLength(50).Value)
+            {
+                this.lastResultsHeight = this.ResultsRow.Height;
+            }
+
             this.ResultsRow.Height = new GridLength(0);
             this.ResultsSplitter.Visibility = Visibility.Collapsed;
         }

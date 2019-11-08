@@ -24,14 +24,13 @@ namespace OfficeRibbonXEditor.Controls
             this.ResultsScintilla.Scintilla.MouseDoubleClick += this.FindResultsScintilla_MouseDoubleClick;
         }
 
-        private IResultCollection Results { get; set; }
+        public IResultCollection Results { get; private set; }
 
         public Scintilla Scintilla { get; set; }
 
         /// <summary>
         /// Updates the find all results panel
         /// </summary>
-        /// <param name="editor">The Scintilla editor used to generate the find results.</param>
         /// <param name="results"></param>
         public void UpdateFindAllResults(IResultCollection results)
         {

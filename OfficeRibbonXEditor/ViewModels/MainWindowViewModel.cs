@@ -1216,6 +1216,8 @@ namespace OfficeRibbonXEditor.ViewModels
                 }
 
                 xmlDoc.Validate(schemaSet, ValidateHandler);
+                
+                tab.RaiseShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
 
                 if (!errorList.Any())
                 {
@@ -1231,7 +1233,6 @@ namespace OfficeRibbonXEditor.ViewModels
                     return true;
                 }
 
-                tab.RaiseShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
                 return false;
             }
             catch (XmlException ex)

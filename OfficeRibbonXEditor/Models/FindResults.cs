@@ -16,6 +16,8 @@ namespace OfficeRibbonXEditor.Models
 
         public List<CharacterRange> Items { get; }
 
+        public bool IsEmpty => this.Items.Count == 0;
+
         public void AddToPanel(Scintilla editor, Scintilla resultsPanel)
         {
             resultsPanel.ClearAll();
