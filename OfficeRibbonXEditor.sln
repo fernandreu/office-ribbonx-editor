@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29318.209
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeRibbonXEditor", "OfficeRibbonXEditor\OfficeRibbonXEditor.csproj", "{87EFED6B-45A1-425F-B63B-5894E4FC0C03}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeRibbonXEditor", "src\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj", "{87EFED6B-45A1-425F-B63B-5894E4FC0C03}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeRibbonXEditorTests", "OfficeRibbonXEditorTests\OfficeRibbonXEditorTests.csproj", "{D4F06196-AE8D-4DF5-BE6B-49490919A67B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeRibbonXEditorTests", "tests\OfficeRibbonXEditorTests\OfficeRibbonXEditorTests.csproj", "{D4F06196-AE8D-4DF5-BE6B-49490919A67B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62BC0A54-36D3-47DD-8A1B-44AE03DDB305}"
 	ProjectSection(SolutionItems) = preProject
@@ -18,11 +18,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		THIRD-PARTY-NOTICES = THIRD-PARTY-NOTICES
 	EndProjectSection
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Installer", "Installer\Installer.wixproj", "{414E2267-764A-4E61-AA5E-F25F407DFAFD}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "Installer", "src\Installer\Installer.wixproj", "{414E2267-764A-4E61-AA5E-F25F407DFAFD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScintillaNET", "ScintillaNET\ScintillaNET.csproj", "{22AE2386-60F1-476E-9303-61CDB0AAC4CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScintillaNET", "src\ScintillaNET\ScintillaNET.csproj", "{22AE2386-60F1-476E-9303-61CDB0AAC4CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScintillaNET.WPF", "ScintillaNET.WPF\ScintillaNET.WPF.csproj", "{BD57B012-822B-4C74-95B8-8254B320CAF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScintillaNET.WPF", "src\ScintillaNET.WPF\ScintillaNET.WPF.csproj", "{BD57B012-822B-4C74-95B8-8254B320CAF3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{017FBD33-4473-4DD2-ADEA-CAA00B695055}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D8B42177-9C73-48C9-971E-1D435353FF17}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -74,6 +80,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{87EFED6B-45A1-425F-B63B-5894E4FC0C03} = {017FBD33-4473-4DD2-ADEA-CAA00B695055}
+		{D4F06196-AE8D-4DF5-BE6B-49490919A67B} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
+		{414E2267-764A-4E61-AA5E-F25F407DFAFD} = {017FBD33-4473-4DD2-ADEA-CAA00B695055}
+		{22AE2386-60F1-476E-9303-61CDB0AAC4CF} = {017FBD33-4473-4DD2-ADEA-CAA00B695055}
+		{BD57B012-822B-4C74-95B8-8254B320CAF3} = {017FBD33-4473-4DD2-ADEA-CAA00B695055}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E5E4631-F9D6-43A1-B677-FD1B0C599606}
