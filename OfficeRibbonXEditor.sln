@@ -27,6 +27,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{017FBD33-4473-4DD2-ADEA-CAA00B695055}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D8B42177-9C73-48C9-971E-1D435353FF17}"
+	ProjectSection(SolutionItems) = preProject
+		build\SharedAssemblyInfo.cs = build\SharedAssemblyInfo.cs
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}"
 EndProject

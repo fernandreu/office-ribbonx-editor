@@ -33,7 +33,7 @@ jobs:
     displayName: 'PreBuildSteps'
     inputs:
       targetType: 'filePath'
-      filePath: 'PreBuild.ps1'
+      filePath: 'build/PreBuild.ps1'
       arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
       
   - task: NuGetToolInstaller@0
@@ -61,7 +61,7 @@ jobs:
     inputs:
       sourceFolder: ''
       contents: |
-        OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
+        src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
       targetFolder: '$(Build.ArtifactStagingDirectory)'
       cleanTargetFolder: true # Optional
       flattenFolders: true # Optional
@@ -88,7 +88,7 @@ jobs:
     inputs:
       sourceFolder: ''
       contents: |
-        Installer/bin/$(buildConfiguration)/$(targetFramework)/**.msi
+        src/Installer/bin/$(buildConfiguration)/$(targetFramework)/**.msi
       targetFolder: '$(Build.ArtifactStagingDirectory)'
       cleanTargetFolder: true # Optional
       flattenFolders: true # Optional
@@ -121,7 +121,7 @@ jobs:
     displayName: 'PreBuildSteps'
     inputs:
       targetType: 'filePath'
-      filePath: 'PreBuild.ps1'
+      filePath: 'build/PreBuild.ps1'
       arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
       
   - task: NuGetToolInstaller@0

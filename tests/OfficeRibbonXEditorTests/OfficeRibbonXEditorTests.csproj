@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="..\SharedAssemblyInfo.cs">
+    <Compile Include="..\..\build\SharedAssemblyInfo.cs">
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
   </ItemGroup>
@@ -44,7 +44,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj">
+    <ProjectReference Include="..\..\src\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj">
       <Project>{87EFED6B-45A1-425F-B63B-5894E4FC0C03}</Project>
       <Name>OfficeRibbonXEditor</Name>
     </ProjectReference>
