@@ -104,16 +104,9 @@ namespace OfficeRibbonXEditor
                 ex = targetEx.InnerException;
             }
 
-            var result = MessageBox.Show(
-                $"An unexpected error occurred:\n\n{ex.GetType().FullName}: {ex.Message}\n\n" +
-                $"Continue using the tool after this?\n- If Yes, the tool might start to malfunction\n- If No, any unsaved changes will be lost",
-                "Unexpected Error Occurred", 
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Error);
-            if (result != MessageBoxResult.Yes)
-            {
-                this.Shutdown();
-            }
+            var dialog = this.container.Resolve<ExceptionDialogViewModel>();
+            dialog.OnLoaded(ex);
+            this.LaunchDialog(this.MainWindow, dialog, true);
         }
     }
 }

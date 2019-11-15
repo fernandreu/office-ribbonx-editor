@@ -81,6 +81,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             builder.RegisterType<AboutDialogViewModel>();
             builder.RegisterType<CallbackDialogViewModel>();
             builder.RegisterType<GoToDialogViewModel>();
+            builder.RegisterType<ExceptionDialogViewModel>();
 
             // Using a singleton for this one ensures that the search criteria is preserved, which is especially
             // important for find next / previous commands
@@ -112,6 +113,11 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             if (contentDialogType == typeof(FindReplaceDialogViewModel))
             {
                 return new FindReplaceDialog();
+            }
+
+            if (contentDialogType == typeof(ExceptionDialogViewModel))
+            {
+                return new ExceptionDialog();
             }
 
             throw new ArgumentException($"Type {contentDialogType.Name} does not have an registered control");
