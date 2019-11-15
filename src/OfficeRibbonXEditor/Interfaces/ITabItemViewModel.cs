@@ -1,4 +1,6 @@
 ﻿using OfficeRibbonXEditor.ViewModels;
+using OfficeRibbonXEditor.ViewModels.Documents;
+using OfficeRibbonXEditor.ViewModels.Windows;
 
 namespace OfficeRibbonXEditor.Interfaces
 {

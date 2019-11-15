@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.ViewModels;
+using OfficeRibbonXEditor.Models.Documents;
+using OfficeRibbonXEditor.ViewModels.Documents;
 
 namespace OfficeRibbonXEditor.FunctionalTests.Documents
 {

@@ -7,14 +7,16 @@ using Moq;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.ViewModels;
+using OfficeRibbonXEditor.Models.Documents;
+using OfficeRibbonXEditor.Models.Events;
+using OfficeRibbonXEditor.ViewModels.Dialogs;
+using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Samples;
+using OfficeRibbonXEditor.ViewModels.Windows;
 
 namespace OfficeRibbonXEditor.FunctionalTests.Windows
 {
     [TestFixture]
-    [Category("Integration")]
     public class MainWindowViewModelTests
     {
         private readonly Mock<IMessageBoxService> msgSvc = new Mock<IMessageBoxService>();

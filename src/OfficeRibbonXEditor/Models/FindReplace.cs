@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models.Events;
 using ScintillaNET;
 
 namespace OfficeRibbonXEditor.Models
