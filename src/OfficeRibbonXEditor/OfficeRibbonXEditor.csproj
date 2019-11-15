@@ -14,12 +14,10 @@
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <PublishTrimmed>true</PublishTrimmed>-->
     <_InstallerTargetFramework>net461</_InstallerTargetFramework>
+    <WarningsAsErrors>NU1605</WarningsAsErrors>
+    <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
   
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <WarningsAsErrors>NU1605</WarningsAsErrors>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="2.1.1" />
     <PackageReference Include="Autofac" Version="4.9.2" />
