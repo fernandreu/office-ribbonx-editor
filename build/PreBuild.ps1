@@ -13,7 +13,7 @@ if ($version.StartsWith("refs/tags/v")) {
     $version = ""
 }
 Write-Host "##vso[task.setvariable variable=ThreeDigitVersion;]$version"
-Get-ChildItem "SharedAssemblyInfo.cs" |
+Get-ChildItem "build/SharedAssemblyInfo.cs" |
 ForEach-Object {
     $c = ($_ | Get-Content -encoding UTF8)
     if ($version -and -not ($c -match [Regex]::Escape("AssemblyVersion(`"$($version.Substring(1)).*`")"))) {
