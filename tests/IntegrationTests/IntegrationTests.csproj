@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <TargetFrameworks>net461;netcoreapp3.0</TargetFrameworks>
+    <UseWPF>true</UseWPF>
+
+    <IsPackable>false</IsPackable>
+
+    <RootNamespace>OfficeRibbonXEditor.IntegrationTests</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
+    <PackageReference Include="Moq" Version="4.10.1"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\*.*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj" />
+  </ItemGroup>
+</Project>

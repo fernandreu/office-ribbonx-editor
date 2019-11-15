@@ -1,8 +1,8 @@
 ﻿using System.IO;
-
 using NUnit.Framework;
+using OfficeRibbonXEditor.Models;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.IntegrationTests.Documents
 {
     [TestFixture]
     public class OfficeDocumentTests

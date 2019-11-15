@@ -1,10 +1,9 @@
 ﻿using System.IO;
-
 using NUnit.Framework;
-
 using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.ViewModels;
 
-namespace OfficeRibbonXEditor.ViewModels
+namespace OfficeRibbonXEditor.FunctionalTests.Documents
 {
     [TestFixture]
     public class OfficeDocumentViewModelTests

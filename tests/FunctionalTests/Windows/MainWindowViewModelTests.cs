@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-
 using Moq;
-
 using NUnit.Framework;
-
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.ViewModels;
 using OfficeRibbonXEditor.ViewModels.Samples;
 
-namespace OfficeRibbonXEditor.ViewModels
+namespace OfficeRibbonXEditor.FunctionalTests.Windows
 {
     [TestFixture]
     [Category("Integration")]
