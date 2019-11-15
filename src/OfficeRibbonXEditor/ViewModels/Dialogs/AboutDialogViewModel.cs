@@ -11,92 +11,15 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     {
         private readonly IMessageBoxService messageBoxService;
 
-        public AboutDialogViewModel(IMessageBoxService messageBoxService)
+        public AboutDialogViewModel(IMessageBoxService messageBoxService, IToolInfo info)
         {
             this.messageBoxService = messageBoxService;
+            this.Info = info;
             this.SubmitIssueCommand = new RelayCommand(ExecuteSubmitIssueCommand);
             this.CopyInfoCommand = new RelayCommand(this.ExecuteCopyInfoCommand);
         }
 
-        public string AssemblyTitle
-        {
-            get
-            {
-                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    AssemblyTitleAttribute titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (!string.IsNullOrEmpty(titleAttribute.Title))
-                    {
-                        return titleAttribute.Title;
-                    }
-                }
-
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
-            }
-        }
-
-        public string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
-
-        public string AssemblyDescription
-        {
-            get
-            {
-                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-
-                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
-            }
-        }
-
-        public string AssemblyProduct
-        {
-            get
-            {
-                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-
-                return ((AssemblyProductAttribute)attributes[0]).Product;
-            }
-        }
-
-        public string AssemblyCopyright
-        {
-            get
-            {
-                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-
-                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
-            }
-        }
-
-        public string AssemblyCompany
-        {
-            get
-            {
-                var attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-
-                return ((AssemblyCompanyAttribute)attributes[0]).Company;
-            }
-        }
-
-        public string RuntimeVersion => RuntimeInformation.FrameworkDescription;
-
-        public string OperatingSystemVersion => RuntimeInformation.OSDescription;
+        public IToolInfo Info { get; }
 
         public RelayCommand SubmitIssueCommand { get; }
 
@@ -110,9 +33,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         private void ExecuteCopyInfoCommand()
         {
             Clipboard.SetText(
-                $"Version: {this.AssemblyVersion}\n" +
-                $"Runtime:\n {this.RuntimeVersion}\n " +
-                $"Operating System: {this.OperatingSystemVersion}");
+                $"Version: {this.Info.AssemblyVersion}\n" +
+                $"Runtime:\n {this.Info.RuntimeVersion}\n " +
+                $"Operating System: {this.Info.OperatingSystemVersion}");
 
             this.messageBoxService.Show(
                 "The version information has been copied to the clipboard.",
