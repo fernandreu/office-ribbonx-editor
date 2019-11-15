@@ -22,7 +22,7 @@ for copying code from one file to another)
 - Possibility of customizing some aspects of the editor such as font size and color
 - Plus all the features of the original Windows Forms project
 
-![Screenshot](Screenshot.png)
+![Screenshot](docs/Screenshot.png)
 
 
 ## Download / Build status
