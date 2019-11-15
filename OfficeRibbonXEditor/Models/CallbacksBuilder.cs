@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Xml;
 
@@ -10,7 +11,7 @@ namespace OfficeRibbonXEditor.Models
         private const string SubString = "Sub ";
         private const string EndSubString = "\nEnd Sub";
         
-        private static System.Collections.Hashtable attributeList;
+        private readonly HashSet<string> callbackList = new HashSet<string>();
 
         private CallbacksBuilder()
         {
@@ -45,18 +46,13 @@ namespace OfficeRibbonXEditor.Models
         /// <returns>List of callbacks.</returns>
         public static StringBuilder GenerateCallback(XmlDocument customUiXml)
         {
-            StringBuilder result = new StringBuilder();
-            if (attributeList == null)
-            {
-                attributeList = new System.Collections.Hashtable();
-            }
-
-            attributeList.Clear();
-            GenerateCallback(customUiXml.DocumentElement, result);
+            var builder = new CallbacksBuilder();
+            var result = new StringBuilder();
+            builder.GenerateCallback(customUiXml.DocumentElement, result);
             return result;
         }
 
-        private static void GenerateCallback(XmlNode node, StringBuilder result)
+        private void GenerateCallback(XmlNode node, StringBuilder result)
         {
             if (node.Attributes != null)
             {
@@ -120,7 +116,7 @@ namespace OfficeRibbonXEditor.Models
             return null;
         }
 
-        private static string GenerateCallback(XmlAttribute callback)
+        private string GenerateCallback(XmlAttribute callback)
         {
             if (string.IsNullOrEmpty(callback.Value))
             {
@@ -129,64 +125,77 @@ namespace OfficeRibbonXEditor.Models
 
             var callbackValue = callback.Value.Substring(callback.Value.LastIndexOf('.') + 1);
 
-            Debug.Assert(attributeList != null, "AttributeList is null");
+            Debug.Assert(this.callbackList != null, "AttributeList is null");
 
-            if (attributeList.ContainsKey(callbackValue))
+            if (this.callbackList.Contains(callbackValue))
             {
                 return string.Empty;
             }
 
-            attributeList.Add(callbackValue, callbackValue);
+            string result;
 
             var callbackType = MapToBase(callback);
-
             switch (callbackType)
             {
                 case BaseCallbackType.ButtonOnAction:
-                    return GenerateVoidCallback(callbackValue);
+                    result = GenerateVoidCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.CommandOnAction:
-                    return GenerateVoidCommand(callbackValue);
+                    result = GenerateVoidCommand(callbackValue);
+                    break;
 
                 case BaseCallbackType.ToggleButtonOnAction:
-                    return GenerateToggleButtonOnActionCallback(callbackValue);
+                    result = GenerateToggleButtonOnActionCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.GalleryOnAction:
-                    return GenerateItemVoidCallback(callbackValue);
+                    result = GenerateItemVoidCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.ComboBoxOnChange:
-                    return GenerateVoidOnChangeCallback(callbackValue);
+                    result = GenerateVoidOnChangeCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.GetBoolean:
                 case BaseCallbackType.GetString:
                 case BaseCallbackType.GetInt:
                 case BaseCallbackType.GetImage:
                 case BaseCallbackType.GetSize:
-                    return GenerateReturnCallback(callbackValue);
+                    result = GenerateReturnCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.GetItemString:
                 case BaseCallbackType.GetItemImage:
-                    return GenerateItemReturnCallback(callbackValue);
+                    result = GenerateItemReturnCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.OnLoad:
-                    return GenerateOnLoadCallback(callbackValue);
+                    result = GenerateOnLoadCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.OnShow:
-                    return GenerateOnShowCallback(callbackValue);
+                    result = GenerateOnShowCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.LoadImage:
-                    return GenerateLoadImageCallback(callbackValue);
+                    result = GenerateLoadImageCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.GetStyle:
-                    return GenerateGetSlabStyleCallback(callbackValue);
+                    result = GenerateGetSlabStyleCallback(callbackValue);
+                    break;
 
                 case BaseCallbackType.UnKnown:
-                    Debug.Assert(false, "Unkown callback " + callback.OwnerDocument?.Name + "." + callback.Name);
+                    Debug.Assert(false, "Unknown callback " + callback.OwnerDocument?.Name + "." + callback.Name);
                     return string.Empty;
                     
                 default:
                     return string.Empty;
             }
+
+            this.callbackList.Add(callbackValue);
+            return result;
         }
 
         private static string GenerateOnLoadCallback(string callback)
