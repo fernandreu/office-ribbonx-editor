@@ -68,6 +68,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             };
 
             this.Editor.Text = this.viewModel.Part.Contents;
+            this.Editor.EmptyUndoBuffer();
 
             this.viewModel.ReadEditorInfo += this.OnReadEditorInfo;
             this.viewModel.UpdateEditor += this.OnUpdateEditor;
