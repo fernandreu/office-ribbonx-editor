@@ -5,6 +5,7 @@ Office RibbonX Editor
 [![Downloads](https://img.shields.io/github/downloads/fernandreu/office-ribbonx-editor/total.svg?style=popout)](https://github.com/fernandreu/office-ribbonx-editor/releases)
 [![Release Version](https://img.shields.io/github/release/fernandreu/office-ribbonx-editor)](https://github.com/fernandreu/office-ribbonx-editor/releases/latest)
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.6.1-informational)](https://dotnet.microsoft.com/download)
+[![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.0.0-informational)](https://dotnet.microsoft.com/download)
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 
 This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than
