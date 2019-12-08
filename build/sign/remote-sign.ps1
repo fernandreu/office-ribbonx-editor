@@ -1,10 +1,14 @@
 # Signs a local file by connecting to a remote machine and running osslsigncode in there
 function RemoteSign {
     [OutputType([bool])]
-    param([string]$path, [string]$destination = '', [string]$hostname = '', [string]$pin = '')
+    param([string]$path, [string]$destination = '', [string]$hostname = '', [string]$pin = '', [string]$port = '')
 
     if ($hostname.Length -eq 0) {
         $hostname = $env:CODESIGN_HOST
+    }
+
+    if ($port.Length -eq 0) {
+        $port = $env:CODESIGN_PORT
     }
 
     if ($pin.Length -eq 0) {
@@ -12,7 +16,7 @@ function RemoteSign {
     }
 
     $fileInfo = Get-Item $path
-    & scp -q "$path" "$($hostname):/tmp/$($fileInfo.Name)"
+    & scp -P $port -q "$path" "$($hostname):/tmp/$($fileInfo.Name)"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
@@ -25,7 +29,7 @@ function RemoteSign {
             "osslsigncode $commonArgs -h sha1 -in `"/tmp/$($fileInfo.Name)`" -out `"/tmp/$resultingName.tmp`"",
             "osslsigncode $commonArgs -nest -h sha2 -in `"/tmp/$resultingName.tmp`" -out `"/tmp/$resultingName`""
         )
-        & ssh $hostname ($commands -join " && ")
+        & ssh $hostname -p $port ($commands -join " && ")
 
         # Another option: shorter, but it shows a welcome message unless the server settings are changed 
         # $commands | & ssh $hostname
@@ -35,7 +39,7 @@ function RemoteSign {
         # & ssh $hostname osslsigncode $commonArgs -nest -h sha2 -in "/tmp/tmp-$resultingName" -out "/tmp/$resultingName"
     } else {
         # Use only SHA256 signature (as it might not be possible to dual-sign the file)
-        & ssh $hostname osslsigncode $commonArgs -h sha2 -in "/tmp/$($fileInfo.Name)" -out "/tmp/$resultingName"
+        & ssh $hostname -p $port osslsigncode $commonArgs -h sha2 -in "/tmp/$($fileInfo.Name)" -out "/tmp/$resultingName"
     }
     if ($LASTEXITCODE -ne 0) {
         return $false
@@ -46,12 +50,12 @@ function RemoteSign {
         $destination = $path
     }
 
-    & scp -q "$($hostname):/tmp/$resultingName" "$destination"
+    & scp -P $port -q "$($hostname):/tmp/$resultingName" "$destination"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
-    & ssh $hostname "rm -f `"/tmp/$($fileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
+    & ssh $hostname -p $port "rm -f `"/tmp/$($fileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
     return $true
 }
 
