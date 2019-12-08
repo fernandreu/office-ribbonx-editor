@@ -118,7 +118,12 @@ jobs:
       script: |
         . ./build/sign/remote-sign.ps1
         ProcessAllFiles "$(Build.ArtifactStagingDirectory)"
-        
+      env:
+        CODESIGN_PIN: $(CODESIGN_PIN)
+        CODESIGN_HOST: $(CODESIGN_HOST)
+        CODESIGN_PUBLIC_KEY: $(CODESIGN_PUBLIC_KEY)
+        CODESIGN_PRIVATE_KEY: $(CODESIGN_PRIVATE_KEY)
+
 - job: NetCore
   displayName: .NET Core
   variables:

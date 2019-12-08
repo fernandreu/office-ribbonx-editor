@@ -1,10 +1,14 @@
 # Signs a local file by connecting to a remote machine and running osslsigncode in there
 function RemoteSign {
     [OutputType([bool])]
-    param([string]$hostname, [string]$path, [string]$destination = '', [string]$pin = '')
+    param([string]$path, [string]$destination = '', [string]$hostname = '', [string]$pin = '')
+
+    if ($hostname.Length -eq 0) {
+        $hostname = $env:CODESIGN_HOST
+    }
 
     if ($pin.Length -eq 0) {
-        $pin = $env:SIGNCODE_PIN
+        $pin = $env:CODESIGN_PIN
     }
 
     $fileInfo = Get-Item $path
@@ -56,7 +60,9 @@ function ProcessSingleFile {
     param ([string]$path)
     $fileInfo = Get-Item $path
     Write-Output "File to be processed: $($fileInfo.Name)"
-    # TODO
+    if ($fileInfo.Extension -eq '.exe' -or $fileInfo.Extension -eq '.msi') {
+        RemoteSign $fileInfo.FullName
+    }
 }
 
 function ProcessAllFiles {
@@ -64,7 +70,13 @@ function ProcessAllFiles {
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
         ProcessSingleFile $_.FullName
-    } 
+    }
+}
+
+function SetCredentials {
+    param([string]$privateKey, [string]$publicKey)
+    Set-Content -Path (Join-Path $HOME ".ssh/id_rsa") -Value $privateKey
+    Set-Content -Path (Join-Path $HOME ".ssh/id_rsa.pub") -Value $publicKey
 }
 
 # if (!(RemoteSign 'fernando@ferando-gigabyte' 'C:\Users\FernA\Downloads\OfficeRibbonXEditor.exe')) {
