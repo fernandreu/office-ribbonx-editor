@@ -18,6 +18,7 @@ pool:
 
 variables:
 - group: GitHubPATGroup
+- group: CodeSign
 - name: solution
   value: '**/*.sln'
 
@@ -110,6 +111,14 @@ jobs:
       artifactName: '.NET Framework Installer'
       publishLocation: 'Container' # Options: container, filePath
 
+  - task: PowerShell@2
+    displayName: 'Sign all binaries if possible'
+    inputs:
+      targetType: inline
+      script: |
+        . ./build/sign/remote-sign.ps1
+        ProcessAllFiles "$(Build.ArtifactStagingDirectory)"
+        
 - job: NetCore
   displayName: .NET Core
   variables:
@@ -163,14 +172,6 @@ jobs:
       artifactName: '.NET Core Binaries'
       publishLocation: 'Container' # Options: container, filePath
 
-- job: CodeSigning
-  displayName: Code Signing
-  dependsOn:
-  - NetFramework
-  - NetCore
-
-  steps:
-    
   - task: PowerShell@2
     displayName: 'Sign all binaries if possible'
     inputs:
