@@ -163,13 +163,13 @@ jobs:
       artifactName: '.NET Core Binaries'
       publishLocation: 'Container' # Options: container, filePath
 
-  - job: CodeSigning
-    displayName: Code Signing
-    dependsOn:
-    - NetFramework
-    - NetCore
+- job: CodeSigning
+  displayName: Code Signing
+  dependsOn:
+  - NetFramework
+  - NetCore
 
-    steps:
+  steps:
     
   - task: PowerShell@2
     displayName: 'Sign all binaries if possible'
