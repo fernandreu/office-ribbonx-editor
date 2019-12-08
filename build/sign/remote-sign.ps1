@@ -65,7 +65,7 @@ function ProcessSingleFile {
     $fileInfo = Get-Item $path
     Write-Output "File to be processed: $($fileInfo.Name)"
     if ($fileInfo.Extension -eq '.exe' -or $fileInfo.Extension -eq '.msi') {
-        RemoteSign $fileInfo.FullName
+        # RemoteSign $fileInfo.FullName
     }
 }
 
@@ -83,6 +83,6 @@ function SetCredentials {
     Set-Content -Path (Join-Path $HOME ".ssh/id_rsa.pub") -Value $publicKey
 }
 
-# if (!(RemoteSign 'fernando@ferando-gigabyte' 'C:\Users\FernA\Downloads\OfficeRibbonXEditor.exe')) {
-#     Write-Output 'No.'
-# }
+if (!(RemoteSign -hostname '' -path 'C:\Users\FernA\Downloads\OfficeRibbonXEditor.exe' -pin "" -port 0)) {
+    Write-Output 'No.'
+}
