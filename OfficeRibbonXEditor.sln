@@ -24,11 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScintillaNET.WPF", "src\Sci
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D8B42177-9C73-48C9-971E-1D435353FF17}"
 	ProjectSection(SolutionItems) = preProject
-		build\github-release-sign.ps1 = build\github-release-sign.ps1
-		build\PreBuild.ps1 = build\PreBuild.ps1
 		build\SharedAssemblyInfo.cs = build\SharedAssemblyInfo.cs
-		build\sign.bat = build\sign.bat
-		build\sign.ps1 = build\sign.ps1
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{46AC6013-D81B-4D5F-ADE8-79F429782266}"

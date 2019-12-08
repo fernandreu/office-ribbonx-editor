@@ -38,7 +38,7 @@ if ($release -eq '') {
         }
     }
 
-    if ($Response -eq $null) {
+    if ($null -eq $Response) {
         Write-Output "No suitable draft release found. Please specify one manually (draft or not)"
         exit
     }
@@ -71,8 +71,8 @@ try {
     }
 
     # Sign all .exe and .msi files found in the temp folder (recursively to capture anything unzipped)
-    $exeTargets = @(Get-ChildItem -Path $folder -Filter *.exe -Recurse -ErrorAction SilentlyContinue -Force | %{$_.FullName})
-    $msiTargets = @(Get-ChildItem -Path $folder -Filter *.msi -Recurse -ErrorAction SilentlyContinue -Force | %{$_.FullName})
+    $exeTargets = @(Get-ChildItem -Path $folder -Filter *.exe -Recurse -ErrorAction SilentlyContinue -Force | ForEach-Object {$_.FullName})
+    $msiTargets = @(Get-ChildItem -Path $folder -Filter *.msi -Recurse -ErrorAction SilentlyContinue -Force | ForEach-Object {$_.FullName})
     $targets = $exeTargets + $msiTargets
     if ($targets.Count -eq 0) {
         exit
