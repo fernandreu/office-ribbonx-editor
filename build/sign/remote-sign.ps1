@@ -36,20 +36,24 @@ function RemoteSign {
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
+    
     if ($destination.Length -eq 0) {
-        $destination = Join-Path $fileInfo.Directory $resultingName
+        # Replace existing file
+        $destination = $path
     }
+
     & scp -q "$($hostname):/tmp/$resultingName" "$destination"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
+
     & ssh $hostname "rm -f `"/tmp/$($fileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
     return $true
 }
 
 # Attempts to produce a signed version of the given file
 function ProcessSingleFile {
-    param ([string]$path, [string]$suffix = '-Signed')
+    param ([string]$path)
     $fileInfo = Get-Item $path
     Write-Output "File to be processed: $($fileInfo.Name)"
     # TODO
@@ -57,7 +61,7 @@ function ProcessSingleFile {
 
 function ProcessAllFiles {
     param ([string]$folder)
-    $files = Get-ChildItem $folder
+    $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
         ProcessSingleFile $_.FullName
     } 
