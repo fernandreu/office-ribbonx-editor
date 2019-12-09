@@ -83,6 +83,6 @@ function SetCredentials {
     Set-Content -Path (Join-Path $HOME ".ssh/id_rsa.pub") -Value $publicKey
 }
 
-if (!(RemoteSign -hostname '' -path 'C:\Users\FernA\Downloads\OfficeRibbonXEditor.exe' -pin "" -port 0)) {
-    Write-Output 'No.'
-}
+# if (!(RemoteSign -hostname '' -path 'C:\Users\FernA\Downloads\OfficeRibbonXEditor.exe' -pin "" -port 0)) {
+#     Write-Output 'No.'
+# }
