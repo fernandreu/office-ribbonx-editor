@@ -102,11 +102,11 @@ jobs:
         Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
 
   - task: PublishBuildArtifacts@1
-    displayName: 'Publish executable (unsigned)'
+    displayName: 'Publish executable (signed)'
     condition: eq(variables['CodeSignSuccess'], true)
     inputs:
       pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Framework Executable (Unsigned)'
+      artifactName: '.NET Framework Executable'
       publishLocation: 'Container' # Options: container, filePath
 
   - task: CopyFiles@2
