@@ -50,12 +50,20 @@ function Set-SignatureRemotely {
 
 function Update-AllFiles {
     [CmdletBinding()]
+    [OutputType([bool])]
     param ([string]$folder, [string]$HostName, [string]$Pin, [string]$Port)
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
-        if ($_.Extension -eq '.exe' -or $_.Extension -eq '.msi') {
-            Write-Output "File to be processed: $($_.Name)"
-            Set-SignatureRemotely -FileInfo $FileInfo -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
+        if ($_.Extension -ne '.exe' -and $_.Extension -ne '.msi') {
+            continue
+        }
+
+        Write-Output "File to be processed: $($_.Name)"
+        $result = Set-SignatureRemotely -FileInfo $FileInfo -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
+        if (-not $result) {
+            return $false
         }
     }
+
+    return $true
 }
