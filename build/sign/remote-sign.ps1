@@ -83,6 +83,7 @@ function ProcessAllFiles {
 function SetCredentials {
     [CmdletBinding()]
     param([string]$privateKey, [string]$publicKey)
+    New-Item -ItemType Directory -Force -Path (Join-Path $HOME ".ssh") | Out-Null
     Set-Content -Path (Join-Path $HOME ".ssh/id_rsa") -Value $privateKey
     Set-Content -Path (Join-Path $HOME ".ssh/id_rsa.pub") -Value $publicKey
 }
