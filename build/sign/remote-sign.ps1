@@ -17,7 +17,7 @@ function RemoteSign {
     }
 
     $fileInfo = Get-Item $path
-    & scp -P $port -q "$path" "$($hostname):/tmp/$($fileInfo.Name)"
+    & scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$port" -q "$path" "$($hostname):/tmp/$($fileInfo.Name)"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
@@ -30,7 +30,7 @@ function RemoteSign {
             "osslsigncode $commonArgs -h sha1 -in `"/tmp/$($fileInfo.Name)`" -out `"/tmp/$resultingName.tmp`"",
             "osslsigncode $commonArgs -nest -h sha2 -in `"/tmp/$resultingName.tmp`" -out `"/tmp/$resultingName`""
         )
-        & ssh $hostname -p $port ($commands -join " && ")
+        & ssh -o "StrictHostKeyChecking no" $hostname -p "$port" ($commands -join " && ")
 
         # Another option: shorter, but it shows a welcome message unless the server settings are changed 
         # $commands | & ssh $hostname
@@ -40,7 +40,7 @@ function RemoteSign {
         # & ssh $hostname osslsigncode $commonArgs -nest -h sha2 -in "/tmp/tmp-$resultingName" -out "/tmp/$resultingName"
     } else {
         # Use only SHA256 signature (as it might not be possible to dual-sign the file)
-        & ssh $hostname -p $port osslsigncode $commonArgs -h sha2 -in "/tmp/$($fileInfo.Name)" -out "/tmp/$resultingName"
+        & ssh -o "StrictHostKeyChecking no" $hostname -p "$port" osslsigncode $commonArgs -h sha2 -in "/tmp/$($fileInfo.Name)" -out "/tmp/$resultingName"
     }
     if ($LASTEXITCODE -ne 0) {
         return $false
@@ -51,12 +51,12 @@ function RemoteSign {
         $destination = $path
     }
 
-    & scp -P $port -q "$($hostname):/tmp/$resultingName" "$destination"
+    & scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$port" -q "$($hostname):/tmp/$resultingName" "$destination"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
-    & ssh $hostname -p $port "rm -f `"/tmp/$($fileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
+    & ssh -o "StrictHostKeyChecking no" $hostname -p $port "rm -f `"/tmp/$($fileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
     return $true
 }
 
@@ -65,9 +65,9 @@ function ProcessSingleFile {
     [CmdletBinding()]
     param ([string]$path)
     $fileInfo = Get-Item $path
-    Write-Output "File to be processed: $($fileInfo.Name)"
     if ($fileInfo.Extension -eq '.exe' -or $fileInfo.Extension -eq '.msi') {
-        RemoteSign $fileInfo.FullName
+        Write-Output "File to be processed: $($fileInfo.Name)"
+        RemoteSign $fileInfo.FullName -ErrorAction Continue
     }
 }
 
@@ -76,7 +76,7 @@ function ProcessAllFiles {
     param ([string]$folder)
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
-        ProcessSingleFile $_.FullName
+        ProcessSingleFile $_.FullName -ErrorAction Continue
     }
 }
 
