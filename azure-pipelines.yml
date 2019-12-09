@@ -144,6 +144,7 @@ jobs:
       script: |
         . ./build/sign/remote-sign.ps1
         $result = Update-AllFiles "$(Build.ArtifactStagingDirectory)" -HostName "$(CODESIGN_HOST)" -Pin "$(CODESIGN_PIN)" -Port "$(CODESIGN_PORT)"
+        Write-Output "Result is: $result"
         Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
 
   - task: PublishBuildArtifacts@1

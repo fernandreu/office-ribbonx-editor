@@ -59,7 +59,7 @@ function Update-AllFiles {
         }
 
         Write-Output "File to be processed: $($_.Name)"
-        $result = Set-SignatureRemotely -FileInfo $FileInfo -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
+        $result = Set-SignatureRemotely -FileInfo $_ -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
         if (-not $result) {
             return $false
         }
