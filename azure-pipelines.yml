@@ -30,6 +30,12 @@ jobs:
 
   steps:
 
+  - task: InstallSSHKey@0
+    inputs:
+      knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
+      sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
+      sshKeySecureFile: 'id_rsa'
+
   - task: PowerShell@2
     displayName: 'PreBuildSteps'
     inputs:
@@ -121,7 +127,6 @@ jobs:
         $env:CODESIGN_PIN = "$(CODESIGN_PIN)"
         $env:CODESIGN_HOST = "$(CODESIGN_HOST)"
         $env:CODESIGN_PORT = "$(CODESIGN_PORT)"
-        SetCredentials "$(CODESIGN_PRIVATE_KEY)" "$(CODESIGN_PUBLIC_KEY)"
         ProcessAllFiles "$(Build.ArtifactStagingDirectory)"
 
 - job: NetCore
@@ -130,6 +135,12 @@ jobs:
     targetFramework: netcoreapp3.0
 
   steps:
+
+  - task: InstallSSHKey@0
+    inputs:
+      knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
+      sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
+      sshKeySecureFile: 'id_rsa'
 
   - task: PowerShell@2
     displayName: 'PreBuildSteps'
@@ -187,5 +198,4 @@ jobs:
         $env:CODESIGN_PIN = "$(CODESIGN_PIN)"
         $env:CODESIGN_HOST = "$(CODESIGN_HOST)"
         $env:CODESIGN_PORT = "$(CODESIGN_PORT)"
-        SetCredentials "$(CODESIGN_PRIVATE_KEY)" "$(CODESIGN_PUBLIC_KEY)"
         ProcessAllFiles "$(Build.ArtifactStagingDirectory)"
