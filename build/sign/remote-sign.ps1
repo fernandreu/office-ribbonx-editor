@@ -5,7 +5,7 @@ function Set-SignatureRemotely {
     param([System.IO.FileInfo]$FileInfo, [string]$HostName, [string]$Pin, [string]$Port, [string]$destination = '')
 
     $Path = $FileInfo.FullName
-    & scp -P "$Port" -q "$Path" "$($HostName):/tmp/$($FileInfo.Name)"
+    & scp -P "$Port" -q "$Path" "$($HostName):/tmp/$($FileInfo.Name)" | Write-Host
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
@@ -18,7 +18,7 @@ function Set-SignatureRemotely {
             "osslsigncode $commonArgs -h sha1 -in `"/tmp/$($FileInfo.Name)`" -out `"/tmp/$resultingName.tmp`"",
             "osslsigncode $commonArgs -nest -h sha2 -in `"/tmp/$resultingName.tmp`" -out `"/tmp/$resultingName`""
         )
-        & ssh $HostName -p "$Port" ($commands -join " && ")
+        & ssh $HostName -p "$Port" ($commands -join " && ") | Write-Host
 
         # Another option: shorter, but it shows a welcome message unless the server settings are changed 
         # $commands | & ssh $HostName
@@ -28,7 +28,7 @@ function Set-SignatureRemotely {
         # & ssh $HostName osslsigncode $commonArgs -nest -h sha2 -in "/tmp/tmp-$resultingName" -out "/tmp/$resultingName"
     } else {
         # Use only SHA256 signature (as it might not be possible to dual-sign the file)
-        & ssh $HostName -p "$Port" osslsigncode $commonArgs -h sha2 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName"
+        & ssh $HostName -p "$Port" osslsigncode $commonArgs -h sha2 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName" | Write-Host
     }
     if ($LASTEXITCODE -ne 0) {
         return $false
@@ -39,12 +39,12 @@ function Set-SignatureRemotely {
         $destination = $Path
     }
 
-    & scp -P "$Port" -q "$($HostName):/tmp/$resultingName" "$destination"
+    & scp -P "$Port" -q "$($HostName):/tmp/$resultingName" "$destination" | Write-Host
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
-    & ssh $HostName -p $Port "rm -f `"/tmp/$($FileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
+    & ssh $HostName -p $Port "rm -f `"/tmp/$($FileInfo.Name)`" && rm -f `"/tmp/$resultingName*`"" | Write-Host
     return $true
 }
 
@@ -64,7 +64,8 @@ function Update-AllFiles {
         if (-not $result) {
             return $false
         }
-
+        
+        Write-Host "Setting result to $true"
         Set-Variable -scope 1 -Name "any" -Value $true
     }
 
