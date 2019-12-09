@@ -52,7 +52,7 @@ function Update-AllFiles {
     [CmdletBinding()]
     [OutputType([bool])]
     param ([string]$folder, [string]$HostName, [string]$Pin, [string]$Port)
-    $any = $false
+    $any = @()
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
         if ($_.Extension -ne '.exe' -and $_.Extension -ne '.msi') {
@@ -66,8 +66,8 @@ function Update-AllFiles {
         }
         
         Write-Host "Setting result to $true"
-        Set-Variable -scope 1 -Name "any" -Value $true
+        $any += $true
     }
 
-    return $any
+    return ($any.Length -gt 0)
 }
