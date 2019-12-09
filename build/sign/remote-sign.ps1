@@ -1,46 +1,34 @@
 # Signs a local file by connecting to a remote machine and running osslsigncode in there
-function RemoteSign {
+function Set-SignatureRemotely {
     [CmdletBinding()]
     [OutputType([bool])]
-    param([string]$path, [string]$destination = '', [string]$hostname = '', [string]$pin = '', [string]$port = '')
+    param([System.IO.FileInfo]$FileInfo, [string]$HostName, [string]$Pin, [string]$Port, [string]$destination = '')
 
-    if ($hostname.Length -eq 0) {
-        $hostname = $env:CODESIGN_HOST
-    }
-
-    if ($port.Length -eq 0) {
-        $port = $env:CODESIGN_PORT
-    }
-
-    if ($pin.Length -eq 0) {
-        $pin = $env:CODESIGN_PIN
-    }
-
-    $fileInfo = Get-Item $path
-    & scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$port" -q "$path" "$($hostname):/tmp/$($fileInfo.Name)"
+    $Path = $FileInfo.FullName
+    & scp -P "$Port" -q "$Path" "$($HostName):/tmp/$($FileInfo.Name)"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
-    $resultingName = "$($fileInfo.BaseName)-Signed$($fileInfo.Extension)"
-    $commonArgs = "-pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $pin"
-    if ($fileInfo.Extension -eq ".exe") {
+    $resultingName = "$($FileInfo.BaseName)-Signed$($FileInfo.Extension)"
+    $commonArgs = "-pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $Pin"
+    if ($FileInfo.Extension -eq ".exe") {
         # Perform a dual signature
         [string[]]$commands = @(
-            "osslsigncode $commonArgs -h sha1 -in `"/tmp/$($fileInfo.Name)`" -out `"/tmp/$resultingName.tmp`"",
+            "osslsigncode $commonArgs -h sha1 -in `"/tmp/$($FileInfo.Name)`" -out `"/tmp/$resultingName.tmp`"",
             "osslsigncode $commonArgs -nest -h sha2 -in `"/tmp/$resultingName.tmp`" -out `"/tmp/$resultingName`""
         )
-        & ssh -o "StrictHostKeyChecking no" $hostname -p "$port" ($commands -join " && ")
+        & ssh $HostName -p "$Port" ($commands -join " && ")
 
         # Another option: shorter, but it shows a welcome message unless the server settings are changed 
-        # $commands | & ssh $hostname
+        # $commands | & ssh $HostName
 
         # Another option
-        # & ssh $hostname osslsigncode $commonArgs -h sha1 -in "/tmp/$($fileInfo.Name)" -out "/tmp/tmp-$resultingName"
-        # & ssh $hostname osslsigncode $commonArgs -nest -h sha2 -in "/tmp/tmp-$resultingName" -out "/tmp/$resultingName"
+        # & ssh $HostName osslsigncode $commonArgs -h sha1 -in "/tmp/$($FileInfo.Name)" -out "/tmp/tmp-$resultingName"
+        # & ssh $HostName osslsigncode $commonArgs -nest -h sha2 -in "/tmp/tmp-$resultingName" -out "/tmp/$resultingName"
     } else {
         # Use only SHA256 signature (as it might not be possible to dual-sign the file)
-        & ssh -o "StrictHostKeyChecking no" $hostname -p "$port" osslsigncode $commonArgs -h sha2 -in "/tmp/$($fileInfo.Name)" -out "/tmp/$resultingName"
+        & ssh $HostName -p "$Port" osslsigncode $commonArgs -h sha2 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName"
     }
     if ($LASTEXITCODE -ne 0) {
         return $false
@@ -48,42 +36,26 @@ function RemoteSign {
     
     if ($destination.Length -eq 0) {
         # Replace existing file
-        $destination = $path
+        $destination = $Path
     }
 
-    & scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P "$port" -q "$($hostname):/tmp/$resultingName" "$destination"
+    & scp -P "$Port" -q "$($HostName):/tmp/$resultingName" "$destination"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
-    & ssh -o "StrictHostKeyChecking no" $hostname -p $port "rm -f `"/tmp/$($fileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
+    & ssh $HostName -p $Port "rm -f `"/tmp/$($FileInfo.Name)`" && rm -f `"/tmp/$resultingName*`""
     return $true
 }
 
-# Attempts to produce a signed version of the given file
-function ProcessSingleFile {
+function Update-AllFiles {
     [CmdletBinding()]
-    param ([string]$path)
-    $fileInfo = Get-Item $path
-    if ($fileInfo.Extension -eq '.exe' -or $fileInfo.Extension -eq '.msi') {
-        Write-Output "File to be processed: $($fileInfo.Name)"
-        RemoteSign $fileInfo.FullName -ErrorAction Continue
-    }
-}
-
-function ProcessAllFiles {
-    [CmdletBinding()]
-    param ([string]$folder)
+    param ([string]$folder, [string]$HostName, [string]$Pin, [string]$Port)
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
-        ProcessSingleFile $_.FullName -ErrorAction Continue
+        if ($_.Extension -eq '.exe' -or $_.Extension -eq '.msi') {
+            Write-Output "File to be processed: $($_.Name)"
+            Set-SignatureRemotely -FileInfo $FileInfo -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
+        }
     }
-}
-
-function SetCredentials {
-    [CmdletBinding()]
-    param([string]$privateKey, [string]$publicKey)
-    New-Item -ItemType Directory -Force -Path (Join-Path $HOME ".ssh") | Out-Null
-    Set-Content -Path (Join-Path $HOME ".ssh/id_rsa") -Value $privateKey
-    Set-Content -Path (Join-Path $HOME ".ssh/id_rsa.pub") -Value $publicKey
 }
