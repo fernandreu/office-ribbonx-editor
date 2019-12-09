@@ -52,18 +52,21 @@ function Update-AllFiles {
     [CmdletBinding()]
     [OutputType([bool])]
     param ([string]$folder, [string]$HostName, [string]$Pin, [string]$Port)
+    $any = $false
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
         if ($_.Extension -ne '.exe' -and $_.Extension -ne '.msi') {
             continue
         }
 
-        Write-Output "File to be processed: $($_.Name)"
+        Write-Host "File to be processed: $($_.Name)"
         $result = Set-SignatureRemotely -FileInfo $_ -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
         if (-not $result) {
             return $false
         }
+
+        $script:any = $true
     }
 
-    return $true
+    return $any
 }
