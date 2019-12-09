@@ -115,6 +115,7 @@ jobs:
     displayName: 'Sign all binaries if possible'
     inputs:
       targetType: inline
+      ignoreLASTEXITCODE: true
       script: |
         . ./build/sign/remote-sign.ps1
         $env:CODESIGN_PIN = "$(CODESIGN_PIN)"

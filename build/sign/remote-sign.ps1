@@ -1,5 +1,6 @@
 # Signs a local file by connecting to a remote machine and running osslsigncode in there
 function RemoteSign {
+    [CmdletBinding()]
     [OutputType([bool])]
     param([string]$path, [string]$destination = '', [string]$hostname = '', [string]$pin = '', [string]$port = '')
 
@@ -61,15 +62,17 @@ function RemoteSign {
 
 # Attempts to produce a signed version of the given file
 function ProcessSingleFile {
+    [CmdletBinding()]
     param ([string]$path)
     $fileInfo = Get-Item $path
     Write-Output "File to be processed: $($fileInfo.Name)"
     if ($fileInfo.Extension -eq '.exe' -or $fileInfo.Extension -eq '.msi') {
-        # RemoteSign $fileInfo.FullName
+        RemoteSign $fileInfo.FullName
     }
 }
 
 function ProcessAllFiles {
+    [CmdletBinding()]
     param ([string]$folder)
     $files = Get-ChildItem $folder -Recurse -File
     $files | ForEach-Object {
@@ -78,6 +81,7 @@ function ProcessAllFiles {
 }
 
 function SetCredentials {
+    [CmdletBinding()]
     param([string]$privateKey, [string]$publicKey)
     Set-Content -Path (Join-Path $HOME ".ssh/id_rsa") -Value $privateKey
     Set-Content -Path (Join-Path $HOME ".ssh/id_rsa.pub") -Value $publicKey
