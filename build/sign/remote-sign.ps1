@@ -65,7 +65,7 @@ function Update-AllFiles {
             return $false
         }
 
-        $script:any = $true
+        Set-Variable -scope 1 -Name "any" -Value $true
     }
 
     return $any
