@@ -121,8 +121,7 @@ jobs:
         $env:CODESIGN_PIN = "$(CODESIGN_PIN)"
         $env:CODESIGN_HOST = "$(CODESIGN_HOST)"
         $env:CODESIGN_PORT = "$(CODESIGN_PORT)"
-        $env:CODESIGN_PUBLIC_KEY = "$(CODESIGN_PUBLIC_KEY)"
-        $env:CODESIGN_PRIVATE_KEY = "$(CODESIGN_PRIVATE_KEY)"
+        SetCredentials "$(CODESIGN_PRIVATE_KEY)" "$(CODESIGN_PUBLIC_KEY)"
         ProcessAllFiles "$(Build.ArtifactStagingDirectory)"
 
 - job: NetCore
@@ -188,6 +187,5 @@ jobs:
         $env:CODESIGN_PIN = "$(CODESIGN_PIN)"
         $env:CODESIGN_HOST = "$(CODESIGN_HOST)"
         $env:CODESIGN_PORT = "$(CODESIGN_PORT)"
-        $env:CODESIGN_PUBLIC_KEY = "$(CODESIGN_PUBLIC_KEY)"
-        $env:CODESIGN_PRIVATE_KEY = "$(CODESIGN_PRIVATE_KEY)"
+        SetCredentials "$(CODESIGN_PRIVATE_KEY)" "$(CODESIGN_PUBLIC_KEY)"
         ProcessAllFiles "$(Build.ArtifactStagingDirectory)"
