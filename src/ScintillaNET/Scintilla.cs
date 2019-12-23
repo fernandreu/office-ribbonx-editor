@@ -1470,148 +1470,91 @@ namespace ScintillaNET
             DirectMessage(NativeMethods.SCI_MULTIPLESELECTADDNEXT);
         }
 
+        private void FireEvent<T>(object key, T e) where T : EventArgs
+        {
+            if (Events[key] is EventHandler<T> handler)
+            {
+                handler?.Invoke(this, e);
+            }
+        }
+
         /// <summary>
         /// Raises the <see cref="AutoCCancelled" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnAutoCCancelled(EventArgs e)
-        {
-            var handler = Events[autoCCancelledEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnAutoCCancelled(EventArgs e) => FireEvent(autoCCancelledEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="AutoCCharDeleted" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnAutoCCharDeleted(EventArgs e)
-        {
-            var handler = Events[autoCCharDeletedEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnAutoCCharDeleted(EventArgs e) => FireEvent(autoCCharDeletedEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="AutoCCompleted" /> event.
         /// </summary>
         /// <param name="e">An <see cref="AutoCSelectionEventArgs" /> that contains the event data.</param>
-        protected virtual void OnAutoCCompleted(AutoCSelectionEventArgs e)
-        {
-            var handler = Events[autoCCompletedEventKey] as EventHandler<AutoCSelectionEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnAutoCCompleted(AutoCSelectionEventArgs e) => FireEvent(autoCCompletedEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="AutoCSelection" /> event.
         /// </summary>
         /// <param name="e">An <see cref="AutoCSelectionEventArgs" /> that contains the event data.</param>
-        protected virtual void OnAutoCSelection(AutoCSelectionEventArgs e)
-        {
-            var handler = Events[autoCSelectionEventKey] as EventHandler<AutoCSelectionEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnAutoCSelection(AutoCSelectionEventArgs e) => FireEvent(autoCSelectionEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="BeforeDelete" /> event.
         /// </summary>
         /// <param name="e">A <see cref="BeforeModificationEventArgs" /> that contains the event data.</param>
-        protected virtual void OnBeforeDelete(BeforeModificationEventArgs e)
-        {
-            var handler = Events[beforeDeleteEventKey] as EventHandler<BeforeModificationEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnBeforeDelete(BeforeModificationEventArgs e) => FireEvent(beforeDeleteEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="BeforeInsert" /> event.
         /// </summary>
         /// <param name="e">A <see cref="BeforeModificationEventArgs" /> that contains the event data.</param>
-        protected virtual void OnBeforeInsert(BeforeModificationEventArgs e)
-        {
-            var handler = Events[beforeInsertEventKey] as EventHandler<BeforeModificationEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnBeforeInsert(BeforeModificationEventArgs e) => FireEvent(beforeInsertEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="BorderStyleChanged" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnBorderStyleChanged(EventArgs e)
-        {
-            var handler = Events[borderStyleChangedEventKey] as EventHandler;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnBorderStyleChanged(EventArgs e) => FireEvent(borderStyleChangedEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="ChangeAnnotation" /> event.
         /// </summary>
         /// <param name="e">A <see cref="ChangeAnnotationEventArgs" /> that contains the event data.</param>
-        protected virtual void OnChangeAnnotation(ChangeAnnotationEventArgs e)
-        {
-            var handler = Events[changeAnnotationEventKey] as EventHandler<ChangeAnnotationEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnChangeAnnotation(ChangeAnnotationEventArgs e) => FireEvent(changeAnnotationEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="CharAdded" /> event.
         /// </summary>
         /// <param name="e">A <see cref="CharAddedEventArgs" /> that contains the event data.</param>
-        protected virtual void OnCharAdded(CharAddedEventArgs e)
-        {
-            var handler = Events[charAddedEventKey] as EventHandler<CharAddedEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnCharAdded(CharAddedEventArgs e) => FireEvent(charAddedEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="Delete" /> event.
         /// </summary>
         /// <param name="e">A <see cref="ModificationEventArgs" /> that contains the event data.</param>
-        protected virtual void OnDelete(ModificationEventArgs e)
-        {
-            var handler = Events[deleteEventKey] as EventHandler<ModificationEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnDelete(ModificationEventArgs e) => FireEvent(deleteEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="DoubleClick" /> event.
         /// </summary>
         /// <param name="e">A <see cref="DoubleClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnDoubleClick(DoubleClickEventArgs e)
-        {
-            var handler = Events[doubleClickEventKey] as EventHandler<DoubleClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnDoubleClick(DoubleClickEventArgs e) => FireEvent(doubleClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="DwellEnd" /> event.
         /// </summary>
         /// <param name="e">A <see cref="DwellEventArgs" /> that contains the event data.</param>
-        protected virtual void OnDwellEnd(DwellEventArgs e)
-        {
-            var handler = Events[dwellEndEventKey] as EventHandler<DwellEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnDwellEnd(DwellEventArgs e) => FireEvent(dwellEndEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="DwellStart" /> event.
         /// </summary>
         /// <param name="e">A <see cref="DwellEventArgs" /> that contains the event data.</param>
-        protected virtual void OnDwellStart(DwellEventArgs e)
-        {
-            var handler = Events[dwellStartEventKey] as EventHandler<DwellEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnDwellStart(DwellEventArgs e) => FireEvent(dwellStartEventKey, e);
 
         /// <summary>
         /// Raises the HandleCreated event.
@@ -1647,111 +1590,61 @@ namespace ScintillaNET
         /// Raises the <see cref="HotspotClick" /> event.
         /// </summary>
         /// <param name="e">A <see cref="HotspotClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnHotspotClick(HotspotClickEventArgs e)
-        {
-            var handler = Events[hotspotClickEventKey] as EventHandler<HotspotClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnHotspotClick(HotspotClickEventArgs e) => FireEvent(hotspotClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="HotspotDoubleClick" /> event.
         /// </summary>
         /// <param name="e">A <see cref="HotspotClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnHotspotDoubleClick(HotspotClickEventArgs e)
-        {
-            var handler = Events[hotspotDoubleClickEventKey] as EventHandler<HotspotClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnHotspotDoubleClick(HotspotClickEventArgs e) => FireEvent(hotspotDoubleClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="HotspotReleaseClick" /> event.
         /// </summary>
         /// <param name="e">A <see cref="HotspotClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnHotspotReleaseClick(HotspotClickEventArgs e)
-        {
-            var handler = Events[hotspotReleaseClickEventKey] as EventHandler<HotspotClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnHotspotReleaseClick(HotspotClickEventArgs e) => FireEvent(hotspotReleaseClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="IndicatorClick" /> event.
         /// </summary>
         /// <param name="e">An <see cref="IndicatorClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnIndicatorClick(IndicatorClickEventArgs e)
-        {
-            var handler = Events[indicatorClickEventKey] as EventHandler<IndicatorClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnIndicatorClick(IndicatorClickEventArgs e) => FireEvent(indicatorClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="IndicatorRelease" /> event.
         /// </summary>
         /// <param name="e">An <see cref="IndicatorReleaseEventArgs" /> that contains the event data.</param>
-        protected virtual void OnIndicatorRelease(IndicatorReleaseEventArgs e)
-        {
-            var handler = Events[indicatorReleaseEventKey] as EventHandler<IndicatorReleaseEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnIndicatorRelease(IndicatorReleaseEventArgs e) => FireEvent(indicatorReleaseEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="Insert" /> event.
         /// </summary>
         /// <param name="e">A <see cref="ModificationEventArgs" /> that contains the event data.</param>
-        protected virtual void OnInsert(ModificationEventArgs e)
-        {
-            var handler = Events[insertEventKey] as EventHandler<ModificationEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnInsert(ModificationEventArgs e) => FireEvent(insertEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="InsertCheck" /> event.
         /// </summary>
         /// <param name="e">An <see cref="InsertCheckEventArgs" /> that contains the event data.</param>
-        protected virtual void OnInsertCheck(InsertCheckEventArgs e)
-        {
-            var handler = Events[insertCheckEventKey] as EventHandler<InsertCheckEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnInsertCheck(InsertCheckEventArgs e) => FireEvent(insertCheckEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="MarginClick" /> event.
         /// </summary>
         /// <param name="e">A <see cref="MarginClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnMarginClick(MarginClickEventArgs e)
-        {
-            var handler = Events[marginClickEventKey] as EventHandler<MarginClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnMarginClick(MarginClickEventArgs e) => FireEvent(marginClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="MarginRightClick" /> event.
         /// </summary>
         /// <param name="e">A <see cref="MarginClickEventArgs" /> that contains the event data.</param>
-        protected virtual void OnMarginRightClick(MarginClickEventArgs e)
-        {
-            var handler = Events[marginRightClickEventKey] as EventHandler<MarginClickEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnMarginRightClick(MarginClickEventArgs e) => FireEvent(marginRightClickEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="ModifyAttempt" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnModifyAttempt(EventArgs e)
-        {
-            var handler = Events[modifyAttemptEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnModifyAttempt(EventArgs e) => FireEvent(modifyAttemptEventKey, e);
 
         /// <summary>
         /// Raises the MouseUp event.
@@ -1780,78 +1673,43 @@ namespace ScintillaNET
         /// Raises the <see cref="NeedShown" /> event.
         /// </summary>
         /// <param name="e">A <see cref="NeedShownEventArgs" /> that contains the event data.</param>
-        protected virtual void OnNeedShown(NeedShownEventArgs e)
-        {
-            var handler = Events[needShownEventKey] as EventHandler<NeedShownEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnNeedShown(NeedShownEventArgs e) => FireEvent(needShownEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="Painted" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnPainted(EventArgs e)
-        {
-            var handler = Events[paintedEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnPainted(EventArgs e) => FireEvent(paintedEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="SavePointLeft" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnSavePointLeft(EventArgs e)
-        {
-            var handler = Events[savePointLeftEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnSavePointLeft(EventArgs e) => FireEvent(savePointLeftEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="SavePointReached" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnSavePointReached(EventArgs e)
-        {
-            var handler = Events[savePointReachedEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnSavePointReached(EventArgs e) => FireEvent(savePointReachedEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="StyleNeeded" /> event.
         /// </summary>
         /// <param name="e">A <see cref="StyleNeededEventArgs" /> that contains the event data.</param>
-        protected virtual void OnStyleNeeded(StyleNeededEventArgs e)
-        {
-            var handler = Events[styleNeededEventKey] as EventHandler<StyleNeededEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnStyleNeeded(StyleNeededEventArgs e) => FireEvent(styleNeededEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="UpdateUI" /> event.
         /// </summary>
         /// <param name="e">An <see cref="UpdateUIEventArgs" /> that contains the event data.</param>
-        protected virtual void OnUpdateUI(UpdateUIEventArgs e)
-        {
-            EventHandler<UpdateUIEventArgs> handler = Events[updateUIEventKey] as EventHandler<UpdateUIEventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnUpdateUI(UpdateUIEventArgs e) => FireEvent(updateUIEventKey, e);
 
         /// <summary>
         /// Raises the <see cref="ZoomChanged" /> event.
         /// </summary>
         /// <param name="e">An EventArgs that contains the event data.</param>
-        protected virtual void OnZoomChanged(EventArgs e)
-        {
-            var handler = Events[zoomChangedEventKey] as EventHandler<EventArgs>;
-            if (handler != null)
-                handler(this, e);
-        }
+        protected virtual void OnZoomChanged(EventArgs e) => FireEvent(zoomChangedEventKey, e);
 
         /// <summary>
         /// Pastes the contents of the clipboard into the current selection.

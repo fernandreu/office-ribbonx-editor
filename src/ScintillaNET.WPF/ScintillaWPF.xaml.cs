@@ -1,23 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
 using System.Windows;
-using System.Windows.Data;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Markup;
-using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Navigation;
-using System.Collections.Generic;
-using System.Windows.Media.Imaging;
-
 using ScintillaNET.WPF.Configuration;
-
-using SN = ScintillaNET;
 
 namespace ScintillaNET.WPF
 {
@@ -26,21 +13,20 @@ namespace ScintillaNET.WPF
     [ContentProperty("WPFConfig")]
     public partial class ScintillaWPF : UserControl
     {
-        private readonly SN.Scintilla mInnerScintilla;
-        public SN.Scintilla Scintilla { get { return mInnerScintilla; } }
+        public Scintilla Scintilla { get; private set; }
 
         public ScintillaWPF()
         {
             InitializeComponent();
-            this.mInnerScintilla = new SN.Scintilla();
-            this.winFormsHost.Child = this.mInnerScintilla;
+            this.Scintilla = new Scintilla();
+            this.winFormsHost.Child = this.Scintilla;
             this.mWPFConfig = new ScintillaWPFConfigItemCollection(this);
 
-            this.mInnerScintilla.ZoomChanged += (o, e) =>
+            this.Scintilla.ZoomChanged += (o, e) =>
             {
-                if (this.Zoom != this.mInnerScintilla.Zoom)
+                if (this.Zoom != this.Scintilla.Zoom)
                 {
-                    this.Zoom = this.mInnerScintilla.Zoom;
+                    this.Zoom = this.Scintilla.Zoom;
                 }
             };
         }
@@ -50,48 +36,7 @@ namespace ScintillaNET.WPF
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public ScintillaWPFConfigItemCollection WPFConfig
-        {
-            get { return mWPFConfig; }
-        }
-
-        [Browsable(false)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private static readonly object scNotificationEventKey = new object();
-
-        private static readonly object insertCheckEventKey = new object();
-        private static readonly object beforeInsertEventKey = new object();
-        private static readonly object beforeDeleteEventKey = new object();
-        private static readonly object insertEventKey = new object();
-        private static readonly object deleteEventKey = new object();
-        private static readonly object updateUIEventKey = new object();
-        private static readonly object modifyAttemptEventKey = new object();
-
-        //private static readonly object styleNeededEventKey = new object();
-        private static readonly object savePointReachedEventKey = new object();
-
-        private static readonly object savePointLeftEventKey = new object();
-        private static readonly object changeAnnotationEventKey = new object();
-        private static readonly object marginClickEventKey = new object();
-        private static readonly object marginRightClickEventKey = new object();
-        private static readonly object charAddedEventKey = new object();
-        private static readonly object autoCSelectionEventKey = new object();
-        private static readonly object autoCCompletedEventKey = new object();
-        private static readonly object autoCCancelledEventKey = new object();
-        private static readonly object autoCCharDeletedEventKey = new object();
-        private static readonly object dwellStartEventKey = new object();
-        private static readonly object dwellEndEventKey = new object();
-        private static readonly object borderStyleChangedEventKey = new object();
-        private static readonly object doubleClickEventKey = new object();
-        private static readonly object paintedEventKey = new object();
-        private static readonly object needShownEventKey = new object();
-        private static readonly object hotspotClickEventKey = new object();
-        private static readonly object hotspotDoubleClickEventKey = new object();
-        private static readonly object hotspotReleaseClickEventKey = new object();
-        private static readonly object indicatorClickEventKey = new object();
-        private static readonly object indicatorReleaseEventKey = new object();
-        private static readonly object zoomChangedEventKey = new object();
+        public ScintillaWPFConfigItemCollection WPFConfig => mWPFConfig;
 
         /// <summary>
         /// A constant used to specify an invalid document position.
@@ -108,8 +53,8 @@ namespace ScintillaNET.WPF
         [Description("The additional caret foreground color.")]
         public Color AdditionalCaretForeColor
         {
-            get { return MediaColor(mInnerScintilla.AdditionalCaretForeColor); }
-            set { mInnerScintilla.AdditionalCaretForeColor = DrawingColor(value); }
+            get => MediaColor(Scintilla.AdditionalCaretForeColor);
+            set => Scintilla.AdditionalCaretForeColor = DrawingColor(value);
         }
 
         /// <summary>
@@ -121,8 +66,8 @@ namespace ScintillaNET.WPF
         [Description("Whether the carets in additional selections should blink.")]
         public bool AdditionalCaretsBlink
         {
-            get { return mInnerScintilla.AdditionalCaretsBlink; }
-            set { mInnerScintilla.AdditionalCaretsBlink = value; }
+            get => Scintilla.AdditionalCaretsBlink;
+            set => Scintilla.AdditionalCaretsBlink = value;
         }
 
         /// <summary>
@@ -134,8 +79,8 @@ namespace ScintillaNET.WPF
         [Description("Whether the carets in additional selections are visible.")]
         public bool AdditionalCaretsVisible
         {
-            get { return mInnerScintilla.AdditionalCaretsVisible; }
-            set { mInnerScintilla.AdditionalCaretsVisible = value; }
+            get => Scintilla.AdditionalCaretsVisible;
+            set => Scintilla.AdditionalCaretsVisible = value;
         }
 
         /// <summary>
@@ -150,8 +95,8 @@ namespace ScintillaNET.WPF
         [Description("The transparency of additional selections.")]
         public int AdditionalSelAlpha
         {
-            get { return mInnerScintilla.AdditionalSelAlpha; }
-            set { mInnerScintilla.AdditionalSelAlpha = value; }
+            get => Scintilla.AdditionalSelAlpha;
+            set => Scintilla.AdditionalSelAlpha = value;
         }
 
         /// <summary>
@@ -163,8 +108,8 @@ namespace ScintillaNET.WPF
         [Description("Whether typing, backspace, or delete works with multiple selection simultaneously.")]
         public bool AdditionalSelectionTyping
         {
-            get { return mInnerScintilla.AdditionalSelectionTyping; }
-            set { mInnerScintilla.AdditionalSelectionTyping = value; }
+            get => Scintilla.AdditionalSelectionTyping;
+            set => Scintilla.AdditionalSelectionTyping = value;
         }
 
         /// <summary>
@@ -180,8 +125,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int AnchorPosition
         {
-            get { return mInnerScintilla.AnchorPosition; }
-            set { mInnerScintilla.AnchorPosition = value; }
+            get => Scintilla.AnchorPosition;
+            set => Scintilla.AnchorPosition = value;
         }
 
         /// <summary>
@@ -193,8 +138,8 @@ namespace ScintillaNET.WPF
         [Description("Display and location of annotations.")]
         public Annotation AnnotationVisible
         {
-            get { return mInnerScintilla.AnnotationVisible; }
-            set { mInnerScintilla.AnnotationVisible = value; }
+            get => Scintilla.AnnotationVisible;
+            set => Scintilla.AnnotationVisible = value;
         }
 
         /// <summary>
@@ -203,10 +148,7 @@ namespace ScintillaNET.WPF
         /// <returns>true if there is an active autocompletion list; otherwise, false.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool AutoCActive
-        {
-            get { return mInnerScintilla.AutoCActive; }
-        }
+        public bool AutoCActive => Scintilla.AutoCActive;
 
         /// <summary>
         /// Gets or sets whether to automatically cancel autocompletion when there are no viable matches.
@@ -220,8 +162,8 @@ namespace ScintillaNET.WPF
         [Description("Whether to automatically cancel autocompletion when no match is possible.")]
         public bool AutoCAutoHide
         {
-            get { return mInnerScintilla.AutoCAutoHide; }
-            set { mInnerScintilla.AutoCAutoHide = value; }
+            get => Scintilla.AutoCAutoHide;
+            set => Scintilla.AutoCAutoHide = value;
         }
 
         /// <summary>
@@ -237,8 +179,8 @@ namespace ScintillaNET.WPF
         [Description("Whether to cancel an autocompletion if the caret moves from its initial location, or is allowed to move to the word start.")]
         public bool AutoCCancelAtStart
         {
-            get { return mInnerScintilla.AutoCCancelAtStart; }
-            set { mInnerScintilla.AutoCCancelAtStart = value; }
+            get => Scintilla.AutoCCancelAtStart;
+            set => Scintilla.AutoCCancelAtStart = value;
         }
 
         /// <summary>
@@ -247,10 +189,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based index of the current autocompletion selection.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int AutoCCurrent
-        {
-            get { return mInnerScintilla.AutoCCurrent; }
-        }
+        public int AutoCCurrent => Scintilla.AutoCCurrent;
 
         /// <summary>
         /// Gets or sets whether to automatically select an item when it is the only one in an autocompletion list.
@@ -264,8 +203,8 @@ namespace ScintillaNET.WPF
         [Description("Whether to automatically choose an autocompletion item when it is the only one in the list.")]
         public bool AutoCChooseSingle
         {
-            get { return mInnerScintilla.AutoCChooseSingle; }
-            set { mInnerScintilla.AutoCChooseSingle = value; }
+            get => Scintilla.AutoCChooseSingle;
+            set => Scintilla.AutoCChooseSingle = value;
         }
 
         /// <summary>
@@ -279,8 +218,8 @@ namespace ScintillaNET.WPF
         [Description("Whether to delete any existing word characters following the caret after autocompletion.")]
         public bool AutoCDropRestOfWord
         {
-            get { return mInnerScintilla.AutoCDropRestOfWord; }
-            set { mInnerScintilla.AutoCDropRestOfWord = value; }
+            get => Scintilla.AutoCDropRestOfWord;
+            set => Scintilla.AutoCDropRestOfWord = value;
         }
 
         /// <summary>
@@ -292,8 +231,8 @@ namespace ScintillaNET.WPF
         [Description("Whether autocompletion word matching can ignore case.")]
         public bool AutoCIgnoreCase
         {
-            get { return mInnerScintilla.AutoCIgnoreCase; }
-            set { mInnerScintilla.AutoCIgnoreCase = value; }
+            get => Scintilla.AutoCIgnoreCase;
+            set => Scintilla.AutoCIgnoreCase = value;
         }
 
         /// <summary>
@@ -306,8 +245,8 @@ namespace ScintillaNET.WPF
         [Description("The maximum number of rows to display in an autocompletion list.")]
         public int AutoCMaxHeight
         {
-            get { return mInnerScintilla.AutoCMaxHeight; }
-            set { mInnerScintilla.AutoCMaxHeight = value; }
+            get => Scintilla.AutoCMaxHeight;
+            set => Scintilla.AutoCMaxHeight = value;
         }
 
         /// <summary>
@@ -323,8 +262,8 @@ namespace ScintillaNET.WPF
         [Description("The width of the autocompletion list measured in characters.")]
         public int AutoCMaxWidth
         {
-            get { return mInnerScintilla.AutoCMaxWidth; }
-            set { mInnerScintilla.AutoCMaxWidth = value; }
+            get => Scintilla.AutoCMaxWidth;
+            set => Scintilla.AutoCMaxWidth = value;
         }
 
         /// <summary>
@@ -336,8 +275,8 @@ namespace ScintillaNET.WPF
         [Description("The order of words in an autocompletion list.")]
         public Order AutoCOrder
         {
-            get { return mInnerScintilla.AutoCOrder; }
-            set { mInnerScintilla.AutoCOrder = value; }
+            get => Scintilla.AutoCOrder;
+            set => Scintilla.AutoCOrder = value;
         }
 
         /// <summary>
@@ -347,10 +286,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="AutoCShow" />
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int AutoCPosStart
-        {
-            get { return mInnerScintilla.AutoCPosStart; }
-        }
+        public int AutoCPosStart => Scintilla.AutoCPosStart;
 
         /// <summary>
         /// Gets or sets the delimiter character used to separate words in an autocompletion list.
@@ -362,8 +298,8 @@ namespace ScintillaNET.WPF
         [Description("The autocompletion list word delimiter. The default is a space character.")]
         public Char AutoCSeparator
         {
-            get { return mInnerScintilla.AutoCSeparator; }
-            set { mInnerScintilla.AutoCSeparator = value; }
+            get => Scintilla.AutoCSeparator;
+            set => Scintilla.AutoCSeparator = value;
         }
 
         /// <summary>
@@ -376,8 +312,8 @@ namespace ScintillaNET.WPF
         [Description("The autocompletion list image type delimiter.")]
         public Char AutoCTypeSeparator
         {
-            get { return mInnerScintilla.AutoCTypeSeparator; }
-            set { mInnerScintilla.AutoCTypeSeparator = value; }
+            get => Scintilla.AutoCTypeSeparator;
+            set => Scintilla.AutoCTypeSeparator = value;
         }
 
         /// <summary>
@@ -393,8 +329,8 @@ namespace ScintillaNET.WPF
         [TypeConverter(typeof(FlagsEnumTypeConverter.FlagsEnumConverter))]
         public AutomaticFold AutomaticFold
         {
-            get { return mInnerScintilla.AutomaticFold; }
-            set { mInnerScintilla.AutomaticFold = value; }
+            get => Scintilla.AutomaticFold;
+            set => Scintilla.AutomaticFold = value;
         }
 
         /// <summary>
@@ -404,8 +340,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Color BackColor
         {
-            get { return MediaColor(mInnerScintilla.BackColor); }
-            set { mInnerScintilla.BackColor = DrawingColor(value); }
+            get => MediaColor(Scintilla.BackColor);
+            set => Scintilla.BackColor = DrawingColor(value);
         }
 
         /// <summary>
@@ -415,8 +351,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public System.Drawing.Image BackgroundImage
         {
-            get { return mInnerScintilla.BackgroundImage; }
-            set { mInnerScintilla.BackgroundImage = value; }
+            get => Scintilla.BackgroundImage;
+            set => Scintilla.BackgroundImage = value;
         }
 
         /// <summary>
@@ -426,8 +362,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public System.Windows.Forms.ImageLayout BackgroundImageLayout
         {
-            get { return mInnerScintilla.BackgroundImageLayout; }
-            set { mInnerScintilla.BackgroundImageLayout = value; }
+            get => Scintilla.BackgroundImageLayout;
+            set => Scintilla.BackgroundImageLayout = value;
         }
 
         /// <summary>
@@ -440,8 +376,8 @@ namespace ScintillaNET.WPF
         [Description("Indicates whether the control should have a border.")]
         public System.Windows.Forms.BorderStyle BorderStyle
         {
-            get { return mInnerScintilla.BorderStyle; }
-            set { mInnerScintilla.BorderStyle = value; }
+            get => Scintilla.BorderStyle;
+            set => Scintilla.BorderStyle = value;
         }
 
         /// <summary>
@@ -457,8 +393,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether drawing is double-buffered.")]
         public bool BufferedDraw
         {
-            get { return mInnerScintilla.BufferedDraw; }
-            set { mInnerScintilla.BufferedDraw = value; }
+            get => Scintilla.BufferedDraw;
+            set => Scintilla.BufferedDraw = value;
         }
 
         /*
@@ -493,10 +429,7 @@ namespace ScintillaNET.WPF
         /// <returns>true if there is an active call tip window; otherwise, false.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CallTipActive
-        {
-            get { return mInnerScintilla.CallTipActive; }
-        }
+        public bool CallTipActive => Scintilla.CallTipActive;
 
         /// <summary>
         /// Gets a value indicating whether there is text on the clipboard that can be pasted into the document.
@@ -505,10 +438,7 @@ namespace ScintillaNET.WPF
         /// <remarks>The document cannot be <see cref="ReadOnly" />  and the selection cannot contain protected text.</remarks>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanPaste
-        {
-            get { return mInnerScintilla.CanPaste; }
-        }
+        public bool CanPaste => Scintilla.CanPaste;
 
         /// <summary>
         /// Gets a value indicating whether there is an undo action to redo.
@@ -516,10 +446,7 @@ namespace ScintillaNET.WPF
         /// <returns>true when there is something to redo; otherwise, false.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanRedo
-        {
-            get { return mInnerScintilla.CanRedo; }
-        }
+        public bool CanRedo => Scintilla.CanRedo;
 
         /// <summary>
         /// Gets a value indicating whether there is an action to undo.
@@ -527,10 +454,7 @@ namespace ScintillaNET.WPF
         /// <returns>true when there is something to undo; otherwise, false.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool CanUndo
-        {
-            get { return mInnerScintilla.CanUndo; }
-        }
+        public bool CanUndo => Scintilla.CanUndo;
 
         /// <summary>
         /// Gets or sets the caret foreground color.
@@ -541,8 +465,8 @@ namespace ScintillaNET.WPF
         [Description("The caret foreground color.")]
         public Color CaretForeColor
         {
-            get { return MediaColor(mInnerScintilla.CaretForeColor); }
-            set { mInnerScintilla.CaretForeColor = DrawingColor(value); }
+            get => MediaColor(Scintilla.CaretForeColor);
+            set => Scintilla.CaretForeColor = DrawingColor(value);
             //get { return (mInnerScintilla.CaretForeColor); }
             //set { mInnerScintilla.CaretForeColor = (value); }
         }
@@ -556,8 +480,8 @@ namespace ScintillaNET.WPF
         [Description("The background color of the current line.")]
         public Color CaretLineBackColor
         {
-            get { return MediaColor(mInnerScintilla.CaretLineBackColor); }
-            set { mInnerScintilla.CaretLineBackColor = DrawingColor(value); }
+            get => MediaColor(Scintilla.CaretLineBackColor);
+            set => Scintilla.CaretLineBackColor = DrawingColor(value);
         }
 
         /// <summary>
@@ -572,8 +496,8 @@ namespace ScintillaNET.WPF
         [Description("The transparency of the current line background color.")]
         public int CaretLineBackColorAlpha
         {
-            get { return mInnerScintilla.CaretLineBackColorAlpha; }
-            set { mInnerScintilla.CaretLineBackColorAlpha = value; }
+            get => Scintilla.CaretLineBackColorAlpha;
+            set => Scintilla.CaretLineBackColorAlpha = value;
         }
 
         /// <summary>
@@ -585,8 +509,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether to highlight the current caret line.")]
         public bool CaretLineVisible
         {
-            get { return mInnerScintilla.CaretLineVisible; }
-            set { mInnerScintilla.CaretLineVisible = value; }
+            get => Scintilla.CaretLineVisible;
+            set => Scintilla.CaretLineVisible = value;
         }
 
         /// <summary>
@@ -599,8 +523,8 @@ namespace ScintillaNET.WPF
         [Description("The caret blink rate in milliseconds.")]
         public int CaretPeriod
         {
-            get { return mInnerScintilla.CaretPeriod; }
-            set { mInnerScintilla.CaretPeriod = value; }
+            get => Scintilla.CaretPeriod;
+            set => Scintilla.CaretPeriod = value;
         }
 
         /// <summary>
@@ -615,8 +539,8 @@ namespace ScintillaNET.WPF
         [Description("The caret display style.")]
         public CaretStyle CaretStyle
         {
-            get { return mInnerScintilla.CaretStyle; }
-            set { mInnerScintilla.CaretStyle = value; }
+            get => Scintilla.CaretStyle;
+            set => Scintilla.CaretStyle = value;
         }
 
         /// <summary>
@@ -632,8 +556,8 @@ namespace ScintillaNET.WPF
         [Description("The width of the caret line measured in pixels (between 0 and 3).")]
         public int CaretWidth
         {
-            get { return mInnerScintilla.CaretWidth; }
-            set { mInnerScintilla.CaretWidth = value; }
+            get => Scintilla.CaretWidth;
+            set => Scintilla.CaretWidth = value;
         }
 
         /// <summary>
@@ -642,10 +566,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based line index containing the <see cref="CurrentPosition" />.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int CurrentLine
-        {
-            get { return mInnerScintilla.CurrentLine; }
-        }
+        public int CurrentLine => Scintilla.CurrentLine;
 
         /// <summary>
         /// Gets or sets the current caret position.
@@ -660,8 +581,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int CurrentPosition
         {
-            get { return mInnerScintilla.CurrentPosition; }
-            set { mInnerScintilla.CurrentPosition = value; }
+            get => Scintilla.CurrentPosition;
+            set => Scintilla.CurrentPosition = value;
         }
 
         /// <summary>
@@ -671,23 +592,17 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new System.Windows.Forms.Cursor Cursor
         {
-            get { return mInnerScintilla.Cursor; }
-            set { mInnerScintilla.Cursor = value; }
+            get => Scintilla.Cursor;
+            set => Scintilla.Cursor = value;
         }
 
         /// <summary>
         /// Gets or sets the default cursor for the control.
         /// </summary>
         /// <returns>An object of type Cursor representing the current default cursor.</returns>
-        protected System.Windows.Forms.Cursor DefaultCursor
-        {
-            get
-            {
-                return System.Windows.Forms.Cursors.IBeam;
-                //return mInnerScintilla.DefaultCursor;
-            }
-        }
+        protected System.Windows.Forms.Cursor DefaultCursor => System.Windows.Forms.Cursors.IBeam;
 
+        //return mInnerScintilla.DefaultCursor;
         /// <summary>
         /// Gets or sets the current document used by the control.
         /// </summary>
@@ -701,8 +616,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Document Document
         {
-            get { return mInnerScintilla.Document; }
-            set { mInnerScintilla.Document = value; }
+            get => Scintilla.Document;
+            set => Scintilla.Document = value;
         }
 
         /// <summary>
@@ -715,8 +630,8 @@ namespace ScintillaNET.WPF
         [Description("The background color to use when indicating long lines.")]
         public Color EdgeColor
         {
-            get { return MediaColor(mInnerScintilla.EdgeColor); }
-            set { mInnerScintilla.EdgeColor = DrawingColor(value); }
+            get => MediaColor(Scintilla.EdgeColor);
+            set => Scintilla.EdgeColor = DrawingColor(value);
         }
 
         /// <summary>
@@ -732,8 +647,8 @@ namespace ScintillaNET.WPF
         [Description("The number of columns at which to display long line indicators.")]
         public int EdgeColumn
         {
-            get { return mInnerScintilla.EdgeColumn; }
-            set { mInnerScintilla.EdgeColumn = value; }
+            get => Scintilla.EdgeColumn;
+            set => Scintilla.EdgeColumn = value;
         }
 
         /// <summary>
@@ -748,8 +663,8 @@ namespace ScintillaNET.WPF
         [Description("Determines how long lines are indicated.")]
         public EdgeMode EdgeMode
         {
-            get { return mInnerScintilla.EdgeMode; }
-            set { mInnerScintilla.EdgeMode = value; }
+            get => Scintilla.EdgeMode;
+            set => Scintilla.EdgeMode = value;
         }
 
         /// <summary>
@@ -761,8 +676,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether the maximum vertical scroll position ends at the last line or can scroll past.")]
         public bool EndAtLastLine
         {
-            get { return mInnerScintilla.EndAtLastLine; }
-            set { mInnerScintilla.EndAtLastLine = value; }
+            get => Scintilla.EndAtLastLine;
+            set => Scintilla.EndAtLastLine = value;
         }
 
         /// <summary>
@@ -775,8 +690,8 @@ namespace ScintillaNET.WPF
         [Description("Determines the characters added into the document when the user presses the Enter key.")]
         public Eol EolMode
         {
-            get { return mInnerScintilla.EolMode; }
-            set { mInnerScintilla.EolMode = value; }
+            get => Scintilla.EolMode;
+            set => Scintilla.EolMode = value;
         }
 
         /// <summary>
@@ -788,8 +703,8 @@ namespace ScintillaNET.WPF
         [Description("Extra whitespace added to the ascent (top) of each line.")]
         public int ExtraAscent
         {
-            get { return mInnerScintilla.ExtraAscent; }
-            set { mInnerScintilla.ExtraAscent = value; }
+            get => Scintilla.ExtraAscent;
+            set => Scintilla.ExtraAscent = value;
         }
 
         /// <summary>
@@ -801,8 +716,8 @@ namespace ScintillaNET.WPF
         [Description("Extra whitespace added to the descent (bottom) of each line.")]
         public int ExtraDescent
         {
-            get { return mInnerScintilla.ExtraDescent; }
-            set { mInnerScintilla.ExtraDescent = value; }
+            get => Scintilla.ExtraDescent;
+            set => Scintilla.ExtraDescent = value;
         }
 
         /// <summary>
@@ -814,8 +729,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int FirstVisibleLine
         {
-            get { return mInnerScintilla.FirstVisibleLine; }
-            set { mInnerScintilla.FirstVisibleLine = value; }
+            get => Scintilla.FirstVisibleLine;
+            set => Scintilla.FirstVisibleLine = value;
         }
 
         /// <summary>
@@ -825,8 +740,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public System.Drawing.Font Font
         {
-            get { return mInnerScintilla.Font; }
-            set { mInnerScintilla.Font = value; }
+            get => Scintilla.Font;
+            set => Scintilla.Font = value;
         }
 
         /// <summary>
@@ -841,8 +756,8 @@ namespace ScintillaNET.WPF
         [Description("Specifies the anti-aliasing method to use when rendering fonts.")]
         public FontQuality FontQuality
         {
-            get { return mInnerScintilla.FontQuality; }
-            set { mInnerScintilla.FontQuality = value; }
+            get => Scintilla.FontQuality;
+            set => Scintilla.FontQuality = value;
         }
 
         /// <summary>
@@ -852,8 +767,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Color ForeColor
         {
-            get { return MediaColor(mInnerScintilla.ForeColor); }
-            set { mInnerScintilla.ForeColor = DrawingColor(value); }
+            get => MediaColor(Scintilla.ForeColor);
+            set => Scintilla.ForeColor = DrawingColor(value);
         }
 
         /// <summary>
@@ -865,8 +780,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int HighlightGuide
         {
-            get { return mInnerScintilla.HighlightGuide; }
-            set { mInnerScintilla.HighlightGuide = value; }
+            get => Scintilla.HighlightGuide;
+            set => Scintilla.HighlightGuide = value;
         }
 
         /// <summary>
@@ -878,8 +793,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether to show the horizontal scroll bar if needed.")]
         public bool HScrollBar
         {
-            get { return mInnerScintilla.HScrollBar; }
-            set { mInnerScintilla.HScrollBar = value; }
+            get => Scintilla.HScrollBar;
+            set => Scintilla.HScrollBar = value;
         }
 
         /// <summary>
@@ -894,8 +809,8 @@ namespace ScintillaNET.WPF
         [Description("Specifies how to use application idle time for styling.")]
         public IdleStyling IdleStyling
         {
-            get { return mInnerScintilla.IdleStyling; }
-            set { mInnerScintilla.IdleStyling = value; }
+            get => Scintilla.IdleStyling;
+            set => Scintilla.IdleStyling = value;
         }
 
         /// <summary>
@@ -908,8 +823,8 @@ namespace ScintillaNET.WPF
         [Description("The indentation size in characters or 0 to make it the same as the tab width.")]
         public int IndentWidth
         {
-            get { return mInnerScintilla.IndentWidth; }
-            set { mInnerScintilla.IndentWidth = value; }
+            get => Scintilla.IndentWidth;
+            set => Scintilla.IndentWidth = value;
         }
 
         /// <summary>
@@ -922,8 +837,8 @@ namespace ScintillaNET.WPF
         [Description("Indicates whether indentation guides are displayed.")]
         public IndentView IndentationGuides
         {
-            get { return mInnerScintilla.IndentationGuides; }
-            set { mInnerScintilla.IndentationGuides = value; }
+            get => Scintilla.IndentationGuides;
+            set => Scintilla.IndentationGuides = value;
         }
 
         /// <summary>
@@ -934,8 +849,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int IndicatorCurrent
         {
-            get { return mInnerScintilla.IndicatorCurrent; }
-            set { mInnerScintilla.IndicatorCurrent = value; }
+            get => Scintilla.IndicatorCurrent;
+            set => Scintilla.IndicatorCurrent = value;
         }
 
         /// <summary>
@@ -944,10 +859,7 @@ namespace ScintillaNET.WPF
         /// <returns>A collection of <see cref="Indicator" /> objects.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public IndicatorCollection Indicators
-        {
-            get { return mInnerScintilla.Indicators; }
-        }
+        public IndicatorCollection Indicators => Scintilla.Indicators;
 
         /// <summary>
         /// Gets or sets the user-defined value used in a subsequent call to <see cref="IndicatorFillRange" />.
@@ -957,8 +869,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int IndicatorValue
         {
-            get { return mInnerScintilla.IndicatorValue; }
-            set { mInnerScintilla.IndicatorValue = value; }
+            get => Scintilla.IndicatorValue;
+            set => Scintilla.IndicatorValue = value;
         }
 
         /// <summary>
@@ -970,8 +882,8 @@ namespace ScintillaNET.WPF
         [Description("The current lexer.")]
         public Lexer Lexer
         {
-            get { return mInnerScintilla.Lexer; }
-            set { mInnerScintilla.Lexer = value; }
+            get => Scintilla.Lexer;
+            set => Scintilla.Lexer = value;
         }
 
         /// <summary>
@@ -983,8 +895,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string LexerLanguage
         {
-            get { return mInnerScintilla.LexerLanguage; }
-            set { mInnerScintilla.LexerLanguage = value; }
+            get => Scintilla.LexerLanguage;
+            set => Scintilla.LexerLanguage = value;
         }
 
         /// <summary>
@@ -994,10 +906,7 @@ namespace ScintillaNET.WPF
         /// <returns>A bitwise combination of the <see cref="LineEndType" /> enumeration.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public LineEndType LineEndTypesActive
-        {
-            get { return mInnerScintilla.LineEndTypesActive; }
-        }
+        public LineEndType LineEndTypesActive => Scintilla.LineEndTypesActive;
 
         /// <summary>
         /// Gets or sets the line ending types interpreted by the <see cref="Scintilla" /> control.
@@ -1013,8 +922,8 @@ namespace ScintillaNET.WPF
         [TypeConverter(typeof(FlagsEnumTypeConverter.FlagsEnumConverter))]
         public LineEndType LineEndTypesAllowed
         {
-            get { return mInnerScintilla.LineEndTypesAllowed; }
-            set { mInnerScintilla.LineEndTypesAllowed = value; }
+            get => Scintilla.LineEndTypesAllowed;
+            set => Scintilla.LineEndTypesAllowed = value;
         }
 
         /// <summary>
@@ -1023,10 +932,7 @@ namespace ScintillaNET.WPF
         /// <returns>A bitwise combination of the <see cref="LineEndType" /> enumeration.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public LineEndType LineEndTypesSupported
-        {
-            get { return mInnerScintilla.LineEndTypesSupported; }
-        }
+        public LineEndType LineEndTypesSupported => Scintilla.LineEndTypesSupported;
 
         /// <summary>
         /// Gets a collection representing lines of text in the <see cref="Scintilla" /> control.
@@ -1034,10 +940,7 @@ namespace ScintillaNET.WPF
         /// <returns>A collection of text lines.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public LineCollection Lines
-        {
-            get { return mInnerScintilla.Lines; }
-        }
+        public LineCollection Lines => Scintilla.Lines;
 
         /// <summary>
         /// Gets the number of lines that can be shown on screen given a constant
@@ -1048,10 +951,7 @@ namespace ScintillaNET.WPF
         /// </returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int LinesOnScreen
-        {
-            get { return mInnerScintilla.LinesOnScreen; }
-        }
+        public int LinesOnScreen => Scintilla.LinesOnScreen;
 
         /// <summary>
         /// Gets or sets the main selection when their are multiple selections.
@@ -1061,8 +961,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int MainSelection
         {
-            get { return mInnerScintilla.MainSelection; }
-            set { mInnerScintilla.MainSelection = value; }
+            get => Scintilla.MainSelection;
+            set => Scintilla.MainSelection = value;
         }
 
         /// <summary>
@@ -1073,10 +973,7 @@ namespace ScintillaNET.WPF
         [Description("The margins collection.")]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public MarginCollection Margins
-        {
-            get { return mInnerScintilla.Margins; }
-        }
+        public MarginCollection Margins => Scintilla.Margins;
 
         /// <summary>
         /// Gets a collection representing markers in a <see cref="Scintilla" /> control.
@@ -1084,10 +981,7 @@ namespace ScintillaNET.WPF
         /// <returns>A collection of markers.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public MarkerCollection Markers
-        {
-            get { return mInnerScintilla.Markers; }
-        }
+        public MarkerCollection Markers => Scintilla.Markers;
 
         /// <summary>
         /// Gets a value indicating whether the document has been modified (is dirty)
@@ -1096,10 +990,7 @@ namespace ScintillaNET.WPF
         /// <returns>true if the document has been modified; otherwise, false.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool Modified
-        {
-            get { return mInnerScintilla.Modified; }
-        }
+        public bool Modified => Scintilla.Modified;
 
         /// <summary>
         /// Gets or sets the time in milliseconds the mouse must linger to generate a <see cref="DwellStart" /> event.
@@ -1113,8 +1004,8 @@ namespace ScintillaNET.WPF
         [Description("The time in milliseconds the mouse must linger to generate a dwell start event. A value of 10000000 disables dwell events.")]
         public int MouseDwellTime
         {
-            get { return mInnerScintilla.MouseDwellTime; }
-            set { mInnerScintilla.MouseDwellTime = value; }
+            get => Scintilla.MouseDwellTime;
+            set => Scintilla.MouseDwellTime = value;
         }
 
         /// <summary>
@@ -1129,8 +1020,8 @@ namespace ScintillaNET.WPF
         [Description("Enable or disable the ability to switch to rectangular selection mode while making a selection with the mouse.")]
         public bool MouseSelectionRectangularSwitch
         {
-            get { return mInnerScintilla.MouseSelectionRectangularSwitch; }
-            set { mInnerScintilla.MouseSelectionRectangularSwitch = value; }
+            get => Scintilla.MouseSelectionRectangularSwitch;
+            set => Scintilla.MouseSelectionRectangularSwitch = value;
         }
 
         // The MouseWheelCaptures property doesn't seem to work correctly in Windows Forms so hiding for now...
@@ -1174,8 +1065,8 @@ namespace ScintillaNET.WPF
         [Description("Enable or disable multiple selection with the CTRL key.")]
         public bool MultipleSelection
         {
-            get { return mInnerScintilla.MultipleSelection; }
-            set { mInnerScintilla.MultipleSelection = value; }
+            get => Scintilla.MultipleSelection;
+            set => Scintilla.MultipleSelection = value;
         }
 
         /// <summary>
@@ -1187,8 +1078,8 @@ namespace ScintillaNET.WPF
         [Description("Determines how pasted text is applied to multiple selections.")]
         public MultiPaste MultiPaste
         {
-            get { return mInnerScintilla.MultiPaste; }
-            set { mInnerScintilla.MultiPaste = value; }
+            get => Scintilla.MultiPaste;
+            set => Scintilla.MultiPaste = value;
         }
 
         /// <summary>
@@ -1200,8 +1091,8 @@ namespace ScintillaNET.WPF
         [Description("Puts the caret into overtype mode.")]
         public bool Overtype
         {
-            get { return mInnerScintilla.Overtype; }
-            set { mInnerScintilla.Overtype = value; }
+            get => Scintilla.Overtype;
+            set => Scintilla.Overtype = value;
         }
 
         /// <summary>
@@ -1211,8 +1102,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new System.Windows.Forms.Padding Padding
         {
-            get { return mInnerScintilla.Padding; }
-            set { mInnerScintilla.Padding = value; }
+            get => Scintilla.Padding;
+            set => Scintilla.Padding = value;
         }
 
         /// <summary>
@@ -1224,8 +1115,8 @@ namespace ScintillaNET.WPF
         [Description("Whether line endings in pasted text are converted to match the document end-of-line mode.")]
         public bool PasteConvertEndings
         {
-            get { return mInnerScintilla.PasteConvertEndings; }
-            set { mInnerScintilla.PasteConvertEndings = value; }
+            get => Scintilla.PasteConvertEndings;
+            set => Scintilla.PasteConvertEndings = value;
         }
 
         /// <summary>
@@ -1237,8 +1128,8 @@ namespace ScintillaNET.WPF
         [Description("Adjusts the number of phases used when drawing.")]
         public Phases PhasesDraw
         {
-            get { return mInnerScintilla.PhasesDraw; }
-            set { mInnerScintilla.PhasesDraw = value; }
+            get => Scintilla.PhasesDraw;
+            set => Scintilla.PhasesDraw = value;
         }
 
         /// <summary>
@@ -1251,8 +1142,8 @@ namespace ScintillaNET.WPF
         [Description("Controls whether the document text can be modified.")]
         public bool ReadOnly
         {
-            get { return mInnerScintilla.ReadOnly; }
-            set { mInnerScintilla.ReadOnly = value; }
+            get => Scintilla.ReadOnly;
+            set => Scintilla.ReadOnly = value;
         }
 
         /// <summary>
@@ -1263,8 +1154,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int RectangularSelectionAnchor
         {
-            get { return mInnerScintilla.RectangularSelectionAnchor; }
-            set { mInnerScintilla.RectangularSelectionAnchor = value; }
+            get => Scintilla.RectangularSelectionAnchor;
+            set => Scintilla.RectangularSelectionAnchor = value;
         }
 
         /// <summary>
@@ -1275,8 +1166,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int RectangularSelectionAnchorVirtualSpace
         {
-            get { return mInnerScintilla.RectangularSelectionAnchorVirtualSpace; }
-            set { mInnerScintilla.RectangularSelectionAnchorVirtualSpace = value; }
+            get => Scintilla.RectangularSelectionAnchorVirtualSpace;
+            set => Scintilla.RectangularSelectionAnchorVirtualSpace = value;
         }
 
         /// <summary>
@@ -1287,8 +1178,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int RectangularSelectionCaret
         {
-            get { return mInnerScintilla.RectangularSelectionCaret; }
-            set { mInnerScintilla.RectangularSelectionCaret = value; }
+            get => Scintilla.RectangularSelectionCaret;
+            set => Scintilla.RectangularSelectionCaret = value;
         }
 
         /// <summary>
@@ -1299,8 +1190,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int RectangularSelectionCaretVirtualSpace
         {
-            get { return mInnerScintilla.RectangularSelectionCaretVirtualSpace; }
-            set { mInnerScintilla.RectangularSelectionCaretVirtualSpace = value; }
+            get => Scintilla.RectangularSelectionCaretVirtualSpace;
+            set => Scintilla.RectangularSelectionCaretVirtualSpace = value;
         }
 
         /// <summary>
@@ -1313,8 +1204,8 @@ namespace ScintillaNET.WPF
         [Description("The range in pixels of the horizontal scroll bar.")]
         public int ScrollWidth
         {
-            get { return mInnerScintilla.ScrollWidth; }
-            set { mInnerScintilla.ScrollWidth = value; }
+            get => Scintilla.ScrollWidth;
+            set => Scintilla.ScrollWidth = value;
         }
 
         /// <summary>
@@ -1329,8 +1220,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether to increase the horizontal scroll width as needed.")]
         public bool ScrollWidthTracking
         {
-            get { return mInnerScintilla.ScrollWidthTracking; }
-            set { mInnerScintilla.ScrollWidthTracking = value; }
+            get => Scintilla.ScrollWidthTracking;
+            set => Scintilla.ScrollWidthTracking = value;
         }
 
         /// <summary>
@@ -1342,8 +1233,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public SearchFlags SearchFlags
         {
-            get { return mInnerScintilla.SearchFlags; }
-            set { mInnerScintilla.SearchFlags = value; }
+            get => Scintilla.SearchFlags;
+            set => Scintilla.SearchFlags = value;
         }
 
         /// <summary>
@@ -1352,10 +1243,7 @@ namespace ScintillaNET.WPF
         /// <returns>The selected text if there is any; otherwise, an empty string.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string SelectedText
-        {
-            get { return mInnerScintilla.SelectedText; }
-        }
+        public string SelectedText => Scintilla.SelectedText;
 
         /// <summary>
         /// Gets or sets the end position of the selection.
@@ -1371,8 +1259,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int SelectionEnd
         {
-            get { return mInnerScintilla.SelectionEnd; }
-            set { mInnerScintilla.SelectionEnd = value; }
+            get => Scintilla.SelectionEnd;
+            set => Scintilla.SelectionEnd = value;
         }
 
         /// <summary>
@@ -1384,8 +1272,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether a selection should fill past the end of the line.")]
         public bool SelectionEolFilled
         {
-            get { return mInnerScintilla.SelectionEolFilled; }
-            set { mInnerScintilla.SelectionEolFilled = value; }
+            get => Scintilla.SelectionEolFilled;
+            set => Scintilla.SelectionEolFilled = value;
         }
 
         /// <summary>
@@ -1394,10 +1282,7 @@ namespace ScintillaNET.WPF
         /// <returns>A collection of selections.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public SelectionCollection Selections
-        {
-            get { return mInnerScintilla.Selections; }
-        }
+        public SelectionCollection Selections => Scintilla.Selections;
 
         /// <summary>
         /// Gets or sets the start position of the selection.
@@ -1413,8 +1298,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int SelectionStart
         {
-            get { return mInnerScintilla.SelectionStart; }
-            set { mInnerScintilla.SelectionStart = value; }
+            get => Scintilla.SelectionStart;
+            set => Scintilla.SelectionStart = value;
         }
 
         /// <summary>
@@ -1429,8 +1314,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Status Status
         {
-            get { return mInnerScintilla.Status; }
-            set { mInnerScintilla.Status = value; }
+            get => Scintilla.Status;
+            set => Scintilla.Status = value;
         }
 
         /// <summary>
@@ -1439,10 +1324,7 @@ namespace ScintillaNET.WPF
         /// <returns>A collection of style definitions.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public StyleCollection Styles
-        {
-            get { return mInnerScintilla.Styles; }
-        }
+        public StyleCollection Styles => Scintilla.Styles;
 
         /// <summary>
         /// Gets or sets how tab characters are represented when whitespace is visible.
@@ -1457,8 +1339,8 @@ namespace ScintillaNET.WPF
         [Description("Style of visible tab characters.")]
         public TabDrawMode TabDrawMode
         {
-            get { return mInnerScintilla.TabDrawMode; }
-            set { mInnerScintilla.TabDrawMode = value; }
+            get => Scintilla.TabDrawMode;
+            set => Scintilla.TabDrawMode = value;
         }
 
         /// <summary>
@@ -1470,8 +1352,8 @@ namespace ScintillaNET.WPF
         [Description("The tab size in characters.")]
         public int TabWidth
         {
-            get { return mInnerScintilla.TabWidth; }
-            set { mInnerScintilla.TabWidth = value; }
+            get => Scintilla.TabWidth;
+            set => Scintilla.TabWidth = value;
         }
 
         /// <summary>
@@ -1485,8 +1367,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int TargetEnd
         {
-            get { return mInnerScintilla.TargetEnd; }
-            set { mInnerScintilla.TargetEnd = value; }
+            get => Scintilla.TargetEnd;
+            set => Scintilla.TargetEnd = value;
         }
 
         /// <summary>
@@ -1500,8 +1382,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int TargetStart
         {
-            get { return mInnerScintilla.TargetStart; }
-            set { mInnerScintilla.TargetStart = value; }
+            get => Scintilla.TargetStart;
+            set => Scintilla.TargetStart = value;
         }
 
         /// <summary>
@@ -1513,10 +1395,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="TargetEnd" />
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public string TargetText
-        {
-            get { return mInnerScintilla.TargetText; }
-        }
+        public string TargetText => Scintilla.TargetText;
 
         /// <summary>
         /// Gets or sets the rendering technology used.
@@ -1530,8 +1409,8 @@ namespace ScintillaNET.WPF
         [Description("The rendering technology used to draw text.")]
         public Technology Technology
         {
-            get { return mInnerScintilla.Technology; }
-            set { mInnerScintilla.Technology = value; }
+            get => Scintilla.Technology;
+            set => Scintilla.Technology = value;
         }
 
         /// <summary>
@@ -1542,8 +1421,8 @@ namespace ScintillaNET.WPF
         [Editor("System.ComponentModel.Design.MultilineStringEditor, System.Design", typeof(System.Drawing.Design.UITypeEditor))]
         public string Text
         {
-            get { return mInnerScintilla.Text; }
-            set { mInnerScintilla.Text = value; }
+            get => Scintilla.Text;
+            set => Scintilla.Text = value;
         }
 
         /// <summary>
@@ -1552,10 +1431,7 @@ namespace ScintillaNET.WPF
         /// <returns>The number of characters in the document.</returns>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int TextLength
-        {
-            get { return mInnerScintilla.TextLength; }
-        }
+        public int TextLength => Scintilla.TextLength;
 
         /// <summary>
         /// Gets or sets whether to use a mixture of tabs and spaces for indentation or purely spaces.
@@ -1566,8 +1442,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether indentation allows tab characters or purely space characters.")]
         public bool UseTabs
         {
-            get { return mInnerScintilla.UseTabs; }
-            set { mInnerScintilla.UseTabs = value; }
+            get => Scintilla.UseTabs;
+            set => Scintilla.UseTabs = value;
         }
 
         /// <summary>
@@ -1576,8 +1452,8 @@ namespace ScintillaNET.WPF
         /// <returns>true to use the wait cursor for the current control; otherwise, false. The default is false.</returns>
         public bool UseWaitCursor
         {
-            get { return mInnerScintilla.UseWaitCursor; }
-            set { mInnerScintilla.UseWaitCursor = value; }
+            get => Scintilla.UseWaitCursor;
+            set => Scintilla.UseWaitCursor = value;
         }
 
         /// <summary>
@@ -1589,8 +1465,8 @@ namespace ScintillaNET.WPF
         [Description("Display end-of-line characters.")]
         public bool ViewEol
         {
-            get { return mInnerScintilla.ViewEol; }
-            set { mInnerScintilla.ViewEol = value; }
+            get => Scintilla.ViewEol;
+            set => Scintilla.ViewEol = value;
         }
 
         /// <summary>
@@ -1604,8 +1480,8 @@ namespace ScintillaNET.WPF
         [Description("Options for displaying whitespace characters.")]
         public WhitespaceMode ViewWhitespace
         {
-            get { return mInnerScintilla.ViewWhitespace; }
-            set { mInnerScintilla.ViewWhitespace = value; }
+            get => Scintilla.ViewWhitespace;
+            set => Scintilla.ViewWhitespace = value;
         }
 
         /// <summary>
@@ -1621,8 +1497,8 @@ namespace ScintillaNET.WPF
         [TypeConverter(typeof(FlagsEnumTypeConverter.FlagsEnumConverter))]
         public VirtualSpace VirtualSpaceOptions
         {
-            get { return mInnerScintilla.VirtualSpaceOptions; }
-            set { mInnerScintilla.VirtualSpaceOptions = value; }
+            get => Scintilla.VirtualSpaceOptions;
+            set => Scintilla.VirtualSpaceOptions = value;
         }
 
         /// <summary>
@@ -1634,8 +1510,8 @@ namespace ScintillaNET.WPF
         [Description("Determines whether to show the vertical scroll bar when needed.")]
         public bool VScrollBar
         {
-            get { return mInnerScintilla.VScrollBar; }
-            set { mInnerScintilla.VScrollBar = value; }
+            get => Scintilla.VScrollBar;
+            set => Scintilla.VScrollBar = value;
         }
 
         /// <summary>
@@ -1648,8 +1524,8 @@ namespace ScintillaNET.WPF
         [Description("The size of whitespace dots.")]
         public int WhitespaceSize
         {
-            get { return mInnerScintilla.WhitespaceSize; }
-            set { mInnerScintilla.WhitespaceSize = value; }
+            get => Scintilla.WhitespaceSize;
+            set => Scintilla.WhitespaceSize = value;
         }
 
         /// <summary>
@@ -1660,8 +1536,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public string WordChars
         {
-            get { return mInnerScintilla.WordChars; }
-            set { mInnerScintilla.WordChars = value; }
+            get => Scintilla.WordChars;
+            set => Scintilla.WordChars = value;
         }
 
         /// <summary>
@@ -1676,8 +1552,8 @@ namespace ScintillaNET.WPF
         [Description("Determines how wrapped sublines are indented.")]
         public WrapIndentMode WrapIndentMode
         {
-            get { return mInnerScintilla.WrapIndentMode; }
-            set { mInnerScintilla.WrapIndentMode = value; }
+            get => Scintilla.WrapIndentMode;
+            set => Scintilla.WrapIndentMode = value;
         }
 
         /// <summary>
@@ -1692,8 +1568,8 @@ namespace ScintillaNET.WPF
         [Description("The line wrapping strategy.")]
         public WrapMode WrapMode
         {
-            get { return mInnerScintilla.WrapMode; }
-            set { mInnerScintilla.WrapMode = value; }
+            get => Scintilla.WrapMode;
+            set => Scintilla.WrapMode = value;
         }
 
         /// <summary>
@@ -1709,8 +1585,8 @@ namespace ScintillaNET.WPF
         [Description("The amount of pixels to indent wrapped sublines.")]
         public int WrapStartIndent
         {
-            get { return mInnerScintilla.WrapStartIndent; }
-            set { mInnerScintilla.WrapStartIndent = value; }
+            get => Scintilla.WrapStartIndent;
+            set => Scintilla.WrapStartIndent = value;
         }
 
         /// <summary>
@@ -1726,8 +1602,8 @@ namespace ScintillaNET.WPF
         [TypeConverter(typeof(FlagsEnumTypeConverter.FlagsEnumConverter))]
         public WrapVisualFlags WrapVisualFlags
         {
-            get { return mInnerScintilla.WrapVisualFlags; }
-            set { mInnerScintilla.WrapVisualFlags = value; }
+            get => Scintilla.WrapVisualFlags;
+            set => Scintilla.WrapVisualFlags = value;
         }
 
         /// <summary>
@@ -1742,8 +1618,8 @@ namespace ScintillaNET.WPF
         [Description("The location of wrap visual flags in relation to the line text.")]
         public WrapVisualFlagLocation WrapVisualFlagLocation
         {
-            get { return mInnerScintilla.WrapVisualFlagLocation; }
-            set { mInnerScintilla.WrapVisualFlagLocation = value; }
+            get => Scintilla.WrapVisualFlagLocation;
+            set => Scintilla.WrapVisualFlagLocation = value;
         }
 
         /// <summary>
@@ -1754,8 +1630,8 @@ namespace ScintillaNET.WPF
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public int XOffset
         {
-            get { return mInnerScintilla.XOffset; }
-            set { mInnerScintilla.XOffset = value; }
+            get => Scintilla.XOffset;
+            set => Scintilla.XOffset = value;
         }
 
         /// <summary>
@@ -1788,9 +1664,9 @@ namespace ScintillaNET.WPF
         private void OnZoomChanged(DependencyPropertyChangedEventArgs e)
         {
             var newValue = (int) e.NewValue;
-            if (this.mInnerScintilla.Zoom != newValue)
+            if (this.Scintilla.Zoom != newValue)
             {
-                this.mInnerScintilla.Zoom = newValue;
+                this.Scintilla.Zoom = newValue;
             }
         }
 
@@ -1805,8 +1681,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when an autocompletion list is cancelled.")]
         public event EventHandler<EventArgs> AutoCCancelled
         {
-            add { mInnerScintilla.AutoCCancelled += value; }
-            remove { mInnerScintilla.AutoCCancelled -= value; }
+            add => Scintilla.AutoCCancelled += value;
+            remove => Scintilla.AutoCCancelled -= value;
         }
 
         /// <summary>
@@ -1816,8 +1692,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user deletes a character while an autocompletion list is active.")]
         public event EventHandler<EventArgs> AutoCCharDeleted
         {
-            add { mInnerScintilla.AutoCCharDeleted += value; }
-            remove { mInnerScintilla.AutoCCharDeleted -= value; }
+            add => Scintilla.AutoCCharDeleted += value;
+            remove => Scintilla.AutoCCharDeleted -= value;
         }
 
         /// <summary>
@@ -1827,8 +1703,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs after autocompleted text has been inserted.")]
         public event EventHandler<AutoCSelectionEventArgs> AutoCCompleted
         {
-            add { mInnerScintilla.AutoCCompleted += value; }
-            remove { mInnerScintilla.AutoCCompleted -= value; }
+            add => Scintilla.AutoCCompleted += value;
+            remove => Scintilla.AutoCCompleted -= value;
         }
 
         /// <summary>
@@ -1839,8 +1715,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when a user has selected an item in an autocompletion list.")]
         public event EventHandler<AutoCSelectionEventArgs> AutoCSelection
         {
-            add { mInnerScintilla.AutoCSelection += value; }
-            remove { mInnerScintilla.AutoCSelection -= value; }
+            add => Scintilla.AutoCSelection += value;
+            remove => Scintilla.AutoCSelection -= value;
         }
 
         /// <summary>
@@ -1850,8 +1726,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler BackColorChanged
         {
-            add { mInnerScintilla.BackColorChanged += value; }
-            remove { mInnerScintilla.BackColorChanged -= value; }
+            add => Scintilla.BackColorChanged += value;
+            remove => Scintilla.BackColorChanged -= value;
         }
 
         /// <summary>
@@ -1861,8 +1737,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler BackgroundImageChanged
         {
-            add { mInnerScintilla.BackgroundImageChanged += value; }
-            remove { mInnerScintilla.BackgroundImageChanged -= value; }
+            add => Scintilla.BackgroundImageChanged += value;
+            remove => Scintilla.BackgroundImageChanged -= value;
         }
 
         /// <summary>
@@ -1872,8 +1748,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler BackgroundImageLayoutChanged
         {
-            add { mInnerScintilla.BackgroundImageLayoutChanged += value; }
-            remove { mInnerScintilla.BackgroundImageLayoutChanged -= value; }
+            add => Scintilla.BackgroundImageLayoutChanged += value;
+            remove => Scintilla.BackgroundImageLayoutChanged -= value;
         }
 
         /// <summary>
@@ -1883,8 +1759,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs before text is deleted.")]
         public event EventHandler<BeforeModificationEventArgs> BeforeDelete
         {
-            add { mInnerScintilla.BeforeDelete += value; }
-            remove { mInnerScintilla.BeforeDelete -= value; }
+            add => Scintilla.BeforeDelete += value;
+            remove => Scintilla.BeforeDelete -= value;
         }
 
         /// <summary>
@@ -1894,8 +1770,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs before text is inserted.")]
         public event EventHandler<BeforeModificationEventArgs> BeforeInsert
         {
-            add { mInnerScintilla.BeforeInsert += value; }
-            remove { mInnerScintilla.BeforeInsert -= value; }
+            add => Scintilla.BeforeInsert += value;
+            remove => Scintilla.BeforeInsert -= value;
         }
 
         /// <summary>
@@ -1905,8 +1781,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the value of the BorderStyle property changes.")]
         public event EventHandler BorderStyleChanged
         {
-            add { mInnerScintilla.BorderStyleChanged += value; }
-            remove { mInnerScintilla.BorderStyleChanged -= value; }
+            add => Scintilla.BorderStyleChanged += value;
+            remove => Scintilla.BorderStyleChanged -= value;
         }
 
         /// <summary>
@@ -1916,8 +1792,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when an annotation has changed.")]
         public event EventHandler<ChangeAnnotationEventArgs> ChangeAnnotation
         {
-            add { mInnerScintilla.ChangeAnnotation += value; }
-            remove { mInnerScintilla.ChangeAnnotation -= value; }
+            add => Scintilla.ChangeAnnotation += value;
+            remove => Scintilla.ChangeAnnotation -= value;
         }
 
         /// <summary>
@@ -1927,8 +1803,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user types a character.")]
         public event EventHandler<CharAddedEventArgs> CharAdded
         {
-            add { mInnerScintilla.CharAdded += value; }
-            remove { mInnerScintilla.CharAdded -= value; }
+            add => Scintilla.CharAdded += value;
+            remove => Scintilla.CharAdded -= value;
         }
 
         /// <summary>
@@ -1938,8 +1814,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler CursorChanged
         {
-            add { mInnerScintilla.CursorChanged += value; }
-            remove { mInnerScintilla.CursorChanged -= value; }
+            add => Scintilla.CursorChanged += value;
+            remove => Scintilla.CursorChanged -= value;
         }
 
         /// <summary>
@@ -1949,8 +1825,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when text is deleted.")]
         public event EventHandler<ModificationEventArgs> Delete
         {
-            add { mInnerScintilla.Delete += value; }
-            remove { mInnerScintilla.Delete -= value; }
+            add => Scintilla.Delete += value;
+            remove => Scintilla.Delete -= value;
         }
 
         /// <summary>
@@ -1960,8 +1836,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the editor is double clicked.")]
         public event EventHandler<DoubleClickEventArgs> DoubleClick
         {
-            add { mInnerScintilla.DoubleClick += value; }
-            remove { mInnerScintilla.DoubleClick -= value; }
+            add => Scintilla.DoubleClick += value;
+            remove => Scintilla.DoubleClick -= value;
         }
 
         /// <summary>
@@ -1971,8 +1847,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the mouse moves from its dwell start position.")]
         public event EventHandler<DwellEventArgs> DwellEnd
         {
-            add { mInnerScintilla.DwellEnd += value; }
-            remove { mInnerScintilla.DwellEnd -= value; }
+            add => Scintilla.DwellEnd += value;
+            remove => Scintilla.DwellEnd -= value;
         }
 
         /// <summary>
@@ -1982,8 +1858,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the mouse is kept in one position (hovers) for a period of time.")]
         public event EventHandler<DwellEventArgs> DwellStart
         {
-            add { mInnerScintilla.DwellStart += value; }
-            remove { mInnerScintilla.DwellStart -= value; }
+            add => Scintilla.DwellStart += value;
+            remove => Scintilla.DwellStart -= value;
         }
 
         /// <summary>
@@ -1993,8 +1869,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler FontChanged
         {
-            add { mInnerScintilla.FontChanged += value; }
-            remove { mInnerScintilla.FontChanged -= value; }
+            add => Scintilla.FontChanged += value;
+            remove => Scintilla.FontChanged -= value;
         }
 
         /// <summary>
@@ -2004,8 +1880,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event EventHandler ForeColorChanged
         {
-            add { mInnerScintilla.ForeColorChanged += value; }
-            remove { mInnerScintilla.ForeColorChanged -= value; }
+            add => Scintilla.ForeColorChanged += value;
+            remove => Scintilla.ForeColorChanged -= value;
         }
 
         /// <summary>
@@ -2015,8 +1891,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user clicks text styled with the hotspot flag.")]
         public event EventHandler<HotspotClickEventArgs> HotspotClick
         {
-            add { mInnerScintilla.HotspotClick += value; }
-            remove { mInnerScintilla.HotspotClick -= value; }
+            add => Scintilla.HotspotClick += value;
+            remove => Scintilla.HotspotClick -= value;
         }
 
         /// <summary>
@@ -2026,8 +1902,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user double clicks text styled with the hotspot flag.")]
         public event EventHandler<HotspotClickEventArgs> HotspotDoubleClick
         {
-            add { mInnerScintilla.HotspotDoubleClick += value; }
-            remove { mInnerScintilla.HotspotDoubleClick -= value; }
+            add => Scintilla.HotspotDoubleClick += value;
+            remove => Scintilla.HotspotDoubleClick -= value;
         }
 
         /// <summary>
@@ -2037,8 +1913,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user releases a click on text styled with the hotspot flag.")]
         public event EventHandler<HotspotClickEventArgs> HotspotReleaseClick
         {
-            add { mInnerScintilla.HotspotReleaseClick += value; }
-            remove { mInnerScintilla.HotspotReleaseClick -= value; }
+            add => Scintilla.HotspotReleaseClick += value;
+            remove => Scintilla.HotspotReleaseClick -= value;
         }
 
         /// <summary>
@@ -2048,8 +1924,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user clicks text with an indicator.")]
         public event EventHandler<IndicatorClickEventArgs> IndicatorClick
         {
-            add { mInnerScintilla.IndicatorClick += value; }
-            remove { mInnerScintilla.IndicatorClick -= value; }
+            add => Scintilla.IndicatorClick += value;
+            remove => Scintilla.IndicatorClick -= value;
         }
 
         /// <summary>
@@ -2059,8 +1935,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the user releases a click on text with an indicator.")]
         public event EventHandler<IndicatorReleaseEventArgs> IndicatorRelease
         {
-            add { mInnerScintilla.IndicatorRelease += value; }
-            remove { mInnerScintilla.IndicatorRelease -= value; }
+            add => Scintilla.IndicatorRelease += value;
+            remove => Scintilla.IndicatorRelease -= value;
         }
 
         /// <summary>
@@ -2070,8 +1946,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when text is inserted.")]
         public event EventHandler<ModificationEventArgs> Insert
         {
-            add { mInnerScintilla.Insert += value; }
-            remove { mInnerScintilla.Insert -= value; }
+            add => Scintilla.Insert += value;
+            remove => Scintilla.Insert -= value;
         }
 
         /// <summary>
@@ -2081,8 +1957,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs before text is inserted. Permits changing the inserted text.")]
         public event EventHandler<InsertCheckEventArgs> InsertCheck
         {
-            add { mInnerScintilla.InsertCheck += value; }
-            remove { mInnerScintilla.InsertCheck -= value; }
+            add => Scintilla.InsertCheck += value;
+            remove => Scintilla.InsertCheck -= value;
         }
 
         /// <summary>
@@ -2092,8 +1968,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when a key is pressed while the control has focus.")]
         public new event System.Windows.Forms.KeyEventHandler KeyDown
         {
-            add { mInnerScintilla.KeyDown += value; }
-            remove { mInnerScintilla.KeyDown -= value; }
+            add => Scintilla.KeyDown += value;
+            remove => Scintilla.KeyDown -= value;
         }
 
         /// <summary>
@@ -2103,8 +1979,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the mouse is over the control and the mouse button is pressed.")]
         public new event System.Windows.Forms.MouseEventHandler MouseDown
         {
-            add { mInnerScintilla.MouseDown += value; }
-            remove { mInnerScintilla.MouseDown -= value; }
+            add => Scintilla.MouseDown += value;
+            remove => Scintilla.MouseDown -= value;
         }
 
         /// <summary>
@@ -2114,8 +1990,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the mouse is over the control and the mouse button is released.")]
         public new event System.Windows.Forms.MouseEventHandler MouseUp
         {
-            add { mInnerScintilla.MouseUp += value; }
-            remove { mInnerScintilla.MouseUp -= value; }
+            add => Scintilla.MouseUp += value;
+            remove => Scintilla.MouseUp -= value;
         }
 
         /// <summary>
@@ -2126,8 +2002,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the mouse is clicked in a sensitive margin.")]
         public event EventHandler<MarginClickEventArgs> MarginClick
         {
-            add { mInnerScintilla.MarginClick += value; }
-            remove { mInnerScintilla.MarginClick -= value; }
+            add => Scintilla.MarginClick += value;
+            remove => Scintilla.MarginClick -= value;
         }
 
         // TODO This isn't working in my tests. Could be Windows Forms interfering.
@@ -2140,8 +2016,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the mouse is right-clicked in a sensitive margin.")]
         public event EventHandler<MarginClickEventArgs> MarginRightClick
         {
-            add { mInnerScintilla.MarginRightClick += value; }
-            remove { mInnerScintilla.MarginRightClick -= value; }
+            add => Scintilla.MarginRightClick += value;
+            remove => Scintilla.MarginRightClick -= value;
         }
 
         /// <summary>
@@ -2152,8 +2028,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when an attempt is made to change text in read-only mode.")]
         public event EventHandler<EventArgs> ModifyAttempt
         {
-            add { mInnerScintilla.ModifyAttempt += value; }
-            remove { mInnerScintilla.ModifyAttempt -= value; }
+            add => Scintilla.ModifyAttempt += value;
+            remove => Scintilla.ModifyAttempt -= value;
         }
 
         /// <summary>
@@ -2164,8 +2040,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when hidden (folded) text should be shown.")]
         public event EventHandler<NeedShownEventArgs> NeedShown
         {
-            add { mInnerScintilla.NeedShown += value; }
-            remove { mInnerScintilla.NeedShown -= value; }
+            add => Scintilla.NeedShown += value;
+            remove => Scintilla.NeedShown -= value;
         }
 
         /// <summary>
@@ -2175,8 +2051,8 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Never)]
         public event System.Windows.Forms.PaintEventHandler Paint
         {
-            add { mInnerScintilla.Paint += value; }
-            remove { mInnerScintilla.Paint -= value; }
+            add => Scintilla.Paint += value;
+            remove => Scintilla.Paint -= value;
         }
 
         /// <summary>
@@ -2186,8 +2062,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the control is painted.")]
         public event EventHandler<EventArgs> Painted
         {
-            add { mInnerScintilla.Painted += value; }
-            remove { mInnerScintilla.Painted -= value; }
+            add => Scintilla.Painted += value;
+            remove => Scintilla.Painted -= value;
         }
 
         /// <summary>
@@ -2200,8 +2076,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when a save point is left and the document becomes dirty.")]
         public event EventHandler<EventArgs> SavePointLeft
         {
-            add { mInnerScintilla.SavePointLeft += value; }
-            remove { mInnerScintilla.SavePointLeft -= value; }
+            add => Scintilla.SavePointLeft += value;
+            remove => Scintilla.SavePointLeft -= value;
         }
 
         /// <summary>
@@ -2214,8 +2090,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when a save point is reached and the document is no longer dirty.")]
         public event EventHandler<EventArgs> SavePointReached
         {
-            add { mInnerScintilla.SavePointReached += value; }
-            remove { mInnerScintilla.SavePointReached -= value; }
+            add => Scintilla.SavePointReached += value;
+            remove => Scintilla.SavePointReached -= value;
         }
 
         /// <summary>
@@ -2230,8 +2106,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the text needs styling.")]
         public event EventHandler<StyleNeededEventArgs> StyleNeeded
         {
-            add { mInnerScintilla.StyleNeeded += value; }
-            remove { mInnerScintilla.StyleNeeded -= value; }
+            add => Scintilla.StyleNeeded += value;
+            remove => Scintilla.StyleNeeded -= value;
         }
 
         /// <summary>
@@ -2242,8 +2118,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the control UI is updated.")]
         public event EventHandler<UpdateUIEventArgs> UpdateUI
         {
-            add { mInnerScintilla.UpdateUI += value; }
-            remove { mInnerScintilla.UpdateUI -= value; }
+            add => Scintilla.UpdateUI += value;
+            remove => Scintilla.UpdateUI -= value;
         }
 
         /// <summary>
@@ -2253,8 +2129,8 @@ namespace ScintillaNET.WPF
         [Description("Occurs when the control is zoomed.")]
         public event EventHandler<EventArgs> ZoomChanged
         {
-            add { mInnerScintilla.ZoomChanged += value; }
-            remove { mInnerScintilla.ZoomChanged -= value; }
+            add => Scintilla.ZoomChanged += value;
+            remove => Scintilla.ZoomChanged -= value;
         }
 
         #endregion Events
@@ -2267,7 +2143,7 @@ namespace ScintillaNET.WPF
         /// <param name="document">The document reference count to increase.</param>
         public void AddRefDocument(Document document)
         {
-            mInnerScintilla.AddRefDocument(document);
+            Scintilla.AddRefDocument(document);
         }
 
         /// <summary>
@@ -2278,7 +2154,7 @@ namespace ScintillaNET.WPF
         /// <remarks>A main selection must first have been set by a call to <see cref="SetSelection" />.</remarks>
         public void AddSelection(int caret, int anchor)
         {
-            mInnerScintilla.AddSelection(caret, anchor);
+            Scintilla.AddSelection(caret, anchor);
         }
 
         /// <summary>
@@ -2288,7 +2164,7 @@ namespace ScintillaNET.WPF
         /// <remarks>The caret position is set to the end of the inserted text, but it is not scrolled into view.</remarks>
         public new void AddText(string text)
         {
-            mInnerScintilla.AddText(text);
+            Scintilla.AddText(text);
         }
 
         /// <summary>
@@ -2296,7 +2172,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void AnnotationClearAll()
         {
-            mInnerScintilla.AnnotationClearAll();
+            Scintilla.AnnotationClearAll();
         }
 
         /// <summary>
@@ -2306,7 +2182,7 @@ namespace ScintillaNET.WPF
         /// <remarks>The current selection is not changed and the new text is not scrolled into view.</remarks>
         public void AppendText(string text)
         {
-            mInnerScintilla.AppendText(text);
+            Scintilla.AppendText(text);
         }
 
         /// <summary>
@@ -2316,7 +2192,7 @@ namespace ScintillaNET.WPF
         /// <param name="sciCommand">The command to assign.</param>
         public void AssignCmdKey(System.Windows.Forms.Keys keyDefinition, Command sciCommand)
         {
-            mInnerScintilla.AssignCmdKey(keyDefinition, sciCommand);
+            Scintilla.AssignCmdKey(keyDefinition, sciCommand);
         }
 
         /// <summary>
@@ -2325,7 +2201,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="AutoCStops" />
         public void AutoCCancel()
         {
-            mInnerScintilla.AutoCCancel();
+            Scintilla.AutoCCancel();
         }
 
         /// <summary>
@@ -2333,7 +2209,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void AutoCComplete()
         {
-            mInnerScintilla.AutoCComplete();
+            Scintilla.AutoCComplete();
         }
 
         /// <summary>
@@ -2353,7 +2229,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="AutoCIgnoreCase" />
         public void AutoCSelect(string select)
         {
-            mInnerScintilla.AutoCSelect(select);
+            Scintilla.AutoCSelect(select);
         }
 
         /// <summary>
@@ -2363,7 +2239,7 @@ namespace ScintillaNET.WPF
         /// <remarks>Common fillup characters are '(', '[', and '.' depending on the language.</remarks>
         public void AutoCSetFillUps(string chars)
         {
-            mInnerScintilla.AutoCSetFillUps(chars);
+            Scintilla.AutoCSetFillUps(chars);
         }
 
         /// <summary>
@@ -2373,7 +2249,7 @@ namespace ScintillaNET.WPF
         /// <param name="list">A list of autocompletion words separated by the <see cref="AutoCSeparator" /> character.</param>
         public void AutoCShow(int lenEntered, string list)
         {
-            mInnerScintilla.AutoCShow(lenEntered, list);
+            Scintilla.AutoCShow(lenEntered, list);
         }
 
         /// <summary>
@@ -2383,7 +2259,7 @@ namespace ScintillaNET.WPF
         /// <remarks>Characters specified should be limited to printable ASCII characters.</remarks>
         public void AutoCStops(string chars)
         {
-            mInnerScintilla.AutoCStops(chars);
+            Scintilla.AutoCStops(chars);
         }
 
         /// <summary>
@@ -2393,7 +2269,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="EndUndoAction" />
         public void BeginUndoAction()
         {
-            mInnerScintilla.BeginUndoAction();
+            Scintilla.BeginUndoAction();
         }
 
         /// <summary>
@@ -2402,7 +2278,7 @@ namespace ScintillaNET.WPF
         /// <param name="position">The zero-based document position of the unmatched brace character or <seealso cref="InvalidPosition"/> to remove the highlight.</param>
         public void BraceBadLight(int position)
         {
-            mInnerScintilla.BraceBadLight(position);
+            Scintilla.BraceBadLight(position);
         }
 
         /// <summary>
@@ -2414,7 +2290,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="HighlightGuide" />
         public void BraceHighlight(int position1, int position2)
         {
-            mInnerScintilla.BraceHighlight(position1, position2);
+            Scintilla.BraceHighlight(position1, position2);
         }
 
         /// <summary>
@@ -2426,7 +2302,7 @@ namespace ScintillaNET.WPF
         /// <remarks>A match only occurs if the style of the matching brace is the same as the starting brace. Nested braces are handled correctly.</remarks>
         public int BraceMatch(int position)
         {
-            return mInnerScintilla.BraceMatch(position);
+            return Scintilla.BraceMatch(position);
         }
 
         /// <summary>
@@ -2434,7 +2310,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void CallTipCancel()
         {
-            mInnerScintilla.CallTipCancel();
+            Scintilla.CallTipCancel();
         }
 
         /// <summary>
@@ -2443,7 +2319,7 @@ namespace ScintillaNET.WPF
         /// <param name="color">The new highlight text Color. The default is dark blue.</param>
         public void CallTipSetForeHlt(Color color)
         {
-            mInnerScintilla.CallTipSetForeHlt(DrawingColor(color));
+            Scintilla.CallTipSetForeHlt(DrawingColor(color));
         }
 
         /// <summary>
@@ -2453,7 +2329,7 @@ namespace ScintillaNET.WPF
         /// <param name="hlEnd">The zero-based index in the call tip text to stop highlighting (exclusive).</param>
         public void CallTipSetHlt(int hlStart, int hlEnd)
         {
-            mInnerScintilla.CallTipSetHlt(hlStart, hlEnd);
+            Scintilla.CallTipSetHlt(hlStart, hlEnd);
         }
 
         /// <summary>
@@ -2462,7 +2338,7 @@ namespace ScintillaNET.WPF
         /// <param name="above">true to display above text; otherwise, false. The default is false.</param>
         public void CallTipSetPosition(bool above)
         {
-            mInnerScintilla.CallTipSetPosition(above);
+            Scintilla.CallTipSetPosition(above);
         }
 
         /// <summary>
@@ -2476,7 +2352,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void CallTipShow(int posStart, string definition)
         {
-            mInnerScintilla.CallTipShow(posStart, definition);
+            Scintilla.CallTipShow(posStart, definition);
         }
 
         /// <summary>
@@ -2485,7 +2361,7 @@ namespace ScintillaNET.WPF
         /// <param name="tabSize">The width in pixels of a tab '\t' character in a call tip. Specifying 0 disables special treatment of tabs.</param>
         public void CallTipTabSize(int tabSize)
         {
-            mInnerScintilla.CallTipTabSize(tabSize);
+            Scintilla.CallTipTabSize(tabSize);
         }
 
         /// <summary>
@@ -2496,7 +2372,7 @@ namespace ScintillaNET.WPF
         /// <param name="endPos">The zero-based document position at which the lexer state change ends.</param>
         public void ChangeLexerState(int startPos, int endPos)
         {
-            mInnerScintilla.ChangeLexerState(startPos, endPos);
+            Scintilla.ChangeLexerState(startPos, endPos);
         }
 
         /// <summary>
@@ -2507,7 +2383,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based document position of the nearest character to the point specified.</returns>
         public int CharPositionFromPoint(int x, int y)
         {
-            return mInnerScintilla.CharPositionFromPoint(x, y);
+            return Scintilla.CharPositionFromPoint(x, y);
         }
 
         /// <summary>
@@ -2519,7 +2395,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based document position of the nearest character to the point specified when near a character; otherwise, -1.</returns>
         public int CharPositionFromPointClose(int x, int y)
         {
-            return mInnerScintilla.CharPositionFromPointClose(x, y);
+            return Scintilla.CharPositionFromPointClose(x, y);
         }
 
         /// <summary>
@@ -2532,7 +2408,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void ChooseCaretX()
         {
-            mInnerScintilla.ChooseCaretX();
+            Scintilla.ChooseCaretX();
         }
 
         /// <summary>
@@ -2540,7 +2416,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void Clear()
         {
-            mInnerScintilla.Clear();
+            Scintilla.Clear();
         }
 
         /// <summary>
@@ -2548,7 +2424,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void ClearAll()
         {
-            mInnerScintilla.ClearAll();
+            Scintilla.ClearAll();
         }
 
         /// <summary>
@@ -2558,7 +2434,7 @@ namespace ScintillaNET.WPF
         /// <remarks>This is equivalent to binding the keys to <see cref="Command.Null" />.</remarks>
         public void ClearCmdKey(System.Windows.Forms.Keys keyDefinition)
         {
-            mInnerScintilla.ClearCmdKey(keyDefinition);
+            Scintilla.ClearCmdKey(keyDefinition);
         }
 
         /// <summary>
@@ -2566,7 +2442,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void ClearAllCmdKeys()
         {
-            mInnerScintilla.ClearAllCmdKeys();
+            Scintilla.ClearAllCmdKeys();
         }
 
         /// <summary>
@@ -2574,7 +2450,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void ClearDocumentStyle()
         {
-            mInnerScintilla.ClearDocumentStyle();
+            Scintilla.ClearDocumentStyle();
         }
 
         /// <summary>
@@ -2582,7 +2458,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void ClearRegisteredImages()
         {
-            mInnerScintilla.ClearRegisteredImages();
+            Scintilla.ClearRegisteredImages();
         }
 
         /// <summary>
@@ -2590,7 +2466,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void ClearSelections()
         {
-            mInnerScintilla.ClearSelections();
+            Scintilla.ClearSelections();
         }
 
         /// <summary>
@@ -2601,7 +2477,7 @@ namespace ScintillaNET.WPF
         /// <remarks>This will also cause fold levels in the range specified to be reset.</remarks>
         public void Colorize(int startPos, int endPos)
         {
-            mInnerScintilla.Colorize(startPos, endPos);
+            Scintilla.Colorize(startPos, endPos);
         }
 
         /// <summary>
@@ -2610,7 +2486,7 @@ namespace ScintillaNET.WPF
         /// <param name="eolMode">One of the <see cref="Eol" /> enumeration values.</param>
         public void ConvertEols(Eol eolMode)
         {
-            mInnerScintilla.ConvertEols(eolMode);
+            Scintilla.ConvertEols(eolMode);
         }
 
         /// <summary>
@@ -2618,7 +2494,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void Copy()
         {
-            mInnerScintilla.Copy();
+            Scintilla.Copy();
         }
 
         /// <summary>
@@ -2627,7 +2503,7 @@ namespace ScintillaNET.WPF
         /// <param name="format">One of the <see cref="CopyFormat" /> enumeration values.</param>
         public void Copy(CopyFormat format)
         {
-            mInnerScintilla.Copy(format);
+            Scintilla.Copy(format);
         }
 
         /// <summary>
@@ -2640,7 +2516,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void CopyAllowLine()
         {
-            mInnerScintilla.CopyAllowLine();
+            Scintilla.CopyAllowLine();
         }
 
         /// <summary>
@@ -2654,7 +2530,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void CopyAllowLine(CopyFormat format)
         {
-            mInnerScintilla.CopyAllowLine(format);
+            Scintilla.CopyAllowLine(format);
         }
 
         /// <summary>
@@ -2664,7 +2540,7 @@ namespace ScintillaNET.WPF
         /// <param name="end">The zero-based character position (exclusive) in the document to stop copying.</param>
         public void CopyRange(int start, int end)
         {
-            mInnerScintilla.CopyRange(start, end);
+            Scintilla.CopyRange(start, end);
         }
 
         /// <summary>
@@ -2675,7 +2551,7 @@ namespace ScintillaNET.WPF
         /// <param name="format">One of the <see cref="CopyFormat" /> enumeration values.</param>
         public void CopyRange(int start, int end, CopyFormat format)
         {
-            mInnerScintilla.CopyRange(start, end, format);
+            Scintilla.CopyRange(start, end, format);
         }
 
         /// <summary>
@@ -2685,7 +2561,7 @@ namespace ScintillaNET.WPF
         /// <remarks>You are responsible for ensuring the reference count eventually reaches 0 or memory leaks will occur.</remarks>
         public Document CreateDocument()
         {
-            return mInnerScintilla.CreateDocument();
+            return Scintilla.CreateDocument();
         }
 
         /// <summary>
@@ -2695,7 +2571,7 @@ namespace ScintillaNET.WPF
         /// <returns>A new <see cref="ILoader" /> object, or null if the loader could not be created.</returns>
         public ILoader CreateLoader(int length)
         {
-            return mInnerScintilla.CreateLoader(length);
+            return Scintilla.CreateLoader(length);
         }
 
         /// <summary>
@@ -2703,7 +2579,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void Cut()
         {
-            mInnerScintilla.Cut();
+            Scintilla.Cut();
         }
 
         /// <summary>
@@ -2713,7 +2589,7 @@ namespace ScintillaNET.WPF
         /// <param name="length">The number of characters to delete.</param>
         public void DeleteRange(int position, int length)
         {
-            mInnerScintilla.DeleteRange(position, length);
+            Scintilla.DeleteRange(position, length);
         }
 
         /// <summary>
@@ -2722,7 +2598,7 @@ namespace ScintillaNET.WPF
         /// <returns>A String describing each keyword set separated by line breaks for the current lexer.</returns>
         public string DescribeKeywordSets()
         {
-            return mInnerScintilla.DescribeKeywordSets();
+            return Scintilla.DescribeKeywordSets();
         }
 
         /// <summary>
@@ -2733,7 +2609,7 @@ namespace ScintillaNET.WPF
         /// <remarks>A list of supported property names for the current <see cref="Lexer" /> can be obtained by calling <see cref="PropertyNames" />.</remarks>
         public string DescribeProperty(string name)
         {
-            return mInnerScintilla.DescribeProperty(name);
+            return Scintilla.DescribeProperty(name);
         }
 
         /// <summary>
@@ -2748,7 +2624,7 @@ namespace ScintillaNET.WPF
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public virtual IntPtr DirectMessage(int msg, IntPtr wParam, IntPtr lParam)
         {
-            return mInnerScintilla.DirectMessage(msg, wParam, lParam);
+            return Scintilla.DirectMessage(msg, wParam, lParam);
         }
 
         /// <summary>
@@ -2759,7 +2635,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Line.DisplayIndex" />
         public int DocLineFromVisible(int displayLine)
         {
-            return mInnerScintilla.DocLineFromVisible(displayLine);
+            return Scintilla.DocLineFromVisible(displayLine);
         }
 
         /// <summary>
@@ -2769,7 +2645,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Selections" />
         public void DropSelection(int selection)
         {
-            mInnerScintilla.DropSelection(selection);
+            Scintilla.DropSelection(selection);
         }
 
         /// <summary>
@@ -2778,7 +2654,7 @@ namespace ScintillaNET.WPF
         /// <remarks>This will also cause <see cref="SetSavePoint" /> to be called but will not raise the <see cref="SavePointReached" /> event.</remarks>
         public void EmptyUndoBuffer()
         {
-            mInnerScintilla.EmptyUndoBuffer();
+            Scintilla.EmptyUndoBuffer();
         }
 
         /// <summary>
@@ -2787,7 +2663,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="BeginUndoAction" />
         public void EndUndoAction()
         {
-            mInnerScintilla.EndUndoAction();
+            Scintilla.EndUndoAction();
         }
 
         /// <summary>
@@ -2796,7 +2672,7 @@ namespace ScintillaNET.WPF
         /// <param name="sciCommand">The command to perform.</param>
         public void ExecuteCmd(Command sciCommand)
         {
-            mInnerScintilla.ExecuteCmd(sciCommand);
+            Scintilla.ExecuteCmd(sciCommand);
         }
 
         /// <summary>
@@ -2806,7 +2682,7 @@ namespace ScintillaNET.WPF
         /// <remarks>When using <see cref="FoldAction.Toggle" /> the first fold header in the document is examined to decide whether to expand or contract.</remarks>
         public void FoldAll(FoldAction action)
         {
-            mInnerScintilla.FoldAll(action);
+            Scintilla.FoldAll(action);
         }
 
         /// <summary>
@@ -2817,7 +2693,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Line.ToggleFoldShowText" />.
         public void FoldDisplayTextSetStyle(FoldDisplayText style)
         {
-            mInnerScintilla.FoldDisplayTextSetStyle(style);
+            Scintilla.FoldDisplayTextSetStyle(style);
         }
 
         /// <summary>
@@ -2827,7 +2703,7 @@ namespace ScintillaNET.WPF
         /// <returns>The character at the specified <paramref name="position" />.</returns>
         public int GetCharAt(int position)
         {
-            return mInnerScintilla.GetCharAt(position);
+            return Scintilla.GetCharAt(position);
         }
 
         /// <summary>
@@ -2837,7 +2713,7 @@ namespace ScintillaNET.WPF
         /// <returns>The number of columns from the start of the line to the specified document <paramref name="position" />.</returns>
         public int GetColumn(int position)
         {
-            return mInnerScintilla.GetColumn(position);
+            return Scintilla.GetColumn(position);
         }
 
         /// <summary>
@@ -2846,7 +2722,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based document position of the last styled character.</returns>
         public int GetEndStyled()
         {
-            return mInnerScintilla.GetEndStyled();
+            return Scintilla.GetEndStyled();
         }
 
         /// <summary>
@@ -2860,7 +2736,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="GetPropertyExpanded" />
         public string GetProperty(string name)
         {
-            return mInnerScintilla.GetProperty(name);
+            return Scintilla.GetProperty(name);
         }
 
         /// <summary>
@@ -2874,7 +2750,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="GetProperty" />
         public string GetPropertyExpanded(string name)
         {
-            return mInnerScintilla.GetPropertyExpanded(name);
+            return Scintilla.GetPropertyExpanded(name);
         }
 
         /// <summary>
@@ -2889,7 +2765,7 @@ namespace ScintillaNET.WPF
         /// </returns>
         public int GetPropertyInt(string name, int defaultValue)
         {
-            return mInnerScintilla.GetPropertyInt(name, defaultValue);
+            return Scintilla.GetPropertyInt(name, defaultValue);
         }
 
         /// <summary>
@@ -2899,7 +2775,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based <see cref="Style" /> index used at the specified <paramref name="position" />.</returns>
         public int GetStyleAt(int position)
         {
-            return mInnerScintilla.GetStyleAt(position);
+            return Scintilla.GetStyleAt(position);
         }
 
         /// <summary>
@@ -2910,7 +2786,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SearchInTarget" />
         public string GetTag(int tagNumber)
         {
-            return mInnerScintilla.GetTag(tagNumber);
+            return Scintilla.GetTag(tagNumber);
         }
 
         /// <summary>
@@ -2921,7 +2797,7 @@ namespace ScintillaNET.WPF
         /// <returns>A string representing the text range.</returns>
         public string GetTextRange(int position, int length)
         {
-            return mInnerScintilla.GetTextRange(position, length);
+            return Scintilla.GetTextRange(position, length);
         }
 
         /// <summary>
@@ -2932,7 +2808,7 @@ namespace ScintillaNET.WPF
         /// <returns>A string representing the text range formatted as HTML.</returns>
         public string GetTextRangeAsHtml(int position, int length)
         {
-            return mInnerScintilla.GetTextRangeAsHtml(position, length);
+            return Scintilla.GetTextRangeAsHtml(position, length);
         }
 
         /// <summary>
@@ -2941,7 +2817,7 @@ namespace ScintillaNET.WPF
         /// <returns>An object representing the version information of the native Scintilla library.</returns>
         public System.Diagnostics.FileVersionInfo GetVersionInfo()
         {
-            return mInnerScintilla.GetVersionInfo();
+            return Scintilla.GetVersionInfo();
         }
 
         ///<summary>
@@ -2951,7 +2827,7 @@ namespace ScintillaNET.WPF
         /// <returns>The word at the specified position.</returns>
         public string GetWordFromPosition(int position)
         {
-            return mInnerScintilla.GetWordFromPosition(position);
+            return Scintilla.GetWordFromPosition(position);
         }
 
         /// <summary>
@@ -2961,7 +2837,7 @@ namespace ScintillaNET.WPF
         /// <remarks>Any selection is discarded.</remarks>
         public void GotoPosition(int position)
         {
-            mInnerScintilla.GotoPosition(position);
+            Scintilla.GotoPosition(position);
         }
 
         /// <summary>
@@ -2973,7 +2849,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Line.Visible" />
         public void HideLines(int lineStart, int lineEnd)
         {
-            mInnerScintilla.HideLines(lineStart, lineEnd);
+            Scintilla.HideLines(lineStart, lineEnd);
         }
 
         /// <summary>
@@ -2983,7 +2859,7 @@ namespace ScintillaNET.WPF
         /// <returns>A bitmap indicating which of the 32 indicators are in use at the specified <paramref name="position" />.</returns>
         public uint IndicatorAllOnFor(int position)
         {
-            return mInnerScintilla.IndicatorAllOnFor(position);
+            return Scintilla.IndicatorAllOnFor(position);
         }
 
         /// <summary>
@@ -2993,7 +2869,7 @@ namespace ScintillaNET.WPF
         /// <param name="length">The number of characters to clear.</param>
         public void IndicatorClearRange(int position, int length)
         {
-            mInnerScintilla.IndicatorClearRange(position, length);
+            Scintilla.IndicatorClearRange(position, length);
         }
 
         /// <summary>
@@ -3003,7 +2879,7 @@ namespace ScintillaNET.WPF
         /// <param name="length">The number of characters to fill.</param>
         public void IndicatorFillRange(int position, int length)
         {
-            mInnerScintilla.IndicatorFillRange(position, length);
+            Scintilla.IndicatorFillRange(position, length);
         }
 
         /// <summary>
@@ -3018,7 +2894,7 @@ namespace ScintillaNET.WPF
         /// <remarks>No scrolling is performed.</remarks>
         public void InsertText(int position, string text)
         {
-            mInnerScintilla.InsertText(position, text);
+            Scintilla.InsertText(position, text);
         }
 
         /// <summary>
@@ -3037,7 +2913,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public bool IsRangeWord(int start, int end)
         {
-            return mInnerScintilla.IsRangeWord(start, end);
+            return Scintilla.IsRangeWord(start, end);
         }
 
         /// <summary>
@@ -3047,7 +2923,7 @@ namespace ScintillaNET.WPF
         /// <returns>The zero-based document line index containing the character <paramref name="position" />.</returns>
         public int LineFromPosition(int position)
         {
-            return mInnerScintilla.LineFromPosition(position);
+            return Scintilla.LineFromPosition(position);
         }
 
         /// <summary>
@@ -3061,7 +2937,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void LineScroll(int lines, int columns)
         {
-            mInnerScintilla.LineScroll(lines, columns);
+            Scintilla.LineScroll(lines, columns);
         }
 
         /// <summary>
@@ -3070,7 +2946,7 @@ namespace ScintillaNET.WPF
         /// <param name="path">The path to the external lexer DLL.</param>
         public void LoadLexerLibrary(string path)
         {
-            mInnerScintilla.LoadLexerLibrary(path);
+            Scintilla.LoadLexerLibrary(path);
         }
 
         /// <summary>
@@ -3079,7 +2955,7 @@ namespace ScintillaNET.WPF
         /// <param name="marker">The zero-based <see cref="Marker" /> index to remove from all lines, or -1 to remove all markers from all lines.</param>
         public void MarkerDeleteAll(int marker)
         {
-            mInnerScintilla.MarkerDeleteAll(marker);
+            Scintilla.MarkerDeleteAll(marker);
         }
 
         /// <summary>
@@ -3088,7 +2964,7 @@ namespace ScintillaNET.WPF
         /// <param name="markerHandle">The <see cref="MarkerHandle" /> created by a previous call to <see cref="Line.MarkerAdd" /> of the marker to delete.</param>
         public void MarkerDeleteHandle(MarkerHandle markerHandle)
         {
-            mInnerScintilla.MarkerDeleteHandle(markerHandle);
+            Scintilla.MarkerDeleteHandle(markerHandle);
         }
 
         /// <summary>
@@ -3097,7 +2973,7 @@ namespace ScintillaNET.WPF
         /// <param name="enabled">true to highlight the current folding block; otherwise, false.</param>
         public void MarkerEnableHighlight(bool enabled)
         {
-            mInnerScintilla.MarkerEnableHighlight(enabled);
+            Scintilla.MarkerEnableHighlight(enabled);
         }
 
         /// <summary>
@@ -3107,7 +2983,7 @@ namespace ScintillaNET.WPF
         /// <returns>If found, the zero-based line index containing the marker; otherwise, -1.</returns>
         public int MarkerLineFromHandle(MarkerHandle markerHandle)
         {
-            return mInnerScintilla.MarkerLineFromHandle(markerHandle);
+            return Scintilla.MarkerLineFromHandle(markerHandle);
         }
 
         /// <summary>
@@ -3119,7 +2995,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="MultiEdgeClearAll" />
         public void MultiEdgeAddLine(int column, Color edgeColor)
         {
-            mInnerScintilla.MultiEdgeAddLine(column, DrawingColor(edgeColor));
+            Scintilla.MultiEdgeAddLine(column, DrawingColor(edgeColor));
         }
 
         /// <summary>
@@ -3128,7 +3004,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="MultiEdgeAddLine" />
         public void MultiEdgeClearAll()
         {
-            mInnerScintilla.MultiEdgeClearAll();
+            Scintilla.MultiEdgeClearAll();
         }
 
         /// <summary>
@@ -3142,7 +3018,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="MultipleSelectAddNext" />
         public void MultipleSelectAddEach()
         {
-            mInnerScintilla.MultipleSelectAddEach();
+            Scintilla.MultipleSelectAddEach();
         }
 
         /// <summary>
@@ -3156,7 +3032,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="MultipleSelectAddNext" />
         public void MultipleSelectAddNext()
         {
-            mInnerScintilla.MultipleSelectAddNext();
+            Scintilla.MultipleSelectAddNext();
         }
 
         /// <summary>
@@ -3164,7 +3040,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void Paste()
         {
-            mInnerScintilla.Paste();
+            Scintilla.Paste();
         }
 
         /// <summary>
@@ -3174,7 +3050,7 @@ namespace ScintillaNET.WPF
         /// <returns>The x-coordinate of the specified <paramref name="pos" /> within the client rectangle of the control.</returns>
         public int PointXFromPosition(int pos)
         {
-            return mInnerScintilla.PointXFromPosition(pos);
+            return Scintilla.PointXFromPosition(pos);
         }
 
         /// <summary>
@@ -3184,7 +3060,7 @@ namespace ScintillaNET.WPF
         /// <returns>The y-coordinate of the specified <paramref name="pos" /> within the client rectangle of the control.</returns>
         public int PointYFromPosition(int pos)
         {
-            return mInnerScintilla.PointYFromPosition(pos);
+            return Scintilla.PointYFromPosition(pos);
         }
 
         /// <summary>
@@ -3193,7 +3069,7 @@ namespace ScintillaNET.WPF
         /// <returns>A String of property names separated by line breaks.</returns>
         public string PropertyNames()
         {
-            return mInnerScintilla.PropertyNames();
+            return Scintilla.PropertyNames();
         }
 
         /// <summary>
@@ -3204,7 +3080,7 @@ namespace ScintillaNET.WPF
         /// <remarks>A list of supported property names for the current <see cref="Lexer" /> can be obtained by calling <see cref="PropertyNames" />.</remarks>
         public PropertyType PropertyType(string name)
         {
-            return mInnerScintilla.PropertyType(name);
+            return Scintilla.PropertyType(name);
         }
 
         /// <summary>
@@ -3212,11 +3088,11 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void Redo()
         {
-            mInnerScintilla.Redo();
+            Scintilla.Redo();
         }
 
         /// <summary>
-        /// Maps the specified image to a type identifer for use in an autocompletion list.
+        /// Maps the specified image to a type identifier for use in an autocompletion list.
         /// </summary>
         /// <param name="type">The numeric identifier for this image.</param>
         /// <param name="image">The Bitmap to use in an autocompletion list.</param>
@@ -3228,7 +3104,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="AutoCTypeSeparator" />
         public void RegisterRgbaImage(int type, System.Drawing.Bitmap image)
         {
-            mInnerScintilla.RegisterRgbaImage(type, image);
+            Scintilla.RegisterRgbaImage(type, image);
         }
 
         /// <summary>
@@ -3240,7 +3116,7 @@ namespace ScintillaNET.WPF
         /// </param>
         public void ReleaseDocument(Document document)
         {
-            mInnerScintilla.ReleaseDocument(document);
+            Scintilla.ReleaseDocument(document);
         }
 
         /// <summary>
@@ -3253,7 +3129,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void ReplaceSelection(string text)
         {
-            mInnerScintilla.ReplaceSelection(text);
+            Scintilla.ReplaceSelection(text);
         }
 
         /// <summary>
@@ -3267,7 +3143,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public int ReplaceTarget(string text)
         {
-            return mInnerScintilla.SearchInTarget(text);
+            return Scintilla.SearchInTarget(text);
         }
 
         /// <summary>
@@ -3283,7 +3159,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="GetTag" />
         public int ReplaceTargetRe(string text)
         {
-            return mInnerScintilla.ReplaceTargetRe(text);
+            return Scintilla.ReplaceTargetRe(text);
         }
 
         /// <summary>
@@ -3291,7 +3167,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void RotateSelection()
         {
-            mInnerScintilla.RotateSelection();
+            Scintilla.RotateSelection();
         }
 
         /// <summary>
@@ -3299,7 +3175,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void ScrollCaret()
         {
-            mInnerScintilla.ScrollCaret();
+            Scintilla.ScrollCaret();
         }
 
         /// <summary>
@@ -3313,7 +3189,7 @@ namespace ScintillaNET.WPF
         /// <remarks>This may be used to make a search match visible.</remarks>
         public void ScrollRange(int start, int end)
         {
-            mInnerScintilla.ScrollRange(start, end);
+            Scintilla.ScrollRange(start, end);
         }
 
         /// <summary>
@@ -3327,7 +3203,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public int SearchInTarget(string text)
         {
-            return mInnerScintilla.SearchInTarget(text);
+            return Scintilla.SearchInTarget(text);
         }
 
         /// <summary>
@@ -3336,7 +3212,7 @@ namespace ScintillaNET.WPF
         /// <remarks>The current position is not scrolled into view.</remarks>
         public void SelectAll()
         {
-            mInnerScintilla.SelectAll();
+            Scintilla.SelectAll();
         }
 
         /// <summary>
@@ -3346,7 +3222,7 @@ namespace ScintillaNET.WPF
         /// <remarks>Calling <see cref="SetSelectionBackColor" /> will reset the <paramref name="color" /> specified.</remarks>
         public void SetAdditionalSelBack(Color color)
         {
-            mInnerScintilla.CallTipSetForeHlt(DrawingColor(color));
+            Scintilla.CallTipSetForeHlt(DrawingColor(color));
         }
 
         /// <summary>
@@ -3356,7 +3232,7 @@ namespace ScintillaNET.WPF
         /// <remarks>Calling <see cref="SetSelectionForeColor" /> will reset the <paramref name="color" /> specified.</remarks>
         public void SetAdditionalSelFore(Color color)
         {
-            mInnerScintilla.CallTipSetForeHlt(DrawingColor(color));
+            Scintilla.CallTipSetForeHlt(DrawingColor(color));
         }
 
         /// <summary>
@@ -3366,7 +3242,7 @@ namespace ScintillaNET.WPF
         /// <remarks>The caret is not scrolled into view.</remarks>
         public void SetEmptySelection(int pos)
         {
-            mInnerScintilla.SetEmptySelection(pos);
+            Scintilla.SetEmptySelection(pos);
         }
 
         /// <summary>
@@ -3375,7 +3251,7 @@ namespace ScintillaNET.WPF
         /// <param name="flags">A bitwise combination of the <see cref="FoldFlags" /> enumeration.</param>
         public void SetFoldFlags(FoldFlags flags)
         {
-            mInnerScintilla.SetFoldFlags(flags);
+            Scintilla.SetFoldFlags(flags);
         }
 
         /// <summary>
@@ -3386,7 +3262,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetFoldMarginHighlightColor" />
         public void SetFoldMarginColor(bool use, Color color)
         {
-            mInnerScintilla.SetFoldMarginColor(use, DrawingColor(color));
+            Scintilla.SetFoldMarginColor(use, DrawingColor(color));
         }
 
         /// <summary>
@@ -3397,7 +3273,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetFoldMarginColor" />
         public void SetFoldMarginHighlightColor(bool use, Color color)
         {
-            mInnerScintilla.SetFoldMarginHighlightColor(use, DrawingColor(color));
+            Scintilla.SetFoldMarginHighlightColor(use, DrawingColor(color));
         }
 
         /// <summary>
@@ -3411,7 +3287,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="DescribeKeywordSets" />
         public void SetKeywords(int set, string keywords)
         {
-            mInnerScintilla.SetKeywords(set, keywords);
+            Scintilla.SetKeywords(set, keywords);
         }
 
         /// <summary>
@@ -3426,7 +3302,7 @@ namespace ScintillaNET.WPF
         /// <remarks>Property names are case-sensitive.</remarks>
         public void SetProperty(string name, string value)
         {
-            mInnerScintilla.SetProperty(name, value);
+            Scintilla.SetProperty(name, value);
         }
 
         /// <summary>
@@ -3435,7 +3311,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Modified" />
         public void SetSavePoint()
         {
-            mInnerScintilla.SetSavePoint();
+            Scintilla.SetSavePoint();
         }
 
         /// <summary>
@@ -3451,7 +3327,7 @@ namespace ScintillaNET.WPF
         /// </remarks>
         public void SetSel(int anchorPos, int currentPos)
         {
-            mInnerScintilla.SetSel(anchorPos, currentPos);
+            Scintilla.SetSel(anchorPos, currentPos);
         }
 
         /// <summary>
@@ -3461,7 +3337,7 @@ namespace ScintillaNET.WPF
         /// <param name="anchor">The zero-based document position to start the selection.</param>
         public void SetSelection(int caret, int anchor)
         {
-            mInnerScintilla.SetSelection(caret, anchor);
+            Scintilla.SetSelection(caret, anchor);
         }
 
         /// <summary>
@@ -3472,7 +3348,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetSelectionForeColor" />
         public void SetSelectionBackColor(bool use, Color color)
         {
-            mInnerScintilla.SetSelectionBackColor(use, DrawingColor(color));
+            Scintilla.SetSelectionBackColor(use, DrawingColor(color));
         }
 
         /// <summary>
@@ -3483,7 +3359,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetSelectionBackColor" />
         public void SetSelectionForeColor(bool use, Color color)
         {
-            mInnerScintilla.SetSelectionForeColor(use, DrawingColor(color));
+            Scintilla.SetSelectionForeColor(use, DrawingColor(color));
         }
 
         /// <summary>
@@ -3503,7 +3379,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="StartStyling" />
         public void SetStyling(int length, int style)
         {
-            mInnerScintilla.SetStyling(length, style);
+            Scintilla.SetStyling(length, style);
         }
 
         /// <summary>
@@ -3515,7 +3391,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="TargetEnd" />
         public void SetTargetRange(int start, int end)
         {
-            mInnerScintilla.SetTargetRange(start, end);
+            Scintilla.SetTargetRange(start, end);
         }
 
         /// <summary>
@@ -3528,7 +3404,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetWhitespaceForeColor" />
         public void SetWhitespaceBackColor(bool use, Color color)
         {
-            mInnerScintilla.SetWhitespaceBackColor(use, DrawingColor(color));
+            Scintilla.SetWhitespaceBackColor(use, DrawingColor(color));
         }
 
         /// <summary>
@@ -3541,7 +3417,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetWhitespaceBackColor" />
         public void SetWhitespaceForeColor(bool use, Color color)
         {
-            mInnerScintilla.SetWhitespaceForeColor(use, DrawingColor(color));
+            Scintilla.SetWhitespaceForeColor(use, DrawingColor(color));
         }
 
         /// <summary>
@@ -3553,7 +3429,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Line.Visible" />
         public void ShowLines(int lineStart, int lineEnd)
         {
-            mInnerScintilla.ShowLines(lineStart, lineEnd);
+            Scintilla.ShowLines(lineStart, lineEnd);
         }
 
         /// <summary>
@@ -3567,7 +3443,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="SetStyling" />
         public void StartStyling(int position)
         {
-            mInnerScintilla.StartStyling(position);
+            Scintilla.StartStyling(position);
         }
 
         /// <summary>
@@ -3576,7 +3452,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="StyleResetDefault" />
         public void StyleClearAll()
         {
-            mInnerScintilla.StyleClearAll();
+            Scintilla.StyleClearAll();
         }
 
         /// <summary>
@@ -3585,7 +3461,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="StyleClearAll" />
         public void StyleResetDefault()
         {
-            mInnerScintilla.StyleResetDefault();
+            Scintilla.StyleResetDefault();
         }
 
         /// <summary>
@@ -3593,7 +3469,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void SwapMainAnchorCaret()
         {
-            mInnerScintilla.SwapMainAnchorCaret();
+            Scintilla.SwapMainAnchorCaret();
         }
 
         /// <summary>
@@ -3602,7 +3478,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="TargetWholeDocument" />
         public void TargetFromSelection()
         {
-            mInnerScintilla.TargetFromSelection();
+            Scintilla.TargetFromSelection();
         }
 
         /// <summary>
@@ -3611,7 +3487,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="TargetFromSelection" />
         public void TargetWholeDocument()
         {
-            mInnerScintilla.TargetWholeDocument();
+            Scintilla.TargetWholeDocument();
         }
 
         /// <summary>
@@ -3622,7 +3498,7 @@ namespace ScintillaNET.WPF
         /// <returns>The width in pixels.</returns>
         public int TextWidth(int style, string text)
         {
-            return mInnerScintilla.TextWidth(style, text);
+            return Scintilla.TextWidth(style, text);
         }
 
         /// <summary>
@@ -3630,7 +3506,7 @@ namespace ScintillaNET.WPF
         /// </summary>
         public void Undo()
         {
-            mInnerScintilla.Undo();
+            Scintilla.Undo();
         }
 
         /// <summary>
@@ -3640,7 +3516,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="UsePopup(PopupMode)" />
         public void UsePopup(bool enablePopup)
         {
-            mInnerScintilla.UsePopup(enablePopup);
+            Scintilla.UsePopup(enablePopup);
         }
 
         /// <summary>
@@ -3649,7 +3525,7 @@ namespace ScintillaNET.WPF
         /// <param name="popupMode">One of the <seealso cref="PopupMode" /> enumeration values.</param>
         public void UsePopup(PopupMode popupMode)
         {
-            mInnerScintilla.UsePopup(popupMode);
+            Scintilla.UsePopup(popupMode);
         }
 
         /// <summary>
@@ -3664,7 +3540,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="WordStartPosition" />
         public int WordEndPosition(int position, bool onlyWordCharacters)
         {
-            return mInnerScintilla.WordEndPosition(position, onlyWordCharacters);
+            return Scintilla.WordEndPosition(position, onlyWordCharacters);
         }
 
         /// <summary>
@@ -3679,7 +3555,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="WordEndPosition" />
         public int WordStartPosition(int position, bool onlyWordCharacters)
         {
-            return mInnerScintilla.WordStartPosition(position, onlyWordCharacters);
+            return Scintilla.WordStartPosition(position, onlyWordCharacters);
         }
 
         /// <summary>
@@ -3688,7 +3564,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Zoom" />
         public void ZoomIn()
         {
-            mInnerScintilla.ZoomIn();
+            Scintilla.ZoomIn();
         }
 
         /// <summary>
@@ -3697,7 +3573,7 @@ namespace ScintillaNET.WPF
         /// <seealso cref="Zoom" />
         public void ZoomOut()
         {
-            mInnerScintilla.ZoomOut();
+            Scintilla.ZoomOut();
         }
 
         /// <summary>
