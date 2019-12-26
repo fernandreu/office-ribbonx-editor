@@ -8,6 +8,7 @@
         xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
         xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels.Dialogs"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="Settings"
         Icon="/Resources/Images/settings.png"
@@ -23,8 +24,9 @@
             <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <GroupBox Header="Editor colors">
@@ -119,7 +121,11 @@
                 <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Auto-indent new lines" Margin="8" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=AutoIndent}"/>
             </Grid>
         </GroupBox>
-        <GroupBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Header="Misc">
+        <GroupBox 
+            Grid.Row="1" 
+            Grid.Column="0" 
+            Grid.ColumnSpan="3" 
+            Header="Misc">
             <StackPanel Margin="2">
                 <CheckBox 
                     Margin="0,0,0,4"
@@ -141,7 +147,56 @@
                     MinHeight="60"/>
             </StackPanel>
         </GroupBox>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="2">
+        <GroupBox
+            Grid.Row="2"
+            Grid.Column="0"
+            Grid.ColumnSpan="3" 
+            Header="File Associations"
+            ToolTip="A context menu entry will appear in Windows Explorer to edit these files directly with the tool">
+            <Grid Margin="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ItemsControl
+                    Grid.Row="0"
+                    ItemsSource="{Binding FileAssociations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Extension}" IsChecked="{Binding NewValue}" Margin="0,0,8,0"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+                <StackPanel 
+                    Grid.Row="1"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+                    <Button 
+                        Content="Check all" 
+                        Margin="0,0,8,0" 
+                        Padding="8,4"
+                        Command="{Binding SetAllAssociationsCommand}">
+                        <Button.CommandParameter>
+                            <system:Boolean>True</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                    <Button 
+                        Content="Uncheck all" 
+                        Padding="8,4"
+                        Command="{Binding SetAllAssociationsCommand}">
+                        <Button.CommandParameter>
+                            <system:Boolean>False</system:Boolean>
+                        </Button.CommandParameter>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2">
             <Button Content="Reset Defaults" Margin="3" Padding="8,4" Command="{Binding ResetCommand}"/>
             <Button Content="Apply" Margin="3" Padding="8,4" Command="{Binding ApplyCommand}" IsEnabled="{Binding SettingsChanged}"/>
             <Button Content="Accept" Margin="3" Padding="8,4" Command="{Binding AcceptCommand}" IsDefault="True" IsEnabled="{Binding SettingsChanged}"/>

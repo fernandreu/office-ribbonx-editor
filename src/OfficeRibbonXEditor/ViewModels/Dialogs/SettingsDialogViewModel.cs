@@ -4,6 +4,7 @@ using System.Linq;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
+using OfficeRibbonXEditor.ViewModels.Shell;
 using OfficeRibbonXEditor.ViewModels.Tabs;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
@@ -11,6 +12,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
     public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
     {
+        private static readonly ICollection<string> extensions = new List<string>
+        {
+            ".xlsx",
+            ".xlsm",
+        };
+
         private readonly string[] usedProperties =
         {
             nameof(Settings.Default.TextColor),
@@ -35,6 +42,14 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.ResetCommand = new RelayCommand(this.ResetToDefault);
             this.ApplyCommand = new RelayCommand(this.ApplySettings);
             this.AcceptCommand = new RelayCommand(this.AcceptSettings);
+            this.SetAllAssociationsCommand = new RelayCommand<bool>(this.SetAllAssociations);
+
+            foreach (var extension in extensions)
+            {
+                var association = new FileAssociationViewModel(extension);
+                association.ValueChanged += (o, e) => this.SettingsChanged = true;
+                this.FileAssociations.Add(association);
+            }
 
             Settings.Default.PropertyChanged += (o, e) => this.SettingsChanged = true;
         }
@@ -56,11 +71,15 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public ICollection<ITabItemViewModel> Tabs { get; private set; }
 
+        public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
+
         public RelayCommand ResetCommand { get; }
 
         public RelayCommand ApplyCommand { get; }
 
         public RelayCommand AcceptCommand { get; }
+
+        public RelayCommand<bool> SetAllAssociationsCommand { get; }
 
         private void LoadCurrent()
         {
@@ -78,6 +97,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             {
                 Settings.Default[pair.Key] = pair.Value;
             }
+
+            foreach (var association in this.FileAssociations)
+            {
+                association.ResetToCurrent();
+            }
         }
 
         private void ResetToDefault()
@@ -92,6 +116,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 Settings.Default[name] = propertyValue.PropertyValue;
             }
 
+            foreach (var association in this.FileAssociations)
+            {
+                association.ResetToDefault();
+            }
+
             this.ApplySettings();
         }
 
@@ -104,18 +133,27 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 tab.Lexer?.Update();
             }
 
+            foreach (var association in this.FileAssociations)
+            {
+                association.Apply();
+            }
+
             this.SettingsChanged = false;
         }
 
         private void AcceptSettings()
         {
-            Settings.Default.Save();
+            this.ApplySettings();
             this.IsCancelled = false;
-            foreach (var tab in this.Tabs.OfType<EditorTabViewModel>())
-            {
-                tab.Lexer?.Update();
-            }
             this.Close();
+        }
+
+        private void SetAllAssociations(bool newValue)
+        {
+            foreach (var association in this.FileAssociations)
+            {
+                association.NewValue = newValue;
+            }
         }
 
         protected override void OnClosing(CancelEventArgs args)
