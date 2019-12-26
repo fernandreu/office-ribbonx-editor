@@ -264,3 +264,4 @@ __pycache__/
 
 # Local history
 .localhistory/
+/build/sign/test.ps1
