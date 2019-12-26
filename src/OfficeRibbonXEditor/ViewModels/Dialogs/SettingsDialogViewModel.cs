@@ -14,8 +14,21 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     {
         private static readonly ICollection<string> extensions = new List<string>
         {
+            ".docx",
+            ".docm",
+            ".dotx",
+            ".dotm",
+            ".pptx",
+            ".pptm",
+            ".ppsx",
+            ".ppsm",
+            ".potx",
+            ".potm",
+            ".ppam",
             ".xlsx",
             ".xlsm",
+            ".xltm",
+            ".xlam",
         };
 
         private readonly string[] usedProperties =

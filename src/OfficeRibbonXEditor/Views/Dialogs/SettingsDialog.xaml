@@ -154,12 +154,13 @@
             Header="File Associations"
             ToolTip="A context menu entry will appear in Windows Explorer to edit these files directly with the tool">
             <Grid Margin="2">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
                 <ItemsControl
-                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,4,0"
                     ItemsSource="{Binding FileAssociations}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -168,17 +169,17 @@
                     </ItemsControl.ItemTemplate>
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <WrapPanel/>
+                            <UniformGrid Columns="6"/>
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                 </ItemsControl>
                 <StackPanel 
-                    Grid.Row="1"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Right">
+                    Grid.Column="1"
+                    Orientation="Vertical"
+                    VerticalAlignment="Bottom">
                     <Button 
                         Content="Check all" 
-                        Margin="0,0,8,0" 
+                        Margin="0,0,0,8" 
                         Padding="8,4"
                         Command="{Binding SetAllAssociationsCommand}">
                         <Button.CommandParameter>

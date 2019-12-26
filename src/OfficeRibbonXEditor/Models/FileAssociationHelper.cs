@@ -53,6 +53,7 @@ namespace OfficeRibbonXEditor.Models
             }
             key.SetValue(null, "Edit with OfficeRibbonXEditor");
             var exePath = Assembly.GetExecutingAssembly().Location;
+            key.SetValue("Icon", exePath);
             var subKey = key.CreateSubKey("command");
             subKey?.SetValue(null, $"\"{exePath}\" \"%1\"");
         }
