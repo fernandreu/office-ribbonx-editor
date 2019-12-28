@@ -1,7 +1,7 @@
 parameters:
   displayName: '.NET Framework Executable'
 
-
+steps:
 - task: PowerShell@2
   displayName: 'Sign ${{ parameters.displayName }}'
   inputs:
