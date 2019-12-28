@@ -70,23 +70,9 @@ jobs:
       fileName: 'OfficeRibbonXEditor.exe'
       project: 'OfficeRibbonXEditor'
 
-  - task: PowerShell@2
-    displayName: 'Sign executable'
-    inputs:
-      targetType: inline
-      ignoreLASTEXITCODE: true
-      script: |
-        . ./build/sign/remote-sign.ps1
-        $result = Update-AllFiles "$(Build.ArtifactStagingDirectory)" -HostName "$(CODESIGN_HOST)" -Pin "$(CODESIGN_PIN)" -Port "$(CODESIGN_PORT)"
-        Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish executable (signed)'
-    condition: eq(variables['CodeSignSuccess'], true)
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Framework Executable'
-      publishLocation: 'Container' # Options: container, filePath
+  - template: build/templates/sign-and-publish.yml
+    parameters:
+      displayName: '.NET Framework Executable'
 
   - template: build/templates/copy-and-publish.yml
     parameters:
@@ -94,23 +80,9 @@ jobs:
       fileName: 'OfficeRibbonXEditor.msi'
       project: 'Installer'
 
-  - task: PowerShell@2
-    displayName: 'Sign installer'
-    inputs:
-      targetType: inline
-      ignoreLASTEXITCODE: true
-      script: |
-        . ./build/sign/remote-sign.ps1
-        $result = Update-AllFiles "$(Build.ArtifactStagingDirectory)" -HostName "$(CODESIGN_HOST)" -Pin "$(CODESIGN_PIN)" -Port "$(CODESIGN_PORT)"
-        Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish installer (signed)'
-    condition: eq(variables['CodeSignSuccess'], true)
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Framework Installer'
-      publishLocation: 'Container' # Options: container, filePath
+  - template: build/templates/sign-and-publish.yml
+    parameters:
+      displayName: '.NET Framework Installer'
 
 - job: NetCore
   displayName: .NET Core
@@ -171,20 +143,6 @@ jobs:
       artifactName: '.NET Core Binaries (Unsigned)'
       publishLocation: 'Container' # Options: container, filePath
 
-  - task: PowerShell@2
-    displayName: 'Sign binaries'
-    inputs:
-      targetType: inline
-      ignoreLASTEXITCODE: true
-      script: |
-        . ./build/sign/remote-sign.ps1
-        $result = Update-AllFiles "$(Build.ArtifactStagingDirectory)" -HostName "$(CODESIGN_HOST)" -Pin "$(CODESIGN_PIN)" -Port "$(CODESIGN_PORT)"
-        Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish binaries (signed)'
-    condition: eq(variables['CodeSignSuccess'], true)
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Core Binaries'
-      publishLocation: 'Container' # Options: container, filePath
+  - template: build/templates/sign-and-publish.yml
+    parameters:
+      displayName: '.NET Core Binaries'

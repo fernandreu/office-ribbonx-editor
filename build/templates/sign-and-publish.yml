@@ -1,0 +1,21 @@
+parameters:
+  displayName: '.NET Framework Executable'
+
+
+- task: PowerShell@2
+  displayName: 'Sign ${{ parameters.displayName }}'
+  inputs:
+    targetType: inline
+    ignoreLASTEXITCODE: true
+    script: |
+      . ./build/sign/remote-sign.ps1
+      $result = Update-AllFiles "$(Build.ArtifactStagingDirectory)" -HostName "$(CODESIGN_HOST)" -Pin "$(CODESIGN_PIN)" -Port "$(CODESIGN_PORT)"
+      Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish ${{ parameters.displayName }} (signed)'
+  condition: eq(variables['CodeSignSuccess'], true)
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: '${{ parameters.displayName }}'
+    publishLocation: 'Container' # Options: container, filePath
