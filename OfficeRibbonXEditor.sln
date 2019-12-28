@@ -40,6 +40,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalTests", "tests\FunctionalTests\FunctionalTests.csproj", "{ACF85006-A9D7-4B30-97C8-C964EA6494E4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{C346825D-3DC7-4AF6-A415-BFEB2E6465AB}"
+	ProjectSection(SolutionItems) = preProject
+		build\templates\copy-and-publish.yml = build\templates\copy-and-publish.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +120,7 @@ Global
 		{92E4D5A6-E84D-4EBD-867B-C5A2994855E5} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
 		{0F75E691-6B9B-4092-B551-05D49EF445F4} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
 		{ACF85006-A9D7-4B30-97C8-C964EA6494E4} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
+		{C346825D-3DC7-4AF6-A415-BFEB2E6465AB} = {D8B42177-9C73-48C9-971E-1D435353FF17}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E5E4631-F9D6-43A1-B677-FD1B0C599606}

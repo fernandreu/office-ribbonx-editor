@@ -64,32 +64,10 @@ jobs:
       platform: '$(buildPlatform)'
       configuration: '$(buildConfiguration)'
 
-  - task: CopyFiles@2
-    displayName: 'Copy Executable'
-    inputs:
-      sourceFolder: ''
-      contents: |
-        src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/**.exe
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
-      cleanTargetFolder: true # Optional
-      flattenFolders: true # Optional
-
-  - task: PowerShell@2
-    displayName: 'Check if executable is really copied'
-    inputs:
-      targetType: inline
-      script: |
-        if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\OfficeRibbonXEditor.exe")) {
-          Write-Host "##vso[task.LogIssue type=error;]Missing executable in staging directory"
-          exit 1
-        }
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish executable (unsigned)'
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Framework Executable (Unsigned)'
-      publishLocation: 'Container' # Options: container, filePath
+  - template: build/templates/copy-and-publish.yml
+    parameters:
+      displayName: '.NET Framework Executable'
+      fileName: 'OfficeRibbonXEditor.exe'
 
   - task: PowerShell@2
     displayName: 'Sign executable'
@@ -109,32 +87,10 @@ jobs:
       artifactName: '.NET Framework Executable'
       publishLocation: 'Container' # Options: container, filePath
 
-  - task: CopyFiles@2
-    displayName: 'Copy installer'
-    inputs:
-      sourceFolder: ''
-      contents: |
-        src/Installer/bin/$(buildConfiguration)/$(targetFramework)/**.msi
-      targetFolder: '$(Build.ArtifactStagingDirectory)'
-      cleanTargetFolder: true # Optional
-      flattenFolders: true # Optional
-
-  - task: PowerShell@2
-    displayName: 'Check if installer is really copied'
-    inputs:
-      targetType: inline
-      script: |
-        if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\OfficeRibbonXEditor.msi")) {
-          Write-Host "##vso[task.LogIssue type=error;]Missing installer in staging directory"
-          exit 1
-        }
-
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish installer (unsigned)'
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Framework Installer (Unsigned)'
-      publishLocation: 'Container' # Options: container, filePath
+  - template: build/templates/copy-and-publish.yml
+    parameters:
+      displayName: '.NET Framework Installer'
+      fileName: 'OfficeRibbonXEditor.msi'
 
   - task: PowerShell@2
     displayName: 'Sign installer'
