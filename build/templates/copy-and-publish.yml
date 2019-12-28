@@ -18,7 +18,7 @@ steps:
   inputs:
     targetType: inline
     script: |
-      if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\${{ parameters.fileName }})) {
+      if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\${{ parameters.fileName }}")) {
         Write-Host "##vso[task.LogIssue type=error;]Missing ${{ parameters.displayName }} in staging directory"
         exit 1
       }
