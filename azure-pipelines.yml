@@ -68,6 +68,7 @@ jobs:
     parameters:
       displayName: '.NET Framework Executable'
       fileName: 'OfficeRibbonXEditor.exe'
+      project: 'OfficeRibbonXEditor'
 
   - task: PowerShell@2
     displayName: 'Sign executable'
@@ -91,6 +92,7 @@ jobs:
     parameters:
       displayName: '.NET Framework Installer'
       fileName: 'OfficeRibbonXEditor.msi'
+      project: 'Installer'
 
   - task: PowerShell@2
     displayName: 'Sign installer'

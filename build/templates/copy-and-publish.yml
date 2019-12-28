@@ -1,6 +1,7 @@
 parameters:
   displayName: '.NET Framework Executable'
   fileName: 'OfficeRibbonXEditor.exe'
+  project: 'OfficeRibbonXEditor'
 
 steps:
 - task: CopyFiles@2
@@ -8,7 +9,7 @@ steps:
   inputs:
     sourceFolder: ''
     contents: |
-      src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/${{ parameters.fileName }}
+      src/${{ parameters.project }}/bin/$(buildConfiguration)/$(targetFramework)/${{ parameters.fileName }}
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
