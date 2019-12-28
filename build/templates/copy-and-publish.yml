@@ -8,8 +8,8 @@ steps:
   inputs:
     sourceFolder: ''
     contents: |
-      src/OfficeRibbonXEditor/bin/${{ buildConfiguration }}/${{ targetFramework }}/${{ parameters.fileName }}
-    targetFolder: '${{ Build.ArtifactStagingDirectory }}'
+      src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)/${{ parameters.fileName }}
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
 
@@ -18,7 +18,7 @@ steps:
   inputs:
     targetType: inline
     script: |
-      if (-not (Test-Path "${{ Build.ArtifactStagingDirectory }}\${{ parameters.fileName }})) {
+      if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\${{ parameters.fileName }})) {
         Write-Host "##vso[task.LogIssue type=error;]Missing ${{ parameters.displayName }} in staging directory"
         exit 1
       }
@@ -26,6 +26,6 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish ${{ parameters.displayName }} (unsigned)'
   inputs:
-    pathtoPublish: '${{ Build.ArtifactStagingDirectory }}' 
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
     artifactName: '${{ parameters.displayName }} (Unsigned)'
     publishLocation: 'Container' # Options: container, filePath
