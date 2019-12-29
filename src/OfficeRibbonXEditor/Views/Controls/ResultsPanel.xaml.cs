@@ -19,9 +19,9 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             this.ResultsScintilla.ClearAll();
 
-            this.ResultsScintilla.Scintilla.KeyUp += this.FindResultsScintilla_KeyUp;
-            this.ResultsScintilla.Scintilla.MouseClick += this.FindResultsScintilla_MouseClick;
-            this.ResultsScintilla.Scintilla.MouseDoubleClick += this.FindResultsScintilla_MouseDoubleClick;
+            this.ResultsScintilla.Scintilla.KeyUp += this.KeyUpEventHandler;
+            this.ResultsScintilla.Scintilla.MouseClick += this.MouseClickEventHandler;
+            this.ResultsScintilla.Scintilla.MouseDoubleClick += this.MouseDoubleClickEventHandler;
         }
 
         public IResultCollection Results { get; private set; }
@@ -34,17 +34,22 @@ namespace OfficeRibbonXEditor.Views.Controls
         /// <param name="results"></param>
         public void UpdateFindAllResults(IResultCollection results)
         {
+            if (results == null)
+            {
+                return;
+            }
+
             this.Results = results;
             this.Results.AddToPanel(this.Scintilla, this.ResultsScintilla.Scintilla);
         }
 
-        private void FindResultsScintilla_KeyUp(object sender, KeyEventArgs e)
+        private void KeyUpEventHandler(object sender, KeyEventArgs e)
         {
             var pos = this.ResultsScintilla.CurrentPosition;
             this.Results.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
         }
 
-        private void FindResultsScintilla_MouseClick(object sender, MouseEventArgs e)
+        private void MouseClickEventHandler(object sender, MouseEventArgs e)
         {
             var pos = this.ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
             if (pos == -1)
@@ -55,7 +60,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.Results.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
         }
 
-        private void FindResultsScintilla_MouseDoubleClick(object sender, MouseEventArgs e)
+        private void MouseDoubleClickEventHandler(object sender, MouseEventArgs e)
         {
             var pos = this.ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
             if (pos == -1)

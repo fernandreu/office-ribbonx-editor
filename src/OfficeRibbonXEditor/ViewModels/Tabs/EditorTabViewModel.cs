@@ -118,12 +118,12 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             }
         }
 
-        public void RaiseShowResults(ResultsEventArgs e)
+        public void OnShowResults(ResultsEventArgs e)
         {
             this.ShowResults?.Invoke(this, e);
         }
 
-        public void RaiseUpdateEditor(EditorChangeEventArgs e)
+        public void OnUpdateEditor(EditorChangeEventArgs e)
         {
             this.UpdateEditor?.Invoke(this, e);
         }

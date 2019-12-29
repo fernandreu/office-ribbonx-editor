@@ -27,7 +27,7 @@ namespace OfficeRibbonXEditor.Converters
                 return value;
             }
 
-            var methodInfo = value.GetType().GetMethod(methodName, new Type[0]);
+            var methodInfo = value.GetType().GetMethod(methodName, Array.Empty<Type>());
             if (methodInfo == null)
             {
                 Debug.WriteLine($"Method '{methodName}' not found for object of type {value.GetType()}");
@@ -78,7 +78,7 @@ namespace OfficeRibbonXEditor.Converters
 
             public void Execute(object parameter)
             {
-                this.method.Invoke(this.sender, new object[0]);
+                this.method.Invoke(this.sender, Array.Empty<object>());
             }
         }
     }

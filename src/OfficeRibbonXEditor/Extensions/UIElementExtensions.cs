@@ -4,14 +4,14 @@ namespace OfficeRibbonXEditor.Extensions
 {
     public static class UiElementExtensions
     {
-        public static bool GetIsFocused(DependencyObject obj)
+        public static bool GetIsFocused(DependencyObject d)
         {
-            return (bool) obj.GetValue(IsFocusedProperty);
+            return (bool?) d?.GetValue(IsFocusedProperty) ?? false;
         }
 
-        public static void SetIsFocused(DependencyObject obj, bool value)
+        public static void SetIsFocused(DependencyObject d, bool value)
         {
-            obj.SetValue(IsFocusedProperty, value);
+            d?.SetValue(IsFocusedProperty, value);
         }
 
         public static readonly DependencyProperty IsFocusedProperty =

@@ -116,7 +116,7 @@ namespace OfficeRibbonXEditor.Converters
         {
             // If the current converter is not the last/first in the list, 
             // get a reference to the next/previous converter.
-            IValueConverter nextConverter = null;
+            IValueConverter? nextConverter = null;
             if (convert)
             {
                 if (converterIndex < this.Converters.Count - 1)
@@ -161,15 +161,20 @@ namespace OfficeRibbonXEditor.Converters
         {
             // The 'Converters' collection has been modified, so validate that each value converter it now
             // contains is decorated with ValueConversionAttribute and then cache the attribute value.
-            IList convertersToProcess = null;
+            IList? convertersToProcess = null;
             if (e.Action == NotifyCollectionChangedAction.Add || e.Action == NotifyCollectionChangedAction.Replace)
             {
                 convertersToProcess = e.NewItems;
             }
             else if (e.Action == NotifyCollectionChangedAction.Remove)
             {
-                foreach (IValueConverter converter in e.OldItems)
+                foreach (IValueConverter? converter in e.OldItems)
                 {
+                    if (converter == null)
+                    {
+                        continue;
+                    }
+
                     this.cachedAttributes.Remove(converter);
                 }
             }
@@ -181,8 +186,13 @@ namespace OfficeRibbonXEditor.Converters
 
             if (convertersToProcess != null && convertersToProcess.Count > 0)
             {
-                foreach (IValueConverter converter in convertersToProcess)
+                foreach (IValueConverter? converter in convertersToProcess)
                 {
+                    if (converter == null)
+                    {
+                        continue;
+                    }
+
                     var attributes = converter.GetType().GetCustomAttributes(typeof(ValueConversionAttribute), false);
 
                     if (attributes.Length != 1)
@@ -190,7 +200,10 @@ namespace OfficeRibbonXEditor.Converters
                         throw new InvalidOperationException("All value converters added to a ValueConverterGroup must be decorated with the ValueConversionAttribute attribute exactly once.");
                     }
 
-                    this.cachedAttributes.Add(converter, attributes[0] as ValueConversionAttribute);
+                    if (attributes[0] is ValueConversionAttribute typedAttribute)
+                    {
+                        this.cachedAttributes.Add(converter, typedAttribute);
+                    }
                 }
             }
         }

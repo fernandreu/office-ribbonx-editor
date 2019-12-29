@@ -32,8 +32,8 @@ namespace OfficeRibbonXEditor.Models
             //Write lines
             foreach (var item in this.Items)
             {
-                var startLine = editor.LineFromPosition(item.cpMin);
-                var endLine = editor.LineFromPosition(item.cpMax);
+                var startLine = editor.LineFromPosition(item.MinPosition);
+                var endLine = editor.LineFromPosition(item.MaxPosition);
 
                 if (startLine == endLine)
                 {
@@ -47,19 +47,19 @@ namespace OfficeRibbonXEditor.Models
             var resultLineIndex = 0;
             foreach (var item in this.Items)
             {
-                var startLine = editor.LineFromPosition(item.cpMin);
-                var endLine = editor.LineFromPosition(item.cpMax);
+                var startLine = editor.LineFromPosition(item.MinPosition);
+                var endLine = editor.LineFromPosition(item.MaxPosition);
 
                 if (startLine == endLine)
                 {
                     var resultsLinePrefix = $"Line {startLine + 1}: ";
 
                     var linePos = editor.Lines[startLine].Position;
-                    var startPosInLine = item.cpMin - linePos;
+                    var startPosInLine = item.MinPosition - linePos;
 
                     var lastLineStartPos = resultsPanel.Lines[resultLineIndex].Position;
 
-                    resultsPanel.IndicatorFillRange(lastLineStartPos + resultsLinePrefix.Length + startPosInLine, item.cpMax - item.cpMin);
+                    resultsPanel.IndicatorFillRange(lastLineStartPos + resultsLinePrefix.Length + startPosInLine, item.MaxPosition - item.MinPosition);
 
                     resultLineIndex++;
                 }
@@ -71,9 +71,9 @@ namespace OfficeRibbonXEditor.Models
             var selectedLine = resultsPanel.LineFromPosition(pos);
 
             var charRange = this.Items[selectedLine];
-            editor.GotoPosition(charRange.cpMax);
-            editor.GotoPosition(charRange.cpMin);
-            editor.SetSelection(charRange.cpMin, charRange.cpMax);
+            editor.GotoPosition(charRange.MaxPosition);
+            editor.GotoPosition(charRange.MinPosition);
+            editor.SetSelection(charRange.MinPosition, charRange.MaxPosition);
             editor.ScrollCaret();
             editor.Focus();
         }

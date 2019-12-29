@@ -36,7 +36,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
             var viewModel = new OfficeDocumentViewModel(doc);
 
             // Act
-            viewModel.InsertPart(XmlParts.RibbonX12);
+            viewModel.InsertPart(XmlPart.RibbonX12);
 
             // Assert
             Assert.AreEqual(1, viewModel.Children.Count);
@@ -48,7 +48,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
             // Arrange
             var doc = new OfficeDocument(this.sourceFile);
             var viewModel = new OfficeDocumentViewModel(doc);
-            viewModel.InsertPart(XmlParts.RibbonX12);
+            viewModel.InsertPart(XmlPart.RibbonX12);
             Assume.That(File.Exists(this.destFile), Is.False, "File was not deleted before test");
 
             // Act
@@ -66,8 +66,8 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         {
             // Arrange
             var viewModel = new OfficeDocumentViewModel(new OfficeDocument(this.sourceFile));
-            viewModel.InsertPart(XmlParts.RibbonX12);
-            viewModel.InsertPart(XmlParts.RibbonX14);
+            viewModel.InsertPart(XmlPart.RibbonX12);
+            viewModel.InsertPart(XmlPart.RibbonX14);
 
             var part = (OfficePartViewModel)viewModel.Children[0];
             part.InsertIcon(this.undoIcon);
@@ -87,7 +87,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
                 {
                     var innerPart = (OfficePartViewModel)innerModel.Children[i];
 
-                    if (innerPart.Part.PartType == XmlParts.RibbonX12)
+                    if (innerPart.Part.PartType == XmlPart.RibbonX12)
                     {
                         Assert.AreEqual(1, innerPart.Children.Count);
                         Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[0]).Name);

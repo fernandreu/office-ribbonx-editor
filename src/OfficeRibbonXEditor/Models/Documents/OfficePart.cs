@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.Models.Documents
     {
         private string id;
 
-        public OfficePart(PackagePart part, XmlParts partType, string relationshipId)
+        public OfficePart(PackagePart part, XmlPart partType, string relationshipId)
         {
             this.Part = part;
             this.PartType = partType;
@@ -23,7 +23,7 @@ namespace OfficeRibbonXEditor.Models.Documents
 
         public PackagePart Part { get; private set; }
 
-        public XmlParts PartType { get; }
+        public XmlPart PartType { get; }
 
         public string Name { get; }
 
@@ -82,7 +82,7 @@ namespace OfficeRibbonXEditor.Models.Documents
 
         public string AddImage(string filePath, string imageId, Func<string, string, bool> alreadyExistingAction = null)
         {
-            if (this.PartType != XmlParts.RibbonX12 && this.PartType != XmlParts.RibbonX14)
+            if (this.PartType != XmlPart.RibbonX12 && this.PartType != XmlPart.RibbonX14)
             {
                 throw new NotSupportedException($"The part type must be either RibbonX12 or RibbonX14, not {this.PartType}");
             }

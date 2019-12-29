@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using OfficeRibbonXEditor.Interfaces;
@@ -93,7 +94,7 @@ namespace OfficeRibbonXEditor.Models
 			// the entire range because it could potentially match the
 			// entire range.
 
-			var text = this.Scintilla.GetTextRange(r.cpMin, r.cpMax - r.cpMin);
+			var text = this.Scintilla.GetTextRange(r.MinPosition, r.MaxPosition - r.MinPosition);
 
 			var m = findExpression.Match(text);
 
@@ -112,7 +113,7 @@ namespace OfficeRibbonXEditor.Models
 					//TODO - check that removing the byte count does not upset anything
 					//int start = r.cpMin + _scintilla.Encoding.GetByteCount(text.Substring(0, m.Index));
 					//int end = _scintilla.Encoding.GetByteCount(text.Substring(m.Index, m.Length));
-					var start = r.cpMin + text.Substring(0, m.Index).Length;
+					var start = r.MinPosition + text.Substring(0, m.Index).Length;
 					var end = text.Substring(m.Index, m.Length).Length;
 
 					range = new CharacterRange(start, start + end);
@@ -126,7 +127,7 @@ namespace OfficeRibbonXEditor.Models
 				//TODO - check that removing the byte count does not upset anything
 				//int start = r.cpMin + _scintilla.Encoding.GetByteCount(text.Substring(0, m.Index));
 				//int end = _scintilla.Encoding.GetByteCount(text.Substring(m.Index, m.Length));
-				var start = r.cpMin + text.Substring(0, m.Index).Length;
+				var start = r.MinPosition + text.Substring(0, m.Index).Length;
 				var end = text.Substring(m.Index, m.Length).Length;
 
 				return new CharacterRange(start, start + end);
@@ -135,28 +136,28 @@ namespace OfficeRibbonXEditor.Models
 
 		public CharacterRange Find(CharacterRange rangeToSearch, string searchString)
 		{
-			return this.Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, Flags);
+			return this.Find(rangeToSearch.MinPosition, rangeToSearch.MaxPosition, searchString, Flags);
 		}
 
 		public CharacterRange Find(CharacterRange rangeToSearch, string searchString, bool searchUp)
 		{
 			if (searchUp)
-				return this.Find(rangeToSearch.cpMax, rangeToSearch.cpMin, searchString, Flags);
+				return this.Find(rangeToSearch.MaxPosition, rangeToSearch.MinPosition, searchString, Flags);
 			else
-				return this.Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, Flags);
+				return this.Find(rangeToSearch.MinPosition, rangeToSearch.MaxPosition, searchString, Flags);
 		}
 
 		public CharacterRange Find(CharacterRange rangeToSearch, string searchString, SearchFlags searchflags)
 		{
-			return this.Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, searchflags);
+			return this.Find(rangeToSearch.MinPosition, rangeToSearch.MaxPosition, searchString, searchflags);
 		}
 
 		public CharacterRange Find(CharacterRange rangeToSearch, string searchString, SearchFlags searchflags, bool searchUp)
 		{
 			if (searchUp)
-				return this.Find(rangeToSearch.cpMax, rangeToSearch.cpMin, searchString, searchflags);
+				return this.Find(rangeToSearch.MaxPosition, rangeToSearch.MinPosition, searchString, searchflags);
 			else
-				return this.Find(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, searchflags);
+				return this.Find(rangeToSearch.MinPosition, rangeToSearch.MaxPosition, searchString, searchflags);
 		}
 
 		public CharacterRange Find(Regex findExpression)
@@ -203,7 +204,7 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindNext(Regex findExpression, bool wrap)
 		{
 			var r = this.Find(this.Scintilla.CurrentPosition, this.Scintilla.TextLength, findExpression);
-			if (r.cpMin != r.cpMax)
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
 				return this.Find(0, this.Scintilla.CurrentPosition, findExpression);
@@ -214,14 +215,14 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindNext(Regex findExpression, bool wrap, CharacterRange searchRange)
 		{
 			var caret = this.Scintilla.CurrentPosition;
-			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
-				return this.Find(searchRange.cpMin, searchRange.cpMax, findExpression, false);
+			if (!(caret >= searchRange.MinPosition && caret <= searchRange.MaxPosition))
+				return this.Find(searchRange.MinPosition, searchRange.MaxPosition, findExpression, false);
 
-			var r = this.Find(caret, searchRange.cpMax, findExpression);
-			if (r.cpMin != r.cpMax)
+			var r = this.Find(caret, searchRange.MaxPosition, findExpression);
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
-				return this.Find(searchRange.cpMin, caret, findExpression);
+				return this.Find(searchRange.MinPosition, caret, findExpression);
 			else
 				return new CharacterRange();
 		}
@@ -239,7 +240,7 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindNext(string searchString, bool wrap, SearchFlags flags)
 		{
 			var r = this.Find(this.Scintilla.CurrentPosition, this.Scintilla.TextLength, searchString, flags);
-			if (r.cpMin != r.cpMax)
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
 				return this.Find(0, this.Scintilla.CurrentPosition, searchString, flags);
@@ -250,14 +251,14 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindNext(string searchString, bool wrap, SearchFlags flags, CharacterRange searchRange)
 		{
 			var caret = this.Scintilla.CurrentPosition;
-			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
-				return this.Find(searchRange.cpMin, searchRange.cpMax, searchString, flags);
+			if (!(caret >= searchRange.MinPosition && caret <= searchRange.MaxPosition))
+				return this.Find(searchRange.MinPosition, searchRange.MaxPosition, searchString, flags);
 
-			var r = this.Find(caret, searchRange.cpMax, searchString, flags);
-			if (r.cpMin != r.cpMax)
+			var r = this.Find(caret, searchRange.MaxPosition, searchString, flags);
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
-				return this.Find(searchRange.cpMin, caret, searchString, flags);
+				return this.Find(searchRange.MinPosition, caret, searchString, flags);
 			else
 				return new CharacterRange();
 		}
@@ -275,7 +276,7 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindPrevious(Regex findExpression, bool wrap)
 		{
 			var r = this.Find(0, this.Scintilla.AnchorPosition, findExpression, true);
-			if (r.cpMin != r.cpMax)
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
 				return this.Find(this.Scintilla.CurrentPosition, this.Scintilla.TextLength, findExpression, true);
@@ -286,18 +287,18 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindPrevious(Regex findExpression, bool wrap, CharacterRange searchRange)
 		{
 			var caret = this.Scintilla.CurrentPosition;
-			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
-				return this.Find(searchRange.cpMin, searchRange.cpMax, findExpression, true);
+			if (!(caret >= searchRange.MinPosition && caret <= searchRange.MaxPosition))
+				return this.Find(searchRange.MinPosition, searchRange.MaxPosition, findExpression, true);
 
 			var anchor = this.Scintilla.AnchorPosition;
-			if (!(anchor >= searchRange.cpMin && anchor <= searchRange.cpMax))
+			if (!(anchor >= searchRange.MinPosition && anchor <= searchRange.MaxPosition))
 				anchor = caret;
 
-			var r = this.Find(searchRange.cpMin, anchor, findExpression, true);
-			if (r.cpMin != r.cpMax)
+			var r = this.Find(searchRange.MinPosition, anchor, findExpression, true);
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
-				return this.Find(anchor, searchRange.cpMax, findExpression, true);
+				return this.Find(anchor, searchRange.MaxPosition, findExpression, true);
 			else
 				return new CharacterRange();
 		}
@@ -315,7 +316,7 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindPrevious(string searchString, bool wrap, SearchFlags flags)
 		{
 			var r = this.Find(this.Scintilla.AnchorPosition, 0, searchString, flags);
-			if (r.cpMin != r.cpMax)
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
 				return this.Find(this.Scintilla.TextLength, this.Scintilla.CurrentPosition, searchString, flags);
@@ -326,18 +327,18 @@ namespace OfficeRibbonXEditor.Models
 		public CharacterRange FindPrevious(string searchString, bool wrap, SearchFlags flags, CharacterRange searchRange)
 		{
 			var caret = this.Scintilla.CurrentPosition;
-			if (!(caret >= searchRange.cpMin && caret <= searchRange.cpMax))
-				return this.Find(searchRange.cpMax, searchRange.cpMin, searchString, flags);
+			if (!(caret >= searchRange.MinPosition && caret <= searchRange.MaxPosition))
+				return this.Find(searchRange.MaxPosition, searchRange.MinPosition, searchString, flags);
 
 			var anchor = this.Scintilla.AnchorPosition;
-			if (!(anchor >= searchRange.cpMin && anchor <= searchRange.cpMax))
+			if (!(anchor >= searchRange.MinPosition && anchor <= searchRange.MaxPosition))
 				anchor = caret;
 
-			var r = this.Find(anchor, searchRange.cpMin, searchString, flags);
-			if (r.cpMin != r.cpMax)
+			var r = this.Find(anchor, searchRange.MinPosition, searchString, flags);
+			if (r.MinPosition != r.MaxPosition)
 				return r;
 			else if (wrap)
-				return this.Find(searchRange.cpMax, anchor, searchString, flags);
+				return this.Find(searchRange.MaxPosition, anchor, searchString, flags);
 			else
 				return new CharacterRange();
 		}
@@ -358,7 +359,7 @@ namespace OfficeRibbonXEditor.Models
 			while (true)
 			{
 				var r = this.Find(startPos, endPos, searchString, flags);
-				if (r.cpMin == r.cpMax)
+				if (r.MinPosition == r.MaxPosition)
 				{
 					break;
 				}
@@ -369,16 +370,16 @@ namespace OfficeRibbonXEditor.Models
 				{
 					//	We can of course have multiple instances of a find on a single
 					//	line. We don't want to mark this line more than once.
-					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.cpMin));
+					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.MinPosition));
 					if (line.Position > lastLine)
 						line.MarkerAdd(this.Marker.Index);
 					lastLine = line.Position;
 				}
 				if (highlight)
 				{
-					this.Scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
+					this.Scintilla.IndicatorFillRange(r.MinPosition, r.MaxPosition - r.MinPosition);
 				}
-				startPos = r.cpMax;
+				startPos = r.MaxPosition;
 			}
 
             this.FindAllResults?.Invoke(this, new ResultsEventArgs(new FindResults(results)));
@@ -398,7 +399,7 @@ namespace OfficeRibbonXEditor.Models
 			while (true)
 			{
 				var r = this.Find(rangeToSearch, findExpression);
-				if (r.cpMin == r.cpMax)
+				if (r.MinPosition == r.MaxPosition)
 				{
 					break;
 				}
@@ -409,16 +410,16 @@ namespace OfficeRibbonXEditor.Models
 				{
 					//	We can of course have multiple instances of a find on a single
 					//	line. We don't want to mark this line more than once.
-					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.cpMin));
+					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.MinPosition));
 					if (line.Position > lastLine)
 						line.MarkerAdd(this.Marker.Index);
 					lastLine = line.Position;
 				}
 				if (highlight)
 				{
-					this.Scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
+					this.Scintilla.IndicatorFillRange(r.MinPosition, r.MaxPosition - r.MinPosition);
 				}
-				rangeToSearch = new CharacterRange(r.cpMax, rangeToSearch.cpMax);
+				rangeToSearch = new CharacterRange(r.MaxPosition, rangeToSearch.MaxPosition);
 			}
 
             this.FindAllResults?.Invoke(this, new ResultsEventArgs(new FindResults(results)));
@@ -433,7 +434,7 @@ namespace OfficeRibbonXEditor.Models
 
 		public List<CharacterRange> FindAll(CharacterRange rangeToSearch, string searchString, SearchFlags flags, bool mark, bool highlight)
 		{
-			return this.FindAll(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, Flags, mark, highlight);
+			return this.FindAll(rangeToSearch.MinPosition, rangeToSearch.MaxPosition, searchString, flags, mark, highlight);
 		}
 
 		public List<CharacterRange> FindAll(Regex findExpression, bool mark, bool highlight)
@@ -471,15 +472,15 @@ namespace OfficeRibbonXEditor.Models
 			while (true)
 			{
 				var r = this.Find(startPos, endPos, searchString, flags);
-				if (r.cpMin == r.cpMax)
+				if (r.MinPosition == r.MaxPosition)
 				{
 					break;
 				}
 
-				this.Scintilla.SelectionStart = r.cpMin;
-				this.Scintilla.SelectionEnd = r.cpMax;
+				this.Scintilla.SelectionStart = r.MinPosition;
+				this.Scintilla.SelectionEnd = r.MaxPosition;
 				this.Scintilla.ReplaceSelection(replaceString);
-				r.cpMax = startPos = r.cpMin + replaceString.Length;
+				r = new CharacterRange(r.MinPosition, startPos = r.MinPosition + replaceString.Length);
 				endPos += diff;
 
 				results.Add(r);
@@ -489,14 +490,14 @@ namespace OfficeRibbonXEditor.Models
 				{
 					//	We can of course have multiple instances of a find on a single
 					//	line. We don't want to mark this line more than once.
-					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.cpMin));
+					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.MinPosition));
 					if (line.Position > lastLine)
 						line.MarkerAdd(this.Marker.Index);
 					lastLine = line.Position;
 				}
 				if (highlight)
 				{
-					this.Scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
+					this.Scintilla.IndicatorFillRange(r.MinPosition, r.MaxPosition - r.MinPosition);
 				}
 			}
 
@@ -513,7 +514,6 @@ namespace OfficeRibbonXEditor.Models
 
 			this.Scintilla.IndicatorCurrent = this.Indicator.Index;
 
-			var findCount = 0;
 			var lastLine = -1;
 
 			this.Scintilla.BeginUndoAction();
@@ -521,36 +521,35 @@ namespace OfficeRibbonXEditor.Models
 			while (true)
 			{
 				var r = this.Find(rangeToSearch, findExpression);
-				if (r.cpMin == r.cpMax)
+				if (r.MinPosition == r.MaxPosition)
 				{
 					break;
 				}
 
-				var findString = this.Scintilla.GetTextRange(r.cpMin, r.cpMax - r.cpMin);
+				var findString = this.Scintilla.GetTextRange(r.MinPosition, r.MaxPosition - r.MinPosition);
 				var replaceString = findExpression.Replace(findString, replaceExpression);
-				this.Scintilla.SelectionStart = r.cpMin;
-				this.Scintilla.SelectionEnd = r.cpMax;
+				this.Scintilla.SelectionStart = r.MinPosition;
+				this.Scintilla.SelectionEnd = r.MaxPosition;
 				this.Scintilla.ReplaceSelection(replaceString);
-				r.cpMax = rangeToSearch.cpMin = r.cpMin + replaceString.Length;
-				rangeToSearch.cpMax += replaceString.Length - findString.Length;
+				r = new CharacterRange(r.MinPosition, r.MinPosition + replaceString.Length);
+				rangeToSearch = new CharacterRange(r.MaxPosition, rangeToSearch.MaxPosition + replaceString.Length - findString.Length);
 
 				results.Add(r);
-				findCount++;
 
 				if (mark)
 				{
 					//	We can of course have multiple instances of a find on a single
 					//	line. We don't want to mark this line more than once.
-					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.cpMin));
+					var line = new Line(this.Scintilla, this.Scintilla.LineFromPosition(r.MinPosition));
 					if (line.Position > lastLine)
 						line.MarkerAdd(this.Marker.Index);
 					lastLine = line.Position;
 				}
 				if (highlight)
 				{
-					this.Scintilla.IndicatorFillRange(r.cpMin, r.cpMax - r.cpMin);
+					this.Scintilla.IndicatorFillRange(r.MinPosition, r.MaxPosition - r.MinPosition);
 				}
-				rangeToSearch = new CharacterRange(r.cpMax, rangeToSearch.cpMax);
+				rangeToSearch = new CharacterRange(r.MaxPosition, rangeToSearch.MaxPosition);
 			}
 
 			this.Scintilla.EndUndoAction();
@@ -567,7 +566,7 @@ namespace OfficeRibbonXEditor.Models
 
 		public List<CharacterRange> ReplaceAll(CharacterRange rangeToSearch, string searchString, string replaceString, SearchFlags flags, bool mark, bool highlight)
 		{
-			return this.ReplaceAll(rangeToSearch.cpMin, rangeToSearch.cpMax, searchString, replaceString, Flags, mark, highlight);
+			return this.ReplaceAll(rangeToSearch.MinPosition, rangeToSearch.MaxPosition, searchString, replaceString, flags, mark, highlight);
 		}
 
 		public List<CharacterRange> ReplaceAll(Regex findExpression, string replaceExpression, bool mark, bool highlight)
@@ -590,8 +589,14 @@ namespace OfficeRibbonXEditor.Models
 			return this.ReplaceAll(0, this.Scintilla.TextLength, searchString, replaceString, flags, mark, highlight);
 		}
 
-		public string Transform(string data)
+		[SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "Suggested fix does not work for .NET Framework 4.6.1")]
+		public static string Transform(string data)
 		{
+            if (data == null)
+            {
+                return null;
+            }
+
 			var result = data;
 			var nullChar = (char)0;
 			var cr = (char)13;
@@ -599,10 +604,10 @@ namespace OfficeRibbonXEditor.Models
 			var tab = (char)9;
 
 			result = result.Replace("\\r\\n", Environment.NewLine);
-			result = result.Replace("\\r", cr.ToString());
-			result = result.Replace("\\n", lf.ToString());
-			result = result.Replace("\\t", tab.ToString());
-			result = result.Replace("\\0", nullChar.ToString());
+			result = result.Replace("\\r", $"{cr}");
+			result = result.Replace("\\n", $"{lf}");
+			result = result.Replace("\\t", $"{tab}");
+			result = result.Replace("\\0", $"{nullChar}");
 
 			return result;
 		}

@@ -238,7 +238,7 @@ namespace OfficeRibbonXEditor.Views.Controls
                 return;
             }
 
-            if (!e.Text.EndsWith("\r") && !e.Text.EndsWith("\n"))
+            if (!e.Text.EndsWith("\r", StringComparison.OrdinalIgnoreCase) && !e.Text.EndsWith("\n", StringComparison.OrdinalIgnoreCase))
             {
                 return;
             }

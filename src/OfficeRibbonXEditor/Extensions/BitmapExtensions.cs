@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -7,7 +8,12 @@ namespace OfficeRibbonXEditor.Extensions
     public static class BitmapExtensions
     {
         public static BitmapImage AsBitmapImage(this Bitmap bitmap)
-        {         
+        {
+            if (bitmap == null)
+            {
+                throw new ArgumentNullException(nameof(bitmap));
+            }
+
             var ms = new MemoryStream();
             bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
             var image = new BitmapImage();

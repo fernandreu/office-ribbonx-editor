@@ -124,7 +124,7 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
         private void btnHighlightAll_Click(object sender, EventArgs e)
         {
-            if (this.txtFind.Text == string.Empty)
+            if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
             if (this._scintilla == null)
                 return;
@@ -221,28 +221,28 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
         private void findNext()
         {
-            if (this.txtFind.Text == string.Empty)
+            if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
             if (this._scintilla == null)
                 return;
 
             CharacterRange r = this._findReplace.FindReplace.FindNext(this.txtFind.Text, true, this._findReplace.GetSearchFlags());
-            if (r.cpMin != r.cpMax)
-                this._scintilla.SetSel(r.cpMin, r.cpMax);
+            if (r.MinPosition != r.MaxPosition)
+                this._scintilla.SetSel(r.MinPosition, r.MaxPosition);
 
             this.MoveFormAwayFromSelection();
         }
 
         private void findPrevious()
         {
-            if (this.txtFind.Text == string.Empty)
+            if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
             if (this._scintilla == null)
                 return;
 
             CharacterRange r = this._findReplace.FindReplace.FindPrevious(this.txtFind.Text, true, this._findReplace.GetSearchFlags());
-            if (r.cpMin != r.cpMax)
-                this._scintilla.SetSel(r.cpMin, r.cpMax);
+            if (r.MinPosition != r.MaxPosition)
+                this._scintilla.SetSel(r.MinPosition, r.MaxPosition);
 
             this.MoveFormAwayFromSelection();
         }
@@ -272,18 +272,18 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
         private void txtFind_TextChanged(object sender, EventArgs e)
         {
             this.txtFind.BackColor = SystemColors.Window;
-            if (this.txtFind.Text == string.Empty)
+            if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
             if (this._scintilla == null)
                 return;
 
             int pos = Math.Min(this._scintilla.CurrentPosition, this._scintilla.AnchorPosition);
             CharacterRange r = this._findReplace.FindReplace.Find(pos, this._scintilla.TextLength, this.txtFind.Text, this._findReplace.GetSearchFlags());
-            if (r.cpMin == r.cpMax)
+            if (r.MinPosition == r.MaxPosition)
                 r = this._findReplace.FindReplace.Find(0, pos, this.txtFind.Text, this._findReplace.GetSearchFlags());
 
-            if (r.cpMin != r.cpMax)
-                this._scintilla.SetSel(r.cpMin, r.cpMax);
+            if (r.MinPosition != r.MaxPosition)
+                this._scintilla.SetSel(r.MinPosition, r.MaxPosition);
             else
                 this.txtFind.BackColor = Color.Tomato;
 

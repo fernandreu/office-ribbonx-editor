@@ -5,13 +5,17 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
+using AsyncAwaitBestPractices;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Extensions;
@@ -32,6 +36,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 {
     using ResultsEventArgs = DataEventArgs<IResultCollection>;
 
+    [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Shown in a message box anyway")]
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly IMessageBoxService messageBoxService;
@@ -74,8 +79,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.SaveAsCommand = new RelayCommand(() => this.ExecuteSaveAsCommand(true));
             this.SaveACopyAsCommand = new RelayCommand(() => this.ExecuteSaveAsCommand(false));
             this.CloseDocumentCommand = new RelayCommand(this.ExecuteCloseDocumentCommand);
-            this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX14));
-            this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlParts.RibbonX12));
+            this.InsertXml14Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlPart.RibbonX14));
+            this.InsertXml12Command = new RelayCommand(() => this.CurrentDocument?.InsertPart(XmlPart.RibbonX12));
             this.InsertXmlSampleCommand = new RelayCommand<XmlSampleViewModel>(this.ExecuteInsertXmlSampleCommand);
             this.InsertIconsCommand = new RelayCommand(this.ExecuteInsertIconsCommand);
             this.ChangeIconIdCommand = new RelayCommand(this.ExecuteChangeIconIdCommand);
@@ -121,7 +126,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 this.FinishOpeningFile(file);
             }
 
-            this.CheckVersionAsync(versionChecker);
+            this.CheckVersionAsync(versionChecker).SafeFireAndForget();
         }
 
         /// <summary>
@@ -245,9 +250,9 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         public bool IsIconSelected => this.SelectedItem is IconViewModel;
         
-        public bool CanInsertXml12Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlParts.RibbonX12) == null;
+        public bool CanInsertXml12Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlPart.RibbonX12) == null;
 
-        public bool CanInsertXml14Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlParts.RibbonX14) == null;
+        public bool CanInsertXml14Part => (this.SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlPart.RibbonX14) == null;
 
         public RelayCommand OpenDocumentCommand { get; }
 
@@ -433,7 +438,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.LaunchDialog<FindReplaceDialogViewModel, (Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler)>((
                 lexer.Editor.Scintilla,
                 action,
-                (o, e) => tab.RaiseShowResults(e)));
+                (o, e) => tab.OnShowResults(e)));
         }
 
         private void ExecuteCloseDocumentCommand()
@@ -447,7 +452,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             if (doc.HasUnsavedChanges)
             {
-                var result = this.messageBoxService.Show(string.Format(StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                var result = this.messageBoxService.Show(string.Format(CultureInfo.CurrentCulture, StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     this.SaveCommand.Execute();
@@ -633,7 +638,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (doc.HasUnsavedChanges)
                 {
                     var result = this.messageBoxService.Show(
-                        string.Format(StringsResource.idsCloseWarningMessage, doc.Name), 
+                        string.Format(CultureInfo.CurrentCulture, StringsResource.idsCloseWarningMessage, doc.Name), 
                         StringsResource.idsCloseWarningTitle,
                         MessageBoxButton.YesNoCancel, 
                         MessageBoxImage.Warning);
@@ -849,6 +854,11 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         public void AdjustTabTitle(ITabItemViewModel tab)
         {
+            if (tab == null)
+            {
+                return;
+            }
+
             var result = tab.Item.Name;
             var targets = this.DocumentList.FindItemsByName(tab.Item).ToList();
             if (targets.Count == 0)
@@ -925,7 +935,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var filters = new List<string>();
             for (;;)
             {
-                var filter = StringsResource.ResourceManager.GetString("idsFilterSaveAs" + filters.Count);
+                var filter = StringsResource.ResourceManager.GetString("idsFilterSaveAs" + filters.Count, CultureInfo.CurrentCulture);
                 if (filter == null)
                 {
                     break;
@@ -1003,23 +1013,18 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private void LoadXmlSchemas()
         {
-            try
-            {
-                this.customUiSchemas = new Hashtable(2);
+            this.customUiSchemas = new Hashtable(2);
 
-                using (var reader = new StringReader(SchemasResource.customUI))
-                {
-                    this.customUiSchemas.Add(XmlParts.RibbonX12, XmlSchema.Read(reader, null));
-                }
-                    
-                using (var reader = new StringReader(SchemasResource.customui14))
-                {
-                    this.customUiSchemas.Add(XmlParts.RibbonX14, XmlSchema.Read(reader, null));
-                }
-            }
-            catch (Exception ex)
+            using (var stringReader = new StringReader(SchemasResource.customUI))
+            using (var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
             {
-                Debug.Fail(ex.Message);
+                this.customUiSchemas.Add(XmlPart.RibbonX12, XmlSchema.Read(reader, null));
+            }
+                
+            using (var stringReader = new StringReader(SchemasResource.customui14))
+            using (var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
+            {
+                this.customUiSchemas.Add(XmlPart.RibbonX14, XmlSchema.Read(reader, null));
             }
         }
 
@@ -1104,6 +1109,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.XmlSamples = root.Items.Count > 0 ? root : null;
         }
 
+
         /// <summary>
         /// Inserts an XML sample to the selected document in the tree
         /// </summary>
@@ -1121,7 +1127,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 // See if there is already a part, and otherwise insert one
                 if (doc.Children.Count == 0)
                 {
-                    doc.InsertPart(XmlParts.RibbonX12);
+                    doc.InsertPart(XmlPart.RibbonX12);
                     newPart = true;
                 }
 
@@ -1154,7 +1160,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 var data = sample.ReadContents();
 
                 // Make sure the xml schema is not for the wrong part type
-                if (this.customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && this.customUiSchemas[part.Part.PartType == XmlParts.RibbonX12 ? XmlParts.RibbonX14 : XmlParts.RibbonX12] is XmlSchema otherSchema)
+                if (this.customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && this.customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema)
                 {
                     data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
                 }
@@ -1164,16 +1170,15 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (info == null)
                 {
                     part.Contents = data;
-                    tab.RaiseUpdateEditor(new EditorChangeEventArgs {Start = -1, End = -1, NewText = data});
+                    tab.OnUpdateEditor(new EditorChangeEventArgs {Start = -1, End = -1, NewText = data});
                 }
                 else
                 {
-                    tab.RaiseUpdateEditor(new EditorChangeEventArgs {Start = info.Selection.Item1, End = info.Selection.Item2, NewText = data});
+                    tab.OnUpdateEditor(new EditorChangeEventArgs {Start = info.Selection.Item1, End = info.Selection.Item2, NewText = data});
                 }
             }
             catch (Exception ex)
             {
-                Debug.Fail(ex.Message);
                 this.messageBoxService.Show(ex.Message, "Error inserting XML sample");
             }
         }
@@ -1228,7 +1233,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
                 xmlDoc.Validate(schemaSet, ValidateHandler);
                 
-                tab.RaiseShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
+                tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
 
                 if (!errorList.Any())
                 {
@@ -1258,11 +1263,11 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     }
                 };
 
-                tab.RaiseShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
+                tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
                 return false;
             }
         }
-        
+
         private void ExecuteGenerateCallbacksCommand()
         {
             // TODO: Check whether any text is selected, and generate callbacks only for that text
@@ -1282,9 +1287,13 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             try
             {
-                var customUi = new XmlDocument();
+                var customUi = new XmlDocument { XmlResolver = null };
 
-                customUi.LoadXml(part.Contents);
+                using (var stringReader = new StringReader(part.Contents))
+                using (var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
+                {
+                    customUi.Load(reader);
+                }
 
                 var callbacks = CallbacksBuilder.GenerateCallback(customUi);
                 if (callbacks == null || callbacks.Length == 0)
@@ -1358,7 +1367,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 }
 
                 var index = lines[i].IndexOf(trimmed, StringComparison.Ordinal);
-                if (trimmed.StartsWith("<!--") && trimmed.EndsWith("-->"))
+                if (trimmed.StartsWith("<!--", StringComparison.OrdinalIgnoreCase) && trimmed.EndsWith("-->", StringComparison.OrdinalIgnoreCase))
                 {
                     // Remove the comment characters
                     lines[i] = lines[i].Substring(0, index) + trimmed.Substring(4, trimmed.Length - 7) + lines[i].Substring(index + trimmed.Length);
@@ -1374,12 +1383,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var combined = string.Join(NewLine, lines);
 
             // Update the selected item's current contents to that, and notify the editor
-            tab.RaiseUpdateEditor(new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
+            tab.OnUpdateEditor(new EditorChangeEventArgs { Start = start, End = end, NewText = combined, UpdateSelection = true });
         }
 
-        private async void CheckVersionAsync(IVersionChecker versionChecker)
+        private async Task CheckVersionAsync(IVersionChecker versionChecker)
         {
-            this.NewerVersion = await versionChecker.CheckVersionAsync();
+            this.NewerVersion = await versionChecker.CheckVersionAsync().ConfigureAwait(false);
         }
 
         private void ExecuteNewerVersionCommand()

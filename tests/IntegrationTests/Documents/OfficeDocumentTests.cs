@@ -40,7 +40,7 @@ namespace OfficeRibbonXEditor.IntegrationTests.Documents
             var doc = new OfficeDocument(this.sourceFile);
 
             // Act
-            var part = doc.CreateCustomPart(XmlParts.RibbonX12);
+            var part = doc.CreateCustomPart(XmlPart.RibbonX12);
 
             // Assert
             Assert.IsNotNull(part, "Part was not inserted");

@@ -8,11 +8,11 @@ namespace OfficeRibbonXEditor.Models.Events
         public ReplaceResultsEventArgs(FindReplace findReplace, List<CharacterRange> replaceAllResults)
         {
             this.FindReplace = findReplace;
-            this.ReplaceAllResults = replaceAllResults;
+            this.ReplaceAllResults = replaceAllResults ?? new List<CharacterRange>();
         }
 
         public FindReplace FindReplace { get; set; }
 
-        public List<CharacterRange> ReplaceAllResults { get; set; }
+        public List<CharacterRange> ReplaceAllResults { get; }
     }
 }

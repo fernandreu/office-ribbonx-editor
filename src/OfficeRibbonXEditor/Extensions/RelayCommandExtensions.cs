@@ -1,4 +1,5 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using System;
+using GalaSoft.MvvmLight.Command;
 
 namespace OfficeRibbonXEditor.Extensions
 {
@@ -11,6 +12,11 @@ namespace OfficeRibbonXEditor.Extensions
         /// <param name="command">The command to execute</param>
         public static void Execute(this RelayCommand command)
         {
+            if (command == null)
+            {
+                throw new ArgumentNullException(nameof(command));
+            }
+
             command.Execute(null);
         }
     }

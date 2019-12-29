@@ -5,7 +5,7 @@ using OfficeRibbonXEditor.Models.Documents;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {
-    public class OfficeDocumentViewModel : TreeViewItemViewModel
+    public class OfficeDocumentViewModel : TreeViewItemViewModel, IDisposable
     {
         private OfficeDocument document;
 
@@ -52,13 +52,13 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             {
                 switch (this.document.FileType)
                 {
-                    case OfficeApplications.Excel:
+                    case OfficeApplication.Excel:
                         return "/Resources/Images/excelwkb.png";
-                    case OfficeApplications.PowerPoint:
+                    case OfficeApplication.PowerPoint:
                         return "/Resources/Images/pptpre.png";
-                    case OfficeApplications.Word:
+                    case OfficeApplication.Word:
                         return "/Resources/Images/worddoc.png";
-                    case OfficeApplications.Xml:
+                    case OfficeApplication.Xml:
                         return "/Resources/Images/xml.png";
                     default:
                         return null;
@@ -83,7 +83,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             this.document = new OfficeDocument(fileName);
             
             // Delete all its original parts
-            foreach (XmlParts type in Enum.GetValues(typeof(XmlParts)))
+            foreach (XmlPart type in Enum.GetValues(typeof(XmlPart)))
             {
                 this.document.RemoveCustomPart(type);
             }
@@ -124,7 +124,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             this.partsAddedOrRemoved = false;
         }
 
-        public void InsertPart(XmlParts type)
+        public void InsertPart(XmlPart type)
         {
             // Check if the part does not exist yet
             var part = this.document.RetrieveCustomPart(type);
@@ -140,7 +140,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             this.partsAddedOrRemoved = true;
         }
 
-        public void RemovePart(XmlParts type)
+        public void RemovePart(XmlPart type)
         {
             this.document.RemoveCustomPart(type);
             this.partsAddedOrRemoved = true;
@@ -171,6 +171,11 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             {
                 this.Children.Add(new OfficePartViewModel(part, this));
             }
+        }
+
+        public void Dispose()
+        {
+            document?.Dispose();
         }
     }
 }

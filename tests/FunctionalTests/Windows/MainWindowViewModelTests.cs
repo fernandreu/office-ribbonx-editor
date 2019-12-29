@@ -94,7 +94,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
             Assert.IsInstanceOf<OfficePartViewModel>(doc.Children[0]);
-            Assert.AreEqual(XmlParts.RibbonX12, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
+            Assert.AreEqual(XmlPart.RibbonX12, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
         }
 
         [Test]
@@ -109,14 +109,14 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
             Assert.IsInstanceOf<OfficePartViewModel>(doc.Children[0]);
-            Assert.AreEqual(XmlParts.RibbonX14, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
+            Assert.AreEqual(XmlPart.RibbonX14, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
         }
 
         [Test]
         public void Xml12PartShouldNotBeInsertedIfAlreadyExists()
         {
             // Arrange
-            var (doc, _) = this.OpenAndInsertPart(XmlParts.RibbonX12, false);
+            var (doc, _) = this.OpenAndInsertPart(XmlPart.RibbonX12, false);
 
             // Act
             this.viewModel.InsertXml12Command.Execute();
@@ -129,7 +129,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         public void Xml14PartShouldNotBeInsertedIfAlreadyExists()
         {
             // Arrange
-            var (doc, _) = this.OpenAndInsertPart(XmlParts.RibbonX14, false);
+            var (doc, _) = this.OpenAndInsertPart(XmlPart.RibbonX14, false);
 
             // Act
             this.viewModel.InsertXml14Command.Execute();
@@ -430,10 +430,10 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             return doc;
         }
 
-        private Tuple<OfficeDocumentViewModel, OfficePartViewModel> OpenAndInsertPart(XmlParts partType = XmlParts.RibbonX12, bool select = true)
+        private Tuple<OfficeDocumentViewModel, OfficePartViewModel> OpenAndInsertPart(XmlPart partType = XmlPart.RibbonX12, bool select = true)
         {
             var doc = this.OpenSource();
-            if (partType == XmlParts.RibbonX12)
+            if (partType == XmlPart.RibbonX12)
             {
                 this.viewModel.InsertXml12Command.Execute();
             }

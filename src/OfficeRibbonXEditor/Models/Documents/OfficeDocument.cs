@@ -6,7 +6,7 @@ using System.IO.Packaging;
 
 namespace OfficeRibbonXEditor.Models.Documents
 {
-    public enum XmlParts
+    public enum XmlPart
     {
         Qat12,
         RibbonX12,
@@ -14,7 +14,7 @@ namespace OfficeRibbonXEditor.Models.Documents
         LastEntry // Always Last
     }
 
-    public enum OfficeApplications
+    public enum OfficeApplication
     {
         Word,
         Excel,
@@ -59,14 +59,9 @@ namespace OfficeRibbonXEditor.Models.Documents
             this.IsDirty = false;
         }
 
-        ~OfficeDocument()
-        {
-            this.Dispose(true /*isFramework*/);
-        }
-
         public Package UnderlyingPackage { get; private set; }
 
-        public List<OfficePart> Parts { get; private set; }
+        public List<OfficePart>? Parts { get; private set; }
 
         public string Name { get; set; }
 
@@ -83,7 +78,7 @@ namespace OfficeRibbonXEditor.Models.Documents
 
                 foreach (var part in this.Parts)
                 {
-                    if (part.PartType == XmlParts.RibbonX12 || part.PartType == XmlParts.RibbonX14)
+                    if (part.PartType == XmlPart.RibbonX12 || part.PartType == XmlPart.RibbonX14)
                     {
                         return true;
                     }
@@ -93,29 +88,32 @@ namespace OfficeRibbonXEditor.Models.Documents
             }
         }
         
-        public OfficeApplications FileType => MapFileType(Path.GetExtension(this.Name));
+        public OfficeApplication FileType => MapFileType(Path.GetExtension(this.Name));
 
-        public static OfficeApplications MapFileType(string extension)
+        public static OfficeApplication MapFileType(string extension)
         {
-            extension = extension.ToLower();
-
-            if (extension.StartsWith(".do"))
+            if (extension == null)
             {
-                return OfficeApplications.Word;
+                return OfficeApplication.Xml;
             }
 
-            if (extension.StartsWith(".xl"))
+            if (extension.StartsWith(".do", StringComparison.OrdinalIgnoreCase))
             {
-                return OfficeApplications.Excel;
+                return OfficeApplication.Word;
             }
 
-            if (extension.StartsWith(".pp"))
+            if (extension.StartsWith(".xl", StringComparison.OrdinalIgnoreCase))
             {
-                return OfficeApplications.PowerPoint;
+                return OfficeApplication.Excel;
+            }
+
+            if (extension.StartsWith(".pp", StringComparison.OrdinalIgnoreCase))
+            {
+                return OfficeApplication.PowerPoint;
             }
 
             Debug.Assert(false, "Unrecognized extension passed");
-            return OfficeApplications.Xml;
+            return OfficeApplication.Xml;
         }
 
         /// <summary>
@@ -161,7 +159,7 @@ namespace OfficeRibbonXEditor.Models.Documents
             return false;
         }
 
-        public void Save(string customFileName = null, bool preserveAttributes = true)
+        public void Save(string? customFileName = null, bool preserveAttributes = true)
         {
             if (string.IsNullOrEmpty(customFileName))
             {
@@ -200,8 +198,13 @@ namespace OfficeRibbonXEditor.Models.Documents
             this.IsDirty = false;
         }
 
-        public void RemoveCustomPart(XmlParts partType)
+        public void RemoveCustomPart(XmlPart partType)
         {
+            if (this.Parts == null)
+            {
+                return;
+            }
+
             for (var i = this.Parts.Count - 1; i >= 0; i--)
             {
                 if (this.Parts[i].PartType != partType)
@@ -219,12 +222,12 @@ namespace OfficeRibbonXEditor.Models.Documents
             }
         }
 
-        public void SaveCustomPart(XmlParts partType, string text)
+        public void SaveCustomPart(XmlPart partType, string text)
         {
             this.SaveCustomPart(partType, text, false /*isCreatingNewPart*/);
         }
 
-        public void SaveCustomPart(XmlParts partType, string text, bool isCreatingNewPart)
+        public void SaveCustomPart(XmlPart partType, string text, bool isCreatingNewPart)
         {
             var targetPart = this.RetrieveCustomPart(partType);
 
@@ -241,26 +244,26 @@ namespace OfficeRibbonXEditor.Models.Documents
             }
 
             Debug.Assert(targetPart != null, "targetPart is null when saving custom part");
-            targetPart.Save(text);
+            targetPart?.Save(text);
             this.IsDirty = true;
         }
 
-        public OfficePart CreateCustomPart(XmlParts partType)
+        public OfficePart CreateCustomPart(XmlPart partType)
         {
             string relativePath;
             string relType;
 
             switch (partType)
             {
-                case XmlParts.RibbonX12:
+                case XmlPart.RibbonX12:
                     relativePath = "/customUI/customUI.xml";
                     relType = CustomUiPartRelType;
                     break;
-                case XmlParts.RibbonX14:
+                case XmlPart.RibbonX14:
                     relativePath = "/customUI/customUI14.xml";
                     relType = CustomUi14PartRelType;
                     break;
-                case XmlParts.Qat12:
+                case XmlPart.Qat12:
                     relativePath = "/customUI/qat.xml";
                     relType = QatPartRelType;
                     break;
@@ -285,13 +288,18 @@ namespace OfficeRibbonXEditor.Models.Documents
 
             Debug.Assert(part != null, "Fail to create custom part.");
 
+            if (this.Parts == null)
+            {
+                this.Parts = new List<OfficePart>();
+            }
+
             this.Parts.Add(part);
             this.IsDirty = true;
 
             return part;
         }
 
-        public OfficePart RetrieveCustomPart(XmlParts partType)
+        public OfficePart? RetrieveCustomPart(XmlPart partType)
         {
             Debug.Assert(this.Parts != null, "Document has no xmlParts to retrieve");
             if (this.Parts == null || this.Parts.Count == 0)
@@ -312,27 +320,21 @@ namespace OfficeRibbonXEditor.Models.Documents
 
         public void Dispose()
         {
-            this.Dispose(false /*isFramework*/);
+            this.Dispose(true);
             GC.SuppressFinalize(this);
         }
 
-        private void Dispose(bool isFramework)
+        protected virtual void Dispose(bool disposing)
         {
             if (this.disposed)
             {
                 return;
             }
 
-            if (!isFramework)
+            if (disposing)
             {
                 this.Name = null;
-                if (this.Parts != null && this.Parts.Count > 0)
-                {
-                    for (int i = 0; i < this.Parts.Count; i++)
-                    {
-                        this.Parts[i] = null;
-                    }
-                }
+                this.Parts?.Clear();
 
                 if (this.UnderlyingPackage != null)
                 {
@@ -354,7 +356,7 @@ namespace OfficeRibbonXEditor.Models.Documents
                     {
                         File.Delete(this.tempFileName);
                     }
-                    catch (Exception ex)
+                    catch (IOException ex)
                     {
                         Debug.Fail(ex.Message);
                     }
@@ -383,7 +385,7 @@ namespace OfficeRibbonXEditor.Models.Documents
                 var customUiUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
                 if (this.UnderlyingPackage.PartExists(customUiUri))
                 {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), XmlParts.RibbonX14, relationship.Id));
+                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), XmlPart.RibbonX14, relationship.Id));
                 }
 
                 break;
@@ -394,7 +396,7 @@ namespace OfficeRibbonXEditor.Models.Documents
                 var customUiUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
                 if (this.UnderlyingPackage.PartExists(customUiUri))
                 {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), XmlParts.RibbonX12, relationship.Id));
+                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), XmlPart.RibbonX12, relationship.Id));
                 }
 
                 break;
@@ -405,7 +407,7 @@ namespace OfficeRibbonXEditor.Models.Documents
                 var qatUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
                 if (this.UnderlyingPackage.PartExists(qatUri))
                 {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(qatUri), XmlParts.Qat12, relationship.Id));
+                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(qatUri), XmlPart.Qat12, relationship.Id));
                 }
 
                 break;

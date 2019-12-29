@@ -20,14 +20,14 @@ namespace OfficeRibbonXEditor.Behaviors
     /// </remarks>
     public static class TabContent
     {
-        public static bool GetIsCached(DependencyObject obj)
+        public static bool GetIsCached(DependencyObject d)
         {
-            return (bool)obj.GetValue(IsCachedProperty);
+            return (bool?)d?.GetValue(IsCachedProperty) ?? false;
         }
 
-        public static void SetIsCached(DependencyObject obj, bool value)
+        public static void SetIsCached(DependencyObject d, bool value)
         {
-            obj.SetValue(IsCachedProperty, value);
+            d?.SetValue(IsCachedProperty, value);
         }
 
         /// <summary>
@@ -38,14 +38,14 @@ namespace OfficeRibbonXEditor.Behaviors
             DependencyProperty.RegisterAttached("IsCached", typeof(bool), typeof(TabContent), new UIPropertyMetadata(false, OnIsCachedChanged));
 
 
-        public static DataTemplate GetTemplate(DependencyObject obj)
+        public static DataTemplate GetTemplate(DependencyObject d)
         {
-            return (DataTemplate)obj.GetValue(TemplateProperty);
+            return (DataTemplate)d?.GetValue(TemplateProperty);
         }
 
-        public static void SetTemplate(DependencyObject obj, DataTemplate value)
+        public static void SetTemplate(DependencyObject d, DataTemplate value)
         {
-            obj.SetValue(TemplateProperty, value);
+            d?.SetValue(TemplateProperty, value);
         }
 
         /// <summary>
@@ -54,15 +54,14 @@ namespace OfficeRibbonXEditor.Behaviors
         public static readonly DependencyProperty TemplateProperty =
             DependencyProperty.RegisterAttached("Template", typeof(DataTemplate), typeof(TabContent), new UIPropertyMetadata(null));
 
-
-        public static DataTemplateSelector GetTemplateSelector(DependencyObject obj)
+        public static DataTemplateSelector GetTemplateSelector(DependencyObject d)
         {
-            return (DataTemplateSelector)obj.GetValue(TemplateSelectorProperty);
+            return (DataTemplateSelector)d?.GetValue(TemplateSelectorProperty);
         }
 
-        public static void SetTemplateSelector(DependencyObject obj, DataTemplateSelector value)
+        public static void SetTemplateSelector(DependencyObject d, DataTemplateSelector value)
         {
-            obj.SetValue(TemplateSelectorProperty, value);
+            d?.SetValue(TemplateSelectorProperty, value);
         }
 
         /// <summary>
@@ -72,15 +71,15 @@ namespace OfficeRibbonXEditor.Behaviors
             DependencyProperty.RegisterAttached("TemplateSelector", typeof(DataTemplateSelector), typeof(TabContent), new UIPropertyMetadata(null));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static TabControl GetInternalTabControl(DependencyObject obj)
+        public static TabControl GetInternalTabControl(DependencyObject d)
         {
-            return (TabControl)obj.GetValue(InternalTabControlProperty);
+            return (TabControl)d?.GetValue(InternalTabControlProperty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetInternalTabControl(DependencyObject obj, TabControl value)
+        public static void SetInternalTabControl(DependencyObject d, TabControl value)
         {
-            obj.SetValue(InternalTabControlProperty, value);
+            d?.SetValue(InternalTabControlProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InternalTabControl.  This enables animation, styling, binding, etc...
@@ -88,17 +87,16 @@ namespace OfficeRibbonXEditor.Behaviors
         public static readonly DependencyProperty InternalTabControlProperty =
             DependencyProperty.RegisterAttached("InternalTabControl", typeof(TabControl), typeof(TabContent), new UIPropertyMetadata(null, OnInternalTabControlChanged));
 
-
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ContentControl GetInternalCachedContent(DependencyObject obj)
+        public static ContentControl GetInternalCachedContent(DependencyObject d)
         {
-            return (ContentControl)obj.GetValue(InternalCachedContentProperty);
+            return (ContentControl)d?.GetValue(InternalCachedContentProperty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetInternalCachedContent(DependencyObject obj, ContentControl value)
+        public static void SetInternalCachedContent(DependencyObject d, ContentControl value)
         {
-            obj.SetValue(InternalCachedContentProperty, value);
+            d?.SetValue(InternalCachedContentProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InternalCachedContent.  This enables animation, styling, binding, etc...
@@ -107,15 +105,15 @@ namespace OfficeRibbonXEditor.Behaviors
             DependencyProperty.RegisterAttached("InternalCachedContent", typeof(ContentControl), typeof(TabContent), new UIPropertyMetadata(null));
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static object GetInternalContentManager(DependencyObject obj)
+        public static object GetInternalContentManager(DependencyObject d)
         {
-            return (object)obj.GetValue(InternalContentManagerProperty);
+            return (object)d?.GetValue(InternalContentManagerProperty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public static void SetInternalContentManager(DependencyObject obj, object value)
+        public static void SetInternalContentManager(DependencyObject d, object value)
         {
-            obj.SetValue(InternalContentManagerProperty, value);
+            d?.SetValue(InternalContentManagerProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InternalContentManager.  This enables animation, styling, binding, etc...
@@ -126,8 +124,7 @@ namespace OfficeRibbonXEditor.Behaviors
         {
             if (obj == null) return;
 
-            var tabControl = obj as TabControl;
-            if (tabControl == null)
+            if (!(obj is TabControl tabControl))
             {
                 throw new InvalidOperationException("Cannot set TabContent.IsCached on object of type " + args.NewValue.GetType().Name +
                     ". Only objects of type TabControl can have TabContent.IsCached property.");
@@ -157,7 +154,7 @@ namespace OfficeRibbonXEditor.Behaviors
 
             var context = new ParserContext();
 
-            context.XamlTypeMapper = new XamlTypeMapper(new string[0]);
+            context.XamlTypeMapper = new XamlTypeMapper(Array.Empty<string>());
             context.XamlTypeMapper.AddMappingProcessingInstruction("b", typeof(TabContent).Namespace, typeof(TabContent).Assembly.FullName);
 
             context.XmlnsDictionary.Add("", "http://schemas.microsoft.com/winfx/2006/xaml/presentation");
@@ -223,43 +220,42 @@ namespace OfficeRibbonXEditor.Behaviors
         private static void EnsureContentTemplateIsNotModified(TabControl tabControl)
         {
             var descriptor = DependencyPropertyDescriptor.FromProperty(TabControl.ContentTemplateProperty, typeof(TabControl));
-            descriptor.AddValueChanged(tabControl, (sender, args) =>
-                {
-                    throw new InvalidOperationException("Cannot assign to TabControl.ContentTemplate when TabContent.IsCached is True. Use TabContent.Template instead");
-                });
+            descriptor.AddValueChanged(tabControl, (sender, args) => 
+                throw new InvalidOperationException("Cannot assign to TabControl.ContentTemplate when TabContent.IsCached is True. Use TabContent.Template instead"));
         }
 
-        public class ContentManager
+        private class ContentManager
         {
-            TabControl _tabControl;
-            Decorator _border;
+            private readonly TabControl tabControl;
+
+            private Decorator border;
 
             public ContentManager(TabControl tabControl, Decorator border)
             {
-                this._tabControl = tabControl;
-                this._border = border;
-                this._tabControl.SelectionChanged += (sender, args) => { this.UpdateSelectedTab(); };
+                this.tabControl = tabControl;
+                this.border = border;
+                this.tabControl.SelectionChanged += (sender, args) => { this.UpdateSelectedTab(); };
             }
 
             public void ReplaceContainer(Decorator newBorder)
             {
-                if (Object.ReferenceEquals(this._border, newBorder)) return;
+                if (ReferenceEquals(this.border, newBorder)) return;
 
-                this._border.Child = null; // detach any tab content that old border may hold
-                this._border = newBorder;
+                this.border.Child = null; // detach any tab content that old border may hold
+                this.border = newBorder;
             }
 
             public void UpdateSelectedTab()
             {
-                this._border.Child = this.GetCurrentContent();
+                this.border.Child = this.GetCurrentContent();
             }
 
             private ContentControl GetCurrentContent()
             {
-                var item = this._tabControl.SelectedItem;
+                var item = this.tabControl.SelectedItem;
                 if (item == null) return null;
 
-                var tabItem = this._tabControl.ItemContainerGenerator.ContainerFromItem(item);
+                var tabItem = this.tabControl.ItemContainerGenerator.ContainerFromItem(item);
                 if (tabItem == null) return null;
 
                 var cachedContent = TabContent.GetInternalCachedContent(tabItem);
@@ -268,8 +264,8 @@ namespace OfficeRibbonXEditor.Behaviors
                     cachedContent = new ContentControl 
                     { 
                         DataContext = item,
-                        ContentTemplate = TabContent.GetTemplate(this._tabControl), 
-                        ContentTemplateSelector = TabContent.GetTemplateSelector(this._tabControl)
+                        ContentTemplate = TabContent.GetTemplate(this.tabControl), 
+                        ContentTemplateSelector = TabContent.GetTemplateSelector(this.tabControl)
                     };
                 
                     cachedContent.SetBinding(ContentControl.ContentProperty, new Binding());

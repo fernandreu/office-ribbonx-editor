@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Xml;
@@ -56,8 +57,13 @@ namespace OfficeRibbonXEditor.Models
         {
             if (node.Attributes != null)
             {
-                foreach (XmlAttribute attribute in node.Attributes)
+                foreach (XmlAttribute? attribute in node.Attributes)
                 {
+                    if (attribute == null)
+                    {
+                        continue;
+                    }
+
                     var callback = GenerateCallback(attribute);
                     if (string.IsNullOrEmpty(callback))
                     {
@@ -83,16 +89,19 @@ namespace OfficeRibbonXEditor.Models
 
             if (node.HasChildNodes)
             {
-                foreach (XmlNode child in node.ChildNodes)
+                foreach (XmlNode? child in node.ChildNodes)
                 {
+                    if (child == null)
+                    {
+                        continue;
+                    }
+
                     GenerateCallback(child, result);
                 }
             }
-
-            return;
         }
 
-        private static string GetControlId(XmlNode node)
+        private static string? GetControlId(XmlNode node)
         {
             if (node.NodeType != XmlNodeType.Element || node.Attributes == null)
             {
@@ -100,8 +109,13 @@ namespace OfficeRibbonXEditor.Models
             }
             try
             {
-                foreach (XmlAttribute attribute in node.Attributes)
+                foreach (XmlAttribute? attribute in node.Attributes)
                 {
+                    if (attribute == null)
+                    {
+                        continue;
+                    }
+
                     if (attribute.Name == "id" || attribute.Name == "idMso" || attribute.Name == "idQ")
                     {
                         return attribute.Value.Substring(attribute.Value.LastIndexOf(':') + 1);
@@ -322,7 +336,7 @@ namespace OfficeRibbonXEditor.Models
                     return BaseCallbackType.GetStyle;
 
                 default:
-                    if (callback.Name.StartsWith("on") || callback.Name.StartsWith("get"))
+                    if (callback.Name.StartsWith("on", StringComparison.OrdinalIgnoreCase) || callback.Name.StartsWith("get", StringComparison.OrdinalIgnoreCase))
                     {
                         return BaseCallbackType.UnKnown;
                     }

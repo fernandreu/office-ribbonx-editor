@@ -294,7 +294,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
                 if (this.SearchSelection)
                 {
-                    if (this.searchRange.cpMin == this.searchRange.cpMax)
+                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition)
                     {
                         this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
                     }
@@ -309,10 +309,10 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
             else
             {
-                var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                 if (this.SearchSelection)
                 {
-                    if (this.searchRange.cpMin == this.searchRange.cpMax) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
                     foundCount = this.FindReplace.FindAll(this.searchRange, textToFind, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
                 }
                 else
@@ -338,7 +338,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.ExecuteClearCommand();
             int foundCount;
 
-            var textToReplace = this.IsExtendedSearch ? this.FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
+            var textToReplace = this.IsExtendedSearch ? FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
 
             if (this.IsRegExSearch)
             {
@@ -355,7 +355,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
                 if (this.SearchSelection)
                 {
-                    if (this.searchRange.cpMin == this.searchRange.cpMax)
+                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition)
                     {
                         this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
                     }
@@ -370,10 +370,10 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
             else
             {
-                var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                 if (this.SearchSelection)
                 {
-                    if (this.searchRange.cpMin == this.searchRange.cpMax) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
                     foundCount = this.FindReplace.ReplaceAll(this.searchRange, textToFind, textToReplace, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
                 }
                 else
@@ -415,22 +415,22 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 return;
             }
 
-            if (foundRange.cpMin == foundRange.cpMax)
+            if (foundRange.MinPosition == foundRange.MaxPosition)
             {
                 this.StatusText = "Match could not be found";
             }
             else
             {
-                if ((searchUp && foundRange.cpMin < this.Scintilla.AnchorPosition) || (!searchUp && foundRange.cpMin > this.Scintilla.CurrentPosition))
+                if ((searchUp && foundRange.MinPosition < this.Scintilla.AnchorPosition) || (!searchUp && foundRange.MinPosition > this.Scintilla.CurrentPosition))
                 {
                     this.StatusText = $"Search match wrapped to the beginning of the {(this.SearchSelection ? "selection" : "document")}";
                 }
 
                 // This should ensure the entire text is visible before it is selected
-                this.Scintilla.GotoPosition(foundRange.cpMax);
-                this.Scintilla.GotoPosition(foundRange.cpMin);
+                this.Scintilla.GotoPosition(foundRange.MaxPosition);
+                this.Scintilla.GotoPosition(foundRange.MinPosition);
 
-                this.Scintilla.SetSel(foundRange.cpMin, foundRange.cpMax);
+                this.Scintilla.SetSel(foundRange.MinPosition, foundRange.MaxPosition);
                 this.MoveDialogAwayFromSelection();
             }
 
@@ -471,7 +471,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
                 if (this.SearchSelection)
                 {
-                    if (this.searchRange.cpMin == this.searchRange.cpMax) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
 
                     if (searchUp)
                         foundRange = this.FindReplace.FindPrevious(rr, this.Wrap, this.searchRange);
@@ -491,16 +491,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             {
                 if (this.SearchSelection)
                 {
-                    if (this.searchRange.cpMin == this.searchRange.cpMax) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
 
                     if (searchUp)
                     {
-                        var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                         foundRange = this.FindReplace.FindPrevious(textToFind, this.Wrap, this.GetSearchFlags(), this.searchRange);
                     }
                     else
                     {
-                        var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                         foundRange = this.FindReplace.FindNext(textToFind, this.Wrap, this.GetSearchFlags(), this.searchRange);
                     }
                 }
@@ -509,12 +509,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                     this.searchRange = new CharacterRange();
                     if (searchUp)
                     {
-                        var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                         foundRange = this.FindReplace.FindPrevious(textToFind, this.Wrap, this.GetSearchFlags());
                     }
                     else
                     {
-                        var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                         foundRange = this.FindReplace.FindNext(textToFind, this.Wrap, this.GetSearchFlags());
                     }
                 }
@@ -543,22 +543,22 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 return;
             }
 
-            if (nextRange.cpMin == nextRange.cpMax)
+            if (nextRange.MinPosition == nextRange.MaxPosition)
             {
                 this.StatusText = "Match could not be found";
             }
             else
             {
-                if (nextRange.cpMin < this.Scintilla.AnchorPosition)
+                if (nextRange.MinPosition < this.Scintilla.AnchorPosition)
                 {
                     this.StatusText = $"Search match wrapped to the beginning of the {(this.SearchSelection ? "selection" : "document")}";
                 }
                 
                 // This should ensure the entire text is visible before it is selected
-                this.Scintilla.GotoPosition(nextRange.cpMax);
-                this.Scintilla.GotoPosition(nextRange.cpMin);
+                this.Scintilla.GotoPosition(nextRange.MaxPosition);
+                this.Scintilla.GotoPosition(nextRange.MinPosition);
 
-                this.Scintilla.SetSel(nextRange.cpMin, nextRange.cpMax);
+                this.Scintilla.SetSel(nextRange.MinPosition, nextRange.MaxPosition);
 
                 this.MoveDialogAwayFromSelection();
             }
@@ -574,12 +574,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
             //	We only do the actual replacement if the current selection exactly
             //	matches the find.
-            if (selRange.cpMax - selRange.cpMin > 0)
+            if (selRange.MaxPosition - selRange.MinPosition > 0)
             {
                 if (this.IsRegExSearch)
                 {
                     rr = new Regex(this.FindText, this.GetRegexOptions());
-                    var selRangeText = this.Scintilla.GetTextRange(selRange.cpMin, selRange.cpMax - selRange.cpMin);
+                    var selRangeText = this.Scintilla.GetTextRange(selRange.MinPosition, selRange.MaxPosition - selRange.MinPosition);
 
                     if (selRange.Equals(this.FindReplace.Find(selRange, rr, false)))
                     {
@@ -592,10 +592,10 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                         //	in the next search.
                         if (searchUp)
                         {
-                            this.scintilla.SelectionStart = selRange.cpMin;
-                            this.scintilla.SelectionEnd = selRange.cpMax;
+                            this.scintilla.SelectionStart = selRange.MinPosition;
+                            this.scintilla.SelectionEnd = selRange.MaxPosition;
                             this.scintilla.ReplaceSelection(rr.Replace(selRangeText, this.ReplaceText));
-                            this.scintilla.GotoPosition(selRange.cpMin);
+                            this.scintilla.GotoPosition(selRange.MinPosition);
                         }
                         else
                             this.Scintilla.ReplaceSelection(rr.Replace(selRangeText, this.ReplaceText));
@@ -603,7 +603,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 }
                 else
                 {
-                    var textToFind = this.IsExtendedSearch ? this.FindReplace.Transform(this.FindText) : this.FindText;
+                    var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
                     if (selRange.Equals(this.FindReplace.Find(selRange, textToFind, false)))
                     {
                         //	If searching up we do the replacement using the range object.
@@ -615,16 +615,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                         //	in the next search.
                         if (searchUp)
                         {
-                            var textToReplace = this.IsExtendedSearch ? this.FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
-                            this.scintilla.SelectionStart = selRange.cpMin;
-                            this.scintilla.SelectionEnd = selRange.cpMax;
+                            var textToReplace = this.IsExtendedSearch ? FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
+                            this.scintilla.SelectionStart = selRange.MinPosition;
+                            this.scintilla.SelectionEnd = selRange.MaxPosition;
                             this.scintilla.ReplaceSelection(textToReplace);
 
-                            this.scintilla.GotoPosition(selRange.cpMin);
+                            this.scintilla.GotoPosition(selRange.MinPosition);
                         }
                         else
                         {
-                            var textToReplace = this.IsExtendedSearch ? this.FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
+                            var textToReplace = this.IsExtendedSearch ? FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
                             this.Scintilla.ReplaceSelection(textToReplace);
                         }
                     }
