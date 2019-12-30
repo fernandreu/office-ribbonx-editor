@@ -1,4 +1,5 @@
-﻿using ScintillaNET;
+﻿using System.Globalization;
+using ScintillaNET;
 using ScintillaNET.WPF;
 
 namespace OfficeRibbonXEditor.Models.Lexers
@@ -9,11 +10,11 @@ namespace OfficeRibbonXEditor.Models.Lexers
     /// </summary>
     public abstract class ScintillaLexer
     {
-        private ScintillaWPF editor;
+        private ScintillaWPF? editor;
 
         private int maxLineNumberCharLength;
 
-        public ScintillaWPF Editor
+        public ScintillaWPF? Editor
         {
             get => this.editor;
             set
@@ -54,11 +55,16 @@ namespace OfficeRibbonXEditor.Models.Lexers
 
         protected abstract void UpdateImplementation();
 
-        private void ScintillaUpdateUi(object sender, UpdateUIEventArgs e)
+        private void ScintillaUpdateUi(object? sender, UpdateUIEventArgs e)
         {
+            if (this.Editor == null)
+            {
+                return;
+            }
+
             // Did the number of characters in the line number display change?
             // i.e. nnn VS nn, or nnnn VS nn, etc...
-            var charLength = this.Editor.Lines.Count.ToString().Length;
+            var charLength = this.Editor.Lines.Count.ToString(CultureInfo.CurrentCulture).Length;
             if (charLength == this.maxLineNumberCharLength)
             {
                 return;
@@ -66,9 +72,9 @@ namespace OfficeRibbonXEditor.Models.Lexers
 
             // Calculate the width required to display the last line number
             // and include some padding for good measure.
-            const int LinePadding = 2;
+            const int linePadding = 2;
 
-            this.Editor.Margins[0].Width = this.Editor.TextWidth(ScintillaNET.Style.LineNumber, new string('9', charLength + 1)) + LinePadding;
+            this.Editor.Margins[0].Width = this.Editor.TextWidth(ScintillaNET.Style.LineNumber, new string('9', charLength + 1)) + linePadding;
             this.maxLineNumberCharLength = charLength;
         }
     }

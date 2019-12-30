@@ -5,15 +5,17 @@
 // <summary>
 //   Defines the RecentFileList type. This is originally from:
 //      https://www.codeproject.com/Articles/23731/RecentFileList-a-WPF-MRU
-//   Modifications made:
-//   - Code has been formatted to be compatible with StyleCop
-//   - New IPersist added for storing the files in user settings
+//   Main modifications made:
+//   - Code has been formatted to be compatible with FxCop / nullable reference types
+//   - New IPersist interface added for storing the files in user settings
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -23,6 +25,8 @@ using System.Windows.Input;
 using System.Xml;
 
 using Microsoft.Win32;
+using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Models.Events;
 
 namespace OfficeRibbonXEditor.Models
 {
@@ -34,14 +38,12 @@ namespace OfficeRibbonXEditor.Models
                 typeof(ICommand),
                 typeof(RecentFileList));
 
-        private Separator separator;
+        private Separator? separator;
 
-        private List<RecentFile> recentFiles;
+        private List<RecentFile>? recentFiles;
 
         public RecentFileList()
         {
-            this.UseXmlPersister();
-
             this.MaxNumberOfFiles = 9;
             this.MaxPathLength = 50;
             this.MenuItemFormatOneToNine = "_{0}:  {2}";
@@ -52,17 +54,8 @@ namespace OfficeRibbonXEditor.Models
         
         public delegate string GetMenuItemTextDelegate(int index, string filepath);
 
-        public event EventHandler<MenuClickEventArgs> MenuClick;
+        public event EventHandler<MenuClickEventArgs>? MenuClick;
 
-        public interface IPersist
-        {
-            List<string> RecentFiles(int max);
-
-            void InsertFile(string filepath, int max);
-
-            void RemoveFile(string filepath, int max);
-        }
-        
         public ICommand ClickCommand
         {
             get => (ICommand)this.GetValue(ClickCommandProperty);
@@ -83,15 +76,15 @@ namespace OfficeRibbonXEditor.Models
         /// </summary>
         public string MenuItemFormatTenPlus { get; set; }
 
-        public IPersist Persister { get; set; }
+        public IPersist Persister { get; set; } = new XmlPersister();
 
         public int MaxNumberOfFiles { get; set; }
 
         public int MaxPathLength { get; set; }
 
-        public MenuItem FileMenu { get; private set; }
+        public MenuItem? FileMenu { get; private set; }
         
-        public GetMenuItemTextDelegate GetMenuItemTextHandler { get; set; }
+        public GetMenuItemTextDelegate? GetMenuItemTextHandler { get; set; }
         
         public List<string> RecentFiles => this.Persister.RecentFiles(this.MaxNumberOfFiles);
         
@@ -107,7 +100,7 @@ namespace OfficeRibbonXEditor.Models
         /// <para>In all cases, the root of the passed path will be preserved in it's entirety.</para>
         /// <para>If a UNC path is used or the pathname and maxLength are particularly short,
         /// the resulting path may be longer than maxLength.</para>
-        /// <para>This method expects fully resolved pathnames to be passed to it.
+        /// <para>This method expects fully resolved path names to be passed to it.
         /// (Use Path.GetFullPath() to obtain this.)</para>
         /// </remarks>
         /// <returns>The shortened path</returns>
@@ -320,7 +313,7 @@ namespace OfficeRibbonXEditor.Models
         {
             if (this.separator != null)
             {
-                this.FileMenu.Items.Remove(this.separator);
+                this.FileMenu?.Items.Remove(this.separator);
             }
 
             if (this.recentFiles != null)
@@ -329,7 +322,7 @@ namespace OfficeRibbonXEditor.Models
                 {
                     if (r.MenuItem != null)
                     {
-                        this.FileMenu.Items.Remove(r.MenuItem);
+                        this.FileMenu?.Items.Remove(r.MenuItem);
                     }
                 }
             }
@@ -340,6 +333,11 @@ namespace OfficeRibbonXEditor.Models
 
         private void InsertMenuItems()
         {
+            if (this.FileMenu == null)
+            {
+                return;
+            }
+
             if (this.recentFiles == null)
             {
                 return;
@@ -366,7 +364,7 @@ namespace OfficeRibbonXEditor.Models
             this.FileMenu.Items.Insert(++index, this.separator);
         }
 
-        private string GetMenuItemText(int index, string filepath, string displaypath)
+        private string GetMenuItemText(int index, string filepath, string displayPath)
         {
             var delegateGetMenuItemText = this.GetMenuItemTextHandler;
             if (delegateGetMenuItemText != null)
@@ -376,9 +374,9 @@ namespace OfficeRibbonXEditor.Models
 
             var format = index < 10 ? this.MenuItemFormatOneToNine : this.MenuItemFormatTenPlus;
 
-            var shortPath = ShortenPathname(displaypath, this.MaxPathLength);
+            var shortPath = ShortenPathname(displayPath, this.MaxPathLength);
 
-            return string.Format(format, index, filepath, shortPath);
+            return string.Format(CultureInfo.CurrentCulture, format, index, filepath, shortPath);
         }
 
         private void LoadRecentFiles()
@@ -404,13 +402,19 @@ namespace OfficeRibbonXEditor.Models
 
         private void MenuItemClick(object sender, EventArgs e)
         {
-            var menuItem = sender as MenuItem;
-
-            this.OnMenuClick(menuItem);
+            if (sender is MenuItem menuItem)
+            {
+                this.OnMenuClick(menuItem);
+            }
         }
 
         private string GetFilepath(MenuItem menuItem)
         {
+            if (this.recentFiles == null)
+            {
+                return string.Empty;
+            }
+
             foreach (var r in this.recentFiles)
             {
                 if (ReferenceEquals(r.MenuItem, menuItem))
@@ -422,18 +426,9 @@ namespace OfficeRibbonXEditor.Models
             return string.Empty;
         }
         
-        public class MenuClickEventArgs : EventArgs
-        {
-            public MenuClickEventArgs(string filepath)
-            {
-                this.Filepath = filepath;
-            }
-
-            public string Filepath { get; }
-        }
-        
         private static class ApplicationAttributes
         {
+            [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Need to investigate which specific exception could be thrown first")]
             static ApplicationAttributes()
             {
                 Title = string.Empty;
@@ -478,23 +473,26 @@ namespace OfficeRibbonXEditor.Models
 
                     Version = assembly.GetName().Version.ToString();
                 }
-                catch
+                catch (Exception)
                 {
                     // If accessing one of the attributes fails, the remaining ones will simply be left as string.Empty
                 }
             }
             
             // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            // ReSharper disable once MemberCanBePrivate.Local
             public static string Title { get; }
 
             public static string CompanyName { get; }
-            
+
             // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            // ReSharper disable once MemberCanBePrivate.Local
             public static string Copyright { get; }
 
             public static string ProductName { get; }
-            
+
             // ReSharper disable once UnusedAutoPropertyAccessor.Local
+            // ReSharper disable once MemberCanBePrivate.Local
             public static string Version { get; }
         }
 
@@ -510,7 +508,7 @@ namespace OfficeRibbonXEditor.Models
 
             public string Filepath { get; }
 
-            public MenuItem MenuItem { get; set; }
+            public MenuItem? MenuItem { get; set; }
 
             public string DisplayPath
             {
@@ -518,7 +516,7 @@ namespace OfficeRibbonXEditor.Models
                 {
                     var directory = Path.GetDirectoryName(this.Filepath);
                     var fileName = Path.GetFileName(this.Filepath);
-                    if (directory == null || fileName == null)
+                    if (string.IsNullOrEmpty(directory) || string.IsNullOrEmpty(fileName))
                     {
                         // Filepath seems ill-formed for some reason, so don't try to shorten it
                         return this.Filepath;
@@ -545,7 +543,7 @@ namespace OfficeRibbonXEditor.Models
                 this.RegistryKey = key;
             }
 
-            public string RegistryKey { get; set; }
+            private string RegistryKey { get; }
 
             public List<string> RecentFiles(int max)
             {
@@ -555,14 +553,14 @@ namespace OfficeRibbonXEditor.Models
 
                 for (var i = 0; i < max; i++)
                 {
-                    var filename = (string)k?.GetValue(Key(i));
+                    var filename = (string?)k?.GetValue(Key(i));
 
                     if (string.IsNullOrEmpty(filename))
                     {
                         break;
                     }
 
-                    list.Add(filename);
+                    list.Add(filename!);
                 }
 
                 return list;
@@ -612,7 +610,7 @@ namespace OfficeRibbonXEditor.Models
 
             private static string Key(int i)
             {
-                return i.ToString("00");
+                return i.ToString("00", CultureInfo.InvariantCulture);
             }
 
             private void RemoveFile(int index, int max)
@@ -659,9 +657,9 @@ namespace OfficeRibbonXEditor.Models
                 this.Stream = stream;
             }
 
-            public string Filepath { get; set; }
+            private string? Filepath { get; }
 
-            public Stream Stream { get; set; }
+            private Stream? Stream { get; }
 
             public List<string> RecentFiles(int max)
             {
@@ -716,11 +714,11 @@ namespace OfficeRibbonXEditor.Models
             {
                 if (!string.IsNullOrEmpty(this.Filepath))
                 {
-                    return new SmartStream(this.Filepath, mode);
+                    return new SmartStream(this.Filepath!, mode);
                 }
                 else
                 {
-                    return new SmartStream(this.Stream);
+                    return new SmartStream(this.Stream!);
                 }
             }
 
@@ -754,7 +752,7 @@ namespace OfficeRibbonXEditor.Models
                         ms.Position = 0;
                     }
 
-                    using (var x = new XmlTextReader(ms))
+                    using (var x = XmlReader.Create(ms, new XmlReaderSettings { XmlResolver = null }))
                     {
                         while (x.Read())
                         {
@@ -887,8 +885,6 @@ namespace OfficeRibbonXEditor.Models
                     {
                         this.Stream?.Dispose();
                     }
-
-                    this.Stream = null;
                 }
             }
         }

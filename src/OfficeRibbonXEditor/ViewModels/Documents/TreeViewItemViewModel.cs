@@ -11,7 +11,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
     {
         #region Data
 
-        private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
+        private static readonly TreeViewItemViewModel dummyChild = new TreeViewItemViewModel();
 
         #endregion // Data
 
@@ -23,19 +23,17 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         
         private bool canHaveContents;
         
-        private string contents;
+        private string? contents;
 
         #endregion // Fields
 
         #region Constructors
 
-        public virtual string Name { get; set; }
+        public virtual string Name { get; set; } = string.Empty;
 
-        protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren, bool canHaveContents = true, string contents = null)
+        protected TreeViewItemViewModel(TreeViewItemViewModel? parent, bool lazyLoadChildren, bool canHaveContents = true, string? contents = null)
         {
             this.Parent = parent;
-
-            this.Children = new ObservableCollection<TreeViewItemViewModel>();
 
             this.CanHaveContents = canHaveContents;
 
@@ -43,7 +41,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
             if (lazyLoadChildren)
             {
-                this.Children.Add(DummyChild);
+                this.Children.Add(dummyChild);
             }
         }
 
@@ -59,12 +57,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// <summary>
         /// Gets the logical child items of this object.
         /// </summary>
-        public ObservableCollection<TreeViewItemViewModel> Children { get; }
+        public ObservableCollection<TreeViewItemViewModel> Children { get; } = new ObservableCollection<TreeViewItemViewModel>();
         
         /// <summary>
         /// Returns true if this object's Children have not yet been populated.
         /// </summary>
-        public bool HasDummyChild => this.Children.Count == 1 && this.Children[0] == DummyChild;
+        public bool HasDummyChild => this.Children.Count == 1 && this.Children[0] == dummyChild;
         
         /// <summary>
         /// Gets or sets a value indicating whether the TreeViewItem associated with this object is expanded.
@@ -88,7 +86,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                 // Lazy load the child items, if necessary.
                 if (this.HasDummyChild)
                 {
-                    this.Children.Remove(DummyChild);
+                    this.Children.Remove(dummyChild);
                     this.LoadChildren();
                 }
             }
@@ -118,13 +116,13 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             set => this.Set(ref this.canHaveContents, value);
         }
 
-        public string Contents
+        public string? Contents
         {
             get => this.contents;
             set => this.Set(ref this.contents, value);
         }
         
-        public TreeViewItemViewModel Parent { get; }
+        public TreeViewItemViewModel? Parent { get; }
 
         /// <summary>
         /// Invoked when the child items need to be loaded on demand.

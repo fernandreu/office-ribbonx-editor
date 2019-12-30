@@ -19,7 +19,7 @@ namespace OfficeRibbonXEditor.Views.Controls
     {
         private GridLength lastResultsHeight = new GridLength(150);
 
-        private EditorTabViewModel viewModel;
+        private EditorTabViewModel? viewModel;
 
         public EditorTab()
         {
@@ -82,16 +82,14 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.viewModel.SelectAll += this.OnSelectAll;
         }
 
-        private void OnReadEditorInfo(object sender, DataEventArgs<EditorInfo> e)
+        private void OnReadEditorInfo(object? sender, DataEventArgs<EditorInfo> e)
         {
-            e.Data = new EditorInfo
-            {
-                Text = this.Editor.Text,
-                Selection = Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd),
-            };
+            e.Data = new EditorInfo(
+                this.Editor.Text,
+                Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd));
         }
 
-        private void OnUpdateEditor(object sender, EditorChangeEventArgs e)
+        private void OnUpdateEditor(object? sender, EditorChangeEventArgs e)
         {
             this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
             this.Editor.InsertText(e.Start, e.NewText);
@@ -106,7 +104,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
 
-        private void OnShowResults(object sender, DataEventArgs<IResultCollection> e)
+        private void OnShowResults(object? sender, DataEventArgs<IResultCollection> e)
         {
             if (e.Data.IsEmpty)
             {
@@ -126,37 +124,37 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.ResultsPanel.UpdateFindAllResults(e.Data);
         }
 
-        private void OnCut(object sender, EventArgs e)
+        private void OnCut(object? sender, EventArgs e)
         {
             this.Editor.Cut();
         }
 
-        private void OnCopy(object sender, EventArgs e)
+        private void OnCopy(object? sender, EventArgs e)
         {
             this.Editor.Copy();
         }
 
-        private void OnPaste(object sender, EventArgs e)
+        private void OnPaste(object? sender, EventArgs e)
         {
             this.Editor.Paste();
         }
 
-        private void OnUndo(object sender, EventArgs e)
+        private void OnUndo(object? sender, EventArgs e)
         {
             this.Editor.Undo();
         }
 
-        private void OnRedo(object sender, EventArgs e)
+        private void OnRedo(object? sender, EventArgs e)
         {
             this.Editor.Redo();
         }
 
-        private void OnSelectAll(object sender, EventArgs e)
+        private void OnSelectAll(object? sender, EventArgs e)
         {
             this.Editor.SelectAll();
         }
 
-        private void OnScintillaUpdateUi(object sender, UpdateUIEventArgs e)
+        private void OnScintillaUpdateUi(object? sender, UpdateUIEventArgs e)
         {
             if (!(this.DataContext is EditorTabViewModel vm))
             {
@@ -179,7 +177,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         // For some reason, the Scintilla editor always seems to have preference over the input gestures.
         // The only solution (so far) is to execute those when appropriate from this event handler.
-        private void OnEditorKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        private void OnEditorKeyDown(object? sender, System.Windows.Forms.KeyEventArgs e)
         {
             var window = Window.GetWindow(this);
             if (window == null)
@@ -231,7 +229,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
 
-        private void OnEditorInsertCheck(object sender, InsertCheckEventArgs e)
+        private void OnEditorInsertCheck(object? sender, InsertCheckEventArgs e)
         {
             if (!Properties.Settings.Default.AutoIndent)
             {
@@ -255,7 +253,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
 
-        private void OnCloseFindResults(object sender, EventArgs e)
+        private void OnCloseFindResults(object? sender, EventArgs e)
         {
             if (this.ResultsRow.Height.Value > new GridLength(50).Value)
             {

@@ -12,10 +12,10 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
     {
         #region Fields
 
-        private bool _autoPosition = true;
-        private Scintilla _scintilla;
-        private bool _toolItem = false;
-        private FindReplaceDialogViewModel _findReplace;
+        private bool autoPosition = true;
+        private Scintilla? scintilla;
+        private bool toolItem = false;
+        private FindReplaceDialogViewModel? findReplace;
 
         #endregion Fields
 
@@ -29,7 +29,7 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
         public IncrementalSearcher(bool toolItem)
         {
             this.InitializeComponent();
-            this._toolItem = toolItem;
+            this.toolItem = toolItem;
             if (toolItem)
                 this.BackColor = Color.Transparent;
         }
@@ -48,58 +48,42 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
         {
             get
             {
-                return this._autoPosition;
+                return this.autoPosition;
             }
             set
             {
                 if (!this.ToolItem)
-                    this._autoPosition = value;
+                    this.autoPosition = value;
                 else
-                    this._autoPosition = false;
+                    this.autoPosition = false;
             }
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public FindReplaceDialogViewModel FindReplace
+        public FindReplaceDialogViewModel? FindReplace
         {
-            get
-            {
-                return this._findReplace;
-            }
+            get => this.findReplace;
             set
             {
-                this._findReplace = value;
-                if (value!=null)
-                {
-                    this._scintilla = this._findReplace.Scintilla;
-                }
-                else
-                {
-                    this._scintilla = null;
-                }
+                this.findReplace = value;
+                this.scintilla = value?.Scintilla;
             }
         }
 
         [Browsable(false)]
-        public Scintilla Scintilla
+        public Scintilla? Scintilla
         {
-            get
-            {
-                return this._scintilla;
-            }
-            set
-            {
-                this._scintilla = value;
-            }
+            get => this.scintilla;
+            set => this.scintilla = value;
         }
 
         public bool ToolItem
         {
-            get { return this._toolItem; }
+            get { return this.toolItem; }
             set
             {
-                this._toolItem = value;
-                if (this._toolItem)
+                this.toolItem = value;
+                if (this.toolItem)
                     this.BackColor = Color.Transparent;
                 else
                     this.BackColor = Color.LightSteelBlue;
@@ -112,29 +96,29 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
         private void brnPrevious_Click(object sender, EventArgs e)
         {
-            this.findPrevious();
+            this.FindPrevious();
         }
 
         private void btnClearHighlights_Click(object sender, EventArgs e)
         {
-            if (this._scintilla == null)
+            if (this.scintilla == null)
                 return;
-            this._findReplace.FindReplace.ClearAllHighlights();
+            this.findReplace?.FindReplace.ClearAllHighlights();
         }
 
         private void btnHighlightAll_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
-            if (this._scintilla == null)
+            if (this.scintilla == null)
                 return;
 
-            int foundCount = this._findReplace.FindReplace.FindAll((string) this.txtFind.Text, false, true).Count;
+            this.findReplace?.FindReplace.FindAll((string) this.txtFind.Text, false, true);
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            this.findNext();
+            this.FindNext();
         }
 
         #endregion Event Handlers
@@ -143,41 +127,37 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
         public virtual void MoveFormAwayFromSelection()
         {
-            if (!this.Visible || this._scintilla == null)
+            if (!this.Visible || this.scintilla == null)
                 return;
 
             if (!this.AutoPosition)
                 return;
 
-            int pos = this._scintilla.CurrentPosition;
-            int x = this._scintilla.PointXFromPosition(pos);
-            int y = this._scintilla.PointYFromPosition(pos);
+            int pos = this.scintilla.CurrentPosition;
+            int x = this.scintilla.PointXFromPosition(pos);
+            int y = this.scintilla.PointYFromPosition(pos);
 
-            Point cursorPoint = new Point(x, y);
+            var cursorPoint = new Point(x, y);
 
-            Rectangle r = new Rectangle(this.Location, this.Size);
+            var r = new Rectangle(
+                new Point(this.scintilla.ClientRectangle.Right - this.Size.Width, 0), 
+                this.Size);
 
-            if (this._scintilla != null)
-            {
-                r.Location = new Point(this._scintilla.ClientRectangle.Right - this.Size.Width, 0);
-            }
-
+            const int sciTextHeight = 2279;
             if (r.Contains(cursorPoint))
             {
                 Point newLocation;
                 if (cursorPoint.Y < (Screen.PrimaryScreen.Bounds.Height / 2))
                 {
-                    //TODO - replace lineheight with ScintillaNET command, when added
-                    int SCI_TEXTHEIGHT = 2279;
-                    int lineHeight = this._scintilla.DirectMessage(SCI_TEXTHEIGHT, IntPtr.Zero, IntPtr.Zero).ToInt32();
+                    //TODO - replace line height with ScintillaNET command, when added
+                    var lineHeight = this.scintilla.DirectMessage(sciTextHeight, IntPtr.Zero, IntPtr.Zero).ToInt32();
                     // Top half of the screen
                     newLocation = new Point(r.X, cursorPoint.Y + lineHeight * 2);
                 }
                 else
                 {
-                    //TODO - replace lineheight with ScintillaNET command, when added
-                    int SCI_TEXTHEIGHT = 2279;
-                    int lineHeight = this._scintilla.DirectMessage(SCI_TEXTHEIGHT, IntPtr.Zero, IntPtr.Zero).ToInt32();
+                    //TODO - replace line height with ScintillaNET command, when added
+                    int lineHeight = this.scintilla.DirectMessage(sciTextHeight, IntPtr.Zero, IntPtr.Zero).ToInt32();
                     // Bottom half of the screen
                     newLocation = new Point(r.X, cursorPoint.Y - this.Height - (lineHeight * 2));
                 }
@@ -200,7 +180,7 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
         protected override void OnLeave(EventArgs e)
         {
             base.OnLostFocus(e);
-            if (!this._toolItem)
+            if (!this.toolItem)
                 this.Hide();
         }
 
@@ -215,75 +195,77 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
             if (this.Visible)
                 this.txtFind.Focus();
-            else if (this._scintilla != null)
-                this._scintilla.Focus();
+            else if (this.scintilla != null)
+                this.scintilla.Focus();
         }
 
-        private void findNext()
+        private void FindNext()
         {
             if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
-            if (this._scintilla == null)
+            if (this.scintilla == null)
                 return;
 
-            CharacterRange r = this._findReplace.FindReplace.FindNext(this.txtFind.Text, true, this._findReplace.GetSearchFlags());
-            if (r.MinPosition != r.MaxPosition)
-                this._scintilla.SetSel(r.MinPosition, r.MaxPosition);
+            var r = this.findReplace?.FindReplace.FindNext(this.txtFind.Text, true, this.findReplace.GetSearchFlags());
+            if (r != null && r.Value.MinPosition !=  r.Value.MaxPosition)
+                this.scintilla.SetSel(r.Value.MinPosition, r.Value.MaxPosition);
 
             this.MoveFormAwayFromSelection();
         }
 
-        private void findPrevious()
+        private void FindPrevious()
         {
             if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
-            if (this._scintilla == null)
+            if (this.scintilla == null)
                 return;
 
-            CharacterRange r = this._findReplace.FindReplace.FindPrevious(this.txtFind.Text, true, this._findReplace.GetSearchFlags());
-            if (r.MinPosition != r.MaxPosition)
-                this._scintilla.SetSel(r.MinPosition, r.MaxPosition);
+            var r = this.findReplace?.FindReplace.FindPrevious(this.txtFind.Text, true, this.findReplace.GetSearchFlags());
+            if (r != null && r.Value.MinPosition != r.Value.MaxPosition)
+            {
+                this.scintilla.SetSel(r.Value.MinPosition, r.Value.MaxPosition);
+            }
 
             this.MoveFormAwayFromSelection();
         }
 
-        private void txtFind_KeyDown(object sender, KeyEventArgs e)
+        private void FindKeyDownEventHandler(object sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
                 case Keys.Enter:
                 case Keys.Down:
-                    this.findNext();
+                    this.FindNext();
                     e.Handled = true;
                     break;
 
                 case Keys.Up:
-                    this.findPrevious();
+                    this.FindPrevious();
                     e.Handled = true;
                     break;
 
                 case Keys.Escape:
-                    if (!this._toolItem)
+                    if (!this.toolItem)
                         this.Hide();
                     break;
             }
         }
 
-        private void txtFind_TextChanged(object sender, EventArgs e)
+        private void FindTextChangedEventHandler(object sender, EventArgs e)
         {
             this.txtFind.BackColor = SystemColors.Window;
             if (string.IsNullOrEmpty(this.txtFind.Text))
                 return;
-            if (this._scintilla == null)
+            if (this.scintilla == null)
                 return;
 
-            int pos = Math.Min(this._scintilla.CurrentPosition, this._scintilla.AnchorPosition);
-            CharacterRange r = this._findReplace.FindReplace.Find(pos, this._scintilla.TextLength, this.txtFind.Text, this._findReplace.GetSearchFlags());
-            if (r.MinPosition == r.MaxPosition)
-                r = this._findReplace.FindReplace.Find(0, pos, this.txtFind.Text, this._findReplace.GetSearchFlags());
+            int pos = Math.Min(this.scintilla.CurrentPosition, this.scintilla.AnchorPosition);
+            var r = this.findReplace?.FindReplace.Find(pos, this.scintilla.TextLength, this.txtFind.Text, this.findReplace.GetSearchFlags());
+            if (r == null || r.Value.MinPosition == r.Value.MaxPosition)
+                r = this.findReplace?.FindReplace.Find(0, pos, this.txtFind.Text, this.findReplace.GetSearchFlags());
 
-            if (r.MinPosition != r.MaxPosition)
-                this._scintilla.SetSel(r.MinPosition, r.MaxPosition);
+            if (r != null && r.Value.MinPosition != r.Value.MaxPosition)
+                this.scintilla.SetSel(r.Value.MinPosition, r.Value.MaxPosition);
             else
                 this.txtFind.BackColor = Color.Tomato;
 

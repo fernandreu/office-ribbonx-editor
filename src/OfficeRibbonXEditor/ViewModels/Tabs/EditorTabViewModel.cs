@@ -14,8 +14,11 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
     public class EditorTabViewModel : ViewModelBase, ITabItemViewModel
     {
-        public EditorTabViewModel()
+        public EditorTabViewModel(OfficePartViewModel part, MainWindowViewModel mainWindow)
         {
+            this.part = part;
+            this.MainWindow = mainWindow;
+
             this.CutCommand = new RelayCommand(() => this.Cut?.Invoke(this, EventArgs.Empty));
             this.CopyCommand = new RelayCommand(() => this.Copy?.Invoke(this, EventArgs.Empty));
             this.PasteCommand = new RelayCommand(() => this.Paste?.Invoke(this, EventArgs.Empty));
@@ -36,19 +39,19 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public RelayCommand SelectAllCommand { get; }
 
-        public event EventHandler Cut;
+        public event EventHandler? Cut;
 
-        public event EventHandler Copy;
+        public event EventHandler? Copy;
 
-        public event EventHandler Paste;
+        public event EventHandler? Paste;
 
-        public event EventHandler Undo;
+        public event EventHandler? Undo;
 
-        public event EventHandler Redo;
+        public event EventHandler? Redo;
 
-        public event EventHandler SelectAll;
+        public event EventHandler? SelectAll;
 
-        private string title;
+        private string title = string.Empty;
 
         public string Title
         {
@@ -56,9 +59,9 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             set => this.Set(ref this.title, value);
         }
 
-        private string statusText;
+        private string? statusText;
 
-        public string StatusText
+        public string? StatusText
         {
             get => this.statusText;
             set => this.Set(ref this.statusText, value);
@@ -72,7 +75,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             set => this.Set(ref this.zoom, value);
         }
 
-        public ScintillaLexer Lexer { get; set; }
+        public ScintillaLexer? Lexer { get; set; }
 
         private OfficePartViewModel part;
 
@@ -99,14 +102,14 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         /// This event will be fired whenever key editor properties (including current text and selection) need to be known. It is the
         /// listener who will need to specify the argument.
         /// </summary>
-        public event EventHandler<DataEventArgs<EditorInfo>> ReadEditorInfo;
+        public event EventHandler<DataEventArgs<EditorInfo>>? ReadEditorInfo;
         
-        public event EventHandler<ResultsEventArgs> ShowResults;
+        public event EventHandler<ResultsEventArgs>? ShowResults;
 
         /// <summary>
         /// This event will be fired when the contents of the editor need to be updated
         /// </summary>
-        public event EventHandler<EditorChangeEventArgs> UpdateEditor;
+        public event EventHandler<EditorChangeEventArgs>? UpdateEditor;
 
         public EditorInfo EditorInfo
         {

@@ -14,7 +14,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             typeof(DialogControl),
             typeof(DialogHostBase));
 
-        public DialogControl View
+        public DialogControl? View
         {
             get => (DialogControl) this.GetValue(ViewProperty);
             set => this.SetValue(ViewProperty, value);

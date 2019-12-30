@@ -15,7 +15,7 @@ namespace OfficeRibbonXEditor.Models
     {
 	    private const SearchFlags Flags = SearchFlags.None;
 
-	    public readonly Scintilla Scintilla;
+	    public Scintilla Scintilla { get; }
 
 	    public FindReplace(Scintilla scintilla)
 	    {
@@ -41,9 +41,9 @@ namespace OfficeRibbonXEditor.Models
 
 		public Marker Marker { get; set; }
 		
-		public event FindAllResultsEventHandler FindAllResults;
+		public event FindAllResultsEventHandler? FindAllResults;
 
-		public event ReplaceAllResultsEventHandler ReplaceAllResults;
+		public event ReplaceAllResultsEventHandler? ReplaceAllResults;
 
 		public delegate void FindAllResultsEventHandler(object sender, ResultsEventArgs findAllResults);
 
@@ -592,11 +592,6 @@ namespace OfficeRibbonXEditor.Models
 		[SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "Suggested fix does not work for .NET Framework 4.6.1")]
 		public static string Transform(string data)
 		{
-            if (data == null)
-            {
-                return null;
-            }
-
 			var result = data;
 			var nullChar = (char)0;
 			var cr = (char)13;

@@ -22,12 +22,12 @@ namespace OfficeRibbonXEditor.Behaviors
     {
         public static bool GetIsCached(DependencyObject d)
         {
-            return (bool?)d?.GetValue(IsCachedProperty) ?? false;
+            return (bool)d.GetValue(IsCachedProperty);
         }
 
         public static void SetIsCached(DependencyObject d, bool value)
         {
-            d?.SetValue(IsCachedProperty, value);
+            d.SetValue(IsCachedProperty, value);
         }
 
         /// <summary>
@@ -40,12 +40,12 @@ namespace OfficeRibbonXEditor.Behaviors
 
         public static DataTemplate GetTemplate(DependencyObject d)
         {
-            return (DataTemplate)d?.GetValue(TemplateProperty);
+            return (DataTemplate)d.GetValue(TemplateProperty);
         }
 
         public static void SetTemplate(DependencyObject d, DataTemplate value)
         {
-            d?.SetValue(TemplateProperty, value);
+            d.SetValue(TemplateProperty, value);
         }
 
         /// <summary>
@@ -56,12 +56,12 @@ namespace OfficeRibbonXEditor.Behaviors
 
         public static DataTemplateSelector GetTemplateSelector(DependencyObject d)
         {
-            return (DataTemplateSelector)d?.GetValue(TemplateSelectorProperty);
+            return (DataTemplateSelector)d.GetValue(TemplateSelectorProperty);
         }
 
         public static void SetTemplateSelector(DependencyObject d, DataTemplateSelector value)
         {
-            d?.SetValue(TemplateSelectorProperty, value);
+            d.SetValue(TemplateSelectorProperty, value);
         }
 
         /// <summary>
@@ -73,13 +73,13 @@ namespace OfficeRibbonXEditor.Behaviors
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static TabControl GetInternalTabControl(DependencyObject d)
         {
-            return (TabControl)d?.GetValue(InternalTabControlProperty);
+            return (TabControl)d.GetValue(InternalTabControlProperty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetInternalTabControl(DependencyObject d, TabControl value)
         {
-            d?.SetValue(InternalTabControlProperty, value);
+            d.SetValue(InternalTabControlProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InternalTabControl.  This enables animation, styling, binding, etc...
@@ -90,13 +90,13 @@ namespace OfficeRibbonXEditor.Behaviors
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static ContentControl GetInternalCachedContent(DependencyObject d)
         {
-            return (ContentControl)d?.GetValue(InternalCachedContentProperty);
+            return (ContentControl)d.GetValue(InternalCachedContentProperty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetInternalCachedContent(DependencyObject d, ContentControl value)
         {
-            d?.SetValue(InternalCachedContentProperty, value);
+            d.SetValue(InternalCachedContentProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InternalCachedContent.  This enables animation, styling, binding, etc...
@@ -107,13 +107,13 @@ namespace OfficeRibbonXEditor.Behaviors
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static object GetInternalContentManager(DependencyObject d)
         {
-            return (object)d?.GetValue(InternalContentManagerProperty);
+            return (object)d.GetValue(InternalContentManagerProperty);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public static void SetInternalContentManager(DependencyObject d, object value)
         {
-            d?.SetValue(InternalContentManagerProperty, value);
+            d.SetValue(InternalContentManagerProperty, value);
         }
 
         // Using a DependencyProperty as the backing store for InternalContentManager.  This enables animation, styling, binding, etc...
@@ -167,9 +167,8 @@ namespace OfficeRibbonXEditor.Behaviors
         private static void OnInternalTabControlChanged(DependencyObject obj, DependencyPropertyChangedEventArgs args)
         {
             if (obj == null) return;
-            var container = obj as Decorator;
 
-            if (container == null)
+            if (!(obj is Decorator container))
             {
                 var message = "Cannot set TabContent.InternalTabControl on object of type " + obj.GetType().Name +
                     ". Only controls that derive from Decorator, such as Border can have a TabContent.InternalTabControl.";
@@ -250,7 +249,7 @@ namespace OfficeRibbonXEditor.Behaviors
                 this.border.Child = this.GetCurrentContent();
             }
 
-            private ContentControl GetCurrentContent()
+            private ContentControl? GetCurrentContent()
             {
                 var item = this.tabControl.SelectedItem;
                 if (item == null) return null;

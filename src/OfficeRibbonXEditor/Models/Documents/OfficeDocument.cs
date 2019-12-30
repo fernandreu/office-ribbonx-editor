@@ -32,10 +32,11 @@ namespace OfficeRibbonXEditor.Models.Documents
 
         public const string ImagePartRelType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
 
-        private string tempFileName;
+        private readonly string tempFileName;
         
         private bool disposed;
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. Triggered due to UnderlyingPackage, but this is assigned in Init()
         public OfficeDocument(string fileName)
         {
             if (fileName == null)
@@ -58,6 +59,7 @@ namespace OfficeRibbonXEditor.Models.Documents
             this.Init();
             this.IsDirty = false;
         }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         public Package UnderlyingPackage { get; private set; }
 
@@ -166,8 +168,6 @@ namespace OfficeRibbonXEditor.Models.Documents
                 customFileName = this.Name;
             }
 
-            Debug.Assert(this.UnderlyingPackage != null, "Failed to get package.");
-
             if (!this.IsDirty && customFileName == this.Name)
             {
                 return;
@@ -268,9 +268,7 @@ namespace OfficeRibbonXEditor.Models.Documents
                     relType = QatPartRelType;
                     break;
                 default:
-                    Debug.Assert(false, "Unknown type");
-                    // ReSharper disable once HeuristicUnreachableCode
-                    return null;
+                    throw new ArgumentException($"Unexpected {nameof(partType)}: {partType}");
             }
 
             var customUiUri = new Uri(relativePath, UriKind.Relative);
@@ -285,8 +283,6 @@ namespace OfficeRibbonXEditor.Models.Documents
             {
                 part = new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), partType, relationship.Id);
             }
-
-            Debug.Assert(part != null, "Fail to create custom part.");
 
             if (this.Parts == null)
             {
@@ -333,35 +329,18 @@ namespace OfficeRibbonXEditor.Models.Documents
 
             if (disposing)
             {
-                this.Name = null;
+                this.Name = string.Empty;
                 this.Parts?.Clear();
 
-                if (this.UnderlyingPackage != null)
-                {
-                    try
-                    {
-                        this.UnderlyingPackage.Close();
-                    }
-                    catch (ObjectDisposedException ex)
-                    {
-                        Debug.Fail(ex.Message);
-                    }
+                this.UnderlyingPackage.Close();
 
-                    this.UnderlyingPackage = null;
+                try
+                {
+                    File.Delete(this.tempFileName);
                 }
-
-                if (this.tempFileName != null)
+                catch (IOException ex)
                 {
-                    try
-                    {
-                        File.Delete(this.tempFileName);
-                    }
-                    catch (IOException ex)
-                    {
-                        Debug.Fail(ex.Message);
-                    }
-
-                    this.tempFileName = null;
+                    Debug.Fail(ex.Message);
                 }
             }
 
@@ -372,10 +351,9 @@ namespace OfficeRibbonXEditor.Models.Documents
         {
             this.UnderlyingPackage = Package.Open(this.tempFileName, FileMode.Open, FileAccess.ReadWrite);
 
-            Debug.Assert(this.UnderlyingPackage != null, "Failed to get package.");
             if (this.UnderlyingPackage == null)
             {
-                return;
+                throw new NullReferenceException("Failed to get package");
             }
 
             this.Parts = new List<OfficePart>();

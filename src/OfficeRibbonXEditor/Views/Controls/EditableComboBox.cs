@@ -13,9 +13,9 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.IsEditable = true;
         }
 
-        private TextBox textBox;
+        private TextBox? textBox;
 
-        public TextBox TextBox
+        public TextBox? TextBox
         {
             get
             {
@@ -38,7 +38,12 @@ namespace OfficeRibbonXEditor.Views.Controls
         public override void OnApplyTemplate()
         {
             base.OnApplyTemplate();
-            this.TextBox.TextChanged += this.OnTextChanged;
+
+            if (this.TextBox != null)
+            {
+                this.TextBox.TextChanged += this.OnTextChanged;
+            }
+
             this.AddHandler(PreviewMouseLeftButtonDownEvent, 
                 new MouseButtonEventHandler(SelectivelyIgnoreMouseButton), true);
             this.AddHandler(GotKeyboardFocusEvent, 
@@ -51,7 +56,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             MouseButtonEventArgs e)
         {
             // Find the TextBox
-            DependencyObject parent = e.OriginalSource as UIElement;
+            DependencyObject? parent = e.OriginalSource as UIElement;
             while (parent != null && !(parent is TextBox))
                 parent = VisualTreeHelper.GetParent(parent);
 

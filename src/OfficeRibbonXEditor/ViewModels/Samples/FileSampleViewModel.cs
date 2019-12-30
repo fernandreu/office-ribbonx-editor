@@ -9,9 +9,14 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
 {
     public class FileSampleViewModel : XmlSampleViewModel
     {
+        public FileSampleViewModel(string path)
+        {
+            Path = path;
+        }
+
         public override string Name => System.IO.Path.GetFileNameWithoutExtension(this.Path);
 
-        public string Path { get; set; }
+        public string Path { get; }
 
         public override string ReadContents()
         {
@@ -26,7 +31,7 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
             {
             }
 
-            return null;
+            return string.Empty;
         }
     }
 }

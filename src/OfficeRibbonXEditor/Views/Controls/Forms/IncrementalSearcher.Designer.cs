@@ -60,8 +60,8 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
             this.txtFind.Name = "txtFind";
             this.txtFind.Size = new System.Drawing.Size(135, 20);
             this.txtFind.TabIndex = 1;
-            this.txtFind.TextChanged += new System.EventHandler(this.txtFind_TextChanged);
-            this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtFind_KeyDown);
+            this.txtFind.TextChanged += new System.EventHandler(this.FindTextChangedEventHandler);
+            this.txtFind.KeyDown += new System.Windows.Forms.KeyEventHandler(this.FindKeyDownEventHandler);
             // 
             // flowLayoutPanel1
             // 

@@ -11,7 +11,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
     {
         private string originalContents;
 
-        private OfficePart part;
+        private OfficePart? part;
 
         public OfficePartViewModel(OfficePart part, OfficeDocumentViewModel parent) 
             : base(parent, false, contents: part.ReadContent())
@@ -23,7 +23,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public string OriginalContents => this.originalContents;
 
-        public OfficePart Part
+        public OfficePart? Part
         {
             get => this.part;
             set => this.Set(ref this.part, value);
@@ -33,12 +33,17 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public bool HasUnsavedChanges => this.originalContents != this.Contents || this.IconsChanged;
 
-        public override string Name => this.Part.Name;
+        public override string Name => this.Part?.Name ?? string.Empty;
 
         public string ImageSource => "/Resources/Images/xml.png";  // TODO: That's probably not the only one possible
 
-        public void InsertIcon(string filePath, string id = null, Func<string, string, bool> alreadyExistingAction = null)
+        public void InsertIcon(string filePath, string? id = null, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
+            if (this.Part == null)
+            {
+                return;
+            }
+
             id = this.Part.AddImage(filePath, id, alreadyExistingAction);
             if (id == null)
             {
@@ -52,7 +57,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public void RemoveIcon(string id)
         {
-            this.part.RemoveImage(id);
+            if (this.Part == null)
+            {
+                return;
+            }
+
+            this.Part.RemoveImage(id);
             for (var i = 0; i < this.Children.Count; ++i)
             {
                 if (!(this.Children[i] is IconViewModel icon))
@@ -76,7 +86,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// exist in the document anymore)</returns>
         public bool Reload()
         {
-            var reloaded = ((OfficeDocumentViewModel)this.Parent).Document.RetrieveCustomPart(this.Part.PartType);
+            if (this.Part == null)
+            {
+                return false;
+            }
+
+            var reloaded = (this.Parent as OfficeDocumentViewModel)?.Document.RetrieveCustomPart(this.Part.PartType);
             if (reloaded == null)
             {
                 // Don't do anything if there is no equivalent to reload
@@ -116,8 +131,19 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public void Save()
         {
+            if (this.Part == null)
+            {
+                return;
+            }
+
             // Do not simply call Part.Save because that will not flag the part as dirty in the parent document
-            var docModel = (OfficeDocumentViewModel)this.Parent;
+            var docModel = this.Parent as OfficeDocumentViewModel;
+            if (docModel?.Document == null)
+            {
+                // TODO: Should this throw?
+                return;
+            }
+
             docModel.Document.SaveCustomPart(this.Part.PartType, this.Contents);
 
             this.Part = docModel.Document.RetrieveCustomPart(this.Part.PartType);
@@ -134,6 +160,11 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         private void LoadIcons()
         {
+            if (this.Part == null)
+            {
+                return;
+            }
+
             this.Children.Clear();
             foreach (var image in this.Part.GetImages())
             {

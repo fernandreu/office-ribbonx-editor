@@ -8,6 +8,6 @@ namespace OfficeRibbonXEditor.Interfaces
      */
     public interface IVersionChecker
     {
-        Task<string> CheckVersionAsync(CancellationToken cancelToken = default(CancellationToken));
+        Task<string?> CheckVersionAsync(CancellationToken cancelToken = default(CancellationToken));
     }
 }

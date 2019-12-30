@@ -8,7 +8,7 @@ namespace OfficeRibbonXEditor.Services
 {
     public class FileDialogService : IFileDialogService
     {
-        public bool? OpenFileDialog(string title, string filter, Action<string> completedAction, string fileName = null, int filterIndex = 0)
+        public bool? OpenFileDialog(string title, string filter, Action<string> completedAction, string? fileName = null, int filterIndex = 0)
         {
             var ofd = new OpenFileDialog
                           {
@@ -22,7 +22,7 @@ namespace OfficeRibbonXEditor.Services
             return ofd.ShowDialog();
         }
 
-        public bool? OpenFilesDialog(string title, string filter, Action<IEnumerable<string>> completedAction, string fileName = null, int filterIndex = 0)
+        public bool? OpenFilesDialog(string title, string filter, Action<IEnumerable<string>> completedAction, string? fileName = null, int filterIndex = 0)
         {
             var ofd = new OpenFileDialog
                           {
@@ -37,7 +37,7 @@ namespace OfficeRibbonXEditor.Services
             return ofd.ShowDialog();
         }
         
-        public bool? SaveFileDialog(string title, string filter, Action<string> completedAction, string fileName = null, int filterIndex = 0)
+        public bool? SaveFileDialog(string title, string filter, Action<string> completedAction, string? fileName = null, int filterIndex = 0)
         {
             var sfd = new SaveFileDialog { Title = title, Filter = filter, FilterIndex = filterIndex, FileName = fileName ?? string.Empty };
             sfd.FileOk += (o, e) => completedAction(((SaveFileDialog)o).FileName);

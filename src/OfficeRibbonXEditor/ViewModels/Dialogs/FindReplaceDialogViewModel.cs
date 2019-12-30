@@ -281,7 +281,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
             if (this.IsRegExSearch)
             {
-                Regex rr = null;
+                Regex rr;
                 try
                 {
                     rr = new Regex(this.FindText, this.GetRegexOptions());
@@ -457,11 +457,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private CharacterRange FindNext(bool searchUp)
         {
-            Regex rr = null;
+            Regex? rr = null;
             return this.FindNext(searchUp, ref rr);
         }
 
-        private CharacterRange FindNext(bool searchUp, ref Regex rr)
+        private CharacterRange FindNext(bool searchUp, ref Regex? rr)
         {
             CharacterRange foundRange;
 
@@ -569,7 +569,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private CharacterRange ReplaceNext(bool searchUp)
         {
-            Regex rr = null;
+            Regex? rr = null;
             var selRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
 
             //	We only do the actual replacement if the current selection exactly

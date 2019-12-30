@@ -46,7 +46,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             }
         }
 
-        public string ImageSource  // TODO: Use the actual ImagesResource file somehow
+        public string? ImageSource  // TODO: Use the actual ImagesResource file somehow
         {
             get
             {
@@ -99,7 +99,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             }
         }
 
-        public void Save(bool reloadFirst = false, string fileName = null, bool preserveAttributes = true)
+        public void Save(bool reloadFirst = false, string? fileName = null, bool preserveAttributes = true)
         {
             if (reloadFirst)
             {
@@ -176,6 +176,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         public void Dispose()
         {
             document?.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }

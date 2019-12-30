@@ -11,7 +11,7 @@ namespace OfficeRibbonXEditor.Views.Controls
     /// </summary>
     public partial class IconTab : UserControl
     {
-        private IconTabViewModel viewModel;
+        private IconTabViewModel? viewModel;
 
         private Point scrollMousePoint = new Point();
 
@@ -73,7 +73,10 @@ namespace OfficeRibbonXEditor.Views.Controls
         private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-            this.viewModel.Zoom += Math.Sign(e.Delta);
+            if (this.viewModel != null)
+            {
+                this.viewModel.Zoom += Math.Sign(e.Delta);
+            }
         }
     }
 }

@@ -17,11 +17,10 @@ namespace OfficeRibbonXEditor.Views.Controls
                 new RoutedEventHandler(SelectAllText), true);
         }
 
-        private static void SelectivelyIgnoreMouseButton(object sender, 
-            MouseButtonEventArgs e)
+        private static void SelectivelyIgnoreMouseButton(object sender, MouseButtonEventArgs e)
         {
             // Find the TextBox
-            DependencyObject parent = e.OriginalSource as UIElement;
+            DependencyObject? parent = e.OriginalSource as UIElement;
             while (parent != null && !(parent is TextBox))
                 parent = VisualTreeHelper.GetParent(parent);
 

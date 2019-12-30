@@ -4,6 +4,12 @@ namespace OfficeRibbonXEditor.Models
 {
     public class EditorInfo
     {
+        public EditorInfo(string text, Tuple<int, int> selection)
+        {
+            Text = text;
+            Selection = selection;
+        }
+
         /// <summary>
         /// Gets or sets the current text shown in the editor
         /// </summary>

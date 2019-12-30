@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
+using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using OfficeRibbonXEditor.Resources;
@@ -21,7 +23,7 @@ namespace OfficeRibbonXEditor.Models.Documents
             this.Name = Path.GetFileName(this.Part.Uri.ToString());
         }
 
-        public PackagePart Part { get; private set; }
+        public PackagePart? Part { get; private set; }
 
         public XmlPart PartType { get; }
 
@@ -29,6 +31,11 @@ namespace OfficeRibbonXEditor.Models.Documents
 
         public string ReadContent()
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             var rd = new StreamReader(this.Part.GetStream(FileMode.Open, FileAccess.Read));
             var text = rd.ReadToEnd();
             rd.Close();
@@ -37,21 +44,30 @@ namespace OfficeRibbonXEditor.Models.Documents
         
         public void Save(string text)
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             if (text == null)
             {
                 Debug.Print("Trying to save a null string");
                 return;
             }
 
-            var tw = new StreamWriter(this.Part.GetStream(FileMode.Create, FileAccess.Write));
-
-            tw.Write(text);
-            tw.Flush();
-            tw.Close();
+            using (var tw = new StreamWriter(this.Part.GetStream(FileMode.Create, FileAccess.Write)))
+            {
+                tw.Write(text);
+            }
         }
 
         public Dictionary<string, BitmapImage> GetImages()
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             var imageCollection = new Dictionary<string, BitmapImage>();
 
             foreach (var relationship in this.Part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
@@ -80,7 +96,7 @@ namespace OfficeRibbonXEditor.Models.Documents
             return imageCollection;
         }
 
-        public string AddImage(string filePath, string imageId, Func<string, string, bool> alreadyExistingAction = null)
+        public string? AddImage(string filePath, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
             if (this.PartType != XmlPart.RibbonX12 && this.PartType != XmlPart.RibbonX14)
             {
@@ -118,6 +134,11 @@ namespace OfficeRibbonXEditor.Models.Documents
         
         public void RemoveImage(string imageId)
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             if (imageId == null)
             {
                 throw new ArgumentNullException(nameof(imageId));
@@ -146,8 +167,13 @@ namespace OfficeRibbonXEditor.Models.Documents
 
         public void Remove()
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             // Remove all image parts first
-            foreach (PackageRelationship relationship in this.Part.GetRelationships())
+            foreach (var relationship in this.Part.GetRelationships())
             {
                 var relUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
                 if (this.Part.Package.PartExists(relUri))
@@ -160,11 +186,15 @@ namespace OfficeRibbonXEditor.Models.Documents
             this.Part.Package.DeletePart(this.Part.Uri);
 
             this.Part = null;
-            this.id = null;
         }
 
         public void ChangeImageId(string source, string target)
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             if (source == null)
             {
                 throw new ArgumentNullException(nameof(source));
@@ -192,7 +222,7 @@ namespace OfficeRibbonXEditor.Models.Documents
 
             if (this.Part.RelationshipExists(target))
             {
-                throw new Exception(string.Format(StringsResource.idsDuplicateId, target));
+                throw new Exception(string.Format(CultureInfo.CurrentCulture, StringsResource.idsDuplicateId, target));
             }
 
             var imageRel = this.Part.GetRelationship(source);
@@ -213,19 +243,24 @@ namespace OfficeRibbonXEditor.Models.Documents
                 throw new ArgumentException("Extension cannot be empty.");
             }
 
-            var extLowerCase = extension.ToLower();
+            var extLowerCase = extension.ToUpperInvariant();
 
             switch (extLowerCase)
             {
-                case "jpg":
+                case "JPG":
                     return "image/jpeg";
                 default:
                     return "image/" + extLowerCase;
             }
         }
 
-        private string AddImageHelper(string fileName, string imageId, Func<string, string, bool> alreadyExistingAction = null)
+        private string? AddImageHelper(string fileName, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
+            if (this.Part == null)
+            {
+                throw new InvalidOperationException($"Part was already removed");
+            }
+
             if (fileName == null)
             {
                 throw new ArgumentNullException(nameof(fileName));
@@ -236,8 +271,6 @@ namespace OfficeRibbonXEditor.Models.Documents
             {
                 return null;
             }
-
-            var br = new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
 
             var imageUri = new Uri("images/" + Path.GetFileName(fileName), UriKind.Relative);
             var fileIndex = 0;
@@ -294,18 +327,18 @@ namespace OfficeRibbonXEditor.Models.Documents
                 return null;
             }
 
-            var bw = new BinaryWriter(imagePart.GetStream(FileMode.Create, FileAccess.Write));
-
-            var buffer = new byte[1024];
-            int byteCount;
-            while ((byteCount = br.Read(buffer, 0, buffer.Length)) > 0)
+            using (var br = new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
+            using (var bw = new BinaryWriter(imagePart.GetStream(FileMode.Create, FileAccess.Write)))
             {
-                bw.Write(buffer, 0, byteCount);
-            }
+                var buffer = new byte[1024];
+                int byteCount;
+                while ((byteCount = br.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    bw.Write(buffer, 0, byteCount);
+                }
 
-            bw.Flush();
-            bw.Close();
-            br.Close();
+                bw.Flush();
+            }
 
             return imageRel.Id;
         }

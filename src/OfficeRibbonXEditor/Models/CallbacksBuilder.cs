@@ -141,7 +141,7 @@ namespace OfficeRibbonXEditor.Models
 
             Debug.Assert(this.callbackList != null, "AttributeList is null");
 
-            if (this.callbackList.Contains(callbackValue))
+            if (this.callbackList?.Contains(callbackValue) ?? false)
             {
                 return string.Empty;
             }
@@ -208,7 +208,7 @@ namespace OfficeRibbonXEditor.Models
                     return string.Empty;
             }
 
-            this.callbackList.Add(callbackValue);
+            this.callbackList?.Add(callbackValue);
             return result;
         }
 

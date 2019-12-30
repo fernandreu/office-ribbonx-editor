@@ -39,7 +39,7 @@ namespace OfficeRibbonXEditor.Models
                 // To prevent this from happening, we introduce a small delay to give the editor time to show the panel
                 // TODO: Find a more robust way to achieve the same effect
 
-                Task.Delay(100).ContinueWith(t => Application.Current.Dispatcher.Invoke(() => this.GoToPosition(1, editor, resultsPanel)));
+                Task.Delay(100).ContinueWith(t => Application.Current.Dispatcher?.Invoke(() => this.GoToPosition(1, editor, resultsPanel)), TaskScheduler.Current);
             }
         }
 
