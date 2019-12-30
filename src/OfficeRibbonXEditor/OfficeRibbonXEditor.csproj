@@ -25,6 +25,11 @@
     <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="2.1.1" />
     <PackageReference Include="Autofac" Version="4.9.2" />
