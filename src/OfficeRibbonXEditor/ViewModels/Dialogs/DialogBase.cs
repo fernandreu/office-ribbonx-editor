@@ -24,7 +24,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public RelayCommand CloseCommand { get; }
 
-        public event EventHandler Closed;
+        public event EventHandler? Closed;
 
         public void Close()
         {

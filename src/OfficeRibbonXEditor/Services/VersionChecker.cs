@@ -36,7 +36,7 @@ namespace OfficeRibbonXEditor.Services
             }
         }
 
-        private async Task<Version> GetVersionAsync(CancellationToken cancelToken)
+        private async Task<Version?> GetVersionAsync(CancellationToken cancelToken)
         {
             using (var httpClient = new HttpClient())
             {

@@ -24,17 +24,17 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.ResultsScintilla.Scintilla.MouseDoubleClick += this.MouseDoubleClickEventHandler;
         }
 
-        public IResultCollection Results { get; private set; }
+        public IResultCollection? Results { get; private set; }
 
-        public Scintilla Scintilla { get; set; }
+        public Scintilla? Scintilla { get; set; }
 
         /// <summary>
         /// Updates the find all results panel
         /// </summary>
         /// <param name="results"></param>
-        public void UpdateFindAllResults(IResultCollection results)
+        public void UpdateFindAllResults(IResultCollection? results)
         {
-            if (results == null)
+            if (results == null || this.Scintilla == null)
             {
                 return;
             }
@@ -45,30 +45,45 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         private void KeyUpEventHandler(object sender, KeyEventArgs e)
         {
+            if (this.Scintilla == null)
+            {
+                return;
+            }
+
             var pos = this.ResultsScintilla.CurrentPosition;
-            this.Results.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
+            this.Results?.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
         }
 
         private void MouseClickEventHandler(object sender, MouseEventArgs e)
         {
+            if (this.Scintilla == null)
+            {
+                return;
+            }
+
             var pos = this.ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
             if (pos == -1)
             {
                 return;
             }
 
-            this.Results.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
+            this.Results?.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
         }
 
         private void MouseDoubleClickEventHandler(object sender, MouseEventArgs e)
         {
+            if (this.Scintilla == null)
+            {
+                return;
+            }
+
             var pos = this.ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
             if (pos == -1)
             {
                 return;
             }
             
-            this.Results.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
+            this.Results?.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
         }
     }
 }

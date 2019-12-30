@@ -8,7 +8,15 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 {
     public class IconTabViewModel : ViewModelBase, ITabItemViewModel
     {
-        private string title;
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. The icon field is actually initialized when setting the Icon property
+        public IconTabViewModel(IconViewModel icon, MainWindowViewModel mainWindow)
+        {
+            this.Icon = icon;
+            this.MainWindow = mainWindow;
+        }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
+        private string title = string.Empty;
 
         public string Title
         {
@@ -16,7 +24,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             set => this.Set(ref this.title, value);
         }
 
-        public string StatusText
+        public string? StatusText
         {
             get
             {

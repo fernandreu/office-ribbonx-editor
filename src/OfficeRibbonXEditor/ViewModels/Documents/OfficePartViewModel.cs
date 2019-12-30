@@ -17,7 +17,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             : base(parent, false, contents: part.ReadContent())
         {
             this.part = part;
-            this.originalContents = this.Contents;
+            this.originalContents = this.Contents ?? string.Empty;
             this.LoadIcons();
         }
 
@@ -144,6 +144,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                 return;
             }
 
+            this.Contents ??= string.Empty;
             docModel.Document.SaveCustomPart(this.Part.PartType, this.Contents);
 
             this.Part = docModel.Document.RetrieveCustomPart(this.Part.PartType);

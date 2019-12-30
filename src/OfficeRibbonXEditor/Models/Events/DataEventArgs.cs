@@ -7,13 +7,13 @@ namespace OfficeRibbonXEditor.Models.Events
     /// An EventArgs with a Data property of any type
     /// </summary>
     /// <typeparam name="T">The type of the Data property</typeparam>
-    public class DataEventArgs<T> : EventArgs
+    public class DataEventArgs<T> : EventArgs where T : class
     {
         public DataEventArgs()
         {
         }
 
-        public DataEventArgs(T data)
+        public DataEventArgs(T? data)
         {
             this.Data = data;
         }
@@ -21,6 +21,6 @@ namespace OfficeRibbonXEditor.Models.Events
         /// <summary>
         /// Gets or sets the data passed by the event
         /// </summary>
-        public T Data { get; set; }
+        public T? Data { get; set; }
     }
 }

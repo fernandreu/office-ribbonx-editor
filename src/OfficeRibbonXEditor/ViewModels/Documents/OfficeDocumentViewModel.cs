@@ -11,6 +11,8 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         private bool partsAddedOrRemoved = false;
 
+        private bool disposed;
+
         public OfficeDocumentViewModel(OfficeDocument document) 
             : base(null, false, false)
         {
@@ -91,6 +93,11 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             // Instead, use the parts currently shown in the editor
             foreach (var part in this.Children.OfType<OfficePartViewModel>())
             {
+                if (part.Part == null)
+                {
+                    continue;
+                }
+
                 this.document.SaveCustomPart(part.Part.PartType, part.OriginalContents, true);
                 
                 // Re-map the Part. This ensures that the PackagePart stored internally in OfficePart points to
@@ -118,6 +125,11 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             // The save operation closes the internal package and re-opens it. Hence, parts need to be re-mapped
             foreach (var part in this.Children.OfType<OfficePartViewModel>())
             {
+                if (part.Part == null)
+                {
+                    continue;
+                }
+
                 part.Part = this.document.RetrieveCustomPart(part.Part.PartType);
             }
 
@@ -147,7 +159,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
             for (var i = 0; i < this.Children.Count; ++i)
             {
-                if (!(this.Children[i] is OfficePartViewModel part))
+                if (!(this.Children[i] is OfficePartViewModel part) || part.Part == null)
                 {
                     continue;
                 }
@@ -167,7 +179,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         private void LoadParts()
         {
-            foreach (var part in this.document.Parts)
+            foreach (var part in this.document.Parts ?? Enumerable.Empty<OfficePart>())
             {
                 this.Children.Add(new OfficePartViewModel(part, this));
             }
@@ -175,8 +187,23 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public void Dispose()
         {
-            document?.Dispose();
+            this.Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                this.document?.Dispose();
+            }
+
+            this.disposed = true;
         }
     }
 }

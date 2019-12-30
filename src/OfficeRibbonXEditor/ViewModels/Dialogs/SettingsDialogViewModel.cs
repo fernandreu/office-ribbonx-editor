@@ -69,7 +69,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public bool OnLoaded(ICollection<ITabItemViewModel> payload)
         {
-            this.Tabs = payload;
+            this.Tabs.Clear();
+            foreach (var tab in payload)
+            {
+                this.Tabs.Add(tab);
+            }
+
             this.LoadCurrent();
             return true;
         }
@@ -82,7 +87,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => this.Set(ref this.settingsChanged, value);
         }
 
-        public ICollection<ITabItemViewModel> Tabs { get; private set; }
+        public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
 
         public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
 

@@ -5,8 +5,14 @@ namespace OfficeRibbonXEditor.Models.Events
 {
     public class LaunchDialogEventArgs : EventArgs
     {
-        public IContentDialogBase Content { get; set; }
+        public LaunchDialogEventArgs(IContentDialogBase content, bool showDialog = true)
+        {
+            this.Content = content;
+            this.ShowDialog = showDialog;
+        }
 
-        public bool ShowDialog { get; set; } = true;
+        public IContentDialogBase Content { get; }
+
+        public bool ShowDialog { get; }
     }
 }

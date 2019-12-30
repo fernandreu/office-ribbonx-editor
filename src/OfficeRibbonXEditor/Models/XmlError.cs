@@ -2,10 +2,17 @@
 {
     public class XmlError
     {
-        public int LineNumber { get; set; }
+        public XmlError(int lineNumber, int linePosition, string message)
+        {
+            LineNumber = lineNumber;
+            LinePosition = linePosition;
+            Message = message;
+        }
 
-        public int LinePosition { get; set; }
+        public int LineNumber { get; }
 
-        public string Message { get; set; }
+        public int LinePosition { get; }
+
+        public string Message { get; }
     }
 }

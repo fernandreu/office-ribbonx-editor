@@ -22,7 +22,9 @@ namespace OfficeRibbonXEditor.Models
                 return false;
             }
 
-            var menuKey = this.GetMenuKey(type, false);
+#pragma warning disable CS8604 // Possible null reference argument (warning triggered after string.IsNullOrEmpty, which is incorrect).
+            var menuKey = GetMenuKey(type, false);
+#pragma warning restore CS8604 // Possible null reference argument.
             return menuKey != null;
         }
 
@@ -58,13 +60,13 @@ namespace OfficeRibbonXEditor.Models
             subKey?.SetValue(null, $"\"{exePath}\" \"%1\"");
         }
 
-        private string GetFileType()
+        private string? GetFileType()
         {
             var key = Registry.ClassesRoot.OpenSubKey(this.extension)?.GetValue(null)?.ToString();
             return key;
         }
 
-        private RegistryKey GetMenuKey(string fileType, bool writable = true)
+        private static RegistryKey GetMenuKey(string fileType, bool writable = true)
         {
             var key = Registry.CurrentUser.OpenSubKey($@"Software\Classes\{fileType}\shell\{MenuEntryName}", writable);
             return key;

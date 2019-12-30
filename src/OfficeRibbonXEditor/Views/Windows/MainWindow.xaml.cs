@@ -14,7 +14,7 @@ namespace OfficeRibbonXEditor.Views.Windows
     /// </summary>
     public partial class MainWindow
     {
-        private MainWindowViewModel viewModel;
+        private MainWindowViewModel? viewModel;
 
         private bool suppressRequestBringIntoView;
 
@@ -34,7 +34,13 @@ namespace OfficeRibbonXEditor.Views.Windows
 
             this.viewModel = model;
 
-            this.viewModel.InsertRecentFile += (o, e) => this.RecentFileList.InsertFile(e.Data);
+            this.viewModel.InsertRecentFile += (o, e) =>
+            {
+                if (e.Data != null)
+                {
+                    this.RecentFileList.InsertFile(e.Data);
+                }
+            };
             this.viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
         }
 
@@ -44,7 +50,7 @@ namespace OfficeRibbonXEditor.Views.Windows
         /// </summary>
         /// <param name="source">The starting source where the TreeViewItem will be searched</param>
         /// <returns>The item found, or null otherwise</returns>
-        private static TreeViewItem VisualUpwardSearch(DependencyObject source)
+        private static TreeViewItem? VisualUpwardSearch(DependencyObject? source)
         {
             while (source != null && !(source is TreeViewItem))
             {
@@ -151,13 +157,16 @@ namespace OfficeRibbonXEditor.Views.Windows
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-            this.viewModel.OpenTabCommand.Execute(null);
+            this.viewModel?.OpenTabCommand.Execute(null);
         }
         
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
-            this.viewModel.SelectedItem = newItem;
+            if (this.viewModel != null)
+            {
+                this.viewModel.SelectedItem = newItem;
+            }
         }
 
         private void OnToolBarLoaded(object sender, RoutedEventArgs e)

@@ -87,6 +87,6 @@ namespace OfficeRibbonXEditor.Views.Controls
             set => this.SetValue(InactiveOpacityProperty, value);
         }
 
-        public DialogHostBase Host { get; set; }
+        public DialogHostBase? Host { get; set; }
     }
 }

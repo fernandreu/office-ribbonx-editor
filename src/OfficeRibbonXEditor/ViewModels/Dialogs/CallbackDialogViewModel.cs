@@ -1,16 +1,17 @@
-﻿using OfficeRibbonXEditor.Interfaces;
+﻿using System.Threading;
+using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models.Lexers;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
 
-    public class CallbackDialogViewModel : DialogBase, IContentDialog<string>
+    public class CallbackDialogViewModel : DialogBase, IContentDialog<string?>
     {
-        private VbaLexer lexer;
+        private VbaLexer? lexer;
 
-        private string code;
+        private string? code;
 
-        public VbaLexer Lexer
+        public VbaLexer? Lexer
         {
             get => this.lexer;
             set
@@ -20,11 +21,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                     return;
                 }
 
+                if (this.Lexer?.Editor == null)
+                {
+                    return;
+                }
+
                 this.Lexer.Editor.Text = this.Code;
             }
         }
 
-        public string Code
+        public string? Code
         {
             get => this.code;
             set
@@ -34,11 +40,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                     return;
                 }
 
+                if (this.Lexer?.Editor == null)
+                {
+                    return;
+                }
+
                 this.Lexer.Editor.Text = this.Code;
             }
         }
 
-        public bool OnLoaded(string payload)
+        public bool OnLoaded(string? payload)
         {
             this.Code = payload;
             return true;

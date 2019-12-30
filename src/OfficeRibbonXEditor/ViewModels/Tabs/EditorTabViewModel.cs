@@ -111,7 +111,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         /// </summary>
         public event EventHandler<EditorChangeEventArgs>? UpdateEditor;
 
-        public EditorInfo EditorInfo
+        public EditorInfo? EditorInfo
         {
             get
             {

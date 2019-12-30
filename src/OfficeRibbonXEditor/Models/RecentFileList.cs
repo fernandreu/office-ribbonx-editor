@@ -111,7 +111,7 @@ namespace OfficeRibbonXEditor.Models
                 return pathname;
             }
 
-            var root = Path.GetPathRoot(pathname);
+            var root = Path.GetPathRoot(pathname) ?? string.Empty;
             if (root.Length > 3)
             {
                 root += Path.DirectorySeparatorChar;
@@ -687,12 +687,12 @@ namespace OfficeRibbonXEditor.Models
                     list.Add(filepath);
                 }
 
-                this.CopyExcluding(old, filepath, list, max);
+                CopyExcluding(old, filepath, list, max);
 
                 this.Save(list, max);
             }
 
-            private void CopyExcluding(List<string> source, string exclude, List<string> target, int max)
+            private static void CopyExcluding(List<string> source, string exclude, List<string> target, int max)
             {
                 foreach (var s in source)
                 {
@@ -806,6 +806,7 @@ namespace OfficeRibbonXEditor.Models
 
             private void Save(IEnumerable<string> list, int max)
             {
+                _ = max;
                 using (var ms = new MemoryStream())
                 using (var x = new XmlTextWriter(ms, Encoding.UTF8))
                 {

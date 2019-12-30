@@ -106,10 +106,10 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         private void OnShowResults(object? sender, DataEventArgs<IResultCollection> e)
         {
-            if (e.Data.IsEmpty)
+            if (e.Data?.IsEmpty ?? true)
             {
                 // No reason to update the panel; simply close it if appropriate
-                if (this.ResultsSplitter.Visibility != Visibility.Collapsed && e.Data.GetType() == this.ResultsPanel.Results?.GetType())
+                if (this.ResultsSplitter.Visibility != Visibility.Collapsed && e.Data?.GetType() == this.ResultsPanel.Results?.GetType())
                 {
                     // In this case, appropriate means: it was previously open and showing data of the same type
                     this.OnCloseFindResults(sender, e);

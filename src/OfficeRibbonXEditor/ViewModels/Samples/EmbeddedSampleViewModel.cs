@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,21 +8,26 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
 {
     public class EmbeddedSampleViewModel : XmlSampleViewModel
     {
-        public string ResourceName { get; set; }
+        public EmbeddedSampleViewModel(string resourceName)
+        {
+            ResourceName = resourceName;
+        }
+
+        public string ResourceName { get; }
 
         private static readonly string samplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";
 
-        public override string Name => this.ResourceName?.Substring(samplesNamespace.Length + 1);
+        public override string Name => this.ResourceName.Substring(samplesNamespace.Length + 1);
 
         public static IEnumerable<XmlSampleViewModel> GetFromAssembly()
         {
             var assembly = Assembly.GetExecutingAssembly();
             return assembly
                 .GetManifestResourceNames()
-                .Where(r => r.StartsWith(samplesNamespace) && r.EndsWith(".xml"))
-                .Select(r => new EmbeddedSampleViewModel { ResourceName = r });
+                .Where(r => r.StartsWith(samplesNamespace, StringComparison.OrdinalIgnoreCase) && r.EndsWith(".xml", StringComparison.OrdinalIgnoreCase))
+                .Select(r => new EmbeddedSampleViewModel(r));
         }
-
+        
         private static string ReadContents(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();

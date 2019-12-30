@@ -14,9 +14,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public RelayCommand AcceptCommand { get; }
 
-        private ScintillaLexer lexer;
+        private ScintillaLexer? lexer;
 
-        public ScintillaLexer Lexer
+        public ScintillaLexer? Lexer
         {
             get => this.lexer;
             set
@@ -39,11 +39,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
         }
 
-        public event EventHandler LexerChanged;
+        public event EventHandler? LexerChanged;
 
-        public int CurrentLineNumber => (this.Lexer?.Editor.CurrentLine ?? -1) + 1;
+        public int CurrentLineNumber => (this.Lexer?.Editor?.CurrentLine ?? -1) + 1;
 
-        public int MaximumLineNumber => this.Lexer?.Editor.Lines.Count ?? 0;
+        public int MaximumLineNumber => this.Lexer?.Editor?.Lines.Count ?? 0;
 
         private int target;
 
@@ -74,9 +74,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 line = 0;
             }
 
-            this.Lexer.Editor.Scintilla.Lines[line].Goto();
+            this.Lexer?.Editor?.Scintilla.Lines[line].Goto();
             this.Close();
-            this.Lexer.Editor.Scintilla.Focus();
+            this.Lexer?.Editor?.Scintilla.Focus();
         }
     }
 }

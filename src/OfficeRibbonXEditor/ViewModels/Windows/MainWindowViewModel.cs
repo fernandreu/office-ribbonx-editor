@@ -143,7 +143,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// </summary>
         public event EventHandler<DataEventArgs<string>>? InsertRecentFile;
 
-        public event EventHandler<DataEventArgs<Cursor?>>? SetGlobalCursor; 
+        public event EventHandler<DataEventArgs<Cursor>>? SetGlobalCursor; 
 
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
@@ -389,7 +389,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 content = this.dialogProvider.ResolveDialog<TDialog>();
             }
             
-            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
+            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs(content, showDialog));
             if (content.IsUnique)
             {
                 // Keep track of the new content
@@ -420,7 +420,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return content;
             }
             
-            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs { Content = content, ShowDialog = showDialog });
+            this.LaunchingDialog?.Invoke(this, new LaunchDialogEventArgs(content, showDialog));
 
             return content;
         }
@@ -598,7 +598,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 }
 
                 var doc = part.Parent as OfficeDocumentViewModel;
-                doc?.RemovePart(part.Part.PartType);
+                var type = part.Part?.PartType;
+                if (type != null)
+                {
+                    doc?.RemovePart(type.Value);
+                }
+
                 return;
             }
 
@@ -768,9 +773,9 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             this.DocumentList.Add(model);
             this.InsertRecentFile?.Invoke(this, new DataEventArgs<string> { Data = fileName });
-            
+
             // Expand the tree view
-            void Expand(TreeViewItemViewModel vm)
+            static void Expand(TreeViewItemViewModel vm)
             {
                 vm.IsExpanded = true;
                 foreach (var child in vm.Children)
@@ -824,11 +829,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var tab = this.OpenTabs.OfType<IconTabViewModel>().FirstOrDefault(x => x.Icon == icon);
             if (tab == null)
             {
-                tab = new IconTabViewModel
-                {
-                    Icon = icon,
-                    MainWindow = this,
-                };
+                tab = new IconTabViewModel(icon, this);
                 this.OpenTabs.Add(tab);
                 this.AdjustTabTitle(tab);
             }
@@ -1030,7 +1031,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         {
             var result = new SampleFolderViewModel
             {
-                Name = Path.GetDirectoryName(path),
+                Name = Path.GetDirectoryName(path) ?? string.Empty,
             };
 
             foreach (var directory in Directory.GetDirectories(path))
@@ -1157,6 +1158,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
                 // Make sure the xml schema is not for the wrong part type
                 if (this.customUiSchemas != null &&
+                    part.Part != null &&
                     this.customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && 
                     this.customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema)
                 {
@@ -1194,7 +1196,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             // Test to see if text is XML first
             try
             {
-                if (this.customUiSchemas == null || !(this.customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
+                if (this.customUiSchemas == null || part.Part == null || !(this.customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
                 {
                     return false;
                 }
@@ -1211,22 +1213,18 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 var ns = xmlDoc.Root?.GetDefaultNamespace().ToString();
                 if (ns != targetSchema.TargetNamespace)
                 {
-                    errorList.Add(new XmlError
-                    {
-                        LineNumber = 1,
-                        LinePosition = 1,
-                        Message = $"Unknown namespace \"{ns}\". Custom UI XML namespace must be \"{targetSchema.TargetNamespace}\"",
-                    });
+                    errorList.Add(new XmlError(
+                        1,
+                        1,
+                        $"Unknown namespace \"{ns}\". Custom UI XML namespace must be \"{targetSchema.TargetNamespace}\""));
                 }
 
                 void ValidateHandler(object o, ValidationEventArgs e)
                 {
-                    errorList.Add(new XmlError
-                    {
-                        LineNumber = e.Exception.LineNumber,
-                        LinePosition = e.Exception.LinePosition,
-                        Message = e.Message,
-                    });
+                    errorList.Add(new XmlError(
+                        e.Exception.LineNumber,
+                        e.Exception.LinePosition,
+                        e.Message));
                 }
 
                 xmlDoc.Validate(schemaSet, ValidateHandler);
@@ -1253,12 +1251,10 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             {
                 var errorList = new[]
                 {
-                    new XmlError
-                    {
-                        LineNumber = ex.LineNumber,
-                        LinePosition = ex.LinePosition,
-                        Message = ex.Message,
-                    }
+                    new XmlError(
+                        ex.LineNumber,
+                        ex.LinePosition,
+                        ex.Message),
                 };
 
                 tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
@@ -1300,7 +1296,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     return;
                 }
                 
-                this.LaunchDialog<CallbackDialogViewModel, string>(callbacks.ToString());
+                this.LaunchDialog<CallbackDialogViewModel, string?>(callbacks.ToString());
             }
             catch (Exception ex)
             {
@@ -1430,16 +1426,26 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             if (e.NewItems != null)
             {
-                foreach (TreeViewItemViewModel item in e.NewItems)
+                foreach (TreeViewItemViewModel? item in e.NewItems)
                 {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+
                     this.AddNotifyEvent(item);
                 }
             }
 
             if (e.OldItems != null)
             {
-                foreach (TreeViewItemViewModel item in e.OldItems)
+                foreach (TreeViewItemViewModel? item in e.OldItems)
                 {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+
                     this.RemoveNotifyEvent(item);
                 }
             }
@@ -1516,7 +1522,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
                 if (cursor != current)
                 {
-                    this.viewModel.SetGlobalCursor?.Invoke(this.viewModel, new DataEventArgs<Cursor?>(cursor));
+                    this.viewModel.SetGlobalCursor?.Invoke(this.viewModel, new DataEventArgs<Cursor>(cursor));
                 }
             }
 
@@ -1528,7 +1534,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
                 if (cursor != current)
                 {
-                    this.viewModel.SetGlobalCursor?.Invoke(this.viewModel, new DataEventArgs<Cursor?>(cursor));
+                    this.viewModel.SetGlobalCursor?.Invoke(this.viewModel, new DataEventArgs<Cursor>(cursor));
                 }
             }
         }

@@ -59,7 +59,7 @@ namespace OfficeRibbonXEditor.Converters
 
         #region IValueConverter Members
 
-        object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var output = value;
 
@@ -79,7 +79,7 @@ namespace OfficeRibbonXEditor.Converters
             return output;
         }
 
-        object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var output = value;
 

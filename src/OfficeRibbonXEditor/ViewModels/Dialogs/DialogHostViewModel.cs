@@ -8,20 +8,20 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     public class DialogHostViewModel : ViewModelBase
     {
-        private IContentDialogBase content;
+        private IContentDialogBase? content;
 
         public DialogHostViewModel()
         {
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
         }
 
-        public event EventHandler ShowingDialog;
+        public event EventHandler? ShowingDialog;
 
         public RelayCommand<CancelEventArgs> ClosingCommand { get; }
 
-        public event EventHandler Closed;
+        public event EventHandler? Closed;
 
-        public IContentDialogBase Content
+        public IContentDialogBase? Content
         {
             get => this.content;
             set => this.Set(ref this.content, value);
@@ -29,7 +29,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private void ExecuteClosingCommand(CancelEventArgs args)
         {
-            this.content.ClosingCommand.Execute(args);
+            this.content?.ClosingCommand.Execute(args);
         }
 
         public void ShowDialog()

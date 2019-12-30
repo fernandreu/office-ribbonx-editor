@@ -11,7 +11,7 @@ namespace OfficeRibbonXEditor.Converters
     [ValueConversion(typeof(double), typeof(double), ParameterType = typeof(double))]
     public class PowerConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
             {
@@ -20,7 +20,7 @@ namespace OfficeRibbonXEditor.Converters
 
             var exponent = ((IConvertible) value).ToDouble(null);
 
-            var baseValue = parameter == null ? 2.0 : ((IConvertible) parameter).ToDouble(null);
+            var baseValue = parameter is IConvertible convertible ? convertible.ToDouble(null) : 2.0;
             return Math.Pow(baseValue, exponent);
         }
 

@@ -40,8 +40,13 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             target.TextBox?.SelectAll();
         }
 
-        private void OnMoveDialogAway(object sender, DataEventArgs<System.Drawing.Point> e)
+        private void OnMoveDialogAway(object sender, PointEventArgs e)
         {
+            if (this.Host == null)
+            {
+                return;
+            }
+
             const int triggerMargin = 64;
 
             // First, we check if the current position is hiding the selection or not

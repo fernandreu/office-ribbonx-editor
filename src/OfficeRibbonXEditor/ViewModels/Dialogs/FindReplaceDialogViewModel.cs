@@ -15,6 +15,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     {
         private CharacterRange searchRange = new CharacterRange();
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. All warnings get initialized in OnLoaded so,
+                               // unless all methods contain safeguards for the exceptional case where OnLoaded is not called, let's not bother with
+                               // nullable types. Not calling OnLoaded should be unusual, and therefore a null reference exception is all you'd need
         public FindReplaceDialogViewModel()
         {
             this.FindNextCommand = new RelayCommand(() => this.FindWrapper(false));
@@ -25,8 +28,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.ReplaceAllCommand = new RelayCommand(this.ExecuteReplaceAllCommand);
             this.ClearCommand = new RelayCommand(this.ExecuteClearCommand);
         }
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public event EventHandler<DataEventArgs<Point>> MoveDialogAway;
+        public event EventHandler<PointEventArgs>? MoveDialogAway;
 
         public RecentListViewModel<string> RecentFinds { get; } = new RecentListViewModel<string>();
 
@@ -243,7 +247,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => this.Set(ref this.highlightMatches, value);
         }
 
-        private string findText;
+        private string findText = string.Empty;
 
         public string FindText
         {
@@ -251,7 +255,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => this.Set(ref this.findText, value);
         }
 
-        private string replaceText;
+        private string replaceText = string.Empty;
 
         public string ReplaceText
         {
@@ -259,7 +263,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => this.Set(ref this.replaceText, value);
         }
 
-        private string statusText;
+        private string statusText = string.Empty;
 
         public string StatusText
         {
@@ -753,7 +757,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             var y = this.Scintilla.PointYFromPosition(pos);
 
             var cursorPoint = this.Scintilla.PointToScreen(new Point(x, y));
-            this.MoveDialogAway?.Invoke(this, new DataEventArgs<Point> { Data = cursorPoint });
+            this.MoveDialogAway?.Invoke(this, new PointEventArgs(cursorPoint));
         }
     }
 }

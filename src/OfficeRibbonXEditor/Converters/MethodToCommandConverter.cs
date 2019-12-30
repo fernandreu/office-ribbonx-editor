@@ -18,10 +18,9 @@ namespace OfficeRibbonXEditor.Converters
     [ValueConversion(typeof(object), typeof(ICommand))]
     public class MethodToCommandConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            var methodName = parameter as string;
-            if (value == null || methodName == null)
+            if (value == null || !(parameter is string methodName))
             {
                 Debug.WriteLine("Either the path or the ConverterParameter of MethodToCommandConverter are null");
                 return value;
@@ -37,7 +36,7 @@ namespace OfficeRibbonXEditor.Converters
             return new MethodProxy(methodInfo, value);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
         {
             throw new InvalidOperationException($"{nameof(MethodToCommandConverter)} can only be used OneWay.");
         }

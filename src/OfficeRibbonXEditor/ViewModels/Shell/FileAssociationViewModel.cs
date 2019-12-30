@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.ViewModels.Shell
             this.NewValue = this.PreviousValue;
         }
 
-        public event EventHandler ValueChanged; 
+        public event EventHandler? ValueChanged; 
 
         public string Extension { get; }
 
