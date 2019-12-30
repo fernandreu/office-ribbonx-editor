@@ -130,7 +130,7 @@ jobs:
     inputs:
       command: test
       projects: '**/*Tests.csproj'
-      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/'
+      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:CopyLocalLockFileAssemblies=true'
       configuration: '$(buildConfiguration)'
 
   - script: |
