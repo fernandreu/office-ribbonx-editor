@@ -111,13 +111,6 @@ jobs:
       restoreSolution: '$(solution)'
 
   - task: DotNetCoreCLI@2
-    displayName: 'Install ReportGenerator'
-    inputs:
-      command: custom
-      custom: tool
-      arguments: 'install --global dotnet-reportgenerator-globaltool'
-
-  - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
     inputs:
       command: build
@@ -126,12 +119,20 @@ jobs:
       configuration: '$(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
+    displayName: 'Install ReportGenerator'
+    inputs:
+      command: custom
+      custom: tool
+      arguments: 'install --global dotnet-reportgenerator-globaltool'
+
+  - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
     inputs:
       command: test
       projects: '**/*Tests.csproj'
       arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:CopyLocalLockFileAssemblies=true'
       configuration: '$(buildConfiguration)'
+      nobuild: true
 
   - script: |
       reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
