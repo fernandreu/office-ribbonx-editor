@@ -20,6 +20,9 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
 
+    <!--This also allows caching NuGet packages in Azure Pipelines-->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
     <!-- SonarQube needs this -->
     <ProjectGuid>{A2A7BCC6-735E-4424-93A4-4EA5255E01FC}</ProjectGuid>
   </PropertyGroup>
