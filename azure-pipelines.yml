@@ -19,6 +19,7 @@ pool:
 variables:
 - group: GitHubPATGroup
 - group: CodeSign
+- group: SonarCloud
 - name: solution
   value: '**/*.sln'
 
@@ -110,6 +111,18 @@ jobs:
     inputs:
       restoreSolution: '$(solution)'
 
+  - task: SonarCloudPrepare@1
+    displayName: 'Prepare SonarCloud analysis'
+    inputs:
+      SonarCloud: 'fernandreu-SonarCloud'
+      organization: '$(SonarOrganization)'
+      projectKey: '$(SonarProjectKey)'
+      projectName: '$(SonarProjectName)'
+      projectVersion: '$(Build.BuildNumber)'
+      extraProperties: |
+      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
+    # sonar.exclusions=**/wwwroot/lib/**/*
+
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
     inputs:
@@ -117,6 +130,8 @@ jobs:
       projects: '**/*.csproj'
       arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
+  # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
+  # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
   - task: PowerShell@2
     displayName: 'Copy PresentationFramework.dll to bin folder'
     inputs:
@@ -140,7 +155,7 @@ jobs:
         /p:_InstallerTargetFramework=$(targetFramework)
         /p:CollectCoverage=true
         /p:Include=[OfficeRibbonXEditor*]*
-        /p:CoverletOutputFormat=json%2Ccobertura
+        /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
         /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.json
       nobuild: true
@@ -150,6 +165,12 @@ jobs:
     inputs:
       codeCoverageTool: 'cobertura'
       summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+
+  - task: SonarCloudAnalyze@1
+    displayName: 'Run SonarCloud code analysis'
+
+  - task: SonarCloudPublish@1
+    displayName: 'Publish SonarCloud quality gate results'
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet publish'
