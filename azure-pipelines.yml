@@ -117,12 +117,12 @@ jobs:
       projects: '**/*.csproj'
       arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Install ReportGenerator'
-    inputs:
-      command: custom
-      custom: tool
-      arguments: 'install --global dotnet-reportgenerator-globaltool'
+  # - task: DotNetCoreCLI@2
+  #   displayName: 'Install ReportGenerator'
+  #   inputs:
+  #     command: custom
+  #     custom: tool
+  #     arguments: 'install --global dotnet-reportgenerator-globaltool'
 
   - task: PowerShell@2
     displayName: 'Copy PresentationFramework.dll to bin folder'
@@ -137,16 +137,32 @@ jobs:
         Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework)/" 
 
   - task: DotNetCoreCLI@2
-    displayName: 'dotnet test'
+    displayName: 'Run Unit Tests'
     inputs:
       command: test
-      projects: '**/*Tests.csproj'
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:Include=[OfficeRibbonXEditor*]*'
+      projects: '**/UnitTests.csproj'
+      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:Include=[OfficeRibbonXEditor*]*'
       nobuild: true
 
-  - script: |
-      reportgenerator -reports:$(Build.SourcesDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
-    displayName: 'Create code coverage report'
+  - task: DotNetCoreCLI@2
+    displayName: 'Run Integration Tests'
+    inputs:
+      command: test
+      projects: '**/IntegrationTests.csproj'
+      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:Include=[OfficeRibbonXEditor*]*'
+      nobuild: true
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Run Functional Tests'
+    inputs:
+      command: test
+      projects: '**/FunctionalTests.csproj'
+      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:Include=[OfficeRibbonXEditor*]*'
+      nobuild: true
+
+  # - script: |
+  #     reportgenerator -reports:$(Build.SourcesDirectory)/TestResults/Coverage/**/*.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
+  #   displayName: 'Create code coverage report'
 
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage report'
