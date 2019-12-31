@@ -137,27 +137,19 @@ jobs:
         Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework)/" 
 
   - task: DotNetCoreCLI@2
-    displayName: 'Run Unit Tests'
+    displayName: 'Run Tests'
     inputs:
       command: test
-      projects: '**/UnitTests.csproj'
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:Include=[OfficeRibbonXEditor*]*'
-      nobuild: true
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Run Integration Tests'
-    inputs:
-      command: test
-      projects: '**/IntegrationTests.csproj'
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:Include=[OfficeRibbonXEditor*]*'
-      nobuild: true
-
-  - task: DotNetCoreCLI@2
-    displayName: 'Run Functional Tests'
-    inputs:
-      command: test
-      projects: '**/FunctionalTests.csproj'
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.cobertura.xml /p:Include=[OfficeRibbonXEditor*]*'
+      projects: '**/*Tests.csproj'
+      arguments: |
+        --configuration $(buildConfiguration) 
+        /p:TargetFramework=$(targetFramework)
+        /p:_InstallerTargetFramework=$(targetFramework)
+        /p:CollectCoverage=true
+        /p:Include=[OfficeRibbonXEditor*]*'
+        /p:CoverletOutputFormat="json,cobertura"
+        /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
+        /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverlet.json
       nobuild: true
 
   # - script: |
