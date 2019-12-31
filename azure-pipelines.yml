@@ -141,14 +141,14 @@ jobs:
     inputs:
       command: test
       projects: '**/*Tests.csproj'
-      arguments: |
-        --configuration $(buildConfiguration) \
-        /p:TargetFramework=$(targetFramework) \
-        /p:_InstallerTargetFramework=$(targetFramework) \
-        /p:CollectCoverage=true \
-        /p:Include=[OfficeRibbonXEditor*]*' \
-        /p:CoverletOutputFormat="json,cobertura" \
-        /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/ \
+      arguments: >-
+        --configuration $(buildConfiguration)
+        /p:TargetFramework=$(targetFramework)
+        /p:_InstallerTargetFramework=$(targetFramework)
+        /p:CollectCoverage=true
+        /p:Include=[OfficeRibbonXEditor*]*
+        /p:CoverletOutputFormat="json,cobertura"
+        /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
         /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverlet.json
       nobuild: true
 
