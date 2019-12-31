@@ -121,7 +121,7 @@ jobs:
       projectVersion: '$(Build.BuildNumber)'
       extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
-      # sonar.exclusions=**/wwwroot/lib/**/*
+        sonar.exclusions=./src/ScintillaNET*/**/*
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
@@ -150,6 +150,7 @@ jobs:
       command: test
       projects: '**/*Tests.csproj'
       arguments: >-
+        --nobuild
         --configuration $(buildConfiguration)
         /p:TargetFramework=$(targetFramework)
         /p:_InstallerTargetFramework=$(targetFramework)
@@ -158,7 +159,6 @@ jobs:
         /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
         /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.json
-      nobuild: true
 
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage report'
