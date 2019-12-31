@@ -354,7 +354,7 @@ namespace OfficeRibbonXEditor.Models.Documents
 
             if (this.UnderlyingPackage == null)
             {
-                throw new NullReferenceException("Failed to get package");
+                throw new InvalidOperationException("Failed to get package");
             }
 
             this.Parts = new List<OfficePart>();

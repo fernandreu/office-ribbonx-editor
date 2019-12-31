@@ -278,7 +278,7 @@ namespace OfficeRibbonXEditor.Models
         {
             if (!(this.Parent is MenuItem parent))
             {
-                throw new ApplicationException("Parent must be a MenuItem");
+                throw new InvalidOperationException("Parent must be a MenuItem");
             }
             
             if (ReferenceEquals(this.FileMenu, parent))

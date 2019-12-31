@@ -221,7 +221,7 @@ namespace OfficeRibbonXEditor.Models.Documents
 
             if (this.Part.RelationshipExists(target))
             {
-                throw new Exception(string.Format(CultureInfo.CurrentCulture, StringsResource.idsDuplicateId, target));
+                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, StringsResource.idsDuplicateId, target));
             }
 
             var imageRel = this.Part.GetRelationship(source);
