@@ -111,10 +111,10 @@ namespace OfficeRibbonXEditor.Models
                 return pathname;
             }
 
-            var root = Path.GetPathRoot(pathname) ?? string.Empty;
+            var root = new StringBuilder(Path.GetPathRoot(pathname) ?? string.Empty);
             if (root.Length > 3)
             {
-                root += Path.DirectorySeparatorChar;
+                root.Append(Path.DirectorySeparatorChar);
             }
 
             var elements = pathname.Substring(root.Length).Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
@@ -129,7 +129,8 @@ namespace OfficeRibbonXEditor.Models
                     // Long enough to shorten. If path is a UNC path, root may be rather long
                     if (root.Length + 6 >= maxLength)
                     {
-                        return root + elements[0].Substring(0, 3) + "...";
+                        root.Append(elements[0].Substring(0, 3) + "...");
+                        return root.ToString();
                     }
                     else
                     {
@@ -140,12 +141,13 @@ namespace OfficeRibbonXEditor.Models
             else if (root.Length + 4 + elements[filenameIndex].Length > maxLength)
             {
                 // pathname is just a root and filename
-                root += "...\\";
+                root.Append("...\\");
 
                 var len = elements[filenameIndex].Length;
                 if (len < 6)
                 {
-                    return root + elements[filenameIndex];
+                    root.Append(elements[filenameIndex]);
+                    return root.ToString();
                 }
 
                 if ((root.Length + 6) >= maxLength)
@@ -157,11 +159,13 @@ namespace OfficeRibbonXEditor.Models
                     len = maxLength - root.Length - 3;
                 }
 
-                return root + elements[filenameIndex].Substring(0, len) + "...";
+                root.Append(elements[filenameIndex].Substring(0, len) + "...");
+                return root.ToString();
             }
             else if (elements.GetLength(0) == 2)
             {
-                return root + "...\\" + elements[1];
+                root.Append("...\\" + elements[1]);
+                return root.ToString();
             }
             else
             {
@@ -206,17 +210,18 @@ namespace OfficeRibbonXEditor.Models
                 // assemble final string
                 for (int i = 0; i < begin; i++)
                 {
-                    root += elements[i] + '\\';
+                    root.Append(elements[i] + '\\');
                 }
 
-                root += "...\\";
+                root.Append("...\\");
 
-                for (int i = end; i < filenameIndex; i++)
+                for (var i = end; i < filenameIndex; i++)
                 {
-                    root += elements[i] + '\\';
+                    root.Append(elements[i] + '\\');
                 }
 
-                return root + elements[filenameIndex];
+                root.Append(elements[filenameIndex]);
+                return root.ToString();
             }
 
             return pathname;

@@ -566,7 +566,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private void ExecuteRemoveItemCommand()
         {
-            if (this.SelectedItem is OfficePartViewModel)
+            if (this.SelectedItem is OfficePartViewModel part)
             {
                 var result = this.messageBoxService.Show(
                     "This action cannot be undone. Are you sure you want to continue?", 
@@ -577,8 +577,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 {
                     return;
                 }
-
-                var part = (OfficePartViewModel)this.SelectedItem;
 
                 foreach (var tab in this.OpenTabs.OfType<EditorTabViewModel>())
                 {
@@ -607,7 +605,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            if (this.SelectedItem is IconViewModel)
+            if (this.SelectedItem is IconViewModel icon)
             {
                 var result = this.messageBoxService.Show(
                     "This action cannot be undone. Are you sure you want to continue?", 
@@ -619,8 +617,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     return;
                 }
 
-                var icon = (IconViewModel) this.SelectedItem;
-
                 foreach (var tab in this.OpenTabs.OfType<IconTabViewModel>())
                 {
                     if (tab.Icon == icon)
@@ -630,8 +626,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     }
                 }
 
-                var part = icon.Parent as OfficePartViewModel;
-                part?.RemoveIcon(icon.Name);
+                var parent = icon.Parent as OfficePartViewModel;
+                parent?.RemoveIcon(icon.Name);
             }
         }
 
