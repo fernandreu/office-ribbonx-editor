@@ -115,8 +115,7 @@ jobs:
     inputs:
       command: build
       projects: '**/*.csproj'
-      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
-      configuration: '$(buildConfiguration)'
+      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
   - task: DotNetCoreCLI@2
     displayName: 'Install ReportGenerator'
@@ -142,8 +141,7 @@ jobs:
     inputs:
       command: test
       projects: '**/*Tests.csproj'
-      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:Include=[OfficeRibbonXEditor*]*'
-      configuration: '$(buildConfiguration)'
+      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:Include=[OfficeRibbonXEditor*]*'
       nobuild: true
 
   - script: |
@@ -163,8 +161,7 @@ jobs:
       projects: '**/OfficeRibbonXEditor.csproj'
       publishWebProjects: false
       zipAfterPublish: false
-      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
-      configuration: '$(buildConfiguration)'
+      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish binaries (unsigned)'
