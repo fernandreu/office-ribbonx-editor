@@ -117,13 +117,6 @@ jobs:
       projects: '**/*.csproj'
       arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
-  # - task: DotNetCoreCLI@2
-  #   displayName: 'Install ReportGenerator'
-  #   inputs:
-  #     command: custom
-  #     custom: tool
-  #     arguments: 'install --global dotnet-reportgenerator-globaltool'
-
   - task: PowerShell@2
     displayName: 'Copy PresentationFramework.dll to bin folder'
     inputs:
@@ -149,12 +142,8 @@ jobs:
         /p:Include=[OfficeRibbonXEditor*]*
         /p:CoverletOutputFormat=json%2Ccobertura
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
-        /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverlet.json
+        /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.json
       nobuild: true
-
-  # - script: |
-  #     reportgenerator -reports:$(Build.SourcesDirectory)/TestResults/Coverage/**/*.xml -targetdir:$(Build.SourcesDirectory)/CodeCoverage -reporttypes:HtmlInline_AzurePipelines
-  #   displayName: 'Create code coverage report'
 
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage report'
