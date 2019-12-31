@@ -120,10 +120,11 @@ jobs:
       cliProjectKey: '$(SonarProjectKey)'
       cliProjectName: '$(SonarProjectName)'
       cliProjectVersion: '$(Build.BuildNumber)'
-      cliSources: '$(Build.SourcesDirectory)'
+      cliSources: '$(Build.SourcesDirectory)/src'
       extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
-        sonar.exclusions=./src/ScintillaNET*/**/*
+        sonar.sources=$(Build.SourcesDirectory)/src
+      # sonar.exclusions=./src/ScintillaNET*/**/*
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
