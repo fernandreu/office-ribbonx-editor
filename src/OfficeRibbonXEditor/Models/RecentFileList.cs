@@ -738,7 +738,7 @@ namespace OfficeRibbonXEditor.Models
                         ss.Stream.Position = 0;
 
                         var buffer = new byte[1 << 20];
-                        for (;;)
+                        while (true)
                         {
                             var bytes = ss.Stream.Read(buffer, 0, buffer.Length);
                             if (bytes == 0)
@@ -836,7 +836,7 @@ namespace OfficeRibbonXEditor.Models
                         ms.Position = 0;
 
                         byte[] buffer = new byte[1 << 20];
-                        for (;;)
+                        while (true)
                         {
                             var bytes = ms.Read(buffer, 0, buffer.Length);
                             if (bytes == 0)

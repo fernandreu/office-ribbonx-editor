@@ -927,7 +927,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             
             var filters = new List<string>();
-            for (;;)
+            while (true)
             {
                 var filter = StringsResource.ResourceManager.GetString("idsFilterSaveAs" + filters.Count, CultureInfo.CurrentCulture);
                 if (filter == null)
