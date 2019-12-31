@@ -121,7 +121,6 @@ jobs:
       projectVersion: '$(Build.BuildNumber)'
       extraProperties: |
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
-    # sonar.exclusions=**/wwwroot/lib/**/*
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
