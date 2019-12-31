@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Packaging;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace OfficeRibbonXEditor.Models.Documents
 {
@@ -358,37 +360,25 @@ namespace OfficeRibbonXEditor.Models.Documents
 
             this.Parts = new List<OfficePart>();
 
-            foreach (var relationship in this.UnderlyingPackage.GetRelationshipsByType(CustomUi14PartRelType))
+            var collection = new[]
             {
-                var customUiUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (this.UnderlyingPackage.PartExists(customUiUri))
+                (CustomUi14PartRelType, XmlPart.RibbonX14),
+                (CustomUiPartRelType, XmlPart.RibbonX12),
+                (QatPartRelType, XmlPart.Qat12),
+            };
+            foreach (var (relType, partType) in collection)
+            {
+                var relationship = this.UnderlyingPackage.GetRelationshipsByType(relType).FirstOrDefault();
+                if (relationship == null)
                 {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), XmlPart.RibbonX14, relationship.Id));
+                    continue;
                 }
 
-                break;
-            }
-
-            foreach (var relationship in this.UnderlyingPackage.GetRelationshipsByType(CustomUiPartRelType))
-            {
-                var customUiUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (this.UnderlyingPackage.PartExists(customUiUri))
+                var uri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
+                if (this.UnderlyingPackage.PartExists(uri))
                 {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), XmlPart.RibbonX12, relationship.Id));
+                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(uri), partType, relationship.Id));
                 }
-
-                break;
-            }
-
-            foreach (var relationship in this.UnderlyingPackage.GetRelationshipsByType(QatPartRelType))
-            {
-                var qatUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (this.UnderlyingPackage.PartExists(qatUri))
-                {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(qatUri), XmlPart.Qat12, relationship.Id));
-                }
-
-                break;
             }
         }
     }
