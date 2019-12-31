@@ -147,7 +147,7 @@ jobs:
         /p:_InstallerTargetFramework=$(targetFramework)
         /p:CollectCoverage=true
         /p:Include=[OfficeRibbonXEditor*]*
-        /p:CoverletOutputFormat=\"json,cobertura\"
+        /p:CoverletOutputFormat=json%2Ccobertura
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
         /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverlet.json
       nobuild: true
