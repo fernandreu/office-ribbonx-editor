@@ -125,12 +125,23 @@ jobs:
       custom: tool
       arguments: 'install --global dotnet-reportgenerator-globaltool'
 
+  - task: PowerShell@2
+    displayName: 'Copy PresentationFramework.dll to bin folder'
+    inputs:
+      targetType: inline
+      ignoreLASTEXITCODE: true
+      script: |
+        $dllPath = "$WINDIR/Microsoft.NET/Framework64/v4.0.30319/WPF/PresentationFramework.dll"
+        Copy-Item $dllPath "./tests/FunctionalTests/bin/$(buildConfiguration)/$(targetFramework/" 
+        Copy-Item $dllPath "./tests/IntegrationTests/bin/$(buildConfiguration)/$(targetFramework/" 
+        Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework/" 
+
   - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
     inputs:
       command: test
       projects: '**/*Tests.csproj'
-      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:CopyLocalLockFileAssemblies=true'
+      arguments: '-p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/Coverage/ /p:Include=[OfficeRibbonXEditor*]*'
       configuration: '$(buildConfiguration)'
       nobuild: true
 
