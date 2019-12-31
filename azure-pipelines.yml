@@ -112,13 +112,15 @@ jobs:
       restoreSolution: '$(solution)'
 
   - task: SonarCloudPrepare@1
-    displayName: 'Prepare SonarCloud analysis'
     inputs:
       SonarCloud: 'fernandreu-SonarCloud'
       organization: '$(SonarOrganization)'
-      projectKey: '$(SonarProjectKey)'
-      projectName: '$(SonarProjectName)'
-      projectVersion: '$(Build.BuildNumber)'
+      scannerMode: 'CLI'
+      configMode: 'manual'
+      cliProjectKey: '$(SonarProjectKey)'
+      cliProjectName: '$(SonarProjectName)'
+      cliProjectVersion: '$(Build.BuildNumber)'
+      cliSources: '.'
       extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
         sonar.exclusions=./src/ScintillaNET*/**/*
