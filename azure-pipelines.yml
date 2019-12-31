@@ -131,10 +131,11 @@ jobs:
       targetType: inline
       ignoreLASTEXITCODE: true
       script: |
-        $dllPath = "$WINDIR/Microsoft.NET/Framework64/v4.0.30319/WPF/PresentationFramework.dll"
-        Copy-Item $dllPath "./tests/FunctionalTests/bin/$(buildConfiguration)/$(targetFramework/" 
-        Copy-Item $dllPath "./tests/IntegrationTests/bin/$(buildConfiguration)/$(targetFramework/" 
-        Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework/" 
+        $winPath = $env:WINDIR
+        $dllPath = "$winPath/Microsoft.NET/Framework64/v4.0.30319/WPF/PresentationFramework.dll"
+        Copy-Item $dllPath "./tests/FunctionalTests/bin/$(buildConfiguration)/$(targetFramework)/" 
+        Copy-Item $dllPath "./tests/IntegrationTests/bin/$(buildConfiguration)/$(targetFramework)/" 
+        Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework)/" 
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet test'
