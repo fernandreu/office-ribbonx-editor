@@ -115,16 +115,13 @@ jobs:
     inputs:
       SonarCloud: 'fernandreu-SonarCloud'
       organization: '$(SonarOrganization)'
-      scannerMode: 'CLI'
-      configMode: 'manual'
-      cliProjectKey: '$(SonarProjectKey)'
-      cliProjectName: '$(SonarProjectName)'
-      cliProjectVersion: '$(Build.BuildNumber)'
-      cliSources: '$(Build.SourcesDirectory)/src'
+      scannerMode: 'MSBuild'
+      projectKey: '$(SonarProjectKey)'
+      projectName: '$(SonarProjectName)'
+      projectVersion: '$(Build.BuildNumber)'
       extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
-        sonar.sources=$(Build.SourcesDirectory)/src
-      # sonar.exclusions=./src/ScintillaNET*/**/*
+        sonar.exclusions=$(Build.SourcesDirectory)/src/ScintillaNET*/**/*
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
