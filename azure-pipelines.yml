@@ -120,7 +120,7 @@ jobs:
       cliProjectKey: '$(SonarProjectKey)'
       cliProjectName: '$(SonarProjectName)'
       cliProjectVersion: '$(Build.BuildNumber)'
-      cliSources: '.'
+      cliSources: '$(Build.SourcesDirectory)'
       extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
         sonar.exclusions=./src/ScintillaNET*/**/*
