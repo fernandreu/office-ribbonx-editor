@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using OfficeRibbonXEditor.Interfaces;
+﻿using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models.Lexers;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs

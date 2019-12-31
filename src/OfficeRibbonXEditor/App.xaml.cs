@@ -4,12 +4,9 @@ using System.Windows;
 using System.Windows.Threading;
 using Autofac;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.Services;
-using OfficeRibbonXEditor.ViewModels;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.ViewModels.Windows;
-using OfficeRibbonXEditor.Views;
 using OfficeRibbonXEditor.Views.Dialogs;
 using OfficeRibbonXEditor.Views.Windows;
 

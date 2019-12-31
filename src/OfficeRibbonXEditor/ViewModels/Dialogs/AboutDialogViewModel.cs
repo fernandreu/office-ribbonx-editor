@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;

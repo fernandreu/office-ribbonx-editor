@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
-using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using OfficeRibbonXEditor.Resources;

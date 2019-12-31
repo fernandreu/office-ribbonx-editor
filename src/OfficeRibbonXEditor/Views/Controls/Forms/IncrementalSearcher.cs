@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using ScintillaNET;
-using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
 
 namespace OfficeRibbonXEditor.Views.Controls.Forms
 {
