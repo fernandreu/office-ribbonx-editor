@@ -15,7 +15,7 @@ namespace OfficeRibbonXEditor.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            throw new InvalidOperationException($"{nameof(StringToVisibilityConverter)} can only be used OneWay.");
         }
     }
 }

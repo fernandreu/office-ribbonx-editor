@@ -20,9 +20,17 @@ namespace OfficeRibbonXEditor.Converters
             return Math.Pow(baseValue, exponent);
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            if (value == null)
+            {
+                return null;
+            }
+
+            var result = ((IConvertible) value).ToDouble(null);
+
+            var baseValue = parameter is IConvertible convertible ? convertible.ToDouble(null) : 2.0;
+            return Math.Log(result) / Math.Log(baseValue);
         }
     }
 }

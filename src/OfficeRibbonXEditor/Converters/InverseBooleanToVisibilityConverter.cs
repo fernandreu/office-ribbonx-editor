@@ -5,6 +5,7 @@ using System.Windows.Data;
 
 namespace OfficeRibbonXEditor.Converters
 {
+    [ValueConversion(typeof(bool), typeof(Visibility))]
     public class InverseBooleanToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

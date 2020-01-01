@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Resources;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
@@ -40,5 +41,5 @@ using System.Runtime.InteropServices;
 
 #if (DEBUG)
 // For my own personal testing of internal members
-[assembly: InternalsVisibleToAttribute("ScintillaNET.Test")]
+[assembly: InternalsVisibleTo("ScintillaNET.Test")]
 #endif

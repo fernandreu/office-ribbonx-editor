@@ -30,6 +30,7 @@ namespace OfficeRibbonXEditor.Converters
     /// thrown when the converter is added to the Converters collection.
     /// </summary>
     [System.Windows.Markup.ContentProperty("Converters")]
+    [ValueConversion(typeof(object), typeof(object))]
     public class ValueConverterGroup : IValueConverter
     {
 
@@ -59,7 +60,7 @@ namespace OfficeRibbonXEditor.Converters
 
         #region IValueConverter Members
 
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var output = value;
 
@@ -79,7 +80,7 @@ namespace OfficeRibbonXEditor.Converters
             return output;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
             var output = value;
 

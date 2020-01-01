@@ -4,7 +4,8 @@ using System.Windows.Data;
 
 namespace OfficeRibbonXEditor.Converters
 {
-    public class DataTypeConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(Type))]
+    public class DataToTypeConverter : IValueConverter
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -13,7 +14,7 @@ namespace OfficeRibbonXEditor.Converters
 
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new InvalidOperationException($"{nameof(DataTypeConverter)} can only be used OneWay.");
+            throw new InvalidOperationException($"{nameof(DataToTypeConverter)} can only be used OneWay.");
         }
     }
 }

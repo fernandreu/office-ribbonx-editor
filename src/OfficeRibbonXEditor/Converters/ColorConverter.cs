@@ -5,6 +5,7 @@ using System.Windows.Media;
 
 namespace OfficeRibbonXEditor.Converters
 {
+    [ValueConversion(typeof(System.Drawing.Color), typeof(Color))]
     public class ColorConverter : IValueConverter
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
