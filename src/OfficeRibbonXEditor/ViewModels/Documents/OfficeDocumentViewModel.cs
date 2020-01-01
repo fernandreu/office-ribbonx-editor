@@ -85,7 +85,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             this.document = new OfficeDocument(fileName);
             
             // Delete all its original parts
-            foreach (XmlPart type in Enum.GetValues(typeof(XmlPart)))
+            foreach (var type in Enum.GetValues(typeof(XmlPart)).OfType<XmlPart>())
             {
                 this.document.RemoveCustomPart(type);
             }

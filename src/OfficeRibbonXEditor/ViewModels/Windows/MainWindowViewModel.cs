@@ -1099,6 +1099,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         }
 
 
+
         /// <summary>
         /// Inserts an XML sample to the selected document in the tree
         /// </summary>
@@ -1158,7 +1159,9 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     this.customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && 
                     this.customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema)
                 {
+#pragma warning disable CA1307 // Specify StringComparison (this option is not available in .NET Framework 4.6.1)
                     data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
+#pragma warning restore CA1307 // Specify StringComparison
                 }
 
                 // Event might be raised too soon (when the view still does not exist). Hence, update part as well
@@ -1279,7 +1282,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             {
                 var customUi = new XmlDocument { XmlResolver = null };
 
-                using (var stringReader = new StringReader(part.Contents))
+                using (var stringReader = new StringReader(part.Contents ?? string.Empty))
                 using (var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
                 {
                     customUi.Load(reader);

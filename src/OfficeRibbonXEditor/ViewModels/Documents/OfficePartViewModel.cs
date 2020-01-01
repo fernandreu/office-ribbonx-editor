@@ -35,7 +35,9 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public override string Name => this.Part?.Name ?? string.Empty;
 
+#pragma warning disable CA1822 // ImageSource does not access instance data and can be made static (but is needed for WPF, in case there are different images one day)
         public string ImageSource => "/Resources/Images/xml.png";  // TODO: That's probably not the only one possible
+#pragma warning restore CA1822
 
         public void InsertIcon(string filePath, string? id = null, Func<string?, string?, bool>? alreadyExistingAction = null)
         {

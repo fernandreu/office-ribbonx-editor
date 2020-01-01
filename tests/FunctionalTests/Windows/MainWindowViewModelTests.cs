@@ -17,7 +17,7 @@ using OfficeRibbonXEditor.ViewModels.Windows;
 namespace OfficeRibbonXEditor.FunctionalTests.Windows
 {
     [TestFixture]
-    public class MainWindowViewModelTests
+    public sealed class MainWindowViewModelTests : IDisposable
     {
         private readonly Mock<IMessageBoxService> msgSvc = new Mock<IMessageBoxService>();
 
@@ -344,7 +344,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             void Handler(object o, LaunchDialogEventArgs e)
             {
                 Assert.IsTrue(e.Content is CallbackDialogViewModel, $"Unexpected dialog launched: {e.Content.GetType().Name}");
-                Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code.StartsWith("'Callback for customUI.onLoad"), "Expected callback not generated");
+                Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code.StartsWith("'Callback for customUI.onLoad", StringComparison.OrdinalIgnoreCase), "Expected callback not generated");
             }
 
             this.viewModel.LaunchingDialog += Handler;
@@ -366,7 +366,9 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
             // It is expected that the part created will be an Office 2007 one, but the templates are for Office 2010+. This gets automatically replaced
             // at insertion time
+#pragma warning disable CA1307 // Missing StringComparison because it is not available in .NET Framework 4.6.1
             var contents = sample.ReadContents().Replace("2009/07", "2006/01");
+#pragma warning restore CA1307
             Assert.AreEqual(contents, part.Contents, "Sample XML file not created with the expected contents");
         }
 
@@ -485,6 +487,11 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), image)).Returns(result).Callback(() => ++count);
             action();
             Assert.AreEqual(1, count, message);
+        }
+
+        public void Dispose()
+        {
+            viewModel?.Dispose();
         }
     }
 }

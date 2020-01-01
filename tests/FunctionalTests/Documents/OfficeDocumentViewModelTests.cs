@@ -32,30 +32,33 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         public void PartShouldBeInserted()
         {
             // Arrange
-            var doc = new OfficeDocument(this.sourceFile);
-            var viewModel = new OfficeDocumentViewModel(doc);
+            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var viewModel = new OfficeDocumentViewModel(doc))
+            {
+                // Act
+                viewModel.InsertPart(XmlPart.RibbonX12);
 
-            // Act
-            viewModel.InsertPart(XmlPart.RibbonX12);
-
-            // Assert
-            Assert.AreEqual(1, viewModel.Children.Count);
+                // Assert
+                Assert.AreEqual(1, viewModel.Children.Count);
+            }
         }
 
         [Test]
         public void DocumentShouldBeSaved()
         {
             // Arrange
-            var doc = new OfficeDocument(this.sourceFile);
-            var viewModel = new OfficeDocumentViewModel(doc);
-            viewModel.InsertPart(XmlPart.RibbonX12);
-            Assume.That(File.Exists(this.destFile), Is.False, "File was not deleted before test");
+            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var viewModel = new OfficeDocumentViewModel(doc))
+            {
+                viewModel.InsertPart(XmlPart.RibbonX12);
+                Assume.That(File.Exists(this.destFile), Is.False, "File was not deleted before test");
 
-            // Act
-            doc.Save(this.destFile);
+                // Act
+                doc.Save(this.destFile);
 
-            // Assert
-            Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
+                // Assert
+                Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
+            }
         }
         
         /// <summary>
@@ -65,20 +68,6 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         public void ReloadOnSaveTest()
         {
             // Arrange
-            var viewModel = new OfficeDocumentViewModel(new OfficeDocument(this.sourceFile));
-            viewModel.InsertPart(XmlPart.RibbonX12);
-            viewModel.InsertPart(XmlPart.RibbonX14);
-
-            var part = (OfficePartViewModel)viewModel.Children[0];
-            part.InsertIcon(this.undoIcon);
-            part.InsertIcon(this.redoIcon);
-            part.RemoveIcon("undo");
-            part = (OfficePartViewModel)viewModel.Children[1];
-            part.InsertIcon(this.redoIcon);
-            var icon = (IconViewModel)part.Children[0];
-            icon.Name = "changedId";
-            part.InsertIcon(this.redoIcon);
-
             void CheckIntegrity(OfficeDocumentViewModel innerModel)
             {
                 Assert.AreEqual(2, innerModel.Children.Count);
@@ -101,16 +90,40 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
                 }
             }
 
-            // Act / assert
-            CheckIntegrity(viewModel);
+            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var viewModel = new OfficeDocumentViewModel(doc))
+            {
+                viewModel.InsertPart(XmlPart.RibbonX12);
+                viewModel.InsertPart(XmlPart.RibbonX14);
 
-            viewModel.Save(false, this.destFile);
-            viewModel = new OfficeDocumentViewModel(new OfficeDocument(this.destFile));
-            CheckIntegrity(viewModel);
+                var part = (OfficePartViewModel) viewModel.Children[0];
+                part.InsertIcon(this.undoIcon);
+                part.InsertIcon(this.redoIcon);
+                part.RemoveIcon("undo");
+                part = (OfficePartViewModel) viewModel.Children[1];
+                part.InsertIcon(this.redoIcon);
+                var icon = (IconViewModel) part.Children[0];
+                icon.Name = "changedId";
+                part.InsertIcon(this.redoIcon);
 
-            viewModel.Save(true, this.destFile);
-            viewModel = new OfficeDocumentViewModel(new OfficeDocument(this.destFile));
-            CheckIntegrity(viewModel);
+                // Act / assert
+                CheckIntegrity(viewModel);
+
+                viewModel.Save(false, this.destFile);
+            }
+
+            using (var doc = new OfficeDocument(this.destFile))
+            using (var viewModel = new OfficeDocumentViewModel(doc))
+            {
+                CheckIntegrity(viewModel);
+                viewModel.Save(true, this.destFile);
+            }
+
+            using (var doc = new OfficeDocument(this.destFile))
+            using (var viewModel = new OfficeDocumentViewModel(doc))
+            {
+                CheckIntegrity(viewModel);
+            }
         }
     }
 }

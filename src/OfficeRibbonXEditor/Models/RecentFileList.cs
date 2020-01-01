@@ -476,7 +476,7 @@ namespace OfficeRibbonXEditor.Models
                         }
                     }
 
-                    Version = assembly.GetName().Version.ToString();
+                    Version = assembly?.GetName().Version?.ToString() ?? string.Empty;
                 }
                 catch (Exception)
                 {

@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Resources;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -9,6 +10,7 @@
 [assembly: AssemblyCopyright("Copyright © Fernando Andreu 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+[assembly: NeutralResourcesLanguage("en-GB")]
 
 // Version information for an assembly consists of the following four values:
 //

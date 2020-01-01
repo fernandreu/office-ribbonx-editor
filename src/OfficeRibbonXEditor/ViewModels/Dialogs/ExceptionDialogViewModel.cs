@@ -6,7 +6,7 @@ using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
-    public class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception>
+    public class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception?>
     {
         private readonly IToolInfo info;
 
@@ -17,9 +17,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.SubmitBugCommand = new RelayCommand(this.ExecuteSubmitBugCommand);
         }
 
-        private Exception exception;
+        private Exception? exception;
 
-        public Exception Exception
+        public Exception? Exception
         {
             get => this.exception;
             set => this.Set(ref this.exception, value);
@@ -29,7 +29,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public RelayCommand SubmitBugCommand { get; }
 
-        public bool OnLoaded(Exception payload)
+        public bool OnLoaded(Exception? payload)
         {
             this.Exception = payload;
             return payload != null;
@@ -42,7 +42,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private void ExecuteSubmitBugCommand()
         {
-            var title = Uri.EscapeDataString($"{this.exception.GetType().Name}: {this.Exception.Message}");
+            var title = Uri.EscapeDataString($"{this.exception?.GetType().Name}: {this.Exception?.Message}");
             var body = Uri.EscapeDataString(
                 "**Describe the bug**\n\n" +
                 $"```\n{this.exception}\n```\n\n" +

@@ -20,11 +20,11 @@ namespace OfficeRibbonXEditor.Services
                     }
                 }
 
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase) ?? string.Empty;
             }
         }
 
-        public string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        public string AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? string.Empty;
 
         public string AssemblyDescription
         {

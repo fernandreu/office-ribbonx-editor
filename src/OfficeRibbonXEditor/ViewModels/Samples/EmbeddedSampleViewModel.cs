@@ -31,10 +31,17 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
         private static string ReadContents(string resourceName)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            // ReSharper disable once AssignNullToNotNullAttribute
-            using (var sr = new StreamReader(assembly.GetManifestResourceStream(resourceName)))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
-                return sr.ReadToEnd();
+                if (stream == null)
+                {
+                    return string.Empty;
+                }
+
+                using (var sr = new StreamReader(stream))
+                {
+                    return sr.ReadToEnd();
+                }
             }
         }
 

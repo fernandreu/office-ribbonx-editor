@@ -1,3 +1,4 @@
+using System.IO;
 using System.Xml;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Models;
@@ -34,8 +35,12 @@ namespace OfficeRibbonXEditor.UnitTests.Xml
         public void GeneratedCallbacksAreCorrect(string xml, string expected)
         {
             // Arrange
-            var doc = new XmlDocument();
-            doc.LoadXml(xml);
+            var doc = new XmlDocument { XmlResolver = null };
+            using (var stringReader = new StringReader(xml))
+            using (var xmlReader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
+            {
+                doc.Load(xmlReader);
+            }
 
             // Act
             var callbacks = CallbacksBuilder.GenerateCallback(doc)?

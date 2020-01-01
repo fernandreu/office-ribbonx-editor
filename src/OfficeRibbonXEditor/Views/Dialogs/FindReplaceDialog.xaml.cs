@@ -40,7 +40,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             target.TextBox?.SelectAll();
         }
 
-        private void OnMoveDialogAway(object sender, PointEventArgs e)
+        private void OnMoveDialogAway(object? sender, PointEventArgs e)
         {
             if (this.Host == null)
             {
