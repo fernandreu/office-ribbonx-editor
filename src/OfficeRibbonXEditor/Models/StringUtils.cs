@@ -1,5 +1,7 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
+using System.Windows.Forms.VisualStyles;
 
 namespace OfficeRibbonXEditor.Models
 {
@@ -28,120 +30,128 @@ namespace OfficeRibbonXEditor.Models
                 return pathName;
             }
 
-            var root = new StringBuilder(Path.GetPathRoot(pathName) ?? string.Empty);
+            var root = Path.GetPathRoot(pathName) ?? string.Empty;
             if (root.Length > 3)
             {
-                root.Append(Path.DirectorySeparatorChar);
+                root += Path.DirectorySeparatorChar;
             }
 
             var elements = pathName.Substring(root.Length).Split(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
 
-            var filenameIndex = elements.GetLength(0) - 1;
-
-            if (elements.GetLength(0) == 1)
+            if (elements.Length == 1)
             {
-                // pathname is just a root and filename
-                if (elements[0].Length > 5)
-                {
-                    // Long enough to shorten. If path is a UNC path, root may be rather long
-                    if (root.Length + 6 >= maxLength)
-                    {
-                        root.Append(elements[0].Substring(0, 3) + "...");
-                        return root.ToString();
-                    }
-                    else
-                    {
-                        return pathName.Substring(0, maxLength - 3) + "...";
-                    }
-                }
+                return ShortenRoot(root, pathName, elements[0], maxLength);
             }
-            else if (root.Length + 4 + elements[filenameIndex].Length > maxLength)
+
+            if (root.Length + 4 + elements.Last().Length > maxLength)
             {
-                // pathname is just a root and filename
-                root.Append("...\\");
-
-                var len = elements[filenameIndex].Length;
-                if (len < 6)
-                {
-                    root.Append(elements[filenameIndex]);
-                    return root.ToString();
-                }
-
-                if ((root.Length + 6) >= maxLength)
-                {
-                    len = 3;
-                }
-                else
-                {
-                    len = maxLength - root.Length - 3;
-                }
-
-                root.Append(elements[filenameIndex].Substring(0, len) + "...");
-                return root.ToString();
+                return ShortenRootAndFileName(root, elements.Last(), maxLength);
             }
-            else if (elements.GetLength(0) == 2)
+            
+            if (elements.Length == 2)
             {
-                root.Append("...\\" + elements[1]);
-                return root.ToString();
+                return root + "...\\" + elements[1];
+            }
+
+            return ShortenFull(root, pathName, elements, maxLength);
+        }
+
+        private static string ShortenRoot(string root, string pathName, string lastElement, int maxLength)
+        {
+            if (lastElement.Length <= 5)
+            {
+                return pathName;
+            }
+
+            // Long enough to shorten. If path is a UNC path, root may be rather long
+            if (root.Length + 6 >= maxLength)
+            {
+                return root + lastElement.Substring(0, 3) + "...";
+            }
+
+            return pathName.Substring(0, maxLength - 3) + "...";
+        }
+
+        private static string ShortenRootAndFileName(string root, string lastElement, int maxLength)
+        {
+            root += "...\\";
+
+            var len = lastElement.Length;
+            if (len < 6)
+            {
+                return root + lastElement;
+            }
+
+            if (root.Length + 6 >= maxLength)
+            {
+                len = 3;
             }
             else
             {
-                var len = 0;
-                var begin = 0;
-
-                for (var i = 0; i < filenameIndex; i++)
-                {
-                    if (elements[i].Length > len)
-                    {
-                        begin = i;
-                        len = elements[i].Length;
-                    }
-                }
-
-                int totalLength = pathName.Length - len + 3;
-                int end = begin + 1;
-
-                while (totalLength > maxLength)
-                {
-                    if (begin > 0)
-                    {
-                        totalLength -= elements[--begin].Length - 1;
-                    }
-
-                    if (totalLength <= maxLength)
-                    {
-                        break;
-                    }
-
-                    if (end < filenameIndex)
-                    {
-                        totalLength -= elements[++end].Length - 1;
-                    }
-
-                    if (begin == 0 && end == filenameIndex)
-                    {
-                        break;
-                    }
-                }
-
-                // assemble final string
-                for (int i = 0; i < begin; i++)
-                {
-                    root.Append(elements[i] + '\\');
-                }
-
-                root.Append("...\\");
-
-                for (var i = end; i < filenameIndex; i++)
-                {
-                    root.Append(elements[i] + '\\');
-                }
-
-                root.Append(elements[filenameIndex]);
-                return root.ToString();
+                len = maxLength - root.Length - 3;
             }
 
-            return pathName;
+            return root + lastElement.Substring(0, len) + "...";
+        }
+
+        private static string ShortenFull(string root, string pathName, string[] elements, int maxLength)
+        {
+            var len = 0;
+            var begin = 0;
+
+            for (var i = 0; i < elements.Length - 1; i++)
+            {
+                if (elements[i].Length <= len)
+                {
+                    continue;
+                }
+
+                begin = i;
+                len = elements[i].Length;
+            }
+
+            var totalLength = pathName.Length - len + 3;
+            var end = begin + 1;
+
+            while (totalLength > maxLength)
+            {
+                if (begin > 0)
+                {
+                    totalLength -= elements[--begin].Length - 1;
+                }
+
+                if (totalLength <= maxLength)
+                {
+                    break;
+                }
+
+                if (end < elements.Length - 1)
+                {
+                    totalLength -= elements[++end].Length - 1;
+                }
+
+                if (begin == 0 && end == elements.Length - 1)
+                {
+                    break;
+                }
+            }
+            
+            // Assemble final string
+            var sb = new StringBuilder(root);
+            for (var i = 0; i < begin; i++)
+            {
+                sb.Append(elements[i] + '\\');
+            }
+
+            sb.Append("...\\");
+
+            for (var i = end; i < elements.Length - 1; i++)
+            {
+                sb.Append(elements[i] + '\\');
+            }
+
+            sb.Append(elements.Last());
+            return sb.ToString();
         }
     }
 }
