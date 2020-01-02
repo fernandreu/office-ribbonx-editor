@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Views.Controls;
 
 namespace OfficeRibbonXEditor.UnitTests.Views.Controls
 {

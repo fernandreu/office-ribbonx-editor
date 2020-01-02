@@ -23,12 +23,11 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
-
 using Microsoft.Win32;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models.Events;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Views.Controls
 {
     public class RecentFileList : Separator
     {

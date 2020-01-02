@@ -134,7 +134,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <models:RecentFileList 
+                <controls:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
                 <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
