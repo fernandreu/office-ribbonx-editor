@@ -1,14 +1,20 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Capturing;
+using FlaUI.Core.Conditions;
+using FlaUI.Core.Definitions;
 using FlaUI.UIA3;
 using NUnit.Framework;
 
 namespace OfficeRibbonXEditor.UITests.Main
 {
+    [Apartment(ApartmentState.STA)]
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Disposed in TearDown")]
     public class MainWindowTests
     {
@@ -29,7 +35,10 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             this.app = Application.Launch(exePath);
             this.automation = new UIA3Automation();
-            this.mainWindow = app.GetMainWindow(this.automation);
+            this.app.WaitWhileMainHandleIsMissing(TimeSpan.FromSeconds(5));
+            var window = app.GetAllTopLevelWindows(this.automation).First();
+            Assert.NotNull(window, "Cannot find main window");
+            this.mainWindow = window;
         }
 
         [TearDown]

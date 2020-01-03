@@ -94,4 +94,12 @@
       <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(OutputPath)\$(_InstallerTargetFramework)\$(AssemblyName).exe" />
     </ItemGroup>
   </Target>
+
+  <!--This ensures runtime config files are copied to the test projects (especially the UI project) so that the tool can be tested properly in .NET Core 3.X-->
+  <Target Name="AddRuntimeDependenciesToContent" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCoreApp'" BeforeTargets="GetCopyToOutputDirectoryItems" DependsOnTargets="GenerateBuildDependencyFile;GenerateBuildRuntimeConfigurationFiles">
+    <ItemGroup>
+      <ContentWithTargetPath Include="$(ProjectDepsFilePath)" CopyToOutputDirectory="PreserveNewest" TargetPath="$(ProjectDepsFileName)" />
+      <ContentWithTargetPath Include="$(ProjectRuntimeConfigFilePath)" CopyToOutputDirectory="PreserveNewest" TargetPath="$(ProjectRuntimeConfigFileName)" />
+    </ItemGroup>
+  </Target>
 </Project>
