@@ -42,9 +42,10 @@ namespace OfficeRibbonXEditor.UITests.Main
         [Test]
         public void CanOpenWindow()
         {
+            var path = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty, "MainWindow.png");
             var image = Capture.Element(this.mainWindow);
-            image.ToFile("MainWindow.png");
-            TestContext.AddTestAttachment("MainWindow.png", "The main window of the tool");
+            image.ToFile(path);
+            TestContext.AddTestAttachment(path, "The main window of the tool");
             Assert.AreEqual("Office RibbonX Editor", this.mainWindow.Title);
         }
     }
