@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.Views.Controls;
 
 namespace OfficeRibbonXEditor.UnitTests.Views.Controls
@@ -13,7 +11,9 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
     {
         private string? filePath;
 
-        private RecentFileList? control;
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. Always defined in SetUp
+        private RecentFileList control;
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         [SetUp]
         public void SetUp()
@@ -38,13 +38,13 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         [Test]
         public void CanAddFiles()
         {
-            using (var stream = this.TempFile())
+            using (var stream = TempFile())
             {
                 // Arrange
-                Assume.That(this.control?.RecentFiles, Is.Empty);
+                Assume.That(this.control.RecentFiles, Is.Empty);
 
                 // Act
-                this.control?.InsertFile(stream.Name);
+                this.control.InsertFile(stream.Name);
 
                 // Assert
                 Assert.Contains(stream.Name, this.control?.RecentFiles);
@@ -55,17 +55,17 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         [Test]
         public void CanRemoveFiles()
         {
-            using (var stream = this.TempFile())
+            using (var stream = TempFile())
             {
                 // Arrange
-                Assume.That(this.control?.RecentFiles, Is.Empty);
+                Assume.That(this.control.RecentFiles, Is.Empty);
 
                 // Act
-                this.control?.InsertFile(stream.Name);
-                this.control?.RemoveFile(stream.Name);
+                this.control.InsertFile(stream.Name);
+                this.control.RemoveFile(stream.Name);
 
                 // Assert
-                Assert.IsEmpty(this.control?.RecentFiles);
+                Assert.IsEmpty(this.control.RecentFiles);
             }
         }
 
@@ -76,11 +76,11 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         public void CannotPassMaxLimit(int maxFiles)
         {
             // Arrange
-            this.control!.MaxNumberOfFiles = maxFiles;
+            this.control.MaxNumberOfFiles = maxFiles;
             var collection = new List<FileStream>(maxFiles + 5);
             for (var i = 0; i < maxFiles + 5; ++i)
             {
-                collection.Add(this.TempFile());
+                collection.Add(TempFile());
             }
 
             // Act
@@ -103,7 +103,7 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
             }
         }
 
-        private FileStream TempFile()
+        private static FileStream TempFile()
         {
             return new FileStream(Path.GetTempFileName(), FileMode.OpenOrCreate, FileAccess.Read, FileShare.None, 4096, FileOptions.DeleteOnClose);
         }

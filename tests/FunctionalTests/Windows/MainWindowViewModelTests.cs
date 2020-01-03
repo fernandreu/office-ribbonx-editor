@@ -35,7 +35,9 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
         private readonly string redoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/redo.png");
 
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. This is defined in SetUp anyway
         private MainWindowViewModel viewModel;
+#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         [SetUp]
         public void SetUp()
@@ -94,7 +96,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
             Assert.IsInstanceOf<OfficePartViewModel>(doc.Children[0]);
-            Assert.AreEqual(XmlPart.RibbonX12, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
+            Assert.AreEqual(XmlPart.RibbonX12, ((OfficePartViewModel)doc.Children[0]).Part!.PartType);
         }
 
         [Test]
@@ -109,7 +111,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
             Assert.IsInstanceOf<OfficePartViewModel>(doc.Children[0]);
-            Assert.AreEqual(XmlPart.RibbonX14, ((OfficePartViewModel)doc.Children[0]).Part.PartType);
+            Assert.AreEqual(XmlPart.RibbonX14, ((OfficePartViewModel)doc.Children[0]).Part!.PartType);
         }
 
         [Test]
@@ -286,21 +288,22 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         public void XmlValidationTest()
         {
             var doc = this.OpenSource();
-            Assert.IsFalse(this.viewModel.SelectedItem.CanHaveContents);
+            Assume.That(this.viewModel.SelectedItem?.CanHaveContents, Is.False);
             
             this.viewModel.InsertXml12Command.Execute();
             this.viewModel.SelectedItem = doc.Children[0];
             Assert.IsTrue(this.viewModel.SelectedItem.CanHaveContents);
 
-            var tab = this.viewModel.OpenPartTab();
-            Assert.NotNull(tab);
+            var tmp = this.viewModel.OpenPartTab();
+            Assert.NotNull(tmp);
+            var tab = tmp!;
 
-            void AssertIsValid(bool expected, string message = null)
+            void AssertIsValid(bool expected, string? message = null)
             {
                 var actual = true;
                 void Handler(object o, DataEventArgs<IResultCollection> e)
                 {
-                    actual = e.Data.IsEmpty;
+                    actual = e.Data?.IsEmpty ?? false;
                 }
 
                 tab.ShowResults += Handler;
@@ -341,10 +344,10 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
             // This should contain a single callback for the onLoad event
             part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            void Handler(object o, LaunchDialogEventArgs e)
+            static void Handler(object o, LaunchDialogEventArgs e)
             {
                 Assert.IsTrue(e.Content is CallbackDialogViewModel, $"Unexpected dialog launched: {e.Content.GetType().Name}");
-                Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code.StartsWith("'Callback for customUI.onLoad", StringComparison.OrdinalIgnoreCase), "Expected callback not generated");
+                Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code?.StartsWith("'Callback for customUI.onLoad", StringComparison.OrdinalIgnoreCase), "Expected callback not generated");
             }
 
             this.viewModel.LaunchingDialog += Handler;
@@ -359,15 +362,15 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         public void InsertSampleInNonExistingPart()
         {
             var doc = this.OpenSource();
-
-            var sample = this.viewModel.XmlSamples.Items.OfType<XmlSampleViewModel>().First();  // This shouldn't be null; if it is, the test will be a means to detect that too
+            
+            var sample = this.viewModel.XmlSamples?.Items.OfType<XmlSampleViewModel>().First();  // This shouldn't be null; if it is, the test will be a means to detect that too
             this.viewModel.InsertXmlSampleCommand.Execute(sample);
             var part = doc.Children.First(); // Again, this should not be null
 
             // It is expected that the part created will be an Office 2007 one, but the templates are for Office 2010+. This gets automatically replaced
             // at insertion time
 #pragma warning disable CA1307 // Missing StringComparison because it is not available in .NET Framework 4.6.1
-            var contents = sample.ReadContents().Replace("2009/07", "2006/01");
+            var contents = sample?.ReadContents().Replace("2009/07", "2006/01") ?? string.Empty;
 #pragma warning restore CA1307
             Assert.AreEqual(contents, part.Contents, "Sample XML file not created with the expected contents");
         }

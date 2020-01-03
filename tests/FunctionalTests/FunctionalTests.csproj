@@ -7,6 +7,9 @@
     <IsPackable>false</IsPackable>
 
     <RootNamespace>OfficeRibbonXEditor.FunctionalTests</RootNamespace>
+
+    <Nullable>enable</Nullable>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">

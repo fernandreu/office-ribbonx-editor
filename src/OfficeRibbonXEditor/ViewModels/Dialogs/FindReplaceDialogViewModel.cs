@@ -15,7 +15,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     {
         private CharacterRange searchRange = new CharacterRange();
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. All warnings get initialized in OnLoaded so,
+#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. All fields get initialized in OnLoaded so,
                                // unless all methods contain safeguards for the exceptional case where OnLoaded is not called, let's not bother with
                                // nullable types. Not calling OnLoaded should be unusual, and therefore a null reference exception is all you'd need
         public FindReplaceDialogViewModel()
@@ -36,6 +36,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public RecentListViewModel<string> RecentReplaces { get; } = new RecentListViewModel<string>();
 
+        /// <summary>
+        /// Gets the internal <see cref="Models.FindReplace"/> instance that performs the actual find / replace
+        /// operations. Only available after <see cref="Scintilla"/> has been set to a non-null value, which is
+        /// usually done when calling <see cref="OnLoaded"/>.
+        /// </summary>
         public FindReplace FindReplace { get; private set; }
 
         public IncrementalSearcher IncrementalSearcher { get; private set; }

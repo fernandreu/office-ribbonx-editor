@@ -18,6 +18,8 @@ namespace OfficeRibbonXEditor.Models
 
         public bool IsEmpty => this.Items.Count == 0;
 
+        public int Count => this.Items.Count;
+
         public void AddToPanel(Scintilla editor, Scintilla resultsPanel)
         {
             resultsPanel.ClearAll();
