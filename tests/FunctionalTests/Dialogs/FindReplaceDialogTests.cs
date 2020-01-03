@@ -7,6 +7,7 @@ using ScintillaNET;
 
 namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Disposed in TearDown method")]
     public class FindReplaceDialogTests
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. Always defined in SetUp
@@ -24,6 +25,12 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
 
             this.viewModel = new FindReplaceDialogViewModel();
             viewModel.OnLoaded((this.scintilla, FindReplaceAction.Find, (o, e) => findAllAction?.Invoke(e.Data)));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            this.scintilla.Dispose();
         }
 
         [Test]

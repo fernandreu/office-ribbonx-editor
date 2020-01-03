@@ -162,6 +162,7 @@ jobs:
         Copy-Item $dllPath "./tests/FunctionalTests/bin/$(buildConfiguration)/$(targetFramework)/" 
         Copy-Item $dllPath "./tests/IntegrationTests/bin/$(buildConfiguration)/$(targetFramework)/" 
         Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework)/" 
+        Copy-Item $dllPath "./tests/UITests/bin/$(buildConfiguration)/$(targetFramework)/" 
 
   - task: DotNetCoreCLI@2
     displayName: 'Run Tests'
