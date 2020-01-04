@@ -140,7 +140,7 @@ jobs:
       projectName: '$(SonarProjectName)'
       projectVersion: '$(Build.BuildNumber)'
       extraProperties: |
-        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)
+        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
 
   - task: DotNetCoreCLI@2
