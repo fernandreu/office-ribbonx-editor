@@ -140,6 +140,7 @@ jobs:
       projectName: '$(SonarProjectName)'
       projectVersion: '$(Build.BuildNumber)'
       extraProperties: |
+        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
 
   - task: DotNetCoreCLI@2
@@ -172,7 +173,6 @@ jobs:
       arguments: >-
         --no-build
         --configuration $(buildConfiguration)
-        --results-directory $(Build.SourcesDirectory)/TestResults
         /p:TargetFramework=$(targetFramework)
         /p:_InstallerTargetFramework=$(targetFramework)
         /p:CollectCoverage=true
