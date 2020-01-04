@@ -5,7 +5,7 @@ Office RibbonX Editor
 [![Downloads](https://img.shields.io/github/downloads/fernandreu/office-ribbonx-editor/total.svg?style=popout)](https://github.com/fernandreu/office-ribbonx-editor/releases)
 [![Release Version](https://img.shields.io/github/release/fernandreu/office-ribbonx-editor)](https://github.com/fernandreu/office-ribbonx-editor/releases/latest)
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.6.1-informational)](https://dotnet.microsoft.com/download)
-[![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.0.0-informational)](https://dotnet.microsoft.com/download)
+[![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1.0-informational)](https://dotnet.microsoft.com/download)
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/BuildAndTest?branchName=master)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandreu_office-ribbonx-editor&metric=alert_status)](https://sonarcloud.io/dashboard?id=fernandreu_office-ribbonx-editor)
 

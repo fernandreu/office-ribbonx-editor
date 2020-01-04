@@ -99,7 +99,7 @@ jobs:
 - job: NetCore
   displayName: .NET Core
   variables:
-    targetFramework: netcoreapp3.0
+    targetFramework: netcoreapp3.1
 
   steps:
 
