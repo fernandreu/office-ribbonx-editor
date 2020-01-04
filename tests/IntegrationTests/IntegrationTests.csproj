@@ -9,18 +9,11 @@
 
     <RootNamespace>OfficeRibbonXEditor.IntegrationTests</RootNamespace>
 
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+
     <!-- SonarQube needs this -->
     <ProjectGuid>{240C0BA9-5B29-430F-9325-2C0D74A1ED35}</ProjectGuid>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

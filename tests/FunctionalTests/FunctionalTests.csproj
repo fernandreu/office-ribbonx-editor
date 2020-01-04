@@ -13,18 +13,11 @@
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
 
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+
     <!-- SonarQube needs this -->
     <ProjectGuid>{8E404929-0EA1-41BF-AA5F-5CD75B1EE4FC}</ProjectGuid>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
   <ItemGroup>

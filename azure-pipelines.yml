@@ -176,6 +176,7 @@ jobs:
         /p:_InstallerTargetFramework=$(targetFramework)
         /p:CollectCoverage=true
         /p:Exclude=[Scintilla*]*
+        /p:IncludeTestAssembly=true
         /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
         /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.$(targetFramework).json
