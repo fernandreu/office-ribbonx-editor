@@ -301,7 +301,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             void AssertIsValid(bool expected, string? message = null)
             {
                 var actual = true;
-                void Handler(object o, DataEventArgs<IResultCollection> e)
+                void Handler(object? o, DataEventArgs<IResultCollection> e)
                 {
                     actual = e.Data?.IsEmpty ?? false;
                 }
@@ -344,7 +344,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
             // This should contain a single callback for the onLoad event
             part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            static void Handler(object o, LaunchDialogEventArgs e)
+            static void Handler(object? o, LaunchDialogEventArgs e)
             {
                 Assert.IsTrue(e.Content is CallbackDialogViewModel, $"Unexpected dialog launched: {e.Content.GetType().Name}");
                 Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code?.StartsWith("'Callback for customUI.onLoad", StringComparison.OrdinalIgnoreCase), "Expected callback not generated");

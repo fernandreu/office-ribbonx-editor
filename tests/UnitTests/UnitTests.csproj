@@ -5,6 +5,7 @@
     <UseWPF>true</UseWPF>
 
     <IsPackable>false</IsPackable>
+    <NoWarn>NU1701</NoWarn>
 
     <RootNamespace>OfficeRibbonXEditor.UnitTests</RootNamespace>
 

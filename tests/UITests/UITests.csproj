@@ -6,6 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
 
     <IsPackable>false</IsPackable>
+    <NoWarn>NU1701</NoWarn>
 
     <RootNamespace>OfficeRibbonXEditor.UITests</RootNamespace>
 

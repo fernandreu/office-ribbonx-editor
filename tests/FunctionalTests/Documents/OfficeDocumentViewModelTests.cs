@@ -76,7 +76,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
                 {
                     var innerPart = (OfficePartViewModel)innerModel.Children[i];
 
-                    if (innerPart.Part.PartType == XmlPart.RibbonX12)
+                    if (innerPart.Part?.PartType == XmlPart.RibbonX12)
                     {
                         Assert.AreEqual(1, innerPart.Children.Count);
                         Assert.AreEqual("redo", ((IconViewModel)innerPart.Children[0]).Name);
