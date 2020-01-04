@@ -124,12 +124,12 @@ jobs:
       targetType: 'filePath'
       filePath: 'build/PreBuild.ps1'
       arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
-      
-  - task: NuGetToolInstaller@0
 
-  - task: NuGetCommand@2
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core sdk'
     inputs:
-      restoreSolution: '$(solution)'
+      packageType: sdk
+      version: 3.1.100
 
   - task: SonarCloudPrepare@1
     inputs:
