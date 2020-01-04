@@ -1,3 +1,6 @@
+$buildConfiguration = $args[0]
+$targetFramework = $args[1]
+# TODO: If possible, the following should also be passed via a build variable
 $winPath = $env:WINDIR
 $dllPath = "$winPath/Microsoft.NET/Framework64/v4.0.30319/WPF/PresentationFramework.dll"
 if (Test-Path $dllPath -PathType Leaf) {
@@ -9,7 +12,7 @@ if (Test-Path $dllPath -PathType Leaf) {
 }
 Get-ChildItem -Path ./tests -Directory | 
 ForEach-Object { 
-    $destination = Join-Path $_.FullName "bin/$(buildConfiguration)/$(targetFramework)/"
+    $destination = Join-Path $_.FullName "bin/$buildConfiguration/$targetFramework/"
     Write-Host "Copying dll to folder: $destination"
     if (Test-Path $destination -PathType Container) {
         Copy-Item $dllPath $destination

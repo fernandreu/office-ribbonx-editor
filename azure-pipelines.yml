@@ -34,35 +34,38 @@ jobs:
   steps:
 
   - task: Cache@2
+    displayName: 'Cache NuGet packages'
     inputs:
       key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
       path: '$(NUGET_PACKAGES)'
       restoreKeys: |
         nuget | "$(Agent.OS)"
         nuget
-    displayName: Cache NuGet packages
 
   - task: InstallSSHKey@0
-    displayName: Install SSH key for code signing
+    displayName: 'Install SSH key for code signing'
     inputs:
       knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
       sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
       sshKeySecureFile: 'id_rsa'
 
   - task: PowerShell@2
-    displayName: 'PreBuildSteps'
+    displayName: 'Run pre-build script'
     inputs:
       targetType: 'filePath'
       filePath: 'build/PreBuild.ps1'
       arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
 
   - task: NuGetToolInstaller@0
+    displayName: 'Install NuGet'
 
   - task: NuGetCommand@2
+    displayName: 'NuGet restore'
     inputs:
       restoreSolution: '$(solution)'
 
   - task: VSBuild@1
+    displayName: 'Build solution'
     inputs:
       solution: '$(solution)'
       platform: '$(buildPlatform)'
@@ -70,7 +73,7 @@ jobs:
       configuration: '$(buildConfiguration)'
 
   - task: VSTest@2
-    displayName: 'RunTests'
+    displayName: 'Run Tests'
     condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
     inputs:
       platform: '$(buildPlatform)'
@@ -104,22 +107,23 @@ jobs:
   steps:
 
   - task: Cache@2
+    displayName: 'Cache NuGet packages'
     inputs:
       key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
       restoreKeys: |
         nuget | "$(Agent.OS)"
         nuget
       path: $(NUGET_PACKAGES)
-    displayName: Cache NuGet packages
     
   - task: InstallSSHKey@0
+    displayName: 'Install SSH key for code signing'
     inputs:
       knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
       sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
       sshKeySecureFile: 'id_rsa'
 
   - task: PowerShell@2
-    displayName: 'PreBuildSteps'
+    displayName: 'Run pre-build script'
     inputs:
       targetType: 'filePath'
       filePath: 'build/PreBuild.ps1'
@@ -132,6 +136,7 @@ jobs:
       version: 3.1.100
 
   - task: SonarCloudPrepare@1
+    displayName: 'Prepare SonarCloud analysis'
     inputs:
       SonarCloud: 'fernandreu-SonarCloud'
       organization: '$(SonarOrganization)'
@@ -144,7 +149,7 @@ jobs:
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
 
   - task: DotNetCoreCLI@2
-    displayName: 'dotnet build'
+    displayName: 'Build solution'
     inputs:
       command: build
       projects: '**/*.csproj'
@@ -157,6 +162,7 @@ jobs:
     inputs:
       targetType: 'filePath'
       filePath: 'build/CopyLibraries.ps1'
+      arguments: '"$(buildConfiguration)" "$(targetFramework)"'
 
   - task: DotNetCoreCLI@2
     displayName: 'Run Tests'
@@ -188,7 +194,7 @@ jobs:
     displayName: 'Publish SonarCloud quality gate results'
 
   - task: DotNetCoreCLI@2
-    displayName: 'dotnet publish'
+    displayName: 'Prepare app package (dotnet publish)'
     inputs:
       command: publish
       projects: '**/OfficeRibbonXEditor.csproj'
