@@ -175,7 +175,7 @@ jobs:
         /p:TargetFramework=$(targetFramework)
         /p:_InstallerTargetFramework=$(targetFramework)
         /p:CollectCoverage=true
-        /p:Include=[OfficeRibbonXEditor*]*
+        /p:Exclude=[Scintilla*]*
         /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
         /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.$(targetFramework).json
