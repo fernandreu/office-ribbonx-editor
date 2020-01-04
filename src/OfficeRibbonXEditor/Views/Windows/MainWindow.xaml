@@ -428,6 +428,7 @@
 
             <TreeView
                 Name="DocumentView"
+                AutomationProperties.AutomationId="TreeView"
                 ItemsSource="{Binding DocumentList}" 
                 Grid.Column="0"
                 PreviewMouseRightButtonDown="OnTreeViewRightClick"
@@ -548,6 +549,7 @@
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
                 behaviors:TabContent.IsCached="True"
+                AutomationProperties.AutomationId="TabView"
                 ItemsSource="{Binding OpenTabs}"
                 SelectedItem="{Binding SelectedTab}">
                 <TabControl.ItemTemplate>
