@@ -140,7 +140,7 @@ jobs:
       projectName: '$(SonarProjectName)'
       projectVersion: '$(Build.BuildNumber)'
       extraProperties: |
-        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.opencover.xml
+        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestCoverage/coverage.$(targetFramework).opencover.xml
 
   - task: DotNetCoreCLI@2
     displayName: 'dotnet build'
@@ -178,13 +178,13 @@ jobs:
         /p:Include=[OfficeRibbonXEditor*]*
         /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
         /p:CoverletOutput=$(Build.SourcesDirectory)/TestCoverage/
-        /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.json
+        /p:mergeWith=$(Build.SourcesDirectory)/TestCoverage/coverage.$(targetFramework).json
 
   - task: PublishCodeCoverageResults@1
     displayName: 'Publish code coverage report'
     inputs:
       codeCoverageTool: 'cobertura'
-      summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.cobertura.xml'
+      summaryFileLocation: '$(Build.SourcesDirectory)/**/coverage.$(targetFramework).cobertura.xml'
 
   - task: SonarCloudAnalyze@1
     displayName: 'Run SonarCloud code analysis'
