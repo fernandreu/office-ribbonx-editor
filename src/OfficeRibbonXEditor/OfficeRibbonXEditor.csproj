@@ -20,23 +20,16 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
 
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+
     <!--This also allows caching NuGet packages in Azure Pipelines-->
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
     <!-- SonarQube needs this -->
     <ProjectGuid>{A2A7BCC6-735E-4424-93A4-4EA5255E01FC}</ProjectGuid>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net461|AnyCPU'">
-    <DebugType>full</DebugType>
-    <DebugSymbols>true</DebugSymbols>
-  </PropertyGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="2.1.1" />
     <PackageReference Include="Autofac" Version="4.9.2" />

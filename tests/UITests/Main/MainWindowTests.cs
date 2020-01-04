@@ -21,9 +21,7 @@ namespace OfficeRibbonXEditor.UITests.Main
 
         private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
 
-        private readonly string exePath = Path.Combine(
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-            "OfficeRibbonXEditor.exe");
+        private readonly string exePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "OfficeRibbonXEditor.exe");
 
         private Application? app;
 
@@ -40,11 +38,7 @@ namespace OfficeRibbonXEditor.UITests.Main
                 this.MakeMainWindowCapture("Main Window status when the test failed");
             }
 
-            this.automation?.Dispose();
-
-            // There are high chances that some unsaved changed warnings appear, so let's directly kill the application
-            // If those warnings need to be tested, a specific test case can be created for them
-            this.app?.Kill();
+            this.CloseApplication();
         }
 
         [Test]
@@ -93,6 +87,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             {
                 FileName = exePath,
                 Arguments = string.Join(" ", arguments.Select(x => $"\"{x}\"")),
+                WorkingDirectory = TestContext.CurrentContext.TestDirectory,
             };
 
             this.app = Application.Launch(psi);
@@ -115,6 +110,31 @@ namespace OfficeRibbonXEditor.UITests.Main
             var image = Capture.Element(this.mainWindow);
             image.ToFile(path);
             TestContext.AddTestAttachment(path, description);
+        }
+
+        /// <summary>
+        /// Attempts to close the application gracefully by closing any unsaved changes prompt that appears when closing the
+        /// main window. Otherwise, killing the application process will result in no code coverage.
+        /// </summary>
+        private void CloseApplication()
+        {
+            if (this.app == null)
+            {
+                return;
+            }
+
+            this.mainWindow?.Close();
+
+            // TODO: Loop might not be needed if WaitWhileBusy() is really working
+            for (var attempts = 0; attempts < 10 && !this.app.HasExited; ++attempts)
+            {
+                this.app.WaitWhileBusy();
+                var dialog = this.mainWindow?.ModalWindows.FirstOrDefault();
+                dialog?.FindFirstChild(x => x.ByName("No")).Click();
+            }
+
+            this.automation?.Dispose();
+            this.app.Close();
         }
     }
 }
