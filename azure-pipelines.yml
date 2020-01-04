@@ -153,17 +153,10 @@ jobs:
   # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
   # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
   - task: PowerShell@2
-    displayName: 'Copy PresentationFramework.dll to bin folder'
+    displayName: 'Copy PresentationFramework.dll to test folders'
     inputs:
-      targetType: inline
-      ignoreLASTEXITCODE: true
-      script: |
-        $winPath = $env:WINDIR
-        $dllPath = "$winPath/Microsoft.NET/Framework64/v4.0.30319/WPF/PresentationFramework.dll"
-        Copy-Item $dllPath "./tests/FunctionalTests/bin/$(buildConfiguration)/$(targetFramework)/" 
-        Copy-Item $dllPath "./tests/IntegrationTests/bin/$(buildConfiguration)/$(targetFramework)/" 
-        Copy-Item $dllPath "./tests/UnitTests/bin/$(buildConfiguration)/$(targetFramework)/" 
-        Copy-Item $dllPath "./tests/UITests/bin/$(buildConfiguration)/$(targetFramework)/" 
+      targetType: 'filePath'
+      filePath: 'build/CopyLibraries.ps1'
 
   - task: DotNetCoreCLI@2
     displayName: 'Run Tests'
