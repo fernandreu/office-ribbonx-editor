@@ -10,6 +10,9 @@
 
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion>
+
+    <!-- SonarQube needs this -->
+    <ProjectGuid>{D1A56613-DC3E-4DF9-A560-6456CDF89378}</ProjectGuid>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net461|AnyCPU'">
