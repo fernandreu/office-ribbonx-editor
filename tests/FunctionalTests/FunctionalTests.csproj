@@ -18,6 +18,8 @@
 
     <!-- SonarQube needs this -->
     <ProjectGuid>{8E404929-0EA1-41BF-AA5F-5CD75B1EE4FC}</ProjectGuid>
+
+    <SonarQubeTestProject>true</SonarQubeTestProject>
   </PropertyGroup>
 
   <ItemGroup>
