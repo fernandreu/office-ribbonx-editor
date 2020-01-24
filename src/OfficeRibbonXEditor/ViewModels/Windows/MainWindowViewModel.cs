@@ -1027,7 +1027,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         {
             var result = new SampleFolderViewModel
             {
-                Name = Path.GetDirectoryName(path) ?? string.Empty,
+                Name = Path.GetFileName(path) ?? string.Empty,
             };
 
             foreach (var directory in Directory.GetDirectories(path))
@@ -1081,10 +1081,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     continue;
                 }
 
-                foreach (var item in folder.Items)
-                {
-                    root.Items.Add(item);
-                }
+                root.Items.Add(folder);
             }
 
             if (Settings.Default.ShowDefaultSamples)

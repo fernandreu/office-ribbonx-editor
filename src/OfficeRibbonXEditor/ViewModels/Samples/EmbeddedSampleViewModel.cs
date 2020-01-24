@@ -17,7 +17,8 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
 
         private static readonly string samplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";
 
-        public override string Name => this.ResourceName.Substring(samplesNamespace.Length + 1);
+        // The name will not contain the .xml extension
+        public override string Name => this.ResourceName.Substring(samplesNamespace.Length + 1, this.ResourceName.Length - samplesNamespace.Length - 5);
 
         public static IEnumerable<XmlSampleViewModel> GetFromAssembly()
         {
