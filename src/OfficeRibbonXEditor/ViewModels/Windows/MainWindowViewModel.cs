@@ -1027,7 +1027,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         {
             var result = new SampleFolderViewModel
             {
-                Name = Path.GetFileName(path) ?? string.Empty,
+                Name = new DirectoryInfo(path).Name,
             };
 
             foreach (var directory in Directory.GetDirectories(path))
