@@ -69,7 +69,7 @@ function Update-AllFiles {
         else {
             $result = $false
         }
-        Remove-Job $job
+        Remove-Job $job -Force
 
         if (-not $result) {
             return $false
