@@ -1,10 +1,11 @@
 # Signs a local file by connecting to a remote machine and running osslsigncode in there
+
 function Set-SignatureRemotely {
     [CmdletBinding()]
     [OutputType([bool])]
-    param([System.IO.FileInfo]$FileInfo, [string]$HostName, [string]$Pin, [string]$Port, [string]$destination = '')
+    param([string]$Path, [string]$HostName, [string]$Pin, [string]$Port, [string]$destination = '')
 
-    $Path = $FileInfo.FullName
+    $FileInfo = Get-Item -Path $Path
     & scp -P "$Port" -q "$Path" "$($HostName):/tmp/$($FileInfo.Name)" | Write-Host
     if ($LASTEXITCODE -ne 0) {
         return $false
@@ -51,7 +52,7 @@ function Set-SignatureRemotely {
 function Update-AllFiles {
     [CmdletBinding()]
     [OutputType([bool])]
-    param ([string]$folder, [string]$HostName, [string]$Pin, [string]$Port)
+    param ([string]$folder, [string]$HostName, [string]$Pin, [string]$Port, [int]$TimeoutSeconds = 30)
     $any = $false
     $files = Get-ChildItem $folder -Recurse -File
     foreach ($file in $files) {
@@ -60,7 +61,16 @@ function Update-AllFiles {
         }
 
         Write-Host "File to be processed: $($file.Name)"
-        $result = Set-SignatureRemotely -FileInfo $file -HostName $HostName -Pin $Pin -Port $Port -ErrorAction Continue
+
+        $job = Start-Job -ScriptBlock ${function:Set-SignatureRemotely} -ArgumentList @($file.FullName, $HostName, $Pin, $Port)
+        if (Wait-Job $job -Timeout $TimeoutSeconds) {
+            $result = Receive-Job $job
+        }
+        else {
+            $result = $false
+        }
+        Remove-Job $job
+
         if (-not $result) {
             return $false
         }
