@@ -3,14 +3,16 @@
 function Set-SignatureRemotely {
     [CmdletBinding()]
     [OutputType([bool])]
-    param([string]$Path, [string]$HostName, [string]$Pin, [string]$Port, [string]$destination = '')
+    param([string]$Path, [string]$HostName, [string]$Pin, [string]$Port, [string]$destination = '', [bool]$ShowSteps = $true)
 
     $FileInfo = Get-Item -Path $Path
+    if ($ShowSteps) { Write-Host "Transferring unsigned file to device..." }
     & scp -P "$Port" -q "$Path" "$($HostName):/tmp/$($FileInfo.Name)" | Write-Host
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
+    if ($ShowSteps) { Write-Host "Executing sign commands..." }
     $resultingName = "$($FileInfo.BaseName)-Signed$($FileInfo.Extension)"
     $commonArgs = "-pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $Pin"
     if ($FileInfo.Extension -eq ".exe") {
@@ -32,6 +34,7 @@ function Set-SignatureRemotely {
         & ssh $HostName -p "$Port" osslsigncode $commonArgs -h sha2 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName" | Write-Host
     }
     if ($LASTEXITCODE -ne 0) {
+        if ($ShowSteps) { Write-Host "File could not be signed" }
         return $false
     }
     
@@ -40,12 +43,16 @@ function Set-SignatureRemotely {
         $destination = $Path
     }
 
+    if ($ShowSteps) { Write-Host "Transferring signed file back..." }
     & scp -P "$Port" -q "$($HostName):/tmp/$resultingName" "$destination" | Write-Host
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
+    if ($ShowSteps) { Write-Host "Removing file in device..." }
     & ssh $HostName -p $Port "rm -f `"/tmp/$($FileInfo.Name)`" && rm -f `"/tmp/$resultingName*`"" | Write-Host
+
+    if ($ShowSteps) { Write-Host "Sign successful" }
     return $true
 }
 
