@@ -71,7 +71,11 @@ function Update-AllFiles {
 
         $job = Start-Job -ScriptBlock ${function:Set-SignatureRemotely} -ArgumentList @($file.FullName, $HostName, $Pin, $Port)
         if (Wait-Job $job -Timeout $TimeoutSeconds) {
-            $result = Receive-Job $job
+            try {
+                $result = Receive-Job $job -ErrorAction Stop
+            } catch {
+                $result = $false
+            }
         }
         else {
             $result = $false
