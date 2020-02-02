@@ -25,6 +25,10 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             this.UndoCommand = new RelayCommand(() => this.Undo?.Invoke(this, EventArgs.Empty));
             this.RedoCommand = new RelayCommand(() => this.Redo?.Invoke(this, EventArgs.Empty));
             this.SelectAllCommand = new RelayCommand(() => this.SelectAll?.Invoke(this, EventArgs.Empty));
+            this.FoldCommand = new RelayCommand<int>(level => this.Fold?.Invoke(this, new FoldEventArgs(level)));
+            this.UnfoldCommand = new RelayCommand<int>(level => this.Fold?.Invoke(this, new FoldEventArgs(level, true)));
+            this.FoldCurrentCommand = new RelayCommand(() => this.Fold?.Invoke(this, new FoldEventArgs(true)));
+            this.UnfoldCurrentCommand = new RelayCommand(() => this.Fold?.Invoke(this, new FoldEventArgs(true, true)));
         }
 
         public RelayCommand CutCommand { get; }
@@ -39,6 +43,14 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public RelayCommand SelectAllCommand { get; }
 
+        public RelayCommand<int> FoldCommand { get; }
+
+        public RelayCommand<int> UnfoldCommand { get; }
+
+        public RelayCommand FoldCurrentCommand { get; }
+
+        public RelayCommand UnfoldCurrentCommand { get; }
+
         public event EventHandler? Cut;
 
         public event EventHandler? Copy;
@@ -50,6 +62,8 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         public event EventHandler? Redo;
 
         public event EventHandler? SelectAll;
+
+        public event EventHandler<FoldEventArgs>? Fold;  
 
         private string title = string.Empty;
 

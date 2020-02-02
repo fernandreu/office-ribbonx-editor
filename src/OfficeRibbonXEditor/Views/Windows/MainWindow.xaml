@@ -16,6 +16,7 @@
         xmlns:documents="clr-namespace:OfficeRibbonXEditor.ViewModels.Documents"
         xmlns:windows="clr-namespace:OfficeRibbonXEditor.ViewModels.Windows"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -68,6 +69,98 @@
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding SelectedTab.UndoCommand}"/>
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding SelectedTab.RedoCommand}"/>
         <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectedTab.SelectAllCommand}"/>
+        <KeyBinding Key="F" Modifiers="Control+Alt" Command="{Binding SelectedTab.FoldCurrentCommand}"/>
+        <KeyBinding Key="G" Modifiers="Control+Alt" Command="{Binding SelectedTab.UnfoldCurrentCommand}"/>
+        <KeyBinding Key="D0" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>0</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D1" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>1</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D2" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>2</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D3" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>3</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D4" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>4</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D5" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>5</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D6" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>6</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D7" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>7</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D8" Modifiers="Alt" Command="{Binding SelectedTab.FoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>8</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D0" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>0</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D1" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>1</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D2" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>2</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D3" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>3</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D4" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>4</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D5" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>5</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D6" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>6</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D7" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>7</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
+        <KeyBinding Key="D8" Modifiers="Alt+Shift" Command="{Binding SelectedTab.UnfoldCommand}">
+            <KeyBinding.CommandParameter>
+                <system:Int32>8</system:Int32>
+            </KeyBinding.CommandParameter>
+        </KeyBinding>
 
         <!--Find / replace dialog controls-->
         <KeyBinding Key="F" Modifiers="Control" Command="{Binding FindCommand}"/>
@@ -210,6 +303,105 @@
                 </MenuItem>
                 <Separator/>
                 <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding SelectedTab.SelectAllCommand}"/>
+            </MenuItem>
+            <MenuItem Header="_View" IsEnabled="{Binding IsEditorTabSelected}">
+                <MenuItem Header="Fold All" InputGestureText="Alt+0" Command="{Binding SelectedTab.FoldCommand}">
+                    <MenuItem.CommandParameter>
+                        <system:Int32>0</system:Int32>
+                    </MenuItem.CommandParameter>
+                </MenuItem>
+                <MenuItem Header="Unfold All" InputGestureText="Alt+Shift+0" Command="{Binding SelectedTab.UnfoldCommand}">
+                    <MenuItem.CommandParameter>
+                        <system:Int32>0</system:Int32>
+                    </MenuItem.CommandParameter>
+                </MenuItem>
+                <MenuItem Header="Fold Current Level" InputGestureText="Ctrl+Alt+F" Command="{Binding SelectedTab.FoldCurrentCommand}"/>
+                <MenuItem Header="Unfold Current Level" InputGestureText="Ctrl+Alt+G" Command="{Binding SelectedTab.UnfoldCurrentCommand}"/>
+                <MenuItem Header="Fold Level">
+                    <!--TODO: Find a way of avoiding all this repetitive code-->
+                    <MenuItem Header="1" InputGestureText="Alt+1" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>1</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="2" InputGestureText="Alt+2" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>2</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="3" InputGestureText="Alt+3" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>3</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="4" InputGestureText="Alt+4" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>4</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="5" InputGestureText="Alt+5" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>5</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="6" InputGestureText="Alt+6" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>6</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="7" InputGestureText="Alt+7" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>7</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="8" InputGestureText="Alt+8" Command="{Binding SelectedTab.FoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>8</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Unfold Level">
+                    <MenuItem Header="1" InputGestureText="Alt+Shift+1" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>1</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="2" InputGestureText="Alt+Shift+2" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>2</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="3" InputGestureText="Alt+Shift+3" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>3</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="4" InputGestureText="Alt+Shift+4" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>4</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="5" InputGestureText="Alt+Shift+5" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>5</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="6" InputGestureText="Alt+Shift+6" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>6</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="7" InputGestureText="Alt+Shift+7" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>7</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                    <MenuItem Header="8" InputGestureText="Alt+Shift+8" Command="{Binding SelectedTab.UnfoldCommand}">
+                        <MenuItem.CommandParameter>
+                            <system:Int32>8</system:Int32>
+                        </MenuItem.CommandParameter>
+                    </MenuItem>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">

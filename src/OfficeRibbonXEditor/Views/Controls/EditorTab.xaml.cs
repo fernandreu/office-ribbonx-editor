@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Dragablz;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.Models.Events;
@@ -80,6 +81,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.viewModel.Undo += this.OnUndo;
             this.viewModel.Redo += this.OnRedo;
             this.viewModel.SelectAll += this.OnSelectAll;
+            this.viewModel.Fold += this.OnFold;
         }
 
         private void OnReadEditorInfo(object? sender, DataEventArgs<EditorInfo> e)
@@ -172,6 +174,35 @@ namespace OfficeRibbonXEditor.Views.Controls
                 var col = this.Editor.GetColumn(pos);
 
                 vm.StatusText = $"Ln {line + 1},  Col {col + 1}";
+            }
+        }
+
+        private void OnFold(object? sender, FoldEventArgs e)
+        {
+            var action = e.Unfold ? FoldAction.Expand : FoldAction.Contract;
+            if (e.CurrentOnly)
+            {
+                var index = this.Editor.LineFromPosition(this.Editor.CurrentPosition);
+                var line = this.Editor.Lines[index];
+                line.FoldChildren(action);
+                return;
+            }
+
+            if (e.Level <= 0)
+            {
+                this.Editor.FoldAll(action);
+                return;
+            }
+
+            foreach (var line in Editor.Lines)
+            {
+                // Fold levels internally start at 1024: https://github.com/jacobslusser/ScintillaNET/issues/307#issuecomment-280809695
+                if (line.FoldLevel - 1023 < e.Level)
+                {
+                    continue;
+                }
+
+                line.FoldLine(action);
             }
         }
 
