@@ -804,6 +804,20 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             };
 
             var process = Process.Start(psi);
+            if (!Sandbox.Default.IsInSandboxMode)
+            {
+                return;
+            }
+
+            try
+            {
+                process?.Kill();
+            }
+            catch (InvalidOperationException)
+            {
+                // The process finished too quickly. This probably means that the tab was
+                // merged with an already opened browsed
+            }
         }
 
         public EditorTabViewModel? OpenPartTab(OfficePartViewModel? part = null)

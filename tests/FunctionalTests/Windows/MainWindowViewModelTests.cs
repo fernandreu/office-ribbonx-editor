@@ -8,6 +8,7 @@ using NUnit.Framework;
 using OfficeRibbonXEditor.Documents;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.ViewModels.Documents;
@@ -42,6 +43,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         [SetUp]
         public void SetUp()
         {
+            Sandbox.Default.IsInSandboxMode = true;
             this.MockOpenFile(this.sourceFile);
             this.MockSaveFile(this.destFile);
             
@@ -415,6 +417,18 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                         this.viewModel.SaveAsCommand.Execute();
                     }
                 });
+        }
+
+        [Test]
+        public void CanOpenHelpPages()
+        {
+            // Act
+            foreach (var pair in this.viewModel.HelpLinks)
+            {
+                this.viewModel.OpenHelpLinkCommand.Execute(pair.Value);
+            }
+
+            // The assert is implicit; the above code should not throw in .NET Core anymore [#88]
         }
         
         /// <summary>
