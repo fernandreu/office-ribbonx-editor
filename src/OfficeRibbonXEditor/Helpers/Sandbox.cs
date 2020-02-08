@@ -8,17 +8,11 @@ namespace OfficeRibbonXEditor.Helpers
     /// Ideally, this class should not be needed because 100% of the code should be testable.
     /// However, it does simplify the testing in some occasions (e.g. navigating to help pages).
     /// </summary>
-    public class Sandbox
+    public static class Sandbox
     {
         private const string VariableName = "OfficeRibbonXEditor:SandboxMode";
 
-        private Sandbox()
-        {
-        }
-
-        public static Sandbox Default { get; } = new Sandbox();
-
-        public bool IsInSandboxMode
+        public static bool IsEnabled
         {
             get => Environment.GetEnvironmentVariable(VariableName) == "1"; 
             set => Environment.SetEnvironmentVariable(VariableName, value ? "1" : null);

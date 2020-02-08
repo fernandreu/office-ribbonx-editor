@@ -43,7 +43,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         [SetUp]
         public void SetUp()
         {
-            Sandbox.Default.IsInSandboxMode = true;
+            Sandbox.IsEnabled = true;
             this.MockOpenFile(this.sourceFile);
             this.MockSaveFile(this.destFile);
             

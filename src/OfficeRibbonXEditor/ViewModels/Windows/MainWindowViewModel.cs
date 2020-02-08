@@ -804,7 +804,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             };
 
             var process = Process.Start(psi);
-            if (!Sandbox.Default.IsInSandboxMode)
+            if (!Sandbox.IsEnabled)
             {
                 return;
             }
