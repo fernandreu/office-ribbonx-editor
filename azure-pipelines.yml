@@ -25,192 +25,194 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 
-jobs:
-- job: NetFramework
-  displayName: .NET Framework
-  variables:
-    targetFramework: net461
+stages:
+- stage: Build
+  jobs:
+  - job: NetFramework
+    displayName: .NET Framework
+    variables:
+      targetFramework: net461
 
-  steps:
+    steps:
 
-  - task: Cache@2
-    displayName: 'Cache NuGet packages'
-    inputs:
-      key: 'nuget | "$(Agent.OS)" | ".NET Framework" | src/OfficeRibbonXEditor/packages.lock.json'
-      path: '$(NUGET_PACKAGES)'
-      restoreKeys: |
-        nuget | "$(Agent.OS)" | ".NET Framework"
-        nuget | "$(Agent.OS)"
-        nuget
+    - task: Cache@2
+      displayName: 'Cache NuGet packages'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | ".NET Framework" | src/OfficeRibbonXEditor/packages.lock.json'
+        path: '$(NUGET_PACKAGES)'
+        restoreKeys: |
+          nuget | "$(Agent.OS)" | ".NET Framework"
+          nuget | "$(Agent.OS)"
+          nuget
 
-  - task: InstallSSHKey@0
-    displayName: 'Install SSH key for code signing'
-    inputs:
-      knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
-      sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
-      sshKeySecureFile: 'id_rsa'
+    - task: InstallSSHKey@0
+      displayName: 'Install SSH key for code signing'
+      inputs:
+        knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
+        sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
+        sshKeySecureFile: 'id_rsa'
 
-  - task: PowerShell@2
-    displayName: 'Run pre-build script'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build/PreBuild.ps1'
-      arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+    - task: PowerShell@2
+      displayName: 'Run pre-build script'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'build/PreBuild.ps1'
+        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
 
-  - task: NuGetToolInstaller@0
-    displayName: 'Install NuGet'
+    - task: NuGetToolInstaller@0
+      displayName: 'Install NuGet'
 
-  - task: NuGetCommand@2
-    displayName: 'NuGet restore'
-    inputs:
-      restoreSolution: '$(solution)'
+    - task: NuGetCommand@2
+      displayName: 'NuGet restore'
+      inputs:
+        restoreSolution: '$(solution)'
 
-  - task: VSBuild@1
-    displayName: 'Build solution'
-    inputs:
-      solution: '$(solution)'
-      platform: '$(buildPlatform)'
-      msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
-      configuration: '$(buildConfiguration)'
+    - task: VSBuild@1
+      displayName: 'Build solution'
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
+        configuration: '$(buildConfiguration)'
 
-  - task: VSTest@2
-    displayName: 'Run Tests'
-    condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
-    inputs:
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
+    - task: VSTest@2
+      displayName: 'Run Tests'
+      condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-  - template: build/templates/copy-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Executable'
-      fileName: 'OfficeRibbonXEditor.exe'
-      project: 'OfficeRibbonXEditor'
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Executable'
+        fileName: 'OfficeRibbonXEditor.exe'
+        project: 'OfficeRibbonXEditor'
 
-  - template: build/templates/sign-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Executable'
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Executable'
 
-  - template: build/templates/copy-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Installer'
-      fileName: 'OfficeRibbonXEditor.msi'
-      project: 'Installer'
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Installer'
+        fileName: 'OfficeRibbonXEditor.msi'
+        project: 'Installer'
 
-  - template: build/templates/sign-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Installer'
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Installer'
 
-- job: NetCore
-  displayName: .NET Core
-  variables:
-    targetFramework: netcoreapp3.1
+  - job: NetCore
+    displayName: .NET Core
+    variables:
+      targetFramework: netcoreapp3.1
 
-  steps:
+    steps:
 
-  - task: Cache@2
-    displayName: 'Cache NuGet packages'
-    inputs:
-      key: 'nuget | "$(Agent.OS)" | ".NET Core" | src/OfficeRibbonXEditor/packages.lock.json'
-      restoreKeys: |
-        nuget | "$(Agent.OS)" | ".NET Core"
-        nuget | "$(Agent.OS)"
-        nuget
-      path: $(NUGET_PACKAGES)
-    
-  - task: InstallSSHKey@0
-    displayName: 'Install SSH key for code signing'
-    inputs:
-      knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
-      sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
-      sshKeySecureFile: 'id_rsa'
+    - task: Cache@2
+      displayName: 'Cache NuGet packages'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | ".NET Core" | src/OfficeRibbonXEditor/packages.lock.json'
+        restoreKeys: |
+          nuget | "$(Agent.OS)" | ".NET Core"
+          nuget | "$(Agent.OS)"
+          nuget
+        path: $(NUGET_PACKAGES)
+      
+    - task: InstallSSHKey@0
+      displayName: 'Install SSH key for code signing'
+      inputs:
+        knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
+        sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
+        sshKeySecureFile: 'id_rsa'
 
-  - task: PowerShell@2
-    displayName: 'Run pre-build script'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build/PreBuild.ps1'
-      arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+    - task: PowerShell@2
+      displayName: 'Run pre-build script'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'build/PreBuild.ps1'
+        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
 
-  - task: UseDotNet@2
-    displayName: 'Use .NET Core sdk'
-    inputs:
-      packageType: sdk
-      version: 3.1.100
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: sdk
+        version: 3.1.100
 
-  - task: SonarCloudPrepare@1
-    displayName: 'Prepare SonarCloud analysis'
-    inputs:
-      SonarCloud: 'fernandreu-SonarCloud'
-      organization: '$(SonarOrganization)'
-      scannerMode: 'MSBuild'
-      projectKey: '$(SonarProjectKey)'
-      projectName: '$(SonarProjectName)'
-      projectVersion: '$(Build.BuildNumber)'
-      extraProperties: |
-        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
+    - task: SonarCloudPrepare@1
+      displayName: 'Prepare SonarCloud analysis'
+      inputs:
+        SonarCloud: 'fernandreu-SonarCloud'
+        organization: '$(SonarOrganization)'
+        scannerMode: 'MSBuild'
+        projectKey: '$(SonarProjectKey)'
+        projectName: '$(SonarProjectName)'
+        projectVersion: '$(Build.BuildNumber)'
+        extraProperties: |
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Build solution'
-    inputs:
-      command: build
-      projects: '**/*.csproj'
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build solution'
+      inputs:
+        command: build
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
-  # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
-  # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
-  - task: PowerShell@2
-    displayName: 'Copy PresentationFramework.dll to test folders'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build/CopyLibraries.ps1'
-      arguments: '"$(buildConfiguration)" "$(targetFramework)"'
+    # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
+    # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
+    - task: PowerShell@2
+      displayName: 'Copy PresentationFramework.dll to test folders'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'build/CopyLibraries.ps1'
+        arguments: '"$(buildConfiguration)" "$(targetFramework)"'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Run Tests'
-    inputs:
-      command: test
-      projects: '**/*Tests.csproj'
-      arguments: >-
-        --no-build
-        --configuration $(buildConfiguration)
-        /p:TargetFramework=$(targetFramework)
-        /p:_InstallerTargetFramework=$(targetFramework)
-        /p:CollectCoverage=true
-        /p:Exclude=[Scintilla*]*
-        /p:IncludeTestAssembly=true
-        /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
-        /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
-        /p:mergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).json
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Tests'
+      inputs:
+        command: test
+        projects: '**/*Tests.csproj'
+        arguments: >-
+          --no-build
+          --configuration $(buildConfiguration)
+          /p:TargetFramework=$(targetFramework)
+          /p:_InstallerTargetFramework=$(targetFramework)
+          /p:CollectCoverage=true
+          /p:Exclude=[Scintilla*]*
+          /p:IncludeTestAssembly=true
+          /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
+          /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
+          /p:mergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).json
 
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage report'
-    inputs:
-      codeCoverageTool: 'cobertura'
-      summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.$(targetFramework).cobertura.xml'
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage report'
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.$(targetFramework).cobertura.xml'
 
-  - task: SonarCloudAnalyze@1
-    displayName: 'Run SonarCloud code analysis'
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run SonarCloud code analysis'
 
-  - task: SonarCloudPublish@1
-    displayName: 'Publish SonarCloud quality gate results'
+    - task: SonarCloudPublish@1
+      displayName: 'Publish SonarCloud quality gate results'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Prepare app package (dotnet publish)'
-    inputs:
-      command: publish
-      projects: '**/OfficeRibbonXEditor.csproj'
-      publishWebProjects: false
-      zipAfterPublish: false
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
+    - task: DotNetCoreCLI@2
+      displayName: 'Prepare app package (dotnet publish)'
+      inputs:
+        command: publish
+        projects: '**/OfficeRibbonXEditor.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish binaries (unsigned)'
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Core Binaries (Unsigned)'
-      publishLocation: 'Container' # Options: container, filePath
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish binaries (unsigned)'
+      inputs:
+        pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: '.NET Core Binaries (Unsigned)'
+        publishLocation: 'Container' # Options: container, filePath
 
-  - template: build/templates/sign-and-publish.yml
-    parameters:
-      displayName: '.NET Core Binaries'
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Core Binaries'
