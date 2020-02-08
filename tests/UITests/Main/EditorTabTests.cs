@@ -111,7 +111,7 @@ namespace OfficeRibbonXEditor.UITests.Main
         }
 
         [Test]
-        public void TestFolding()
+        public void TestFoldingLevels()
         {
             // Using a for loop instead of method arguments because this avoids calling SetUp for
             // such short actions
@@ -122,15 +122,30 @@ namespace OfficeRibbonXEditor.UITests.Main
 
                 // Act
                 Keyboard.TypeSimultaneously(VirtualKeyShort.ALT, key); // Folding
-                Task.Delay(50).Wait();
+                Thread.Sleep(50);
 
                 Keyboard.TypeSimultaneously(VirtualKeyShort.ALT, VirtualKeyShort.SHIFT, key); // Unfolding
-                Task.Delay(50).Wait();
+                Thread.Sleep(50);
 
                 // Assert
                 // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
                 Assert.AreEqual(originalCode, this.editor.Text);
             }
+        }
+
+        [Test]
+        public void TestFoldingCurrent()
+        {
+            // Act
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.ALT, VirtualKeyShort.KEY_F); // Folding
+            Thread.Sleep(50);
+
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.ALT, VirtualKeyShort.KEY_G); // Unfolding
+            Thread.Sleep(50);
+
+            // Assert
+            // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
+            Assert.AreEqual(originalCode, this.editor.Text);
         }
 
         private void WaitForClipboard()
@@ -142,8 +157,7 @@ namespace OfficeRibbonXEditor.UITests.Main
                     Assert.Fail("Clipboard not set");
                 }
 
-                // Using await Task.Delay() instead will interfere with the STA config when getting clipboard contents
-                Task.Delay(50).Wait();
+                Thread.Sleep(50);
             }
         }
     }
