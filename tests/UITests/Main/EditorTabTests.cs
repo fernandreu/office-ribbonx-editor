@@ -72,7 +72,7 @@ namespace OfficeRibbonXEditor.UITests.Main
 
             // Act
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_X);
-            this.WaitForClipboard();
+            WaitForClipboard();
 
             // Assert
             Assert.AreEqual(originalCode, Clipboard.GetText());
@@ -88,7 +88,7 @@ namespace OfficeRibbonXEditor.UITests.Main
 
             // Act
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_C);
-            this.WaitForClipboard();
+            WaitForClipboard();
 
             // Assert
             Assert.AreEqual(this.editor.Text, Clipboard.GetText());
@@ -122,10 +122,10 @@ namespace OfficeRibbonXEditor.UITests.Main
 
                 // Act
                 Keyboard.TypeSimultaneously(VirtualKeyShort.ALT, key); // Folding
-                Thread.Sleep(50);
+                Task.Delay(50).Wait();
 
                 Keyboard.TypeSimultaneously(VirtualKeyShort.ALT, VirtualKeyShort.SHIFT, key); // Unfolding
-                Thread.Sleep(50);
+                Task.Delay(50).Wait();
 
                 // Assert
                 // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
@@ -138,17 +138,17 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             // Act
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.ALT, VirtualKeyShort.KEY_F); // Folding
-            Thread.Sleep(50);
+            Task.Delay(50).Wait();
 
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.ALT, VirtualKeyShort.KEY_G); // Unfolding
-            Thread.Sleep(50);
+            Task.Delay(50).Wait();
 
             // Assert
             // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
             Assert.AreEqual(originalCode, this.editor.Text);
         }
 
-        private void WaitForClipboard()
+        private static void WaitForClipboard()
         {
             for (var i = 0; !Clipboard.ContainsText(); ++i)
             {
@@ -157,7 +157,10 @@ namespace OfficeRibbonXEditor.UITests.Main
                     Assert.Fail("Clipboard not set");
                 }
 
-                Thread.Sleep(50);
+                // Do NOT:
+                // - await the task, as this causes issues with the STA mode
+                // - switch to Thread.Sleep(50), as that does not apparently have the same effect
+                Task.Delay(50).Wait();
             }
         }
     }
