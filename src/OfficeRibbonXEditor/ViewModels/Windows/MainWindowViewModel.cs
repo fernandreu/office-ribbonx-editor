@@ -106,6 +106,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
+            this.OpenHelpLinkCommand = new RelayCommand<string>(this.ExecuteOpenHelpLinkCommand);
 
             this.DocumentList.CollectionChanged += this.OnTreeViewItemCollectionChanged;
 
@@ -331,7 +332,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// </summary>
         public RelayCommand<DragEventArgs> DropCommand { get; }
 
-        public RelayCommand<string> OpenHelpLinkCommand { get; } = new RelayCommand<string>(url => Process.Start(url));
+        public RelayCommand<string> OpenHelpLinkCommand { get; }
 
         /// <summary>
         /// Gets a list of headers which will be shown in the "Useful links" menu, together with the links they point to
@@ -792,6 +793,17 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 // Select the document on the TreeView
                 this.SelectedItem = model;
             }
+        }
+
+        private void ExecuteOpenHelpLinkCommand(string url)
+        {
+            var psi = new ProcessStartInfo
+            {
+                FileName = url,
+                UseShellExecute = true,
+            };
+
+            Process.Start(psi);
         }
 
         public EditorTabViewModel? OpenPartTab(OfficePartViewModel? part = null)
