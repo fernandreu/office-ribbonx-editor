@@ -36,9 +36,10 @@ jobs:
   - task: Cache@2
     displayName: 'Cache NuGet packages'
     inputs:
-      key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
+      key: 'nuget | "$(Agent.OS)" | ".NET Framework" | src/OfficeRibbonXEditor/packages.lock.json'
       path: '$(NUGET_PACKAGES)'
       restoreKeys: |
+        nuget | "$(Agent.OS)" | ".NET Framework"
         nuget | "$(Agent.OS)"
         nuget
 
@@ -109,8 +110,9 @@ jobs:
   - task: Cache@2
     displayName: 'Cache NuGet packages'
     inputs:
-      key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
+      key: 'nuget | "$(Agent.OS)" | ".NET Core" | src/OfficeRibbonXEditor/packages.lock.json'
       restoreKeys: |
+        nuget | "$(Agent.OS)" | ".NET Core"
         nuget | "$(Agent.OS)"
         nuget
       path: $(NUGET_PACKAGES)
