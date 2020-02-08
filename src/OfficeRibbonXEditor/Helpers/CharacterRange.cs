@@ -6,7 +6,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     /// <summary>
     /// Specifies a range of characters. If the min and max positions are equal, the range is empty.

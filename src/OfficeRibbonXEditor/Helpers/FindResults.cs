@@ -3,7 +3,7 @@ using System.Drawing;
 using OfficeRibbonXEditor.Interfaces;
 using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     public class FindResults : IResultCollection
     {

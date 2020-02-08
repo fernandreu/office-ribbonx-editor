@@ -8,7 +8,7 @@ using System.Windows.Media.Imaging;
 using System.Xml;
 using OfficeRibbonXEditor.Resources;
 
-namespace OfficeRibbonXEditor.Models.Documents
+namespace OfficeRibbonXEditor.Documents
 {
     public class OfficePart
     {

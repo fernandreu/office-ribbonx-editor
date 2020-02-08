@@ -1,7 +1,7 @@
 ﻿using System;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models.Lexers;
+using OfficeRibbonXEditor.Lexers;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {

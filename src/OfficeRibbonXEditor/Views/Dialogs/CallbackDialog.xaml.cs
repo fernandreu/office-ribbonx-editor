@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using OfficeRibbonXEditor.Models.Lexers;
+using OfficeRibbonXEditor.Lexers;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.Views.Controls;
 

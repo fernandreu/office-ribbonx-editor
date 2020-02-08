@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OfficeRibbonXEditor.Models.Events
+namespace OfficeRibbonXEditor.Events
 {
     public class FoldEventArgs : EventArgs
     {

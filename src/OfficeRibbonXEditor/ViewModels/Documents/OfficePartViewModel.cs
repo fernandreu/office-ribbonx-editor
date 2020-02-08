@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
-using OfficeRibbonXEditor.Models.Documents;
+using OfficeRibbonXEditor.Documents;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {

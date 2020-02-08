@@ -1,10 +1,10 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Events;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.Models.Events;
-using OfficeRibbonXEditor.Models.Lexers;
+using OfficeRibbonXEditor.Lexers;
 using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Windows;
 

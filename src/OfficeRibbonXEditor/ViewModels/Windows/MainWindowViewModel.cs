@@ -18,12 +18,12 @@ using System.Xml.Schema;
 using AsyncAwaitBestPractices;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.Models.Documents;
-using OfficeRibbonXEditor.Models.Events;
-using OfficeRibbonXEditor.Models.Lexers;
+using OfficeRibbonXEditor.Lexers;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.Resources;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
@@ -803,7 +803,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 UseShellExecute = true,
             };
 
-            Process.Start(psi);
+            var process = Process.Start(psi);
         }
 
         public EditorTabViewModel? OpenPartTab(OfficePartViewModel? part = null)

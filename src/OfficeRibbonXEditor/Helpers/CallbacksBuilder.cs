@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Xml;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     public class CallbacksBuilder
     {

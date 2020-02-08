@@ -8,7 +8,6 @@
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:resources="clr-namespace:OfficeRibbonXEditor.Resources"
         xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
-        xmlns:models="clr-namespace:OfficeRibbonXEditor.Models"
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
         xmlns:behaviors="clr-namespace:OfficeRibbonXEditor.Behaviors"
         xmlns:samples="clr-namespace:OfficeRibbonXEditor.ViewModels.Samples"

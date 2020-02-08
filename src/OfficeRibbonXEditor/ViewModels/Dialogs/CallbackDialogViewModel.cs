@@ -1,5 +1,5 @@
 ﻿using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models.Lexers;
+using OfficeRibbonXEditor.Lexers;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     public class EditorInfo
     {

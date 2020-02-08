@@ -1,7 +1,7 @@
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.UnitTests.Xml
 {

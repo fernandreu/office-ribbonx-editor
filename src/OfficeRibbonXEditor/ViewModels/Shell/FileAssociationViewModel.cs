@@ -1,6 +1,6 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
-using OfficeRibbonXEditor.Models;
+using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.ViewModels.Shell
 {

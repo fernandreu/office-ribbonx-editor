@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models.Events;
 using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
 	using ResultsEventArgs = DataEventArgs<IResultCollection>;
 

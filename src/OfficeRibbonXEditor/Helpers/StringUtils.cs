@@ -1,9 +1,8 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms.VisualStyles;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     public static class StringUtils
     {

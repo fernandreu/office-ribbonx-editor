@@ -1,7 +1,7 @@
 ﻿using System;
 using OfficeRibbonXEditor.Interfaces;
 
-namespace OfficeRibbonXEditor.Models.Events
+namespace OfficeRibbonXEditor.Events
 {
     public class LaunchDialogEventArgs : EventArgs
     {

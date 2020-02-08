@@ -5,7 +5,7 @@ using System.IO;
 using System.IO.Packaging;
 using System.Linq;
 
-namespace OfficeRibbonXEditor.Models.Documents
+namespace OfficeRibbonXEditor.Documents
 {
     public enum XmlPart
     {

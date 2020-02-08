@@ -24,9 +24,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 using Microsoft.Win32;
+using OfficeRibbonXEditor.Events;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.Models.Events;
 
 namespace OfficeRibbonXEditor.Views.Controls
 {

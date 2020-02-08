@@ -4,7 +4,7 @@ using System.Windows;
 using OfficeRibbonXEditor.Interfaces;
 using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     public class XmlErrorResults : IResultCollection
     {

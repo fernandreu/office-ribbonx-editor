@@ -4,10 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Dragablz;
+using OfficeRibbonXEditor.Events;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.Models.Events;
-using OfficeRibbonXEditor.Models.Lexers;
+using OfficeRibbonXEditor.Lexers;
 using OfficeRibbonXEditor.ViewModels.Tabs;
 using ScintillaNET;
 

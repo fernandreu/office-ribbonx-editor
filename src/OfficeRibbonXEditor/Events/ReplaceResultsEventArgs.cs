@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using OfficeRibbonXEditor.Helpers;
 
-namespace OfficeRibbonXEditor.Models.Events
+namespace OfficeRibbonXEditor.Events
 {
     public class ReplaceResultsEventArgs : EventArgs
     {

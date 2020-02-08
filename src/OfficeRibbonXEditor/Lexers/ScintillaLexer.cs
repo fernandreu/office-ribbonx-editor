@@ -2,7 +2,7 @@
 using ScintillaNET;
 using ScintillaNET.WPF;
 
-namespace OfficeRibbonXEditor.Models.Lexers
+namespace OfficeRibbonXEditor.Lexers
 {
     /// <summary>
     /// Abstract class to handle any update in syntax highlighting (or formatting in general) of the Scintilla editor

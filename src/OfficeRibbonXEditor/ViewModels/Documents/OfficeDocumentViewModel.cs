@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using OfficeRibbonXEditor.Models.Documents;
+using OfficeRibbonXEditor.Documents;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {

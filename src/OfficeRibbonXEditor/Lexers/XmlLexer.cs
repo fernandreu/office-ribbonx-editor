@@ -1,6 +1,6 @@
 ﻿using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Models.Lexers
+namespace OfficeRibbonXEditor.Lexers
 {
     public class XmlLexer : ScintillaLexer
     {

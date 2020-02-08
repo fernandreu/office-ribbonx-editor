@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Microsoft.Win32;
 
-namespace OfficeRibbonXEditor.Models
+namespace OfficeRibbonXEditor.Helpers
 {
     public class FileAssociationHelper
     {

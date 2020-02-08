@@ -2,12 +2,12 @@
 using System.Drawing;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Events;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
-using OfficeRibbonXEditor.Models.Events;
 using OfficeRibbonXEditor.Views.Controls.Forms;
 using ScintillaNET;
-using CharacterRange = OfficeRibbonXEditor.Models.CharacterRange;
+using CharacterRange = OfficeRibbonXEditor.Helpers.CharacterRange;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
@@ -37,7 +37,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         public RecentListViewModel<string> RecentReplaces { get; } = new RecentListViewModel<string>();
 
         /// <summary>
-        /// Gets the internal <see cref="Models.FindReplace"/> instance that performs the actual find / replace
+        /// Gets the internal <see cref="OfficeRibbonXEditor.Helpers.FindReplace"/> instance that performs the actual find / replace
         /// operations. Only available after <see cref="Scintilla"/> has been set to a non-null value, which is
         /// usually done when calling <see cref="OnLoaded"/>.
         /// </summary>

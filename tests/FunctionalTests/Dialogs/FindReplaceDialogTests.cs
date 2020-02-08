@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Models;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using ScintillaNET;
 

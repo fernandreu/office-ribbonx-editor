@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Models.Lexers
+namespace OfficeRibbonXEditor.Lexers
 {
     public class VbaLexer : ScintillaLexer
     {
