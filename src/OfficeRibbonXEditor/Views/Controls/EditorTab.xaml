@@ -20,6 +20,7 @@
 
         <sn:ScintillaWPF
             x:Name="Editor"
+            AutomationProperties.AutomationId="Editor"
             Grid.Row="0"
             HorizontalAlignment="Stretch"
             FontFamily="Consolas"

@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Markup;
 using System.ComponentModel;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using ScintillaNET.WPF.Configuration;
 
@@ -29,6 +30,11 @@ namespace ScintillaNET.WPF
                     this.Zoom = this.Scintilla.Zoom;
                 }
             };
+        }
+
+        protected override AutomationPeer OnCreateAutomationPeer()
+        {
+            return new ScintillaAutomationPeer(this);
         }
 
         private readonly ScintillaWPFConfigItemCollection mWPFConfig;

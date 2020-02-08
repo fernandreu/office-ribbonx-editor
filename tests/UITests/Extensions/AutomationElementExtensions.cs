@@ -2,6 +2,7 @@
 using System.Reflection;
 using FlaUI.Core.AutomationElements;
 using NUnit.Framework;
+using OfficeRibbonXEditor.UITests.Helpers;
 using OfficeRibbonXEditor.UITests.Models;
 
 namespace OfficeRibbonXEditor.UITests.Extensions
@@ -11,6 +12,11 @@ namespace OfficeRibbonXEditor.UITests.Extensions
         public static DocumentItem? AsDocumentItem(this AutomationElement self)
         {
             return self != null ? new DocumentItem(self.FrameworkAutomationElement) : null;
+        }
+
+        public static Scintilla? AsScintilla(this AutomationElement self)
+        {
+            return self != null ? new Scintilla(self.FrameworkAutomationElement) : null;
         }
 
         public static Tree? FindTreeView(this AutomationElement self)
