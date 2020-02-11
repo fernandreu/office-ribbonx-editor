@@ -228,6 +228,7 @@ stages:
           steps:
           - powershell: |
               $version = "$(Build.SourceBranch)"
+              $version = "refs/tags/v0.1"  # TODO: Temporary test
               if ($version.StartsWith("refs/tags/v")) {
                   $parts = $version.Substring(10).Split(".")
                   while ($parts.Count -lt 3) {
