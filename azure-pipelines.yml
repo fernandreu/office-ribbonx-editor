@@ -249,18 +249,18 @@ stages:
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Framework Executable'
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/CI-Pipeline/.NET Framework Executable/OfficeRibbonXEditor.exe'
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/.NET Framework Executable/OfficeRibbonXEditor.exe'
               includeRootFolder: false
               archiveFile: '$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETFramework.zip'
           - powershell: >-
               Copy-Item
-              -Path "$(System.DefaultWorkingDirectory)/CI-Pipeline/.NET Framework Installer/OfficeRibbonXEditor.msi"
+              -Path "$(System.DefaultWorkingDirectory)/.NET Framework Installer/OfficeRibbonXEditor.msi"
               -Destination "$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETFramework.msi"
             displayName: 'Copy .NET Framework Installer'
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Core Binaries'
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/CI-Pipeline/.NET Core Binaries/OfficeRibbonXEditor'
+              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/.NET Core Binaries/OfficeRibbonXEditor'
               includeRootFolder: false
               archiveFile: '$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETCore.zip'
           - task: GitHubRelease@1
