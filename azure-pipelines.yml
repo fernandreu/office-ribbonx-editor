@@ -195,6 +195,7 @@ stages:
       displayName: 'Run SonarCloud code analysis'
 
     - task: SonarCloudPublish@1
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
       displayName: 'Publish SonarCloud quality gate results'
 
     - task: DotNetCoreCLI@2

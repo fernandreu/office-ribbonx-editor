@@ -24,9 +24,8 @@ steps:
         exit 1
       }
 
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@1
   displayName: 'Publish ${{ parameters.displayName }} (unsigned)'
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
     artifactName: '${{ parameters.displayName }} (Unsigned)'
-    publishLocation: 'Container' # Options: container, filePath

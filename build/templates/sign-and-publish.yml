@@ -12,10 +12,9 @@ steps:
       $result = Update-AllFiles "$(Build.ArtifactStagingDirectory)" -HostName "$(CODESIGN_HOST)" -Pin "$(CODESIGN_PIN)" -Port "$(CODESIGN_PORT)"
       Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
 
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@1
   displayName: 'Publish ${{ parameters.displayName }} (signed)'
   condition: eq(variables['CodeSignSuccess'], true)
   inputs:
-    pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
     artifactName: '${{ parameters.displayName }}'
-    publishLocation: 'Container' # Options: container, filePath
