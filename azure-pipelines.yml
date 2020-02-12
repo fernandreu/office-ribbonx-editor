@@ -98,24 +98,6 @@ stages:
       parameters:
         displayName: '.NET Framework Installer'
 
-  - job: SignNetFramework
-    dependsOn: NetFramework
-    displayName: Sign .NET Framework
-    pool:
-      name: default
-      demands: CodeSign
-    steps:
-
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        displayName: '.NET Framework Executable'
-        path: '$(Pipeline.Workspace)/.NET Framework Executable'
-
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        displayName: '.NET Framework Installer'
-        path: '$(Pipeline.Workspace)/.NET Framework Installer'
-
   - job: NetCore
     displayName: .NET Core
     variables:
@@ -221,16 +203,42 @@ stages:
         zipAfterPublish: false
         arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
 
-    - task: PublishBuildArtifacts@1
+    - task: PublishPipelineArtifacts@1
       displayName: 'Publish binaries (unsigned)'
       inputs:
-        pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
+        targetPath: '$(Build.ArtifactStagingDirectory)' 
         artifactName: '.NET Core Binaries (Unsigned)'
-        publishLocation: 'Container' # Options: container, filePath
 
-    # - template: build/templates/sign-and-publish.yml
-    #   parameters:
-    #     displayName: '.NET Core Binaries'
+- stage: Sign
+  dependsOn: Build
+  pool:
+    name: default
+    demands: CodeSign
+  jobs:
+
+  - job: NetFrameworkExecutable
+    displayName: Sign .NET Framework Executable
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Executable'
+        path: '$(Pipeline.Workspace)/.NET Framework Executable'
+
+  - job: NetFrameworkInstaller
+    displayName: Sign .NET Framework Installer
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Installer'
+        path: '$(Pipeline.Workspace)/.NET Framework Installer'
+
+  - job: NetCoreBinaries
+    displayName: Sign .NET Core Binaries
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Core Binaries'
+        path: '$(Pipeline.Workspace)/.NET Core Binaries'
 
 - stage: Release
   dependsOn: Build
