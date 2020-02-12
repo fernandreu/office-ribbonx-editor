@@ -241,7 +241,7 @@ stages:
         path: '$(Pipeline.Workspace)/.NET Core Binaries'
 
 - stage: Release
-  dependsOn: Build
+  dependsOn: Sign
   jobs:
   - deployment: Deploy
     environment: staging

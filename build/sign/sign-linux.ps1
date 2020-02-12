@@ -42,9 +42,11 @@ function Update-AllFiles {
     [CmdletBinding()]
     [OutputType([bool])]
     param ([string]$folder, [string]$Pin, [int]$TimeoutSeconds = 30)
+    Write-Host "Folder passed: $folder"
     $any = $false
     $files = Get-ChildItem $folder -Recurse -File
     foreach ($file in $files) {
+        Write-Host "File: $($file.Name)"
         if ($file.Extension -ne '.exe' -and $file.Extension -ne '.msi') {
             continue
         }
