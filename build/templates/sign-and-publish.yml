@@ -9,7 +9,7 @@ steps:
     path: '$(Pipeline.Workspace)' 
 
 - task: PowerShell@2
-  artifactName: 'Sign ${{ parameters.artifactName }}'
+  displayName: 'Sign ${{ parameters.artifactName }}'
   inputs:
     targetType: inline
     ignoreLASTEXITCODE: true
@@ -23,7 +23,7 @@ steps:
       }
 
 - task: PublishPipelineArtifact@1
-  artifactName: 'Publish ${{ parameters.artifactName }} (signed)'
+  displayName: 'Publish ${{ parameters.artifactName }} (signed)'
   condition: eq(variables['CodeSignSuccess'], true)
   inputs:
     targetPath: '$(Pipeline.Workspace)/${{ parameters.artifactName }}' 
