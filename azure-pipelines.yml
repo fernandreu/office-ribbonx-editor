@@ -203,7 +203,7 @@ stages:
         zipAfterPublish: false
         arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
 
-    - task: PublishPipelineArtifacts@1
+    - task: PublishPipelineArtifact@1
       displayName: 'Publish binaries (unsigned)'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)' 
