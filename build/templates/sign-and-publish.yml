@@ -18,8 +18,8 @@ steps:
       $result = Update-AllFiles "$(Pipeline.Workspace)/${{ parameters.artifactName }}" -Pin "$(CODESIGN_PIN)"
       Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
       if (!$result) {
-        Write-Host "##vso[task.setvariable variable=agent.jobstatus;]canceled"
-        Write-Host "##vso[task.complete result=Canceled;]DONE"
+        Write-Host "##vso[task.setvariable variable=agent.jobstatus;]cancelled"
+        Write-Host "##vso[task.complete result=Cancelled;]DONE"
       }
 
 - task: PublishPipelineArtifact@1
