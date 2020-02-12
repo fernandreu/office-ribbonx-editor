@@ -5,21 +5,22 @@ function Set-SignatureLocally {
     [OutputType([bool])]
     param([string]$Path, [string]$Pin, [string]$destination = '')
 
+    Write-Host "Copying file to: /tmp/$($FileInfo.Name)"
     $FileInfo = Get-Item -Path $Path
     Copy-Item -Path $Path -Destination "/tmp/$($FileInfo.Name)"
     if ($LASTEXITCODE -ne 0) {
         return $false
     }
 
+    Write-Host "Signing file"
     $resultingName = "$($FileInfo.BaseName)-Signed$($FileInfo.Extension)"
-    $commonArgs = "-pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $Pin"
     if ($FileInfo.Extension -eq ".exe") {
         # Perform a dual signature
-        . osslsigncode $commonArgs -h sha1 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName.tmp" | Write-Host
-        . osslsigncode $commonArgs -nest -h sha2 -in "/tmp/$resultingName.tmp" -out "/tmp/$resultingName" | Write-Host
+        . osslsigncode -pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $Pin -h sha1 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName.tmp" | Write-Host
+        . osslsigncode -pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $Pin -nest -h sha2 -in "/tmp/$resultingName.tmp" -out "/tmp/$resultingName" | Write-Host
     } else {
         # Use only SHA256 signature (as it might not be possible to dual-sign the file)
-        . osslsigncode $commonArgs -h sha2 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName" | Write-Host
+        . osslsigncode -pkcs11engine /usr/lib/x86_64-linux-gnu/engines-1.1/pkcs11.so -pkcs11module /opt/proCertumCardManager/sc30pkcs11-2.0.0.39.r2-MS.so -certs ~/codesign.spc -t http://time.certum.pl -pass $Pin -h sha2 -in "/tmp/$($FileInfo.Name)" -out "/tmp/$resultingName" | Write-Host
     }
     if ($LASTEXITCODE -ne 0) {
         return $false
@@ -30,7 +31,8 @@ function Set-SignatureLocally {
         $destination = $Path
     }
 
-    Move-Item -Path "/tmp/$resultingName" -Destination "$destination"
+    Write-Host "Moving item back to: $destination"
+    Move-Item -Path "/tmp/$resultingName" -Destination "$destination" -Force 
     if ($LASTEXITCODE -ne 0) {
         return $false
     }

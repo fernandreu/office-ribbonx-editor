@@ -45,13 +45,6 @@ stages:
           nuget | "$(Agent.OS)"
           nuget
 
-    - task: InstallSSHKey@0
-      displayName: 'Install SSH key for code signing'
-      inputs:
-        knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
-        sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
-        sshKeySecureFile: 'id_rsa'
-
     - task: PowerShell@2
       displayName: 'Run pre-build script'
       inputs:
@@ -111,13 +104,6 @@ stages:
           nuget
         path: $(NUGET_PACKAGES)
       
-    - task: InstallSSHKey@0
-      displayName: 'Install SSH key for code signing'
-      inputs:
-        knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
-        sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
-        sshKeySecureFile: 'id_rsa'
-
     - task: PowerShell@2
       displayName: 'Run pre-build script'
       inputs:
