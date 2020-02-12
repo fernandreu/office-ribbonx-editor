@@ -94,10 +94,6 @@ stages:
         fileName: 'OfficeRibbonXEditor.msi'
         project: 'Installer'
 
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        displayName: '.NET Framework Installer'
-
   - job: NetCore
     displayName: .NET Core
     variables:
