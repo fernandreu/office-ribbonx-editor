@@ -88,10 +88,6 @@ stages:
         fileName: 'OfficeRibbonXEditor.exe'
         project: 'OfficeRibbonXEditor'
 
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        displayName: '.NET Framework Executable'
-
     - template: build/templates/copy-and-publish.yml
       parameters:
         displayName: '.NET Framework Installer'
@@ -101,6 +97,23 @@ stages:
     - template: build/templates/sign-and-publish.yml
       parameters:
         displayName: '.NET Framework Installer'
+
+  - job: SignNetFramework
+    displayName: Sign .NET Framework
+    pool:
+      name: default
+      demands: CodeSign
+    steps:
+
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Executable'
+        path: '$(Pipeline.Workspace)/.NET Framework Executable'
+
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Installer'
+        path: '$(Pipeline.Workspace)/.NET Framework Installer'
 
   - job: NetCore
     displayName: .NET Core
@@ -214,9 +227,9 @@ stages:
         artifactName: '.NET Core Binaries (Unsigned)'
         publishLocation: 'Container' # Options: container, filePath
 
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        displayName: '.NET Core Binaries'
+    # - template: build/templates/sign-and-publish.yml
+    #   parameters:
+    #     displayName: '.NET Core Binaries'
 
 - stage: Release
   dependsOn: Build
@@ -249,18 +262,18 @@ stages:
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Framework Executable'
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/.NET Framework Executable/OfficeRibbonXEditor.exe'
+              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Executable/OfficeRibbonXEditor.exe'
               includeRootFolder: false
               archiveFile: '$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETFramework.zip'
           - powershell: >-
               Copy-Item
-              -Path "$(System.DefaultWorkingDirectory)/.NET Framework Installer/OfficeRibbonXEditor.msi"
+              -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.msi"
               -Destination "$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETFramework.msi"
             displayName: 'Copy .NET Framework Installer'
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Core Binaries'
             inputs:
-              rootFolderOrFile: '$(System.DefaultWorkingDirectory)/.NET Core Binaries/OfficeRibbonXEditor'
+              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Core Binaries/OfficeRibbonXEditor'
               includeRootFolder: false
               archiveFile: '$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETCore.zip'
           - task: GitHubRelease@1
