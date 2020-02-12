@@ -99,6 +99,7 @@ stages:
         displayName: '.NET Framework Installer'
 
   - job: SignNetFramework
+    dependsOn: NetFramework
     displayName: Sign .NET Framework
     pool:
       name: default
