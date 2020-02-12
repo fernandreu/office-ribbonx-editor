@@ -1,21 +1,30 @@
 parameters:
-  displayName: '.NET Framework Executable'
-  path: ''
+  artifactName: '.NET Framework Executable'
 
 steps:
+- task: DownloadPipelineArtifact@2
+  inputs:
+    source: 'current'
+    artifact: '${{ parameters.artifactName }}'
+    path: '$(Pipeline.Workspace)' 
+
 - task: PowerShell@2
-  displayName: 'Sign ${{ parameters.displayName }}'
+  artifactName: 'Sign ${{ parameters.artifactName }}'
   inputs:
     targetType: inline
     ignoreLASTEXITCODE: true
     script: |
       . ./build/sign/sign-linux.ps1
-      $result = Update-AllFiles "${{ parameters.path }}" -Pin "$(CODESIGN_PIN)"
+      $result = Update-AllFiles "$(Pipeline.Workspace)/${{ parameters.artifactName }}" -Pin "$(CODESIGN_PIN)"
       Write-Host "##vso[task.setvariable variable=CodeSignSuccess;]$result"
+      if (!$result) {
+        Write-Host "##vso[task.setvariable variable=agent.jobstatus;]canceled"
+        Write-Host "##vso[task.complete result=Canceled;]DONE"
+      }
 
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish ${{ parameters.displayName }} (signed)'
+  artifactName: 'Publish ${{ parameters.artifactName }} (signed)'
   condition: eq(variables['CodeSignSuccess'], true)
   inputs:
-    targetPath: '${{ parameters.path }}' 
-    artifactName: '${{ parameters.displayName }}'
+    targetPath: '$(Pipeline.Workspace)/${{ parameters.artifactName }}' 
+    artifactName: '${{ parameters.artifactName }}'
