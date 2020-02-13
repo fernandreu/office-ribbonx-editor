@@ -252,18 +252,18 @@ stages:
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Executable/OfficeRibbonXEditor.exe'
               includeRootFolder: false
-              archiveFile: '$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETFramework.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
           - powershell: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.msi"
-              -Destination "$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETFramework.msi"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.msi"
             displayName: 'Copy .NET Framework Installer'
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Core Binaries'
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Core Binaries/OfficeRibbonXEditor'
               includeRootFolder: false
-              archiveFile: '$(Agent.ReleaseDirectory)/OfficeRibbonXEditor-NETCore.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETCore.zip'
           - task: GitHubRelease@1
             displayName: 'Create GitHub Release'
             inputs:
@@ -299,7 +299,7 @@ stages:
                 as it is a reputation system based on the number of downloads. Similarly, when
                 attempting to download the assets, some browsers might show warning messages
                 indicating these are not commonly downloaded, but it is completely safe to do so.**
-              assets: '$(Agent.ReleaseDirectory)/*.*'
+              assets: '$(Build.ArtifactStagingDirectory)/*.*'
               isDraft: true
               changeLogType: issueBased
               changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'
@@ -330,11 +330,13 @@ stages:
                   exit 1
               }
               
+              exit # TODO: Remove once it is confirmed that the stage works
+
               New-Item -Path "tmp" -ItemType "directory"
               cd tmp
               git clone --single-branch --branch info https://github.com/fernandreu/office-ribbonx-editor.git -q
               cd office-ribbonx-editor
-              
+
               Write-Host "Version passed is: $version"
               $version | Out-File -Encoding UTF8 -FilePath .\RELEASE-VERSION
               git config --global user.email "$email"
