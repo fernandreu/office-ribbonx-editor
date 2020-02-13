@@ -25,192 +25,320 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 
-jobs:
-- job: NetFramework
-  displayName: .NET Framework
-  variables:
-    targetFramework: net461
+stages:
+- stage: Build
+  jobs:
+  - job: NetFramework
+    displayName: .NET Framework
+    variables:
+      targetFramework: net461
 
-  steps:
+    steps:
 
-  - task: Cache@2
-    displayName: 'Cache NuGet packages'
-    inputs:
-      key: 'nuget | "$(Agent.OS)" | ".NET Framework" | src/OfficeRibbonXEditor/packages.lock.json'
-      path: '$(NUGET_PACKAGES)'
-      restoreKeys: |
-        nuget | "$(Agent.OS)" | ".NET Framework"
-        nuget | "$(Agent.OS)"
-        nuget
+    - task: Cache@2
+      displayName: 'Cache NuGet packages'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | ".NET Framework" | src/OfficeRibbonXEditor/packages.lock.json'
+        path: '$(NUGET_PACKAGES)'
+        restoreKeys: |
+          nuget | "$(Agent.OS)" | ".NET Framework"
+          nuget | "$(Agent.OS)"
+          nuget
 
-  - task: InstallSSHKey@0
-    displayName: 'Install SSH key for code signing'
-    inputs:
-      knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
-      sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
-      sshKeySecureFile: 'id_rsa'
+    - task: PowerShell@2
+      displayName: 'Run pre-build script'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'build/PreBuild.ps1'
+        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
 
-  - task: PowerShell@2
-    displayName: 'Run pre-build script'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build/PreBuild.ps1'
-      arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+    - task: NuGetToolInstaller@0
+      displayName: 'Install NuGet'
 
-  - task: NuGetToolInstaller@0
-    displayName: 'Install NuGet'
+    - task: NuGetCommand@2
+      displayName: 'NuGet restore'
+      inputs:
+        restoreSolution: '$(solution)'
 
-  - task: NuGetCommand@2
-    displayName: 'NuGet restore'
-    inputs:
-      restoreSolution: '$(solution)'
+    - task: VSBuild@1
+      displayName: 'Build solution'
+      inputs:
+        solution: '$(solution)'
+        platform: '$(buildPlatform)'
+        msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
+        configuration: '$(buildConfiguration)'
 
-  - task: VSBuild@1
-    displayName: 'Build solution'
-    inputs:
-      solution: '$(solution)'
-      platform: '$(buildPlatform)'
-      msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
-      configuration: '$(buildConfiguration)'
+    - task: VSTest@2
+      displayName: 'Run Tests'
+      condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
+      inputs:
+        platform: '$(buildPlatform)'
+        configuration: '$(buildConfiguration)'
 
-  - task: VSTest@2
-    displayName: 'Run Tests'
-    condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
-    inputs:
-      platform: '$(buildPlatform)'
-      configuration: '$(buildConfiguration)'
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Executable'
+        fileName: 'OfficeRibbonXEditor.exe'
+        project: 'OfficeRibbonXEditor'
 
-  - template: build/templates/copy-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Executable'
-      fileName: 'OfficeRibbonXEditor.exe'
-      project: 'OfficeRibbonXEditor'
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Installer'
+        fileName: 'OfficeRibbonXEditor.msi'
+        project: 'Installer'
 
-  - template: build/templates/sign-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Executable'
+  - job: NetCore
+    displayName: .NET Core
+    variables:
+      targetFramework: netcoreapp3.1
 
-  - template: build/templates/copy-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Installer'
-      fileName: 'OfficeRibbonXEditor.msi'
-      project: 'Installer'
+    steps:
 
-  - template: build/templates/sign-and-publish.yml
-    parameters:
-      displayName: '.NET Framework Installer'
+    - task: Cache@2
+      displayName: 'Cache NuGet packages'
+      inputs:
+        key: 'nuget | "$(Agent.OS)" | ".NET Core" | src/OfficeRibbonXEditor/packages.lock.json'
+        restoreKeys: |
+          nuget | "$(Agent.OS)" | ".NET Core"
+          nuget | "$(Agent.OS)"
+          nuget
+        path: $(NUGET_PACKAGES)
+      
+    - task: PowerShell@2
+      displayName: 'Run pre-build script'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'build/PreBuild.ps1'
+        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
 
-- job: NetCore
-  displayName: .NET Core
-  variables:
-    targetFramework: netcoreapp3.1
+    - task: UseDotNet@2
+      displayName: 'Use .NET Core sdk'
+      inputs:
+        packageType: sdk
+        version: 3.1.100
 
-  steps:
+    - task: SonarCloudPrepare@1
+      displayName: 'Prepare SonarCloud analysis'
+      inputs:
+        SonarCloud: 'fernandreu-SonarCloud'
+        organization: '$(SonarOrganization)'
+        scannerMode: 'MSBuild'
+        projectKey: '$(SonarProjectKey)'
+        projectName: '$(SonarProjectName)'
+        projectVersion: '$(Build.BuildNumber)'
+        extraProperties: |
+          sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+          sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
 
-  - task: Cache@2
-    displayName: 'Cache NuGet packages'
-    inputs:
-      key: 'nuget | "$(Agent.OS)" | ".NET Core" | src/OfficeRibbonXEditor/packages.lock.json'
-      restoreKeys: |
-        nuget | "$(Agent.OS)" | ".NET Core"
-        nuget | "$(Agent.OS)"
-        nuget
-      path: $(NUGET_PACKAGES)
-    
-  - task: InstallSSHKey@0
-    displayName: 'Install SSH key for code signing'
-    inputs:
-      knownHostsEntry: '$(CODESIGN_KNOWN_HOSTS)'
-      sshPublicKey: '$(CODESIGN_PUBLIC_KEY)'
-      sshKeySecureFile: 'id_rsa'
+    - task: DotNetCoreCLI@2
+      displayName: 'Build solution'
+      inputs:
+        command: build
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
-  - task: PowerShell@2
-    displayName: 'Run pre-build script'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build/PreBuild.ps1'
-      arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+    # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
+    # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
+    - task: PowerShell@2
+      displayName: 'Copy PresentationFramework.dll to test folders'
+      inputs:
+        targetType: 'filePath'
+        filePath: 'build/CopyLibraries.ps1'
+        arguments: '"$(buildConfiguration)" "$(targetFramework)"'
 
-  - task: UseDotNet@2
-    displayName: 'Use .NET Core sdk'
-    inputs:
-      packageType: sdk
-      version: 3.1.100
+    - task: DotNetCoreCLI@2
+      displayName: 'Run Tests'
+      inputs:
+        command: test
+        projects: '**/*Tests.csproj'
+        arguments: >-
+          --no-build
+          --configuration $(buildConfiguration)
+          /p:TargetFramework=$(targetFramework)
+          /p:_InstallerTargetFramework=$(targetFramework)
+          /p:CollectCoverage=true
+          /p:Exclude=[Scintilla*]*
+          /p:IncludeTestAssembly=true
+          /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
+          /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
+          /p:mergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).json
 
-  - task: SonarCloudPrepare@1
-    displayName: 'Prepare SonarCloud analysis'
-    inputs:
-      SonarCloud: 'fernandreu-SonarCloud'
-      organization: '$(SonarOrganization)'
-      scannerMode: 'MSBuild'
-      projectKey: '$(SonarProjectKey)'
-      projectName: '$(SonarProjectName)'
-      projectVersion: '$(Build.BuildNumber)'
-      extraProperties: |
-        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).opencover.xml
+    - task: PublishCodeCoverageResults@1
+      displayName: 'Publish code coverage report'
+      inputs:
+        codeCoverageTool: 'cobertura'
+        summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.$(targetFramework).cobertura.xml'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Build solution'
-    inputs:
-      command: build
-      projects: '**/*.csproj'
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
+    - task: SonarCloudAnalyze@1
+      displayName: 'Run SonarCloud code analysis'
 
-  # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
-  # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
-  - task: PowerShell@2
-    displayName: 'Copy PresentationFramework.dll to test folders'
-    inputs:
-      targetType: 'filePath'
-      filePath: 'build/CopyLibraries.ps1'
-      arguments: '"$(buildConfiguration)" "$(targetFramework)"'
+    - task: SonarCloudPublish@1
+      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+      displayName: 'Publish SonarCloud quality gate results'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Run Tests'
-    inputs:
-      command: test
-      projects: '**/*Tests.csproj'
-      arguments: >-
-        --no-build
-        --configuration $(buildConfiguration)
-        /p:TargetFramework=$(targetFramework)
-        /p:_InstallerTargetFramework=$(targetFramework)
-        /p:CollectCoverage=true
-        /p:Exclude=[Scintilla*]*
-        /p:IncludeTestAssembly=true
-        /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
-        /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
-        /p:mergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.$(targetFramework).json
+    - task: DotNetCoreCLI@2
+      displayName: 'Prepare app package (dotnet publish)'
+      inputs:
+        command: publish
+        projects: '**/OfficeRibbonXEditor.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
 
-  - task: PublishCodeCoverageResults@1
-    displayName: 'Publish code coverage report'
-    inputs:
-      codeCoverageTool: 'cobertura'
-      summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.$(targetFramework).cobertura.xml'
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish binaries (unsigned)'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: '.NET Core Binaries (Unsigned)'
 
-  - task: SonarCloudAnalyze@1
-    displayName: 'Run SonarCloud code analysis'
+- stage: Sign
+  dependsOn: Build
+  pool:
+    name: default
+    demands: CodeSign
+  jobs:
 
-  - task: SonarCloudPublish@1
-    displayName: 'Publish SonarCloud quality gate results'
+  - job: NetFrameworkExecutable
+    displayName: Sign .NET Framework Executable
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        artifactName: '.NET Framework Executable'
 
-  - task: DotNetCoreCLI@2
-    displayName: 'Prepare app package (dotnet publish)'
-    inputs:
-      command: publish
-      projects: '**/OfficeRibbonXEditor.csproj'
-      publishWebProjects: false
-      zipAfterPublish: false
-      arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
+  - job: NetFrameworkInstaller
+    displayName: Sign .NET Framework Installer
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        artifactName: '.NET Framework Installer'
 
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish binaries (unsigned)'
-    inputs:
-      pathtoPublish: '$(Build.ArtifactStagingDirectory)' 
-      artifactName: '.NET Core Binaries (Unsigned)'
-      publishLocation: 'Container' # Options: container, filePath
+  - job: NetCoreBinaries
+    displayName: Sign .NET Core Binaries
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        artifactName: '.NET Core Binaries'
 
-  - template: build/templates/sign-and-publish.yml
-    parameters:
-      displayName: '.NET Core Binaries'
+- stage: Release
+  dependsOn: Sign
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
+  jobs:
+  - deployment: Deploy
+    environment: staging
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - powershell: |
+              $version = "$(Build.SourceBranch)"
+              if ($version.StartsWith("refs/tags/v")) {
+                  $parts = $version.Substring(10).Split(".")
+                  while ($parts.Count -lt 3) {
+                      $parts += "0"
+                  }
+                  $version = $parts -join "."
+                  Write-Host "Resulting three-digit version: $version"
+              } else {
+                  $message = "No version detected; release pipeline can only be launched from a vX.X.X tag build"
+                  Write-Host "##vso[task.LogIssue type=error;] $message"
+                  exit 1
+              }
+              Write-Host "##vso[task.setvariable variable=ThreeDigitVersion;]$version"
+              # There is no need to check if the version coincides with the assembly version because 
+              # that is already checked in the build pipeline
+            displayName: 'Check Git Tag'
+          - task: ArchiveFiles@2
+            displayName: 'Archive .NET Framework Executable'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Executable/OfficeRibbonXEditor.exe'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
+          - powershell: >-
+              Copy-Item
+              -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.msi"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.msi"
+            displayName: 'Copy .NET Framework Installer'
+          - task: ArchiveFiles@2
+            displayName: 'Archive .NET Core Binaries'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Core Binaries/OfficeRibbonXEditor'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETCore.zip'
+          - task: GitHubRelease@1
+            displayName: 'Create GitHub Release'
+            inputs:
+              gitHubConnection: 'fernandreu-pat'
+              repositoryName: 'fernandreu/office-ribbonx-editor'
+              tagSource: userSpecifiedTag
+              tag: '$(Build.SourceBranchName)'
+              title: 'Office RibbonX Editor $(ThreeDigitVersion).$(Build.BuildId)'
+              releaseNotesSource: inline
+              releaseNotesInline: |
+                Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
+                
+                ## What's New
+                
+                For a full list of closed issues since last release, see below. 
+                
+                ## How to install / use
+                
+                Download one of the items from the `Assets` section below.
+                
+                Compressed `.zip` files do not require installation (i.e. will not create any
+                entry in the control panel's program list). When feasible, these will contain
+                a single `.exe` file.
+                
+                The .NET Framework builds require at least version 4.6.1 of the .NET Framework
+                Runtime. The .NET Core builds are still experimental and require at least
+                version 3.0 of the .NET Core Runtime (the one for desktop apps is enough). If
+                you need any of these runtimes, check [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
+                
+                **Note: As of version 1.6, both the installer and executable are cryptographically
+                signed. In the long therm, this should prevent security warnings in Windows due
+                to untrusted software being executed (see #74). This will not take effect immediately,
+                as it is a reputation system based on the number of downloads. Similarly, when
+                attempting to download the assets, some browsers might show warning messages
+                indicating these are not commonly downloaded, but it is completely safe to do so.**
+              assets: '$(Build.ArtifactStagingDirectory)/*.*'
+              isDraft: true
+              changeLogType: issueBased
+              changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'
+          - powershell: |
+              # TODO: This entire script is deprecated, as latest release version is now read directly 
+              # from the GitHub API. This is only kept for legacy purposes (i.e. until enough time 
+              # passes for users to update to a more recent tool). Once this is removed, the corresponding
+              # GitHub variables will no longer be needed.
+              
+              $version = "$(ThreeDigitVersion).$(Build.BuildId)"
+              $version = $version.Substring(1)
+              $pat = "$(GitHubPAT)"
+              $name = "$(GitHubName)"
+              $email = "$(GitHubEmail)"
+              
+              # Check if all necessary variables were passed correctly
+              if ($version.Length -eq 0) {
+                  Write-Host "##vso[task.LogIssue type=error;]The version is missing"
+                  exit 1
+              } elseif ($pat.Length -eq 0) {
+                  Write-Host "##vso[task.LogIssue type=error;]The GitHub PAT is missing"
+                  exit 1
+              } elseif ($name.Length -eq 0) {
+                  Write-Host "##vso[task.LogIssue type=error;]The GitHub name is missing"
+                  exit 1
+              } elseif ($email.Length -eq 0) {
+                  Write-Host "##vso[task.LogIssue type=error;]The GitHub email is missing"
+                  exit 1
+              }
+              
+              New-Item -Path "tmp" -ItemType "directory"
+              cd tmp
+              git clone --single-branch --branch info https://github.com/fernandreu/office-ribbonx-editor.git -q
+              cd office-ribbonx-editor
+
+              Write-Host "Version passed is: $version"
+              $version | Out-File -Encoding UTF8 -FilePath .\RELEASE-VERSION
+              git config --global user.email "$email"
+              git config --global user.name "$name"
+              git commit -a -m "Update release version to $version" -q
+              git push https://$($pat)@github.com/fernandreu/office-ribbonx-editor.git info -q
+            displayName: 'Update Info Branch'
