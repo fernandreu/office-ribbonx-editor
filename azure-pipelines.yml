@@ -221,6 +221,7 @@ stages:
 
 - stage: Release
   dependsOn: Sign
+  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
   jobs:
   - deployment: Deploy
     environment: staging
@@ -230,7 +231,6 @@ stages:
           steps:
           - powershell: |
               $version = "$(Build.SourceBranch)"
-              $version = "refs/tags/v0.1"  # TODO: Temporary test
               if ($version.StartsWith("refs/tags/v")) {
                   $parts = $version.Substring(10).Split(".")
                   while ($parts.Count -lt 3) {
@@ -330,8 +330,6 @@ stages:
                   exit 1
               }
               
-              exit # TODO: Remove once it is confirmed that the stage works
-
               New-Item -Path "tmp" -ItemType "directory"
               cd tmp
               git clone --single-branch --branch info https://github.com/fernandreu/office-ribbonx-editor.git -q
