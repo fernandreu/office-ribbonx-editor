@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.UIA3;
@@ -35,8 +36,18 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             this.App = Application.Launch(psi);
             this.Automation = new UIA3Automation();
             this.App.WaitWhileMainHandleIsMissing(TimeSpan.FromSeconds(10));
-            this.Window = App.GetAllTopLevelWindows(this.Automation).FirstOrDefault();
-            Assume.That(this.Window, Is.Not.Null, "Cannot find main window");
+            for (var i = 0; i < 100; ++i)
+            {
+                this.Window = this.App.GetAllTopLevelWindows(this.Automation).FirstOrDefault();
+                if (this.Window != null)
+                {
+                    return;
+                }
+
+                Thread.Sleep(100);
+            }
+
+            Assert.Ignore("Cannot find main window");
         }
 
         /// <summary>
