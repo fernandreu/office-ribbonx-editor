@@ -430,7 +430,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
             // The assert is implicit; the above code should not throw in .NET Core anymore [#88]
         }
-        
+
         /// <summary>
         /// Opens the document given by sourceFile
         /// </summary>

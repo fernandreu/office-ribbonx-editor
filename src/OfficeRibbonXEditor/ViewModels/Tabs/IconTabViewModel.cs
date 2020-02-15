@@ -16,7 +16,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         {
             this.Icon = icon;
             this.MainWindow = mainWindow;
-            this.ResetGridCommand = new RelayCommand(ExecuteResetGrid);
+            this.ResetGridCommand = new RelayCommand(ResetGridSettings);
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
@@ -85,6 +85,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public void ApplyChanges()
         {
+            // No changes need to be applied in an icon tab
         }
         
         private void OnIconPropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -97,7 +98,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             this.MainWindow.AdjustTabTitles();
         }
 
-        private static void ExecuteResetGrid()
+        public static void ResetGridSettings()
         {
             Settings.Default.IconGridMargin = 0;
             Settings.Default.IconGridMainColor = Color.White;
