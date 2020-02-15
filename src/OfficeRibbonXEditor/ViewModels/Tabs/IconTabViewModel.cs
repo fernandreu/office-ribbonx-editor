@@ -1,6 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Drawing;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Windows;
 
@@ -13,8 +16,11 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         {
             this.Icon = icon;
             this.MainWindow = mainWindow;
+            this.ResetGridCommand = new RelayCommand(ExecuteResetGrid);
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+
+        public RelayCommand ResetGridCommand { get; }
 
         private string title = string.Empty;
 
@@ -89,6 +95,16 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             }
 
             this.MainWindow.AdjustTabTitles();
+        }
+
+        private static void ExecuteResetGrid()
+        {
+            Settings.Default.IconGridMargin = 0;
+            Settings.Default.IconGridMainColor = Color.White;
+            Settings.Default.IconGridSecondaryColor = Color.Gray;
+            Settings.Default.IconGridTwoColors = true;
+            Settings.Default.IconGridSize = 16;
+            Settings.Default.Save();
         }
     }
 }
