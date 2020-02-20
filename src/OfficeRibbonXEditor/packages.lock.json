@@ -127,6 +127,11 @@
         "resolved": "4.0.1",
         "contentHash": "IUQy4ecekf2zHNqgoBb5FELg5OEYTGd7exA/dhmyQfjLsXVEnRYANvyVco8QnwAWP5FtEWAhNr7L7CSCDb8hqQ=="
       },
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
+      },
       "Microsoft.CodeAnalysis.VersionCheckAnalyzer": {
         "type": "Transitive",
         "resolved": "2.9.8",
@@ -579,17 +584,19 @@
           "System.Drawing.Common": "4.7.0"
         }
       },
-      "scintillanet": {
-        "type": "Project"
-      },
       "scintillanet.wpf": {
         "type": "Project",
         "dependencies": {
-          "ScintillaNET": "1.0.0"
+          "fernandreu.ScintillaNET": "4.0.3"
         }
       }
     },
     ".NETCoreApp,Version=v3.1/win7-x86": {
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
+      },
       "Microsoft.Win32.Registry": {
         "type": "Transitive",
         "resolved": "4.7.0",
@@ -990,6 +997,11 @@
           "System.Threading.Tasks.Extensions": "4.5.3"
         }
       },
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
+      },
       "Fody": {
         "type": "Transitive",
         "resolved": "6.0.0",
@@ -1294,17 +1306,19 @@
           "System.Runtime.CompilerServices.Unsafe": "4.5.2"
         }
       },
-      "scintillanet": {
-        "type": "Project"
-      },
       "scintillanet.wpf": {
         "type": "Project",
         "dependencies": {
-          "ScintillaNET": "1.0.0"
+          "fernandreu.ScintillaNET": "4.0.3"
         }
       }
     },
     ".NETFramework,Version=v4.6.1/win7-x86": {
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
+      },
       "Microsoft.Win32.Registry": {
         "type": "Transitive",
         "resolved": "4.7.0",

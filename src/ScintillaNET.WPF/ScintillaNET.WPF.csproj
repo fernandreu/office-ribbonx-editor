@@ -37,7 +37,7 @@
     <DocumentationFile>bin\Release\$(TargetFramework)\ScintillaNET.WPF.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ScintillaNET\ScintillaNET.csproj" />
+    <PackageReference Include="fernandreu.ScintillaNET" Version="4.0.3" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

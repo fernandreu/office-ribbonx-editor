@@ -9,7 +9,7 @@
     <AssemblyName>OfficeRibbonXEditor</AssemblyName>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <PreserveCompilationContext>false</PreserveCompilationContext>
     <!--<PublishSingleFile>true</PublishSingleFile>    
     <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
