@@ -224,7 +224,7 @@ stages:
   condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
   jobs:
   - deployment: Deploy
-    environment: staging
+    environment: Release
     strategy:
       runOnce:
         deploy:
