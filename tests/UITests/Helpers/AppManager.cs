@@ -36,18 +36,8 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             this.App = Application.Launch(psi);
             this.Automation = new UIA3Automation();
             this.App.WaitWhileMainHandleIsMissing(TimeSpan.FromSeconds(10));
-            for (var i = 0; i < 100; ++i)
-            {
-                this.Window = this.App.GetAllTopLevelWindows(this.Automation).FirstOrDefault();
-                if (this.Window != null)
-                {
-                    return;
-                }
-
-                Thread.Sleep(100);
-            }
-
-            Assert.Ignore("Cannot find main window");
+            this.Window = this.App.GetMainWindow(this.Automation, TimeSpan.FromSeconds(10));
+            Assume.That(this.Window, Is.Not.Null, "Cannot find main window");
         }
 
         /// <summary>
