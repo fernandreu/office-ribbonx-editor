@@ -13,16 +13,16 @@ if ($version.StartsWith("refs/tags/v")) {
     $version = ""
 }
 Write-Host "##vso[task.setvariable variable=ThreeDigitVersion;]$version"
-Get-ChildItem "build/SharedAssemblyInfo.cs" |
+Get-ChildItem "src/OfficeRibbonXEditor/OfficeRibbonXEditor.csproj" |
 ForEach-Object {
     $c = ($_ | Get-Content -encoding UTF8)
-    if ($version -and -not ($c -match [Regex]::Escape("AssemblyVersion(`"$($version.Substring(1)).0`")"))) {
-        $message = "Tag version $version does not coincide with assembly version"
+    if ($version -and -not ($c -match [Regex]::Escape("<VersionPrefix>$($version.Substring(1)).0</VersionPrefix>"))) {
+        $message = "Tag version $version does not coincide with project version"
         Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
         exit 1
     }
-    $c = $c -replace '(AssemblyVersion\(\"\d+.\d+.\d+)\.(\d)(\"\))', "`$1.$buildId`$3"
+    $c = $c -replace '(<VersionPrefix>\d+.\d+.\d+)\.(\d)(</VersionPrefix>)', "`$1.$buildId`$3"
     $joined = $c -join "`r`n"
-    Write-Host "Resulting assembly:`n$joined"
+    Write-Host "Resulting project:`n$joined"
     [IO.File]::WriteAllText($_.FullName, $joined)
 }
