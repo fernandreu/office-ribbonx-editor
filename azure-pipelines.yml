@@ -5,7 +5,7 @@ trigger:
     - master
     - 'feature/*'
   tags:
-    include:
+    exclude:
     - 'v*'
   paths:
     exclude:
@@ -50,7 +50,7 @@ stages:
       inputs:
         targetType: 'filePath'
         filePath: 'build/PreBuild.ps1'
-        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+        arguments: '"$(Build.BuildId)"'
 
     - task: NuGetToolInstaller@0
       displayName: 'Install NuGet'
@@ -109,7 +109,7 @@ stages:
       inputs:
         targetType: 'filePath'
         filePath: 'build/PreBuild.ps1'
-        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+        arguments: '"$(Build.BuildId)"'
 
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
