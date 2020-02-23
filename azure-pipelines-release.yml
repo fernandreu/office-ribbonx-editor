@@ -52,8 +52,8 @@ jobs:
           inputs:
             gitHubConnection: 'fernandreu-pat'
             repositoryName: 'fernandreu/office-ribbonx-editor'
-            tagSource: userSpecifiedTag
-            tag: '$(Build.SourceBranchName)'
+            tagSource: manual
+            tag: 'v$(ThreeDigitVersion)'
             title: 'Office RibbonX Editor $(ThreeDigitVersion) (Build $(Build.BuildId))'
             releaseNotesSource: inline
             releaseNotesInline: |
