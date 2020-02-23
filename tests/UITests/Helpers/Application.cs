@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Definitions;
@@ -307,9 +308,9 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             var mainWindow = automation.FromHandle(mainWindowHandle).AsWindow();
             if (mainWindow != null)
             {
-                // This is an internal property. Only side-effect is that Window.GetMainWindow() will need to
-                // get evaluated even when being called from a main window
-                ////mainWindow.IsMainWindow = true;
+                // This is an internal property, assigned directly in the original class
+                var prop = mainWindow.GetType().GetProperty("IsMainWindow", BindingFlags.Instance | BindingFlags.NonPublic);
+                prop.SetValue(mainWindow, true);
             }
             return mainWindow;
         }
