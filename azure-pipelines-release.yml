@@ -5,8 +5,6 @@ pool:
 
 variables:
 - group: GitHubPATGroup
-- name: solution
-  value: '**/*.sln'
 
 jobs:
 - deployment: Deploy
@@ -30,7 +28,7 @@ jobs:
           displayName: 'Check Version'
           inputs:
             targetType: 'filePath'
-            filePath: 'build/PreRelease.ps1'
+            filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
             arguments: '"$(Pipeline.Workspace)"'
 
         - task: ArchiveFiles@2
