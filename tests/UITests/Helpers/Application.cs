@@ -27,6 +27,8 @@ namespace OfficeRibbonXEditor.UITests.Helpers
     /// </summary>
     public class Application : IDisposable
     {
+        private static readonly PropertyInfo isMainWindowProperty = typeof(Window).GetProperty("IsMainWindow", BindingFlags.Instance | BindingFlags.NonPublic);
+
         /// <summary>
         /// The process of this application.
         /// </summary>
@@ -309,8 +311,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             if (mainWindow != null)
             {
                 // This is an internal property, assigned directly in the original class
-                var prop = mainWindow.GetType().GetProperty("IsMainWindow", BindingFlags.Instance | BindingFlags.NonPublic);
-                prop.SetValue(mainWindow, true);
+                isMainWindowProperty.SetValue(mainWindow, true);
             }
             return mainWindow;
         }
