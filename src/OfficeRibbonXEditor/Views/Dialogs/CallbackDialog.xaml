@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:sn="http://scintillanet.codeplex.com"
+        xmlns:sn="https://github.com/fernandreu/ScintillaNET.WPF"
         xmlns:extensions="clr-namespace:OfficeRibbonXEditor.Extensions"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
         Title="Callbacks Viewer"

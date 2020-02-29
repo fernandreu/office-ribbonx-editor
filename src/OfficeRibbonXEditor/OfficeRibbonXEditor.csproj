@@ -42,6 +42,7 @@
     <PackageReference Include="Costura.Fody" Version="4.1.0" />
     <PackageReference Include="Dragablz" Version="0.0.3.203" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="3.7.0" />
+    <PackageReference Include="fernandreu.ScintillaNET.WPF" Version="3.0.0" />
     <PackageReference Include="log4net" Version="1.2.10" />
     <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
       <PrivateAssets>all</PrivateAssets>
@@ -62,10 +63,6 @@
 
   <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\ScintillaNET.WPF\ScintillaNET.WPF.csproj" />
   </ItemGroup>
 
   <ItemGroup>
