@@ -41,6 +41,15 @@
         "resolved": "3.7.0",
         "contentHash": "DeDuJY5qrXS6Z1RQ65HvgaWmDbSe7MSFuOaN9nBp+/ze8J6OEoNsUKxrQaAvkzeX6CiV1r6GOsovUyjDSSVoKg=="
       },
+      "fernandreu.ScintillaNET.WPF": {
+        "type": "Direct",
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "jttDE3FJgYwgIKAzUCYsM+Or1iC1LSJKnpHYw/woyb4sKkf22RODyvH7Ghka6sfue3sduaLx/ATJuNwBFD7+Jw==",
+        "dependencies": {
+          "fernandreu.ScintillaNET": "4.0.3"
+        }
+      },
       "log4net": {
         "type": "Direct",
         "requested": "[1.2.10, )",
@@ -126,6 +135,11 @@
         "type": "Transitive",
         "resolved": "4.0.1",
         "contentHash": "IUQy4ecekf2zHNqgoBb5FELg5OEYTGd7exA/dhmyQfjLsXVEnRYANvyVco8QnwAWP5FtEWAhNr7L7CSCDb8hqQ=="
+      },
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
       },
       "Microsoft.CodeAnalysis.VersionCheckAnalyzer": {
         "type": "Transitive",
@@ -581,6 +595,11 @@
       }
     },
     ".NETCoreApp,Version=v3.1/win7-x86": {
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
+      },
       "Microsoft.Win32.Registry": {
         "type": "Transitive",
         "resolved": "4.7.0",
@@ -891,6 +910,15 @@
         "resolved": "3.7.0",
         "contentHash": "DeDuJY5qrXS6Z1RQ65HvgaWmDbSe7MSFuOaN9nBp+/ze8J6OEoNsUKxrQaAvkzeX6CiV1r6GOsovUyjDSSVoKg=="
       },
+      "fernandreu.ScintillaNET.WPF": {
+        "type": "Direct",
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "jttDE3FJgYwgIKAzUCYsM+Or1iC1LSJKnpHYw/woyb4sKkf22RODyvH7Ghka6sfue3sduaLx/ATJuNwBFD7+Jw==",
+        "dependencies": {
+          "fernandreu.ScintillaNET": "4.0.3"
+        }
+      },
       "log4net": {
         "type": "Direct",
         "requested": "[1.2.10, )",
@@ -980,6 +1008,11 @@
         "dependencies": {
           "System.Threading.Tasks.Extensions": "4.5.3"
         }
+      },
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
       },
       "Fody": {
         "type": "Transitive",
@@ -1287,6 +1320,11 @@
       }
     },
     ".NETFramework,Version=v4.6.1/win7-x86": {
+      "fernandreu.ScintillaNET": {
+        "type": "Transitive",
+        "resolved": "4.0.3",
+        "contentHash": "EO4jOWH4ExEyqaKnR5LXbDQVv9rEeOHk9vOo9Wq7ixnzXYXUrlzk5lRnt/VxUdsUslSpp1iqPdRmCLzBHQ0JsA=="
+      },
       "Microsoft.Win32.Registry": {
         "type": "Transitive",
         "resolved": "4.7.0",
