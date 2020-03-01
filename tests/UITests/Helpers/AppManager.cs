@@ -40,6 +40,16 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             Assume.That(this.Window, Is.Not.Null, "Cannot find main window");
         }
 
+        public Window[] GetTopLevelWindows()
+        {
+            if (this.App == null || this.Automation == null)
+            {
+                return Array.Empty<Window>();
+            }
+
+            return this.App.GetAllTopLevelWindows(this.Automation);
+        }
+
         /// <summary>
         /// Attempts to close the application gracefully by closing any unsaved changes prompt that appears when closing the
         /// main window. Otherwise, killing the application process will result in no code coverage.

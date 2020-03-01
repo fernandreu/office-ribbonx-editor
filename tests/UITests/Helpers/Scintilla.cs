@@ -1,5 +1,7 @@
-﻿using FlaUI.Core;
+﻿using System.Linq;
+using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Definitions;
 
 namespace OfficeRibbonXEditor.UITests.Helpers
 {
@@ -14,5 +16,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             get => this.Patterns.Value.Pattern.Value.Value;
             set => this.Patterns.Value.Pattern.SetValue(value);
         }
+
+        public SelectedTextRange Selection => new SelectedTextRange(this.Patterns.Text.Pattern, this.Patterns.Value.Pattern, this.Patterns.Text.Pattern.GetSelection().First());
     }
 }

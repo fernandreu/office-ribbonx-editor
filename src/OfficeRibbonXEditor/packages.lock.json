@@ -43,9 +43,9 @@
       },
       "fernandreu.ScintillaNET.WPF": {
         "type": "Direct",
-        "requested": "[3.0.1, )",
-        "resolved": "3.0.1",
-        "contentHash": "1jAlP22gk7PEXfhlfRP7KpKipwEBpIlkVjzRnnlinI4BzH5lsFyMxm1ztpAEcazYQOfzNOg2sqRsc0znLT03qg==",
+        "requested": "[3.0.2-alpha4, )",
+        "resolved": "3.0.2-alpha4",
+        "contentHash": "nYR8JlYvgXOKtpr41SFs3ovle38wqofui7gBuqfTHifov4YF6vV7+jkoqSc/WmyeCrGMKyL1CIfbhmkGX7cSrA==",
         "dependencies": {
           "fernandreu.ScintillaNET": "4.0.4"
         }
@@ -912,9 +912,9 @@
       },
       "fernandreu.ScintillaNET.WPF": {
         "type": "Direct",
-        "requested": "[3.0.1, )",
-        "resolved": "3.0.1",
-        "contentHash": "1jAlP22gk7PEXfhlfRP7KpKipwEBpIlkVjzRnnlinI4BzH5lsFyMxm1ztpAEcazYQOfzNOg2sqRsc0znLT03qg==",
+        "requested": "[3.0.2-alpha4, )",
+        "resolved": "3.0.2-alpha4",
+        "contentHash": "nYR8JlYvgXOKtpr41SFs3ovle38wqofui7gBuqfTHifov4YF6vV7+jkoqSc/WmyeCrGMKyL1CIfbhmkGX7cSrA==",
         "dependencies": {
           "fernandreu.ScintillaNET": "4.0.4"
         }
