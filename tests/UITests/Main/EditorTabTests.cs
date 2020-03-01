@@ -193,6 +193,24 @@ namespace OfficeRibbonXEditor.UITests.Main
             Assert.AreEqual(expected, this.editor.Selection.Line + 1);
         }
 
+        [Test]
+        [TestCase(2)]
+        public void TestToggleComments(int line)
+        {
+            // Arrange
+            var textParts = new[] { "This", "text", "has", "five", "lines" };
+            this.editor.Text = string.Join(Environment.NewLine, textParts);
+            this.editor.Selection.Line = line - 1;
+
+            // Act / Assert
+
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.DIVIDE); // Toggle comment
+            Assert.That(this.editor.Selection.Text, Does.Match($"<\\!--{textParts[line - 1]}-->.*"));
+
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.DIVIDE); // Toggle comment
+            Assert.That(this.editor.Selection.Text, Does.Match($"{textParts[line - 1]}.*"));
+        }
+
         private static void WaitForClipboard()
         {
             for (var i = 0; !Clipboard.ContainsText(); ++i)
