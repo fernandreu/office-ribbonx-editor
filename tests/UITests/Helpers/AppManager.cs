@@ -69,12 +69,19 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 
             this.Window?.Close();
 
-            // TODO: Loop might not be needed if WaitWhileBusy() is really working
-            for (var attempts = 0; attempts < 10 && !this.App.HasExited; ++attempts)
+            try
             {
-                this.App.WaitWhileBusy();
-                var dialog = this.Window?.ModalWindows.FirstOrDefault();
-                dialog?.FindFirstChild(x => x.ByName("No")).Click();
+                // TODO: Loop might not be needed if WaitWhileBusy() is really working
+                for (var attempts = 0; attempts < 10 && !this.App.HasExited; ++attempts)
+                {
+                    this.App.WaitWhileBusy();
+                    var dialog = this.Window?.ModalWindows.FirstOrDefault();
+                    dialog?.FindFirstChild(x => x.ByName("No")).Click();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // The app has probably exited already
             }
 
             this.Automation?.Dispose();
