@@ -153,7 +153,6 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
             // Assert
             Assert.IsEmpty(doc.Children, "Part was not removed");
-
         }
 
         [Test]
@@ -355,6 +354,23 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             this.viewModel.LaunchingDialog += Handler;
             this.viewModel.GenerateCallbacksCommand.Execute();
             this.viewModel.LaunchingDialog -= Handler;  // Just in case we add other checks later
+        }
+
+        [Test]
+        public void TabTitlesAreAdjusted()
+        {
+            // Arrange
+            var (_, part) = this.OpenAndInsertPart();
+            this.viewModel.OpenTabCommand.Execute(part);
+            var tab = this.viewModel.SelectedTab;
+            Assume.That(tab, Is.Not.Null, "Tab is null");
+            var original = tab!.Title;
+
+            // Act: we open the same document again (confirming that action first)
+            this.AssertMessage(() => this.OpenAndInsertPart(), MessageBoxImage.Warning, MessageBoxResult.Yes);
+
+            // Assert
+            Assert.AreNotEqual(original, tab.Title);
         }
 
         /// <summary>
