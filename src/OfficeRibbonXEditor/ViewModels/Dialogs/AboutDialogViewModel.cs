@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
@@ -25,7 +26,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private static void ExecuteSubmitIssueCommand()
         {
-            Process.Start("https://github.com/fernandreu/office-ribbonx-editor/issues/new/choose");
+            UrlUtils.OpenUrl("https://github.com/fernandreu/office-ribbonx-editor/issues/new/choose");
         }
 
         private void ExecuteCopyInfoCommand()

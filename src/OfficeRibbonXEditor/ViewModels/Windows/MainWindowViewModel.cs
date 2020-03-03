@@ -106,7 +106,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.PreviewDragEnterCommand = new RelayCommand<DragData>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragData>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
-            this.OpenHelpLinkCommand = new RelayCommand<string>(this.ExecuteOpenHelpLinkCommand);
+            this.OpenHelpLinkCommand = new RelayCommand<string>(UrlUtils.OpenUrl);
 
             this.DocumentList.CollectionChanged += this.OnTreeViewItemCollectionChanged;
 
@@ -795,31 +795,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
-        private void ExecuteOpenHelpLinkCommand(string url)
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true,
-            };
-
-            var process = Process.Start(psi);
-            if (!Sandbox.IsEnabled)
-            {
-                return;
-            }
-
-            try
-            {
-                process?.Kill();
-            }
-            catch (InvalidOperationException)
-            {
-                // The process finished too quickly. This probably means that the tab was
-                // merged with an already opened browsed
-            }
-        }
-
         public EditorTabViewModel? OpenPartTab(OfficePartViewModel? part = null)
         {
             part ??= this.SelectedItem as OfficePartViewModel;
@@ -1360,7 +1335,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            Process.Start("https://github.com/fernandreu/office-ribbonx-editor/releases/latest");
+            UrlUtils.OpenUrl("https://github.com/fernandreu/office-ribbonx-editor/releases/latest");
         }
 
         private void ExecuteShowSettingsCommand()

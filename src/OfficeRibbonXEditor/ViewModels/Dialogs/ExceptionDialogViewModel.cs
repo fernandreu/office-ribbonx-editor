@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
@@ -54,7 +55,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 $"- Version: {this.info.AssemblyVersion}\n" +
                 $"- Runtime: {this.info.RuntimeVersion}\n" +
                 $"- Operating System: {this.info.OperatingSystemVersion}\n");
-            Process.Start($"https://github.com/fernandreu/office-ribbonx-editor/issues/new?assignees=&labels=bug&title={title}&body={body}");
+            UrlUtils.OpenUrl($"https://github.com/fernandreu/office-ribbonx-editor/issues/new?assignees=&labels=bug&title={title}&body={body}");
         }
     }
 }

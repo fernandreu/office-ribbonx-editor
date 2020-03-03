@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows.Documents;
 using System.Windows.Navigation;
+using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.Views.Controls
 {
@@ -16,7 +17,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         private static void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            UrlUtils.OpenUrl(e.Uri.AbsoluteUri);
             e.Handled = true;
         }
     }
