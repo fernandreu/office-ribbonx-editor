@@ -192,7 +192,7 @@ stages:
         artifactName: '.NET Core Binaries (Unsigned)'
 
   - job: ReleaseScripts
-    displayName: Public Release Scripts
+    displayName: Publish Release Scripts
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
