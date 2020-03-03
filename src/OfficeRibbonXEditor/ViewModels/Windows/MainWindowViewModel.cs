@@ -1056,7 +1056,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             return result;
         }
 
-        private SampleFolderViewModel? LoadXmlSamples()
+        private static SampleFolderViewModel? LoadXmlSamples()
         {
             return SampleUtils.LoadXmlSamples(
                 Settings.Default.CustomSamples.Split('\n'), 

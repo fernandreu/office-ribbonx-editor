@@ -15,7 +15,8 @@ namespace OfficeRibbonXEditor.UITests.Main
     {
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
-        private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
+        // TODO: Test save as command, then check if file was created as destFile
+        //private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
 
         // The initialization is actually not needed because it is again done in SetUp, but it is a clean way of
         // removing a warning due to uninitialized non-null fields. The alternative is via pragma

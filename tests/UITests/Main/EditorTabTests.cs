@@ -174,7 +174,8 @@ namespace OfficeRibbonXEditor.UITests.Main
                 dialog = this.manager.Window!.FindFirstDescendant(x => x.ByControlType(ControlType.Window)).AsWindow();
                 return dialog;
             }, TimeSpan.FromSeconds(1));
-            Assert.That(dialog.Title, Does.Match(".*Go To.*"), "Go To dialog not shown");
+            Assert.NotNull(dialog, "No dialog launched");
+            Assert.That(dialog!.Title, Does.Match(".*Go To.*"), "Go To dialog not shown");
 
             var currentLineBox = dialog.FindFirstDescendant("CurrentLineBox").AsTextBox();
             Assert.AreEqual($"{originalLine}", currentLineBox.Text);
