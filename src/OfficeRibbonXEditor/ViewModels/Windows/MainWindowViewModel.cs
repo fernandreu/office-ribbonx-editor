@@ -199,7 +199,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     return;
                 }
 
-                Properties.Settings.Default.ShowWhitespace = value;
+                Settings.Default.ShowWhitespace = value;
                 foreach (var tab in this.OpenTabs.OfType<EditorTabViewModel>())
                 {
                     tab.Lexer?.Update();
@@ -1049,79 +1049,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             return result;
         }
 
-        private static SampleFolderViewModel? ScanSampleFolder(string path)
+        private SampleFolderViewModel? LoadXmlSamples()
         {
-            var result = new SampleFolderViewModel
-            {
-                Name = new DirectoryInfo(path).Name,
-            };
-
-            foreach (var directory in Directory.GetDirectories(path))
-            {
-                var folder = ScanSampleFolder(directory);
-                if (folder == null)
-                {
-                    continue;
-                }
-
-                result.Items.Add(folder);
-            }
-
-            foreach (var file in Directory.GetFiles(path, "*.xml"))
-            {
-                result.Items.Add(new FileSampleViewModel(file));
-            }
-
-            return result.Items.Count > 0 ? result : null;
+            return SampleUtils.LoadXmlSamples(
+                Settings.Default.CustomSamples.Split('\n'), 
+                Settings.Default.ShowDefaultSamples);
         }
-
-        private static SampleFolderViewModel? LoadXmlSamples()
-        {
-            var root = new SampleFolderViewModel
-            {
-                Name = "XML Sample",
-            };
-
-            foreach (var source in Settings.Default.CustomSamples.Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(source))
-                {
-                    continue;
-                }
-
-                var trimmed = source.Trim();
-
-                if (trimmed.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase) && File.Exists(trimmed))
-                {
-                    root.Items.Add(new FileSampleViewModel(trimmed));
-                }
-
-                if (!Directory.Exists(trimmed))
-                {
-                    continue;
-                }
-
-                var folder = ScanSampleFolder(trimmed);
-                if (folder == null)
-                {
-                    continue;
-                }
-
-                root.Items.Add(folder);
-            }
-
-            if (Settings.Default.ShowDefaultSamples)
-            {
-                foreach (var sample in EmbeddedSampleViewModel.GetFromAssembly())
-                {
-                    root.Items.Add(sample);
-                }
-            }
-
-            return root.Items.Count > 0 ? root : null;
-        }
-
-
 
         /// <summary>
         /// Inserts an XML sample to the selected document in the tree
