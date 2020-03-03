@@ -28,8 +28,36 @@ namespace OfficeRibbonXEditor.IntegrationTests.Helpers
         }
 
         [Test]
+        public static void CanScanSingleFiles()
+        {
+            // Arrange
+            string path, name;
+            do
+            {
+                name = Path.GetRandomFileName();
+                path = Path.Combine(Path.GetTempPath(), name + ".xml");
+            } while (Directory.Exists(path));
+
+            File.WriteAllText(path, null);
+
+            // Act
+            var result = SampleUtils.LoadXmlSamples(new[] {path}, false);
+
+            // Assert
+            try
+            {
+                Assert.AreEqual(1, result.Items.Count);
+                Assert.AreEqual(name, result.Items[0].Name);
+            }
+            finally
+            {
+                File.Delete(path);
+            }
+        }
+
+        [Test]
         [TestCase(3, 2, 2)]
-        public static void CanScanDiskSamples(int numFiles, int numFolders, int nestedLevels)
+        public static void CanScanFolder(int numFiles, int numFolders, int nestedLevels)
         {
             // Arrange: create a random folder / xml file structure
             string root;

@@ -103,8 +103,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
             this.CloseTabCommand = new RelayCommand<ITabItemViewModel>(this.ExecuteCloseTabCommand);
-            this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
-            this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
+            this.PreviewDragEnterCommand = new RelayCommand<DragData>(this.ExecutePreviewDragCommand);
+            this.DropCommand = new RelayCommand<DragData>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
             this.OpenHelpLinkCommand = new RelayCommand<string>(this.ExecuteOpenHelpLinkCommand);
 
@@ -325,12 +325,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// <summary>
         /// Gets the command that starts the drag / drop action for opening files
         /// </summary>
-        public RelayCommand<DragEventArgs> PreviewDragEnterCommand { get; }
+        public RelayCommand<DragData> PreviewDragEnterCommand { get; }
 
         /// <summary>
         /// Gets the command that finishes the drag / drop action for opening files
         /// </summary>
-        public RelayCommand<DragEventArgs> DropCommand { get; }
+        public RelayCommand<DragData> DropCommand { get; }
 
         public RelayCommand<string> OpenHelpLinkCommand { get; }
 
@@ -672,15 +672,14 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.Closed?.Invoke(this, EventArgs.Empty);
         }
 
-        private void ExecutePreviewDragCommand(DragEventArgs e)
+        private void ExecutePreviewDragCommand(DragData data)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!data.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 return;
             }
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files == null)
+            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
             {
                 return;
             }
@@ -690,18 +689,17 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            e.Handled = true;
+            data.Handled = true;
         }
 
-        private void ExecuteDropCommand(DragEventArgs e)
+        private void ExecuteDropCommand(DragData data)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!data.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 return;
             }
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files == null)
+            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
             {
                 return;
             }
@@ -710,6 +708,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             {
                 this.FinishOpeningFile(file);
             }
+
+            data.Handled = true;
         }
 
         private void ExecuteOpenDocumentCommand()
@@ -934,9 +934,16 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 tab.ApplyChanges();
             }
 
-            foreach (var doc in this.DocumentList)
+            try
             {
-                doc.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                foreach (var doc in this.DocumentList)
+                {
+                    doc.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

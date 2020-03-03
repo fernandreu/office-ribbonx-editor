@@ -366,11 +366,33 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             Assume.That(tab, Is.Not.Null, "Tab is null");
             var original = tab!.Title;
 
-            // Act: we open the same document again (confirming that action first)
+            // Act / assert
+
+            // We open the same document again (confirming that action first), and check if the title changed
             this.AssertMessage(() => this.OpenAndInsertPart(), MessageBoxImage.Warning, MessageBoxResult.Yes);
+            Assert.AreNotEqual(original, tab.Title);
+
+            // We close the newly opened document, and check if the title is back to normal
+            this.viewModel.CloseDocumentCommand.Execute();
+            Assert.AreEqual(original, tab.Title);
+        }
+
+        [Test]
+        [TestCase(true)]
+        [TestCase(false)]
+        public void CanCloseTabs(bool explicitly)
+        {
+            // Arrange
+            var (_, part) = this.OpenAndInsertPart();
+            this.viewModel.OpenTabCommand.Execute(part);
+            var tab = this.viewModel.SelectedTab;
+            Assume.That(tab, Is.Not.Null, "Tab is null");
+
+            // Act
+            this.viewModel.CloseTabCommand.Execute(explicitly ? tab : null);
 
             // Assert
-            Assert.AreNotEqual(original, tab.Title);
+            Assert.IsEmpty(this.viewModel.OpenTabs);
         }
 
         /// <summary>
@@ -404,15 +426,12 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             this.MockOpenFile(this.destFile);
             this.viewModel.OpenDocumentCommand.Execute();
             this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
-            
+
             // Act / assert: Open the same file in exclusive mode
-            Assert.DoesNotThrow(() =>
+            using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
-                {
-                    this.viewModel.SaveCommand.Execute();
-                }
-            });
+                AssertMessage(() => this.viewModel.SaveCommand.Execute(), MessageBoxImage.Error);
+            }
         }
 
         /// <summary>
@@ -424,15 +443,32 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Arrange
             this.OpenSource();
             this.viewModel.SaveAsCommand.Execute();
-            
+
             // Act / assert: Open the same file in exclusive mode
-            Assert.DoesNotThrow(() =>
-                {
-                    using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
-                    {
-                        this.viewModel.SaveAsCommand.Execute();
-                    }
-                });
+            // Act / assert: Open the same file in exclusive mode
+            using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+            {
+                AssertMessage(() => this.viewModel.SaveAsCommand.Execute(), MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Checks whether a file being saved while opened in another program is detected correctly and does not cause any crash
+        /// </summary>
+        [Test]
+        public void SaveAllInUseTest()
+        {
+            // Arrange
+            File.Copy(this.sourceFile, this.destFile);
+            this.MockOpenFile(this.destFile);
+            this.viewModel.OpenDocumentCommand.Execute();
+            this.viewModel.SelectedItem = this.viewModel.DocumentList[0];
+
+            // Act / assert: Open the same file in exclusive mode
+            using (File.Open(this.destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+            {
+                AssertMessage(() => this.viewModel.SaveAllCommand.Execute(), MessageBoxImage.Error);
+            }
         }
 
         [Test]
@@ -445,6 +481,54 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             }
 
             // The assert is implicit; the above code should not throw in .NET Core anymore [#88]
+        }
+
+        public static readonly object[] DragData =
+        {
+            new object[] { DataFormats.Text, true, false, false },
+            new object[] { DataFormats.FileDrop, true, false, true },
+            new object[] { DataFormats.FileDrop, true, true, false },
+            new object[] { DataFormats.FileDrop, false, false, false },
+        };
+
+        [Test]
+        [TestCaseSource(nameof(DragData))]
+        public void TestPreviewDragEnter(string dataFormat, bool existingFile, bool forceReturnNull, bool handled)
+        {
+            // Arrange
+            var e = this.MockDragData(dataFormat, forceReturnNull, existingFile);
+
+            // Act
+            this.viewModel.PreviewDragEnterCommand.Execute(e);
+            
+            // Assert
+            Assert.AreEqual(handled, e.Handled);
+        }
+
+        [Test]
+        [TestCaseSource(nameof(DragData))]
+        public void TestDrop(string dataFormat, bool existingFile, bool forceReturnNull, bool opened)
+        {
+            // Arrange
+            var e = this.MockDragData(dataFormat, forceReturnNull, existingFile);
+
+            // Act
+            this.viewModel.DropCommand.Execute(e);
+
+            // Assert
+            Assert.AreEqual(opened, this.viewModel.DocumentList.Count > 0);
+        }
+
+        private DragData MockDragData(string dataFormat, bool forceReturnNull, bool existingFile)
+        {
+            var dataMock = new Mock<IDataObject>();
+            dataMock.Setup(x => x.GetDataPresent(It.IsAny<string>()))
+                .Returns<string>(x => x == dataFormat);
+            dataMock.Setup(x => x.GetData(It.IsAny<string>()))
+#pragma warning disable CS8603 // Possible null reference return.
+                .Returns<string>(x => x != dataFormat || forceReturnNull ? null : new[] { existingFile ? this.sourceFile : "abcd.efgh" });
+#pragma warning restore CS8603 // Possible null reference return.
+            return new DragData(dataMock.Object);
         }
 
         /// <summary>
@@ -517,9 +601,16 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         private void AssertMessage(Action action, MessageBoxImage image, MessageBoxResult result = MessageBoxResult.OK, string message = "Message not shown")
         {
             var count = 0;
-            this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), image)).Returns(result).Callback(() => ++count);
-            action();
-            Assert.AreEqual(1, count, message);
+            try
+            {
+                this.msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), image)).Returns(result).Callback(() => ++count);
+                action();
+                Assert.AreEqual(1, count, message);
+            }
+            finally
+            {
+                this.msgSvc.Reset();
+            }
         }
 
         public void Dispose()
