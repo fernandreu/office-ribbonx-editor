@@ -483,17 +483,17 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // The assert is implicit; the above code should not throw in .NET Core anymore [#88]
         }
 
-        public static readonly object[] DragData =
+        public static readonly TestCaseData[] DragData =
         {
-            new object[] { DataFormats.Text, true, false, false },
-            new object[] { DataFormats.FileDrop, true, false, true },
-            new object[] { DataFormats.FileDrop, true, true, false },
-            new object[] { DataFormats.FileDrop, false, false, false },
+            new TestCaseData(DataFormats.Text, true, false).Returns(false),
+            new TestCaseData(DataFormats.FileDrop, true, false).Returns(true),
+            new TestCaseData(DataFormats.FileDrop, true, true).Returns(false),
+            new TestCaseData(DataFormats.FileDrop, false, false).Returns(false),
         };
 
         [Test]
         [TestCaseSource(nameof(DragData))]
-        public void TestPreviewDragEnter(string dataFormat, bool existingFile, bool forceReturnNull, bool handled)
+        public bool TestPreviewDragEnter(string dataFormat, bool existingFile, bool forceReturnNull)
         {
             // Arrange
             var e = this.MockDragData(dataFormat, forceReturnNull, existingFile);
@@ -502,12 +502,12 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             this.viewModel.PreviewDragEnterCommand.Execute(e);
             
             // Assert
-            Assert.AreEqual(handled, e.Handled);
+            return e.Handled;
         }
 
         [Test]
         [TestCaseSource(nameof(DragData))]
-        public void TestDrop(string dataFormat, bool existingFile, bool forceReturnNull, bool opened)
+        public bool TestDrop(string dataFormat, bool existingFile, bool forceReturnNull)
         {
             // Arrange
             var e = this.MockDragData(dataFormat, forceReturnNull, existingFile);
@@ -516,7 +516,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             this.viewModel.DropCommand.Execute(e);
 
             // Assert
-            Assert.AreEqual(opened, this.viewModel.DocumentList.Count > 0);
+            return this.viewModel.DocumentList.Count > 0;
         }
 
         private DragData MockDragData(string dataFormat, bool forceReturnNull, bool existingFile)
