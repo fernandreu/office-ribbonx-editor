@@ -73,5 +73,24 @@ namespace OfficeRibbonXEditor.UITests.Main
             var tabItem = this.manager.Window?.FindTabView()?.SelectedTabItem;
             Assert.NotNull(tabItem);
         }
+
+        [Test]
+        public void CanShowAboutDialog()
+        {
+            // Arrange
+            this.manager.Launch();
+            var helpMenu = this.manager.Window?.FindFirstDescendant(x => x.ByText("Help")).AsMenu();
+            Assume.That(helpMenu, Is.Not.Null, "Missing Help menu");
+            helpMenu!.Click();
+            var aboutMenu = helpMenu.FindFirstDescendant(x => x.ByText("About"));
+            Assume.That(aboutMenu, Is.Not.Null, "Missing About menu");
+
+            // Act
+            aboutMenu!.Click();
+
+            // Assert
+            var aboutDialog = this.manager.Window?.ModalWindows.FirstOrDefault();
+            Assert.NotNull(aboutDialog, "About dialog not launched");
+        }
     }
 }

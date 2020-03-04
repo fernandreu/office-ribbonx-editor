@@ -65,6 +65,14 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             if (status == TestStatus.Failed)
             {
                 this.Window?.TestCapture("MainWindow.png", "Main Window status when the test failed");
+
+                // TODO: Capture all modal windows and top-level windows
+            }
+
+            while (this.Window?.ModalWindows.Any() ?? false)
+            {
+                this.Window.ModalWindows.First().Close();
+                this.App.WaitWhileBusy();
             }
 
             this.Window?.Close();
