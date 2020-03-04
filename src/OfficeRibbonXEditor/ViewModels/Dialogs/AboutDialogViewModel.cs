@@ -1,8 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
+using Xceed.Wpf.Toolkit.Core.Converters;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
@@ -10,11 +12,14 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     {
         private readonly IMessageBoxService messageBoxService;
 
-        public AboutDialogViewModel(IMessageBoxService messageBoxService, IToolInfo info)
+        private readonly IUrlHelper urlHelper;
+
+        public AboutDialogViewModel(IMessageBoxService messageBoxService, IToolInfo info, IUrlHelper urlHelper)
         {
             this.messageBoxService = messageBoxService;
             this.Info = info;
-            this.SubmitIssueCommand = new RelayCommand(ExecuteSubmitIssueCommand);
+            this.urlHelper = urlHelper;
+            this.SubmitIssueCommand = new RelayCommand(this.ExecuteSubmitIssueCommand);
             this.CopyInfoCommand = new RelayCommand(this.ExecuteCopyInfoCommand);
         }
 
@@ -24,9 +29,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public RelayCommand CopyInfoCommand { get; }
 
-        private static void ExecuteSubmitIssueCommand()
+        private void ExecuteSubmitIssueCommand()
         {
-            UrlUtils.OpenUrl("https://github.com/fernandreu/office-ribbonx-editor/issues/new/choose");
+            this.urlHelper.OpenUrl(new Uri("https://github.com/fernandreu/office-ribbonx-editor/issues/new/choose"));
         }
 
         private void ExecuteCopyInfoCommand()

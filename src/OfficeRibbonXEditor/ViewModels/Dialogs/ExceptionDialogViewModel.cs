@@ -11,9 +11,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     {
         private readonly IToolInfo info;
 
-        public ExceptionDialogViewModel(IToolInfo info)
+        private readonly IUrlHelper urlHelper;
+
+        public ExceptionDialogViewModel(IToolInfo info, IUrlHelper urlHelper)
         {
             this.info = info;
+            this.urlHelper = urlHelper;
             this.ShutdownCommand = new RelayCommand(this.ExecuteShutdownCommand);
             this.SubmitBugCommand = new RelayCommand(this.ExecuteSubmitBugCommand);
         }
@@ -55,7 +58,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 $"- Version: {this.info.AssemblyVersion}\n" +
                 $"- Runtime: {this.info.RuntimeVersion}\n" +
                 $"- Operating System: {this.info.OperatingSystemVersion}\n");
-            UrlUtils.OpenUrl($"https://github.com/fernandreu/office-ribbonx-editor/issues/new?assignees=&labels=bug&title={title}&body={body}");
+            this.urlHelper.OpenUrl(new Uri($"https://github.com/fernandreu/office-ribbonx-editor/issues/new?assignees=&labels=bug&title={title}&body={body}"));
         }
     }
 }

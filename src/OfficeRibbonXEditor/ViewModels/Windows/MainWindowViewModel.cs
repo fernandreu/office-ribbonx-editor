@@ -45,6 +45,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private readonly IDialogProvider dialogProvider;
 
+        private readonly IUrlHelper urlHelper;
+
         private readonly Dictionary<Type, IContentDialogBase> dialogs = new Dictionary<Type, IContentDialogBase>();
 
         /// <summary>
@@ -68,11 +70,17 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private bool disposed;
 
-        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker, IDialogProvider dialogProvider)
+        public MainWindowViewModel(
+            IMessageBoxService messageBoxService, 
+            IFileDialogService fileDialogService, 
+            IVersionChecker versionChecker, 
+            IDialogProvider dialogProvider, 
+            IUrlHelper urlHelper)
         {
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
             this.dialogProvider = dialogProvider;
+            this.urlHelper = urlHelper;
 
             this.OpenDocumentCommand = new RelayCommand(this.ExecuteOpenDocumentCommand);
             this.OpenTabCommand = new RelayCommand<TreeViewItemViewModel>(this.ExecuteOpenTabCommand);
@@ -106,7 +114,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.PreviewDragEnterCommand = new RelayCommand<DragData>(this.ExecutePreviewDragCommand);
             this.DropCommand = new RelayCommand<DragData>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
-            this.OpenHelpLinkCommand = new RelayCommand<string>(UrlUtils.OpenUrl);
+            this.OpenHelpLinkCommand = new RelayCommand<string>(this.ExecuteOpenHelpLinkCommand);
 
             this.DocumentList.CollectionChanged += this.OnTreeViewItemCollectionChanged;
 
@@ -1335,7 +1343,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            UrlUtils.OpenUrl("https://github.com/fernandreu/office-ribbonx-editor/releases/latest");
+            this.urlHelper.OpenUrl(new Uri("https://github.com/fernandreu/office-ribbonx-editor/releases/latest"));
+        }
+
+        private void ExecuteOpenHelpLinkCommand(string url)
+        {
+            this.urlHelper.OpenUrl(new Uri(url));
         }
 
         private void ExecuteShowSettingsCommand()

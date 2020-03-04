@@ -30,6 +30,7 @@ namespace OfficeRibbonXEditor
             builder.RegisterType<VersionChecker>().As<IVersionChecker>();
             builder.RegisterType<DialogProvider>().As<IDialogProvider>();
             builder.RegisterType<ToolInfo>().As<IToolInfo>();
+            builder.RegisterType<UrlHelper>().As<IUrlHelper>();
 
             builder.RegisterType<MainWindowViewModel>();
             DialogHostBase.RegisterDialogViewModels(builder);

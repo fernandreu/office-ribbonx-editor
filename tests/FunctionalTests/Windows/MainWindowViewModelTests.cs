@@ -28,6 +28,8 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
         private readonly Mock<IDialogProvider> dialogProvider = new Mock<IDialogProvider>();
 
+        private readonly Mock<IUrlHelper> urlHelper = new Mock<IUrlHelper>();
+
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
         private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
@@ -43,7 +45,6 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         [SetUp]
         public void SetUp()
         {
-            Sandbox.IsEnabled = true;
             this.MockOpenFile(this.sourceFile);
             this.MockSaveFile(this.destFile);
             
@@ -59,7 +60,8 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                 this.msgSvc.Object, 
                 this.fileSvc.Object, 
                 this.versionChecker.Object, 
-                this.dialogProvider.Object);
+                this.dialogProvider.Object,
+                this.urlHelper.Object);
         }
 
         [Test]
@@ -474,13 +476,27 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         [Test]
         public void CanOpenHelpPages()
         {
-            // Act
-            foreach (var pair in this.viewModel.HelpLinks)
-            {
-                this.viewModel.OpenHelpLinkCommand.Execute(pair.Value);
-            }
+            // Arrange
+            var triggered = false;
+            this.urlHelper.Setup(x => x.OpenUrl(It.IsAny<Uri>())).Callback(() => triggered = true);
 
-            // The assert is implicit; the above code should not throw in .NET Core anymore [#88]
+            try
+            {
+                foreach (var pair in this.viewModel.HelpLinks)
+                {
+                    triggered = false;
+
+                    // Act
+                    this.viewModel.OpenHelpLinkCommand.Execute(pair.Value);
+
+                    // Assert
+                    Assert.True(triggered);
+                }
+            }
+            finally
+            {
+                this.urlHelper.Reset();
+            }
         }
 
         public static readonly TestCaseData[] DragData =
