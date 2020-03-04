@@ -5,6 +5,12 @@ namespace OfficeRibbonXEditor.Interfaces
 {
     public interface IUrlHelper
     {
-        Process? OpenUrl(Uri url);
+        Process? OpenIssue();
+
+        Process? OpenBug(string title, string body);
+
+        Process? OpenRelease(string version = "latest");
+
+        Process? OpenExternal(Uri url);
     }
 }

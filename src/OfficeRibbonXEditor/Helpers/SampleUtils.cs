@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Samples;
 
 namespace OfficeRibbonXEditor.Helpers

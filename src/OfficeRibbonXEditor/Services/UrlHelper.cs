@@ -6,7 +6,26 @@ namespace OfficeRibbonXEditor.Services
 {
     public class UrlHelper : IUrlHelper
     {
-        public Process? OpenUrl(Uri url)
+        private const string BaseUrl = "https://github.com/fernandreu/office-ribbonx-editor";
+
+        public Process? OpenIssue()
+        {
+            return this.OpenExternal(new Uri($"{BaseUrl}/issues/new/choose"));
+        }
+
+        public Process? OpenBug(string title, string body)
+        {
+            title = Uri.EscapeUriString(title);
+            body = Uri.EscapeUriString(body);
+            return this.OpenExternal(new Uri($"{BaseUrl}/issues/new?assignees=&labels=bug&title={title}&body={body}"));
+        }
+
+        public Process? OpenRelease(string version = "latest")
+        {
+            return this.OpenExternal(new Uri($"{BaseUrl}/releases/{version}"));
+        }
+
+        public Process? OpenExternal(Uri url)
         {
             var psi = new ProcessStartInfo
             {

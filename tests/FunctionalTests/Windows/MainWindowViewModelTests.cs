@@ -478,7 +478,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         {
             // Arrange
             var triggered = false;
-            this.urlHelper.Setup(x => x.OpenUrl(It.IsAny<Uri>())).Callback(() => triggered = true);
+            this.urlHelper.Setup(x => x.OpenExternal(It.IsAny<Uri>())).Callback(() => triggered = true);
 
             try
             {

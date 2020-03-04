@@ -27,7 +27,7 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             // We give this the default value we will want in most cases while
             // still allowing it to be defined via xaml if needed
-            this.OpenUrlCommand = new RelayCommand<Uri>(uri => new UrlHelper().OpenUrl(uri));
+            this.OpenUrlCommand = new RelayCommand<Uri>(uri => new UrlHelper().OpenExternal(uri));
 
             this.RequestNavigate += this.OnRequestNavigate;
         }

@@ -521,7 +521,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.OpenTabs.RemoveAt(index);
             if (this.SelectedTab == tab)
             {
-                this.SelectedTab = index < this.OpenTabs.Count ? this.OpenTabs[index] : index > 0 ? this.OpenTabs[index - 1] : null;
+                var count = this.OpenTabs.Count;
+                this.SelectedTab = count > 0 ? this.OpenTabs[Math.Max(index, count - 1)] : null;
             }
         }
 
@@ -1343,12 +1344,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            this.urlHelper.OpenUrl(new Uri("https://github.com/fernandreu/office-ribbonx-editor/releases/latest"));
+            this.urlHelper.OpenRelease();
         }
 
         private void ExecuteOpenHelpLinkCommand(string url)
         {
-            this.urlHelper.OpenUrl(new Uri(url));
+            this.urlHelper.OpenExternal(new Uri(url));
         }
 
         private void ExecuteShowSettingsCommand()

@@ -2,7 +2,6 @@
 using System.Linq;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
-using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Extensions;
 
 namespace OfficeRibbonXEditor.UITests.Models
