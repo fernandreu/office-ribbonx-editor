@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using Autofac;
 using Moq;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Documents;
@@ -26,9 +27,9 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
         private readonly Mock<IVersionChecker> versionChecker = new Mock<IVersionChecker>();
 
-        private readonly Mock<IDialogProvider> dialogProvider = new Mock<IDialogProvider>();
-
         private readonly Mock<IUrlHelper> urlHelper = new Mock<IUrlHelper>();
+
+        private readonly IContainer container = new AppContainerBuilder().Build();
 
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
@@ -60,7 +61,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                 this.msgSvc.Object, 
                 this.fileSvc.Object, 
                 this.versionChecker.Object, 
-                this.dialogProvider.Object,
+                this.container.Resolve<IDialogProvider>(),
                 this.urlHelper.Object);
         }
 
@@ -356,6 +357,46 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             this.viewModel.LaunchingDialog += Handler;
             this.viewModel.GenerateCallbacksCommand.Execute();
             this.viewModel.LaunchingDialog -= Handler;  // Just in case we add other checks later
+        }
+
+        [Test]
+        public void CanLaunchSettingsDialog()
+        {
+            // Arrange
+            IContentDialogBase? content = null;
+            this.viewModel.LaunchingDialog += (o, e) =>
+            {
+                content = e.Content;
+            };
+
+            // Act
+            this.viewModel.ShowSettingsCommand.Execute();
+
+            // Assert
+            Assert.IsInstanceOf(typeof(SettingsDialogViewModel), content);
+            var dialog = (SettingsDialogViewModel)content!;
+            Assert.IsEmpty(dialog.Tabs);
+        }
+
+        [Test]
+        public void CanLaunchSettingsDialog_WithEditorTab()
+        {
+            // Arrange
+            var (_, part) = this.OpenAndInsertPart();
+            this.viewModel.OpenTabCommand.Execute(part);
+            IContentDialogBase? content = null;
+            this.viewModel.LaunchingDialog += (o, e) =>
+            {
+                content = e.Content;
+            };
+
+            // Act
+            this.viewModel.ShowSettingsCommand.Execute();
+
+            // Assert
+            Assert.IsInstanceOf(typeof(SettingsDialogViewModel), content);
+            var dialog = (SettingsDialogViewModel) content!;
+            Assert.IsNotEmpty(dialog.Tabs);
         }
 
         [Test]
