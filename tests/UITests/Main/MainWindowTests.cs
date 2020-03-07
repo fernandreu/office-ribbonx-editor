@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using FlaUI.Core.AutomationElements;
@@ -79,19 +80,54 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             // Arrange
             this.manager.Launch();
-            var helpMenu = this.manager.Window?.FindFirstDescendant(x => x.ByText("Help")).AsMenu();
+            var helpMenu = this.manager.HelpMenu;
             Assume.That(helpMenu, Is.Not.Null, "Missing Help menu");
             helpMenu!.Click();
+            this.manager.App!.WaitWhileBusy();
             var aboutMenu = helpMenu.FindFirstDescendant(x => x.ByText("About"));
             Assume.That(aboutMenu, Is.Not.Null, "Missing About menu");
 
             // Act
             aboutMenu!.Click();
+            this.manager.App!.WaitWhileBusy();
 
             // Assert
-            this.manager.App!.WaitWhileBusy();
             var aboutDialog = this.manager.Window?.ModalWindows.FirstOrDefault();
             Assert.NotNull(aboutDialog, "About dialog not launched");
+        }
+
+        [Test]
+        public void FileAppearsInRecentList()
+        {
+            // Arrange : open a file and close it so that it appears in the recent file list
+            this.manager.Launch(sourceFile);
+            var treeView = this.manager.Window!.FindTreeView();
+            Assume.That(treeView, Is.Not.Null);
+            treeView!.Items.First().Click();
+            this.manager.App!.WaitWhileBusy();
+
+            var fileMenu = this.manager.FileMenu;
+            Assume.That(fileMenu, Is.Not.Null, "Missing File menu");
+            fileMenu!.Click();
+            this.manager.App!.WaitWhileBusy();
+
+            var closeDocumentEntry = fileMenu.FindFirstDescendant(x => x.ByText("Close Current Document"));
+            closeDocumentEntry.Click();
+            this.manager.App!.WaitWhileBusy();
+            Assume.That(treeView!.Items, Is.Empty);
+
+            var fileName = Path.GetFileName(sourceFile);
+            Assume.That(fileName, Is.Not.Null, "Cannot get filename");
+
+            // Act / assert: check if the file has been added to the recent list, and open it
+            fileMenu!.Click();
+            this.manager.App.WaitWhileBusy();
+            var entry = fileMenu.FindAllDescendants()
+                .FirstOrDefault(x => x.Name.StartsWith("1: ", StringComparison.OrdinalIgnoreCase) && x.Name.EndsWith(fileName, StringComparison.OrdinalIgnoreCase));
+            Assert.NotNull(entry, "Recent file entry for opened file not found");
+            entry.Click();
+            this.manager.App.WaitWhileBusy();
+            Assert.IsNotEmpty(treeView.Items, "Recent file not opened");
         }
     }
 }

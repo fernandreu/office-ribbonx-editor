@@ -23,6 +23,10 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 
         public Window? Window { get; private set; }
 
+        public Menu? FileMenu  => this.Window?.FindFirstDescendant(x => x.ByText("File")).AsMenu();
+
+        public Menu? HelpMenu => this.Window?.FindFirstDescendant(x => x.ByText("Help")).AsMenu();
+
         public void Launch(params string[] arguments)
         {
             var psi = new ProcessStartInfo
