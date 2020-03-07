@@ -89,6 +89,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             aboutMenu!.Click();
 
             // Assert
+            this.manager.App!.WaitWhileBusy();
             var aboutDialog = this.manager.Window?.ModalWindows.FirstOrDefault();
             Assert.NotNull(aboutDialog, "About dialog not launched");
         }
