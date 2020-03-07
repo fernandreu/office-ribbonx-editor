@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Tools;
 using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Extensions;
 using OfficeRibbonXEditor.UITests.Helpers;
@@ -89,10 +90,11 @@ namespace OfficeRibbonXEditor.UITests.Main
 
             // Act
             aboutMenu!.Click();
-            this.manager.App!.WaitWhileBusy();
 
             // Assert
-            var aboutDialog = this.manager.Window?.ModalWindows.FirstOrDefault();
+            var aboutDialog = Retry.WhileNull(
+                () => this.manager.Window?.ModalWindows.FirstOrDefault(), 
+                TimeSpan.FromSeconds(2)).Result;
             Assert.NotNull(aboutDialog, "About dialog not launched");
         }
 
