@@ -1,6 +1,5 @@
 
-Office RibbonX Editor
-=====================
+# Office RibbonX Editor
 
 [![Downloads](https://img.shields.io/github/downloads/fernandreu/office-ribbonx-editor/total.svg?style=popout)](https://github.com/fernandreu/office-ribbonx-editor/releases)
 [![Release Version](https://img.shields.io/github/release/fernandreu/office-ribbonx-editor)](https://github.com/fernandreu/office-ribbonx-editor/releases/latest)
@@ -8,6 +7,21 @@ Office RibbonX Editor
 [![.NET Core](https://img.shields.io/badge/.NET%20Core-%3E%3D%203.1.0-informational)](https://dotnet.microsoft.com/download)
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/CI%20Pipeline?branchName=master&stageName=Build)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandreu_office-ribbonx-editor&metric=alert_status)](https://sonarcloud.io/dashboard?id=fernandreu_office-ribbonx-editor)
+
+The Office RibbonX Editor is a standalone tool to edit the Custom UI part of Office open document file format. 
+It contains both Office 2007 and Office 2010 custom UI schemas.
+
+The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including
+Office 2013, Office 2016 and Office 365.
+
+To learn more about how to use these identifiers to customize the Office ribbon, backstage, and context menus visit:
+ - [Change the Ribbon in Excel 2007-2016](https://www.rondebruin.nl/win/s2/win001.htm)
+ - [Customizing the Office Fluent Ribbon for Developers](https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx)
+ - [Introduction to the Office Backstage View for Developers](https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx)
+ - [Office Fluent User Interface Control Identifiers](https://github.com/OfficeDev/office-fluent-ui-command-identifiers)
+
+
+## Improvements
 
 This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than
 trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign
@@ -71,20 +85,3 @@ essence, Step 4 will no longer use the temporary unzipped copy of the Excel file
 but will generate a new one instead. As a consequence, any external changes you might have done in the meantime
 (i.e. Step 3) will no longer get lost. If you did not make any external changes, the `Reload on Save` button
 won’t have any noticeable impact for you.
-
-
-## Other info
-
-*This section has been partially borrowed from the [original Windows Forms project](https://github.com/OfficeDev/office-custom-ui-editor).*
-
-The Office RibbonX Editor is a standalone tool to edit the Custom UI part of Office open document file format. 
-It contains both Office 2007 and Office 2010 custom UI schemas.
-
-The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including
-Office 2013, Office 2016 and Office 365.
-
-To learn more about how to use these identifiers to customize the Office ribbon, backstage, and context menus visit:
- - [Change the Ribbon in Excel 2007-2016](https://www.rondebruin.nl/win/s2/win001.htm)
- - [Customizing the Office Fluent Ribbon for Developers](https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx)
- - [Introduction to the Office Backstage View for Developers](https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx)
- - [Office Fluent User Interface Control Identifiers](https://github.com/OfficeDev/office-fluent-ui-command-identifiers)
