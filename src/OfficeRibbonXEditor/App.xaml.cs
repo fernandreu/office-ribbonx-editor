@@ -46,6 +46,7 @@ namespace OfficeRibbonXEditor
             window.DataContext = windowModel;
             windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
             windowModel.Closed += (o, e) => window.Close();
+            windowModel.OnLoaded();
             window.Show();
         }
 

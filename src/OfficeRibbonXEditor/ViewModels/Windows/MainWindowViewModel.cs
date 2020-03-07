@@ -43,6 +43,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private readonly IFileDialogService fileDialogService;
 
+        private readonly IVersionChecker versionChecker;
+
         private readonly IDialogProvider dialogProvider;
 
         private readonly IUrlHelper urlHelper;
@@ -79,6 +81,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         {
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
+            this.versionChecker = versionChecker;
             this.dialogProvider = dialogProvider;
             this.urlHelper = urlHelper;
 
@@ -126,18 +129,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 #endif
             this.customUiSchemas = LoadXmlSchemas();
             this.XmlSamples = LoadXmlSamples();
-
-            foreach (var file in Environment.GetCommandLineArgs().Skip(1))
-            {
-                if (!File.Exists(file))
-                {
-                    continue;
-                }
-
-                this.FinishOpeningFile(file);
-            }
-
-            this.CheckVersionAsync(versionChecker).SafeFireAndForget();
         }
 
         /// <summary>
@@ -388,6 +379,25 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Called by the application to perform any action that might depend on the window having been
+        /// set up already (usually because they depend on events listened in the window).
+        /// </summary>
+        public void OnLoaded()
+        {
+            foreach (var file in Environment.GetCommandLineArgs().Skip(1))
+            {
+                if (!File.Exists(file))
+                {
+                    continue;
+                }
+
+                this.FinishOpeningFile(file);
+            }
+
+            this.CheckVersionAsync(this.versionChecker).SafeFireAndForget();
         }
 
         public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = false) where TDialog : IContentDialogBase

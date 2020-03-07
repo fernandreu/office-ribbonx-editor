@@ -63,6 +63,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                 this.versionChecker.Object, 
                 this.container.Resolve<IDialogProvider>(),
                 this.urlHelper.Object);
+            this.viewModel.OnLoaded();
         }
 
         [Test]
