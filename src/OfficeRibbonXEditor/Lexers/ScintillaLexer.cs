@@ -51,6 +51,9 @@ namespace OfficeRibbonXEditor.Lexers
             }
 
             this.UpdateImplementation();
+
+            // Ensure cursor is visible by making it coincide with the default background color
+            this.Editor.Scintilla.CaretForeColor = this.Editor.Styles[Style.Default].ForeColor;
         }
 
         protected abstract void UpdateImplementation();
