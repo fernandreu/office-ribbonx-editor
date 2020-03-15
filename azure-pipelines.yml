@@ -81,11 +81,18 @@ stages:
         fileName: 'OfficeRibbonXEditor.exe'
         project: 'OfficeRibbonXEditor'
 
+    - script: >-
+        iscc build/install/setup.iss
+        /DVersionPrefix="$(VersionPrefix)"
+        /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
+        /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
+      displayName: Generate installer
+
     - template: build/templates/copy-and-publish.yml
       parameters:
         displayName: '.NET Framework Installer'
-        fileName: 'OfficeRibbonXEditor.msi'
-        project: 'Installer'
+        fileName: 'OfficeRibbonXEditor.exe'
+        binFolder: 'Installer'
 
   - job: NetCore
     displayName: .NET Core
@@ -191,6 +198,19 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)' 
         artifactName: '.NET Core Binaries (Unsigned)'
 
+    - script: >-
+        iscc build/install/setup.iss
+        /DVersionPrefix="$(VersionPrefix)"
+        /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
+        /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
+      displayName: Generate installer
+
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Core Installer'
+        fileName: 'OfficeRibbonXEditor.exe'
+        binFolder: 'Installer'
+
   - job: ReleaseScripts
     displayName: Publish Release Scripts
     steps:
@@ -209,6 +229,8 @@ stages:
 
   - job: NetFrameworkExecutable
     displayName: Sign .NET Framework Executable
+    workspace:
+      clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
@@ -216,6 +238,8 @@ stages:
 
   - job: NetFrameworkInstaller
     displayName: Sign .NET Framework Installer
+    workspace:
+      clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
@@ -223,7 +247,18 @@ stages:
 
   - job: NetCoreBinaries
     displayName: Sign .NET Core Binaries
+    workspace:
+      clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
         artifactName: '.NET Core Binaries'
+
+  - job: NetCoreInstaller
+    displayName: Sign .NET Core Installer
+    workspace:
+      clean: all
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        artifactName: '.NET Core Installer'

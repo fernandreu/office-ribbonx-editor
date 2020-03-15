@@ -81,13 +81,6 @@
     </None>
   </ItemGroup>
 
-  <!-- This is a workaround for Wix (see https://github.com/wixtoolset/issues/issues/5705) -->
-  <Target Name="GetTargetPath" Returns="@(_FakeOutputPath)">
-    <ItemGroup>
-      <_FakeOutputPath Include="$(MSBuildProjectDirectory)\$(OutputPath)\$(_InstallerTargetFramework)\$(AssemblyName).exe" />
-    </ItemGroup>
-  </Target>
-
   <!--This ensures runtime config files are copied to the test projects (especially the UI project) so that the tool can be tested properly in .NET Core 3.X-->
   <Target Name="AddRuntimeDependenciesToContent" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCoreApp'" BeforeTargets="GetCopyToOutputDirectoryItems" DependsOnTargets="GenerateBuildDependencyFile;GenerateBuildRuntimeConfigurationFiles">
     <ItemGroup>
