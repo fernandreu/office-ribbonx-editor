@@ -47,6 +47,11 @@ jobs:
             rootFolderOrFile: '$(Pipeline.Workspace)/.NET Core Binaries/OfficeRibbonXEditor'
             includeRootFolder: false
             archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETCore.zip'
+        - powershell: >-
+            Copy-Item
+            -Path "$(Pipeline.Workspace)/.NET Core Installer/OfficeRibbonXEditor.exe"
+            -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETCore.exe"
+          displayName: 'Copy .NET Core Installer'
         - task: GitHubRelease@1
           displayName: 'Create GitHub Release'
           inputs:

@@ -198,6 +198,19 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)' 
         artifactName: '.NET Core Binaries (Unsigned)'
 
+    - script: >-
+        iscc build/install/setup.iss
+        /DVersionPrefix="$(VersionPrefix)"
+        /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
+        /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
+      displayName: Generate installer
+
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Framework Installer'
+        fileName: 'OfficeRibbonXEditor.exe'
+        binFolder: 'Installer'
+
   - job: ReleaseScripts
     displayName: Publish Release Scripts
     steps:
