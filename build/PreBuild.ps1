@@ -21,4 +21,5 @@ ForEach-Object {
     ExtractVariable $c 'Copyright'
     ExtractVariable $c 'Description'
     ExtractVariable $c 'PackageProjectUrl'
+    ExtractVariable $c 'VersionPrefix'
 }
