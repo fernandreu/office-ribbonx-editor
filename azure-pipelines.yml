@@ -207,7 +207,7 @@ stages:
 
     - template: build/templates/copy-and-publish.yml
       parameters:
-        displayName: '.NET Framework Installer'
+        displayName: '.NET Core Installer'
         fileName: 'OfficeRibbonXEditor.exe'
         binFolder: 'Installer'
 
