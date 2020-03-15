@@ -81,11 +81,18 @@ stages:
         fileName: 'OfficeRibbonXEditor.exe'
         project: 'OfficeRibbonXEditor'
 
+    - script: >-
+        iscc build/install/setup.iss
+        /DVersionPrefix="$(VersionPrefix)"
+        /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
+        /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
+      displayName: Generate installer
+
     - template: build/templates/copy-and-publish.yml
       parameters:
         displayName: '.NET Framework Installer'
         fileName: 'OfficeRibbonXEditor.msi'
-        project: 'Installer'
+        binFolder: 'Installer'
 
   - job: NetCore
     displayName: .NET Core
