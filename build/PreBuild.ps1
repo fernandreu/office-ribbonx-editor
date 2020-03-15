@@ -1,7 +1,7 @@
 function ExtractVariable([string[]]$Lines, [string]$PropertyName) {
     $value = ($Lines | Select-String -Pattern "<$PropertyName>(.*)</$PropertyName>").Matches.Groups[1].Value
-    Write-Host "- ${$PropertyName}: $value"
-    Write-Host "##vso[task.setvariable variable=$PropertyName;]$value"
+    Write-Host "- $($PropertyName): $value"
+    Write-Host "##vso[task.setvariable variable=Extracted$PropertyName;]$value"
 }
 
 $buildId = $args[0]
@@ -15,10 +15,10 @@ ForEach-Object {
     [IO.File]::WriteAllText($_.FullName, $joined)
 
     Write-Host "Extracted variables:"
-    ExtractVariable -Lines $c -PropertyName 'AssemblyName'
-    ExtractVariable -Lines $c -PropertyName 'AssemblyTitle'
-    ExtractVariable -Lines $c -PropertyName 'Authors'
-    ExtractVariable -Lines $c -PropertyName 'Copyright'
-    ExtractVariable -Lines $c -PropertyName 'Description'
-    ExtractVariable -Lines $c -PropertyName 'PackageProjectUrl'
+    ExtractVariable $c 'AssemblyName'
+    ExtractVariable $c 'AssemblyTitle'
+    ExtractVariable $c 'Authors'
+    ExtractVariable $c 'Copyright'
+    ExtractVariable $c 'Description'
+    ExtractVariable $c 'PackageProjectUrl'
 }
