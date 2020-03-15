@@ -1,27 +1,50 @@
 
-// This needs to coincide with the GUID of the original Wix project for previous versions
-// to get uninstalled automatically
-#define ProjectGuid "{{414e2267-764a-4e61-aa5e-f25f407dfafd}"
+#ifndef ProjectGuid
+  #define ProjectGuid "{{414e2267-764a-4e61-aa5e-f25f407dfafd}"
+#endif
+#ifndef AssemblyName
+  #define AssemblyName "OfficeRibbonXEditor"
+#endif
+#ifndef AssemblyTitle
+  #define AssemblyTitle "Office RibbonX Editor"
+#endif
+#ifndef Authors
+  #define Authors "Fernando Andreu"
+#endif
+#ifndef ProjectUrl
+  #define ProjectUrl "https://github.com/fernandreu/office-ribbonx-editor"
+#endif
+#ifndef Description
+  #define Description "A tool to edit the Custom UI part of Office documents."
+#endif
+#ifndef Copyright
+  #define Copyright 'Copyright (c) ' + GetDateTimeString(yyyy) + ' ' + Authors
+#endif
+#ifndef ExeName
+  #define ExeName AssemblyName + '.exe'
+#endif
+#ifndef InputFolder
+  #define InputFolder "../../src/OfficeRibbonXEditor/bin/Release/netcoreapp3.1"
+#endif
+#ifndef OutputFolder
+  #define OutputFolder "../../src/OfficeRibbonXEditor/bin/Installer/netcoreapp3.1"
+#endif
+#ifndef VersionPrefix
+  #define VersionPrefix GetFileVersion(InputFolder + '/' + ExeName)
+#endif
 
-#define AssemblyName "Office RibbonX Editor"
-#define Authors "Fernando Andreu"
-#define ProjectUrl "https://github.com/fernandreu/office-ribbonx-editor"
-#define Description "A tool to edit the Custom UI part of Office documents."
-#define Copyright "Copyright (c) 2020 Fernando Andreu"
-#define ExeName "OfficeRibbonXEditor.exe"
-#define OutputFile "OfficeRibbonXEditor"
 
 [Setup]
 AppId={#ProjectGuid}
-AppName={#AssemblyName}
+AppName={#AssemblyTitle}
 AppVersion={#VersionPrefix}
-AppVerName={#AssemblyName}
+AppVerName={#AssemblyTitle}
 AppPublisher={#Authors}
 AppPublisherURL={#ProjectUrl}
 AppSupportURL={#ProjectUrl}
 AppUpdatesURL={#ProjectUrl}
-DefaultDirName={autopf}\{#AssemblyName}
-DefaultGroupName={#AssemblyName}
+DefaultDirName={autopf}\{#AssemblyTitle}
+DefaultGroupName={#AssemblyTitle}
 DisableProgramGroupPage=no
 DisableDirPage=auto
 LicenseFile=..\..\LICENSE
@@ -34,7 +57,7 @@ VersionInfoTextVersion={#VersionPrefix}
 VersionInfoCopyright={#Copyright}
 PrivilegesRequired=admin
 OutputDir={#OutputFolder}
-OutputBaseFilename={#OutputFile}
+OutputBaseFilename={#AssemblyName}
 UninstallDisplayIcon={app}\{#ExeName}
 AllowNoIcons=yes
 
@@ -45,8 +68,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "{#InputFolder}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs
 
 [Icons]  
-Name: "{group}\{#AssemblyName}"; Filename: "{app}\{#ExeName}" 
-Name: "{commondesktop}\{#AssemblyName}"; Filename: "{app}\{#ExeName}"; Tasks: desktopicon
+Name: "{group}\{#AssemblyTitle}"; Filename: "{app}\{#ExeName}" 
+Name: "{commondesktop}\{#AssemblyTitle}"; Filename: "{app}\{#ExeName}"; Tasks: desktopicon
 
 [Run]
 Filename: "{app}\{#ExeName}"; Description: "Launch application"; Flags: postinstall nowait skipifsilent unchecked

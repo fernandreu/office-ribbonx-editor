@@ -83,6 +83,12 @@ stages:
 
     - script: >-
         iscc build/install/setup.iss
+        /DAssemblyName="$(AssemblyName)"
+        /DAssemblyTitle="$(AssemblyTitle)"
+        /DAuthors="$(Authors)"
+        /DProjectUrl="$(PackageProjectUrl)"
+        /DDescription="$(Description)"
+        /DCopyright="$(Copyright)"
         /DVersionPrefix="$(VersionPrefix)"
         /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
         /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
@@ -200,6 +206,12 @@ stages:
 
     - script: >-
         iscc build/install/setup.iss
+        /DAssemblyName="$(AssemblyName)"
+        /DAssemblyTitle="$(AssemblyTitle)"
+        /DAuthors="$(Authors)"
+        /DProjectUrl="$(PackageProjectUrl)"
+        /DDescription="$(Description)"
+        /DCopyright="$(Copyright)"
         /DVersionPrefix="$(VersionPrefix)"
         /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
         /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"

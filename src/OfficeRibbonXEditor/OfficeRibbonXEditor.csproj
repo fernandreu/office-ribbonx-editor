@@ -8,6 +8,7 @@
     <Copyright>Copyright (c) 2020 Fernando Andreu</Copyright>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <Description>A tool to edit the Custom UI part of Office documents.</Description>
+    <PackageProjectUrl>https://github.com/fernandreu/office-ribbonx-editor</PackageProjectUrl>
 
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>net461;netcoreapp3.1</TargetFrameworks>
