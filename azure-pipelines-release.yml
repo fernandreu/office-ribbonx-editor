@@ -38,8 +38,8 @@ jobs:
             archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
         - powershell: >-
             Copy-Item
-            -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.msi"
-            -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.msi"
+            -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
+            -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETFramework.exe"
           displayName: 'Copy .NET Framework Installer'
         - task: ArchiveFiles@2
           displayName: 'Archive .NET Core Binaries'

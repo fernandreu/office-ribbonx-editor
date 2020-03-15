@@ -91,7 +91,7 @@ stages:
     - template: build/templates/copy-and-publish.yml
       parameters:
         displayName: '.NET Framework Installer'
-        fileName: 'OfficeRibbonXEditor.msi'
+        fileName: 'OfficeRibbonXEditor.exe'
         binFolder: 'Installer'
 
   - job: NetCore
