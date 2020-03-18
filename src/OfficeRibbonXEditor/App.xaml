@@ -10,6 +10,63 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/Dragablz;component/Themes/Generic.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type Menu}" BasedOn="{StaticResource {x:Type Menu}}">
+                <Setter Property="Foreground" Value="Green"/>
+                <Setter Property="Background" Value="Yellow"/>
+            </Style>
+
+            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
+                <Setter Property="Foreground" Value="Green"/>
+                <Setter Property="Background" Value="Yellow"/>
+                <Setter Property="BorderBrush" Value="Yellow"/>
+            </Style>
+
+            <Style TargetType="{x:Type Separator}" BasedOn="{StaticResource {x:Type Separator}}">
+                <Setter Property="Foreground" Value="Green"/>
+                <Setter Property="Background" Value="Yellow"/>
+            </Style>
+
+            <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
+                <Setter Property="Foreground" Value="DarkRed"/>
+            </Style>
+
+            <!--<Style TargetType="{x:Type ToolBarTray}" BasedOn="{StaticResource {x:Type ToolBarTray}}">
+                <Setter Property="Background" Value="DarkRed"/>
+            </Style>-->
+
+            <SolidColorBrush x:Key="{x:Static SystemColors.ActiveBorderBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ActiveCaptionBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ActiveCaptionTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.AppWorkspaceBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlDarkDarkBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlLightLightBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ControlTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.DesktopBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.GradientActiveCaptionBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.GradientInactiveCaptionBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.GrayTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.HotTrackBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveBorderBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveCaptionBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveCaptionTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InfoBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InfoTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.MenuBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.MenuBarBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.MenuHighlightBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.MenuTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.ScrollBarBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowFrameBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkGreen"/>
+            <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="DarkGreen"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

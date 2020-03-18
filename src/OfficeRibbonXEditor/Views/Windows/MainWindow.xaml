@@ -175,7 +175,7 @@
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <Separator/>
+                <Separator Background="Green" Foreground="DarkGoldenrod"/>
                 <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/save.png"
@@ -425,7 +425,7 @@
                     ItemsSource="{Binding XmlSamples.Items}"
                     ToolTipService.ShowOnDisabled="True">
                     <MenuItem.Style>
-                        <Style TargetType="{x:Type MenuItem}">
+                        <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
                             <Setter Property="IsEnabled" Value="False"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab, Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type tabs:EditorTabViewModel}}" Value="True">
@@ -463,7 +463,7 @@
                             Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                             Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
 
-                        <Style TargetType="{x:Type MenuItem}">
+                        <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
                             <Setter Property="Header" Value="{Binding Name}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type samples:SampleFolderViewModel}}" Value="True">
@@ -483,7 +483,7 @@
             <MenuItem Header="_Help">
                 <MenuItem Header="Useful links" ItemsSource="{Binding HelpLinks}">
                     <MenuItem.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                             <Setter Property="Header" Value="{Binding Key}"/>
                             <Setter Property="Command" Value="{Binding DataContext.OpenHelpLinkCommand, ElementName=Window}"/>
                             <Setter Property="CommandParameter" Value="{Binding Value}"/>
