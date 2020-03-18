@@ -1,28 +1,25 @@
+function ExtractVariable([string[]]$Lines, [string]$PropertyName) {
+    $value = ($Lines | Select-String -Pattern "<$PropertyName>(.*)</$PropertyName>").Matches.Groups[1].Value
+    Write-Host "- $($PropertyName): $value"
+    Write-Host "##vso[task.setvariable variable=Extracted$PropertyName;]$value"
+}
+
 $buildId = $args[0]
 Write-Host "Build ID is: $buildId"
-$version = [string]$args[1]
-if ($version.StartsWith("refs/tags/v")) {
-    $parts = $version.Substring(10).Split(".")
-    while ($parts.Count -lt 3) {
-        $parts += "0"
-    }
-    $version = $parts -join "."
-    Write-Host "Resulting version: $version"
-} else {
-    Write-Host "No version detected"
-    $version = ""
-}
-Write-Host "##vso[task.setvariable variable=ThreeDigitVersion;]$version"
-Get-ChildItem "build/SharedAssemblyInfo.cs" |
+Get-ChildItem "src/OfficeRibbonXEditor/OfficeRibbonXEditor.csproj" |
 ForEach-Object {
     $c = ($_ | Get-Content -encoding UTF8)
-    if ($version -and -not ($c -match [Regex]::Escape("AssemblyVersion(`"$($version.Substring(1)).0`")"))) {
-        $message = "Tag version $version does not coincide with assembly version"
-        Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
-        exit 1
-    }
-    $c = $c -replace '(AssemblyVersion\(\"\d+.\d+.\d+)\.(\d)(\"\))', "`$1.$buildId`$3"
+    $c = $c -replace '(<VersionPrefix>\d+\.\d+\.\d+)\.(\d)(</VersionPrefix>)', "`$1.$buildId`$3"
     $joined = $c -join "`r`n"
-    Write-Host "Resulting assembly:`n$joined"
+    Write-Host "Resulting project:`n$joined"
     [IO.File]::WriteAllText($_.FullName, $joined)
+
+    Write-Host "Extracted variables:"
+    ExtractVariable $c 'AssemblyName'
+    ExtractVariable $c 'AssemblyTitle'
+    ExtractVariable $c 'Authors'
+    ExtractVariable $c 'Copyright'
+    ExtractVariable $c 'Description'
+    ExtractVariable $c 'PackageProjectUrl'
+    ExtractVariable $c 'VersionPrefix'
 }

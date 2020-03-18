@@ -6,7 +6,7 @@
     <UseWindowsForms>true</UseWindowsForms>
 
     <IsPackable>false</IsPackable>
-    <NoWarn>NU1701</NoWarn>
+    <NoWarn>NU1701;CA1707</NoWarn>
 
     <RootNamespace>OfficeRibbonXEditor.FunctionalTests</RootNamespace>
 
@@ -36,7 +36,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="Moq" Version="4.13.1" />
   </ItemGroup>
 

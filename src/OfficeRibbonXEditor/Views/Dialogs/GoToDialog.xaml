@@ -33,6 +33,7 @@
                    Content="_Current line number"/>
             <TextBox Grid.Row="0" 
                      Grid.Column="1"
+                     AutomationProperties.AutomationId="CurrentLineBox"
                      Margin="4"
                      VerticalAlignment="Center"
                      TextAlignment="Center"
@@ -44,6 +45,7 @@
                    Content="_Maximum line number"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
+                     AutomationProperties.AutomationId="MaximumLineBox"
                      Margin="4"
                      VerticalAlignment="Center"
                      TextAlignment="Center"
@@ -53,17 +55,19 @@
             <Label Grid.Row="2"
                    Grid.Column="0"
                    Content="Go to line number"/>
-            <xctk:IntegerUpDown Grid.Row="2"
-                                Grid.Column="1"
-                                x:Name="TargetBox"
-                                Margin="4"
-                                VerticalAlignment="Center"
-                                TextAlignment="Center"
-                                AutoMoveFocus="True"
-                                Minimum="1"
-                                Maximum="{Binding MaximumLineNumber}"
-                                AutoSelectBehavior="OnFocus"
-                                Value="{Binding Target, UpdateSourceTrigger=PropertyChanged}"/>
+            <xctk:IntegerUpDown 
+                Grid.Row="2"
+                Grid.Column="1"
+                AutomationProperties.AutomationId="TargetBox"
+                x:Name="TargetBox"
+                Margin="4"
+                VerticalAlignment="Center"
+                TextAlignment="Center"
+                AutoMoveFocus="True"
+                Minimum="1"
+                Maximum="{Binding MaximumLineNumber}"
+                AutoSelectBehavior="OnFocus"
+                Value="{Binding Target, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
         <DockPanel Margin="0,4,0,0"
                    LastChildFill="False">
@@ -74,6 +78,7 @@
                     Command="{Binding CloseCommand}"
                     IsCancel="True"/>
             <Button DockPanel.Dock="Right"
+                    AutomationProperties.AutomationId="AcceptButton"
                     MinWidth="60"
                     Margin="0,0,8,0"
                     Content="OK"

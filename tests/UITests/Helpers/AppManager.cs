@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.UIA3;
@@ -24,6 +23,10 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 
         public Window? Window { get; private set; }
 
+        public Menu? FileMenu  => this.Window?.FindFirstDescendant(x => x.ByText("File"), TimeSpan.FromSeconds(1)).AsMenu();
+
+        public Menu? HelpMenu => this.Window?.FindFirstDescendant(x => x.ByText("Help"), TimeSpan.FromSeconds(1)).AsMenu();
+
         public void Launch(params string[] arguments)
         {
             var psi = new ProcessStartInfo
@@ -36,18 +39,18 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             this.App = Application.Launch(psi);
             this.Automation = new UIA3Automation();
             this.App.WaitWhileMainHandleIsMissing(TimeSpan.FromSeconds(10));
-            for (var i = 0; i < 100; ++i)
-            {
-                this.Window = this.App.GetAllTopLevelWindows(this.Automation).FirstOrDefault();
-                if (this.Window != null)
-                {
-                    return;
-                }
+            this.Window = this.App.GetMainWindow(this.Automation, TimeSpan.FromSeconds(10));
+            Assume.That(this.Window, Is.Not.Null, "Cannot find main window");
+        }
 
-                Thread.Sleep(100);
+        public Window[] GetTopLevelWindows()
+        {
+            if (this.App == null || this.Automation == null)
+            {
+                return Array.Empty<Window>();
             }
 
-            Assert.Ignore("Cannot find main window");
+            return this.App.GetAllTopLevelWindows(this.Automation);
         }
 
         /// <summary>
@@ -65,16 +68,31 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             if (status == TestStatus.Failed)
             {
                 this.Window?.TestCapture("MainWindow.png", "Main Window status when the test failed");
+
+                // TODO: Capture all modal windows and top-level windows
+            }
+
+            while (this.Window?.ModalWindows.Any() ?? false)
+            {
+                this.Window.ModalWindows.First().Close();
+                this.App.WaitWhileBusy();
             }
 
             this.Window?.Close();
 
-            // TODO: Loop might not be needed if WaitWhileBusy() is really working
-            for (var attempts = 0; attempts < 10 && !this.App.HasExited; ++attempts)
+            try
             {
-                this.App.WaitWhileBusy();
-                var dialog = this.Window?.ModalWindows.FirstOrDefault();
-                dialog?.FindFirstChild(x => x.ByName("No")).Click();
+                // TODO: Loop might not be needed if WaitWhileBusy() is really working
+                for (var attempts = 0; attempts < 10 && !this.App.HasExited; ++attempts)
+                {
+                    this.App.WaitWhileBusy();
+                    var dialog = this.Window?.ModalWindows.FirstOrDefault();
+                    dialog?.FindFirstChild(x => x.ByName("No")).Click();
+                }
+            }
+            catch (InvalidOperationException)
+            {
+                // The app has probably exited already
             }
 
             this.Automation?.Dispose();

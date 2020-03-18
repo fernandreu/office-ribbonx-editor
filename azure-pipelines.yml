@@ -5,7 +5,7 @@ trigger:
     - master
     - 'feature/*'
   tags:
-    include:
+    exclude:
     - 'v*'
   paths:
     exclude:
@@ -50,7 +50,7 @@ stages:
       inputs:
         targetType: 'filePath'
         filePath: 'build/PreBuild.ps1'
-        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+        arguments: '"$(Build.BuildId)"'
 
     - task: NuGetToolInstaller@0
       displayName: 'Install NuGet'
@@ -81,11 +81,24 @@ stages:
         fileName: 'OfficeRibbonXEditor.exe'
         project: 'OfficeRibbonXEditor'
 
+    - script: >-
+        iscc build/install/setup.iss
+        /DAssemblyName="$(ExtractedAssemblyName)"
+        /DAssemblyTitle="$(ExtractedAssemblyTitle)"
+        /DAuthors="$(ExtractedAuthors)"
+        /DProjectUrl="$(ExtractedPackageProjectUrl)"
+        /DDescription="$(ExtractedDescription)"
+        /DCopyright="$(ExtractedCopyright)"
+        /DVersionPrefix="$(ExtractedVersionPrefix)"
+        /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
+        /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
+      displayName: Generate installer
+
     - template: build/templates/copy-and-publish.yml
       parameters:
         displayName: '.NET Framework Installer'
-        fileName: 'OfficeRibbonXEditor.msi'
-        project: 'Installer'
+        fileName: 'OfficeRibbonXEditor.exe'
+        binFolder: 'Installer'
 
   - job: NetCore
     displayName: .NET Core
@@ -109,7 +122,7 @@ stages:
       inputs:
         targetType: 'filePath'
         filePath: 'build/PreBuild.ps1'
-        arguments: '"$(Build.BuildId)" "$(Build.SourceBranch)"'
+        arguments: '"$(Build.BuildId)"'
 
     - task: UseDotNet@2
       displayName: 'Use .NET Core sdk'
@@ -191,6 +204,34 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)' 
         artifactName: '.NET Core Binaries (Unsigned)'
 
+    - script: >-
+        iscc build/install/setup.iss
+        /DAssemblyName="$(ExtractedAssemblyName)"
+        /DAssemblyTitle="$(ExtractedAssemblyTitle)"
+        /DAuthors="$(ExtractedAuthors)"
+        /DProjectUrl="$(ExtractedPackageProjectUrl)"
+        /DDescription="$(ExtractedDescription)"
+        /DCopyright="$(ExtractedCopyright)"
+        /DVersionPrefix="$(ExtractedVersionPrefix)"
+        /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/$(targetFramework)"
+        /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/$(targetFramework)"
+      displayName: Generate installer
+
+    - template: build/templates/copy-and-publish.yml
+      parameters:
+        displayName: '.NET Core Installer'
+        fileName: 'OfficeRibbonXEditor.exe'
+        binFolder: 'Installer'
+
+  - job: ReleaseScripts
+    displayName: Publish Release Scripts
+    steps:
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Release Scripts'
+      inputs:
+        targetPath: 'build/ReleaseScripts' 
+        artifactName: 'ReleaseScripts'
+
 - stage: Sign
   dependsOn: Build
   pool:
@@ -200,6 +241,8 @@ stages:
 
   - job: NetFrameworkExecutable
     displayName: Sign .NET Framework Executable
+    workspace:
+      clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
@@ -207,6 +250,8 @@ stages:
 
   - job: NetFrameworkInstaller
     displayName: Sign .NET Framework Installer
+    workspace:
+      clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
@@ -214,131 +259,18 @@ stages:
 
   - job: NetCoreBinaries
     displayName: Sign .NET Core Binaries
+    workspace:
+      clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
         artifactName: '.NET Core Binaries'
 
-- stage: Release
-  dependsOn: Sign
-  condition: and(succeeded(), startsWith(variables['Build.SourceBranch'], 'refs/tags/v'))
-  jobs:
-  - deployment: Deploy
-    environment: staging
-    strategy:
-      runOnce:
-        deploy:
-          steps:
-          - powershell: |
-              $version = "$(Build.SourceBranch)"
-              if ($version.StartsWith("refs/tags/v")) {
-                  $parts = $version.Substring(10).Split(".")
-                  while ($parts.Count -lt 3) {
-                      $parts += "0"
-                  }
-                  $version = $parts -join "."
-                  Write-Host "Resulting three-digit version: $version"
-              } else {
-                  $message = "No version detected; release pipeline can only be launched from a vX.X.X tag build"
-                  Write-Host "##vso[task.LogIssue type=error;] $message"
-                  exit 1
-              }
-              Write-Host "##vso[task.setvariable variable=ThreeDigitVersion;]$version"
-              # There is no need to check if the version coincides with the assembly version because 
-              # that is already checked in the build pipeline
-            displayName: 'Check Git Tag'
-          - task: ArchiveFiles@2
-            displayName: 'Archive .NET Framework Executable'
-            inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Executable/OfficeRibbonXEditor.exe'
-              includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
-          - powershell: >-
-              Copy-Item
-              -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.msi"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.msi"
-            displayName: 'Copy .NET Framework Installer'
-          - task: ArchiveFiles@2
-            displayName: 'Archive .NET Core Binaries'
-            inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Core Binaries/OfficeRibbonXEditor'
-              includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETCore.zip'
-          - task: GitHubRelease@1
-            displayName: 'Create GitHub Release'
-            inputs:
-              gitHubConnection: 'fernandreu-pat'
-              repositoryName: 'fernandreu/office-ribbonx-editor'
-              tagSource: userSpecifiedTag
-              tag: '$(Build.SourceBranchName)'
-              title: 'Office RibbonX Editor $(ThreeDigitVersion).$(Build.BuildId)'
-              releaseNotesSource: inline
-              releaseNotesInline: |
-                Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
-                
-                ## What's New
-                
-                For a full list of closed issues since last release, see below. 
-                
-                ## How to install / use
-                
-                Download one of the items from the `Assets` section below.
-                
-                Compressed `.zip` files do not require installation (i.e. will not create any
-                entry in the control panel's program list). When feasible, these will contain
-                a single `.exe` file.
-                
-                The .NET Framework builds require at least version 4.6.1 of the .NET Framework
-                Runtime. The .NET Core builds are still experimental and require at least
-                version 3.0 of the .NET Core Runtime (the one for desktop apps is enough). If
-                you need any of these runtimes, check [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
-                
-                **Note: As of version 1.6, both the installer and executable are cryptographically
-                signed. In the long therm, this should prevent security warnings in Windows due
-                to untrusted software being executed (see #74). This will not take effect immediately,
-                as it is a reputation system based on the number of downloads. Similarly, when
-                attempting to download the assets, some browsers might show warning messages
-                indicating these are not commonly downloaded, but it is completely safe to do so.**
-              assets: '$(Build.ArtifactStagingDirectory)/*.*'
-              isDraft: true
-              changeLogType: issueBased
-              changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'
-          - powershell: |
-              # TODO: This entire script is deprecated, as latest release version is now read directly 
-              # from the GitHub API. This is only kept for legacy purposes (i.e. until enough time 
-              # passes for users to update to a more recent tool). Once this is removed, the corresponding
-              # GitHub variables will no longer be needed.
-              
-              $version = "$(ThreeDigitVersion).$(Build.BuildId)"
-              $version = $version.Substring(1)
-              $pat = "$(GitHubPAT)"
-              $name = "$(GitHubName)"
-              $email = "$(GitHubEmail)"
-              
-              # Check if all necessary variables were passed correctly
-              if ($version.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The version is missing"
-                  exit 1
-              } elseif ($pat.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The GitHub PAT is missing"
-                  exit 1
-              } elseif ($name.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The GitHub name is missing"
-                  exit 1
-              } elseif ($email.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The GitHub email is missing"
-                  exit 1
-              }
-              
-              New-Item -Path "tmp" -ItemType "directory"
-              cd tmp
-              git clone --single-branch --branch info https://github.com/fernandreu/office-ribbonx-editor.git -q
-              cd office-ribbonx-editor
-
-              Write-Host "Version passed is: $version"
-              $version | Out-File -Encoding UTF8 -FilePath .\RELEASE-VERSION
-              git config --global user.email "$email"
-              git config --global user.name "$name"
-              git commit -a -m "Update release version to $version" -q
-              git push https://$($pat)@github.com/fernandreu/office-ribbonx-editor.git info -q
-            displayName: 'Update Info Branch'
+  - job: NetCoreInstaller
+    displayName: Sign .NET Core Installer
+    workspace:
+      clean: all
+    steps:
+    - template: build/templates/sign-and-publish.yml
+      parameters:
+        artifactName: '.NET Core Installer'

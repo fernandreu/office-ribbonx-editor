@@ -1,15 +1,19 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Definitions;
 using FlaUI.Core.Input;
+using FlaUI.Core.Tools;
 using FlaUI.Core.WindowsAPI;
 using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Extensions;
 using OfficeRibbonXEditor.UITests.Helpers;
+using Window = FlaUI.Core.AutomationElements.Window;
 
 namespace OfficeRibbonXEditor.UITests.Main
 {
@@ -54,7 +58,7 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             this.editor.Text = this.originalCode;
             this.editor.Click();
-            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.HOME);
+            this.editor.Selection.Position = 0;
         }
 
         [OneTimeTearDown]
@@ -146,6 +150,63 @@ namespace OfficeRibbonXEditor.UITests.Main
             // Assert
             // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
             Assert.AreEqual(originalCode, this.editor.Text);
+        }
+
+        [Test]
+        [TestCase(2, 1, 1)]
+        [TestCase(4, 5, 5)]
+        [TestCase(3, 10, 3)] // Values outside range should be ignored
+        [TestCase(3, 0, 3)] // Values outside range should be ignored
+        public void TestGoTo(int originalLine, int newLine, int expected)
+        {
+            // Arrange
+            var textParts = new [] {"This", "text", "has", "five", "lines"};
+            this.editor.Text = string.Join(Environment.NewLine, textParts);
+            this.editor.Selection.Line = originalLine - 1;
+
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_G); // Go To
+            Window? dialog = null;
+            Retry.WhileNull(() =>
+            {
+                dialog = this.manager.Window!.FindFirstDescendant(x => x.ByControlType(ControlType.Window)).AsWindow();
+                return dialog;
+            }, TimeSpan.FromSeconds(1));
+            Assert.NotNull(dialog, "No dialog launched");
+            Assert.That(dialog!.Title, Does.Match(".*Go To.*"), "Go To dialog not shown");
+
+            var currentLineBox = dialog.FindFirstDescendant("CurrentLineBox").AsTextBox();
+            Assert.AreEqual($"{originalLine}", currentLineBox.Text);
+
+            var maximumLineBox = dialog.FindFirstDescendant("MaximumLineBox").AsTextBox();
+            Assert.AreEqual($"{textParts.Length}", maximumLineBox.Text);
+
+            // Due to this being a SpinBox, the original AutomationId (TargetBox) is ignored
+            var targetBox = dialog.FindFirstDescendant("PART_TextBox").AsTextBox();
+
+            // Act
+            targetBox.Text = $"{newLine}";
+            dialog.FindFirstDescendant("AcceptButton").Click();
+
+            // Assert
+            Assert.AreEqual(expected, this.editor.Selection.Line + 1);
+        }
+
+        [Test]
+        [TestCase(2)]
+        public void TestToggleComments(int line)
+        {
+            // Arrange
+            var textParts = new[] { "This", "text", "has", "five", "lines" };
+            this.editor.Text = string.Join(Environment.NewLine, textParts);
+            this.editor.Selection.Line = line - 1;
+
+            // Act / Assert
+
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.DIVIDE); // Toggle comment
+            Assert.That(this.editor.Selection.Text, Does.Match($"<\\!--{textParts[line - 1]}-->.*"));
+
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.DIVIDE); // Toggle comment
+            Assert.That(this.editor.Selection.Text, Does.Match($"{textParts[line - 1]}.*"));
         }
 
         private static void WaitForClipboard()

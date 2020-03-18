@@ -33,12 +33,6 @@
         <i:EventTrigger EventName="Closing">
             <mvvmlight:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
         </i:EventTrigger>
-        <i:EventTrigger EventName="PreviewDragEnter">
-            <mvvmlight:EventToCommand Command="{Binding PreviewDragEnterCommand}" PassEventArgsToCommand="True"/>
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Drop">
-            <mvvmlight:EventToCommand Command="{Binding DropCommand}" PassEventArgsToCommand="True"/>
-        </i:EventTrigger>
     </i:Interaction.Triggers>
     <Window.Resources>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>

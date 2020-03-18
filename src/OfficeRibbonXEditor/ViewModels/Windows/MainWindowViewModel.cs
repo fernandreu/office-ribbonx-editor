@@ -43,7 +43,11 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private readonly IFileDialogService fileDialogService;
 
+        private readonly IVersionChecker versionChecker;
+
         private readonly IDialogProvider dialogProvider;
+
+        private readonly IUrlHelper urlHelper;
 
         private readonly Dictionary<Type, IContentDialogBase> dialogs = new Dictionary<Type, IContentDialogBase>();
 
@@ -68,11 +72,18 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private bool disposed;
 
-        public MainWindowViewModel(IMessageBoxService messageBoxService, IFileDialogService fileDialogService, IVersionChecker versionChecker, IDialogProvider dialogProvider)
+        public MainWindowViewModel(
+            IMessageBoxService messageBoxService, 
+            IFileDialogService fileDialogService, 
+            IVersionChecker versionChecker, 
+            IDialogProvider dialogProvider, 
+            IUrlHelper urlHelper)
         {
             this.messageBoxService = messageBoxService;
             this.fileDialogService = fileDialogService;
+            this.versionChecker = versionChecker;
             this.dialogProvider = dialogProvider;
+            this.urlHelper = urlHelper;
 
             this.OpenDocumentCommand = new RelayCommand(this.ExecuteOpenDocumentCommand);
             this.OpenTabCommand = new RelayCommand<TreeViewItemViewModel>(this.ExecuteOpenTabCommand);
@@ -103,8 +114,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
             this.CloseCommand = new RelayCommand(this.ExecuteCloseCommand);
             this.CloseTabCommand = new RelayCommand<ITabItemViewModel>(this.ExecuteCloseTabCommand);
-            this.PreviewDragEnterCommand = new RelayCommand<DragEventArgs>(this.ExecutePreviewDragCommand);
-            this.DropCommand = new RelayCommand<DragEventArgs>(this.ExecuteDropCommand);
+            this.PreviewDragEnterCommand = new RelayCommand<DragData>(this.ExecutePreviewDragCommand);
+            this.DropCommand = new RelayCommand<DragData>(this.ExecuteDropCommand);
             this.NewerVersionCommand = new RelayCommand(this.ExecuteNewerVersionCommand);
             this.OpenHelpLinkCommand = new RelayCommand<string>(this.ExecuteOpenHelpLinkCommand);
 
@@ -118,18 +129,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 #endif
             this.customUiSchemas = LoadXmlSchemas();
             this.XmlSamples = LoadXmlSamples();
-
-            foreach (var file in Environment.GetCommandLineArgs().Skip(1))
-            {
-                if (!File.Exists(file))
-                {
-                    continue;
-                }
-
-                this.FinishOpeningFile(file);
-            }
-
-            this.CheckVersionAsync(versionChecker).SafeFireAndForget();
         }
 
         /// <summary>
@@ -199,7 +198,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     return;
                 }
 
-                Properties.Settings.Default.ShowWhitespace = value;
+                Settings.Default.ShowWhitespace = value;
                 foreach (var tab in this.OpenTabs.OfType<EditorTabViewModel>())
                 {
                     tab.Lexer?.Update();
@@ -325,12 +324,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// <summary>
         /// Gets the command that starts the drag / drop action for opening files
         /// </summary>
-        public RelayCommand<DragEventArgs> PreviewDragEnterCommand { get; }
+        public RelayCommand<DragData> PreviewDragEnterCommand { get; }
 
         /// <summary>
         /// Gets the command that finishes the drag / drop action for opening files
         /// </summary>
-        public RelayCommand<DragEventArgs> DropCommand { get; }
+        public RelayCommand<DragData> DropCommand { get; }
 
         public RelayCommand<string> OpenHelpLinkCommand { get; }
 
@@ -380,6 +379,25 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Called by the application to perform any action that might depend on the window having been
+        /// set up already (usually because they depend on events listened in the window).
+        /// </summary>
+        public void OnLoaded()
+        {
+            foreach (var file in Environment.GetCommandLineArgs().Skip(1))
+            {
+                if (!File.Exists(file))
+                {
+                    continue;
+                }
+
+                this.FinishOpeningFile(file);
+            }
+
+            this.CheckVersionAsync(this.versionChecker).SafeFireAndForget();
         }
 
         public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = false) where TDialog : IContentDialogBase
@@ -513,7 +531,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.OpenTabs.RemoveAt(index);
             if (this.SelectedTab == tab)
             {
-                this.SelectedTab = index < this.OpenTabs.Count ? this.OpenTabs[index] : index > 0 ? this.OpenTabs[index - 1] : null;
+                var count = this.OpenTabs.Count;
+                this.SelectedTab = count > 0 ? this.OpenTabs[Math.Max(index, count - 1)] : null;
             }
         }
 
@@ -672,15 +691,14 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             this.Closed?.Invoke(this, EventArgs.Empty);
         }
 
-        private void ExecutePreviewDragCommand(DragEventArgs e)
+        private void ExecutePreviewDragCommand(DragData data)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!data.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 return;
             }
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files == null)
+            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
             {
                 return;
             }
@@ -690,18 +708,17 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            e.Handled = true;
+            data.Handled = true;
         }
 
-        private void ExecuteDropCommand(DragEventArgs e)
+        private void ExecuteDropCommand(DragData data)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (!data.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 return;
             }
 
-            var files = (string[])e.Data.GetData(DataFormats.FileDrop);
-            if (files == null)
+            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
             {
                 return;
             }
@@ -710,6 +727,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             {
                 this.FinishOpeningFile(file);
             }
+
+            data.Handled = true;
         }
 
         private void ExecuteOpenDocumentCommand()
@@ -792,31 +811,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             {
                 // Select the document on the TreeView
                 this.SelectedItem = model;
-            }
-        }
-
-        private void ExecuteOpenHelpLinkCommand(string url)
-        {
-            var psi = new ProcessStartInfo
-            {
-                FileName = url,
-                UseShellExecute = true,
-            };
-
-            var process = Process.Start(psi);
-            if (!Sandbox.IsEnabled)
-            {
-                return;
-            }
-
-            try
-            {
-                process?.Kill();
-            }
-            catch (InvalidOperationException)
-            {
-                // The process finished too quickly. This probably means that the tab was
-                // merged with an already opened browsed
             }
         }
 
@@ -934,9 +928,16 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 tab.ApplyChanges();
             }
 
-            foreach (var doc in this.DocumentList)
+            try
             {
-                doc.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                foreach (var doc in this.DocumentList)
+                {
+                    doc.Save(this.ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1049,79 +1050,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             return result;
         }
 
-        private static SampleFolderViewModel? ScanSampleFolder(string path)
-        {
-            var result = new SampleFolderViewModel
-            {
-                Name = new DirectoryInfo(path).Name,
-            };
-
-            foreach (var directory in Directory.GetDirectories(path))
-            {
-                var folder = ScanSampleFolder(directory);
-                if (folder == null)
-                {
-                    continue;
-                }
-
-                result.Items.Add(folder);
-            }
-
-            foreach (var file in Directory.GetFiles(path, "*.xml"))
-            {
-                result.Items.Add(new FileSampleViewModel(file));
-            }
-
-            return result.Items.Count > 0 ? result : null;
-        }
-
         private static SampleFolderViewModel? LoadXmlSamples()
         {
-            var root = new SampleFolderViewModel
-            {
-                Name = "XML Sample",
-            };
-
-            foreach (var source in Settings.Default.CustomSamples.Split('\n'))
-            {
-                if (string.IsNullOrWhiteSpace(source))
-                {
-                    continue;
-                }
-
-                var trimmed = source.Trim();
-
-                if (trimmed.EndsWith(".xml", StringComparison.InvariantCultureIgnoreCase) && File.Exists(trimmed))
-                {
-                    root.Items.Add(new FileSampleViewModel(trimmed));
-                }
-
-                if (!Directory.Exists(trimmed))
-                {
-                    continue;
-                }
-
-                var folder = ScanSampleFolder(trimmed);
-                if (folder == null)
-                {
-                    continue;
-                }
-
-                root.Items.Add(folder);
-            }
-
-            if (Settings.Default.ShowDefaultSamples)
-            {
-                foreach (var sample in EmbeddedSampleViewModel.GetFromAssembly())
-                {
-                    root.Items.Add(sample);
-                }
-            }
-
-            return root.Items.Count > 0 ? root : null;
+            return SampleUtils.LoadXmlSamples(
+                Settings.Default.CustomSamples.Split('\n'), 
+                Settings.Default.ShowDefaultSamples);
         }
-
-
 
         /// <summary>
         /// Inserts an XML sample to the selected document in the tree
@@ -1420,7 +1354,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            Process.Start("https://github.com/fernandreu/office-ribbonx-editor/releases/latest");
+            this.urlHelper.OpenRelease();
+        }
+
+        private void ExecuteOpenHelpLinkCommand(string url)
+        {
+            this.urlHelper.OpenExternal(new Uri(url));
         }
 
         private void ExecuteShowSettingsCommand()

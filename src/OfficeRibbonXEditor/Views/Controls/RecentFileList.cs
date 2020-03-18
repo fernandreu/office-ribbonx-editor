@@ -25,6 +25,7 @@ using System.Windows.Input;
 using System.Xml;
 using Microsoft.Win32;
 using OfficeRibbonXEditor.Events;
+using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
@@ -256,11 +257,9 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             var files = new List<RecentFile>(list.Count);
 
-            var i = 0;
-
-            foreach (var filepath in list)
+            foreach (var (filepath, index) in list.Enumerated())
             {
-                files.Add(new RecentFile(i++, filepath));
+                files.Add(new RecentFile(index, filepath));
             }
 
             return files;
@@ -463,14 +462,16 @@ namespace OfficeRibbonXEditor.Views.Controls
                     return;
                 }
 
-                for (int i = 0; i < max; i++)
+                for (var i = 0; i < max; i++)
                 {
-                    string s = (string)k.GetValue(Key(i));
-                    if (s != null && s.Equals(filepath, StringComparison.CurrentCultureIgnoreCase))
+                    var s = (string)k.GetValue(Key(i));
+                    if (s == null || !s.Equals(filepath, StringComparison.CurrentCultureIgnoreCase))
                     {
-                        this.RemoveFile(i, max);
-                        i--; // Repeat this loop iteration again
+                        continue;
                     }
+
+                    this.RemoveFile(i, max);
+                    i--; // Repeat this loop iteration again
                 }
             }
 
@@ -590,7 +591,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             private List<string> Load(int max)
             {
-                List<string> list = new List<string>(max);
+                var list = new List<string>(max);
 
                 using (var ms = new MemoryStream())
                 {

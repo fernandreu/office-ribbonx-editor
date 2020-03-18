@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
 using Autofac;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Services;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
@@ -17,25 +18,12 @@ namespace OfficeRibbonXEditor
     /// </summary>
     public partial class App : Application
     {
-        private readonly IContainer container;
+        private readonly IContainer container = new AppContainerBuilder().Build();
 
         private readonly Dictionary<IContentDialogBase, DialogHost> dialogs = new Dictionary<IContentDialogBase, DialogHost>();
 
         public App()
         {
-            var builder = new ContainerBuilder();
-
-            builder.RegisterType<MessageBoxService>().As<IMessageBoxService>();
-            builder.RegisterType<FileDialogService>().As<IFileDialogService>();
-            builder.RegisterType<VersionChecker>().As<IVersionChecker>();
-            builder.RegisterType<DialogProvider>().As<IDialogProvider>();
-            builder.RegisterType<ToolInfo>().As<IToolInfo>();
-
-            builder.RegisterType<MainWindowViewModel>();
-            DialogHostBase.RegisterDialogViewModels(builder);
-
-            this.container = builder.Build();
-
             this.Dispatcher.UnhandledException += this.OnUnhandledException;
         }
 
@@ -58,6 +46,7 @@ namespace OfficeRibbonXEditor
             window.DataContext = windowModel;
             windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
             windowModel.Closed += (o, e) => window.Close();
+            windowModel.OnLoaded();
             window.Show();
         }
 

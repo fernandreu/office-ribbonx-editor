@@ -5,58 +5,167 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
              xmlns:tabs="clr-namespace:OfficeRibbonXEditor.ViewModels.Tabs"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:properties="clr-namespace:OfficeRibbonXEditor.Properties"
              mc:Ignorable="d" 
+             x:Name="Tab"
              d:DataContext="{d:DesignInstance tabs:IconTabViewModel}"
              d:DesignHeight="450" 
              d:DesignWidth="800">
     <UserControl.Resources>
         <converters:PowerConverter x:Key="PowerConverter"/>
-    </UserControl.Resources>
-    <ScrollViewer
-        x:Name="ScrollViewer"
-        HorizontalScrollBarVisibility="Auto"
-        PreviewMouseLeftButtonDown="OnPreviewMouseLeftButtonDown"
-        PreviewMouseMove="OnPreviewMouseMove"
-        PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"
-        PreviewMouseWheel="OnPreviewMouseWheel">
-        <Border
-            VerticalAlignment="Center"
-            HorizontalAlignment="Center"
-            BorderBrush="Black"
-            BorderThickness="1">
-            <Border.Background>
-                <DrawingBrush 
-                    Viewport="0,0,16,16" 
-                    ViewportUnits="Absolute"
-                    TileMode="Tile">
-                    <DrawingBrush.Drawing>
-                        <DrawingGroup>
-                            <GeometryDrawing Brush="White">
-                                <GeometryDrawing.Geometry>
-                                    <RectangleGeometry Rect="0,0,100,100" />
-                                </GeometryDrawing.Geometry>
-                            </GeometryDrawing>
+        <converters:RectConverter x:Key="RectConverter"/>
+        <converters:ColorConverter x:Key="ColorConverter"/>
+        <SolidColorBrush 
+            x:Key="MainBrush"
+            Color="{Binding ElementName=MainColorPicker, Path=SelectedColor}"/>
+        <SolidColorBrush 
+            x:Key="SecondaryBrush"
+            Color="{Binding ElementName=SecondaryColorPicker, Path=SelectedColor}"/>
+        <DrawingBrush 
+            x:Key="GridBrush"
+            ViewportUnits="Absolute"
+            TileMode="Tile">
+            <DrawingBrush.Viewport>
+                <MultiBinding Converter="{StaticResource RectConverter}">
+                    <Binding ElementName="GridSizeSlider" Path="Value"/>
+                    <Binding ElementName="GridSizeSlider" Path="Value"/>
+                </MultiBinding>
+            </DrawingBrush.Viewport>
+            <DrawingBrush.Drawing>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="{DynamicResource MainBrush}">
+                        <GeometryDrawing.Geometry>
+                            <RectangleGeometry Rect="0,0,100,100" />
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
 
-                            <GeometryDrawing
-                                Brush="Gray">
-                                <GeometryDrawing.Geometry>
-                                    <GeometryGroup>
-                                        <RectangleGeometry Rect="0,0,50,50" />
-                                        <RectangleGeometry Rect="50,50,50,50" />
-                                    </GeometryGroup>
-                                </GeometryDrawing.Geometry>
-                            </GeometryDrawing>
-                        </DrawingGroup>
-                    </DrawingBrush.Drawing>
-                </DrawingBrush>
-            </Border.Background>
-            <Image Stretch="None" Source="{Binding Icon.Image}">
-                <Image.LayoutTransform>
-                    <ScaleTransform
-                        ScaleX="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"
-                        ScaleY="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"/>
-                </Image.LayoutTransform>
-            </Image>
-        </Border>
-    </ScrollViewer>
+                    <GeometryDrawing Brush="{DynamicResource SecondaryBrush}">
+                        <GeometryDrawing.Geometry>
+                            <GeometryGroup>
+                                <RectangleGeometry Rect="0,0,50,50" />
+                                <RectangleGeometry Rect="50,50,50,50" />
+                            </GeometryGroup>
+                        </GeometryDrawing.Geometry>
+                    </GeometryDrawing>
+                </DrawingGroup>
+            </DrawingBrush.Drawing>
+        </DrawingBrush>
+    </UserControl.Resources>
+    <DockPanel>
+        <GroupBox 
+            DockPanel.Dock="Bottom"
+            Header="Grid options">
+            <StackPanel
+                Margin="4"
+                DockPanel.Dock="Bottom"
+                Orientation="Horizontal">
+                <Label
+                    VerticalAlignment="Center"
+                    Content="Margin:"/>
+                <Slider
+                    x:Name="MarginSlider"
+                    VerticalAlignment="Center"
+                    Width="100"
+                    Minimum="0"
+                    Maximum="128"
+                    TickFrequency="1"
+                    Value="{Binding Source={x:Static properties:Settings.Default}, Path=IconGridMargin}" 
+                    IsSnapToTickEnabled="True"/>
+                <Label 
+                    VerticalAlignment="Center"
+                    Content="{Binding ElementName=MarginSlider, Path=Value}"/>
+
+                <Label 
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    Content="Main color:"/>
+                <xctk:ColorPicker
+                    Margin="4,0,0,0"
+                    x:Name="MainColorPicker"
+                    Width="50"
+                    Height="24"
+                    SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=IconGridMainColor, Converter={StaticResource ColorConverter}}" 
+                    DisplayColorAndName="False" 
+                    MaxDropDownWidth="250"/>
+
+                <CheckBox 
+                    x:Name="SecondaryColorBox"
+                    Margin="12,0,0,0"
+                    VerticalAlignment="Center"
+                    IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=IconGridTwoColors}" 
+                    Content="Secondary color:"/>
+                <xctk:ColorPicker
+                    x:Name="SecondaryColorPicker"
+                    IsEnabled="{Binding ElementName=SecondaryColorBox, Path=IsChecked}"
+                    Margin="4,0,0,0"
+                    Width="50"
+                    Height="24"
+                    SelectedColor="{Binding Source={x:Static properties:Settings.Default}, Path=IconGridSecondaryColor, Converter={StaticResource ColorConverter}}" 
+                    DisplayColorAndName="False" 
+                    MaxDropDownWidth="250"/>
+
+                <Label
+                    Margin="12,0,0,0"
+                    IsEnabled="{Binding ElementName=SecondaryColorBox, Path=IsChecked}"
+                    VerticalAlignment="Center"
+                    Content="Size:"/>
+                <Slider
+                    x:Name="GridSizeSlider"
+                    IsEnabled="{Binding ElementName=SecondaryColorBox, Path=IsChecked}"
+                    VerticalAlignment="Center"
+                    Width="100"
+                    Minimum="4"
+                    Maximum="96"
+                    Value="{Binding Source={x:Static properties:Settings.Default}, Path=IconGridSize}" 
+                    TickFrequency="1"
+                    IsSnapToTickEnabled="True"/>
+                <Label 
+                    IsEnabled="{Binding ElementName=SecondaryColorBox, Path=IsChecked}"
+                    VerticalAlignment="Center"
+                    Content="{Binding ElementName=GridSizeSlider, Path=Value}"/>
+
+                <Button
+                    VerticalAlignment="Center"
+                    Margin="12,0,0,0"
+                    Padding="2"
+                    Content="Reset"
+                    Command="{Binding ResetGridCommand}"/>
+            </StackPanel>
+        </GroupBox>
+        <ScrollViewer
+            x:Name="ScrollViewer"
+            HorizontalScrollBarVisibility="Auto"
+            PreviewMouseLeftButtonDown="OnPreviewMouseLeftButtonDown"
+            PreviewMouseMove="OnPreviewMouseMove"
+            PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"
+            PreviewMouseWheel="OnPreviewMouseWheel">
+            <Border
+                VerticalAlignment="Center"
+                HorizontalAlignment="Center"
+                BorderBrush="Black"
+                BorderThickness="1">
+                <Border.Style>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="Background" Value="{DynamicResource MainBrush}"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=SecondaryColorBox, Path=IsChecked}" Value="True">
+                                <Setter Property="Background" Value="{StaticResource GridBrush}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Image 
+                    Margin="{Binding ElementName=MarginSlider, Path=Value}"
+                    Stretch="None" 
+                    Source="{Binding Icon.Image}">
+                    <Image.LayoutTransform>
+                        <ScaleTransform
+                            ScaleX="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"
+                            ScaleY="{Binding Zoom, Converter={StaticResource PowerConverter}, ConverterParameter=1.2}"/>
+                    </Image.LayoutTransform>
+                </Image>
+            </Border>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>

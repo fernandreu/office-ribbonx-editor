@@ -1,8 +1,8 @@
 ﻿using System.Windows;
-using System.Windows.Automation;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Windows;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
@@ -42,7 +42,32 @@ namespace OfficeRibbonXEditor.Views.Windows
                     this.RecentFileList.InsertFile(e.Data);
                 }
             };
+
             this.viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
+
+            // These no longer use interactions in XAML due to the conversion needed for the command parameter
+            this.PreviewDragEnter += this.OnPreviewDragEnter;
+            this.Drop += this.OnDrop;
+        }
+
+        private void OnPreviewDragEnter(object sender, DragEventArgs e)
+        {
+            var data = new DragData(e.Data);
+            this.viewModel?.PreviewDragEnterCommand.Execute(data);
+            if (data.Handled)
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void OnDrop(object sender, DragEventArgs e)
+        {
+            var data = new DragData(e.Data);
+            this.viewModel?.DropCommand.Execute(data);
+            if (data.Handled)
+            {
+                e.Handled = true;
+            }
         }
 
         /// <summary>

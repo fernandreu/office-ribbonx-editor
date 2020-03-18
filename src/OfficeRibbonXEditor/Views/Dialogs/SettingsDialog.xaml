@@ -198,7 +198,7 @@
             </Grid>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2">
-            <Button Content="Reset Defaults" Margin="3" Padding="8,4" Command="{Binding ResetCommand}"/>
+            <Button Content="Reset Defaults" Margin="3" Padding="8,4" Command="{Binding ResetToDefaultCommand}"/>
             <Button Content="Apply" Margin="3" Padding="8,4" Command="{Binding ApplyCommand}" IsEnabled="{Binding SettingsChanged}"/>
             <Button Content="Accept" Margin="3" Padding="8,4" Command="{Binding AcceptCommand}" IsDefault="True" IsEnabled="{Binding SettingsChanged}"/>
         </StackPanel>

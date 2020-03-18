@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Reflection;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Conditions;
+using FlaUI.Core.Tools;
 using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Helpers;
 using OfficeRibbonXEditor.UITests.Models;
@@ -19,14 +22,14 @@ namespace OfficeRibbonXEditor.UITests.Extensions
             return self != null ? new Scintilla(self.FrameworkAutomationElement) : null;
         }
 
-        public static Tree? FindTreeView(this AutomationElement self)
+        public static Tree? FindTreeView(this AutomationElement self, TimeSpan? timeout = null)
         {
-            return self?.FindFirstChild(x => x.ByAutomationId("TreeView")).AsTree();
+            return Retry.WhileNull(() => self?.FindFirstChild("TreeView"), timeout).Result.AsTree();
         }
 
-        public static Tab? FindTabView(this AutomationElement self)
+        public static Tab? FindTabView(this AutomationElement self, TimeSpan? timeout = null)
         {
-            return self?.FindFirstChild(x => x.ByAutomationId("TabView")).AsTab();
+            return Retry.WhileNull(() => self?.FindFirstChild("TabView"), timeout).Result.AsTab();
         }
 
         /// <summary>
@@ -41,6 +44,26 @@ namespace OfficeRibbonXEditor.UITests.Extensions
             var image = FlaUI.Core.Capturing.Capture.Element(self);
             image.ToFile(path);
             TestContext.AddTestAttachment(path, description);
+        }
+
+        public static AutomationElement? FindFirstDescendant(this AutomationElement self,  TimeSpan timeout)
+        {
+            return Retry.WhileNull(() => self?.FindFirstDescendant(), timeout).Result;
+        }
+
+        public static AutomationElement? FindFirstDescendant(this AutomationElement self, ConditionBase condition, TimeSpan timeout)
+        {
+            return Retry.WhileNull(() => self?.FindFirstDescendant(condition), timeout).Result;
+        }
+
+        public static AutomationElement? FindFirstDescendant(this AutomationElement self, Func<ConditionFactory, ConditionBase> conditionFunc, TimeSpan timeout)
+        {
+            return Retry.WhileNull(() => self?.FindFirstDescendant(conditionFunc), timeout).Result;
+        }
+
+        public static AutomationElement? FindFirstDescendant(this AutomationElement self, string automationId, TimeSpan timeout)
+        {
+            return Retry.WhileNull(() => self?.FindFirstDescendant(automationId), timeout).Result;
         }
     }
 }

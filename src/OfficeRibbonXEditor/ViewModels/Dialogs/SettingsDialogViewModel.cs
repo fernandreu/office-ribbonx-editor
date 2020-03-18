@@ -52,7 +52,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public SettingsDialogViewModel()
         {
-            this.ResetCommand = new RelayCommand(this.ResetToDefault);
+            this.ResetToDefaultCommand = new RelayCommand(this.ResetToDefault);
+            this.ResetToCurrentCommand = new RelayCommand(this.ResetToCurrent);
             this.ApplyCommand = new RelayCommand(this.ApplySettings);
             this.AcceptCommand = new RelayCommand(this.AcceptSettings);
             this.SetAllAssociationsCommand = new RelayCommand<bool>(this.SetAllAssociations);
@@ -91,7 +92,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
 
-        public RelayCommand ResetCommand { get; }
+        public RelayCommand ResetToDefaultCommand { get; }
+
+        public RelayCommand ResetToCurrentCommand { get; }
 
         public RelayCommand ApplyCommand { get; }
 

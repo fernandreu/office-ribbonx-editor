@@ -1,7 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Tools;
 using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Extensions;
 using OfficeRibbonXEditor.UITests.Helpers;
@@ -15,7 +17,8 @@ namespace OfficeRibbonXEditor.UITests.Main
     {
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
-        private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
+        // TODO: Test save as command, then check if file was created as destFile
+        //private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
 
         // The initialization is actually not needed because it is again done in SetUp, but it is a clean way of
         // removing a warning due to uninitialized non-null fields. The alternative is via pragma
@@ -71,6 +74,58 @@ namespace OfficeRibbonXEditor.UITests.Main
 
             var tabItem = this.manager.Window?.FindTabView()?.SelectedTabItem;
             Assert.NotNull(tabItem);
+        }
+
+        [Test]
+        public void CanShowAboutDialog()
+        {
+            // Arrange
+            this.manager.Launch();
+            var helpMenu = this.manager.HelpMenu;
+            Assume.That(helpMenu, Is.Not.Null, "Missing Help menu");
+            helpMenu!.Click();
+            var aboutMenu = helpMenu.FindFirstDescendant(x => x.ByText("About"), TimeSpan.FromSeconds(1));
+            Assume.That(aboutMenu, Is.Not.Null, "Missing About menu");
+
+            // Act
+            aboutMenu!.Click();
+
+            // Assert
+            var aboutDialog = this.manager.Window?.FindFirstModalWindow();
+            Assert.NotNull(aboutDialog, "About dialog not launched");
+        }
+
+        [Test]
+        public void FileAppearsInRecentList()
+        {
+            // Arrange : open a file and close it so that it appears in the recent file list
+            this.manager.Launch(sourceFile);
+            var treeView = this.manager.Window!.FindTreeView();
+            Assume.That(treeView, Is.Not.Null);
+            treeView!.Items.First().Click();
+
+            var fileMenu = this.manager.FileMenu;
+            Assume.That(fileMenu, Is.Not.Null, "Missing File menu");
+            fileMenu!.Click();
+
+            var closeDocumentEntry = fileMenu.FindFirstDescendant(x => x.ByText("Close Current Document"), TimeSpan.FromSeconds(1));
+            Assume.That(closeDocumentEntry, Is.Not.Null, "Missing Close Current Document menu");
+            closeDocumentEntry!.Click();
+            this.manager.App!.WaitWhileBusy();
+            Assume.That(treeView!.Items, Is.Empty);
+
+            var fileName = Path.GetFileName(sourceFile);
+            Assume.That(fileName, Is.Not.Null, "Cannot get filename");
+
+            // Act / assert: check if the file has been added to the recent list, and open it
+            fileMenu!.Click();
+            var entry = Retry.WhileNull(() => fileMenu.FindAllDescendants().FirstOrDefault(
+                    x => x.Name.StartsWith("1: ", StringComparison.OrdinalIgnoreCase) && x.Name.EndsWith(fileName, StringComparison.OrdinalIgnoreCase)))
+                .Result;
+            Assert.NotNull(entry, "Recent file entry for opened file not found");
+            entry.Click();
+            this.manager.App.WaitWhileBusy();
+            Assert.IsNotEmpty(treeView.Items, "Recent file not opened");
         }
     }
 }

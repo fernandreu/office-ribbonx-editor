@@ -18,22 +18,22 @@
     </controls:DialogControl.Resources>  
     <DockPanel LastChildFill="False" Margin="12">
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Author:</TextBlock> Fernando Andreu
+            <TextBlock FontWeight="Bold">Author:</TextBlock> <TextBlock AutomationProperties.AutomationId="AuthorBox" Text="{Binding Info.AssemblyCompany}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">License:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/office-ribbonx-editor/blob/master/LICENSE">MIT</controls:ExternalHyperlink>
+            <TextBlock FontWeight="Bold">License:</TextBlock> <controls:ExternalHyperlink AutomationProperties.AutomationId="LicenseBox" NavigateUri="https://github.com/fernandreu/office-ribbonx-editor/blob/master/LICENSE">MIT</controls:ExternalHyperlink>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink NavigateUri="https://github.com/fernandreu/office-ribbonx-editor">https://github.com/fernandreu/office-ribbonx-editor</controls:ExternalHyperlink>
+            <TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink AutomationProperties.AutomationId="ProjectPageBox" NavigateUri="https://github.com/fernandreu/office-ribbonx-editor">https://github.com/fernandreu/office-ribbonx-editor</controls:ExternalHyperlink>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Version:</TextBlock> <TextBlock Text="{Binding Info.AssemblyVersion}"/>
+            <TextBlock FontWeight="Bold">Version:</TextBlock> <TextBlock AutomationProperties.AutomationId="AssemblyVersionBox" Text="{Binding Info.AssemblyVersion}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Runtime:</TextBlock> <TextBlock Text="{Binding Info.RuntimeVersion}"/>
+            <TextBlock FontWeight="Bold">Runtime:</TextBlock> <TextBlock AutomationProperties.AutomationId="RuntimeVersionBox" Text="{Binding Info.RuntimeVersion}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Operating System:</TextBlock> <TextBlock Text="{Binding Info.OperatingSystemVersion}"/>
+            <TextBlock FontWeight="Bold">Operating System:</TextBlock> <TextBlock AutomationProperties.AutomationId="OsVersionBox" Text="{Binding Info.OperatingSystemVersion}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4">
             Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.

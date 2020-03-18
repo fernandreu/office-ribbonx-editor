@@ -1,6 +1,9 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
+using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Services;
 
 namespace OfficeRibbonXEditor.Views.Controls
 {
@@ -9,14 +12,29 @@ namespace OfficeRibbonXEditor.Views.Controls
     /// </summary>
     public class ExternalHyperlink : Hyperlink
     {
-        public ExternalHyperlink()
+        public static readonly DependencyProperty OpenUrlCommandProperty = DependencyProperty.Register(
+            nameof(OpenUrlCommand),
+            typeof(RelayCommand<Uri>),
+            typeof(DialogControl));
+
+        public RelayCommand<Uri> OpenUrlCommand
         {
-            this.RequestNavigate += OnRequestNavigate;
+            get => (RelayCommand<Uri>)this.GetValue(OpenUrlCommandProperty);
+            set => this.SetValue(OpenUrlCommandProperty, value);
         }
 
-        private static void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        public ExternalHyperlink()
         {
-            Process.Start(new ProcessStartInfo(e.Uri.AbsoluteUri));
+            // We give this the default value we will want in most cases while
+            // still allowing it to be defined via xaml if needed
+            this.OpenUrlCommand = new RelayCommand<Uri>(uri => new UrlHelper().OpenExternal(uri));
+
+            this.RequestNavigate += this.OnRequestNavigate;
+        }
+
+        private void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        {
+            this.OpenUrlCommand.Execute(e.Uri);
             e.Handled = true;
         }
     }
