@@ -119,6 +119,7 @@
                 <Label Grid.Row="2" Grid.Column="0" Content="Wrap Mode"/>
                 <ComboBox x:Name="WrapModeBox"  Grid.Row="2" Grid.Column="1" SelectedItem="{Binding Source={x:Static properties:Settings.Default}, Path=WrapMode}"/>
                 <CheckBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Content="Auto-indent new lines" Margin="8" IsChecked="{Binding Source={x:Static properties:Settings.Default}, Path=AutoIndent}"/>
+                <controls:IntegerUpDown Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"/>
             </Grid>
         </GroupBox>
         <GroupBox 

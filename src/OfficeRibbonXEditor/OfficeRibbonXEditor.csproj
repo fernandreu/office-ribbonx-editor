@@ -83,6 +83,12 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Styles\Default.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
   <!--This ensures runtime config files are copied to the test projects (especially the UI project) so that the tool can be tested properly in .NET Core 3.X-->
   <Target Name="AddRuntimeDependenciesToContent" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCoreApp'" BeforeTargets="GetCopyToOutputDirectoryItems" DependsOnTargets="GenerateBuildDependencyFile;GenerateBuildRuntimeConfigurationFiles">
     <ItemGroup>

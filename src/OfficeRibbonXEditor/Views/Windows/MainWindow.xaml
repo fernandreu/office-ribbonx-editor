@@ -426,7 +426,7 @@
                     ItemsSource="{Binding XmlSamples.Items}"
                     ToolTipService.ShowOnDisabled="True">
                     <MenuItem.Style>
-                        <Style TargetType="{x:Type MenuItem}">
+                        <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
                             <Setter Property="IsEnabled" Value="False"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding SelectedTab, Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type tabs:EditorTabViewModel}}" Value="True">
@@ -464,7 +464,7 @@
                             Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                             Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
 
-                        <Style TargetType="{x:Type MenuItem}">
+                        <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource {x:Type MenuItem}}">
                             <Setter Property="Header" Value="{Binding Name}"/>
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding Converter={StaticResource IsOfTypeConverter}, ConverterParameter={x:Type samples:SampleFolderViewModel}}" Value="True">
@@ -484,7 +484,7 @@
             <MenuItem Header="_Help">
                 <MenuItem Header="Useful links" ItemsSource="{Binding HelpLinks}">
                     <MenuItem.ItemContainerStyle>
-                        <Style TargetType="MenuItem">
+                        <Style TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}">
                             <Setter Property="Header" Value="{Binding Key}"/>
                             <Setter Property="Command" Value="{Binding DataContext.OpenHelpLinkCommand, ElementName=Window}"/>
                             <Setter Property="CommandParameter" Value="{Binding Value}"/>
@@ -622,7 +622,7 @@
                 SelectedItemChanged="OnDocumentViewSelectionChanged"
                 HorizontalAlignment="Stretch">
                 <TreeView.ItemContainerStyle>
-                    <Style TargetType="{x:Type TreeViewItem}">
+                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                         <d:Style.DataContext>
                             <x:Type Type="documents:TreeViewItemViewModel"/>
                         </d:Style.DataContext>

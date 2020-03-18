@@ -133,7 +133,7 @@
                             <Button Content="Find _Next"
                                     Command="{Binding FindNextCommand}">
                                 <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsFindTabSelected}" Value="True">
                                                 <Setter Property="IsDefault" Value="True"/>
@@ -270,7 +270,7 @@
                             <Button Content="Replace _Next"
                                     Command="{Binding ReplaceNextCommand}">
                                 <Button.Style>
-                                    <Style TargetType="{x:Type Button}">
+                                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding IsFindTabSelected}" Value="False">
                                                 <Setter Property="IsDefault" Value="True"/>

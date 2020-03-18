@@ -12,7 +12,7 @@
         d:DesignWidth="{Binding PreferredWidth, RelativeSource={RelativeSource Self}}"
         d:DataContext="{d:DesignInstance dialogs:AboutDialogViewModel}">
     <controls:DialogControl.Resources>
-        <Style TargetType="TextBlock">
+        <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="FontSize" Value="12"/>
         </Style>
     </controls:DialogControl.Resources>  
