@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
+using FlaUI.Core.Exceptions;
 using FlaUI.UIA3;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -90,9 +91,11 @@ namespace OfficeRibbonXEditor.UITests.Helpers
                     dialog?.FindFirstChild(x => x.ByName("No")).Click();
                 }
             }
+            catch (NoClickablePointException)
+            {
+            }
             catch (InvalidOperationException)
             {
-                // The app has probably exited already
             }
 
             this.Automation?.Dispose();
