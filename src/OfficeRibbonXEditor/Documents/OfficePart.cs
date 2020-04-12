@@ -226,7 +226,12 @@ namespace OfficeRibbonXEditor.Documents
 
             var imageRel = this.Part.GetRelationship(source);
 
-            this.Part.CreateRelationship(imageRel.TargetUri, imageRel.TargetMode, imageRel.RelationshipType, target);
+            // Modify the Uri to point to the new file name as well
+            var path = imageRel.TargetUri.ToString();
+            var folder = Path.GetDirectoryName(path);
+            var uri = new Uri($"{folder}/{target}.png", UriKind.Relative);
+
+            this.Part.CreateRelationship(uri, imageRel.TargetMode, imageRel.RelationshipType, target);
             this.Part.DeleteRelationship(source);
         }
 
@@ -253,7 +258,7 @@ namespace OfficeRibbonXEditor.Documents
             }
         }
 
-        private string? AddImageHelper(string fileName, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
+        private string? AddImageHelper(string fileName, string imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
             if (this.Part == null)
             {
@@ -271,47 +276,42 @@ namespace OfficeRibbonXEditor.Documents
                 return null;
             }
 
-            var imageUri = new Uri("images/" + Path.GetFileName(fileName), UriKind.Relative);
-            var fileIndex = 0;
+            var extension = Path.GetExtension(fileName);
+
+            // Check for duplicates and correct ID if necessary
+            var originalId = imageId;
+            var index = 0;
             while (true)
             {
-                if (this.Part.Package.PartExists(PackUriHelper.ResolvePartUri(this.Part.Uri, imageUri)))
+                if (this.Part.RelationshipExists(imageId))
                 {
-                    Debug.Write(imageUri + " already exists.");
-                    imageUri = new Uri(
-                        "images/" +
-                        Path.GetFileNameWithoutExtension(fileName) +
-                        (fileIndex++) +
-                        Path.GetExtension(fileName),
-                        UriKind.Relative);
+                    Debug.Write($"A relationship '{imageId}' already exists");
+                    imageId = $"{imageId}{index++}";
                     continue;
                 }
 
                 break;
             }
 
-            var originalId = imageId;
-            if (imageId != null)
-            {
-                int idIndex = 0;
-                string testId = imageId;
-                while (true)
-                {
-                    if (this.Part.RelationshipExists(testId))
-                    {
-                        Debug.Write(testId + " already exists.");
-                        testId = imageId + (idIndex++);
-                        continue;
-                    }
-
-                    imageId = testId;
-                    break;
-                }
-            }
-
             if (imageId != originalId && !(alreadyExistingAction?.Invoke(originalId, imageId) ?? true))
             {
                 return null;
+            }
+
+            // Now do the same for the Uri (which does need to coincide with the ID)
+
+            var imageUri = new Uri($"images/{originalId}{extension}", UriKind.Relative);
+            index = 0;
+            while (true)
+            {
+                if (this.Part.Package.PartExists(PackUriHelper.ResolvePartUri(this.Part.Uri, imageUri)))
+                {
+                    Debug.Write($"A Uri '{imageUri}' already exists");
+                    imageUri = new Uri($"images/{originalId}{index++}{extension}", UriKind.Relative);
+                    continue;
+                }
+
+                break;
             }
 
             var imageRel = this.Part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);
