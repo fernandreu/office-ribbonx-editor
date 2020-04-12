@@ -226,8 +226,36 @@ namespace OfficeRibbonXEditor.Documents
 
             var imageRel = this.Part.GetRelationship(source);
 
-            this.Part.CreateRelationship(imageRel.TargetUri, imageRel.TargetMode, imageRel.RelationshipType, target);
+            // Find the new Uri for the icon (TODO: PNG assumed)
+            var originalUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri);
+            var newRelativeUri = FindFirstAvailableImageUri(this.Part, target, ".png");
+            var newUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, newRelativeUri);
+
+            // Create the new package part
+            var originalPart = this.Part.Package.GetPart(originalUri);
+            var newPart = this.Part.Package.CreatePart(newUri, originalPart.ContentType, originalPart.CompressionOption);
+            if (newPart == null)
+            {
+                throw new InvalidOperationException("There is no file associated with the icon you are trying to rename");
+            }
+
+            using (var br = new BinaryReader(originalPart.GetStream(FileMode.Open, FileAccess.Read)))
+            using (var bw = new BinaryWriter(newPart.GetStream(FileMode.Create, FileAccess.Write)))
+            {
+                var buffer = new byte[1024];
+                int byteCount;
+                while ((byteCount = br.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    bw.Write(buffer, 0, byteCount);
+                }
+
+                bw.Flush();
+            }
+
+            this.Part.Package.DeletePart(originalUri);
             this.Part.DeleteRelationship(source);
+
+            this.Part.CreateRelationship(newRelativeUri, imageRel.TargetMode, imageRel.RelationshipType, target);
         }
 
         private static string MapImageContentType(string extension)
@@ -253,7 +281,7 @@ namespace OfficeRibbonXEditor.Documents
             }
         }
 
-        private string? AddImageHelper(string fileName, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
+        private string? AddImageHelper(string fileName, string imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
             if (this.Part == null)
             {
@@ -271,48 +299,19 @@ namespace OfficeRibbonXEditor.Documents
                 return null;
             }
 
-            var imageUri = new Uri("images/" + Path.GetFileName(fileName), UriKind.Relative);
-            var fileIndex = 0;
-            while (true)
-            {
-                if (this.Part.Package.PartExists(PackUriHelper.ResolvePartUri(this.Part.Uri, imageUri)))
-                {
-                    Debug.Write(imageUri + " already exists.");
-                    imageUri = new Uri(
-                        "images/" +
-                        Path.GetFileNameWithoutExtension(fileName) +
-                        (fileIndex++) +
-                        Path.GetExtension(fileName),
-                        UriKind.Relative);
-                    continue;
-                }
+            var extension = Path.GetExtension(fileName);
 
-                break;
-            }
-
+            // Check for duplicates and correct ID if necessary
             var originalId = imageId;
-            if (imageId != null)
-            {
-                int idIndex = 0;
-                string testId = imageId;
-                while (true)
-                {
-                    if (this.Part.RelationshipExists(testId))
-                    {
-                        Debug.Write(testId + " already exists.");
-                        testId = imageId + (idIndex++);
-                        continue;
-                    }
-
-                    imageId = testId;
-                    break;
-                }
-            }
+            imageId = FindFirstAvailableImageId(this.Part, imageId);
 
             if (imageId != originalId && !(alreadyExistingAction?.Invoke(originalId, imageId) ?? true))
             {
                 return null;
             }
+
+            // Now do the same for the Uri (which does need to coincide with the ID)
+            var imageUri = FindFirstAvailableImageUri(this.Part, originalId, extension);
 
             var imageRel = this.Part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);
 
@@ -340,6 +339,37 @@ namespace OfficeRibbonXEditor.Documents
             }
 
             return imageRel.Id;
+        }
+
+        private static string FindFirstAvailableImageId(PackagePart part, string imageId)
+        {
+            var index = 0;
+            while (true)
+            {
+                if (!part.RelationshipExists(imageId))
+                {
+                    return imageId;
+                }
+
+                Debug.Write($"A relationship '{imageId}' already exists");
+                imageId = $"{imageId}{index++}";
+            }
+        }
+
+        private static Uri FindFirstAvailableImageUri(PackagePart part, string imageId, string extension)
+        {
+            var imageUri = new Uri($"images/{imageId}{extension}", UriKind.Relative);
+            var index = 0;
+            while (true)
+            {
+                if (!part.Package.PartExists(PackUriHelper.ResolvePartUri(part.Uri, imageUri)))
+                {
+                    return imageUri;
+                }
+
+                Debug.Write($"A Uri '{imageUri}' already exists");
+                imageUri = new Uri($"images/{imageId}{index++}{extension}", UriKind.Relative);
+            }
         }
     }
 }

@@ -111,21 +111,28 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             {
                 // Save it to a temporary path file
                 // TODO: This might not coincide with the original file format
+                // The other, most common alternative is using .ico files; however, there is no
+                // standard IconBitmapEncoder available
                 var encoder = new PngBitmapEncoder();
 
                 var photoId = Guid.NewGuid();
                 var location = Path.Combine(Path.GetTempPath(), photoId + ".png");
                 encoder.Frames.Add(BitmapFrame.Create(icon.Image));
 
-                using (var stream = new FileStream(location, FileMode.Create))
+                try
                 {
-                    encoder.Save(stream);
-                }
+                    using (var stream = new FileStream(location, FileMode.Create))
+                    {
+                        encoder.Save(stream);
+                    }
 
-                // Load the image
-                this.InsertIcon(location, icon.Name);
-                
-                File.Delete(location);
+                    // Load the image
+                    this.InsertIcon(location, icon.Name);
+                }
+                finally
+                {
+                    File.Delete(location);
+                }
             }
 
             return true;
