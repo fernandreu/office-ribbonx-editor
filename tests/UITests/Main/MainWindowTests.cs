@@ -62,6 +62,7 @@ namespace OfficeRibbonXEditor.UITests.Main
         }
 
         [Test]
+        [Ignore("Tabablz control does not contain the necessary automation patterns for last check")]
         public void CanInsertSample()
         {
             // Arrange / act
