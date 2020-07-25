@@ -120,9 +120,9 @@ function install_azure_agent {
         return
     fi
 
-    tarFile="vsts-agent-linux-x64-2.165.0.tar.gz"
+    tarFile="vsts-agent-linux-x64-2.172.2.tar.gz"
     if [[ ! -f $tarFile ]]; then
-        wget https://vstsagentpackage.azureedge.net/agent/2.165.0/$tarFile
+        wget https://vstsagentpackage.azureedge.net/agent/2.172.2/$tarFile
     fi
     mkdir devops-agent
     cd devops-agent
