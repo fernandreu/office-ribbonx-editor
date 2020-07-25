@@ -133,7 +133,7 @@ function install_azure_agent {
     sudo ./svc.sh uninstall
     ./config.sh remove --unattended --auth pat --token $PAT
 
-    ./config.sh --unattended --acceptTeeEula --url https://dev.azure.com/fernandreu-public --auth pat --token $PAT --pool default --agent fernando-VirtualBox --replace
+    ./config.sh --unattended --acceptTeeEula --url https://dev.azure.com/fernandreu-public --auth pat --token $PAT --pool default --agent fernando-VMWare --replace
 
     sudo ./svc.sh install
     sudo ./svc.sh start
