@@ -9,7 +9,6 @@
         xmlns:resources="clr-namespace:OfficeRibbonXEditor.Resources"
         xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
-        xmlns:behaviors="clr-namespace:OfficeRibbonXEditor.Behaviors"
         xmlns:samples="clr-namespace:OfficeRibbonXEditor.ViewModels.Samples"
         xmlns:tabs="clr-namespace:OfficeRibbonXEditor.ViewModels.Tabs"
         xmlns:documents="clr-namespace:OfficeRibbonXEditor.ViewModels.Documents"
@@ -730,7 +729,6 @@
                 VerticalAlignment="Stretch"
                 ResizeBehavior="PreviousAndNext"/>
 
-            <!--The IsCached="True" prevents tab templates from being reused, which would otherwise mess up the undo history-->
             <dragablz:TabablzControl
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
