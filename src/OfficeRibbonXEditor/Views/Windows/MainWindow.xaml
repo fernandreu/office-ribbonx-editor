@@ -9,13 +9,13 @@
         xmlns:resources="clr-namespace:OfficeRibbonXEditor.Resources"
         xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
         xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
-        xmlns:behaviors="clr-namespace:OfficeRibbonXEditor.Behaviors"
         xmlns:samples="clr-namespace:OfficeRibbonXEditor.ViewModels.Samples"
         xmlns:tabs="clr-namespace:OfficeRibbonXEditor.ViewModels.Tabs"
         xmlns:documents="clr-namespace:OfficeRibbonXEditor.ViewModels.Documents"
         xmlns:windows="clr-namespace:OfficeRibbonXEditor.ViewModels.Windows"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
+        xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -729,32 +729,46 @@
                 VerticalAlignment="Stretch"
                 ResizeBehavior="PreviousAndNext"/>
 
-            <!--The IsCached="True" prevents tab templates from being reused, which would otherwise mess up the undo history-->
-            <TabControl
+            <dragablz:TabablzControl
                 Grid.Column="2"
                 Grid.ColumnSpan="2"
-                behaviors:TabContent.IsCached="True"
                 AutomationProperties.AutomationId="TabView"
                 ItemsSource="{Binding OpenTabs}"
                 SelectedItem="{Binding SelectedTab}">
-                <TabControl.ItemTemplate>
+                <dragablz:TabablzControl.HeaderItemTemplate>
                     <DataTemplate>
                         <StackPanel
+                            d:DataContext="{d:DesignInstance tabs:EditorTabViewModel}"
                             Orientation="Horizontal">
-                            <TextBlock Text="{Binding Title}"/>
+                            <Grid>
+                                <TextBlock Text="{Binding Title}"/>
+                                <Thumb
+                                    Style="{DynamicResource InvisibleThumbStyle}"
+                                    dragablz:DragablzItem.IsCustomThumb="True"></Thumb>
+                            </Grid>
                             <Button
                                 Style="{StaticResource CloseItemCommandButtonStyle}"
                                 Command="{Binding MainWindow.CloseTabCommand}"
                                 CommandParameter="{Binding}"/>
                         </StackPanel>
                     </DataTemplate>
-                </TabControl.ItemTemplate>
-                <behaviors:TabContent.Template>
+                </dragablz:TabablzControl.HeaderItemTemplate>
+                <dragablz:TabablzControl.ContentTemplate>
                     <DataTemplate>
                         <ContentControl Content="{Binding}"/>
                     </DataTemplate>
-                </behaviors:TabContent.Template>
+                </dragablz:TabablzControl.ContentTemplate>
                 <TabControl.Resources>
+                    <Style TargetType="{x:Type Thumb}" x:Key="InvisibleThumbStyle">
+                        <Setter Property="Background" Value="Transparent" />
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate>
+                                    <Grid Background="{TemplateBinding Background}" />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                     <DataTemplate DataType="{x:Type tabs:EditorTabViewModel}">
                         <controls:EditorTab/>
                     </DataTemplate>
@@ -762,7 +776,7 @@
                         <controls:IconTab/>
                     </DataTemplate>
                 </TabControl.Resources>
-            </TabControl>
+            </dragablz:TabablzControl>
 
         </Grid>
     </DockPanel>
