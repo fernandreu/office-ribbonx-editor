@@ -223,6 +223,15 @@ stages:
         fileName: 'OfficeRibbonXEditor.exe'
         binFolder: 'Installer'
 
+  - job: ReleaseScripts
+    displayName: Publish Release Scripts
+    steps:
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Release Scripts'
+      inputs:
+        targetPath: 'build/ReleaseScripts' 
+        artifactName: 'ReleaseScripts'
+
 - stage: Sign
   dependsOn: Build
   pool:
@@ -268,7 +277,7 @@ stages:
 
 - stage: Release
   dependsOn: Sign
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['createRelease'], 'true'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['CreateRelease'], 'true'))
 
   jobs:
   - deployment: Deploy
@@ -278,16 +287,11 @@ stages:
         deploy:
           steps:
           
-          - task: DownloadPipelineArtifact@2
-            inputs:
-              source: 'current'
-              targetPath: '$(Pipeline.Workspace)'
-
           - task: PowerShell@2
             displayName: 'Check Version'
             inputs:
               targetType: 'filePath'
-              filePath: 'build/ReleaseScripts/PreRelease.ps1'
+              filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
               arguments: '"$(Pipeline.Workspace)"'
 
           - task: ArchiveFiles@2
