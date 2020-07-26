@@ -7,6 +7,7 @@ using FlaUI.Core.Tools;
 using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Extensions;
 using OfficeRibbonXEditor.UITests.Helpers;
+using OfficeRibbonXEditor.Views.Controls;
 
 namespace OfficeRibbonXEditor.UITests.Main
 {
@@ -62,18 +63,20 @@ namespace OfficeRibbonXEditor.UITests.Main
         }
 
         [Test]
-        [Ignore("Tabablz control does not contain the necessary automation patterns for last check")]
         public void CanInsertSample()
         {
             // Arrange / act
             this.manager.Launch(sourceFile);
             this.manager.Window?.FindTreeView()?.Items.First().Select();
             var menu = this.manager.Window?.FindFirstChild(cf => cf.Menu()).AsMenu();
+            var tabView = this.manager.Window?.FindTabView();
+            var tabItem = tabView?.FindFirstChild(x => x.ByClassName(nameof(EditorTab)));
+            Assert.Null(tabItem);
 
             var sampleEntry = menu?.Items["Insert"].Items["Sample XML"].Items[0];
             sampleEntry?.Invoke();
 
-            var tabItem = this.manager.Window?.FindTabView()?.SelectedTabItem;
+            tabItem = tabView?.FindFirstChild(x => x.ByClassName(nameof(EditorTab)));
             Assert.NotNull(tabItem);
         }
 
