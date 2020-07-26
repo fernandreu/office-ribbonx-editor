@@ -4,9 +4,11 @@ $sourcePath = $args[0]
 $allSigned = $true;
 if (-Not (Test-Path "$sourcePath/.NET Framework Executable/OfficeRibbonXEditor.exe")) {
     $allSigned = $false
-} elseif (-Not (Test-Path "$sourcePath/.NET Framework Installer/OfficeRibbonXEditor.msi")) {
+} elseif (-Not (Test-Path "$sourcePath/.NET Framework Installer/OfficeRibbonXEditor.exe")) {
     $allSigned = $false
 } elseif (-Not (Test-Path "$sourcePath/.NET Core Binaries/OfficeRibbonXEditor/OfficeRibbonXEditor.exe")) {
+    $allSigned = $false
+} elseif (-Not (Test-Path "$sourcePath/.NET Core Installer/OfficeRibbonXEditor.exe")) {
     $allSigned = $false
 }
 

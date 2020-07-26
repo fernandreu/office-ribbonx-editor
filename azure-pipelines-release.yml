@@ -14,14 +14,15 @@ jobs:
       deploy:
         steps:
         
-        - task: DownloadPipelineArtifact@2
+        - task: DownloadBuildArtifact@0
           inputs:
             buildType: 'specific'
-            project: '31ef26fb-4bc4-4b29-854b-920268892dcd'
-            definition: '1'
+            project: 'OfficeRibbonXEditor'
+            pipeline: 'CI Pipeline'
             buildVersionToDownload: 'specific'
             buildId: '$(BuildId)'
-            targetPath: '$(Pipeline.Workspace)'
+            downloadType: 'specific'
+            downloadPath: '$(Pipeline.Workspace)'
 
         - task: PowerShell@2
           displayName: 'Check Version'
