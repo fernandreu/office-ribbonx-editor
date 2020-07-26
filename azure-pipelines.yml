@@ -326,7 +326,7 @@ stages:
               title: 'Office RibbonX Editor $(ThreeDigitVersion) (Build $(Build.BuildId))'
               releaseNotesSource: inline
               releaseNotesInline: |
-                Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(BuildId))
+                Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
                 
                 ## What's New
                 
@@ -355,42 +355,3 @@ stages:
               isDraft: true
               changeLogType: issueBased
               changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'
-          - powershell: |
-              # TODO: This entire script is deprecated, as latest release version is now read directly 
-              # from the GitHub API. This is only kept for legacy purposes (i.e. until enough time 
-              # passes for users to update to a more recent tool). Once this is removed, the corresponding
-              # GitHub variables will no longer be needed.
-              
-              $version = "$(ThreeDigitVersion).$(Build.BuildId)"
-              $version = $version.Substring(1)
-              $pat = "$(GitHubPAT)"
-              $name = "$(GitHubName)"
-              $email = "$(GitHubEmail)"
-              
-              # Check if all necessary variables were passed correctly
-              if ($version.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The version is missing"
-                  exit 1
-              } elseif ($pat.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The GitHub PAT is missing"
-                  exit 1
-              } elseif ($name.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The GitHub name is missing"
-                  exit 1
-              } elseif ($email.Length -eq 0) {
-                  Write-Host "##vso[task.LogIssue type=error;]The GitHub email is missing"
-                  exit 1
-              }
-              
-              New-Item -Path "tmp" -ItemType "directory"
-              cd tmp
-              git clone --single-branch --branch info https://github.com/fernandreu/office-ribbonx-editor.git -q
-              cd office-ribbonx-editor
-
-              Write-Host "Version passed is: $version"
-              $version | Out-File -Encoding UTF8 -FilePath .\RELEASE-VERSION
-              git config --global user.email "$email"
-              git config --global user.name "$name"
-              git commit -a -m "Update release version to $version" -q
-              git push https://$($pat)@github.com/fernandreu/office-ribbonx-editor.git info -q
-            displayName: 'Update Info Branch'
