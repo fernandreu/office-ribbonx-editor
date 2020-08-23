@@ -18,7 +18,7 @@
   #define Description "A tool to edit the Custom UI part of Office documents."
 #endif
 #ifndef Copyright
-  #define Copyright 'Copyright (c) ' + GetDateTimeString(yyyy) + ' ' + Authors
+  #define Copyright 'Copyright (c) ' + GetDateTimeString('yyyy', '', '') + ' ' + Authors
 #endif
 #ifndef ExeName
   #define ExeName AssemblyName + '.exe'
@@ -99,32 +99,11 @@ begin
   Result:=sRet;
 end;
 
-function StrSplit(Text: String; Separator: String): TArrayOfString;
-var
-  i, p: Integer;
-  Dest: TArrayOfString; 
-begin
-  i := 0;
-  repeat
-    SetArrayLength(Dest, i+1);
-    p := Pos(Separator,Text);
-    if p > 0 then begin
-      Dest[i] := Copy(Text, 1, p-1);
-      Text := Copy(Text, p + Length(Separator), Length(Text));
-      i := i + 1;
-    end else begin
-      Dest[i] := Text;
-      Text := '';
-    end;
-  until Length(Text)=0;
-  Result := Dest
-end;
-
 function UnInstallOldVersion(Guid: String): Integer;
 var
   sUnInstallString: String;
-  sParts: TArrayOfString;
-  sArgs: String;
+  sArgs: String;       
+  iPos: Integer;
   iResultCode: Integer;
 begin
 // Return Values:
@@ -138,13 +117,17 @@ begin
   // get the uninstall string of the old app
   sUnInstallString := GetUninstallString(Guid);
   if sUnInstallString <> '' then begin           
-    sParts := StrSplit(sUnInstallString, '"');
-    sUnInstallString := RemoveQuotes(sParts[1]);
-    if CompareText(sUninstallString, 'MsiExec.exe') = 0 then
-      sArgs := '/QUIET /PASSIVE'
-    else
+    sUnInstallString := RemoveQuotes(sUninstallString);
+    iPos := Pos('MSIEXEC.EXE', Uppercase(sUnInstallString));
+    if iPos > 0 then begin
+      // Old Wix installers (msi-based) will be like: 'MsiExec.exe {ProjectGuid}
+      // We need to insert some arguments before the Guid (or any other argument)       
+      sArgs := '/QUIET /PASSIVE ' + Copy(sUnInstallString, iPos+12, 500);
+      sUnInstallString := Copy(sUnInstallString, 1, iPos+11);
+    end else begin
+      // New InnoSetup installers simply call their custom unins000.exe with no arguments
       sArgs := '/VERYSILENT /NORESTART /SUPPRESSMSGBOXES';
-    if Length(sParts) > 2 then sArgs := sArgs + sParts[2];
+    end;
     if Exec(sUnInstallString, sArgs,'', SW_HIDE, ewWaitUntilTerminated, iResultCode) then
       Result := 3
     else
