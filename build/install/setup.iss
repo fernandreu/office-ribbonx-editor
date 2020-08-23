@@ -18,7 +18,7 @@
   #define Description "A tool to edit the Custom UI part of Office documents."
 #endif
 #ifndef Copyright
-  #define Copyright 'Copyright (c) ' + GetDateTimeString('yyyy') + ' ' + Authors
+  #define Copyright 'Copyright (c) ' + GetDateTimeString('yyyy', '', '') + ' ' + Authors
 #endif
 #ifndef ExeName
   #define ExeName AssemblyName + '.exe'
