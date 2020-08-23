@@ -1,3 +1,8 @@
+parameters:
+- name: createRelease
+  displayName: Create GitHub Release
+  default: false
+  type: boolean
 
 trigger:
   branches:
@@ -277,7 +282,7 @@ stages:
 
 - stage: Release
   dependsOn: Sign
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(variables['CreateRelease'], 'true'))
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), eq(parameters.createRelease, true))
 
   jobs:
   - deployment: Deploy
