@@ -117,6 +117,105 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About.Author" xml:space="preserve">
+    <value>Author:</value>
+  </data>
+  <data name="About.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="About.CopyVersion" xml:space="preserve">
+    <value>Copy version information</value>
+  </data>
+  <data name="About.License" xml:space="preserve">
+    <value>License:</value>
+  </data>
+  <data name="About.OperatingSystem" xml:space="preserve">
+    <value>Operating System:</value>
+  </data>
+  <data name="About.Paragraph1" xml:space="preserve">
+    <value>Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.</value>
+  </data>
+  <data name="About.Paragraph2" xml:space="preserve">
+    <value>The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including Office 2013, Office 2016, Office 2019 and Office 365.</value>
+  </data>
+  <data name="About.ProjectPage" xml:space="preserve">
+    <value>Project Page:</value>
+  </data>
+  <data name="About.Runtime" xml:space="preserve">
+    <value>Runtime:</value>
+  </data>
+  <data name="About.SubmitIssue" xml:space="preserve">
+    <value>Submit an issue</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>About Office RibbonX Editor</value>
+  </data>
+  <data name="About.Version" xml:space="preserve">
+    <value>Version:</value>
+  </data>
+  <data name="Callbacks.Title" xml:space="preserve">
+    <value>Callbacks Viewer</value>
+  </data>
+  <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
+    <value>Change ID</value>
+  </data>
+  <data name="ContextMenu.TreeView.Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertIcons" xml:space="preserve">
+    <value>Insert Icons...</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2007" xml:space="preserve">
+    <value>Insert Office 2007 Custom UI Part</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2010" xml:space="preserve">
+    <value>Insert Office 2010+ Custom UI Part</value>
+  </data>
+  <data name="ContextMenu.TreeView.Open" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="ContextMenu.TreeView.Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="ContextMenu.TreeView.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
+    <value>Save As...</value>
+  </data>
+  <data name="Exception.CloseDialog" xml:space="preserve">
+    <value>Close this Dialog</value>
+  </data>
+  <data name="Exception.Disclaimer" xml:space="preserve">
+    <value>If you keep using the tool after this exception, it might start to malfunction.</value>
+  </data>
+  <data name="Exception.ShutdownApp" xml:space="preserve">
+    <value>Shutdown Application</value>
+  </data>
+  <data name="Exception.SubmitBug" xml:space="preserve">
+    <value>Submit Bug Report</value>
+  </data>
+  <data name="Exception.Title" xml:space="preserve">
+    <value>Unhandled Exception Occurred</value>
+  </data>
+  <data name="GoTo.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="GoTo.CurrentLine" xml:space="preserve">
+    <value>_Current line number</value>
+  </data>
+  <data name="GoTo.DesiredLine" xml:space="preserve">
+    <value>Go to line number</value>
+  </data>
+  <data name="GoTo.MaxLine" xml:space="preserve">
+    <value>_Maximum line number</value>
+  </data>
+  <data name="GoTo.Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="GoTo.Title" xml:space="preserve">
+    <value>Go To Line</value>
+  </data>
   <data name="Menu.Edit" xml:space="preserve">
     <value>_Edit</value>
   </data>
@@ -232,6 +331,12 @@
   <data name="Menu.View.UnfoldLevel" xml:space="preserve">
     <value>Unfold Level</value>
     <comment>The menu title for unfolding a specific level</comment>
+  </data>
+  <data name="Message.VersionCopy.Text" xml:space="preserve">
+    <value>The version information has been copied to the clipboard.</value>
+  </data>
+  <data name="Message.VersionCopy.Title" xml:space="preserve">
+    <value>Version Information Copied</value>
   </data>
   <data name="ToolBar.Callbacks" xml:space="preserve">
     <value>Generate Callbacks</value>

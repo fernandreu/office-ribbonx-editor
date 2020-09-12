@@ -156,6 +156,12 @@
   <data name="Menu.View" xml:space="preserve">
     <value>_Ver</value>
   </data>
+  <data name="Message.VersionCopy.Text" xml:space="preserve">
+    <value>Los detalles de la versión han sido copiados al portapapeles.</value>
+  </data>
+  <data name="Message.VersionCopy.Title" xml:space="preserve">
+    <value>Detalles de Versión Copiados</value>
+  </data>
   <data name="ToolBar.VersionAvailable" xml:space="preserve">
     <value>v{0} Disponible!</value>
   </data>

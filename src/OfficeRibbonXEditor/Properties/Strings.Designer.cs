@@ -61,6 +61,303 @@ namespace OfficeRibbonXEditor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Author:.
+        /// </summary>
+        public static string About_Author {
+            get {
+                return ResourceManager.GetString("About.Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string About_Close {
+            get {
+                return ResourceManager.GetString("About.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copy version information.
+        /// </summary>
+        public static string About_CopyVersion {
+            get {
+                return ResourceManager.GetString("About.CopyVersion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License:.
+        /// </summary>
+        public static string About_License {
+            get {
+                return ResourceManager.GetString("About.License", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Operating System:.
+        /// </summary>
+        public static string About_OperatingSystem {
+            get {
+                return ResourceManager.GetString("About.OperatingSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas..
+        /// </summary>
+        public static string About_Paragraph1 {
+            get {
+                return ResourceManager.GetString("About.Paragraph1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Office 2010 custom UI schema is the latest schema and it&apos;s still being used in the latest versions of Office including Office 2013, Office 2016, Office 2019 and Office 365..
+        /// </summary>
+        public static string About_Paragraph2 {
+            get {
+                return ResourceManager.GetString("About.Paragraph2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project Page:.
+        /// </summary>
+        public static string About_ProjectPage {
+            get {
+                return ResourceManager.GetString("About.ProjectPage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Runtime:.
+        /// </summary>
+        public static string About_Runtime {
+            get {
+                return ResourceManager.GetString("About.Runtime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit an issue.
+        /// </summary>
+        public static string About_SubmitIssue {
+            get {
+                return ResourceManager.GetString("About.SubmitIssue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About Office RibbonX Editor.
+        /// </summary>
+        public static string About_Title {
+            get {
+                return ResourceManager.GetString("About.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version:.
+        /// </summary>
+        public static string About_Version {
+            get {
+                return ResourceManager.GetString("About.Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Callbacks Viewer.
+        /// </summary>
+        public static string Callbacks_Title {
+            get {
+                return ResourceManager.GetString("Callbacks.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Change ID.
+        /// </summary>
+        public static string ContextMenu_TreeView_ChangeId {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.ChangeId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string ContextMenu_TreeView_Close {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert Icons....
+        /// </summary>
+        public static string ContextMenu_TreeView_InsertIcons {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.InsertIcons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert Office 2007 Custom UI Part.
+        /// </summary>
+        public static string ContextMenu_TreeView_InsertOffice2007 {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.InsertOffice2007", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert Office 2010+ Custom UI Part.
+        /// </summary>
+        public static string ContextMenu_TreeView_InsertOffice2010 {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.InsertOffice2010", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string ContextMenu_TreeView_Open {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string ContextMenu_TreeView_Remove {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.Remove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string ContextMenu_TreeView_Save {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save As....
+        /// </summary>
+        public static string ContextMenu_TreeView_SaveAs {
+            get {
+                return ResourceManager.GetString("ContextMenu.TreeView.SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close this Dialog.
+        /// </summary>
+        public static string Exception_CloseDialog {
+            get {
+                return ResourceManager.GetString("Exception.CloseDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you keep using the tool after this exception, it might start to malfunction..
+        /// </summary>
+        public static string Exception_Disclaimer {
+            get {
+                return ResourceManager.GetString("Exception.Disclaimer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shutdown Application.
+        /// </summary>
+        public static string Exception_ShutdownApp {
+            get {
+                return ResourceManager.GetString("Exception.ShutdownApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit Bug Report.
+        /// </summary>
+        public static string Exception_SubmitBug {
+            get {
+                return ResourceManager.GetString("Exception.SubmitBug", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unhandled Exception Occurred.
+        /// </summary>
+        public static string Exception_Title {
+            get {
+                return ResourceManager.GetString("Exception.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string GoTo_Cancel {
+            get {
+                return ResourceManager.GetString("GoTo.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Current line number.
+        /// </summary>
+        public static string GoTo_CurrentLine {
+            get {
+                return ResourceManager.GetString("GoTo.CurrentLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go to line number.
+        /// </summary>
+        public static string GoTo_DesiredLine {
+            get {
+                return ResourceManager.GetString("GoTo.DesiredLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Maximum line number.
+        /// </summary>
+        public static string GoTo_MaxLine {
+            get {
+                return ResourceManager.GetString("GoTo.MaxLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string GoTo_Ok {
+            get {
+                return ResourceManager.GetString("GoTo.Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Go To Line.
+        /// </summary>
+        public static string GoTo_Title {
+            get {
+                return ResourceManager.GetString("GoTo.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _Edit.
         /// </summary>
         public static string Menu_Edit {
@@ -399,6 +696,24 @@ namespace OfficeRibbonXEditor.Properties {
         public static string Menu_View_UnfoldLevel {
             get {
                 return ResourceManager.GetString("Menu.View.UnfoldLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The version information has been copied to the clipboard..
+        /// </summary>
+        public static string Message_VersionCopy_Text {
+            get {
+                return ResourceManager.GetString("Message.VersionCopy.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version Information Copied.
+        /// </summary>
+        public static string Message_VersionCopy_Title {
+            get {
+                return ResourceManager.GetString("Message.VersionCopy.Title", resourceCulture);
             }
         }
         

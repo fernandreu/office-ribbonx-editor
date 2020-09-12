@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:dialogs="clr-namespace:OfficeRibbonXEditor.ViewModels.Dialogs"
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
         mc:Ignorable="d"
-        Title="About Office RibbonX Editor"
+        Title="{lex:Loc About.Title}"
         PreferredWidth="450"
         SizeToContent="Height"
         d:DesignWidth="{Binding PreferredWidth, RelativeSource={RelativeSource Self}}"
@@ -18,37 +19,33 @@
     </controls:DialogControl.Resources>  
     <DockPanel LastChildFill="False" Margin="12">
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Author:</TextBlock> <TextBlock AutomationProperties.AutomationId="AuthorBox" Text="{Binding Info.AssemblyCompany}"/>
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.Author}"/> <TextBlock AutomationProperties.AutomationId="AuthorBox" Text="{Binding Info.AssemblyCompany}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">License:</TextBlock> <controls:ExternalHyperlink AutomationProperties.AutomationId="LicenseBox" NavigateUri="https://github.com/fernandreu/office-ribbonx-editor/blob/master/LICENSE">MIT</controls:ExternalHyperlink>
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.License}"/> <controls:ExternalHyperlink AutomationProperties.AutomationId="LicenseBox" NavigateUri="https://github.com/fernandreu/office-ribbonx-editor/blob/master/LICENSE">MIT</controls:ExternalHyperlink>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Project Page:</TextBlock> <controls:ExternalHyperlink AutomationProperties.AutomationId="ProjectPageBox" NavigateUri="https://github.com/fernandreu/office-ribbonx-editor">https://github.com/fernandreu/office-ribbonx-editor</controls:ExternalHyperlink>
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.ProjectPage}"/> <controls:ExternalHyperlink AutomationProperties.AutomationId="ProjectPageBox" NavigateUri="https://github.com/fernandreu/office-ribbonx-editor">https://github.com/fernandreu/office-ribbonx-editor</controls:ExternalHyperlink>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Version:</TextBlock> <TextBlock AutomationProperties.AutomationId="AssemblyVersionBox" Text="{Binding Info.AssemblyVersion}"/>
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.Version}"/> <TextBlock AutomationProperties.AutomationId="AssemblyVersionBox" Text="{Binding Info.AssemblyVersion}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Runtime:</TextBlock> <TextBlock AutomationProperties.AutomationId="RuntimeVersionBox" Text="{Binding Info.RuntimeVersion}"/>
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.Runtime}"/> <TextBlock AutomationProperties.AutomationId="RuntimeVersionBox" Text="{Binding Info.RuntimeVersion}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
-            <TextBlock FontWeight="Bold">Operating System:</TextBlock> <TextBlock AutomationProperties.AutomationId="OsVersionBox" Text="{Binding Info.OperatingSystemVersion}"/>
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.OperatingSystem}"/> <TextBlock AutomationProperties.AutomationId="OsVersionBox" Text="{Binding Info.OperatingSystemVersion}"/>
         </TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4">
-            Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.
-        </TextBlock>
-        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4">
-            The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including Office 2013, Office 2016, Office 2019 and Office 365.
-        </TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4" Text="{lex:Loc About.Paragraph1}"/>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" Text="{lex:Loc About.Paragraph2}"/>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" FontStyle="Italic">
             This tool is a fork of the original <controls:ExternalHyperlink NavigateUri="https://github.com/OfficeDev/office-custom-ui-editor">Custom UI Editor for Microsoft Office</controls:ExternalHyperlink>, 
             developed by Microsoft. However, the tool is not affiliated with, endorsed by, sponsored by, or in any way officially connected with Microsoft Corporation, or any of its subsidiaries or its affiliates.
         </TextBlock>
         <StackPanel DockPanel.Dock="Bottom" Margin="0,4,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Copy version information" Padding="10,2" Margin="8,0,0,0" Command="{Binding CopyInfoCommand}"/>
-            <Button Content="Submit an issue" Padding="10,2" Margin="8,0,0,0" Command="{Binding SubmitIssueCommand}"/>
-            <Button Content="Close" Padding="10,2" Margin="8,0,0,0" Command="{Binding CloseCommand}"/>
+            <Button Content="{lex:Loc About.CopyVersion}" Padding="10,2" Margin="8,0,0,0" Command="{Binding CopyInfoCommand}"/>
+            <Button Content="{lex:Loc About.SubmitIssue}" Padding="10,2" Margin="8,0,0,0" Command="{Binding SubmitIssueCommand}"/>
+            <Button Content="{lex:Loc About.Close}" Padding="10,2" Margin="8,0,0,0" Command="{Binding CloseCommand}"/>
         </StackPanel>
     </DockPanel>
 </controls:DialogControl>

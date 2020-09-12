@@ -660,7 +660,7 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                    <MenuItem Header="Insert Office 2010+ Custom UI Part" 
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.InsertOffice2010}" 
                                               Command="{Binding InsertXml14Command}" 
                                               IsEnabled="{Binding CanInsertXml14Part}">
                                         <MenuItem.Icon>
@@ -669,7 +669,7 @@
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Insert Office 2007 Custom UI Part" 
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.InsertOffice2007}" 
                                               Command="{Binding InsertXml12Command}"
                                               IsEnabled="{Binding CanInsertXml12Part}">
                                         <MenuItem.Icon>
@@ -679,15 +679,15 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <Separator/>
-                                    <MenuItem Header="Save" Command="{Binding SaveCommand}">
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.Save}" Command="{Binding SaveCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/save.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Save As..." Command="{Binding SaveAsCommand}"/>
-                                    <MenuItem Header="Close" Command="{Binding CloseDocumentCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.SaveAs}" Command="{Binding SaveAsCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.Close}" Command="{Binding CloseDocumentCommand}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -702,15 +702,15 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                    <MenuItem Header="Open" Command="{Binding OpenTabCommand}"/>
-                                    <MenuItem Header="Insert icons..." Command="{Binding InsertIconsCommand}">
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.Open}" Command="{Binding OpenTabCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.InsertIcon}" Command="{Binding InsertIconsCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/insertPicture.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                                    Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.Remove}" Command="{Binding RemoveCommand}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
@@ -724,9 +724,9 @@
                             <StackPanel.ContextMenu>
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
-                                    <MenuItem Header="Open" Command="{Binding OpenTabCommand}"/>
-                                    <MenuItem Header="Change ID" InputGestureText="F2" Command="{Binding ChangeIconIdCommand}"/>
-                                    <MenuItem Header="Remove" Command="{Binding RemoveCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.Open}" Command="{Binding OpenTabCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.ChangeId}" InputGestureText="F2" Command="{Binding ChangeIconIdCommand}"/>
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.Remove}" Command="{Binding RemoveCommand}"/>
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
                         </StackPanel>
