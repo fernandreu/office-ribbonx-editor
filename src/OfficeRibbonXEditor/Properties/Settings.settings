@@ -80,5 +80,11 @@
     <Setting Name="IconGridSize" Type="System.Double" Scope="User">
       <Value Profile="(Default)">16</Value>
     </Setting>
+    <Setting Name="Culture" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="UICulture" Type="System.String" Scope="User">
+      <Value Profile="(Default)">es-ES</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

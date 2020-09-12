@@ -16,6 +16,10 @@
         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
         xmlns:system="clr-namespace:System;assembly=mscorlib"
         xmlns:dragablz="clr-namespace:Dragablz;assembly=Dragablz"
+        xmlns:lex="http://wpflocalizeextension.codeplex.com"
+        lex:LocalizeDictionary.DesignCulture="en"
+        lex:ResxLocalizationProvider.DefaultAssembly="OfficeRibbonXEditor"
+        lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
         Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
@@ -167,8 +171,8 @@
     </Window.InputBindings>
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2">
-            <MenuItem Header="_File">
-                <MenuItem Header="Open" InputGestureText="Ctrl+O" Command="{Binding OpenDocumentCommand}">
+            <MenuItem Header="{lex:Loc Menu.File}">
+                <MenuItem Header="{lex:Loc Menu.File.Open}" InputGestureText="Ctrl+O" Command="{Binding OpenDocumentCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/open.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -176,7 +180,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Save Current Document" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <MenuItem Header="{lex:Loc Menu.File.Save}" InputGestureText="Ctrl+S" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -184,7 +188,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
 
-                <MenuItem Header="Save All Documents" Command="{Binding SaveAllCommand}">
+                <MenuItem Header="{lex:Loc Menu.File.SaveAll}" Command="{Binding SaveAllCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/save.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -193,26 +197,26 @@
                 </MenuItem>
 
                 <MenuItem
-                    Header="Save As..." 
+                    Header="{lex:Loc Menu.File.SaveAs}" 
                     Command="{Binding SaveAsCommand}"
-                    ToolTip="Save the current document with a different name"
+                    ToolTip="{lex:Loc Menu.File.SaveAs.ToolTip}"
                     IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <MenuItem 
-                    Header="Save a Copy As..." 
+                    Header="{lex:Loc Menu.File.SaveCopy}" 
                     Command="{Binding SaveACopyAsCommand}"
-                    ToolTip="Save a completely separate copy of the current document"
+                    ToolTip="{lex:Loc Menu.File.SaveCopy.ToolTip}"
                     IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <MenuItem 
-                    Header="Close Current Document"
+                    Header="{lex:Loc Menu.File.Close}"
                     InputGestureText="Ctrl+W" 
                     Command="{Binding CloseDocumentCommand}" 
                     IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}"/>
 
                 <Separator/>
 
-                <MenuItem Header="Settings..." Command="{Binding ShowSettingsCommand}">
+                <MenuItem Header="{lex:Loc Menu.File.Settings}" Command="{Binding ShowSettingsCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/settings.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -223,26 +227,26 @@
                 <controls:RecentFileList 
                     x:Name="RecentFileList"
                     ClickCommand="{Binding RecentFileClickCommand}"/>
-                <MenuItem Header="Exit" Command="{Binding CloseCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.File.Exit}" Command="{Binding CloseCommand}"/>
             </MenuItem>
-            <MenuItem Header="_Edit" IsEnabled="{Binding IsPartSelected}">
-                <MenuItem Header="Find..." InputGestureText="Ctrl+F" Command="{Binding FindCommand}">
+            <MenuItem Header="{lex:Loc Menu.Edit}" IsEnabled="{Binding IsPartSelected}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Find}" InputGestureText="Ctrl+F" Command="{Binding FindCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/find.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Replace..." InputGestureText="Ctrl+H" Command="{Binding ReplaceCommand}"/>
-                <MenuItem Header="Incremental Search..." InputGestureText="Ctrl+I" Command="{Binding IncrementalSearchCommand}"/>
-                <MenuItem Header="Find Previous" InputGestureText="Shift+F3" Command="{Binding FindPreviousCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Replace}" InputGestureText="Ctrl+H" Command="{Binding ReplaceCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.Edit.Incremental}" InputGestureText="Ctrl+I" Command="{Binding IncrementalSearchCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.Edit.FindPrevious}" InputGestureText="Shift+F3" Command="{Binding FindPreviousCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/find_previous.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Find Next" InputGestureText="F3" Command="{Binding FindNextCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.FindNext}" InputGestureText="F3" Command="{Binding FindNextCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/find_next.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -250,7 +254,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Go To Line..." InputGestureText="Ctrl+G" Command="{Binding GoToCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.GoTo}" InputGestureText="Ctrl+G" Command="{Binding GoToCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/go_to.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -258,14 +262,14 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Undo" InputGestureText="Ctrl+Z" Command="{Binding SelectedTab.UndoCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Undo}" InputGestureText="Ctrl+Z" Command="{Binding SelectedTab.UndoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/undo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Redo" InputGestureText="Ctrl+Y" Command="{Binding SelectedTab.RedoCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Redo}" InputGestureText="Ctrl+Y" Command="{Binding SelectedTab.RedoCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/redo.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -273,21 +277,21 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Cut" InputGestureText="Ctrl+X" Command="{Binding SelectedTab.CutCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Cut}" InputGestureText="Ctrl+X" Command="{Binding SelectedTab.CutCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/cut.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Copy" InputGestureText="Ctrl+C" Command="{Binding SelectedTab.CopyCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Copy}" InputGestureText="Ctrl+C" Command="{Binding SelectedTab.CopyCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/copy.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Paste" InputGestureText="Ctrl+V" Command="{Binding SelectedTab.PasteCommand}">
+                <MenuItem Header="{lex:Loc Menu.Edit.Paste}" InputGestureText="Ctrl+V" Command="{Binding SelectedTab.PasteCommand}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/paste.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -295,22 +299,22 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Select All" InputGestureText="Ctrl+A" Command="{Binding SelectedTab.SelectAllCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.Edit.SelectAll}" InputGestureText="Ctrl+A" Command="{Binding SelectedTab.SelectAllCommand}"/>
             </MenuItem>
-            <MenuItem Header="_View" IsEnabled="{Binding IsEditorTabSelected}">
-                <MenuItem Header="Fold All" InputGestureText="Alt+0" Command="{Binding SelectedTab.FoldCommand}">
+            <MenuItem Header="{lex:Loc Menu.View}" IsEnabled="{Binding IsEditorTabSelected}">
+                <MenuItem Header="{lex:Loc Menu.View.FoldAll}" InputGestureText="Alt+0" Command="{Binding SelectedTab.FoldCommand}">
                     <MenuItem.CommandParameter>
                         <system:Int32>0</system:Int32>
                     </MenuItem.CommandParameter>
                 </MenuItem>
-                <MenuItem Header="Unfold All" InputGestureText="Alt+Shift+0" Command="{Binding SelectedTab.UnfoldCommand}">
+                <MenuItem Header="{lex:Loc Menu.View.UnfoldAll}" InputGestureText="Alt+Shift+0" Command="{Binding SelectedTab.UnfoldCommand}">
                     <MenuItem.CommandParameter>
                         <system:Int32>0</system:Int32>
                     </MenuItem.CommandParameter>
                 </MenuItem>
-                <MenuItem Header="Fold Current Level" InputGestureText="Ctrl+Alt+F" Command="{Binding SelectedTab.FoldCurrentCommand}"/>
-                <MenuItem Header="Unfold Current Level" InputGestureText="Ctrl+Alt+G" Command="{Binding SelectedTab.UnfoldCurrentCommand}"/>
-                <MenuItem Header="Fold Level">
+                <MenuItem Header="{lex:Loc Menu.View.FoldCurrent}" InputGestureText="Ctrl+Alt+F" Command="{Binding SelectedTab.FoldCurrentCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.View.UnfoldCurrent}" InputGestureText="Ctrl+Alt+G" Command="{Binding SelectedTab.UnfoldCurrentCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.View.FoldLevel}">
                     <!--TODO: Find a way of avoiding all this repetitive code-->
                     <MenuItem Header="1" InputGestureText="Alt+1" Command="{Binding SelectedTab.FoldCommand}">
                         <MenuItem.CommandParameter>
@@ -353,7 +357,7 @@
                         </MenuItem.CommandParameter>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Unfold Level">
+                <MenuItem Header="{lex:Loc Menu.View.UnfoldLevel}">
                     <MenuItem Header="1" InputGestureText="Alt+Shift+1" Command="{Binding SelectedTab.UnfoldCommand}">
                         <MenuItem.CommandParameter>
                             <system:Int32>1</system:Int32>
@@ -396,15 +400,15 @@
                     </MenuItem>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
-                <MenuItem Header="Office 2010+ Custom UI Part" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
+            <MenuItem Header="{lex:Loc Menu.Insert}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <MenuItem Header="{lex:Loc Menu.Insert.Office2010}" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
                                Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Office 2007 Custom UI Part" Command="{Binding InsertXml12Command}" IsEnabled="{Binding CanInsertXml12Part}">
+                <MenuItem Header="{lex:Loc Menu.Insert.Office2007}" Command="{Binding InsertXml12Command}" IsEnabled="{Binding CanInsertXml12Part}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/xml.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -412,7 +416,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="Icons..." Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
+                <MenuItem Header="{lex:Loc Menu.Insert.Icons}" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/insertPicture.png"
                                Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 
@@ -421,7 +425,7 @@
                 </MenuItem>
                 <Separator/>
                 <MenuItem 
-                    Header="Sample XML"
+                    Header="{lex:Loc Menu.Insert.Sample}"
                     ItemsSource="{Binding XmlSamples.Items}"
                     ToolTipService.ShowOnDisabled="True">
                     <MenuItem.Style>
@@ -480,8 +484,8 @@
                     </MenuItem.Resources>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="_Help">
-                <MenuItem Header="Useful links" ItemsSource="{Binding HelpLinks}">
+            <MenuItem Header="{lex:Loc Menu.Help}">
+                <MenuItem Header="{lex:Loc Menu.Help.UsefulLinks}" ItemsSource="{Binding HelpLinks}">
                     <MenuItem.ItemContainerStyle>
                         <Style TargetType="MenuItem">
                             <Setter Property="Header" Value="{Binding Key}"/>
@@ -498,69 +502,69 @@
         <ToolBarTray DockPanel.Dock="Top" IsLocked="True">
             <ToolBar OverflowMode="Never" Loaded="OnToolBarLoaded">
 
-                <Button ToolTip="Open an Office document" Command="{Binding OpenDocumentCommand}">
+                <Button ToolTip="{lex:Loc ToolBar.Open.ToolTip}" Command="{Binding OpenDocumentCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/open.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Open</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.Open}"/>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Save the current Office document" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+                <Button ToolTip="{lex:Loc ToolBar.Save.ToolTip}" Command="{Binding SaveCommand}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/save.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Save</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.Save}"/>
                     </StackPanel>
                 </Button>
 
                 <Separator/>
 
                 <CheckBox IsChecked="{Binding ShowWhitespaces}" 
-                          ToolTip="Show space, tab and line end characters in the editor">
+                          ToolTip="{lex:Loc ToolBar.ShowWhitespaces.ToolTip}">
                     <Image Source="/Resources/Images/pilcrow.png" Width="16" Height="16"/>
                 </CheckBox>
 
                 <Button Command="{Binding ToggleCommentCommand}" 
                         IsEnabled="{Binding IsPartSelected}"
-                        ToolTip="Comment / uncomment the currently selected lines">
+                        ToolTip="{lex:Loc ToolBar.ToggleComment.ToolTip}">
                     <Image Source="/Resources/Images/tag.png" Width="16" Height="16"/>
                 </Button>
 
                 <Separator/>
 
-                <Button ToolTip="View the editor settings" Command="{Binding ShowSettingsCommand}">
+                <Button ToolTip="{lex:Loc ToolBar.Settings.ToolTip}" Command="{Binding ShowSettingsCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/settings.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Settings</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.Settings}"/>
                     </StackPanel>
                 </Button>
 
                 <Separator/>
 
-                <Button ToolTip="Insert Icons" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
+                <Button ToolTip="{lex:Loc ToolBar.InsertIcons.ToolTip}" Command="{Binding InsertIconsCommand}" IsEnabled="{Binding IsPartSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/insertPicture.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Insert Icons</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.InsertIcons}"/>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Check whether the current XML file conforms to its corresponding schema" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsEditorTabSelected}">
+                <Button ToolTip="{lex:Loc ToolBar.Validate.ToolTip}" Command="{Binding ValidateCommand}" IsEnabled="{Binding IsEditorTabSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/check.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Validate</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.Validate}"/>
                     </StackPanel>
                 </Button>
 
-                <Button ToolTip="Generate callbacks for the current XML file" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsEditorTabSelected}">
+                <Button ToolTip="{lex:Loc ToolBar.Callbacks.ToolTip}" Command="{Binding GenerateCallbacksCommand}" IsEnabled="{Binding IsEditorTabSelected}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/callbacks.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Generate Callbacks</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.Callbacks}"/>
                     </StackPanel>
                 </Button>
 
-                <CheckBox IsChecked="{Binding ReloadOnSave}" ToolTip="To ensure you do not delete changes made externally, you can reload the documents right before they are to be saved">
+                <CheckBox IsChecked="{Binding ReloadOnSave}" ToolTip="{lex:Loc ToolBar.ReloadOnSave.ToolTip}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/redo.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">Reload on Save</TextBlock>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.ReloadOnSave}"/>
                     </StackPanel>
                 </CheckBox>
 
