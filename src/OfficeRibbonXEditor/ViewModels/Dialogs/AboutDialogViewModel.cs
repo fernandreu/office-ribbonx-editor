@@ -2,7 +2,7 @@
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.Properties;
+using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
