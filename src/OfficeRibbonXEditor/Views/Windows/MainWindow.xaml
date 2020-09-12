@@ -575,7 +575,14 @@
                         Command="{Binding NewerVersionCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/bricks.png" Width="16" Height="16"/>
-                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{Binding NewerVersion, StringFormat={}v{0} Available!}"/>
+                        <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{lex:StringFormatConverter}">
+                                    <lex:BLoc Key="ToolBar.VersionAvailable"/>
+                                    <Binding Path="NewerVersion"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                     </StackPanel>
                 </Button>
             </ToolBar>

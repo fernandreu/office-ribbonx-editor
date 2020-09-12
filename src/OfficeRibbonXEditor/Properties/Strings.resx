@@ -283,5 +283,6 @@
   </data>
   <data name="ToolBar.VersionAvailable" xml:space="preserve">
     <value>v{0} Avalilable!</value>
+    <comment>{0} is the placeholder for the verison, e.g. "1.2.3"</comment>
   </data>
 </root>

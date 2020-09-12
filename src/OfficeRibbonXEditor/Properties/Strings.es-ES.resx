@@ -156,4 +156,7 @@
   <data name="Menu.View" xml:space="preserve">
     <value>_Ver</value>
   </data>
+  <data name="ToolBar.VersionAvailable" xml:space="preserve">
+    <value>v{0} Disponible!</value>
+  </data>
 </root>
