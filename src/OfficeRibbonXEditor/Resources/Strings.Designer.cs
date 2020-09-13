@@ -1195,6 +1195,35 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The document &apos;{0}&apos; is already open. Opening a document more than once is dangerous and can lead to loss of data, unless you save it with a different name straight away.
+        ///
+        ///Are you completely sure you want to open this document again?.
+        /// </summary>
+        public static string Message_AlreadyOpen_Text {
+            get {
+                return ResourceManager.GetString("Message.AlreadyOpen.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document Already Open.
+        /// </summary>
+        public static string Message_AlreadyOpen_Title {
+            get {
+                return ResourceManager.GetString("Message.AlreadyOpen.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error Generating Callbacks.
+        /// </summary>
+        public static string Message_CallbackError_Title {
+            get {
+                return ResourceManager.GetString("Message.CallbackError.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File {0} has unsaved changes. Do you want to save them before closing it?.
         /// </summary>
         public static string Message_CloseUnsavedDoc_Text {
@@ -1213,6 +1242,69 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This custom UI file already has an icon with id {0}. Do you want to insert the new icon with id {1} instead?.
+        /// </summary>
+        public static string Message_IconExists_Text {
+            get {
+                return ResourceManager.GetString("Message.IconExists.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Icon Already Exists.
+        /// </summary>
+        public static string Message_IconExists_Title {
+            get {
+                return ResourceManager.GetString("Message.IconExists.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This will insert the sample XML code on the current cursor position. Are you sure you want to continue?.
+        /// </summary>
+        public static string Message_InsertSample_Text {
+            get {
+                return ResourceManager.GetString("Message.InsertSample.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert XML Sample.
+        /// </summary>
+        public static string Message_InsertSample_Title {
+            get {
+                return ResourceManager.GetString("Message.InsertSample.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error inserting XML sample.
+        /// </summary>
+        public static string Message_InsertSampleError_Title {
+            get {
+                return ResourceManager.GetString("Message.InsertSampleError.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Release version {0} is now available. Do you want to download it?.
+        /// </summary>
+        public static string Message_NewVersion_Text {
+            get {
+                return ResourceManager.GetString("Message.NewVersion.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Newer Version Available.
+        /// </summary>
+        public static string Message_NewVersion_Title {
+            get {
+                return ResourceManager.GetString("Message.NewVersion.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is no callback to be generated..
         /// </summary>
         public static string Message_NoCallbacks_Text {
@@ -1227,6 +1319,60 @@ namespace OfficeRibbonXEditor.Resources {
         public static string Message_NoCallbacks_Title {
             get {
                 return ResourceManager.GetString("Message.NoCallbacks.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error opening Office document.
+        /// </summary>
+        public static string Message_OpenError_Title {
+            get {
+                return ResourceManager.GetString("Message.OpenError.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action cannot be undone. Are you sure you want to continue?.
+        /// </summary>
+        public static string Message_RemoveIcon_Text {
+            get {
+                return ResourceManager.GetString("Message.RemoveIcon.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove Icon.
+        /// </summary>
+        public static string Message_RemoveIcon_Title {
+            get {
+                return ResourceManager.GetString("Message.RemoveIcon.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This action cannot be undone. Are you sure you want to continue?.
+        /// </summary>
+        public static string Message_RemovePart_Text {
+            get {
+                return ResourceManager.GetString("Message.RemovePart.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove XML part.
+        /// </summary>
+        public static string Message_RemovePart_Title {
+            get {
+                return ResourceManager.GetString("Message.RemovePart.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error saving Office document.
+        /// </summary>
+        public static string Message_SaveError_Title {
+            get {
+                return ResourceManager.GetString("Message.SaveError.Title", resourceCulture);
             }
         }
         
@@ -1290,6 +1436,240 @@ namespace OfficeRibbonXEditor.Resources {
         public static string SaveDialog_SaveAs_Title {
             get {
                 return ResourceManager.GetString("SaveDialog.SaveAs.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Accept.
+        /// </summary>
+        public static string Settings_Accept {
+            get {
+                return ResourceManager.GetString("Settings.Accept", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string Settings_Apply {
+            get {
+                return ResourceManager.GetString("Settings.Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Editor colors.
+        /// </summary>
+        public static string Settings_Colors {
+            get {
+                return ResourceManager.GetString("Settings.Colors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Attribute.
+        /// </summary>
+        public static string Settings_Colors_Attribute {
+            get {
+                return ResourceManager.GetString("Settings.Colors.Attribute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Background.
+        /// </summary>
+        public static string Settings_Colors_Background {
+            get {
+                return ResourceManager.GetString("Settings.Colors.Background", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Comment.
+        /// </summary>
+        public static string Settings_Colors_Comment {
+            get {
+                return ResourceManager.GetString("Settings.Colors.Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normal Text.
+        /// </summary>
+        public static string Settings_Colors_Default {
+            get {
+                return ResourceManager.GetString("Settings.Colors.Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String.
+        /// </summary>
+        public static string Settings_Colors_String {
+            get {
+                return ResourceManager.GetString("Settings.Colors.String", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tag.
+        /// </summary>
+        public static string Settings_Colors_Tag {
+            get {
+                return ResourceManager.GetString("Settings.Colors.Tag", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Other editor settings.
+        /// </summary>
+        public static string Settings_Editor {
+            get {
+                return ResourceManager.GetString("Settings.Editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto-indent new lines.
+        /// </summary>
+        public static string Settings_Editor_AutoIndent {
+            get {
+                return ResourceManager.GetString("Settings.Editor.AutoIndent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Font Size.
+        /// </summary>
+        public static string Settings_Editor_FontSize {
+            get {
+                return ResourceManager.GetString("Settings.Editor.FontSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tab Width.
+        /// </summary>
+        public static string Settings_Editor_TabWidth {
+            get {
+                return ResourceManager.GetString("Settings.Editor.TabWidth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrap Mode.
+        /// </summary>
+        public static string Settings_Editor_WrapMode {
+            get {
+                return ResourceManager.GetString("Settings.Editor.WrapMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Associations.
+        /// </summary>
+        public static string Settings_FileAssociations {
+            get {
+                return ResourceManager.GetString("Settings.FileAssociations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check All.
+        /// </summary>
+        public static string Settings_FileAssociations_CheckAll {
+            get {
+                return ResourceManager.GetString("Settings.FileAssociations.CheckAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A context menu entry will appear in Windows Explorer to edit these files directly with the tool.
+        /// </summary>
+        public static string Settings_FileAssociations_ToolTip {
+            get {
+                return ResourceManager.GetString("Settings.FileAssociations.ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uncheck All.
+        /// </summary>
+        public static string Settings_FileAssociations_UncheckAll {
+            get {
+                return ResourceManager.GetString("Settings.FileAssociations.UncheckAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Misc.
+        /// </summary>
+        public static string Settings_Misc {
+            get {
+                return ResourceManager.GetString("Settings.Misc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show default XML templates in the Insert menu.
+        /// </summary>
+        public static string Settings_Misc_DefaultTemplates {
+            get {
+                return ResourceManager.GetString("Settings.Misc.DefaultTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional XML templates to load:.
+        /// </summary>
+        public static string Settings_Misc_ExtraTemplates {
+            get {
+                return ResourceManager.GetString("Settings.Misc.ExtraTemplates", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One path per line. Paths can be either XML files or folders containing those. They can also be relative to the tool&apos;s folder.
+        /// </summary>
+        public static string Settings_Misc_ExtraTemplates_ToolTip {
+            get {
+                return ResourceManager.GetString("Settings.Misc.ExtraTemplates.ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preserve file attributes when saving an already existing document.
+        /// </summary>
+        public static string Settings_Misc_PreserveAttributes {
+            get {
+                return ResourceManager.GetString("Settings.Misc.PreserveAttributes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If checked, read-only files will keep to be read-only after saving them for example.
+        /// </summary>
+        public static string Settings_Misc_PreserveAttributes_ToolTip {
+            get {
+                return ResourceManager.GetString("Settings.Misc.PreserveAttributes.ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset Defaults.
+        /// </summary>
+        public static string Settings_ResetDefaults {
+            get {
+                return ResourceManager.GetString("Settings.ResetDefaults", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings_Title {
+            get {
+                return ResourceManager.GetString("Settings.Title", resourceCulture);
             }
         }
         

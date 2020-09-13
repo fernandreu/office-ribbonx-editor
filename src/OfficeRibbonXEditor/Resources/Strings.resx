@@ -497,6 +497,17 @@
     <value>Unfold Level</value>
     <comment>The menu title for unfolding a specific level</comment>
   </data>
+  <data name="Message.AlreadyOpen.Text" xml:space="preserve">
+    <value>The document '{0}' is already open. Opening a document more than once is dangerous and can lead to loss of data, unless you save it with a different name straight away.
+
+Are you completely sure you want to open this document again?</value>
+  </data>
+  <data name="Message.AlreadyOpen.Title" xml:space="preserve">
+    <value>Document Already Open</value>
+  </data>
+  <data name="Message.CallbackError.Title" xml:space="preserve">
+    <value>Error Generating Callbacks</value>
+  </data>
   <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
     <value>File {0} has unsaved changes. Do you want to save them before closing it?</value>
     <comment>{0} is the placeholder for the file name</comment>
@@ -504,11 +515,50 @@
   <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
     <value>Unsaved Changes</value>
   </data>
+  <data name="Message.IconExists.Text" xml:space="preserve">
+    <value>This custom UI file already has an icon with id {0}. Do you want to insert the new icon with id {1} instead?</value>
+  </data>
+  <data name="Message.IconExists.Title" xml:space="preserve">
+    <value>Icon Already Exists</value>
+  </data>
+  <data name="Message.InsertSample.Text" xml:space="preserve">
+    <value>This will insert the sample XML code on the current cursor position. Are you sure you want to continue?</value>
+  </data>
+  <data name="Message.InsertSample.Title" xml:space="preserve">
+    <value>Insert XML Sample</value>
+  </data>
+  <data name="Message.InsertSampleError.Title" xml:space="preserve">
+    <value>Error inserting XML sample</value>
+  </data>
+  <data name="Message.NewVersion.Text" xml:space="preserve">
+    <value>Release version {0} is now available. Do you want to download it?</value>
+  </data>
+  <data name="Message.NewVersion.Title" xml:space="preserve">
+    <value>Newer Version Available</value>
+  </data>
   <data name="Message.NoCallbacks.Text" xml:space="preserve">
     <value>There is no callback to be generated.</value>
   </data>
   <data name="Message.NoCallbacks.Title" xml:space="preserve">
     <value>Generate Callbacks</value>
+  </data>
+  <data name="Message.OpenError.Title" xml:space="preserve">
+    <value>Error opening Office document</value>
+  </data>
+  <data name="Message.RemoveIcon.Text" xml:space="preserve">
+    <value>This action cannot be undone. Are you sure you want to continue?</value>
+  </data>
+  <data name="Message.RemoveIcon.Title" xml:space="preserve">
+    <value>Remove Icon</value>
+  </data>
+  <data name="Message.RemovePart.Text" xml:space="preserve">
+    <value>This action cannot be undone. Are you sure you want to continue?</value>
+  </data>
+  <data name="Message.RemovePart.Title" xml:space="preserve">
+    <value>Remove XML part</value>
+  </data>
+  <data name="Message.SaveError.Title" xml:space="preserve">
+    <value>Error saving Office document</value>
   </data>
   <data name="Message.ValidXml.Text" xml:space="preserve">
     <value>Custom UI XML is well formed.</value>
@@ -530,6 +580,84 @@
   </data>
   <data name="SaveDialog.SaveAs.Title" xml:space="preserve">
     <value>Save OOXML Document</value>
+  </data>
+  <data name="Settings.Accept" xml:space="preserve">
+    <value>Accept</value>
+  </data>
+  <data name="Settings.Apply" xml:space="preserve">
+    <value>Apply</value>
+  </data>
+  <data name="Settings.Colors" xml:space="preserve">
+    <value>Editor colors</value>
+  </data>
+  <data name="Settings.Colors.Attribute" xml:space="preserve">
+    <value>Attribute</value>
+  </data>
+  <data name="Settings.Colors.Background" xml:space="preserve">
+    <value>Background</value>
+  </data>
+  <data name="Settings.Colors.Comment" xml:space="preserve">
+    <value>Comment</value>
+  </data>
+  <data name="Settings.Colors.Default" xml:space="preserve">
+    <value>Normal Text</value>
+  </data>
+  <data name="Settings.Colors.String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="Settings.Colors.Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="Settings.Editor" xml:space="preserve">
+    <value>Other editor settings</value>
+  </data>
+  <data name="Settings.Editor.AutoIndent" xml:space="preserve">
+    <value>Auto-indent new lines</value>
+  </data>
+  <data name="Settings.Editor.FontSize" xml:space="preserve">
+    <value>Font Size</value>
+  </data>
+  <data name="Settings.Editor.TabWidth" xml:space="preserve">
+    <value>Tab Width</value>
+  </data>
+  <data name="Settings.Editor.WrapMode" xml:space="preserve">
+    <value>Wrap Mode</value>
+  </data>
+  <data name="Settings.FileAssociations" xml:space="preserve">
+    <value>File Associations</value>
+  </data>
+  <data name="Settings.FileAssociations.CheckAll" xml:space="preserve">
+    <value>Check All</value>
+  </data>
+  <data name="Settings.FileAssociations.ToolTip" xml:space="preserve">
+    <value>A context menu entry will appear in Windows Explorer to edit these files directly with the tool</value>
+  </data>
+  <data name="Settings.FileAssociations.UncheckAll" xml:space="preserve">
+    <value>Uncheck All</value>
+  </data>
+  <data name="Settings.Misc" xml:space="preserve">
+    <value>Misc</value>
+  </data>
+  <data name="Settings.Misc.DefaultTemplates" xml:space="preserve">
+    <value>Show default XML templates in the Insert menu</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates" xml:space="preserve">
+    <value>Additional XML templates to load:</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
+    <value>One path per line. Paths can be either XML files or folders containing those. They can also be relative to the tool's folder</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes" xml:space="preserve">
+    <value>Preserve file attributes when saving an already existing document</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes.ToolTip" xml:space="preserve">
+    <value>If checked, read-only files will keep to be read-only after saving them for example</value>
+  </data>
+  <data name="Settings.ResetDefaults" xml:space="preserve">
+    <value>Reset Defaults</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Settings</value>
   </data>
   <data name="ToolBar.Callbacks" xml:space="preserve">
     <value>Generate Callbacks</value>

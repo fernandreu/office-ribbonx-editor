@@ -570,8 +570,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             bool AlreadyExistingAction(string? existingId, string? newId)
             {
                 var result = this.messageBoxService.Show(
-                    $"This custom UI file already has an icon with id {existingId}. Do you want to insert the new icon with id {newId} instead?",
-                    "Icon Already Exists",
+                    string.Format(CultureInfo.InvariantCulture, Strings.Message_IconExists_Text, existingId, newId),
+                    Strings.Message_IconExists_Title,
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
 
@@ -589,8 +589,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (this.SelectedItem is OfficePartViewModel part)
             {
                 var result = this.messageBoxService.Show(
-                    "This action cannot be undone. Are you sure you want to continue?", 
-                    "Remove XML part", 
+                    Strings.Message_RemovePart_Text, 
+                    Strings.Message_RemovePart_Title, 
                     MessageBoxButton.YesNo, 
                     MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -628,8 +628,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (this.SelectedItem is IconViewModel icon)
             {
                 var result = this.messageBoxService.Show(
-                    "This action cannot be undone. Are you sure you want to continue?", 
-                    "Remove Icon", 
+                    Strings.Message_RemoveIcon_Text, 
+                    Strings.Message_RemoveIcon_Title, 
                     MessageBoxButton.YesNo, 
                     MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -761,9 +761,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (existing != null)
             {
                 var result = this.messageBoxService.Show(
-                    $"The document '{existing.Name}' is already open. Opening a document more than once is dangerous and can lead to loss of data, " +
-                    $"unless you save it with a different name straight away.\n\nAre you completely sure you want to open this document again?",
-                    "Document Already Open",
+                    string.Format(CultureInfo.InvariantCulture, Strings.Message_AlreadyOpen_Text, existing.Name),
+                    Strings.Message_AlreadyOpen_Title,
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
                 if (result != MessageBoxResult.Yes)
@@ -783,7 +782,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error opening Office document", image: MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_OpenError_Title, image: MessageBoxImage.Error);
                 return;
             }
 
@@ -917,7 +916,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_SaveError_Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -937,7 +936,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_SaveError_Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1016,7 +1015,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error saving Office document", image: MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_SaveError_Title, image: MessageBoxImage.Error);
                 return;
             }
             
@@ -1090,8 +1089,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (!newPart)
             {
                 var result = this.messageBoxService.Show(
-                    "This will replace the contents of the current part. Are you sure you want to continue?", 
-                    "Insert XML Sample", 
+                    Strings.Message_InsertSample_Text, 
+                    Strings.Message_InsertSample_Title, 
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.No)
@@ -1135,7 +1134,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error inserting XML sample");
+                this.messageBoxService.Show(ex.Message, Strings.Message_InsertSampleError_Title);
             }
         }
 
@@ -1256,7 +1255,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error Generating Callbacks", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_CallbackError_Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1344,8 +1343,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         private void ExecuteNewerVersionCommand()
         {
             var result = this.messageBoxService.Show(
-                $"Release version {this.newerVersion} is now available. Do you want to download it?", 
-                "Newer Version Available", 
+                string.Format(CultureInfo.InvariantCulture, Strings.Message_NewVersion_Text, this.newerVersion),
+                Strings.Message_NewVersion_Title, 
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Information);
 
