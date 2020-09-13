@@ -1287,6 +1287,15 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error Changing Icon ID.
+        /// </summary>
+        public static string Message_ChangeIdError_Title {
+            get {
+                return ResourceManager.GetString("Message.ChangeIdError.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File {0} has unsaved changes. Do you want to save them before closing it?.
         /// </summary>
         public static string Message_CloseUnsavedDoc_Text {
@@ -1697,6 +1706,15 @@ namespace OfficeRibbonXEditor.Resources {
         public static string Settings_Misc_ExtraTemplates_ToolTip {
             get {
                 return ResourceManager.GetString("Settings.Misc.ExtraTemplates.ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language.
+        /// </summary>
+        public static string Settings_Misc_Language {
+            get {
+                return ResourceManager.GetString("Settings.Misc.Language", resourceCulture);
             }
         }
         

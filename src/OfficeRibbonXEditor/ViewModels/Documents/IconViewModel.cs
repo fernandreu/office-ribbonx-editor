@@ -4,6 +4,7 @@ using System.Windows.Media.Imaging;
 using System.Xml;
 using CommonServiceLocator;
 using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {
@@ -85,7 +86,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                 this.NewName = this.Name;
                 ServiceLocator.Current.GetInstance<IMessageBoxService>()?.Show(
                     errorMessage, 
-                    "Error Changing Icon ID", 
+                    Strings.Message_ChangeIdError_Title, 
                     MessageBoxButton.OK, 
                     MessageBoxImage.Error);
                 return;

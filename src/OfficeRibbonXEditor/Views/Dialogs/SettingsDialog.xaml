@@ -129,6 +129,20 @@
             Grid.ColumnSpan="3" 
             Header="{lex:Loc Settings.Misc}">
             <StackPanel Margin="2">
+                <StackPanel
+                    Margin="0,0,0,4"
+                    Orientation="Horizontal">
+                    <Label 
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Content="{lex:Loc Settings.Misc.Language}"/>
+                    <ComboBox 
+                        VerticalAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        ItemsSource="{Binding Languages}"
+                        SelectedItem="{Binding Language}"
+                        DisplayMemberPath="Name"/>
+                </StackPanel>
                 <CheckBox 
                     Margin="0,0,0,4"
                     Content="{lex:Loc Settings.Misc.PreserveAttributes}" 
