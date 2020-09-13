@@ -57,6 +57,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public SettingsDialogViewModel()
         {
+            this.LanguageNames = this.Languages.Select(x => x.Name).ToList();
+
             this.ResetToDefaultCommand = new RelayCommand(this.ResetToDefault);
             this.ResetToCurrentCommand = new RelayCommand(this.ResetToCurrent);
             this.ApplyCommand = new RelayCommand(this.ApplySettings);
@@ -75,9 +77,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             Settings.Default.PropertyChanged += this.SettingsChangedEventHandler;
         }
 
-        private LanguageChoice? language;
+        private string? language;
 
-        public LanguageChoice? Language
+        public string? Language
         {
             get => this.language;
             set
@@ -87,7 +89,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                     return;
                 }
 
-                Settings.Default.UICulture = value?.Id ?? string.Empty;
+                this.SaveLanguage();
             }
         }
 
@@ -111,12 +113,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
 
+        // Note: Not using this directly for the ComboBox items binding (plus DisplayMemberPath="Name") because it will
+        // cause issues with the UI testing. Using the raw strings in LanguageNames instead
         public ICollection<LanguageChoice> Languages { get; } = new[]
         {
             new LanguageChoice("English", string.Empty), 
             new LanguageChoice("Español", "es"),
             new LanguageChoice("Français", "fr"),
         };
+
+        public ICollection<string> LanguageNames { get; }
 
         public RelayCommand ResetToDefaultCommand { get; }
 
@@ -229,7 +235,13 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         private void LoadLanguage()
         {
             var foundLanguage = this.Languages.FirstOrDefault(x => x.Id == Settings.Default.UICulture);
-            this.Language = foundLanguage ?? this.Languages.First();
+            this.Language = foundLanguage?.Name ?? this.Languages.First().Name;
+        }
+
+        private void SaveLanguage()
+        {
+            var foundLanguage = this.Languages.FirstOrDefault(x => x.Name == this.Language);
+            Settings.Default.UICulture = foundLanguage.Id;
         }
 
         private void SetAllAssociations(bool newValue)

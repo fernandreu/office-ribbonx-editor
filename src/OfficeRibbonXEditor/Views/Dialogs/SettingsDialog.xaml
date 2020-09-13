@@ -137,11 +137,11 @@
                         VerticalContentAlignment="Center"
                         Content="{lex:Loc Settings.Misc.Language}"/>
                     <ComboBox 
+                        AutomationProperties.AutomationId="LanguageCombo"
                         VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
-                        ItemsSource="{Binding Languages}"
-                        SelectedItem="{Binding Language}"
-                        DisplayMemberPath="Name"/>
+                        ItemsSource="{Binding LanguageNames}"
+                        SelectedItem="{Binding Language}"/>
                 </StackPanel>
                 <CheckBox 
                     Margin="0,0,0,4"
@@ -214,9 +214,27 @@
             </Grid>
         </GroupBox>
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="2">
-            <Button Content="{lex:Loc Settings.ResetDefaults}" Margin="3" Padding="8,4" Command="{Binding ResetToDefaultCommand}"/>
-            <Button Content="{lex:Loc Settings.Apply}" Margin="3" Padding="8,4" Command="{Binding ApplyCommand}" IsEnabled="{Binding SettingsChanged}"/>
-            <Button Content="{lex:Loc Settings.Accept}" Margin="3" Padding="8,4" Command="{Binding AcceptCommand}" IsDefault="True" IsEnabled="{Binding SettingsChanged}"/>
+            <Button 
+                AutomationProperties.AutomationId="ResetButton"
+                Margin="3" 
+                Padding="8,4" 
+                Content="{lex:Loc Settings.ResetDefaults}" 
+                Command="{Binding ResetToDefaultCommand}"/>
+            <Button 
+                AutomationProperties.AutomationId="ApplyButton"
+                Margin="3" 
+                Padding="8,4"
+                Content="{lex:Loc Settings.Apply}" 
+                Command="{Binding ApplyCommand}" 
+                IsEnabled="{Binding SettingsChanged}"/>
+            <Button 
+                AutomationProperties.AutomationId="AcceptButton"
+                Margin="3" 
+                Padding="8,4" 
+                Content="{lex:Loc Settings.Accept}" 
+                Command="{Binding AcceptCommand}" 
+                IsDefault="True" 
+                IsEnabled="{Binding SettingsChanged}"/>
         </StackPanel>
     </Grid>
 </controls:DialogControl>

@@ -400,7 +400,7 @@
                     </MenuItem>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="{lex:Loc Menu.Insert}" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
+            <MenuItem Header="{lex:Loc Menu.Insert}" AutomationProperties.AutomationId="Insert" IsEnabled="{Binding SelectedItem, Converter={StaticResource IsNotNullConverter}}">
                 <MenuItem Header="{lex:Loc Menu.Insert.Office2010}" Command="{Binding InsertXml14Command}" IsEnabled="{Binding CanInsertXml14Part}">
                     <MenuItem.Icon>
                         <Image Source="/Resources/Images/xml.png"
@@ -426,6 +426,7 @@
                 <Separator/>
                 <MenuItem 
                     Header="{lex:Loc Menu.Insert.Sample}"
+                    AutomationProperties.AutomationId="SampleXml"
                     ItemsSource="{Binding XmlSamples.Items}"
                     ToolTipService.ShowOnDisabled="True">
                     <MenuItem.Style>
@@ -531,7 +532,7 @@
 
                 <Separator/>
 
-                <Button ToolTip="{lex:Loc ToolBar.Settings.ToolTip}" Command="{Binding ShowSettingsCommand}">
+                <Button ToolTip="{lex:Loc ToolBar.Settings.ToolTip}" AutomationProperties.AutomationId="SettingsButton" Command="{Binding ShowSettingsCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/settings.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center" Text="{lex:Loc ToolBar.Settings}"/>
