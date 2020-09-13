@@ -259,6 +259,15 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zoom Factor:.
+        /// </summary>
+        public static string Editor_ZoomFactor {
+            get {
+                return ResourceManager.GetString("Editor.ZoomFactor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close this Dialog.
         /// </summary>
         public static string Exception_CloseDialog {
@@ -1123,6 +1132,15 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string Menu_Help_About {
+            get {
+                return ResourceManager.GetString("Menu.Help.About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Useful Links.
         /// </summary>
         public static string Menu_Help_UsefulLinks {
@@ -1213,7 +1231,7 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to UnfoldAll.
+        ///   Looks up a localized string similar to Unfold All.
         /// </summary>
         public static string Menu_View_UnfoldAll {
             get {

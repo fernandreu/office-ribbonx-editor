@@ -183,6 +183,9 @@
   <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
     <value>Save As...</value>
   </data>
+  <data name="Editor.ZoomFactor" xml:space="preserve">
+    <value>Zoom Factor:</value>
+  </data>
   <data name="Exception.CloseDialog" xml:space="preserve">
     <value>Close this Dialog</value>
   </data>
@@ -471,6 +474,9 @@
   <data name="Menu.Help" xml:space="preserve">
     <value>_Help</value>
   </data>
+  <data name="Menu.Help.About" xml:space="preserve">
+    <value>About</value>
+  </data>
   <data name="Menu.Help.UsefulLinks" xml:space="preserve">
     <value>Useful Links</value>
   </data>
@@ -503,7 +509,7 @@
     <comment>The menu title for folding a specific level</comment>
   </data>
   <data name="Menu.View.UnfoldAll" xml:space="preserve">
-    <value>UnfoldAll</value>
+    <value>Unfold All</value>
   </data>
   <data name="Menu.View.UnfoldCurrent" xml:space="preserve">
     <value>Unfold Current Level</value>

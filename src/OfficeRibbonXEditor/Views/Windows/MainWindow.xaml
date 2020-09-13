@@ -495,7 +495,7 @@
                     </MenuItem.ItemContainerStyle>
                 </MenuItem>
                 <Separator/>
-                <MenuItem Header="About" Command="{Binding ShowAboutCommand}"/>
+                <MenuItem Header="{lex:Loc Menu.Help.About}" Command="{Binding ShowAboutCommand}"/>
             </MenuItem>
         </Menu>
 
@@ -605,7 +605,7 @@
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" Margin="0,0,10,0">
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Zoom factor:" Padding="0,0,4,0"/>
+                    <Label Content="{lex:Loc Editor.ZoomFactor}" Padding="0,0,4,0"/>
                     <xctk:IntegerUpDown x:Name="ZoomBox" Value="{Binding SelectedTab.Zoom}" Height="20" Minimum="-10" Maximum="20"/>
                 </StackPanel>
             </StatusBarItem>
