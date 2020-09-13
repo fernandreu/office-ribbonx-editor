@@ -349,7 +349,7 @@ namespace OfficeRibbonXEditor.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("es-ES")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string UICulture {
             get {
                 return ((string)(this["UICulture"]));
