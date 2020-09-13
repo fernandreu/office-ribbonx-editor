@@ -31,6 +31,13 @@ namespace OfficeRibbonXEditor
         {
             this.Dispatcher.UnhandledException += this.OnUnhandledException;
 
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
             InitializeCultures();
         }
 
@@ -62,7 +69,7 @@ namespace OfficeRibbonXEditor
 
         private void ApplicationExit(object sender, ExitEventArgs e)
         {
-            OfficeRibbonXEditor.Properties.Settings.Default.Save();
+            Settings.Default.Save();
         }
 
         private void LaunchMainWindow()

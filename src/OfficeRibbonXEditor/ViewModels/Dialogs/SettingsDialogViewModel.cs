@@ -70,8 +70,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 this.FileAssociations.Add(association);
             }
 
-            var foundLanguage = this.Languages.FirstOrDefault(x => x.Id == Settings.Default.UICulture);
-            this.Language = foundLanguage ?? this.Languages.First();
+            this.LoadLanguage();
 
             Settings.Default.PropertyChanged += this.SettingsChangedEventHandler;
         }
@@ -145,6 +144,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         {
             if (e.PropertyName == nameof(Settings.Default.UICulture))
             {
+                this.LoadLanguage();
                 this.LanguageChanged = true;
             }
 
@@ -224,6 +224,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.ApplySettings();
             this.IsCancelled = false;
             this.Close();
+        }
+
+        private void LoadLanguage()
+        {
+            var foundLanguage = this.Languages.FirstOrDefault(x => x.Id == Settings.Default.UICulture);
+            this.Language = foundLanguage ?? this.Languages.First();
         }
 
         private void SetAllAssociations(bool newValue)
