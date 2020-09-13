@@ -2,6 +2,7 @@
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
@@ -39,8 +40,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 $"Operating System: {this.Info.OperatingSystemVersion}");
 
             this.messageBoxService.Show(
-                "The version information has been copied to the clipboard.",
-                "Version Information Copied",
+                Strings.Message_VersionCopy_Text,
+                Strings.Message_VersionCopy_Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
         }

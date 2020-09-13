@@ -474,7 +474,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             if (doc.HasUnsavedChanges)
             {
-                var result = this.messageBoxService.Show(string.Format(CultureInfo.CurrentCulture, StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                var result = this.messageBoxService.Show(string.Format(CultureInfo.InvariantCulture, Strings.Message_CloseUnsavedDoc_Text, doc.Name), Strings.Message_CloseUnsavedDoc_Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     this.SaveCommand.Execute();
@@ -543,7 +543,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            this.fileDialogService.OpenFilesDialog(StringsResource.idsInsertIconsDialogTitle, StringsResource.idsFilterAllSupportedImages + "|" + StringsResource.idsFilterAllFiles, this.FinishInsertingIcons);
+            this.fileDialogService.OpenFilesDialog(Strings.OpenDialog_Icons_Title, Strings.Filter_Icons + "|" + Strings.Filter_All, this.FinishInsertingIcons);
         }
 
         /// <summary>
@@ -570,8 +570,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             bool AlreadyExistingAction(string? existingId, string? newId)
             {
                 var result = this.messageBoxService.Show(
-                    $"This custom UI file already has an icon with id {existingId}. Do you want to insert the new icon with id {newId} instead?",
-                    "Icon Already Exists",
+                    string.Format(CultureInfo.InvariantCulture, Strings.Message_IconExists_Text, existingId, newId),
+                    Strings.Message_IconExists_Title,
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
 
@@ -589,8 +589,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (this.SelectedItem is OfficePartViewModel part)
             {
                 var result = this.messageBoxService.Show(
-                    "This action cannot be undone. Are you sure you want to continue?", 
-                    "Remove XML part", 
+                    Strings.Message_RemovePart_Text, 
+                    Strings.Message_RemovePart_Title, 
                     MessageBoxButton.YesNo, 
                     MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -628,8 +628,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (this.SelectedItem is IconViewModel icon)
             {
                 var result = this.messageBoxService.Show(
-                    "This action cannot be undone. Are you sure you want to continue?", 
-                    "Remove Icon", 
+                    Strings.Message_RemoveIcon_Text, 
+                    Strings.Message_RemoveIcon_Title, 
                     MessageBoxButton.YesNo, 
                     MessageBoxImage.Warning);
                 if (result == MessageBoxResult.No)
@@ -663,8 +663,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (doc.HasUnsavedChanges)
                 {
                     var result = this.messageBoxService.Show(
-                        string.Format(CultureInfo.CurrentCulture, StringsResource.idsCloseWarningMessage, doc.Name), 
-                        StringsResource.idsCloseWarningTitle,
+                        string.Format(CultureInfo.InvariantCulture, Strings.Message_CloseUnsavedDoc_Text, doc.Name), 
+                        Strings.Message_CloseUnsavedDoc_Title,
                         MessageBoxButton.YesNoCancel, 
                         MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
@@ -735,15 +735,15 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         {
             string[] filters =
                 {
-                    StringsResource.idsFilterAllOfficeDocuments,
-                    StringsResource.idsFilterWordDocuments,
-                    StringsResource.idsFilterExcelDocuments,
-                    StringsResource.idsFilterPPTDocuments,
-                    StringsResource.idsFilterAllFiles,
+                    Strings.Filter_AllOfficeDocuments,
+                    Strings.Filter_WordDocuments,
+                    Strings.Filter_ExcelDocuments,
+                    Strings.Filter_PowerPointDocuments,
+                    Strings.Filter_All,
                 };
 
             this.fileDialogService.OpenFileDialog(
-                StringsResource.idsOpenDocumentDialogTitle, 
+                Strings.OpenDialog_Document_Title, 
                 string.Join("|", filters), 
                 this.FinishOpeningFile);
         }
@@ -761,9 +761,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (existing != null)
             {
                 var result = this.messageBoxService.Show(
-                    $"The document '{existing.Name}' is already open. Opening a document more than once is dangerous and can lead to loss of data, " +
-                    $"unless you save it with a different name straight away.\n\nAre you completely sure you want to open this document again?",
-                    "Document Already Open",
+                    string.Format(CultureInfo.InvariantCulture, Strings.Message_AlreadyOpen_Text, existing.Name),
+                    Strings.Message_AlreadyOpen_Title,
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Warning);
                 if (result != MessageBoxResult.Yes)
@@ -783,7 +782,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error opening Office document", image: MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_OpenError_Title, image: MessageBoxImage.Error);
                 return;
             }
 
@@ -917,7 +916,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_SaveError_Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -937,7 +936,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error saving Office document", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_SaveError_Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -952,7 +951,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var filters = new List<string>();
             while (true)
             {
-                var filter = StringsResource.ResourceManager.GetString("idsFilterSaveAs" + filters.Count, CultureInfo.CurrentCulture);
+                var filter = Strings.ResourceManager.GetString("Filter.SaveAs" + filters.Count, CultureInfo.CurrentCulture);
                 if (filter == null)
                 {
                     break;
@@ -961,7 +960,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 filters.Add(filter);
             }
 
-            filters.Add(StringsResource.idsFilterAllFiles);
+            filters.Add(Strings.Filter_All);
             
             var ext = Path.GetExtension(doc.Name);
 
@@ -978,7 +977,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
 
             this.fileDialogService.SaveFileDialog(
-                StringsResource.idsSaveDocumentAsDialogTitle, 
+                Strings.SaveDialog_SaveAs_Title, 
                 string.Join("|", filters),
                 path => this.FinishSavingFile(path, renameCurrent), 
                 doc.Name, 
@@ -1016,7 +1015,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error saving Office document", image: MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_SaveError_Title, image: MessageBoxImage.Error);
                 return;
             }
             
@@ -1090,8 +1089,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             if (!newPart)
             {
                 var result = this.messageBoxService.Show(
-                    "This will replace the contents of the current part. Are you sure you want to continue?", 
-                    "Insert XML Sample", 
+                    Strings.Message_InsertSample_Text, 
+                    Strings.Message_InsertSample_Title, 
                     MessageBoxButton.YesNo,
                     MessageBoxImage.Exclamation);
                 if (result == MessageBoxResult.No)
@@ -1135,7 +1134,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error inserting XML sample");
+                this.messageBoxService.Show(ex.Message, Strings.Message_InsertSampleError_Title);
             }
         }
 
@@ -1192,8 +1191,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     if (showValidMessage)
                     {
                         this.messageBoxService.Show(
-                            StringsResource.idsValidXml,
-                            "XML is Valid",
+                            Strings.Message_ValidXml_Text,
+                            Strings.Message_ValidXml_Title,
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
                     }
@@ -1248,7 +1247,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 var callbacks = CallbacksBuilder.GenerateCallback(customUi);
                 if (callbacks == null || callbacks.Length == 0)
                 {
-                    this.messageBoxService.Show(StringsResource.idsNoCallback, "Generate Callbacks", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.messageBoxService.Show(Strings.Message_NoCallbacks_Text, Strings.Message_NoCallbacks_Title, MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
                 
@@ -1256,7 +1255,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
             catch (Exception ex)
             {
-                this.messageBoxService.Show(ex.Message, "Error Generating Callbacks", MessageBoxButton.OK, MessageBoxImage.Error);
+                this.messageBoxService.Show(ex.Message, Strings.Message_CallbackError_Title, MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -1344,8 +1343,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         private void ExecuteNewerVersionCommand()
         {
             var result = this.messageBoxService.Show(
-                $"Release version {this.newerVersion} is now available. Do you want to download it?", 
-                "Newer Version Available", 
+                string.Format(CultureInfo.InvariantCulture, Strings.Message_NewVersion_Text, this.newerVersion),
+                Strings.Message_NewVersion_Title, 
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Information);
 

@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Threading;
 using System.Windows;
+using System.Windows.Markup;
 using System.Windows.Threading;
 using Autofac;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.Services;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.ViewModels.Windows;
 using OfficeRibbonXEditor.Views.Dialogs;
 using OfficeRibbonXEditor.Views.Windows;
+using WPFLocalizeExtension.Engine;
 
 namespace OfficeRibbonXEditor
 {
@@ -25,6 +30,15 @@ namespace OfficeRibbonXEditor
         public App()
         {
             this.Dispatcher.UnhandledException += this.OnUnhandledException;
+
+            if (Settings.Default.UpgradeRequired)
+            {
+                Settings.Default.Upgrade();
+                Settings.Default.UpgradeRequired = false;
+                Settings.Default.Save();
+            }
+
+            InitializeCultures();
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -34,9 +48,28 @@ namespace OfficeRibbonXEditor
             this.LaunchMainWindow();
         }
 
+        private static void InitializeCultures()
+        {
+            if (!string.IsNullOrEmpty(Settings.Default.Culture))
+            {
+                LocalizeDictionary.Instance.Culture
+                    = Thread.CurrentThread.CurrentCulture
+                        = new CultureInfo(Settings.Default.Culture);
+            }
+
+            if (!string.IsNullOrEmpty(Settings.Default.UICulture))
+            {
+                LocalizeDictionary.Instance.Culture
+                    = Thread.CurrentThread.CurrentUICulture
+                        = new CultureInfo(Settings.Default.UICulture);
+            }
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.Name)));
+        }
+
         private void ApplicationExit(object sender, ExitEventArgs e)
         {
-            OfficeRibbonXEditor.Properties.Settings.Default.Save();
+            Settings.Default.Save();
         }
 
         private void LaunchMainWindow()

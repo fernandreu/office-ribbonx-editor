@@ -69,11 +69,14 @@ namespace OfficeRibbonXEditor.UITests.Main
             this.manager.Launch(sourceFile);
             this.manager.Window?.FindTreeView()?.Items.First().Select();
             var menu = this.manager.Window?.FindFirstChild(cf => cf.Menu()).AsMenu();
+            Assert.NotNull(menu);
             var tabView = this.manager.Window?.FindTabView();
             var tabItem = tabView?.FindFirstChild(x => x.ByClassName(nameof(EditorTab)));
             Assert.Null(tabItem);
 
-            var sampleEntry = menu?.Items["Insert"].Items["Sample XML"].Items[0];
+            var insertMenu = menu!.Items.First(x => x.AutomationId == "Insert");
+            var sampleMenu = insertMenu.Items.First(x => x.AutomationId == "SampleXml");
+            var sampleEntry = sampleMenu.Items[0];
             sampleEntry?.Invoke();
 
             tabItem = tabView?.FindFirstChild(x => x.ByClassName(nameof(EditorTab)));

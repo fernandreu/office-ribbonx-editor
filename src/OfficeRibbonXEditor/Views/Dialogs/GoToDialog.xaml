@@ -1,20 +1,22 @@
-﻿<controls:DialogControl x:Class="OfficeRibbonXEditor.Views.Dialogs.GoToDialog"
-         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-         xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
-         xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels.Dialogs"
-         mc:Ignorable="d" 
-         Title="Go To Line"
-         Icon="/Resources/Images/go_to.png"
-         SizeToContent="Height"
-         PreferredWidth="280" 
-         InactiveOpacity="0.5"
-         d:DesignWidth="280"
-         d:DesignHeight="150"
-         d:DataContext="{d:DesignInstance viewModels:GoToDialogViewModel}">
+﻿<controls:DialogControl 
+    x:Class="OfficeRibbonXEditor.Views.Dialogs.GoToDialog"
+     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+     xmlns:controls="clr-namespace:OfficeRibbonXEditor.Views.Controls"
+     xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels.Dialogs"
+     xmlns:lex="http://wpflocalizeextension.codeplex.com"
+     mc:Ignorable="d" 
+     Title="{lex:Loc GoTo.Title}"
+     Icon="/Resources/Images/go_to.png"
+     SizeToContent="Height"
+     PreferredWidth="280" 
+     InactiveOpacity="0.5"
+     d:DesignWidth="280"
+     d:DesignHeight="150"
+     d:DataContext="{d:DesignInstance viewModels:GoToDialogViewModel}">
     <StackPanel Orientation="Vertical"
                 Margin="8">
         <Grid>
@@ -30,7 +32,7 @@
 
             <Label Grid.Row="0"
                    Grid.Column="0"
-                   Content="_Current line number"/>
+                   Content="{lex:Loc GoTo.CurrentLine}"/>
             <TextBox Grid.Row="0" 
                      Grid.Column="1"
                      AutomationProperties.AutomationId="CurrentLineBox"
@@ -42,7 +44,7 @@
 
             <Label Grid.Row="1"
                    Grid.Column="0"
-                   Content="_Maximum line number"/>
+                   Content="{lex:Loc GoTo.MaxLine}"/>
             <TextBox Grid.Row="1"
                      Grid.Column="1"
                      AutomationProperties.AutomationId="MaximumLineBox"
@@ -54,7 +56,7 @@
 
             <Label Grid.Row="2"
                    Grid.Column="0"
-                   Content="Go to line number"/>
+                   Content="{lex:Loc GoTo.DesiredLine}"/>
             <xctk:IntegerUpDown 
                 Grid.Row="2"
                 Grid.Column="1"
@@ -74,14 +76,14 @@
             <Button DockPanel.Dock="Right"
                     MinWidth="60"
                     Margin="0,0,4,0"
-                    Content="Cancel" 
+                    Content="{lex:Loc GoTo.Cancel}" 
                     Command="{Binding CloseCommand}"
                     IsCancel="True"/>
             <Button DockPanel.Dock="Right"
                     AutomationProperties.AutomationId="AcceptButton"
                     MinWidth="60"
                     Margin="0,0,8,0"
-                    Content="OK"
+                    Content="{lex:Loc GoTo.Ok}"
                     Command="{Binding AcceptCommand}"
                     IsDefault="True"/>
         </DockPanel>

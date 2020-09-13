@@ -5,6 +5,7 @@ using GalaSoft.MvvmLight.Command;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
+using OfficeRibbonXEditor.Resources;
 using OfficeRibbonXEditor.Views.Controls.Forms;
 using ScintillaNET;
 using CharacterRange = OfficeRibbonXEditor.Helpers.CharacterRange;
@@ -297,7 +298,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 }
                 catch (ArgumentException ex)
                 {
-                    this.StatusText = $"Error in Regular Expression: {ex.Message}";
+                    this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                     return;
                 }
 
@@ -331,7 +332,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 }
             }
 
-            this.StatusText = $"Total found: {foundCount}";
+            this.StatusText = $"{Strings.FindReplace_Status_TotalFound}: {foundCount}";
             this.AddRecentFind();
         }
 
@@ -358,7 +359,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 }
                 catch (ArgumentException ex)
                 {
-                    this.StatusText = $"Error in Regular Expression: {ex.Message}";
+                    this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                     return;
                 }
 
@@ -392,7 +393,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 }
             }
 
-            this.StatusText = $"Total replaced: {foundCount}";
+            this.StatusText = $"{Strings.FindReplace_Status_TotalReplaced}: {foundCount}";
             this.AddRecentFind();
             this.AddRecentReplace();
         }
@@ -420,19 +421,19 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
             catch (ArgumentException ex)
             {
-                this.StatusText = $"Error in Regular Expression: {ex.Message}";
+                this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                 return;
             }
 
             if (foundRange.MinPosition == foundRange.MaxPosition)
             {
-                this.StatusText = "Match could not be found";
+                this.StatusText = Strings.FindReplace_Status_NoMatch;
             }
             else
             {
                 if ((searchUp && foundRange.MinPosition < this.Scintilla.AnchorPosition) || (!searchUp && foundRange.MinPosition > this.Scintilla.CurrentPosition))
                 {
-                    this.StatusText = $"Search match wrapped to the beginning of the {(this.SearchSelection ? "selection" : "document")}";
+                    this.StatusText = Strings.FindReplace_Status_Wrap;
                 }
 
                 // This should ensure the entire text is visible before it is selected
@@ -548,19 +549,19 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
             catch (ArgumentException ex)
             {
-                this.StatusText = $"Error in Regular Expression: {ex.Message}";
+                this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                 return;
             }
 
             if (nextRange.MinPosition == nextRange.MaxPosition)
             {
-                this.StatusText = "Match could not be found";
+                this.StatusText = Strings.FindReplace_Status_NoMatch;
             }
             else
             {
                 if (nextRange.MinPosition < this.Scintilla.AnchorPosition)
                 {
-                    this.StatusText = $"Search match wrapped to the beginning of the {(this.SearchSelection ? "selection" : "document")}";
+                    this.StatusText = Strings.FindReplace_Status_Wrap;
                 }
                 
                 // This should ensure the entire text is visible before it is selected

@@ -131,6 +131,17 @@
         "resolved": "2.0.20525",
         "contentHash": "0r+Le4E7hCm4zToUvBzjSUyTcuU3rFeoPa7JyTdWIzR/F7wH6+O/pWkjHIG40hIA0z1wvRdZayvoizA4wcK1dg=="
       },
+      "WPFLocalizeExtension": {
+        "type": "Direct",
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "WJ6ciJOHVp+WcRwjInIZe6z8eKeeNahGBRNxWL/DlDdiGcYuwd52shb+mlLf7QLjugWJG14T5ehmrPcOWZzpkw==",
+        "dependencies": {
+          "System.Drawing.Common": "4.7.0",
+          "System.Management": "4.7.0",
+          "XAMLMarkupExtensions": "2.0.0"
+        }
+      },
       "AsyncAwaitBestPractices": {
         "type": "Transitive",
         "resolved": "4.0.1",
@@ -592,6 +603,11 @@
         "dependencies": {
           "System.Drawing.Common": "4.7.0"
         }
+      },
+      "XAMLMarkupExtensions": {
+        "type": "Transitive",
+        "resolved": "2.0.0",
+        "contentHash": "lf2OKHcoLWEmLy4WxI4D6IrAv5xCwGLMnrjTQWGPaxUYMdd9/oA4HaE7sX2QIZefruth+sJi0+nzg4dDEILPOQ=="
       }
     },
     ".NETCoreApp,Version=v3.1/win7-x86": {
@@ -1001,6 +1017,15 @@
         "resolved": "2.0.20525",
         "contentHash": "0r+Le4E7hCm4zToUvBzjSUyTcuU3rFeoPa7JyTdWIzR/F7wH6+O/pWkjHIG40hIA0z1wvRdZayvoizA4wcK1dg=="
       },
+      "WPFLocalizeExtension": {
+        "type": "Direct",
+        "requested": "[3.8.0, )",
+        "resolved": "3.8.0",
+        "contentHash": "WJ6ciJOHVp+WcRwjInIZe6z8eKeeNahGBRNxWL/DlDdiGcYuwd52shb+mlLf7QLjugWJG14T5ehmrPcOWZzpkw==",
+        "dependencies": {
+          "XAMLMarkupExtensions": "2.0.0"
+        }
+      },
       "AsyncAwaitBestPractices": {
         "type": "Transitive",
         "resolved": "4.0.1",
@@ -1317,6 +1342,11 @@
         "dependencies": {
           "System.Runtime.CompilerServices.Unsafe": "4.5.2"
         }
+      },
+      "XAMLMarkupExtensions": {
+        "type": "Transitive",
+        "resolved": "2.0.0",
+        "contentHash": "lf2OKHcoLWEmLy4WxI4D6IrAv5xCwGLMnrjTQWGPaxUYMdd9/oA4HaE7sX2QIZefruth+sJi0+nzg4dDEILPOQ=="
       }
     },
     ".NETFramework,Version=v4.6.1/win7-x86": {

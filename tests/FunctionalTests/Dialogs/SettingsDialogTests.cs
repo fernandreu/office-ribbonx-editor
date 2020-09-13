@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
@@ -24,6 +25,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             nameof(Settings.Default.PreserveAttributes),
             nameof(Settings.Default.ShowDefaultSamples),
             nameof(Settings.Default.CustomSamples),
+            nameof(Settings.Default.UICulture),
         };
 
         private readonly IDictionary<string, object> originalSettings = new Dictionary<string, object>();
@@ -54,7 +56,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             // Arrange
             var dialog = Launch();
             var current = Settings.Default[settingName];
-            Settings.Default[settingName] = AlterSetting(current);
+            Settings.Default[settingName] = AlterSetting(current, settingName, dialog);
             Assume.That(Settings.Default[settingName], Is.Not.EqualTo(current));
 
             // Act
@@ -71,7 +73,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             var dialog = Launch();
             dialog.ResetToDefaultCommand.Execute();
             var original = Settings.Default[settingName];
-            var current = AlterSetting(original);
+            var current = AlterSetting(original, settingName, dialog);
             Settings.Default[settingName] = current;
             Settings.Default.Save();
             Assume.That(Settings.Default[settingName], Is.Not.EqualTo(original));
@@ -94,8 +96,13 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             return dialog;
         }
 
-        private static object? AlterSetting(object? o)
+        private static object? AlterSetting(object? o, string settingName, SettingsDialogViewModel dialog)
         {
+            if (settingName == nameof(Settings.Default.UICulture))
+            {
+                return dialog.Languages.First(x => x.Id != o as string).Id;
+            }
+
             switch (o)
             {
                 case bool b:

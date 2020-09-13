@@ -1,11 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Shell;
 using OfficeRibbonXEditor.ViewModels.Tabs;
+using WPFLocalizeExtension.Engine;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
@@ -46,12 +50,15 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             nameof(Settings.Default.PreserveAttributes),
             nameof(Settings.Default.ShowDefaultSamples),
             nameof(Settings.Default.CustomSamples),
+            nameof(Settings.Default.UICulture),
         };
         
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
 
         public SettingsDialogViewModel()
         {
+            this.LanguageNames = this.Languages.Select(x => x.Name).ToList();
+
             this.ResetToDefaultCommand = new RelayCommand(this.ResetToDefault);
             this.ResetToCurrentCommand = new RelayCommand(this.ResetToCurrent);
             this.ApplyCommand = new RelayCommand(this.ApplySettings);
@@ -65,8 +72,67 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 this.FileAssociations.Add(association);
             }
 
-            Settings.Default.PropertyChanged += (o, e) => this.SettingsChanged = true;
+            this.LoadLanguage();
+
+            Settings.Default.PropertyChanged += this.SettingsChangedEventHandler;
         }
+
+        private string? language;
+
+        public string? Language
+        {
+            get => this.language;
+            set
+            {
+                if (!this.Set(ref this.language, value))
+                {
+                    return;
+                }
+
+                this.SaveLanguage();
+            }
+        }
+
+        private bool settingsChanged;
+
+        public bool SettingsChanged
+        {
+            get => this.settingsChanged;
+            set => this.Set(ref this.settingsChanged, value);
+        }
+
+        private bool languageChanged;
+
+        public bool LanguageChanged
+        {
+            get => this.languageChanged;
+            set => this.Set(ref this.languageChanged, value);
+        }
+
+        public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
+
+        public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
+
+        // Note: Not using this directly for the ComboBox items binding (plus DisplayMemberPath="Name") because it will
+        // cause issues with the UI testing. Using the raw strings in LanguageNames instead
+        public ICollection<LanguageChoice> Languages { get; } = new[]
+        {
+            new LanguageChoice("English", string.Empty), 
+            new LanguageChoice("Español", "es"),
+            new LanguageChoice("Français", "fr"),
+        };
+
+        public ICollection<string> LanguageNames { get; }
+
+        public RelayCommand ResetToDefaultCommand { get; }
+
+        public RelayCommand ResetToCurrentCommand { get; }
+
+        public RelayCommand ApplyCommand { get; }
+
+        public RelayCommand AcceptCommand { get; }
+
+        public RelayCommand<bool> SetAllAssociationsCommand { get; }
 
         public bool OnLoaded(ICollection<ITabItemViewModel> payload)
         {
@@ -80,27 +146,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             return true;
         }
 
-        private bool settingsChanged;
-
-        public bool SettingsChanged
+        private void SettingsChangedEventHandler(object sender, PropertyChangedEventArgs e)
         {
-            get => this.settingsChanged;
-            set => this.Set(ref this.settingsChanged, value);
+            if (e.PropertyName == nameof(Settings.Default.UICulture))
+            {
+                this.LoadLanguage();
+                this.LanguageChanged = true;
+            }
+
+            this.SettingsChanged = true;
         }
-
-        public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
-
-        public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
-
-        public RelayCommand ResetToDefaultCommand { get; }
-
-        public RelayCommand ResetToCurrentCommand { get; }
-
-        public RelayCommand ApplyCommand { get; }
-
-        public RelayCommand AcceptCommand { get; }
-
-        public RelayCommand<bool> SetAllAssociationsCommand { get; }
 
         private void LoadCurrent()
         {
@@ -159,7 +214,15 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 association.Apply();
             }
 
+            if (this.LanguageChanged)
+            {
+                LocalizeDictionary.Instance.Culture
+                    = Thread.CurrentThread.CurrentUICulture
+                        = new CultureInfo(Settings.Default.UICulture);
+            }
+
             this.SettingsChanged = false;
+            this.LanguageChanged = false;
         }
 
         private void AcceptSettings()
@@ -167,6 +230,18 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.ApplySettings();
             this.IsCancelled = false;
             this.Close();
+        }
+
+        private void LoadLanguage()
+        {
+            var foundLanguage = this.Languages.FirstOrDefault(x => x.Id == Settings.Default.UICulture);
+            this.Language = foundLanguage?.Name ?? this.Languages.First().Name;
+        }
+
+        private void SaveLanguage()
+        {
+            var foundLanguage = this.Languages.FirstOrDefault(x => x.Name == this.Language);
+            Settings.Default.UICulture = foundLanguage.Id;
         }
 
         private void SetAllAssociations(bool newValue)
