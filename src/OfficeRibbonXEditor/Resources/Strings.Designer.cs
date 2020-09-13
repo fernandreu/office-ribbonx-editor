@@ -772,6 +772,51 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Match could not be found.
+        /// </summary>
+        public static string FindReplace_Status_NoMatch {
+            get {
+                return ResourceManager.GetString("FindReplace.Status.NoMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error in Regular Expression.
+        /// </summary>
+        public static string FindReplace_Status_RegExError {
+            get {
+                return ResourceManager.GetString("FindReplace.Status.RegExError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total found.
+        /// </summary>
+        public static string FindReplace_Status_TotalFound {
+            get {
+                return ResourceManager.GetString("FindReplace.Status.TotalFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total replaced.
+        /// </summary>
+        public static string FindReplace_Status_TotalReplaced {
+            get {
+                return ResourceManager.GetString("FindReplace.Status.TotalReplaced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search match wrapped to the beginning of the document / selection.
+        /// </summary>
+        public static string FindReplace_Status_Wrap {
+            get {
+                return ResourceManager.GetString("FindReplace.Status.Wrap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find and Replace.
         /// </summary>
         public static string FindReplace_Title {

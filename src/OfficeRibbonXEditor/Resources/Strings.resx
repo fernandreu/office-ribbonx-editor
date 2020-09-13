@@ -354,6 +354,21 @@
   <data name="FindReplace.Selection" xml:space="preserve">
     <value>Search Selection</value>
   </data>
+  <data name="FindReplace.Status.NoMatch" xml:space="preserve">
+    <value>Match could not be found</value>
+  </data>
+  <data name="FindReplace.Status.RegExError" xml:space="preserve">
+    <value>Error in Regular Expression</value>
+  </data>
+  <data name="FindReplace.Status.TotalFound" xml:space="preserve">
+    <value>Total found</value>
+  </data>
+  <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
+    <value>Total replaced</value>
+  </data>
+  <data name="FindReplace.Status.Wrap" xml:space="preserve">
+    <value>Search match wrapped to the beginning of the document / selection</value>
+  </data>
   <data name="FindReplace.Title" xml:space="preserve">
     <value>Find and Replace</value>
   </data>
