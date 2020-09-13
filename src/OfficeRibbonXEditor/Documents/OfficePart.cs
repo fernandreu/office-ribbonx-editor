@@ -125,7 +125,7 @@ namespace OfficeRibbonXEditor.Documents
 
             if (imageId.Length == 0)
             {
-                throw new ArgumentException(StringsResource.idsNonEmptyId);
+                throw new ArgumentException("Target Id cannot be empty");
             }
 
             return this.AddImageHelper(filePath, imageId, alreadyExistingAction);
@@ -135,7 +135,7 @@ namespace OfficeRibbonXEditor.Documents
         {
             if (this.Part == null)
             {
-                throw new InvalidOperationException($"Part was already removed");
+                throw new InvalidOperationException("Part was already removed");
             }
 
             if (imageId == null)
@@ -191,7 +191,7 @@ namespace OfficeRibbonXEditor.Documents
         {
             if (this.Part == null)
             {
-                throw new InvalidOperationException($"Part was already removed");
+                throw new InvalidOperationException("Part was already removed");
             }
 
             if (source == null)
@@ -206,7 +206,7 @@ namespace OfficeRibbonXEditor.Documents
 
             if (target.Length == 0)
             {
-                throw new ArgumentException(StringsResource.idsNonEmptyId);
+                throw new ArgumentException("Target Id cannot be empty");
             }
 
             if (source == target)
@@ -221,7 +221,7 @@ namespace OfficeRibbonXEditor.Documents
 
             if (this.Part.RelationshipExists(target))
             {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, StringsResource.idsDuplicateId, target));
+                throw new InvalidOperationException($"OOXML part Id \"{target}\" already exists");
             }
 
             var imageRel = this.Part.GetRelationship(source);

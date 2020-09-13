@@ -21,7 +21,7 @@
         lex:ResxLocalizationProvider.DefaultAssembly="OfficeRibbonXEditor"
         lex:ResxLocalizationProvider.DefaultDictionary="Strings"
         mc:Ignorable="d"
-        Title="{x:Static resources:StringsResource.idsApplicationTitle}" 
+        Title="{lex:Loc MainWindow.Title}" 
         Height="{Binding Source={x:Static properties:Settings.Default}, Path=Height}"
         Width="{Binding Source={x:Static properties:Settings.Default}, Path=Width}" 
         Top="{Binding Source={x:Static properties:Settings.Default}, Path=Top}"

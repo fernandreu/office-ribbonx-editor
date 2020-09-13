@@ -304,6 +304,492 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All Files (*.*)|*.*.
+        /// </summary>
+        public static string Filter_All {
+            get {
+                return ResourceManager.GetString("Filter.All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All Office Documents|*.???x;*.???m.
+        /// </summary>
+        public static string Filter_AllOfficeDocuments {
+            get {
+                return ResourceManager.GetString("Filter.AllOfficeDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Excel Workbooks|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm.
+        /// </summary>
+        public static string Filter_ExcelDocuments {
+            get {
+                return ResourceManager.GetString("Filter.ExcelDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supported Icons|*.ico;*.bmp;*.png;*.jpg;*.tif.
+        /// </summary>
+        public static string Filter_Icons {
+            get {
+                return ResourceManager.GetString("Filter.Icons", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft PowerPoint Presentations|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx.
+        /// </summary>
+        public static string Filter_PowerPointDocuments {
+            get {
+                return ResourceManager.GetString("Filter.PowerPointDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Workbook|*.xlsx.
+        /// </summary>
+        public static string Filter_SaveAs0 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Macro-Enabled Workbook|*.xlsm.
+        /// </summary>
+        public static string Filter_SaveAs1 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Show|*.ppsx.
+        /// </summary>
+        public static string Filter_SaveAs10 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs10", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Macro-Enabled Show|*.ppsm.
+        /// </summary>
+        public static string Filter_SaveAs11 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs11", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Add-in|*.ppam.
+        /// </summary>
+        public static string Filter_SaveAs12 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs12", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Document|*.docx.
+        /// </summary>
+        public static string Filter_SaveAs13 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs13", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Macro-Enabled Document|*.docm.
+        /// </summary>
+        public static string Filter_SaveAs14 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs14", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Template|*.dotx.
+        /// </summary>
+        public static string Filter_SaveAs15 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs15", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Word Macro-Enabled Template|*.dotm.
+        /// </summary>
+        public static string Filter_SaveAs16 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs16", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Binary Workbook|*.xlsb.
+        /// </summary>
+        public static string Filter_SaveAs2 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Template|*.xltx.
+        /// </summary>
+        public static string Filter_SaveAs3 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Macro-Enabled Template|*.xltm.
+        /// </summary>
+        public static string Filter_SaveAs4 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Excel Add-in|*.xlam.
+        /// </summary>
+        public static string Filter_SaveAs5 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Presentation|*.pptx.
+        /// </summary>
+        public static string Filter_SaveAs6 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs6", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Macro-Enabled Presentation|*.pptm.
+        /// </summary>
+        public static string Filter_SaveAs7 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Template|*.potx.
+        /// </summary>
+        public static string Filter_SaveAs8 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs8", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PowerPoint Macro-Enabled Template|*.potm.
+        /// </summary>
+        public static string Filter_SaveAs9 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Word Documents|*.do?x;*.do?m.
+        /// </summary>
+        public static string Filter_WordDocuments {
+            get {
+                return ResourceManager.GetString("Filter.WordDocuments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Find.
+        /// </summary>
+        public static string FindReplace_Find {
+            get {
+                return ResourceManager.GetString("FindReplace.Find", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find All.
+        /// </summary>
+        public static string FindReplace_FindAll {
+            get {
+                return ResourceManager.GetString("FindReplace.FindAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C_lear.
+        /// </summary>
+        public static string FindReplace_FindAll_Clear {
+            get {
+                return ResourceManager.GetString("FindReplace.FindAll.Clear", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Highlight Matches.
+        /// </summary>
+        public static string FindReplace_FindAll_HighlightMatches {
+            get {
+                return ResourceManager.GetString("FindReplace.FindAll.HighlightMatches", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Mark Line.
+        /// </summary>
+        public static string FindReplace_FindAll_MarkLine {
+            get {
+                return ResourceManager.GetString("FindReplace.FindAll.MarkLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find _All.
+        /// </summary>
+        public static string FindReplace_FindAll_Ok {
+            get {
+                return ResourceManager.GetString("FindReplace.FindAll.Ok", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find Next.
+        /// </summary>
+        public static string FindReplace_FindNext {
+            get {
+                return ResourceManager.GetString("FindReplace.FindNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find Previous.
+        /// </summary>
+        public static string FindReplace_FindPrevious {
+            get {
+                return ResourceManager.GetString("FindReplace.FindPrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find.
+        /// </summary>
+        public static string FindReplace_FindTab {
+            get {
+                return ResourceManager.GetString("FindReplace.FindTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Options.
+        /// </summary>
+        public static string FindReplace_Options {
+            get {
+                return ResourceManager.GetString("FindReplace.Options", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Compiled.
+        /// </summary>
+        public static string FindReplace_Options_Compiled {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.Compiled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ECMAScript.
+        /// </summary>
+        public static string FindReplace_Options_ECMAScript {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.ECMAScript", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E_xplicit Capture.
+        /// </summary>
+        public static string FindReplace_Options_ExplicitCapture {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.ExplicitCapture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to I_gnore Case.
+        /// </summary>
+        public static string FindReplace_Options_IgnoreCase {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.IgnoreCase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ignore Pattern Whitespace.
+        /// </summary>
+        public static string FindReplace_Options_IgnoreWhitespace {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.IgnoreWhitespace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to C_ulture Invariant.
+        /// </summary>
+        public static string FindReplace_Options_Invariant {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.Invariant", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Multiline.
+        /// </summary>
+        public static string FindReplace_Options_Multiline {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.Multiline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Right To Left.
+        /// </summary>
+        public static string FindReplace_Options_RightToLeft {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.RightToLeft", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Singleline.
+        /// </summary>
+        public static string FindReplace_Options_Singleline {
+            get {
+                return ResourceManager.GetString("FindReplace.Options.Singleline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Replace.
+        /// </summary>
+        public static string FindReplace_Replace {
+            get {
+                return ResourceManager.GetString("FindReplace.Replace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace _All.
+        /// </summary>
+        public static string FindReplace_ReplaceAll {
+            get {
+                return ResourceManager.GetString("FindReplace.ReplaceAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace _Next.
+        /// </summary>
+        public static string FindReplace_ReplaceNext {
+            get {
+                return ResourceManager.GetString("FindReplace.ReplaceNext", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace _Previous.
+        /// </summary>
+        public static string FindReplace_ReplacePrevious {
+            get {
+                return ResourceManager.GetString("FindReplace.ReplacePrevious", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Replace.
+        /// </summary>
+        public static string FindReplace_ReplaceTab {
+            get {
+                return ResourceManager.GetString("FindReplace.ReplaceTab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Type.
+        /// </summary>
+        public static string FindReplace_SearchType {
+            get {
+                return ResourceManager.GetString("FindReplace.SearchType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E_xtended (\n, \r, \t, \0).
+        /// </summary>
+        public static string FindReplace_SearchType_Extended {
+            get {
+                return ResourceManager.GetString("FindReplace.SearchType.Extended", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular _Expression.
+        /// </summary>
+        public static string FindReplace_SearchType_Regular {
+            get {
+                return ResourceManager.GetString("FindReplace.SearchType.Regular", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Standard.
+        /// </summary>
+        public static string FindReplace_SearchType_Standard {
+            get {
+                return ResourceManager.GetString("FindReplace.SearchType.Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search Selection.
+        /// </summary>
+        public static string FindReplace_Selection {
+            get {
+                return ResourceManager.GetString("FindReplace.Selection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find and Replace.
+        /// </summary>
+        public static string FindReplace_Title {
+            get {
+                return ResourceManager.GetString("FindReplace.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Wrap.
+        /// </summary>
+        public static string FindReplace_Wrap {
+            get {
+                return ResourceManager.GetString("FindReplace.Wrap", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string GoTo_Cancel {
@@ -354,6 +840,15 @@ namespace OfficeRibbonXEditor.Resources {
         public static string GoTo_Title {
             get {
                 return ResourceManager.GetString("GoTo.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Office RibbonX Editor.
+        /// </summary>
+        public static string MainWindow_Title {
+            get {
+                return ResourceManager.GetString("MainWindow.Title", resourceCulture);
             }
         }
         
@@ -700,6 +1195,60 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File {0} has unsaved changes. Do you want to save them before closing it?.
+        /// </summary>
+        public static string Message_CloseUnsavedDoc_Text {
+            get {
+                return ResourceManager.GetString("Message.CloseUnsavedDoc.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        public static string Message_CloseUnsavedDoc_Title {
+            get {
+                return ResourceManager.GetString("Message.CloseUnsavedDoc.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no callback to be generated..
+        /// </summary>
+        public static string Message_NoCallbacks_Text {
+            get {
+                return ResourceManager.GetString("Message.NoCallbacks.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generate Callbacks.
+        /// </summary>
+        public static string Message_NoCallbacks_Title {
+            get {
+                return ResourceManager.GetString("Message.NoCallbacks.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom UI XML is well formed..
+        /// </summary>
+        public static string Message_ValidXml_Text {
+            get {
+                return ResourceManager.GetString("Message.ValidXml.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to XML is Valid.
+        /// </summary>
+        public static string Message_ValidXml_Title {
+            get {
+                return ResourceManager.GetString("Message.ValidXml.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The version information has been copied to the clipboard..
         /// </summary>
         public static string Message_VersionCopy_Text {
@@ -714,6 +1263,33 @@ namespace OfficeRibbonXEditor.Resources {
         public static string Message_VersionCopy_Title {
             get {
                 return ResourceManager.GetString("Message.VersionCopy.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open OOXML Document.
+        /// </summary>
+        public static string OpenDialog_Document_Title {
+            get {
+                return ResourceManager.GetString("OpenDialog.Document.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insert Custom Icons.
+        /// </summary>
+        public static string OpenDialog_Icons_Title {
+            get {
+                return ResourceManager.GetString("OpenDialog.Icons.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save OOXML Document.
+        /// </summary>
+        public static string SaveDialog_SaveAs_Title {
+            get {
+                return ResourceManager.GetString("SaveDialog.SaveAs.Title", resourceCulture);
             }
         }
         

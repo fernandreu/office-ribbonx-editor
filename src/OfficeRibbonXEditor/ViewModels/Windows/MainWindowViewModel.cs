@@ -474,7 +474,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             if (doc.HasUnsavedChanges)
             {
-                var result = this.messageBoxService.Show(string.Format(CultureInfo.CurrentCulture, StringsResource.idsCloseWarningMessage, doc.Name), StringsResource.idsCloseWarningTitle, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                var result = this.messageBoxService.Show(string.Format(CultureInfo.InvariantCulture, Strings.Message_CloseUnsavedDoc_Text, doc.Name), Strings.Message_CloseUnsavedDoc_Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
                     this.SaveCommand.Execute();
@@ -543,7 +543,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            this.fileDialogService.OpenFilesDialog(StringsResource.idsInsertIconsDialogTitle, StringsResource.idsFilterAllSupportedImages + "|" + StringsResource.idsFilterAllFiles, this.FinishInsertingIcons);
+            this.fileDialogService.OpenFilesDialog(Strings.OpenDialog_Icons_Title, Strings.Filter_Icons + "|" + Strings.Filter_All, this.FinishInsertingIcons);
         }
 
         /// <summary>
@@ -663,8 +663,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (doc.HasUnsavedChanges)
                 {
                     var result = this.messageBoxService.Show(
-                        string.Format(CultureInfo.CurrentCulture, StringsResource.idsCloseWarningMessage, doc.Name), 
-                        StringsResource.idsCloseWarningTitle,
+                        string.Format(CultureInfo.InvariantCulture, Strings.Message_CloseUnsavedDoc_Text, doc.Name), 
+                        Strings.Message_CloseUnsavedDoc_Title,
                         MessageBoxButton.YesNoCancel, 
                         MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
@@ -735,15 +735,15 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         {
             string[] filters =
                 {
-                    StringsResource.idsFilterAllOfficeDocuments,
-                    StringsResource.idsFilterWordDocuments,
-                    StringsResource.idsFilterExcelDocuments,
-                    StringsResource.idsFilterPPTDocuments,
-                    StringsResource.idsFilterAllFiles,
+                    Strings.Filter_AllOfficeDocuments,
+                    Strings.Filter_WordDocuments,
+                    Strings.Filter_ExcelDocuments,
+                    Strings.Filter_PowerPointDocuments,
+                    Strings.Filter_All,
                 };
 
             this.fileDialogService.OpenFileDialog(
-                StringsResource.idsOpenDocumentDialogTitle, 
+                Strings.OpenDialog_Document_Title, 
                 string.Join("|", filters), 
                 this.FinishOpeningFile);
         }
@@ -952,7 +952,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var filters = new List<string>();
             while (true)
             {
-                var filter = StringsResource.ResourceManager.GetString("idsFilterSaveAs" + filters.Count, CultureInfo.CurrentCulture);
+                var filter = Strings.ResourceManager.GetString("Filter.SaveAs" + filters.Count, CultureInfo.CurrentCulture);
                 if (filter == null)
                 {
                     break;
@@ -961,7 +961,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 filters.Add(filter);
             }
 
-            filters.Add(StringsResource.idsFilterAllFiles);
+            filters.Add(Strings.Filter_All);
             
             var ext = Path.GetExtension(doc.Name);
 
@@ -978,7 +978,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
 
             this.fileDialogService.SaveFileDialog(
-                StringsResource.idsSaveDocumentAsDialogTitle, 
+                Strings.SaveDialog_SaveAs_Title, 
                 string.Join("|", filters),
                 path => this.FinishSavingFile(path, renameCurrent), 
                 doc.Name, 
@@ -1192,8 +1192,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     if (showValidMessage)
                     {
                         this.messageBoxService.Show(
-                            StringsResource.idsValidXml,
-                            "XML is Valid",
+                            Strings.Message_ValidXml_Text,
+                            Strings.Message_ValidXml_Title,
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
                     }
@@ -1248,7 +1248,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 var callbacks = CallbacksBuilder.GenerateCallback(customUi);
                 if (callbacks == null || callbacks.Length == 0)
                 {
-                    this.messageBoxService.Show(StringsResource.idsNoCallback, "Generate Callbacks", MessageBoxButton.OK, MessageBoxImage.Information);
+                    this.messageBoxService.Show(Strings.Message_NoCallbacks_Text, Strings.Message_NoCallbacks_Title, MessageBoxButton.OK, MessageBoxImage.Information);
                     return;
                 }
                 
