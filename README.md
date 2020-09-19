@@ -98,41 +98,45 @@ If you get stuck in any step, feel free to [create an issue](https://github.com/
 and I will assist you.
 
 1. Find the file you want to edit on this GitHub project
-  a. All translations are `Strings.xyz.resx` files stored in [src/OfficeRibbonXEditor/Resources](https://github.com/fernandreu/office-ribbonx-editor/tree/master/src/OfficeRibbonXEditor/Resources)
-  b. The `xyz` part is what indicates the language contained in the file
-  c. For example, the Spanish translation is stored in the `Strings.es.resx` file [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx)
+    1. All translations are `Strings.xyz.resx` files stored in [src/OfficeRibbonXEditor/Resources](https://github.com/fernandreu/office-ribbonx-editor/tree/master/src/OfficeRibbonXEditor/Resources)
+    2. The `xyz` part is what indicates the language contained in the file
+    3. For example, the Spanish translation is stored in the `Strings.es.resx` file [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx)
 2. Click on the `Edit` button at the top-right corner
-  a. This might trigger a fork of this project under your GitHub account (otherwise, it will occur when saving any changes)
+    1. This might trigger a fork of this project under your GitHub account (otherwise, it will occur when saving any changes)
 3. Make any necessary changes
-  a. The `<data>` tags are essentially the string resources throughout the application
-  b. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
-  c. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
-  d. Only the child `<value>` tags should need modifications
+    1. The `<data>` tags are essentially the string resources throughout the application
+    2. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
+    3. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
+    4. Only the child `<value>` tags should need modifications
 4. Save the changes at the bottom
-  a. This should trigger a commit of the file in your forked repository, and hopefully a pull request to this
-    repository too
-  b. If the pull request does not occur automatically, you might see some buttons either in your fork or here
-    to do so
+    1. This should trigger a commit of the file in your forked repository, and hopefully a pull request to this
+      repository too
+    2. If the pull request does not occur automatically, you might see some buttons either in your fork or here
+      to do so
 
 ### Creating a translation for a new language
 
-These steps are recommended for people that already a bit familiar with the Git / GitHub workflow. If this 
+These steps are recommended for people that are already a bit familiar with the Git / GitHub workflow. If this 
 is not your case, please [create an issue](https://github.com/fernandreu/office-ribbonx-editor/issues/new)
-instead. I will then generate a template myself, so you will be able to follow the previous steps instead
-of these ones.
+instead. I will then generate a template myself, so you will be able to follow the 
+[previous steps](#improving-an-existing-translation) instead of these ones.
 
 1. Create a copy of the `Strings.resx` file [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.resx), which contains the default English language
-  a. If you want, you can also create the copy from an existing translation, (e.g. `Strings.es.resx` for Spanish [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx))
+    1. If you want, you can also create the copy from an existing translation (e.g. `Strings.es.resx` for Spanish [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx))
+    
 2. Name the copy `Strings.xyz.resx`, with `xyz` being your language tag
-  a. For a list of available language tags, see the table in [this page](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)
-  b. There is no need to specify the country in the language tag as well (i.e. `de`, `pt`, `ru`, etc. is enough)
+    1. For a list of available language tags, see the table in [this page](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)
+    2. There is no need to specify the country in the language tag as well (i.e. `de`, `pt`, `ru`, etc. is enough)
+  
 3. Put the file in the same [src/OfficeRibbonXEditor/Resources](https://github.com/fernandreu/office-ribbonx-editor/tree/master/src/OfficeRibbonXEditor/Resources)
   folder where the original file was
+  
 4. Make any necessary changes to this file
-  a. The `<data>` tags are essentially the string resources throughout the application
-  b. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
-  c. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
-  d. Only the child `<value>` tags should need modifications
+    1. The `<data>` tags are essentially the string resources throughout the application
+    2. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
+    3. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
+    4. Only the child `<value>` tags should need modifications
+    
 5. Modify the `LanguageChoice` class [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Helpers/LanguageChoice.cs)
   to add your new language into the `All` collection
 
