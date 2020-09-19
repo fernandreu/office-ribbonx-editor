@@ -85,3 +85,57 @@ essence, Step 4 will no longer use the temporary unzipped copy of the Excel file
 but will generate a new one instead. As a consequence, any external changes you might have done in the meantime
 (i.e. Step 3) will no longer get lost. If you did not make any external changes, the `Reload on Save` button
 won’t have any noticeable impact for you.
+
+
+## Do you want to see the tool in your language?
+
+Any help improving existing translations or adding new ones is welcome. I will add your names to a list of
+acknowledgments, either in this readme or in the About section of the tool itself.
+
+### Improving an existing translation
+
+If you get stuck in any step, feel free to [create an issue](https://github.com/fernandreu/office-ribbonx-editor/issues/new)
+and I will assist you.
+
+1. Find the file you want to edit on this GitHub project
+  a. All translations are `Strings.xyz.resx` files stored in [src/OfficeRibbonXEditor/Resources](https://github.com/fernandreu/office-ribbonx-editor/tree/master/src/OfficeRibbonXEditor/Resources)
+  b. The `xyz` part is what indicates the language contained in the file
+  c. For example, the Spanish translation is stored in the `Strings.es.resx` file [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx)
+2. Click on the `Edit` button at the top-right corner
+  a. This might trigger a fork of this project under your GitHub account (otherwise, it will occur when saving any changes)
+3. Make any necessary changes
+  a. The `<data>` tags are essentially the string resources throughout the application
+  b. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
+  c. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
+  d. Only the child `<value>` tags should need modifications
+4. Save the changes at the bottom
+  a. This should trigger a commit of the file in your forked repository, and hopefully a pull request to this
+    repository too
+  b. If the pull request does not occur automatically, you might see some buttons either in your fork or here
+    to do so
+
+### Creating a translation for a new language
+
+These steps are recommended for people that already a bit familiar with the Git / GitHub workflow. If this 
+is not your case, please [create an issue](https://github.com/fernandreu/office-ribbonx-editor/issues/new)
+instead. I will then generate a template myself, so you will be able to follow the previous steps instead
+of these ones.
+
+1. Create a copy of the `Strings.resx` file [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.resx), which contains the default English language
+  a. If you want, you can also create the copy from an existing translation, (e.g. `Strings.es.resx` for Spanish [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx))
+2. Name the copy `Strings.xyz.resx`, with `xyz` being your language tag
+  a. For a list of available language tags, see the table in [this page](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)
+  b. There is no need to specify the country in the language tag as well (i.e. `de`, `pt`, `ru`, etc. is enough)
+3. Put the file in the same [src/OfficeRibbonXEditor/Resources](https://github.com/fernandreu/office-ribbonx-editor/tree/master/src/OfficeRibbonXEditor/Resources)
+  folder where the original file was
+4. Make any necessary changes to this file
+  a. The `<data>` tags are essentially the string resources throughout the application
+  b. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
+  c. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
+  d. Only the child `<value>` tags should need modifications
+5. Modify the `LanguageChoice` class [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Helpers/LanguageChoice.cs)
+  to add your new language into the `All` collection
+
+It might be possible to perform all these steps directly in your GitHub fork via several commits. Otherwise,
+you might need to have at least Git installed. Visual Studio should not be necessary unless you want to see
+how your translation looks (you will be able to see it from the build artifacts of your pull request too).
