@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
@@ -100,7 +101,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         {
             if (settingName == nameof(Settings.Default.UICulture))
             {
-                return dialog.Languages.First(x => x.Id != o as string).Id;
+                return LanguageChoice.All.First(x => x.Id != o as string).Id;
             }
 
             switch (o)
