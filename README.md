@@ -8,6 +8,8 @@
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/CI%20Pipeline?branchName=master&stageName=Build)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandreu_office-ribbonx-editor&metric=alert_status)](https://sonarcloud.io/dashboard?id=fernandreu_office-ribbonx-editor)
 
+**Translators welcome! See [below](#do-you-want-to-see-the-tool-in-your-language).**
+
 The Office RibbonX Editor is a standalone tool to edit the Custom UI part of Office open document file format. 
 It contains both Office 2007 and Office 2010 custom UI schemas.
 
@@ -109,7 +111,7 @@ and I will assist you.
     3. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
     4. Only the child `<value>` tags should need modifications
 4. Save the changes at the bottom
-    1. This should trigger a commit of the file in your forked repository, and hopefully a pull request to this
+    1. This should trigger a commit of the file in your forked repository, and perhaps a pull request to this
       repository too
     2. If the pull request does not occur automatically, you might see some buttons either in your fork or here
       to do so
@@ -123,20 +125,16 @@ instead. I will then generate a template myself, so you will be able to follow t
 
 1. Create a copy of the `Strings.resx` file [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.resx), which contains the default English language
     1. If you want, you can also create the copy from an existing translation (e.g. `Strings.es.resx` for Spanish [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Resources/Strings.es.resx))
-    
 2. Name the copy `Strings.xyz.resx`, with `xyz` being your language tag
     1. For a list of available language tags, see the table in [this page](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-lcid/a9eac961-e77d-41a6-90a5-ce1a8b0cdb9c)
     2. There is no need to specify the country in the language tag as well (i.e. `de`, `pt`, `ru`, etc. is enough)
-  
 3. Put the file in the same [src/OfficeRibbonXEditor/Resources](https://github.com/fernandreu/office-ribbonx-editor/tree/master/src/OfficeRibbonXEditor/Resources)
   folder where the original file was
-  
 4. Make any necessary changes to this file
     1. The `<data>` tags are essentially the string resources throughout the application
     2. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
     3. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
     4. Only the child `<value>` tags should need modifications
-    
 5. Modify the `LanguageChoice` class [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Helpers/LanguageChoice.cs)
   to add your new language into the `All` collection
 
