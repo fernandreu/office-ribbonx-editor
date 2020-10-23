@@ -1906,5 +1906,23 @@ namespace OfficeRibbonXEditor.Resources {
                 return ResourceManager.GetString("ToolBar.VersionAvailable", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You can only define one of the following attributes in an element: {0}.
+        /// </summary>
+        public static string Validation_MutuallyExclusive {
+            get {
+                return ResourceManager.GetString("Validation.MutuallyExclusive", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown namespace &quot;{0}&quot;. Custom UI XML namespace must be &quot;{1}&quot;.
+        /// </summary>
+        public static string Validation_WrongNamespace {
+            get {
+                return ResourceManager.GetString("Validation.WrongNamespace", resourceCulture);
+            }
+        }
     }
 }

@@ -22,6 +22,7 @@ using OfficeRibbonXEditor.Documents;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Helpers;
+using OfficeRibbonXEditor.Helpers.Xml;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Lexers;
 using OfficeRibbonXEditor.Properties;
@@ -1156,37 +1157,11 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     return false;
                 }
 
-                var xmlDoc = XDocument.Parse(
-                    part.Contents, 
-                    LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
-                
-                var schemaSet = new XmlSchemaSet();
-                schemaSet.Add(targetSchema);
+                var errorList = XmlValidation.Validate(part?.Contents, targetSchema);
 
-                var errorList = new List<XmlError>();
-
-                var ns = xmlDoc.Root?.GetDefaultNamespace().ToString();
-                if (ns != targetSchema.TargetNamespace)
-                {
-                    errorList.Add(new XmlError(
-                        1,
-                        1,
-                        $"Unknown namespace \"{ns}\". Custom UI XML namespace must be \"{targetSchema.TargetNamespace}\""));
-                }
-
-                void ValidateHandler(object o, ValidationEventArgs e)
-                {
-                    errorList.Add(new XmlError(
-                        e.Exception.LineNumber,
-                        e.Exception.LinePosition,
-                        e.Message));
-                }
-
-                xmlDoc.Validate(schemaSet, ValidateHandler);
-                
                 tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
 
-                if (!errorList.Any())
+                if (errorList.Count == 0)
                 {
                     if (showValidMessage)
                     {
