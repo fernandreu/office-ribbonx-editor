@@ -738,4 +738,10 @@ Are you completely sure you want to open this document again?</value>
     <value>v{0} Avalilable!</value>
     <comment>{0} is the placeholder for the verison, e.g. "1.2.3"</comment>
   </data>
+  <data name="Validation.MutuallyExclusive" xml:space="preserve">
+    <value>You can only define one of the following attributes in an element: {0}</value>
+  </data>
+  <data name="Validation.WrongNamespace" xml:space="preserve">
+    <value>Unknown namespace "{0}". Custom UI XML namespace must be "{1}"</value>
+  </data>
 </root>

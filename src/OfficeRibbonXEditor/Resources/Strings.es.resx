@@ -738,4 +738,10 @@ Está completamente seguro de que quiere abrir este documento de nuevo?</value>
     <value>v{0} Disponible!</value>
     <comment>{0} is the placeholder for the verison, e.g. "1.2.3"</comment>
   </data>
+  <data name="Validation.MutuallyExclusive" xml:space="preserve">
+    <value>Solo puedes definir uno de los siguientes attributos en un elemento: {0}</value>
+  </data>
+  <data name="Validation.WrongNamespace" xml:space="preserve">
+    <value>Espacio con nombre desconocido: "{0}". El espacio con nombre del archivo XML debe ser "{1}"</value>
+  </data>
 </root>
