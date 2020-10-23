@@ -33,12 +33,24 @@ namespace OfficeRibbonXEditor.Helpers.Xml
 
         public static IList<XmlError> Validate(string? xml, XmlSchema targetSchema)
         {
-            var xmlDoc = XDocument.Parse(xml ?? string.Empty, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
+            var errorList = new List<XmlError>();
+
+            XDocument xmlDoc;
+            try
+            {
+                xmlDoc = XDocument.Parse(xml ?? string.Empty, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
+            }
+            catch (XmlException ex)
+            {
+                errorList.Add(new XmlError(
+                    ex.LineNumber,
+                    ex.LinePosition,
+                    ex.Message));
+                return errorList;
+            }
 
             var schemaSet = new XmlSchemaSet();
             schemaSet.Add(targetSchema);
-
-            var errorList = new List<XmlError>();
 
             var ns = xmlDoc.Root?.GetDefaultNamespace().ToString();
             if (ns != targetSchema.TargetNamespace)
@@ -57,7 +69,17 @@ namespace OfficeRibbonXEditor.Helpers.Xml
                     e.Message));
             }
 
-            xmlDoc.Validate(schemaSet, ValidateHandler);
+            try
+            {
+                xmlDoc.Validate(schemaSet, ValidateHandler);
+            }
+            catch (XmlException ex)
+            {
+                errorList.Add(new XmlError(
+                    ex.LineNumber,
+                    ex.LinePosition,
+                    ex.Message));
+            }
 
             if (errorList.Count != 0)
             {

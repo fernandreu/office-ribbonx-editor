@@ -1033,21 +1033,11 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private static Hashtable LoadXmlSchemas()
         {
-            var result = new Hashtable(2);
-
-            using (var stringReader = new StringReader(SchemasResource.customUI))
-            using (var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
+            return new Hashtable(2)
             {
-                result.Add(XmlPart.RibbonX12, XmlSchema.Read(reader, null));
-            }
-                
-            using (var stringReader = new StringReader(SchemasResource.customui14))
-            using (var reader = XmlReader.Create(stringReader, new XmlReaderSettings { XmlResolver = null }))
-            {
-                result.Add(XmlPart.RibbonX14, XmlSchema.Read(reader, null));
-            }
-
-            return result;
+                {XmlPart.RibbonX12, Schema.Load(XmlPart.RibbonX12)},
+                {XmlPart.RibbonX14, Schema.Load(XmlPart.RibbonX14)},
+            };
         }
 
         private static SampleFolderViewModel? LoadXmlSamples()
@@ -1150,46 +1140,30 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var part = tab.Part;
 
             // Test to see if text is XML first
-            try
+            if (this.customUiSchemas == null || part.Part == null || !(this.customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
             {
-                if (this.customUiSchemas == null || part.Part == null || !(this.customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
-                {
-                    return false;
-                }
-
-                var errorList = XmlValidation.Validate(part?.Contents, targetSchema);
-
-                tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
-
-                if (errorList.Count == 0)
-                {
-                    if (showValidMessage)
-                    {
-                        this.messageBoxService.Show(
-                            Strings.Message_ValidXml_Text,
-                            Strings.Message_ValidXml_Title,
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Information);
-                    }
-
-                    return true;
-                }
-
                 return false;
             }
-            catch (XmlException ex)
-            {
-                var errorList = new[]
-                {
-                    new XmlError(
-                        ex.LineNumber,
-                        ex.LinePosition,
-                        ex.Message),
-                };
 
-                tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
-                return false;
+            var errorList = XmlValidation.Validate(part?.Contents, targetSchema);
+
+            tab.OnShowResults(new ResultsEventArgs(new XmlErrorResults(errorList)));
+
+            if (errorList.Count == 0)
+            {
+                if (showValidMessage)
+                {
+                    this.messageBoxService.Show(
+                        Strings.Message_ValidXml_Text,
+                        Strings.Message_ValidXml_Title,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                }
+
+                return true;
             }
+
+            return false;
         }
 
         private void ExecuteGenerateCallbacksCommand()
