@@ -305,7 +305,7 @@ namespace OfficeRibbonXEditor.Helpers
                 case "getSupertip":
                 case "getDescription":
                 case "getKeytip":
-                case "getSelectedItemId":
+                case "getSelectedItemID":
                 case "getImageMso":
                 case "getContent":
                 case "getText":
@@ -315,7 +315,7 @@ namespace OfficeRibbonXEditor.Helpers
                     return BaseCallbackType.GetString;
                 case "getItemLabel":
                 case "getItemTooltip":
-                case "getItemId":
+                case "getItemID":
                     return BaseCallbackType.GetItemString;
                 case "getImage":
                     return BaseCallbackType.GetImage;
