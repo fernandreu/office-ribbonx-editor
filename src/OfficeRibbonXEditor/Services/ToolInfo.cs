@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services
 {
+    [Export(typeof(IToolInfo))]
     public class ToolInfo : IToolInfo
     {
         public string AssemblyTitle

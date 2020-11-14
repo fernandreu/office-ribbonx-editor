@@ -1,9 +1,10 @@
-﻿using OfficeRibbonXEditor.Interfaces;
+﻿using OfficeRibbonXEditor.Helpers;
+using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Lexers;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
-
+    [Export]
     public class CallbackDialogViewModel : DialogBase, IContentDialog<string?>
     {
         private VbaLexer? lexer;

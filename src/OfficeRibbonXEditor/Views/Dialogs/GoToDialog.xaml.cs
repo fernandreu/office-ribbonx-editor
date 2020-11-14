@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using OfficeRibbonXEditor.Helpers;
+using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.Views.Controls;
 
 namespace OfficeRibbonXEditor.Views.Dialogs
@@ -6,6 +8,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     /// <summary>
     /// Interaction logic for GoToDialog.xaml
     /// </summary>
+    [ExportView(typeof(GoToDialogViewModel))]
     public partial class GoToDialog : DialogControl
     {
         public GoToDialog()

@@ -38,6 +38,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
     using ResultsEventArgs = DataEventArgs<IResultCollection>;
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Shown in a message box anyway")]
+    [Export]
     public class MainWindowViewModel : ViewModelBase, IDisposable
     {
         private readonly IMessageBoxService messageBoxService;

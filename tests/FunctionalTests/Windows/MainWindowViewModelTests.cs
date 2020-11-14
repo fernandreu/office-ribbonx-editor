@@ -29,7 +29,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
         private readonly Mock<IUrlHelper> urlHelper = new Mock<IUrlHelper>();
 
-        private readonly IContainer container = new AppContainerBuilder().Build();
+        private readonly IContainer container = App.CreateContainer();
 
         private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 

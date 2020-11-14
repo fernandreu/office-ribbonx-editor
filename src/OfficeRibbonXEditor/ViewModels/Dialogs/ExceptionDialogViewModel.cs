@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
+    [Export]
     public class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception?>
     {
         private readonly IToolInfo info;

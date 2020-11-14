@@ -13,6 +13,7 @@ namespace OfficeRibbonXEditor.Views.Windows
     /// <summary>
     /// Interaction logic for MainWindow
     /// </summary>
+    [ExportView(typeof(MainWindowViewModel))]
     public partial class MainWindow
     {
         private MainWindowViewModel? viewModel;
