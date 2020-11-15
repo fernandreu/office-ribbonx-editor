@@ -133,6 +133,15 @@
           "CommonServiceLocator": "2.0.2"
         }
       },
+      "System.Resources.Extensions": {
+        "type": "Direct",
+        "requested": "[5.0.0, )",
+        "resolved": "5.0.0",
+        "contentHash": "KBiqY/+W6hWVwucHBHO76JkgBGyawlxCcP946MhK8dNjalaBgZkyHaux8ko58PENTqQHHjoDa7cfIkAchfJPPA==",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        }
+      },
       "System.Windows.Interactivity.WPF": {
         "type": "Direct",
         "requested": "[2.0.20525, )",
@@ -810,6 +819,12 @@
         "requested": "[5.4.1.1, )",
         "resolved": "5.4.1.1",
         "contentHash": "xYpVzOYnIz/M6T0pdc3w5t0vrt2ZKspSS+CZjQ+pZE+5yHv9qXSWkncHJXb6D7Egstalso4ivnIUkA1xEClViw=="
+      },
+      "System.Resources.Extensions": {
+        "type": "Direct",
+        "requested": "[5.0.0, )",
+        "resolved": "5.0.0",
+        "contentHash": "KBiqY/+W6hWVwucHBHO76JkgBGyawlxCcP946MhK8dNjalaBgZkyHaux8ko58PENTqQHHjoDa7cfIkAchfJPPA=="
       },
       "System.Windows.Interactivity.WPF": {
         "type": "Direct",

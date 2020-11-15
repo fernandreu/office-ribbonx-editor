@@ -33,6 +33,8 @@
     <!--This also allows caching NuGet packages in Azure Pipelines-->
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
+    <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
+
     <!-- SonarQube needs this -->
     <ProjectGuid>{A2A7BCC6-735E-4424-93A4-4EA5255E01FC}</ProjectGuid>
   </PropertyGroup>
@@ -52,6 +54,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.0" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+    <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
     <PackageReference Include="WPFLocalizeExtension" Version="3.8.0" />
   </ItemGroup>
