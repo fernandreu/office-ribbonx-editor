@@ -102,7 +102,7 @@ steps:
       -p:TargetFramework=${{ parameters.targetFramework }}
       -p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       --runtime win-x64
-      --self-contained
+      --self-contained true
       --output $(Build.ArtifactStagingDirectory)'
 
 - task: PublishPipelineArtifact@1
