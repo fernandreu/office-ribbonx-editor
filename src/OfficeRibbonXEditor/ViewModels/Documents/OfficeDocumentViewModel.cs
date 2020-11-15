@@ -9,7 +9,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
     {
         private OfficeDocument document;
 
-        private bool partsAddedOrRemoved = false;
+        private bool partsAddedOrRemoved;
 
         private bool disposed;
 

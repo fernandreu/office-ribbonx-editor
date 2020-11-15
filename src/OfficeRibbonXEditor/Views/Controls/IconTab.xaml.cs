@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.Views.Controls
     {
         private IconTabViewModel? viewModel;
 
-        private Point scrollMousePoint = new Point();
+        private Point scrollMousePoint;
 
         private double hOffset = 1;
         private double vOffset = 1;

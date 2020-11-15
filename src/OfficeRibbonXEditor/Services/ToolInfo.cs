@@ -22,7 +22,7 @@ namespace OfficeRibbonXEditor.Services
                     }
                 }
 
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase) ?? string.Empty;
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
             }
         }
 

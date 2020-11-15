@@ -56,21 +56,12 @@ stages:
         filePath: 'build/PreBuild.ps1'
         arguments: '"$(Build.BuildId)"'
 
-    - task: NuGetToolInstaller@1
-      displayName: 'Install NuGet'
-      inputs:
-        versionSpec: '5.7.0'
-
-    - task: NuGetCommand@2
-      displayName: 'NuGet restore'
-      inputs:
-        restoreSolution: '$(solution)'
-
     - task: VSBuild@1
       displayName: 'Build solution'
       inputs:
         solution: '$(solution)'
         platform: '$(buildPlatform)'
+        restoreNugetPackages: true
         msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
         configuration: '$(buildConfiguration)'
 
