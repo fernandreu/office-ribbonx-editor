@@ -1,10 +1,12 @@
 ﻿using System;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Lexers;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
+    [Export]
     public class GoToDialogViewModel : DialogBase, IContentDialog<ScintillaLexer>
     {
         public GoToDialogViewModel()

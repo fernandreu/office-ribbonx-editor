@@ -16,7 +16,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public bool IsUnique => true;
 
-        public bool IsClosed { get; protected set; } = false;
+        public bool IsClosed { get; protected set; }
 
         public bool IsCancelled { get; protected set; } = true;
 

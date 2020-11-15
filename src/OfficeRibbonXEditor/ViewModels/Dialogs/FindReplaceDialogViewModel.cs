@@ -12,9 +12,12 @@ using CharacterRange = OfficeRibbonXEditor.Helpers.CharacterRange;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
+    // Using a singleton for this one ensures that the search criteria is preserved, which is especially
+    // important for find next / previous commands
+    [Export(Lifetime = Lifetime.Singleton)]
     public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
     {
-        private CharacterRange searchRange = new CharacterRange();
+        private CharacterRange searchRange;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. All fields get initialized in OnLoaded so,
                                // unless all methods contain safeguards for the exceptional case where OnLoaded is not called, let's not bother with

@@ -1,14 +1,31 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Windows;
-using Autofac;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
-using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.Views.Controls;
 
 namespace OfficeRibbonXEditor.Views.Dialogs
 {
     public class DialogHostBase : Window
     {
+        private static readonly IDictionary<Type, Type> RegisteredViews = new Dictionary<Type, Type>();
+
+        static DialogHostBase()
+        {
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                var attribute = type.GetCustomAttribute<ExportViewAttribute>();
+                if (attribute == null)
+                {
+                    continue;
+                }
+
+                RegisteredViews[attribute.ViewModelType] = type;
+            }
+        }
+
         public static readonly DependencyProperty ViewProperty = DependencyProperty.Register(
             nameof(View),
             typeof(DialogControl),
@@ -74,53 +91,14 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             host.CenterInOwner();
         }
 
-        public static void RegisterDialogViewModels(ContainerBuilder builder)
-        {
-            builder.RegisterType<DialogHostViewModel>();
-            builder.RegisterType<SettingsDialogViewModel>();
-            builder.RegisterType<AboutDialogViewModel>();
-            builder.RegisterType<CallbackDialogViewModel>();
-            builder.RegisterType<GoToDialogViewModel>();
-            builder.RegisterType<ExceptionDialogViewModel>();
-
-            // Using a singleton for this one ensures that the search criteria is preserved, which is especially
-            // important for find next / previous commands
-            builder.RegisterType<FindReplaceDialogViewModel>().SingleInstance();
-        }
-
         private static DialogControl GenerateControl(Type contentDialogType)
         {
-            if (contentDialogType == typeof(AboutDialogViewModel))
+            if (!RegisteredViews.TryGetValue(contentDialogType, out var viewType))
             {
-                return new AboutDialog();
+                throw new ArgumentException($"Type {contentDialogType.Name} does not have a registered control");
             }
 
-            if (contentDialogType == typeof(CallbackDialogViewModel))
-            {
-                return new CallbackDialog();
-            }
-
-            if (contentDialogType == typeof(SettingsDialogViewModel))
-            {
-                return new SettingsDialog();
-            }
-
-            if (contentDialogType == typeof(GoToDialogViewModel))
-            {
-                return new GoToDialog();
-            }
-
-            if (contentDialogType == typeof(FindReplaceDialogViewModel))
-            {
-                return new FindReplaceDialog();
-            }
-
-            if (contentDialogType == typeof(ExceptionDialogViewModel))
-            {
-                return new ExceptionDialog();
-            }
-
-            throw new ArgumentException($"Type {contentDialogType.Name} does not have an registered control");
+            return (DialogControl) Activator.CreateInstance(viewType);
         }
 
         private void CenterInOwner()

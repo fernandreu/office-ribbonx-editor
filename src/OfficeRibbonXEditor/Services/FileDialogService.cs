@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 
 using Microsoft.Win32;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services
 {
+    [Export(typeof(IFileDialogService))]
     public class FileDialogService : IFileDialogService
     {
         public bool? OpenFileDialog(string title, string filter, Action<string> completedAction, string? fileName = null, int filterIndex = 0)

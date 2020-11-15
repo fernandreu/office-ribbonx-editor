@@ -2,10 +2,12 @@
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
+    [Export]
     public class DialogHostViewModel : ViewModelBase
     {
         private IContentDialogBase? content;

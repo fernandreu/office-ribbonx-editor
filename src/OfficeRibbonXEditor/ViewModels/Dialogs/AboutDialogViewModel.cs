@@ -1,11 +1,12 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using GalaSoft.MvvmLight.Command;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
+    [Export]
     public class AboutDialogViewModel : DialogBase
     {
         private readonly IMessageBoxService messageBoxService;

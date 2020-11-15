@@ -83,7 +83,7 @@ namespace OfficeRibbonXEditor.UnitTests.Services
             var version = service.RuntimeVersion;
 
             // Assert
-            Assert.That(version, Does.Match(".*Core.*").Or.Match(".*Framework.*"), "Unknown runtime");
+            Assert.That(version, Does.Match(@"\.NET (\d|\.)+").Or.Match(@"\.NET Framework (\d|\.)+"), "Unknown runtime");
         }
 
         [Test]

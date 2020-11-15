@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using OfficeRibbonXEditor.Events;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.Views.Controls;
 
@@ -8,6 +9,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     /// <summary>
     /// Interaction logic for FindReplaceDialog.xaml
     /// </summary>
+    [ExportView(typeof(FindReplaceDialogViewModel))]
     public partial class FindReplaceDialog : DialogControl
     {
         public FindReplaceDialog()

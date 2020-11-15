@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services
 {
+    [Export(typeof(IUrlHelper))]
     public class UrlHelper : IUrlHelper
     {
         private const string BaseUrl = "https://github.com/fernandreu/office-ribbonx-editor";

@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
         private bool autoPosition = true;
         private Scintilla? scintilla;
-        private bool toolItem = false;
+        private bool toolItem;
         private FindReplaceDialogViewModel? findReplace;
 
         #endregion Fields

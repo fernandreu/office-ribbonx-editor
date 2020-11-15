@@ -38,6 +38,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
     using ResultsEventArgs = DataEventArgs<IResultCollection>;
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Shown in a message box anyway")]
+    [Export]
     public class MainWindowViewModel : ViewModelBase, IDisposable
     {
         private readonly IMessageBoxService messageBoxService;
@@ -60,16 +61,16 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// <summary>
         /// Whether the editor should make the whitespace / EOL characters visible.
         /// </summary>
-        private bool showWhitespaces = false;
+        private bool showWhitespaces;
 
         /// <summary>
         /// The version string of a newer release, if available
         /// </summary>
-        private string? newerVersion = null;
+        private string? newerVersion;
 
         private readonly Hashtable? customUiSchemas;
 
-        private TreeViewItemViewModel? selectedItem = null;
+        private TreeViewItemViewModel? selectedItem;
 
         private bool disposed;
 

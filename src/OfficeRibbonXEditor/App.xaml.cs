@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.DirectoryServices.ActiveDirectory;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
@@ -6,6 +7,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Threading;
 using Autofac;
+using Autofac.Builder;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
@@ -23,7 +25,7 @@ namespace OfficeRibbonXEditor
     /// </summary>
     public partial class App : Application
     {
-        private readonly IContainer container = new AppContainerBuilder().Build();
+        private readonly IContainer container = CreateContainer();
 
         private readonly Dictionary<IContentDialogBase, DialogHost> dialogs = new Dictionary<IContentDialogBase, DialogHost>();
 
@@ -39,6 +41,29 @@ namespace OfficeRibbonXEditor
             }
 
             InitializeCultures();
+        }
+
+        public static IContainer CreateContainer()
+        {
+            var result = new ContainerBuilder();
+
+            foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+            {
+                var attribute = type.GetCustomAttribute<ExportAttribute>();
+                if (attribute == null)
+                {
+                    continue;
+                }
+
+                var registration = attribute.InterfaceType == null ? result.RegisterType(type) : result.RegisterType(type).As(attribute.InterfaceType);
+
+                if (attribute.Lifetime == Lifetime.Singleton)
+                {
+                    registration.SingleInstance();
+                }
+            }
+
+            return result.Build();
         }
 
         protected override void OnStartup(StartupEventArgs e)

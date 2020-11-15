@@ -1,9 +1,11 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services
 {
+    [Export(typeof(IToolInfo))]
     public class ToolInfo : IToolInfo
     {
         public string AssemblyTitle
@@ -20,7 +22,7 @@ namespace OfficeRibbonXEditor.Services
                     }
                 }
 
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase) ?? string.Empty;
+                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
             }
         }
 

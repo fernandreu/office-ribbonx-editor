@@ -13,7 +13,7 @@ using WPFLocalizeExtension.Engine;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
-
+    [Export]
     public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
     {
         private static readonly ICollection<string> extensions = new List<string>

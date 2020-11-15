@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Lexers;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.Views.Controls;
@@ -9,6 +10,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     /// <summary>
     /// Interaction logic for CallbackWindow
     /// </summary>
+    [ExportView(typeof(CallbackDialogViewModel))]
     public partial class CallbackDialog : DialogControl
     {
         public CallbackDialog()

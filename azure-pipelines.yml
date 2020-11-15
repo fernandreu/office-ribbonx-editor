@@ -8,7 +8,6 @@ trigger:
   branches:
     include:
     - master
-    - 'feature/*'
   tags:
     exclude:
     - 'v*'
@@ -57,34 +56,43 @@ stages:
         filePath: 'build/PreBuild.ps1'
         arguments: '"$(Build.BuildId)"'
 
-    - task: NuGetToolInstaller@0
-      displayName: 'Install NuGet'
-
-    - task: NuGetCommand@2
-      displayName: 'NuGet restore'
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK'
       inputs:
-        restoreSolution: '$(solution)'
+        packageType: sdk
+        version: 5.0.100
 
-    - task: VSBuild@1
+    - task: DotNetCoreCLI@2
       displayName: 'Build solution'
       inputs:
-        solution: '$(solution)'
-        platform: '$(buildPlatform)'
-        msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
-        configuration: '$(buildConfiguration)'
-
-    - task: VSTest@2
+        command: build
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
+        
+    - task: DotNetCoreCLI@2
       displayName: 'Run Tests'
-      condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
       inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
-
-    - template: build/templates/copy-and-publish.yml
-      parameters:
-        displayName: '.NET Framework Executable'
-        fileName: 'OfficeRibbonXEditor.exe'
-        project: 'OfficeRibbonXEditor'
+        command: test
+        projects: '**/*Tests.csproj'
+        arguments: >-
+          --no-build
+          --configuration $(buildConfiguration)
+          /p:TargetFramework=$(targetFramework)
+          
+    - task: DotNetCoreCLI@2
+      displayName: 'Prepare app package (dotnet publish)'
+      inputs:
+        command: publish
+        projects: '**/OfficeRibbonXEditor.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
+        
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish binaries (unsigned)'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: '.NET Framework Binaries (Unsigned)'
 
     - script: >-
         iscc build/install/setup.iss
@@ -106,18 +114,18 @@ stages:
         binFolder: 'Installer'
 
   - job: NetCore
-    displayName: .NET Core
+    displayName: .NET
     variables:
-      targetFramework: netcoreapp3.1
+      targetFramework: net5.0-windows
 
     steps:
 
     - task: Cache@2
       displayName: 'Cache NuGet packages'
       inputs:
-        key: 'nuget | "$(Agent.OS)" | ".NET Core" | src/OfficeRibbonXEditor/packages.lock.json'
+        key: 'nuget | "$(Agent.OS)" | ".NET" | src/OfficeRibbonXEditor/packages.lock.json'
         restoreKeys: |
-          nuget | "$(Agent.OS)" | ".NET Core"
+          nuget | "$(Agent.OS)" | ".NET"
           nuget | "$(Agent.OS)"
           nuget
         path: $(NUGET_PACKAGES)
@@ -130,10 +138,10 @@ stages:
         arguments: '"$(Build.BuildId)"'
 
     - task: UseDotNet@2
-      displayName: 'Use .NET Core sdk'
+      displayName: 'Use .NET SDK'
       inputs:
         packageType: sdk
-        version: 3.1.100
+        version: 5.0.100
 
     - task: SonarCloudPrepare@1
       displayName: 'Prepare SonarCloud analysis'
@@ -207,7 +215,7 @@ stages:
       displayName: 'Publish binaries (unsigned)'
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)' 
-        artifactName: '.NET Core Binaries (Unsigned)'
+        artifactName: '.NET Binaries (Unsigned)'
 
     - script: >-
         iscc build/install/setup.iss
@@ -224,7 +232,7 @@ stages:
 
     - template: build/templates/copy-and-publish.yml
       parameters:
-        displayName: '.NET Core Installer'
+        displayName: '.NET Installer'
         fileName: 'OfficeRibbonXEditor.exe'
         binFolder: 'Installer'
 
@@ -245,14 +253,14 @@ stages:
     demands: CodeSign
   jobs:
 
-  - job: NetFrameworkExecutable
-    displayName: Sign .NET Framework Executable
+  - job: NetFrameworkBinaries
+    displayName: Sign .NET Framework Binaries
     workspace:
       clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
-        artifactName: '.NET Framework Executable'
+        artifactName: '.NET Framework Binaries'
 
   - job: NetFrameworkInstaller
     displayName: Sign .NET Framework Installer
@@ -264,22 +272,22 @@ stages:
         artifactName: '.NET Framework Installer'
 
   - job: NetCoreBinaries
-    displayName: Sign .NET Core Binaries
+    displayName: Sign .NET Binaries
     workspace:
       clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
-        artifactName: '.NET Core Binaries'
+        artifactName: '.NET Binaries'
 
   - job: NetCoreInstaller
-    displayName: Sign .NET Core Installer
+    displayName: Sign .NET Installer
     workspace:
       clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
-        artifactName: '.NET Core Installer'
+        artifactName: '.NET Installer'
 
 - ${{ if eq(parameters.createRelease, true) }}:
   - stage: Release
@@ -302,9 +310,9 @@ stages:
                 arguments: '"$(Pipeline.Workspace)"'
 
             - task: ArchiveFiles@2
-              displayName: 'Archive .NET Framework Executable'
+              displayName: 'Archive .NET Framework Binaries'
               inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Executable/OfficeRibbonXEditor.exe'
+                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries/OfficeRibbonXEditor'
                 includeRootFolder: false
                 archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
             - powershell: >-
@@ -313,16 +321,16 @@ stages:
                 -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETFramework.exe"
               displayName: 'Copy .NET Framework Installer'
             - task: ArchiveFiles@2
-              displayName: 'Archive .NET Core Binaries'
+              displayName: 'Archive .NET Binaries'
               inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Core Binaries/OfficeRibbonXEditor'
+                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries/OfficeRibbonXEditor'
                 includeRootFolder: false
-                archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETCore.zip'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5.zip'
             - powershell: >-
                 Copy-Item
-                -Path "$(Pipeline.Workspace)/.NET Core Installer/OfficeRibbonXEditor.exe"
-                -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETCore.exe"
-              displayName: 'Copy .NET Core Installer'
+                -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
+                -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NET5.exe"
+              displayName: 'Copy .NET Installer'
             - task: GitHubRelease@1
               displayName: 'Create GitHub Release'
               inputs:
@@ -348,16 +356,10 @@ stages:
                   a single `.exe` file.
                   
                   The .NET Framework builds require at least version 4.6.1 of the .NET Framework
-                  Runtime. The .NET Core builds are still experimental and require at least
-                  version 3.0 of the .NET Core Runtime (the one for desktop apps is enough). If
-                  you need any of these runtimes, check [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
-                  
-                  **Note: As of version 1.6, both the installer and executable are cryptographically
-                  signed. In the long therm, this should prevent security warnings in Windows due
-                  to untrusted software being executed (see #74). This will not take effect immediately,
-                  as it is a reputation system based on the number of downloads. Similarly, when
-                  attempting to download the assets, some browsers might show warning messages
-                  indicating these are not commonly downloaded, but it is completely safe to do so.**
+                  Runtime. The .NET builds require at least version 5.0 of the .NET Runtime (the
+                  one for desktop apps is enough). If you need any of these runtimes, check
+                  [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
+
                 assets: '$(Build.ArtifactStagingDirectory)/*.*'
                 isDraft: true
                 changeLogType: issueBased
