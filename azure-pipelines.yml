@@ -68,13 +68,16 @@ stages:
         command: build
         projects: '**/*.csproj'
         arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
-
-    - task: VSTest@2
+        
+    - task: DotNetCoreCLI@2
       displayName: 'Run Tests'
-      condition: not(startsWith(variables['targetFramework'], 'net5'))
       inputs:
-        platform: '$(buildPlatform)'
-        configuration: '$(buildConfiguration)'
+        command: test
+        projects: '**/*Tests.csproj'
+        arguments: >-
+          --no-build
+          --configuration $(buildConfiguration)
+          /p:TargetFramework=$(targetFramework)
 
     - template: build/templates/copy-and-publish.yml
       parameters:

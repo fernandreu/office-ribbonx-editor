@@ -27,15 +27,6 @@
         "resolved": "2.0.5",
         "contentHash": "Md2q9f6hAuUAm6IWTybQbYvxhDAs2dqmsudVDghpg0Q+C0M2KkmiTDjeGx1PsYhnZPvp+hy1Cx99v0VPW9W6/g=="
       },
-      "Costura.Fody": {
-        "type": "Direct",
-        "requested": "[4.1.0, )",
-        "resolved": "4.1.0",
-        "contentHash": "MkW5aqhqNvuP6MiaaD5Yx8efXv+5ucsumRx+Nsn5b+PA4RnaxJLtXhGkm1N+Hi7sjkSlL8kl1klSS/7v2DxZHw==",
-        "dependencies": {
-          "Fody": "6.0.0"
-        }
-      },
       "Dragablz": {
         "type": "Direct",
         "requested": "[0.0.3.223, )",
@@ -170,11 +161,6 @@
         "type": "Transitive",
         "resolved": "4.0.4",
         "contentHash": "UpnuIthh+VQiPBGAkrwLe8t1oG+ciL0j1FlZlkCYJ6Hz0MHG6BJQCcVIGzOoecdpnYqUCnj6CrZWnYZNL9hmPg=="
-      },
-      "Fody": {
-        "type": "Transitive",
-        "resolved": "6.0.0",
-        "contentHash": "rH9Q7GapghyLYESfeCUOqh0S70eLc3FAikIgEEyGeng3JJf1M7mt2BUxjz93o3ipDXLrKn1s69AIEolmnVn8xg=="
       },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
@@ -714,12 +700,6 @@
         "requested": "[2.0.5, )",
         "resolved": "2.0.5",
         "contentHash": "Md2q9f6hAuUAm6IWTybQbYvxhDAs2dqmsudVDghpg0Q+C0M2KkmiTDjeGx1PsYhnZPvp+hy1Cx99v0VPW9W6/g=="
-      },
-      "Costura.Fody": {
-        "type": "Direct",
-        "requested": "[4.1.0, )",
-        "resolved": "4.1.0",
-        "contentHash": "MkW5aqhqNvuP6MiaaD5Yx8efXv+5ucsumRx+Nsn5b+PA4RnaxJLtXhGkm1N+Hi7sjkSlL8kl1klSS/7v2DxZHw=="
       },
       "Dragablz": {
         "type": "Direct",

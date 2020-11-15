@@ -43,7 +43,6 @@
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="5.0.2" />
     <PackageReference Include="Autofac" Version="6.0.0" />
     <PackageReference Include="CommonServiceLocator" Version="2.0.5" />
-    <PackageReference Include="Costura.Fody" Version="4.1.0" />
     <PackageReference Include="Dragablz" Version="0.0.3.223" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.0.1" />
     <PackageReference Include="fernandreu.ScintillaNET.WPF" Version="3.0.2" />
