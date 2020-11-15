@@ -118,7 +118,7 @@ steps:
     /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
   displayName: Generate ${{ parameters.tag }} Installer
 
-- template: build/templates/copy-and-publish.yml
+- template: copy-and-publish.yml
   parameters:
     displayName: '${{ parameters.tag }} Installer'
     fileName: 'OfficeRibbonXEditor.exe'
