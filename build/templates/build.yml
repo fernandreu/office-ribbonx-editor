@@ -123,3 +123,4 @@ steps:
     displayName: '${{ parameters.tag }} Installer'
     fileName: 'OfficeRibbonXEditor.exe'
     binFolder: 'Installer'
+    targetFramework: '${{ parameters.targetFramework }}'
