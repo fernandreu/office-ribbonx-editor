@@ -24,10 +24,10 @@
   #define ExeName AssemblyName + '.exe'
 #endif
 #ifndef InputFolder
-  #define InputFolder "../../src/OfficeRibbonXEditor/bin/Release/netcoreapp3.1"
+  #define InputFolder "../../src/OfficeRibbonXEditor/bin/Release/net5.0-windows"
 #endif
 #ifndef OutputFolder
-  #define OutputFolder "../../src/OfficeRibbonXEditor/bin/Installer/netcoreapp3.1"
+  #define OutputFolder "../../src/OfficeRibbonXEditor/bin/Installer/net5.0-windows"
 #endif
 #ifndef VersionPrefix
   #define VersionPrefix GetFileVersion(InputFolder + '/' + ExeName)

@@ -108,7 +108,7 @@ stages:
   - job: NetCore
     displayName: .NET
     variables:
-      targetFramework: netcoreapp3.1
+      targetFramework: net5.0-windows
 
     steps:
 
