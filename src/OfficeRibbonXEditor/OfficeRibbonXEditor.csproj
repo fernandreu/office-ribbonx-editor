@@ -17,10 +17,6 @@
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
     <PreserveCompilationContext>false</PreserveCompilationContext>
-    <!--<PublishSingleFile>true</PublishSingleFile>    
-    <RuntimeIdentifier>win10-x64</RuntimeIdentifier>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <PublishTrimmed>true</PublishTrimmed>-->
     <_InstallerTargetFramework>net461</_InstallerTargetFramework>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
     <NoWarn>NU1701</NoWarn>
@@ -51,7 +47,6 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Windows.Compatibility" Version="5.0.0" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
     <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
