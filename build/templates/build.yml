@@ -1,0 +1,126 @@
+parameters:
+  tagetFramework: 'net461'
+  tag: '.NET Framework'
+  sonarCloud: false
+  coverage: true
+
+steps:
+
+- task: Cache@2
+  displayName: 'Cache NuGet packages'
+  inputs:
+    key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
+    restoreKeys: |
+      nuget | "$(Agent.OS)"
+      nuget
+    path: $(NUGET_PACKAGES)
+  
+- task: PowerShell@2
+  displayName: 'Run pre-build script'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'build/PreBuild.ps1'
+    arguments: '"$(Build.BuildId)"'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK'
+  inputs:
+    packageType: sdk
+    version: 5.0.100
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis'
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  inputs:
+    SonarCloud: 'fernandreu-SonarCloud'
+    organization: '$(SonarOrganization)'
+    scannerMode: 'MSBuild'
+    projectKey: '$(SonarProjectKey)'
+    projectName: '$(SonarProjectName)'
+    projectVersion: '$(Build.BuildNumber)'
+    extraProperties: |
+      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.opencover.xml
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: build
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) -p:TargetFramework=${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
+
+# This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
+# See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
+- task: PowerShell@2
+  displayName: 'Copy PresentationFramework.dll to test folders'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'build/CopyLibraries.ps1'
+    arguments: '"$(buildConfiguration)" "${{ parameters.targetFramework }}"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run Tests'
+  inputs:
+    command: test
+    projects: '**/*Tests.csproj'
+    arguments: >-
+      --no-build
+      --configuration $(buildConfiguration)
+      /p:TargetFramework=${{ parameters.targetFramework }}
+      /p:_InstallerTargetFramework=${{ parameters.targetFramework }}
+      /p:CollectCoverage=${{ parameters.coverage }}
+      /p:Exclude=[Scintilla*]*
+      /p:IncludeTestAssembly=true
+      /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
+      /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
+      /p:mergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.json
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true'))
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.${{ parameters.targetFramework }}.cobertura.xml'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud code analysis'
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+
+- task: SonarCloudPublish@1
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  displayName: 'Publish SonarCloud quality gate results'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Prepare app package (dotnet publish)'
+  inputs:
+    command: publish
+    projects: '**/OfficeRibbonXEditor.csproj'
+    publishWebProjects: false
+    zipAfterPublish: false
+    arguments: '--configuration $(buildConfiguration) -p:TargetFramework=${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }} --output $(Build.ArtifactStagingDirectory)'
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish ${{ parameters.tag }} binaries (unsigned)'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: '${{ parameters.tag }} Binaries (Unsigned)'
+
+- script: >-
+    iscc build/install/setup.iss
+    /DAssemblyName="$(ExtractedAssemblyName)"
+    /DAssemblyTitle="$(ExtractedAssemblyTitle)"
+    /DAuthors="$(ExtractedAuthors)"
+    /DProjectUrl="$(ExtractedPackageProjectUrl)"
+    /DDescription="$(ExtractedDescription)"
+    /DCopyright="$(ExtractedCopyright)"
+    /DVersionPrefix="$(ExtractedVersionPrefix)"
+    /DInputFolder="../../src/OfficeRibbonXEditor/bin/$(buildConfiguration)/${{ parameters.targetFramework }}"
+    /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
+  displayName: Generate ${{ parameters.tag }} Installer
+
+- template: copy-and-publish.yml
+  parameters:
+    displayName: '${{ parameters.tag }} Installer'
+    fileName: 'OfficeRibbonXEditor.exe'
+    binFolder: 'Installer'
+    targetFramework: '${{ parameters.targetFramework }}'
