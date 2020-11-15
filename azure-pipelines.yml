@@ -78,12 +78,21 @@ stages:
           --no-build
           --configuration $(buildConfiguration)
           /p:TargetFramework=$(targetFramework)
-
-    - template: build/templates/copy-and-publish.yml
-      parameters:
-        displayName: '.NET Framework Executable'
-        fileName: 'OfficeRibbonXEditor.exe'
-        project: 'OfficeRibbonXEditor'
+          
+    - task: DotNetCoreCLI@2
+      displayName: 'Prepare app package (dotnet publish)'
+      inputs:
+        command: publish
+        projects: '**/OfficeRibbonXEditor.csproj'
+        publishWebProjects: false
+        zipAfterPublish: false
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework) --output $(Build.ArtifactStagingDirectory)'
+        
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish binaries (unsigned)'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)' 
+        artifactName: '.NET Framework Binaries (Unsigned)'
 
     - script: >-
         iscc build/install/setup.iss
@@ -244,14 +253,14 @@ stages:
     demands: CodeSign
   jobs:
 
-  - job: NetFrameworkExecutable
-    displayName: Sign .NET Framework Executable
+  - job: NetFrameworkBinaries
+    displayName: Sign .NET Framework Binaries
     workspace:
       clean: all
     steps:
     - template: build/templates/sign-and-publish.yml
       parameters:
-        artifactName: '.NET Framework Executable'
+        artifactName: '.NET Framework Binaries'
 
   - job: NetFrameworkInstaller
     displayName: Sign .NET Framework Installer
@@ -301,9 +310,9 @@ stages:
                 arguments: '"$(Pipeline.Workspace)"'
 
             - task: ArchiveFiles@2
-              displayName: 'Archive .NET Framework Executable'
+              displayName: 'Archive .NET Framework Binaries'
               inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Executable/OfficeRibbonXEditor.exe'
+                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries/OfficeRibbonXEditor'
                 includeRootFolder: false
                 archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
             - powershell: >-
@@ -316,11 +325,11 @@ stages:
               inputs:
                 rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries/OfficeRibbonXEditor'
                 includeRootFolder: false
-                archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETCore.zip'
+                archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5.zip'
             - powershell: >-
                 Copy-Item
                 -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
-                -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETCore.exe"
+                -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NET5.exe"
               displayName: 'Copy .NET Installer'
             - task: GitHubRelease@1
               displayName: 'Create GitHub Release'
