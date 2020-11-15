@@ -63,23 +63,15 @@ stages:
         version: 5.0.100
 
     - task: DotNetCoreCLI@2
-      displayName: 'Restore NuGet packages'
+      displayName: 'Build solution'
       inputs:
-        command: restore
+        command: build
         projects: '**/*.csproj'
         arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
-    - task: VSBuild@1
-      displayName: 'Build solution'
-      inputs:
-        solution: '$(solution)'
-        platform: '$(buildPlatform)'
-        msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
-        configuration: '$(buildConfiguration)'
-
     - task: VSTest@2
       displayName: 'Run Tests'
-      condition: not(startsWith(variables['targetFramework'], 'netcoreapp'))
+      condition: not(startsWith(variables['targetFramework'], 'net5'))
       inputs:
         platform: '$(buildPlatform)'
         configuration: '$(buildConfiguration)'
