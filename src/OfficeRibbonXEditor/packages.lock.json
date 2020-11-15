@@ -193,7 +193,7 @@
         "contentHash": "lf2OKHcoLWEmLy4WxI4D6IrAv5xCwGLMnrjTQWGPaxUYMdd9/oA4HaE7sX2QIZefruth+sJi0+nzg4dDEILPOQ=="
       }
     },
-    ".NETFramework,Version=v4.6.1/win-x86": {
+    ".NETFramework,Version=v4.6.1/win-x64": {
       "fernandreu.ScintillaNET": {
         "type": "Transitive",
         "resolved": "4.0.4",
@@ -419,7 +419,7 @@
         "contentHash": "lf2OKHcoLWEmLy4WxI4D6IrAv5xCwGLMnrjTQWGPaxUYMdd9/oA4HaE7sX2QIZefruth+sJi0+nzg4dDEILPOQ=="
       }
     },
-    ".NETCoreApp,Version=v5.0/win-x86": {
+    ".NETCoreApp,Version=v5.0/win-x64": {
       "fernandreu.ScintillaNET": {
         "type": "Transitive",
         "resolved": "4.0.4",

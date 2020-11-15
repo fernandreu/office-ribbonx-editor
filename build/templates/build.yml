@@ -108,7 +108,7 @@ steps:
 - task: PublishPipelineArtifact@1
   displayName: 'Publish ${{ parameters.tag }} binaries (unsigned)'
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    targetPath: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor' 
     artifactName: '${{ parameters.tag }} Binaries (Unsigned)'
 
 - script: >-
@@ -120,7 +120,7 @@ steps:
     /DDescription="$(ExtractedDescription)"
     /DCopyright="$(ExtractedCopyright)"
     /DVersionPrefix="$(ExtractedVersionPrefix)"
-    /DInputFolder="$(Build.ArtifactStagingDirectory)"
+    /DInputFolder="$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor"
     /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
   displayName: Generate ${{ parameters.tag }} Installer
 
