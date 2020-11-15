@@ -8,7 +8,6 @@ trigger:
   branches:
     include:
     - master
-    - 'feature/*'
   tags:
     exclude:
     - 'v*'
@@ -57,7 +56,7 @@ stages:
         filePath: 'build/PreBuild.ps1'
         arguments: '"$(Build.BuildId)"'
 
-    - task: NuGetToolInstaller@0
+    - task: NuGetToolInstaller@1
       displayName: 'Install NuGet'
 
     - task: NuGetCommand@2
