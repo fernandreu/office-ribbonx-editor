@@ -103,7 +103,7 @@ steps:
       -p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       --runtime win-x64
       --self-contained true
-      --output $(Build.ArtifactStagingDirectory)'
+      --output "$(Build.ArtifactStagingDirectory)"
 
 - task: PublishPipelineArtifact@1
   displayName: 'Publish ${{ parameters.tag }} binaries (unsigned)'
