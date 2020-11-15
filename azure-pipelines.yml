@@ -56,20 +56,22 @@ stages:
         filePath: 'build/PreBuild.ps1'
         arguments: '"$(Build.BuildId)"'
 
-    - task: NuGetToolInstaller@1
-      displayName: 'Install NuGet'
+    - task: UseDotNet@2
+      displayName: 'Use .NET SDK'
       inputs:
-        versionSpec: '5.8.0'
+        packageType: sdk
+        version: 5.0.100
 
-    - task: NuGetCommand@2
-      displayName: 'NuGet restore'
+    - task: DotNetCoreCLI@2
+      displayName: 'Restore NuGet packages'
       inputs:
-        restoreSolution: '$(solution)'
+        command: restore
+        projects: '**/*.csproj'
+        arguments: '--configuration $(buildConfiguration) -p:TargetFramework=$(targetFramework) -p:_InstallerTargetFramework=$(targetFramework)'
 
     - task: VSBuild@1
       displayName: 'Build solution'
       inputs:
-        vsVersion: '15.8'
         solution: '$(solution)'
         platform: '$(buildPlatform)'
         msbuildArgs: '/p:TargetFramework=$(targetFramework) /p:_InstallerTargetFramework=$(targetFramework)'
@@ -132,7 +134,7 @@ stages:
         arguments: '"$(Build.BuildId)"'
 
     - task: UseDotNet@2
-      displayName: 'Use .NET sdk'
+      displayName: 'Use .NET SDK'
       inputs:
         packageType: sdk
         version: 5.0.100
