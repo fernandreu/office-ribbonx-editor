@@ -70,10 +70,13 @@ stages:
         targetPath: 'build/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: UnsignedBuild
-    displayName: Publish (Unsigned)
+  - job: Publish
+    displayName: Publish
+    condition: and(succeeded(), eq(varaibles['Build.SourceBranch'], 'refs/heads/master'))
     dependsOn: [ NetFrameworkTesting, NetCoreTesting ]
     steps:
+    - template: build/templates/pre-steps.yml
+
     - template: build/templates/publish.yml
       parameters:
         tag: '.NET Framework'
@@ -91,7 +94,7 @@ stages:
         targetFramework: $(targetFramework)
 
 - stage: Release
-  dependsOn: Build
+  dependsOn: Publish
   condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'). ${{ parameters.createRelease }} )
 
   jobs:
