@@ -32,16 +32,24 @@ variables:
 stages:
 - stage: Build
   jobs:
+
   - job: NetFramework
     displayName: .NET Framework
+    variables:
+      targetFramework: net461
 
     steps:
     - template: build/templates/build.yml
       parameters:
-        targetFramework: 'net461'
         tag: '.NET Framework'
+        targetFramework: $(targetFramework)
         sonarCloud: false
         coverage: false
+
+    - template: build/templates/publish.yml
+      parameters:
+        tag: '.NET Framework'
+        targetFramework: $(targetFramework)
 
   - job: NetCore
     displayName: .NET
@@ -51,10 +59,21 @@ stages:
     steps:
     - template: build/templates/build.yml
       parameters:
-        targetFramework: 'net5.0-windows'
         tag: '.NET'
+        targetFramework: $(targetFramework)
         sonarCloud: true
         coverage: true
+
+    - template: build/templates/publish.yml
+      parameters:
+        tag: '.NET'
+        targetFramework: $(targetFramework)
+      
+    - template: build/templates/publish.yml
+      parameters:
+        tag: 'Self-Contained .NET'
+        selfContained: true
+        targetFramework: $(targetFramework)
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
@@ -132,7 +151,7 @@ stages:
             - task: ArchiveFiles@2
               displayName: 'Archive .NET Framework Binaries'
               inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries/OfficeRibbonXEditor'
+                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
                 includeRootFolder: false
                 archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
             - powershell: >-
@@ -143,7 +162,7 @@ stages:
             - task: ArchiveFiles@2
               displayName: 'Archive .NET Binaries'
               inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries/OfficeRibbonXEditor'
+                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
                 includeRootFolder: false
                 archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5.zip'
             - powershell: >-
