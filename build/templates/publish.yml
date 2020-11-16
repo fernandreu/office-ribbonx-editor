@@ -22,7 +22,7 @@ steps:
       -p:TargetFramework=${{ parameters.targetFramework }}
       -p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       --runtime win-x64
-      --self-contained {{ parameters.selfContained }}
+      --self-contained ${{ parameters.selfContained }}
       --output "$(Build.ArtifactStagingDirectory)"
 
 - task: PublishPipelineArtifact@1
@@ -45,7 +45,7 @@ steps:
   displayName: Generate ${{ parameters.tag }} installer
 
 - task: CopyFiles@2
-  displayName: 'Copy ${{ parameters.tag }}  '
+  displayName: 'Copy ${{ parameters.tag }} Installer'
   inputs:
     sourceFolder: ''
     contents: |
