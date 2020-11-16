@@ -1,0 +1,22 @@
+steps:
+- task: Cache@2
+  displayName: 'Cache NuGet packages'
+  inputs:
+    key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
+    restoreKeys: |
+      nuget | "$(Agent.OS)"
+      nuget
+    path: $(NUGET_PACKAGES)
+  
+- task: PowerShell@2
+  displayName: 'Run pre-build script'
+  inputs:
+    targetType: 'filePath'
+    filePath: 'build/PreBuild.ps1'
+    arguments: '"$(Build.BuildId)"'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET SDK'
+  inputs:
+    packageType: sdk
+    version: 5.0.100

@@ -1,0 +1,71 @@
+parameters:
+  tag: '.NET Framework'
+  selfContained: false
+  targetFramework: 'net461'
+
+steps:
+- task: DeleteFiles@1
+  displayName: 'Delete output folder contents'
+  inputs:
+    sourceFolder: '$(Build.ArtifactStagingDirectory)'
+    contents: '**/*'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Prepare standard app package (dotnet publish)'
+  inputs:
+    command: publish
+    projects: '**/OfficeRibbonXEditor.csproj'
+    publishWebProjects: false
+    zipAfterPublish: false
+    arguments: >-
+      --configuration $(buildConfiguration)
+      -p:TargetFramework=${{ parameters.targetFramework }}
+      -p:_InstallerTargetFramework=${{ parameters.targetFramework }}
+      --runtime win-x64
+      --self-contained ${{ parameters.selfContained }}
+      --output "$(Build.ArtifactStagingDirectory)"
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish ${{ parameters.tag }} binaries (unsigned)'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor' 
+    artifactName: '${{ parameters.tag }} Binaries (Unsigned)'
+
+- script: >-
+    iscc build/install/setup.iss
+    /DAssemblyName="$(ExtractedAssemblyName)"
+    /DAssemblyTitle="$(ExtractedAssemblyTitle)"
+    /DAuthors="$(ExtractedAuthors)"
+    /DProjectUrl="$(ExtractedPackageProjectUrl)"
+    /DDescription="$(ExtractedDescription)"
+    /DCopyright="$(ExtractedCopyright)"
+    /DVersionPrefix="$(ExtractedVersionPrefix)"
+    /DInputFolder="$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor"
+    /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
+  displayName: Generate ${{ parameters.tag }} installer
+
+- task: CopyFiles@2
+  displayName: 'Copy ${{ parameters.tag }} Installer'
+  inputs:
+    sourceFolder: ''
+    contents: |
+      src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}/OfficeRibbonXEditor.exe
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+    cleanTargetFolder: true # Optional
+    flattenFolders: true # Optional
+
+- task: PowerShell@2
+  displayName: 'Check if ${{ parameters.tag }} installer is really copied'
+  inputs:
+    targetType: inline
+    script: |
+      if (-not (Test-Path "$(Build.ArtifactStagingDirectory)\OfficeRibbonXEditor.exe")) {
+        Write-Host "##vso[task.LogIssue type=error;]Missing ${{ parameters.tag }} in staging directory"
+        exit 1
+      }
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish ${{ parameters.tag }} Installer (unsigned)'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)' 
+    artifactName: '${{ parameters.tag }} Installer (Unsigned)'
