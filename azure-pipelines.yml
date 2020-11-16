@@ -33,8 +33,8 @@ stages:
 - stage: Build
   jobs:
 
-  - job: NetFramework
-    displayName: .NET Framework
+  - job: NetFrameworkTesting
+    displayName: .NET Framework Testing
     variables:
       targetFramework: net461
 
@@ -46,13 +46,8 @@ stages:
         sonarCloud: false
         coverage: false
 
-    - template: build/templates/publish.yml
-      parameters:
-        tag: '.NET Framework'
-        targetFramework: $(targetFramework)
-
-  - job: NetCore
-    displayName: .NET
+  - job: NetCoreTesting
+    displayName: .NET Testing
     variables:
       targetFramework: net5.0-windows
 
@@ -63,6 +58,26 @@ stages:
         targetFramework: $(targetFramework)
         sonarCloud: true
         coverage: true
+        sign: false
+
+  - job: ReleaseScripts
+    displayName: Publish Release Scripts
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }}))
+    steps:
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Release Scripts'
+      inputs:
+        targetPath: 'build/ReleaseScripts' 
+        artifactName: 'ReleaseScripts'
+
+  - job: UnsignedBuild
+    displayName: Publish (Unsigned)
+    dependsOn: [ NetFrameworkTesting, NetCoreTesting ]
+    steps:
+    - template: build/templates/publish.yml
+      parameters:
+        tag: '.NET Framework'
+        targetFramework: $(targetFramework)
 
     - template: build/templates/publish.yml
       parameters:
@@ -75,131 +90,77 @@ stages:
         selfContained: true
         targetFramework: $(targetFramework)
 
-  - job: ReleaseScripts
-    displayName: Publish Release Scripts
-    steps:
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish Release Scripts'
-      inputs:
-        targetPath: 'build/ReleaseScripts' 
-        artifactName: 'ReleaseScripts'
-
-- stage: Sign
+- stage: Release
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-  pool:
-    name: default
-    demands: CodeSign
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'). ${{ parameters.createRelease }})
+
   jobs:
+  - deployment: Deploy
+    environment: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          
+          - task: PowerShell@2
+            displayName: 'Check Version'
+            inputs:
+              targetType: 'filePath'
+              filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
+              arguments: '"$(Pipeline.Workspace)"'
 
-  - job: NetFrameworkBinaries
-    displayName: Sign .NET Framework Binaries
-    workspace:
-      clean: all
-    steps:
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        artifactName: '.NET Framework Binaries'
+          - task: ArchiveFiles@2
+            displayName: 'Archive .NET Framework Binaries'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
+          - powershell: >-
+              Copy-Item
+              -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETFramework.exe"
+            displayName: 'Copy .NET Framework Installer'
+          - task: ArchiveFiles@2
+            displayName: 'Archive .NET Binaries'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5.zip'
+          - powershell: >-
+              Copy-Item
+              -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NET5.exe"
+            displayName: 'Copy .NET Installer'
+          - task: GitHubRelease@1
+            displayName: 'Create GitHub Release'
+            inputs:
+              gitHubConnection: 'fernandreu-pat'
+              repositoryName: 'fernandreu/office-ribbonx-editor'
+              tagSource: userSpecifiedTag
+              tag: 'v$(ThreeDigitVersion)'
+              title: 'Office RibbonX Editor $(ThreeDigitVersion) (Build $(Build.BuildId))'
+              releaseNotesSource: inline
+              releaseNotesInline: |
+                Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
+                
+                ## What's New
+                
+                For a full list of closed issues since last release, see below. 
+                
+                ## How to install / use
+                
+                Download one of the items from the `Assets` section below.
+                
+                Compressed `.zip` files do not require installation (i.e. will not create any
+                entry in the control panel's program list). When feasible, these will contain
+                a single `.exe` file.
+                
+                The .NET Framework builds require at least version 4.6.1 of the .NET Framework
+                Runtime. The .NET builds require at least version 5.0 of the .NET Runtime (the
+                one for desktop apps is enough). If you need any of these runtimes, check
+                [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
 
-  - job: NetFrameworkInstaller
-    displayName: Sign .NET Framework Installer
-    workspace:
-      clean: all
-    steps:
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        artifactName: '.NET Framework Installer'
-
-  - job: NetCoreBinaries
-    displayName: Sign .NET Binaries
-    workspace:
-      clean: all
-    steps:
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        artifactName: '.NET Binaries'
-
-  - job: NetCoreInstaller
-    displayName: Sign .NET Installer
-    workspace:
-      clean: all
-    steps:
-    - template: build/templates/sign-and-publish.yml
-      parameters:
-        artifactName: '.NET Installer'
-
-- ${{ if eq(parameters.createRelease, true) }}:
-  - stage: Release
-    dependsOn: Sign
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-
-    jobs:
-    - deployment: Deploy
-      environment: Release
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            
-            - task: PowerShell@2
-              displayName: 'Check Version'
-              inputs:
-                targetType: 'filePath'
-                filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
-                arguments: '"$(Pipeline.Workspace)"'
-
-            - task: ArchiveFiles@2
-              displayName: 'Archive .NET Framework Binaries'
-              inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
-                includeRootFolder: false
-                archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
-            - powershell: >-
-                Copy-Item
-                -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
-                -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETFramework.exe"
-              displayName: 'Copy .NET Framework Installer'
-            - task: ArchiveFiles@2
-              displayName: 'Archive .NET Binaries'
-              inputs:
-                rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
-                includeRootFolder: false
-                archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5.zip'
-            - powershell: >-
-                Copy-Item
-                -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
-                -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NET5.exe"
-              displayName: 'Copy .NET Installer'
-            - task: GitHubRelease@1
-              displayName: 'Create GitHub Release'
-              inputs:
-                gitHubConnection: 'fernandreu-pat'
-                repositoryName: 'fernandreu/office-ribbonx-editor'
-                tagSource: userSpecifiedTag
-                tag: 'v$(ThreeDigitVersion)'
-                title: 'Office RibbonX Editor $(ThreeDigitVersion) (Build $(Build.BuildId))'
-                releaseNotesSource: inline
-                releaseNotesInline: |
-                  Released automatically from [Azure Pipelines](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/results?buildId=$(Build.BuildId))
-                  
-                  ## What's New
-                  
-                  For a full list of closed issues since last release, see below. 
-                  
-                  ## How to install / use
-                  
-                  Download one of the items from the `Assets` section below.
-                  
-                  Compressed `.zip` files do not require installation (i.e. will not create any
-                  entry in the control panel's program list). When feasible, these will contain
-                  a single `.exe` file.
-                  
-                  The .NET Framework builds require at least version 4.6.1 of the .NET Framework
-                  Runtime. The .NET builds require at least version 5.0 of the .NET Runtime (the
-                  one for desktop apps is enough). If you need any of these runtimes, check
-                  [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
-
-                assets: '$(Build.ArtifactStagingDirectory)/*.*'
-                isDraft: true
-                changeLogType: issueBased
-                changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'
+              assets: '$(Build.ArtifactStagingDirectory)/*.*'
+              isDraft: true
+              changeLogType: issueBased
+              changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'
