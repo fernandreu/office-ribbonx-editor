@@ -62,7 +62,7 @@ stages:
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }}))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }} )
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
@@ -92,7 +92,7 @@ stages:
 
 - stage: Release
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'). ${{ parameters.createRelease }})
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'). ${{ parameters.createRelease }} )
 
   jobs:
   - deployment: Deploy
