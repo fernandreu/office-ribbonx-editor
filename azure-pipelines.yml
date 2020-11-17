@@ -80,18 +80,18 @@ stages:
     - template: build/templates/publish.yml
       parameters:
         tag: '.NET Framework'
-        targetFramework: $(targetFramework)
+        targetFramework: net461
 
     - template: build/templates/publish.yml
       parameters:
         tag: '.NET'
-        targetFramework: $(targetFramework)
+        targetFramework: net5.0-windows
       
     - template: build/templates/publish.yml
       parameters:
         tag: 'Self-Contained .NET'
         selfContained: true
-        targetFramework: $(targetFramework)
+        targetFramework: net5.0-windows
 
 - stage: Release
   dependsOn: Build
