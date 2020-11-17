@@ -72,7 +72,7 @@ stages:
 
   - job: Publish
     displayName: Publish
-    condition: and(succeeded(), eq(varaibles['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     dependsOn: [ NetFrameworkTesting, NetCoreTesting ]
     steps:
     - template: build/templates/pre-steps.yml
