@@ -39,7 +39,7 @@ function Set-Signatures {
     )
 
     # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
-    $files = Get-Files -Source $Source -Filters *.msi,*.exe,*.dll
+    $files = Get-Files -Source $Source -Filters *.msi,*.exe
     if ($files.Count -ne 0) {
         Write-Host "Found $($files.Count) files to sign"
         $fileList = $files -join ' '

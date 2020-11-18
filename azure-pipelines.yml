@@ -70,14 +70,14 @@ stages:
         targetPath: 'build/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: Publish
+  - job: NETFrameworkPublish
     displayName: Publish
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    dependsOn: [ NetFrameworkTesting, NetCoreTesting ]
+    dependsOn: NetFrameworkTesting
     pool:
       name: default
       demands: CodeSign
-      
+
     steps:
     - template: build/templates/pre-steps.yml
 
@@ -86,16 +86,27 @@ stages:
         tag: '.NET Framework'
         targetFramework: net461
 
-    - template: build/templates/publish.yml
-      parameters:
-        tag: '.NET'
-        targetFramework: net5.0-windows
-      
-    - template: build/templates/publish.yml
-      parameters:
-        tag: 'Self-Contained .NET'
-        selfContained: true
-        targetFramework: net5.0-windows
+  - job: NETCorePublish
+    displayName: Publish
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    dependsOn: NetCoreTesting
+    pool:
+      name: default
+      demands: CodeSign
+
+    steps:
+      - template: build/templates/pre-steps.yml
+  
+      - template: build/templates/publish.yml
+        parameters:
+          tag: '.NET'
+          targetFramework: net5.0-windows
+        
+      - template: build/templates/publish.yml
+        parameters:
+          tag: 'Self-Contained .NET'
+          selfContained: true
+          targetFramework: net5.0-windows
 
 - stage: Release
   dependsOn: Build
