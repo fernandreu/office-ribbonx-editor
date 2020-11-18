@@ -187,7 +187,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             {
                 dialog = this.manager.Window!.FindFirstDescendant(x => x.ByControlType(ControlType.Window)).AsWindow();
                 return dialog;
-            }, TimeSpan.FromSeconds(1));
+            }, TimeSpan.FromSeconds(5));
             Assert.NotNull(dialog, "No dialog launched");
 
             var currentLineBox = dialog!.FindFirstDescendant("CurrentLineBox").AsTextBox();
@@ -202,6 +202,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             // Act
             targetBox.Text = $"{newLine}";
             dialog.FindFirstDescendant("AcceptButton").Click();
+            Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // Assert
             Assert.AreEqual(expected, this.editor.Selection.Line + 1);
