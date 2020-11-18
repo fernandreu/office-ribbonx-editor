@@ -1,12 +1,13 @@
 steps:
-- task: Cache@2
-  displayName: 'Cache NuGet packages'
-  inputs:
-    key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
-    restoreKeys: |
-      nuget | "$(Agent.OS)"
-      nuget
-    path: $(NUGET_PACKAGES)
+# Caching seems to be causing more harm than good
+# - task: Cache@2
+#   displayName: 'Cache NuGet packages'
+#   inputs:
+#     key: 'nuget | "$(Agent.OS)" | src/OfficeRibbonXEditor/packages.lock.json'
+#     restoreKeys: |
+#       nuget | "$(Agent.OS)"
+#       nuget
+#     path: $(NUGET_PACKAGES)
   
 - task: PowerShell@2
   displayName: 'Run pre-build script'

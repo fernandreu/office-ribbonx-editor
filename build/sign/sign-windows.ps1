@@ -41,12 +41,12 @@ function Set-Signatures {
     # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
     $files = Get-Files -Source $Source -Filters *.msi,*.exe,*.dll
     if ($files.Count -ne 0) {
-        Write-Host "Found $($files.Count) files to single-sign"
+        Write-Host "Found $($files.Count) files to sign"
         $fileList = $files -join ' '
         $arguments = "sign /n `"$_CERT_NAME`" /tr http://time.certum.pl /fd sha256 /a $fileList"
         Start-Process -FilePath "$_SIGN_TOOL" -NoNewWindow -Wait -ArgumentList $arguments
     } else {
-        Write-Host 'Found no files to single-sign'
+        Write-Host 'Found no files to sign'
     }
 }
 
