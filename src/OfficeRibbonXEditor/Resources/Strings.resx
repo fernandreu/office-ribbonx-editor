@@ -408,6 +408,9 @@
   <data name="Menu.Edit.Cut" xml:space="preserve">
     <value>Cut</value>
   </data>
+  <data name="Menu.Edit.DuplicateLine" xml:space="preserve">
+    <value>Duplicate Line</value>
+  </data>
   <data name="Menu.Edit.Find" xml:space="preserve">
     <value>Find...</value>
   </data>

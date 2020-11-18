@@ -71,7 +71,7 @@ stages:
         artifactName: 'ReleaseScripts'
 
   - job: NETFrameworkPublish
-    displayName: Publish
+    displayName: .NET Framework Publish
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     dependsOn: NetFrameworkTesting
     pool:
@@ -87,7 +87,7 @@ stages:
         targetFramework: net461
 
   - job: NETCorePublish
-    displayName: Publish
+    displayName: .NET Publish
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     dependsOn: NetCoreTesting
     pool:
