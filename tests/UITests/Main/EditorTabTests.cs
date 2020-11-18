@@ -189,9 +189,8 @@ namespace OfficeRibbonXEditor.UITests.Main
                 return dialog;
             }, TimeSpan.FromSeconds(1));
             Assert.NotNull(dialog, "No dialog launched");
-            Assert.That(dialog!.Title, Does.Match(".*Go To.*"), "Go To dialog not shown");
 
-            var currentLineBox = dialog.FindFirstDescendant("CurrentLineBox").AsTextBox();
+            var currentLineBox = dialog!.FindFirstDescendant("CurrentLineBox").AsTextBox();
             Assert.AreEqual($"{originalLine}", currentLineBox.Text);
 
             var maximumLineBox = dialog.FindFirstDescendant("MaximumLineBox").AsTextBox();
