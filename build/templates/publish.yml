@@ -31,7 +31,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
-    filePath: '../sign/sign-windows.ps1'
+    filePath: 'build/sign/sign-windows.ps1'
     arguments: '"$(Build.ArtifactStagingDirectory)"'
 
 - task: PublishPipelineArtifact@1
@@ -78,7 +78,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
-    filePath: '../sign/sign-windows.ps1'
+    filePath: 'build/sign/sign-windows.ps1'
     arguments: '"$(Build.ArtifactStagingDirectory)"'
 
 - task: PublishPipelineArtifact@1
