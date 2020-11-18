@@ -13,6 +13,7 @@ using FlaUI.Core.WindowsAPI;
 using NUnit.Framework;
 using OfficeRibbonXEditor.UITests.Extensions;
 using OfficeRibbonXEditor.UITests.Helpers;
+using OfficeRibbonXEditor.Views.Controls;
 using Window = FlaUI.Core.AutomationElements.Window;
 
 namespace OfficeRibbonXEditor.UITests.Main
@@ -42,7 +43,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             var tabView = this.manager.Window?.FindTabView();
             Assume.That(tabView, Is.Not.Null);
 
-            this.tab = tabView!.TabItems.FirstOrDefault();
+            this.tab = tabView!.FindFirstDescendant(x => x.ByClassName(nameof(EditorTab))).AsTabItem();
             Assume.That(this.tab, Is.Not.Null, "Editor tab not automatically shown");
 
             var scintilla = this.tab.FindFirstDescendant("Editor").AsScintilla();
@@ -53,7 +54,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             Assume.That(this.originalCode, Is.Not.Empty);
         }
 
-        [SetUp] 
+        [SetUp]
         public void SetUp()
         {
             this.editor.Text = this.originalCode;
@@ -112,6 +113,22 @@ namespace OfficeRibbonXEditor.UITests.Main
             // Assert
             Assert.AreNotEqual(originalCode, this.editor.Text);
             Assert.That(this.editor.Text, Contains.Substring(pastedText));
+        }
+
+        [Test]
+        public void TestDuplicateLine()
+        {
+            // Arrange
+            const string contents = "First Line\n    Second Line\nThird Line";
+            this.editor.Text = contents;
+            this.editor.Selection.Position = 0;
+
+            // Act
+            Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_D);
+            this.manager.App!.WaitWhileBusy();
+
+            // Assert
+            Assert.That(this.editor.Text, Contains.Substring("First Line\nFirst Line\n"));
         }
 
         [Test]
