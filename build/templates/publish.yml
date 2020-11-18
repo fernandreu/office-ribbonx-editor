@@ -2,6 +2,7 @@ parameters:
   tag: '.NET Framework'
   selfContained: false
   targetFramework: 'net461'
+  sign: true
 
 steps:
 - task: DeleteFiles@1
@@ -25,11 +26,19 @@ steps:
       --self-contained ${{ parameters.selfContained }}
       --output "$(Build.ArtifactStagingDirectory)"
 
+- task: PowerShell@2
+  displayName: 'Sign binaries'
+  condition: and(succeeded(), ${{ parameters.sign }} )
+  inputs:
+    targetType: 'filePath'
+    filePath: '../sign/sign-windows.ps1'
+    arguments: '"$(Build.ArtifactStagingDirectory)"'
+
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish ${{ parameters.tag }} binaries (unsigned)'
+  displayName: 'Publish ${{ parameters.tag }} binaries'
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor' 
-    artifactName: '${{ parameters.tag }} Binaries (Unsigned)'
+    artifactName: '${{ parameters.tag }} Binaries'
 
 - script: >-
     iscc build/install/setup.iss
@@ -64,8 +73,16 @@ steps:
         exit 1
       }
 
+- task: PowerShell@2
+  displayName: 'Sign installer'
+  condition: and(succeeded(), ${{ parameters.sign }} )
+  inputs:
+    targetType: 'filePath'
+    filePath: '../sign/sign-windows.ps1'
+    arguments: '"$(Build.ArtifactStagingDirectory)"'
+
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish ${{ parameters.tag }} Installer (unsigned)'
+  displayName: 'Publish ${{ parameters.tag }} Installer'
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)' 
-    artifactName: '${{ parameters.tag }} Installer (Unsigned)'
+    artifactName: '${{ parameters.tag }} Installer'
