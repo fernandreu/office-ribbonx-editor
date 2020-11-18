@@ -27,7 +27,7 @@ steps:
       --output "$(Build.ArtifactStagingDirectory)"
 
 - task: PowerShell@2
-  displayName: 'Sign binaries'
+  displayName: 'Sign ${{ parameters.tag }} binaries'
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
@@ -74,7 +74,7 @@ steps:
       }
 
 - task: PowerShell@2
-  displayName: 'Sign installer'
+  displayName: 'Sign ${{ parameters.tag }} installer'
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'

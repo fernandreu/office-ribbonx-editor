@@ -26,7 +26,7 @@ function Get-Files {
     $files = [System.Collections.Generic.List[string]]@()
     foreach ($file in (Get-ChildItem -Path $Source -File -Recurse)) {
         if (Get-IsSuitable -File $file -Filters $Filters) {
-            $files.Add("`"$file`"") | Out-Null
+            $files.Add("`"$($file.FullName)`"") | Out-Null
         }
     }
 
