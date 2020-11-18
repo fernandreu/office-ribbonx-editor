@@ -29,6 +29,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             this.UnfoldCommand = new RelayCommand<int>(level => this.Fold?.Invoke(this, new FoldEventArgs(level, true)));
             this.FoldCurrentCommand = new RelayCommand(() => this.Fold?.Invoke(this, new FoldEventArgs(true)));
             this.UnfoldCurrentCommand = new RelayCommand(() => this.Fold?.Invoke(this, new FoldEventArgs(true, true)));
+            this.DuplicateLineCommand = new RelayCommand(() => this.DuplicateLine?.Invoke(this, EventArgs.Empty));
         }
 
         public RelayCommand CutCommand { get; }
@@ -51,6 +52,8 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public RelayCommand UnfoldCurrentCommand { get; }
 
+        public RelayCommand DuplicateLineCommand { get; }
+
         public event EventHandler? Cut;
 
         public event EventHandler? Copy;
@@ -63,7 +66,9 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public event EventHandler? SelectAll;
 
-        public event EventHandler<FoldEventArgs>? Fold;  
+        public event EventHandler<FoldEventArgs>? Fold;
+
+        public event EventHandler? DuplicateLine;
 
         private string title = string.Empty;
 

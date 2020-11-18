@@ -68,6 +68,7 @@
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding SelectedTab.UndoCommand}"/>
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding SelectedTab.RedoCommand}"/>
         <KeyBinding Key="A" Modifiers="Control" Command="{Binding SelectedTab.SelectAllCommand}"/>
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding SelectedTab.DuplicateLineCommand}"/>
         <KeyBinding Key="V" Modifiers="Control+Shift" Command="{Binding ValidateCommand}"/>
         <KeyBinding Key="C" Modifiers="Control+Shift" Command="{Binding GenerateCallbacksCommand}"/>
         <KeyBinding Key="F" Modifiers="Control+Alt" Command="{Binding SelectedTab.FoldCurrentCommand}"/>
@@ -311,6 +312,10 @@
                             Height="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}"/>
                     </MenuItem.Icon>
                 </MenuItem>
+                <MenuItem
+                    Header="{lex:Loc Menu.Edit.DuplicateLine}"
+                    InputGestureText="Ctrl+D"
+                    Command="{Binding SelectedTab.DuplicateLineCommand}"/>
                 <Separator/>
                 <MenuItem
                     Header="{lex:Loc Menu.Edit.Undo}"

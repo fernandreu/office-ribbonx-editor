@@ -53,6 +53,8 @@ namespace OfficeRibbonXEditor.Views.Controls
                 previousModel.Undo -= this.OnUndo;
                 previousModel.Redo -= this.OnRedo;
                 previousModel.SelectAll -= this.OnSelectAll;
+                previousModel.Fold -= this.OnFold;
+                previousModel.DuplicateLine -= this.OnDuplicateLine;
             }
 
             if (!(args.NewValue is EditorTabViewModel model))
@@ -81,6 +83,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             this.viewModel.Redo += this.OnRedo;
             this.viewModel.SelectAll += this.OnSelectAll;
             this.viewModel.Fold += this.OnFold;
+            this.viewModel.DuplicateLine += this.OnDuplicateLine;
         }
 
         private void OnReadEditorInfo(object? sender, DataEventArgs<EditorInfo> e)
@@ -203,6 +206,15 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 line.FoldLine(action);
             }
+        }
+
+        private void OnDuplicateLine(object? sender, EventArgs e)
+        {
+            // The Scintilla editor has an equivalent Ctrl+D shortcut, but it messes up the automatic indentation, so we do our own version instead
+            var index = this.Editor.LineFromPosition(this.Editor.CurrentPosition);
+            var line = this.Editor.Lines[index];
+            this.Editor.InsertText(line.Position, line.Text);
+            this.Editor.ScrollCaret();
         }
 
         // For some reason, the Scintilla editor always seems to have preference over the input gestures.

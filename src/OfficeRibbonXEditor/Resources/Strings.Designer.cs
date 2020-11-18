@@ -934,6 +934,15 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate Line.
+        /// </summary>
+        public static string Menu_Edit_DuplicateLine {
+            get {
+                return ResourceManager.GetString("Menu.Edit.DuplicateLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Find....
         /// </summary>
         public static string Menu_Edit_Find {
