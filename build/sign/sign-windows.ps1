@@ -50,6 +50,4 @@ function Set-Signatures {
     }
 }
 
-If ($MyInvocation.InvocationName -ne '.') {
-    Set-Signatures $args[0]
-}
+Set-Signatures $args[0]
