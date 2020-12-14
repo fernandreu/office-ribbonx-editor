@@ -840,7 +840,7 @@
                                 <ContextMenu d:DataContext="{Binding DataContext, ElementName=Window}" 
                                              DataContext="{Binding Path=PlacementTarget.Tag, RelativeSource={RelativeSource Self}}">
                                     <MenuItem Header="{lex:Loc ContextMenu.TreeView.Open}" Command="{Binding OpenTabCommand}"/>
-                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.InsertIcon}" Command="{Binding InsertIconsCommand}">
+                                    <MenuItem Header="{lex:Loc ContextMenu.TreeView.InsertIcons}" Command="{Binding InsertIconsCommand}">
                                         <MenuItem.Icon>
                                             <Image Source="/Resources/Images/insertPicture.png"
                                                    Width="{Binding Source={x:Static properties:Settings.Default}, Path=IconSize}" 

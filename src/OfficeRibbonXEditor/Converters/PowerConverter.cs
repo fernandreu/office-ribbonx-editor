@@ -16,7 +16,7 @@ namespace OfficeRibbonXEditor.Converters
 
             var exponent = ((IConvertible) value).ToDouble(null);
 
-            var baseValue = parameter is IConvertible convertible ? convertible.ToDouble(null) : 2.0;
+            var baseValue = parameter is IConvertible convertible ? convertible.ToDouble(CultureInfo.InvariantCulture) : 2.0;
             return Math.Pow(baseValue, exponent);
         }
 
@@ -29,7 +29,7 @@ namespace OfficeRibbonXEditor.Converters
 
             var result = ((IConvertible) value).ToDouble(null);
 
-            var baseValue = parameter is IConvertible convertible ? convertible.ToDouble(null) : 2.0;
+            var baseValue = parameter is IConvertible convertible ? convertible.ToDouble(CultureInfo.InvariantCulture) : 2.0;
             return Math.Log(result) / Math.Log(baseValue);
         }
     }
