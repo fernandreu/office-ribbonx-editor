@@ -20,6 +20,7 @@ namespace OfficeRibbonXEditor.Documents
         Word,
         Excel,
         PowerPoint,
+        Visio,
         Xml,
     }
 
@@ -113,6 +114,11 @@ namespace OfficeRibbonXEditor.Documents
             if (extension.StartsWith(".pp", StringComparison.OrdinalIgnoreCase))
             {
                 return OfficeApplication.PowerPoint;
+            }
+
+            if (extension.StartsWith(".vs", StringComparison.OrdinalIgnoreCase))
+            {
+                return OfficeApplication.Visio;
             }
 
             Debug.Assert(false, "Unrecognized extension passed");
