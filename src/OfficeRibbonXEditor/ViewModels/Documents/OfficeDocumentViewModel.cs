@@ -60,6 +60,8 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                         return "/Resources/Images/pptpre.png";
                     case OfficeApplication.Word:
                         return "/Resources/Images/worddoc.png";
+                    case OfficeApplication.Visio:
+                        return "/Resources/Images/visiodoc.png";
                     case OfficeApplication.Xml:
                         return "/Resources/Images/xml.png";
                     default:

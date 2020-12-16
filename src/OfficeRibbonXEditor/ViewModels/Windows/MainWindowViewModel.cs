@@ -741,6 +741,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                     Strings.Filter_WordDocuments,
                     Strings.Filter_ExcelDocuments,
                     Strings.Filter_PowerPointDocuments,
+                    Strings.Filter_VisioDocuments,
                     Strings.Filter_All,
                 };
 

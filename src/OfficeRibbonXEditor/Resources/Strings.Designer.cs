@@ -439,11 +439,47 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Visio Diagram|*.vsdx.
+        /// </summary>
+        public static string Filter_SaveAs17 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs17", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visio Macro-Enabled Diagram|*.vsdm.
+        /// </summary>
+        public static string Filter_SaveAs18 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs18", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visio Template|*.vstx.
+        /// </summary>
+        public static string Filter_SaveAs19 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs19", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Excel Binary Workbook|*.xlsb.
         /// </summary>
         public static string Filter_SaveAs2 {
             get {
                 return ResourceManager.GetString("Filter.SaveAs2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visio Macro-Enabled Template|*.vstm.
+        /// </summary>
+        public static string Filter_SaveAs20 {
+            get {
+                return ResourceManager.GetString("Filter.SaveAs20", resourceCulture);
             }
         }
         
@@ -507,6 +543,15 @@ namespace OfficeRibbonXEditor.Resources {
         public static string Filter_SaveAs9 {
             get {
                 return ResourceManager.GetString("Filter.SaveAs9", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Microsoft Visio Drawings|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;.
+        /// </summary>
+        public static string Filter_VisioDocuments {
+            get {
+                return ResourceManager.GetString("Filter.VisioDocuments", resourceCulture);
             }
         }
         

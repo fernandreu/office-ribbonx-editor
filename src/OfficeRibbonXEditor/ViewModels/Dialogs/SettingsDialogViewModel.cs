@@ -33,6 +33,10 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             ".xlsm",
             ".xltm",
             ".xlam",
+            ".vsdx",
+            ".vsdm",
+            ".vstx",
+            ".vstm",
         };
 
         private readonly string[] usedProperties =
