@@ -216,6 +216,9 @@
   <data name="Filter.PowerPointDocuments" xml:space="preserve">
     <value>Presentaciones de Microsoft PowerPoint|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
   </data>
+  <data name="Filter.VisioDocuments" xml:space="preserve">
+    <value>Dibujos de Microsoft Visio|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
+  </data>
   <data name="Filter.SaveAs0" xml:space="preserve">
     <value>Hoja de Cálculo de Excel|*.xlsx</value>
   </data>
@@ -242,6 +245,18 @@
   </data>
   <data name="Filter.SaveAs16" xml:space="preserve">
     <value>Plantilla de Word Habilitada para Macros|*.dotm</value>
+  </data>
+  <data name="Filter.SaveAs17" xml:space="preserve">
+    <value>Diagrama de Visio|*.vsdx</value>
+  </data>
+  <data name="Filter.SaveAs18" xml:space="preserve">
+    <value>Diagrama de Visio Habilitado para Macros|*.vsdm</value>
+  </data>
+  <data name="Filter.SaveAs19" xml:space="preserve">
+    <value>Plantilla de Visio|*.vstx</value>
+  </data>
+  <data name="Filter.SaveAs20" xml:space="preserve">
+    <value>Plantilla de Visio Habilitada para Macros|*.vstm</value>
   </data>
   <data name="Filter.SaveAs2" xml:space="preserve">
     <value>Hoja de Cálculo Binaria de Excel|*.xlsb</value>
