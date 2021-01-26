@@ -20,7 +20,7 @@
     <_InstallerTargetFramework>net461</_InstallerTargetFramework>
     <WarningsAsErrors>NU1605</WarningsAsErrors>
     <NoWarn>NU1701</NoWarn>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
 
     <DebugType>full</DebugType>

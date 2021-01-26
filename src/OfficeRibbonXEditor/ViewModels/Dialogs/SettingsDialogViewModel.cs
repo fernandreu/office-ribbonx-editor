@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
+
 using GalaSoft.MvvmLight.Command;
+
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Shell;
 using OfficeRibbonXEditor.ViewModels.Tabs;
+
 using WPFLocalizeExtension.Engine;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
@@ -16,6 +20,13 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export]
     public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
     {
+        public static readonly ICollection<CultureInfo> LanguageChoices = new[]
+        {
+            new CultureInfo("en-US"),
+            new CultureInfo("es-ES"),
+            new CultureInfo("zh-CN"),
+        };
+
         private static readonly ICollection<string> extensions = new List<string>
         {
             ".docx",
@@ -56,12 +67,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             nameof(Settings.Default.CustomSamples),
             nameof(Settings.Default.UICulture),
         };
-        
+
         private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
 
         public SettingsDialogViewModel()
         {
-            this.LanguageNames = LanguageChoice.All.Select(x => x.Name).ToList();
+            this.LanguageNames = LanguageChoices.Select(x => x.TextInfo.ToTitleCase(x.NativeName)).ToList();
 
             this.ResetToDefaultCommand = new RelayCommand(this.ResetToDefault);
             this.ResetToCurrentCommand = new RelayCommand(this.ResetToCurrent);
@@ -76,7 +87,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 this.FileAssociations.Add(association);
             }
 
-            this.LoadLanguage();
+            this.language = this.LoadLanguage();
 
             Settings.Default.PropertyChanged += this.SettingsChangedEventHandler;
         }
@@ -117,8 +128,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
 
-        // Note: Not using directly LangaugeChoice.All as ComboBox items binding (plus DisplayMemberPath="Name") because it will
-        // cause issues with the UI testing. Using the raw strings in LanguageNames instead
+        // Note: Not using directly LanguageChoice as ComboBox items binding (plus DisplayMemberPath="Name") because it will
+        // cause issues with the UI testing. Using a raw string list instead
         public ICollection<string> LanguageNames { get; }
 
         public RelayCommand ResetToDefaultCommand { get; }
@@ -147,7 +158,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         {
             if (e.PropertyName == nameof(Settings.Default.UICulture))
             {
-                this.LoadLanguage();
+                this.Language = this.LoadLanguage();
                 this.LanguageChanged = true;
             }
 
@@ -214,8 +225,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             if (this.LanguageChanged)
             {
                 LocalizeDictionary.Instance.Culture
-                    = Thread.CurrentThread.CurrentUICulture
-                        = new CultureInfo(Settings.Default.UICulture);
+                    = CultureInfo.CurrentUICulture
+                        = CultureInfo.DefaultThreadCurrentUICulture
+                            = new CultureInfo(Settings.Default.UICulture);
             }
 
             this.SettingsChanged = false;
@@ -229,16 +241,26 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             this.Close();
         }
 
-        private void LoadLanguage()
+        private string LoadLanguage()
         {
-            var foundLanguage = LanguageChoice.All.FirstOrDefault(x => x.Id == Settings.Default.UICulture);
-            this.Language = foundLanguage?.Name ?? LanguageChoice.All.First().Name;
+            try
+            {
+                var foundLanguage = LanguageChoices.FirstOrDefault(x => x.ThreeLetterISOLanguageName == new CultureInfo(Settings.Default.UICulture).ThreeLetterISOLanguageName);
+                var culture = foundLanguage ?? LanguageChoices.First();
+                return culture.TextInfo.ToTitleCase(culture.NativeName);
+            }
+            catch (CultureNotFoundException)
+            {
+                // The setting was probably incorrect. Perhaps a corrupted settings file, or a development version of the tool before the system was changed slightly
+                return LanguageNames.First();
+            }
         }
 
         private void SaveLanguage()
         {
-            var foundLanguage = LanguageChoice.All.FirstOrDefault(x => x.Name == this.Language);
-            Settings.Default.UICulture = foundLanguage.Id;
+            // We do not check the ThreeLetterISOLanguageName in this case because all options should come from the dropdown
+            var foundLanguage = LanguageChoices.FirstOrDefault(x => x.TextInfo.ToTitleCase(x.NativeName) == this.Language);
+            Settings.Default.UICulture = foundLanguage.Name;
         }
 
         private void SetAllAssociations(bool newValue)

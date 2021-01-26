@@ -762,4 +762,7 @@ Are you completely sure you want to open this document again?</value>
   <data name="Validation.WrongNamespace" xml:space="preserve">
     <value>Unknown namespace "{0}". Custom UI XML namespace must be "{1}"</value>
   </data>
+  <data name="About.Translators" xml:space="preserve">
+    <value>Translators:</value>
+  </data>
 </root>

@@ -101,7 +101,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         {
             if (settingName == nameof(Settings.Default.UICulture))
             {
-                return LanguageChoice.All.First(x => x.Id != o as string).Id;
+                return SettingsDialogViewModel.LanguageChoices.First(x => x.Name != o as string).Name;
             }
 
             switch (o)

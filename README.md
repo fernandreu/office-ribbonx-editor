@@ -107,7 +107,7 @@ and I will assist you.
     1. This might trigger a fork of this project under your GitHub account (otherwise, it will occur when saving any changes)
 3. Make any necessary changes
     1. The `<data>` tags are essentially the string resources throughout the application
-    2. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
+    2. Their `name` attribute is how they are being identified internally. This might provide some hints about their intended use
     3. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
     4. Only the child `<value>` tags should need modifications
 4. Save the changes at the bottom
@@ -132,7 +132,7 @@ instead. I will then generate a template myself, so you will be able to follow t
   folder where the original file was
 4. Make any necessary changes to this file
     1. The `<data>` tags are essentially the string resources throughout the application
-    2. Their `name` attribute is how they are being identified internally. This might provide some hits about their intended use
+    2. Their `name` attribute is how they are being identified internally. This might provide some hints about their intended use
     3. Otherwise, there might also be a child `<comment>` tag providing more details about a particular resource
     4. Only the child `<value>` tags should need modifications
 5. Modify the `LanguageChoice` class [here](https://github.com/fernandreu/office-ribbonx-editor/blob/master/src/OfficeRibbonXEditor/Helpers/LanguageChoice.cs)
@@ -141,3 +141,7 @@ instead. I will then generate a template myself, so you will be able to follow t
 It might be possible to perform all these steps directly in your GitHub fork via several commits. Otherwise,
 you might need to have at least Git installed. Visual Studio should not be necessary unless you want to see
 how your translation looks (you will be able to see it from the build artifacts of your pull request too).
+
+### Special thanks to all translators so far
+
+- Chinese: [bitaller](https://github.com/bitaller)

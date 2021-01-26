@@ -762,4 +762,7 @@
   <data name="Validation.WrongNamespace" xml:space="preserve">
     <value>未知命名空间 "{0}"，定制UI XML命名空间必须为 "{1}"</value>
   </data>
+  <data name="About.Translators:" xml:space="preserve">
+    <value>Translators:</value>
+  </data>
 </root>

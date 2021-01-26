@@ -490,7 +490,7 @@
     <value>Ajustes...</value>
   </data>
   <data name="Menu.Help" xml:space="preserve">
-    <value>_Ayuda</value>
+    <value>A_yuda</value>
   </data>
   <data name="Menu.Help.About" xml:space="preserve">
     <value>Acerca De</value>
@@ -761,5 +761,8 @@ Está completamente seguro de que quiere abrir este documento de nuevo?</value>
   </data>
   <data name="Validation.WrongNamespace" xml:space="preserve">
     <value>Espacio con nombre desconocido: "{0}". El espacio con nombre del archivo XML debe ser "{1}"</value>
+  </data>
+  <data name="About.Translators" xml:space="preserve">
+    <value>Traductores:</value>
   </data>
 </root>
