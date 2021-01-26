@@ -74,21 +74,15 @@ namespace OfficeRibbonXEditor
 
         private static void InitializeCultures()
         {
-            if (!string.IsNullOrEmpty(Settings.Default.Culture))
+            if (string.IsNullOrEmpty(Settings.Default.UICulture))
             {
-                LocalizeDictionary.Instance.Culture
-                    = Thread.CurrentThread.CurrentCulture
-                        = new CultureInfo(Settings.Default.Culture);
+                Settings.Default.UICulture = CultureInfo.CurrentUICulture.Name;
             }
 
-            if (!string.IsNullOrEmpty(Settings.Default.UICulture))
-            {
-                LocalizeDictionary.Instance.Culture
-                    = Thread.CurrentThread.CurrentUICulture
+            LocalizeDictionary.Instance.Culture
+                = CultureInfo.CurrentUICulture
+                    = CultureInfo.DefaultThreadCurrentUICulture
                         = new CultureInfo(Settings.Default.UICulture);
-            }
-
-            FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.Name)));
         }
 
         private void ApplicationExit(object sender, ExitEventArgs e)

@@ -160,6 +160,15 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Translators:.
+        /// </summary>
+        public static string About_Translators {
+            get {
+                return ResourceManager.GetString("About.Translators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Version:.
         /// </summary>
         public static string About_Version {
