@@ -51,7 +51,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             var original = combo.SelectedItem.Text;
 
             // Act
-            combo.Select(original == "English" ? 1 : 0);
+            combo.Select(original.StartsWith("English", StringComparison.OrdinalIgnoreCase) ? 1 : 0);
             applyButton.Click();
 
             // Assert
