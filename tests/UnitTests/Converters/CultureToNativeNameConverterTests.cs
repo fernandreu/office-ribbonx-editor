@@ -10,7 +10,6 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
     public class CultureToNativeNameConverterTests : ConverterTestsBase<CultureToNativeNameConverter, string, string>
     {
         [Test]
-        [TestCase("es-ES", ExpectedResult = "Español (España)")]
         [TestCase("en-US", ExpectedResult = "English (United States)")]
         public object? ConvertTest(object? original)
         {
