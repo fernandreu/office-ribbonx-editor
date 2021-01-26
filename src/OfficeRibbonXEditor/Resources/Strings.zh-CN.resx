@@ -1,0 +1,765 @@
+﻿<？xml version="1.0" encoding="utf-8"？>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About.Author" xml:space="preserve">
+    <value>作者:</value>
+  </data>
+  <data name="About.Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="About.CopyVersion" xml:space="preserve">
+    <value>拷贝版本信息</value>
+  </data>
+  <data name="About.License" xml:space="preserve">
+    <value>许可证:</value>
+  </data>
+  <data name="About.OperatingSystem" xml:space="preserve">
+    <value>操作系统:</value>
+  </data>
+  <data name="About.Paragraph1" xml:space="preserve">
+    <value>Office RibbonX编辑器是开源的免费工具，用于编辑Office开放文档的定制UI，工具中支持Office 2007和Office 2010两种架构。</value>
+  </data>
+  <data name="About.Paragraph2" xml:space="preserve">
+    <value>Office 2010定制UI架构是最新版本，后续发布的Office 2013、Office 2016、Office 2019和Microsoft 365仍然使用相同架构。</value>
+  </data>
+  <data name="About.ProjectPage" xml:space="preserve">
+    <value>项目主页:</value>
+  </data>
+  <data name="About.Runtime" xml:space="preserve">
+    <value>运行环境:</value>
+  </data>
+  <data name="About.SubmitIssue" xml:space="preserve">
+    <value>报告问题</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>关于Office RibbonX编辑器</value>
+  </data>
+  <data name="About.Version" xml:space="preserve">
+    <value>版本:</value>
+  </data>
+  <data name="Callbacks.Title" xml:space="preserve">
+    <value>回调过程</value>
+  </data>
+  <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
+    <value>修改ID</value>
+  </data>
+  <data name="ContextMenu.TreeView.Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertIcons" xml:space="preserve">
+    <value>插入图标...</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2007" xml:space="preserve">
+    <value>插入Office 2007定制UI</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2010" xml:space="preserve">
+    <value>插入Office 2010+定制UI</value>
+  </data>
+  <data name="ContextMenu.TreeView.Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="ContextMenu.TreeView.Remove" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="ContextMenu.TreeView.Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
+    <value>另存为...</value>
+  </data>
+  <data name="Editor.ZoomFactor" xml:space="preserve">
+    <value>缩放比例:</value>
+  </data>
+  <data name="Exception.CloseDialog" xml:space="preserve">
+    <value>关闭对话框</value>
+  </data>
+  <data name="Exception.Disclaimer" xml:space="preserve">
+    <value>如果软件过期之后，您继续使用此软件，将可能发生功能异常。</value>
+  </data>
+  <data name="Exception.ShutdownApp" xml:space="preserve">
+    <value>关闭程序</value>
+  </data>
+  <data name="Exception.SubmitBug" xml:space="preserve">
+    <value>提交异常报告</value>
+  </data>
+  <data name="Exception.Title" xml:space="preserve">
+    <value>发出未知错误</value>
+  </data>
+  <data name="Filter.All" xml:space="preserve">
+    <value>全部文件 (*.*)|*.*</value>
+  </data>
+  <data name="Filter.AllOfficeDocuments" xml:space="preserve">
+    <value>全部Office文件|*.？？？x;*.？？？m</value>
+  </data>
+  <data name="Filter.ExcelDocuments" xml:space="preserve">
+    <value>Microsoft Excel文件|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
+  </data>
+  <data name="Filter.Icons" xml:space="preserve">
+    <value>支持的图标|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
+  </data>
+  <data name="Filter.PowerPointDocuments" xml:space="preserve">
+    <value>Microsoft PowerPoint文件|*.pp？x;*.pp？m;*.potx;*.potm;*.thmx</value>
+  </data>
+  <data name="Filter.VisioDocuments" xml:space="preserve">
+    <value>Microsoft Visio文件|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
+  </data>
+  <data name="Filter.SaveAs0" xml:space="preserve">
+    <value>Excel工作簿|*.xlsx</value>
+  </data>
+  <data name="Filter.SaveAs1" xml:space="preserve">
+    <value>启用宏的Excel工作簿|*.xlsm</value>
+  </data>
+  <data name="Filter.SaveAs10" xml:space="preserve">
+    <value>PowerPoint放映|*.ppsx</value>
+  </data>
+  <data name="Filter.SaveAs11" xml:space="preserve">
+    <value>启用宏的PowerPoint放映|*.ppsm</value>
+  </data>
+  <data name="Filter.SaveAs12" xml:space="preserve">
+    <value>PowerPoint加载项|*.ppam</value>
+  </data>
+  <data name="Filter.SaveAs13" xml:space="preserve">
+    <value>Word文档|*.docx</value>
+  </data>
+  <data name="Filter.SaveAs14" xml:space="preserve">
+    <value>启用宏的Macro-Enabled文档|*.docm</value>
+  </data>
+  <data name="Filter.SaveAs15" xml:space="preserve">
+    <value>Word模板|*.dotx</value>
+  </data>
+  <data name="Filter.SaveAs16" xml:space="preserve">
+    <value>用宏的Word模板|*.dotm</value>
+  </data>
+  <data name="Filter.SaveAs17" xml:space="preserve">
+    <value>Visio绘图|*.vsdx</value>
+  </data>
+  <data name="Filter.SaveAs18" xml:space="preserve">
+    <value>启用宏的Visio绘图|*.vsdm</value>
+  </data>
+  <data name="Filter.SaveAs19" xml:space="preserve">
+    <value>Visio模板|*.vstx</value>
+  </data>
+  <data name="Filter.SaveAs20" xml:space="preserve">
+    <value>启用宏的Visio模板|*.vstm</value>
+  </data>
+  <data name="Filter.SaveAs2" xml:space="preserve">
+    <value>Excel二进制工作簿|*.xlsb</value>
+  </data>
+  <data name="Filter.SaveAs3" xml:space="preserve">
+    <value>Excel模板|*.xltx</value>
+  </data>
+  <data name="Filter.SaveAs4" xml:space="preserve">
+    <value>启用宏的Excel模板|*.xltm</value>
+  </data>
+  <data name="Filter.SaveAs5" xml:space="preserve">
+    <value>Excel加载宏|*.xlam</value>
+  </data>
+  <data name="Filter.SaveAs6" xml:space="preserve">
+    <value>PowerPoint演示文稿|*.pptx</value>
+  </data>
+  <data name="Filter.SaveAs7" xml:space="preserve">
+    <value>启用宏的PowerPoint演示文稿|*.pptm</value>
+  </data>
+  <data name="Filter.SaveAs8" xml:space="preserve">
+    <value>PowerPoint模板|*.potx</value>
+  </data>
+  <data name="Filter.SaveAs9" xml:space="preserve">
+    <value>启用宏的PowerPoint模板|*.potm</value>
+  </data>
+  <data name="Filter.WordDocuments" xml:space="preserve">
+    <value>Microsoft Word文档|*.do？x;*.do？m</value>
+  </data>
+  <data name="FindReplace.Find" xml:space="preserve">
+    <value>查找(_F)</value>
+  </data>
+  <data name="FindReplace.FindAll" xml:space="preserve">
+    <value>查找全部</value>
+  </data>
+  <data name="FindReplace.FindAll.Clear" xml:space="preserve">
+    <value>清除(_l)</value>
+  </data>
+  <data name="FindReplace.FindAll.HighlightMatches" xml:space="preserve">
+    <value>全部标记(_H)</value>
+  </data>
+  <data name="FindReplace.FindAll.MarkLine" xml:space="preserve">
+    <value>标记行(_M)</value>
+  </data>
+  <data name="FindReplace.FindAll.Ok" xml:space="preserve">
+    <value>查找全部(_A)</value>
+  </data>
+  <data name="FindReplace.FindNext" xml:space="preserve">
+    <value>查找下一个</value>
+  </data>
+  <data name="FindReplace.FindPrevious" xml:space="preserve">
+    <value>查找前一个</value>
+  </data>
+  <data name="FindReplace.FindTab" xml:space="preserve">
+    <value>查找</value>
+  </data>
+  <data name="FindReplace.Options" xml:space="preserve">
+    <value>查找</value>
+  </data>
+  <data name="FindReplace.Options.Compiled" xml:space="preserve">
+    <value>编译(_C)</value>
+  </data>
+  <data name="FindReplace.Options.ECMAScript" xml:space="preserve">
+    <value>ECMAScript</value>
+  </data>
+  <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
+    <value>捕获异常(_x)</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
+    <value>忽略大小写(_g)</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
+    <value>忽略白字符</value>
+  </data>
+  <data name="FindReplace.Options.Invariant" xml:space="preserve">
+    <value>区域设置(_u)</value>
+  </data>
+  <data name="FindReplace.Options.Multiline" xml:space="preserve">
+    <value>多行</value>
+  </data>
+  <data name="FindReplace.Options.RightToLeft" xml:space="preserve">
+    <value>从右至左</value>
+  </data>
+  <data name="FindReplace.Options.Singleline" xml:space="preserve">
+    <value>单行</value>
+  </data>
+  <data name="FindReplace.Replace" xml:space="preserve">
+    <value>替换(_R)</value>
+  </data>
+  <data name="FindReplace.ReplaceAll" xml:space="preserve">
+    <value>全部替换(_A)</value>
+  </data>
+  <data name="FindReplace.ReplaceNext" xml:space="preserve">
+    <value>替换下一个(_N)</value>
+  </data>
+  <data name="FindReplace.ReplacePrevious" xml:space="preserve">
+    <value>替换前一个(_P)</value>
+  </data>
+  <data name="FindReplace.ReplaceTab" xml:space="preserve">
+    <value>替换</value>
+  </data>
+  <data name="FindReplace.SearchType" xml:space="preserve">
+    <value>查找类型</value>
+  </data>
+  <data name="FindReplace.SearchType.Extended" xml:space="preserve">
+    <value>扩展(_x)(\n, \r, \t, \0)</value>
+  </data>
+  <data name="FindReplace.SearchType.Regular" xml:space="preserve">
+    <value>正则表达式(_E)</value>
+  </data>
+  <data name="FindReplace.SearchType.Standard" xml:space="preserve">
+    <value>普通(_S)</value>
+  </data>
+  <data name="FindReplace.Selection" xml:space="preserve">
+    <value>选取范围内</value>
+  </data>
+  <data name="FindReplace.Status.NoMatch" xml:space="preserve">
+    <value>无法找到</value>
+  </data>
+  <data name="FindReplace.Status.RegExError" xml:space="preserve">
+    <value>正则表达式错误</value>
+  </data>
+  <data name="FindReplace.Status.TotalFound" xml:space="preserve">
+    <value>计数:</value>
+  </data>
+  <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
+    <value>全部替换:</value>
+  </data>
+  <data name="FindReplace.Status.Wrap" xml:space="preserve">
+    <value>循环查找</value>
+  </data>
+  <data name="FindReplace.Title" xml:space="preserve">
+    <value>查找和替换</value>
+  </data>
+  <data name="FindReplace.Wrap" xml:space="preserve">
+    <value>循环(_W)</value>
+  </data>
+  <data name="GoTo.Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="GoTo.CurrentLine" xml:space="preserve">
+    <value>当前行号(_C)</value>
+  </data>
+  <data name="GoTo.DesiredLine" xml:space="preserve">
+    <value>跳转到行号</value>
+  </data>
+  <data name="GoTo.MaxLine" xml:space="preserve">
+    <value>最大行号(_M)</value>
+  </data>
+  <data name="GoTo.Ok" xml:space="preserve">
+    <value>定位</value>
+  </data>
+  <data name="GoTo.Title" xml:space="preserve">
+    <value>转至...</value>
+  </data>
+  <data name="MainWindow.Title" xml:space="preserve">
+    <value>Office RibbonX编辑器</value>
+  </data>
+  <data name="Menu.Edit" xml:space="preserve">
+    <value>编辑(_E)</value>
+  </data>
+  <data name="Menu.Edit.Copy" xml:space="preserve">
+    <value>复制</value>
+  </data>
+  <data name="Menu.Edit.Cut" xml:space="preserve">
+    <value>剪切</value>
+  </data>
+  <data name="Menu.Edit.DuplicateLine" xml:space="preserve">
+    <value>复制当前行</value>
+  </data>
+  <data name="Menu.Edit.Find" xml:space="preserve">
+    <value>查找...</value>
+  </data>
+  <data name="Menu.Edit.FindNext" xml:space="preserve">
+    <value>查找下一个</value>
+  </data>
+  <data name="Menu.Edit.FindPrevious" xml:space="preserve">
+    <value>查找前一个</value>
+  </data>
+  <data name="Menu.Edit.GoTo" xml:space="preserve">
+    <value>转至...</value>
+  </data>
+  <data name="Menu.Edit.Incremental" xml:space="preserve">
+    <value>快捷搜索...</value>
+  </data>
+  <data name="Menu.Edit.Paste" xml:space="preserve">
+    <value>粘贴</value>
+  </data>
+  <data name="Menu.Edit.Redo" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="Menu.Edit.Replace" xml:space="preserve">
+    <value>替换...</value>
+  </data>
+  <data name="Menu.Edit.SelectAll" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="Menu.Edit.Undo" xml:space="preserve">
+    <value>撤消</value>
+  </data>
+  <data name="Menu.File" xml:space="preserve">
+    <value>文件(_F)</value>
+  </data>
+  <data name="Menu.File.Close" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="Menu.File.Exit" xml:space="preserve">
+    <value>退出</value>
+  </data>
+  <data name="Menu.File.Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="Menu.File.Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="Menu.File.SaveAll" xml:space="preserve">
+    <value>保存全部文档</value>
+  </data>
+  <data name="Menu.File.SaveAs" xml:space="preserve">
+    <value>另存为...</value>
+  </data>
+  <data name="Menu.File.SaveAs.ToolTip" xml:space="preserve">
+    <value>将当前文件重命名后另存</value>
+  </data>
+  <data name="Menu.FIle.SaveCopy" xml:space="preserve">
+    <value>拷贝另存为...</value>
+  </data>
+  <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
+    <value>将当前文件另存为一个副本</value>
+  </data>
+  <data name="Menu.File.Settings" xml:space="preserve">
+    <value>设置...</value>
+  </data>
+  <data name="Menu.Help" xml:space="preserve">
+    <value>帮助(_H)</value>
+  </data>
+  <data name="Menu.Help.About" xml:space="preserve">
+    <value>关于</value>
+  </data>
+  <data name="Menu.Help.UsefulLinks" xml:space="preserve">
+    <value>学习资源</value>
+  </data>
+  <data name="Menu.Insert" xml:space="preserve">
+    <value>插入(_I)</value>
+  </data>
+  <data name="Menu.Insert.Icons" xml:space="preserve">
+    <value>图标...</value>
+  </data>
+  <data name="Menu.Insert.Office2007" xml:space="preserve">
+    <value>Office 2007定制UI</value>
+  </data>
+  <data name="Menu.Insert.Office2010" xml:space="preserve">
+    <value>Office 2010+定制UI</value>
+  </data>
+  <data name="Menu.Insert.Sample" xml:space="preserve">
+    <value>XML示例</value>
+  </data>
+  <data name="Menu.View" xml:space="preserve">
+    <value>查看(_V)</value>
+  </data>
+  <data name="Menu.View.FoldAll" xml:space="preserve">
+    <value>折叠全部</value>
+  </data>
+  <data name="Menu.View.FoldCurrent" xml:space="preserve">
+    <value>折叠当前级</value>
+  </data>
+  <data name="Menu.View.FoldLevel" xml:space="preserve">
+    <value>折叠级别</value>
+    <comment>折叠指定级别菜单标题</comment>
+  </data>
+  <data name="Menu.View.UnfoldAll" xml:space="preserve">
+    <value>展开全部</value>
+  </data>
+  <data name="Menu.View.UnfoldCurrent" xml:space="preserve">
+    <value>展开当前级</value>
+  </data>
+  <data name="Menu.View.UnfoldLevel" xml:space="preserve">
+    <value>展开基本</value>
+    <comment>展开指定级别菜单标题</comment>
+  </data>
+  <data name="Message.AlreadyOpen.Text" xml:space="preserve">
+    <value>文档'{0}'已经打开，多次打开同一文件可能会导致数据丢失，将文件另存不同文件。
+	
+是否继续打开此文档？</value>
+  </data>
+  <data name="Message.AlreadyOpen.Title" xml:space="preserve">
+    <value>文档已经打开</value>
+  </data>
+  <data name="Message.CallbackError.Title" xml:space="preserve">
+    <value>错误：创建回调过程</value>
+  </data>
+  <data name="Message.ChangeIdError.Title" xml:space="preserve">
+    <value>错误：修改图标ID</value>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
+    <value>文件'{0}'尚未保存，关闭之前是否保存？</value>
+    <comment>{0}是文件名的占位符</comment>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
+    <value>未保存的修改</value>
+  </data>
+  <data name="Message.IconExists.Text" xml:space="preserve">
+    <value>当前文件中已经存在ID为{0}的图标，是否将新插入的图标ID设置为{1}？</value>
+  </data>
+  <data name="Message.IconExists.Title" xml:space="preserve">
+    <value>图标已经存在</value>
+  </data>
+  <data name="Message.InsertSample.Text" xml:space="preserve">
+    <value>将在当前编辑位置插入XML示例代码，是否继续？</value>
+  </data>
+  <data name="Message.InsertSample.Title" xml:space="preserve">
+    <value>插入XML示例代码</value>
+  </data>
+  <data name="Message.InsertSampleError.Title" xml:space="preserve">
+    <value>错误：插入XML示例代码</value>
+  </data>
+  <data name="Message.NewVersion.Text" xml:space="preserve">
+    <value>版本{0}已经发布，是否下载新版本？</value>
+  </data>
+  <data name="Message.NewVersion.Title" xml:space="preserve">
+    <value>新版本</value>
+  </data>
+  <data name="Message.NoCallbacks.Text" xml:space="preserve">
+    <value>没有生成回调过程。</value>
+  </data>
+  <data name="Message.NoCallbacks.Title" xml:space="preserve">
+    <value>生成回调</value>
+  </data>
+  <data name="Message.OpenError.Title" xml:space="preserve">
+    <value>错误：打开Office文档</value>
+  </data>
+  <data name="Message.RemoveIcon.Text" xml:space="preserve">
+    <value>这个操作无法撤消，是否继续？</value>
+  </data>
+  <data name="Message.RemoveIcon.Title" xml:space="preserve">
+    <value>删除图标</value>
+  </data>
+  <data name="Message.RemovePart.Text" xml:space="preserve">
+    <value>这个操作无法撤消，是否继续？</value>
+  </data>
+  <data name="Message.RemovePart.Title" xml:space="preserve">
+    <value>删除XML组件</value>
+  </data>
+  <data name="Message.SaveError.Title" xml:space="preserve">
+    <value>错误：保存Office</value>
+  </data>
+  <data name="Message.ValidXml.Text" xml:space="preserve">
+    <value>定制UI XML格式正确。</value>
+  </data>
+  <data name="Message.ValidXml.Title" xml:space="preserve">
+    <value>校验XML</value>
+  </data>
+  <data name="Message.VersionCopy.Text" xml:space="preserve">
+    <value>版本信息已拷贝到剪贴板。</value>
+  </data>
+  <data name="Message.VersionCopy.Title" xml:space="preserve">
+    <value>拷贝版本信息</value>
+  </data>
+  <data name="OpenDialog.Document.Title" xml:space="preserve">
+    <value>打开OOXML文档</value>
+  </data>
+  <data name="OpenDialog.Icons.Title" xml:space="preserve">
+    <value>插入自定义图标</value>
+  </data>
+  <data name="SaveDialog.SaveAs.Title" xml:space="preserve">
+    <value>保存OOXML文档</value>
+  </data>
+  <data name="Settings.Accept" xml:space="preserve">
+    <value>接受</value>
+  </data>
+  <data name="Settings.Apply" xml:space="preserve">
+    <value>应用</value>
+  </data>
+  <data name="Settings.Colors" xml:space="preserve">
+    <value>编辑器配色</value>
+  </data>
+  <data name="Settings.Colors.Attribute" xml:space="preserve">
+    <value>属性</value>
+  </data>
+  <data name="Settings.Colors.Background" xml:space="preserve">
+    <value>背景</value>
+  </data>
+  <data name="Settings.Colors.Comment" xml:space="preserve">
+    <value>注释</value>
+  </data>
+  <data name="Settings.Colors.Default" xml:space="preserve">
+    <value>普通文本</value>
+  </data>
+  <data name="Settings.Colors.String" xml:space="preserve">
+    <value>字符串</value>
+  </data>
+  <data name="Settings.Colors.Tag" xml:space="preserve">
+    <value>标签</value>
+  </data>
+  <data name="Settings.Editor" xml:space="preserve">
+    <value>其他编辑器设置</value>
+  </data>
+  <data name="Settings.Editor.AutoIndent" xml:space="preserve">
+    <value>新行自动缩进</value>
+  </data>
+  <data name="Settings.Editor.FontSize" xml:space="preserve">
+    <value>字体大小</value>
+  </data>
+  <data name="Settings.Editor.TabWidth" xml:space="preserve">
+    <value>制表符宽度</value>
+  </data>
+  <data name="Settings.Editor.WrapMode" xml:space="preserve">
+    <value>换行模式</value>
+  </data>
+  <data name="Settings.FileAssociations" xml:space="preserve">
+    <value>文件管理</value>
+  </data>
+  <data name="Settings.FileAssociations.CheckAll" xml:space="preserve">
+    <value>全选</value>
+  </data>
+  <data name="Settings.FileAssociations.ToolTip" xml:space="preserve">
+    <value>在Windows资源管理器右键菜单中将增加命令项，可以使用本工具打开关联文件。</value>
+  </data>
+  <data name="Settings.FileAssociations.UncheckAll" xml:space="preserve">
+    <value>取消全选</value>
+  </data>
+  <data name="Settings.Misc" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="Settings.Misc.DefaultTemplates" xml:space="preserve">
+    <value>在插入菜单中显示缺省XML模板</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates" xml:space="preserve">
+    <value>加载附加XML模板:</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
+    <value>每行应只包含一个路径，指定路径可以是MXL文件全路径或者其所在目录，也可以是基于本软件安装目录的相对路径。</value>
+  </data>
+  <data name="Settings.Misc.Language" xml:space="preserve">
+    <value>语言</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes" xml:space="preserve">
+    <value>保存已经存在文件时的预留文件属性</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes.ToolTip" xml:space="preserve">
+    <value>如果选中，只读文件保存后仍为只读文件</value>
+  </data>
+  <data name="Settings.ResetDefaults" xml:space="preserve">
+    <value>恢复缺省设置</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="ToolBar.Callbacks" xml:space="preserve">
+    <value>生成回调</value>
+  </data>
+  <data name="ToolBar.Callbacks.ToolTip" xml:space="preserve">
+    <value>为当前XML文件生成回调</value>
+  </data>
+  <data name="ToolBar.InsertIcons" xml:space="preserve">
+    <value>插入图标</value>
+  </data>
+  <data name="ToolBar.InsertIcons.ToolTip" xml:space="preserve">
+    <value>插入图标</value>
+  </data>
+  <data name="ToolBar.Open" xml:space="preserve">
+    <value>打开</value>
+  </data>
+  <data name="ToolBar.Open.ToolTip" xml:space="preserve">
+    <value>打开Office文档</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave" xml:space="preserve">
+    <value>刷新文档</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave.ToolTip" xml:space="preserve">
+    <value>为了确保不丢失其他外部程序对此文件的更改，请在文件保存后重新加载文档</value>
+  </data>
+  <data name="ToolBar.Save" xml:space="preserve">
+    <value>保存</value>
+  </data>
+  <data name="ToolBar.Save.ToolTip" xml:space="preserve">
+    <value>保存当前Office文档</value>
+  </data>
+  <data name="ToolBar.Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="ToolBar.Settings.ToolTip" xml:space="preserve">
+    <value>查看编辑器设置</value>
+  </data>
+  <data name="ToolBar.ShowWhitespaces.ToolTip" xml:space="preserve">
+    <value>在编辑器中显示空格、制表符和换行标识</value>
+  </data>
+  <data name="ToolBar.ToggleComment.ToolTip" xml:space="preserve">
+    <value>注释/取消注释选中的行</value>
+  </data>
+  <data name="ToolBar.Validate" xml:space="preserve">
+    <value>校验</value>
+  </data>
+  <data name="ToolBar.Validate.ToolTip" xml:space="preserve">
+    <value>检查当前XML文件是否符合规范</value>
+  </data>
+  <data name="ToolBar.VersionAvailable" xml:space="preserve">
+    <value>v{0} 已经发布!</value>
+    <comment>{0}版本号的占位符，例如："1.2.3"</comment>
+  </data>
+  <data name="Validation.MutuallyExclusive" xml:space="preserve">
+    <value>在一个元素中只能定义一个下列属性: {0}</value>
+  </data>
+  <data name="Validation.WrongNamespace" xml:space="preserve">
+    <value>未知命名空间 "{0}"，定制UI XML命名空间必须为 "{1}"</value>
+  </data>
+</root>
