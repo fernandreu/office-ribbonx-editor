@@ -132,23 +132,33 @@ stages:
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Binaries.zip'
           - powershell: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NETFramework.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Installer.exe"
             displayName: 'Copy .NET Framework Installer'
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Binaries'
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5-Binaries.zip'
           - powershell: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-Installer-NET5.exe"
-            displayName: 'Copy .NET Installer'
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5-Installer.exe"
+          - task: ArchiveFiles@2
+            displayName: 'Archive Self-Contained .NET Binaries'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained .NET Binaries'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET5-Binaries.zip'
+          - powershell: >-
+              Copy-Item
+              -Path "$(Pipeline.Workspace)/Self-Contained .NET Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET5-Installer.exe"
+            displayName: 'Copy Self-Contained .NET Installer'
           - task: GitHubRelease@1
             displayName: 'Create GitHub Release'
             inputs:
@@ -167,31 +177,31 @@ stages:
                 
                 ## How to install / use
                 
-                Download one of the items from the `Assets` section below.
+                Download one of the items from the `Assets` section below. If in doubt, I would
+                recommend using the .NET Framework Installer.
 
                 There are two types of downloads available:
-                - **Binaries:** These are just a `.zip` file ready to be uncompressed with
-                  no installation (no entry will be created in the control panel's program
-                  list)
-                - **Installers:** A typical self-extracting installer (it will require admin
-                  rights)
+                - **Binaries:** These are just a `.zip` file ready to be extracted, with no
+                  installation necessary. No entry will be created in the control panel's program
+                  list
+                - **Installers:** A typical self-extracting installer which will require admin
+                  rights
                                 
                 For each of those download types, the tool comes in three variants:
                 - **.NET Framework:** This was the main variant in the past. Typically, you
                   shouldn't need to install the .NET Framework redistributable yourself, as
                   this is shipped with Windows 10 nowadays. Otherwise, download the latest
                   runtime [here](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)
-                - **.NET:** This requires at least version 5.0 of the
+                - **.NET (5):** This requires at least version 5.0 of the
                   [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
                   (the one for desktop apps is enough)
                 - **Self-contained .NET:** This also uses the .NET 5.0 runtime, but this is
                   embedded in the `.zip` file / installer, so you won't need to install anything
                   else. As a drawback, the resulting tool is much larger in file size
                   
-                **If in doubt, I would recommend using the .NET Framework Installer.**
-
-                Due to some limitations, none of the variants will contain a single `.exe` file
-                anymore, and will include a collection of DLLs and other auxiliary files too.
+                Due to some technical limitations, the .NET Framework variants no longer consist
+                of a single `.exe` file once extracted / installed. Instead, it will contain a
+                collection of DLLs and other auxiliary files too, similarly to other variants.
 
 
               assets: '$(Build.ArtifactStagingDirectory)/*.*'
