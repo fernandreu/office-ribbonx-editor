@@ -110,7 +110,7 @@ stages:
 
 - stage: Release
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'). ${{ parameters.createRelease }} )
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }} )
 
   jobs:
   - deployment: Deploy
