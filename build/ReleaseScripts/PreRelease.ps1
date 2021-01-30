@@ -13,13 +13,7 @@ $missing = [System.Collections.Generic.List[string]]@()
 $path = $null
 foreach ($artifact in $artifactsToCheck) {
     $path = "$sourcePath/$artifact/OfficeRibbonXEditor.exe"
-    if (-not (Test-Path $path -PathType Leaf)) {
-        $missing.Add($path) | Out-Null
-        continue
-    }
-
-    $signature = Get-AuthenticodeSignature -FilePath $path
-    if ($null -eq $signature -or $signature.Status -ne [SignatureStatus]::Valid) {
+    if (-not (Test-Path $path -PathType Leaf) -or (Get-AuthenticodeSignature -FilePath $path).Status -ne 'Valid') {
         $missing.Add($path) | Out-Null
     }
 }
