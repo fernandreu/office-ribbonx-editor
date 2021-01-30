@@ -170,8 +170,8 @@ stages:
                 Download one of the items from the `Assets` section below.
                 
                 Compressed `.zip` files do not require installation (i.e. will not create any
-                entry in the control panel's program list). When feasible, these will contain
-                a single `.exe` file.
+                entry in the control panel's program list). Due to some limitations, none of
+                these will contain a single `.exe` file anymore
                 
                 The .NET Framework builds require at least version 4.6.1 of the .NET Framework
                 Runtime. The .NET builds require at least version 5.0 of the .NET Runtime (the
