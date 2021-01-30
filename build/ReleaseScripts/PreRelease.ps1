@@ -1,26 +1,37 @@
 $sourcePath = $args[0]
 
 # Do the signed artifacts exist?
-$allSigned = $true;
-if (-Not (Test-Path "$sourcePath/.NET Framework Executable/OfficeRibbonXEditor.exe")) {
-    $allSigned = $false
-} elseif (-Not (Test-Path "$sourcePath/.NET Framework Installer/OfficeRibbonXEditor.exe")) {
-    $allSigned = $false
-} elseif (-Not (Test-Path "$sourcePath/.NET Core Binaries/OfficeRibbonXEditor/OfficeRibbonXEditor.exe")) {
-    $allSigned = $false
-} elseif (-Not (Test-Path "$sourcePath/.NET Core Installer/OfficeRibbonXEditor.exe")) {
-    $allSigned = $false
+$artifactsToCheck = @(
+    '.NET Framework Binaries';
+    '.NET Framework Installer';
+    '.NET Binaries';
+    '.NET Installer';
+    'Self-Contained .NET Binaries';
+    'Self-Contained .NET Installer'
+)
+$missing = [System.Collections.Generic.List[string]]@()
+$path = $null
+foreach ($artifact in $artifactsToCheck) {
+    $path = "$sourcePath/$artifact/OfficeRibbonXEditor.exe"
+    if (-not (Test-Path $path -PathType Leaf)) {
+        $missing.Add($path) | Out-Null
+        continue
+    }
+
+    $signature = Get-AuthenticodeSignature -FilePath $path
+    if ($null -eq $signature -or $signature.Status -ne [SignatureStatus]::Valid) {
+        $missing.Add($path) | Out-Null
+    }
 }
 
-if (-Not $allSigned)
-{
-    $message = "Not all necessary signed artifacts were found"
+if ($missing.Count -ne 0) {
+    $message = "The following artifacts were not found or were not signed correctly: $($missing -join ', ')"
     Write-Host "##vso[task.LogIssue type=error;] $message"
     exit 1
 }
 
-# Find assembly version from any artifact
-$version = (Get-Item "$sourcePath/.NET Framework Executable/OfficeRibbonXEditor.exe" | Select-Object -ExpandProperty VersionInfo).FileVersion
+# Find assembly version from any artifact (i.e. the last one tested above)
+$version = (Get-Item $path | Select-Object -ExpandProperty VersionInfo).FileVersion
 $versionParts = $version.Split(".")
 $versionParts = $versionParts[0..($versionParts.Length - 2)]
 $version = $versionParts -join "."

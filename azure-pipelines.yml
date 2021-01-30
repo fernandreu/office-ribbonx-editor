@@ -168,15 +168,31 @@ stages:
                 ## How to install / use
                 
                 Download one of the items from the `Assets` section below.
-                
-                Compressed `.zip` files do not require installation (i.e. will not create any
-                entry in the control panel's program list). Due to some limitations, none of
-                these will contain a single `.exe` file anymore
-                
-                The .NET Framework builds require at least version 4.6.1 of the .NET Framework
-                Runtime. The .NET builds require at least version 5.0 of the .NET Runtime (the
-                one for desktop apps is enough). If you need any of these runtimes, check
-                [Microsoft's .NET download page](https://dotnet.microsoft.com/download).
+
+                There are two types of downloads available:
+                - **Binaries:** These are just a `.zip` file ready to be uncompressed with
+                  no installation (no entry will be created in the control panel's program
+                  list)
+                - **Installers:** A typical self-extracting installer (it will require admin
+                  rights)
+                                
+                For each of those download types, the tool comes in three variants:
+                - **.NET Framework:** This was the main variant in the past. Typically, you
+                  shouldn't need to install the .NET Framework redistributable yourself, as
+                  this is shipped with Windows 10 nowadays. Otherwise, download the latest
+                  runtime [here](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)
+                - **.NET:** This requires at least version 5.0 of the
+                  [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
+                  (the one for desktop apps is enough)
+                - **Self-contained .NET:** This also uses the .NET 5.0 runtime, but this is
+                  embedded in the `.zip` file / installer, so you won't need to install anything
+                  else. As a drawback, the resulting tool is much larger in file size
+                  
+                **If in doubt, I would recommend using the .NET Framework Installer.**
+
+                Due to some limitations, none of the variants will contain a single `.exe` file
+                anymore, and will include a collection of DLLs and other auxiliary files too.
+
 
               assets: '$(Build.ArtifactStagingDirectory)/*.*'
               isDraft: true
