@@ -124,7 +124,7 @@
     <value>关闭</value>
   </data>
   <data name="About.CopyVersion" xml:space="preserve">
-    <value>拷贝版本信息</value>
+    <value>复制版本信息</value>
   </data>
   <data name="About.License" xml:space="preserve">
     <value>许可证:</value>
@@ -133,7 +133,7 @@
     <value>操作系统:</value>
   </data>
   <data name="About.Paragraph1" xml:space="preserve">
-    <value>Office RibbonX编辑器是开源的免费工具，用于编辑Office开放文档的定制UI，工具中支持Office 2007和Office 2010两种架构。</value>
+    <value>Office RibbonX编辑器是开源的免费工具，用于编辑Office开放文档的定制UI，本工具支持Office 2007和Office 2010两种架构。</value>
   </data>
   <data name="About.Paragraph2" xml:space="preserve">
     <value>Office 2010定制UI架构是最新版本，后续发布的Office 2013、Office 2016、Office 2019和Microsoft 365仍然使用相同架构。</value>
@@ -190,7 +190,7 @@
     <value>关闭对话框</value>
   </data>
   <data name="Exception.Disclaimer" xml:space="preserve">
-    <value>如果软件过期之后，您继续使用此软件，将可能发生功能异常。</value>
+    <value>如果软件过期之后，您继续使用此软件，将有可能发生功能异常。</value>
   </data>
   <data name="Exception.ShutdownApp" xml:space="preserve">
     <value>关闭程序</value>
@@ -238,13 +238,13 @@
     <value>Word文档|*.docx</value>
   </data>
   <data name="Filter.SaveAs14" xml:space="preserve">
-    <value>启用宏的Macro-Enabled文档|*.docm</value>
+    <value>启用宏的Word文档|*.docm</value>
   </data>
   <data name="Filter.SaveAs15" xml:space="preserve">
     <value>Word模板|*.dotx</value>
   </data>
   <data name="Filter.SaveAs16" xml:space="preserve">
-    <value>用宏的Word模板|*.dotm</value>
+    <value>启用宏的Word模板|*.dotm</value>
   </data>
   <data name="Filter.SaveAs17" xml:space="preserve">
     <value>Visio绘图|*.vsdx</value>
@@ -283,7 +283,7 @@
     <value>启用宏的PowerPoint模板|*.potm</value>
   </data>
   <data name="Filter.WordDocuments" xml:space="preserve">
-    <value>Microsoft Word文档|*.do?x;*.do?m</value>
+    <value>Word文档|*.do?x;*.do?m</value>
   </data>
   <data name="FindReplace.Find" xml:space="preserve">
     <value>查找(_F)</value>
@@ -537,12 +537,12 @@
     <comment>展开指定级别菜单标题</comment>
   </data>
   <data name="Message.AlreadyOpen.Text" xml:space="preserve">
-    <value>文档'{0}'已经打开，多次打开同一文件可能会导致数据丢失，将文件另存不同文件。
+    <value>文档'{0}'已经打开，多次打开同一文件可能会导致数据丢失，除非将文件另存不同文件。
 	
-是否继续打开此文档?</value>
+是否继续打开此文件?</value>
   </data>
   <data name="Message.AlreadyOpen.Title" xml:space="preserve">
-    <value>文档已经打开</value>
+    <value>文件已经打开</value>
   </data>
   <data name="Message.CallbackError.Title" xml:space="preserve">
     <value>错误：创建回调过程</value>
@@ -609,10 +609,10 @@
     <value>校验XML</value>
   </data>
   <data name="Message.VersionCopy.Text" xml:space="preserve">
-    <value>版本信息已拷贝到剪贴板。</value>
+    <value>版本信息已复制到剪贴板。</value>
   </data>
   <data name="Message.VersionCopy.Title" xml:space="preserve">
-    <value>拷贝版本信息</value>
+    <value>复制版本信息</value>
   </data>
   <data name="OpenDialog.Document.Title" xml:space="preserve">
     <value>打开OOXML文档</value>
@@ -726,7 +726,7 @@
     <value>刷新文档</value>
   </data>
   <data name="ToolBar.ReloadOnSave.ToolTip" xml:space="preserve">
-    <value>为了确保不丢失其他外部程序对此文件的更改，请在文件保存后重新加载文档</value>
+    <value>为了确保不丢失其他外部程序对此文件的更改，请在文件保存后重新加载文件</value>
   </data>
   <data name="ToolBar.Save" xml:space="preserve">
     <value>保存</value>
@@ -754,7 +754,7 @@
   </data>
   <data name="ToolBar.VersionAvailable" xml:space="preserve">
     <value>v{0} 已经发布!</value>
-    <comment>{0}版本号的占位符，例如："1.2.3"</comment>
+    <comment>{0}是版本号的占位符，例如："1.2.3"</comment>
   </data>
   <data name="Validation.MutuallyExclusive" xml:space="preserve">
     <value>在一个元素中只能定义一个下列属性: {0}</value>
@@ -763,6 +763,6 @@
     <value>未知命名空间 "{0}"，定制UI XML命名空间必须为 "{1}"</value>
   </data>
   <data name="About.Translators:" xml:space="preserve">
-    <value>Translators:</value>
+    <value>翻译志愿者:</value>
   </data>
 </root>
