@@ -7,7 +7,7 @@
     {
         public DialogHost()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

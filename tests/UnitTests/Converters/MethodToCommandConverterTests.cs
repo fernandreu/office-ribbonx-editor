@@ -18,7 +18,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         public void ConvertTest(object? original, string? methodName)
         {
             // Act
-            var (methodInfo, sender) = this.ApplyConversion(original, methodName);
+            var (methodInfo, sender) = ApplyConversion(original, methodName);
 
             // Assert
             Assert.NotNull(methodInfo);
@@ -32,12 +32,12 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("string", typeof(string))]
         public void ShouldNotConvertBack(object? original, object? parameter)
         {
-            Assert.Throws<InvalidOperationException>(() => this.ConvertBack(original, parameter));
+            Assert.Throws<InvalidOperationException>(() => ConvertBack(original, parameter));
         }
 
         private (MethodInfo?, object?) ApplyConversion(object? original, string? methodName)
         {
-            var result = this.Convert(original, methodName);
+            var result = Convert(original, methodName);
             if (result == null)
             {
                 return (null, null);

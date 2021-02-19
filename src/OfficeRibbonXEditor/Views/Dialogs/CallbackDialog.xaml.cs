@@ -15,7 +15,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     {
         public CallbackDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
@@ -27,7 +27,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
                 return;
             }
 
-            model.Lexer = new VbaLexer {Editor = this.Editor};
+            model.Lexer = new VbaLexer {Editor = Editor};
         }
     }
 }

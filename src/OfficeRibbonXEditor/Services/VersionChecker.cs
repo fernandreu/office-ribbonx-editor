@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.Services
         {
             try
             {
-                var latestVersion = await this.GetVersionAsync(cancelToken).ConfigureAwait(false);
+                var latestVersion = await GetVersionAsync(cancelToken).ConfigureAwait(false);
                 if (latestVersion == null)
                 {
                     return null;
@@ -40,21 +40,19 @@ namespace OfficeRibbonXEditor.Services
 
         private async Task<Version?> GetVersionAsync(CancellationToken cancelToken)
         {
-            using (var httpClient = new HttpClient())
-            {
-                httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
-                httpClient.DefaultRequestHeaders.Add("User-Agent", "request");
-                var uri = new Uri(CheckUrl);
-                using (var response = await httpClient.GetAsync(uri, cancelToken).ConfigureAwait(false))
-                {
-                    var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    // We just need the "tag_name" field from the response. We could deserialize everything with
-                    // JSON.Net and obtain that field, but that adds an extra (mid-size) library just for one
-                    // field. Hence, using RegEx instead, which should do just fine.
-                    var match = Regex.Match(contentString, "\\\"tag_name\\\".*?:.*?\\\"v(.*?)\\\"");
-                    return match.Success ? new Version(match.Groups[1].Value) : null;
-                }
-            }
+            using var httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "request");
+
+            var uri = new Uri(CheckUrl);
+            using var response = await httpClient.GetAsync(uri, cancelToken).ConfigureAwait(false);
+            var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+
+            // We just need the "tag_name" field from the response. We could deserialize everything with
+            // JSON.Net and obtain that field, but that adds an extra (mid-size) library just for one
+            // field. Hence, using RegEx instead, which should do just fine.
+            var match = Regex.Match(contentString, "\\\"tag_name\\\".*?:.*?\\\"v(.*?)\\\"");
+            return match.Success ? new Version(match.Groups[1].Value) : null;
         }
     }
 }

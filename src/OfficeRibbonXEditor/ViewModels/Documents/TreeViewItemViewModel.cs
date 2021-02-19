@@ -9,39 +9,21 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
     /// </summary>
     public class TreeViewItemViewModel : ViewModelBase
     {
-        #region Data
-
-        private static readonly TreeViewItemViewModel dummyChild = new TreeViewItemViewModel();
-
-        #endregion // Data
-
-        #region Fields
-        
-        private bool isExpanded;
-        
-        private bool isSelected;
-        
-        private bool canHaveContents;
-        
-        private string? contents;
-
-        #endregion // Fields
-
-        #region Constructors
+        private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
         public virtual string Name { get; set; } = string.Empty;
 
         protected TreeViewItemViewModel(TreeViewItemViewModel? parent, bool lazyLoadChildren, bool canHaveContents = true, string? contents = null)
         {
-            this.Parent = parent;
+            Parent = parent;
 
-            this.CanHaveContents = canHaveContents;
+            CanHaveContents = canHaveContents;
 
-            this.Contents = contents;
+            Contents = contents;
 
             if (lazyLoadChildren)
             {
-                this.Children.Add(dummyChild);
+                Children.Add(DummyChild);
             }
         }
 
@@ -50,10 +32,6 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         {
         }
 
-        #endregion // Constructors
-        
-        #region Presentation Members
-        
         /// <summary>
         /// Gets the logical child items of this object.
         /// </summary>
@@ -62,64 +40,68 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// <summary>
         /// Returns true if this object's Children have not yet been populated.
         /// </summary>
-        public bool HasDummyChild => this.Children.Count == 1 && this.Children[0] == dummyChild;
+        public bool HasDummyChild => Children.Count == 1 && Children[0] == DummyChild;
         
+        private bool _isExpanded;
         /// <summary>
         /// Gets or sets a value indicating whether the TreeViewItem associated with this object is expanded.
         /// </summary>
         public bool IsExpanded
         {
-            get => this.isExpanded;
+            get => _isExpanded;
             set
             {
-                if (!this.Set(ref this.isExpanded, value))
+                if (!Set(ref _isExpanded, value))
                 {
                     return;
                 }
 
                 // Expand all the way up to the root.
-                if (this.isExpanded && this.Parent != null)
+                if (_isExpanded && Parent != null)
                 {
-                    this.Parent.IsExpanded = true;
+                    Parent.IsExpanded = true;
                 }
 
                 // Lazy load the child items, if necessary.
-                if (this.HasDummyChild)
+                if (HasDummyChild)
                 {
-                    this.Children.Remove(dummyChild);
-                    this.LoadChildren();
+                    Children.Remove(DummyChild);
+                    LoadChildren();
                 }
             }
         }
 
+        private bool _isSelected;
         /// <summary>
         /// Gets or sets a value indicating whether the TreeViewItem associated with this object is selected.
         /// </summary>
         public bool IsSelected
         {
-            get => this.isSelected;
+            get => _isSelected;
             set
             {
-                if (this.Set(ref this.isSelected, value) && this.isSelected)
+                if (Set(ref _isSelected, value) && _isSelected)
                 {
-                    this.IsExpanded = true; // To select something, you should be able to see it
+                    IsExpanded = true; // To select something, you should be able to see it
                 }
             }
         }
 
+        private bool _canHaveContents;
         /// <summary>
         /// Gets or sets a value indicating whether this TreeViewItem can have contents edited in the code control
         /// </summary>
         public bool CanHaveContents
         {
-            get => this.canHaveContents;
-            set => this.Set(ref this.canHaveContents, value);
+            get => _canHaveContents;
+            set => Set(ref _canHaveContents, value);
         }
 
+        private string? _contents;
         public string? Contents
         {
-            get => this.contents;
-            set => this.Set(ref this.contents, value);
+            get => _contents;
+            set => Set(ref _contents, value);
         }
         
         public TreeViewItemViewModel? Parent { get; }
@@ -139,7 +121,5 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         protected virtual void SelectionLost()
         {
         }
-        
-        #endregion // Presentation Members
     }
 }

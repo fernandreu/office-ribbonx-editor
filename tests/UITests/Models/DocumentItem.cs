@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.UITests.Models
         {
         }
 
-        public string? Title => this.FindAllChildren().Last().AsLabel().Text;
+        public string? Title => FindAllChildren().Last().AsLabel().Text;
 
         public new List<DocumentItem> Items
         {

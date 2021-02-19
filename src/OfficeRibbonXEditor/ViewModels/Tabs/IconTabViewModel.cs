@@ -14,71 +14,68 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. The icon field is actually initialized when setting the Icon property
         public IconTabViewModel(IconViewModel icon, MainWindowViewModel mainWindow)
         {
-            this.Icon = icon;
-            this.MainWindow = mainWindow;
-            this.ResetGridCommand = new RelayCommand(ResetGridSettings);
+            Icon = icon;
+            MainWindow = mainWindow;
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        public RelayCommand ResetGridCommand { get; }
+        private RelayCommand? _resetGridCommand;
+        public RelayCommand ResetGridCommand => _resetGridCommand ??= new RelayCommand(ResetGridSettings);
 
-        private string title = string.Empty;
-
+        private string _title = string.Empty;
         public string Title
         {
-            get => this.title;
-            set => this.Set(ref this.title, value);
+            get => _title;
+            set => Set(ref _title, value);
         }
 
         public string? StatusText
         {
             get
             {
-                if (this.Icon?.Image == null)
+                if (Icon?.Image == null)
                 {
                     return null;
                 }
 
-                return $"Size: {this.Icon.Image.Width:F0}x{(int) this.Icon.Image.Height:F0}";
+                return $"Size: {Icon.Image.Width:F0}x{(int) Icon.Image.Height:F0}";
             }
         }
 
-        private IconViewModel icon;
-
+        private IconViewModel _icon;
         public IconViewModel Icon
         {
-            get => this.icon;
+            get => _icon;
             set
             {
-                var previous = this.icon;
-                if (!this.Set(ref this.icon, value))
+                var previous = _icon;
+                if (!Set(ref _icon, value))
                 {
                     return;
                 }
 
                 if (previous != null)
                 {
-                    previous.PropertyChanged -= this.OnIconPropertyChanged;
+                    previous.PropertyChanged -= OnIconPropertyChanged;
                 }
 
                 if (value != null)
                 {
-                    value.PropertyChanged += this.OnIconPropertyChanged;
+                    value.PropertyChanged += OnIconPropertyChanged;
                 }
 
-                this.RaisePropertyChanged(nameof(this.StatusText));
-                this.RaisePropertyChanged(nameof(this.Item));
+                RaisePropertyChanged(nameof(StatusText));
+                RaisePropertyChanged(nameof(Item));
             }
         }
 
-        public TreeViewItemViewModel Item => this.Icon;
+        public TreeViewItemViewModel Item => Icon;
 
-        private int zoom;
-
+        private int _zoom;
         public int Zoom
         {
-            get => this.zoom;
-            set => this.Set(ref this.zoom, value);
+            get => _zoom;
+            set => Set(ref _zoom, value);
         }
 
         public MainWindowViewModel MainWindow { get; set; }
@@ -95,7 +92,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
                 return;
             }
 
-            this.MainWindow.AdjustTabTitles();
+            MainWindow.AdjustTabTitles();
         }
 
         public static void ResetGridSettings()

@@ -16,22 +16,22 @@ namespace OfficeRibbonXEditor.UITests.Main
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Disposed in TearDown")]
     public class SettingsTests
     {
-        private AppManager? manager;
+        private AppManager? _manager;
 
-        private Window? dialog;
+        private Window? _dialog;
 
         [SetUp]
         public void SetUp()
         {
-            this.manager = new AppManager();
-            this.manager.Launch();
+            _manager = new AppManager();
+            _manager.Launch();
 
-            this.manager.Window!
+            _manager.Window!
                 .FindFirstChild(x => x.ByClassName("ToolBar"))
                 .FindFirstChild("SettingsButton")
                 .Click();
-            this.dialog = Retry.WhileNull(
-                    () => this.manager.Window.FindFirstDescendant(x => x.ByClassName("Window")),
+            _dialog = Retry.WhileNull(
+                    () => _manager.Window.FindFirstDescendant(x => x.ByClassName("Window")),
                 TimeSpan.FromSeconds(1))
                 .Result.AsWindow();
         }
@@ -39,15 +39,15 @@ namespace OfficeRibbonXEditor.UITests.Main
         [TearDown]
         public void TearDown()
         {
-            this.manager!.Dispose();
+            _manager!.Dispose();
         }
 
         [Test]
         public void CanChangeLanguage()
         {
             // Arrange
-            var combo = this.dialog!.FindFirstDescendant("LanguageCombo").AsComboBox();
-            var applyButton = this.dialog.FindFirstDescendant("ApplyButton");
+            var combo = _dialog!.FindFirstDescendant("LanguageCombo").AsComboBox();
+            var applyButton = _dialog.FindFirstDescendant("ApplyButton");
             var original = combo.SelectedItem.Text;
 
             // Act
@@ -55,7 +55,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             applyButton.Click();
 
             // Assert
-            var exceptionDialog = this.manager!.Window!.FindFirstModalWindow(TimeSpan.FromSeconds(1));
+            var exceptionDialog = _manager!.Window!.FindFirstModalWindow(TimeSpan.FromSeconds(1));
             Assert.Null(exceptionDialog);
             Assert.AreNotEqual(original, combo.SelectedItem.Text);
         }

@@ -10,39 +10,35 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export]
     public class DialogHostViewModel : ViewModelBase
     {
-        private IContentDialogBase? content;
-
-        public DialogHostViewModel()
-        {
-            this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
-        }
+        private IContentDialogBase? _content;
 
         public event EventHandler? ShowingDialog;
 
-        public RelayCommand<CancelEventArgs> ClosingCommand { get; }
+        private RelayCommand<CancelEventArgs>? _closingCommand;
+        public RelayCommand<CancelEventArgs> ClosingCommand => _closingCommand ??= new RelayCommand<CancelEventArgs>(ExecuteClosingCommand);
 
         public event EventHandler? Closed;
 
         public IContentDialogBase? Content
         {
-            get => this.content;
-            set => this.Set(ref this.content, value);
+            get => _content;
+            set => Set(ref _content, value);
         }
 
         private void ExecuteClosingCommand(CancelEventArgs args)
         {
-            this.content?.ClosingCommand.Execute(args);
+            _content?.ClosingCommand.Execute(args);
         }
 
         public void ShowDialog()
         {
-            this.ShowingDialog?.Invoke(this, EventArgs.Empty);
+            ShowingDialog?.Invoke(this, EventArgs.Empty);
         }
 
         public void Close()
         {
             var args = new CancelEventArgs();
-            this.Closed?.Invoke(this, EventArgs.Empty);
+            Closed?.Invoke(this, EventArgs.Empty);
         }
     }
 }

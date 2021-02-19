@@ -16,21 +16,21 @@ namespace OfficeRibbonXEditor.Extensions
     {
         public SettingBindingExtension()
         {
-            this.Initialize();
+            Initialize();
         }
 
         public SettingBindingExtension(string path)
             : base(path)
         {
-            this.Initialize();
+            Initialize();
         }
 
         private void Initialize()
         {
-            this.Source = Properties.Settings.Default;
+            Source = Properties.Settings.Default;
 
             // Beware: TwoWay or OneWayToSource does not work with app settings
-            this.Mode = BindingMode.TwoWay;
+            Mode = BindingMode.TwoWay;
         }
     }
 }

@@ -9,12 +9,12 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public void Add(T item)
         {
-            if (this.Values.Contains(item))
+            if (Values.Contains(item))
             {
-                this.Values.Remove(item);
+                Values.Remove(item);
             }
 
-            this.Values.Insert(0, item);
+            Values.Insert(0, item);
         }
     }
 }

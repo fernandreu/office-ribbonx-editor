@@ -12,10 +12,10 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 
         public string Text
         {
-            get => this.Patterns.Value.Pattern.Value.Value;
-            set => this.Patterns.Value.Pattern.SetValue(value);
+            get => Patterns.Value.Pattern.Value.Value;
+            set => Patterns.Value.Pattern.SetValue(value);
         }
 
-        public SelectedTextRange Selection => new SelectedTextRange(this.Patterns.Text.Pattern, this.Patterns.Value.Pattern, this.Patterns.Text.Pattern.GetSelection().First());
+        public SelectedTextRange Selection => new SelectedTextRange(Patterns.Text.Pattern, Patterns.Value.Pattern, Patterns.Text.Pattern.GetSelection().First());
     }
 }

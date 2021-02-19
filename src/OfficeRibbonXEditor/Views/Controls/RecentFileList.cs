@@ -39,18 +39,18 @@ namespace OfficeRibbonXEditor.Views.Controls
                 typeof(ICommand),
                 typeof(RecentFileList));
 
-        private Separator? separator;
+        private Separator? _separator;
 
-        private List<RecentFile>? recentFiles;
+        private List<RecentFile>? _recentFiles;
 
         public RecentFileList()
         {
-            this.MaxNumberOfFiles = 9;
-            this.MaxPathLength = 50;
-            this.MenuItemFormatOneToNine = "_{0}:  {2}";
-            this.MenuItemFormatTenPlus = "{0}:  {2}";
+            MaxNumberOfFiles = 9;
+            MaxPathLength = 50;
+            MenuItemFormatOneToNine = "_{0}:  {2}";
+            MenuItemFormatTenPlus = "{0}:  {2}";
 
-            this.Loaded += (s, e) => this.HookFileMenu();
+            Loaded += (s, e) => HookFileMenu();
         }
         
         public delegate string GetMenuItemTextDelegate(int index, string filepath);
@@ -59,8 +59,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public ICommand ClickCommand
         {
-            get => (ICommand)this.GetValue(ClickCommandProperty);
-            set => this.SetValue(ClickCommandProperty, value);
+            get => (ICommand)GetValue(ClickCommandProperty);
+            set => SetValue(ClickCommandProperty, value);
         }
 
         /// <summary>
@@ -87,173 +87,173 @@ namespace OfficeRibbonXEditor.Views.Controls
         
         public GetMenuItemTextDelegate? GetMenuItemTextHandler { get; set; }
         
-        public List<string> RecentFiles => this.Persister.RecentFiles(this.MaxNumberOfFiles);
+        public List<string> RecentFiles => Persister.RecentFiles(MaxNumberOfFiles);
         
         public void UseRegistryPersister()
         {
-            this.Persister = new RegistryPersister();
+            Persister = new RegistryPersister();
         }
 
         public void UseRegistryPersister(string key)
         {
-            this.Persister = new RegistryPersister(key);
+            Persister = new RegistryPersister(key);
         }
 
         public void UseXmlPersister()
         {
-            this.Persister = new XmlPersister();
+            Persister = new XmlPersister();
         }
 
         public void UseXmlPersister(string filepath)
         {
-            this.Persister = new XmlPersister(filepath);
+            Persister = new XmlPersister(filepath);
         }
 
         public void UseXmlPersister(Stream stream)
         {
-            this.Persister = new XmlPersister(stream);
+            Persister = new XmlPersister(stream);
         }
 
         public void RemoveFile(string filepath)
         {
-            this.Persister.RemoveFile(filepath, this.MaxNumberOfFiles);
+            Persister.RemoveFile(filepath, MaxNumberOfFiles);
         }
 
         public void InsertFile(string filepath)
         {
-            this.Persister.InsertFile(filepath, this.MaxNumberOfFiles);
+            Persister.InsertFile(filepath, MaxNumberOfFiles);
         }
 
         protected virtual void OnMenuClick(MenuItem menuItem)
         {
-            var filepath = this.GetFilepath(menuItem);
+            var filepath = GetFilepath(menuItem);
 
             if (string.IsNullOrEmpty(filepath))
             {
                 return;
             }
 
-            this.MenuClick?.Invoke(menuItem, new MenuClickEventArgs(filepath));
-            if (this.ClickCommand?.CanExecute(filepath) ?? false)
+            MenuClick?.Invoke(menuItem, new MenuClickEventArgs(filepath));
+            if (ClickCommand?.CanExecute(filepath) ?? false)
             {
-                this.ClickCommand?.Execute(filepath);
+                ClickCommand?.Execute(filepath);
             }
         }
         
         // ReSharper disable StyleCop.SA1126
         private void HookFileMenu()
         {
-            if (!(this.Parent is MenuItem parent))
+            if (!(Parent is MenuItem parent))
             {
                 throw new InvalidOperationException("Parent must be a MenuItem");
             }
             
-            if (ReferenceEquals(this.FileMenu, parent))
+            if (ReferenceEquals(FileMenu, parent))
             {
                 return;
             }
 
-            if (this.FileMenu != null)
+            if (FileMenu != null)
             {
-                this.FileMenu.SubmenuOpened -= this.FileMenuSubmenuOpened;
+                FileMenu.SubmenuOpened -= FileMenuSubmenuOpened;
             }
 
-            this.FileMenu = parent;
-            this.FileMenu.SubmenuOpened += this.FileMenuSubmenuOpened;
+            FileMenu = parent;
+            FileMenu.SubmenuOpened += FileMenuSubmenuOpened;
         }
 
         private void FileMenuSubmenuOpened(object sender, RoutedEventArgs e)
         {
-            this.SetMenuItems();
+            SetMenuItems();
         }
 
         private void SetMenuItems()
         {
-            this.RemoveMenuItems();
+            RemoveMenuItems();
 
-            this.LoadRecentFiles();
+            LoadRecentFiles();
 
-            this.InsertMenuItems();
+            InsertMenuItems();
         }
 
         private void RemoveMenuItems()
         {
-            if (this.separator != null)
+            if (_separator != null)
             {
-                this.FileMenu?.Items.Remove(this.separator);
+                FileMenu?.Items.Remove(_separator);
             }
 
-            if (this.recentFiles != null)
+            if (_recentFiles != null)
             {
-                foreach (var r in this.recentFiles)
+                foreach (var r in _recentFiles)
                 {
                     if (r.MenuItem != null)
                     {
-                        this.FileMenu?.Items.Remove(r.MenuItem);
+                        FileMenu?.Items.Remove(r.MenuItem);
                     }
                 }
             }
 
-            this.separator = null;
-            this.recentFiles = null;
+            _separator = null;
+            _recentFiles = null;
         }
 
         private void InsertMenuItems()
         {
-            if (this.FileMenu == null)
+            if (FileMenu == null)
             {
                 return;
             }
 
-            if (this.recentFiles == null)
+            if (_recentFiles == null)
             {
                 return;
             }
 
-            if (this.recentFiles.Count == 0)
+            if (_recentFiles.Count == 0)
             {
                 return;
             }
 
-            var index = this.FileMenu.Items.IndexOf(this);
+            var index = FileMenu.Items.IndexOf(this);
 
-            foreach (var r in this.recentFiles)
+            foreach (var r in _recentFiles)
             {
-                var header = this.GetMenuItemText(r.Number + 1, r.Filepath, r.DisplayPath);
+                var header = GetMenuItemText(r.Number + 1, r.Filepath, r.DisplayPath);
 
                 r.MenuItem = new MenuItem { Header = header };
-                r.MenuItem.Click += this.MenuItemClick;
+                r.MenuItem.Click += MenuItemClick;
 
-                this.FileMenu.Items.Insert(++index, r.MenuItem);
+                FileMenu.Items.Insert(++index, r.MenuItem);
             }
 
-            this.separator = new Separator();
-            this.FileMenu.Items.Insert(++index, this.separator);
+            _separator = new Separator();
+            FileMenu.Items.Insert(++index, _separator);
         }
 
         private string GetMenuItemText(int index, string filepath, string displayPath)
         {
-            var delegateGetMenuItemText = this.GetMenuItemTextHandler;
+            var delegateGetMenuItemText = GetMenuItemTextHandler;
             if (delegateGetMenuItemText != null)
             {
                 return delegateGetMenuItemText(index, filepath);
             }
 
-            var format = index < 10 ? this.MenuItemFormatOneToNine : this.MenuItemFormatTenPlus;
+            var format = index < 10 ? MenuItemFormatOneToNine : MenuItemFormatTenPlus;
 
-            var shortPath = StringUtils.ShortenPathName(displayPath, this.MaxPathLength);
+            var shortPath = StringUtils.ShortenPathName(displayPath, MaxPathLength);
 
             return string.Format(CultureInfo.CurrentCulture, format, index, filepath, shortPath);
         }
 
         private void LoadRecentFiles()
         {
-            this.recentFiles = this.LoadRecentFilesCore();
+            _recentFiles = LoadRecentFilesCore();
         }
 
         private List<RecentFile> LoadRecentFilesCore()
         {
-            var list = this.RecentFiles;
+            var list = RecentFiles;
 
             var files = new List<RecentFile>(list.Count);
 
@@ -269,18 +269,18 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             if (sender is MenuItem menuItem)
             {
-                this.OnMenuClick(menuItem);
+                OnMenuClick(menuItem);
             }
         }
 
         private string GetFilepath(MenuItem menuItem)
         {
-            if (this.recentFiles == null)
+            if (_recentFiles == null)
             {
                 return string.Empty;
             }
 
-            foreach (var r in this.recentFiles)
+            foreach (var r in _recentFiles)
             {
                 if (ReferenceEquals(r.MenuItem, menuItem))
                 {
@@ -365,8 +365,8 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             public RecentFile(int number, string filepath)
             {
-                this.Number = number;
-                this.Filepath = filepath;
+                Number = number;
+                Filepath = filepath;
             }
 
             public int Number { get; }
@@ -379,12 +379,12 @@ namespace OfficeRibbonXEditor.Views.Controls
             {
                 get
                 {
-                    var directory = Path.GetDirectoryName(this.Filepath);
-                    var fileName = Path.GetFileName(this.Filepath);
+                    var directory = Path.GetDirectoryName(Filepath);
+                    var fileName = Path.GetFileName(Filepath);
                     if (string.IsNullOrEmpty(directory) || string.IsNullOrEmpty(fileName))
                     {
                         // Filepath seems ill-formed for some reason, so don't try to shorten it
-                        return this.Filepath;
+                        return Filepath;
                     }
                     
                     return Path.Combine(directory, fileName);
@@ -396,7 +396,7 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             public RegistryPersister()
             {
-                this.RegistryKey =
+                RegistryKey =
                     "Software\\" +
                     ApplicationAttributes.CompanyName + "\\" +
                     ApplicationAttributes.ProductName + "\\" +
@@ -405,14 +405,14 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             public RegistryPersister(string key)
             {
-                this.RegistryKey = key;
+                RegistryKey = key;
             }
 
             private string RegistryKey { get; }
 
             public List<string> RecentFiles(int max)
             {
-                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey) ?? Registry.CurrentUser.CreateSubKey(this.RegistryKey);
+                var k = Registry.CurrentUser.OpenSubKey(RegistryKey) ?? Registry.CurrentUser.CreateSubKey(RegistryKey);
 
                 var list = new List<string>(max);
 
@@ -433,9 +433,9 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             public void InsertFile(string filepath, int max)
             {
-                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey, true) ?? Registry.CurrentUser.CreateSubKey(this.RegistryKey, true);
+                var k = Registry.CurrentUser.OpenSubKey(RegistryKey, true) ?? Registry.CurrentUser.CreateSubKey(RegistryKey, true);
 
-                this.RemoveFile(filepath, max);
+                RemoveFile(filepath, max);
 
                 for (var i = max - 2; i >= 0; i--)
                 {
@@ -456,7 +456,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             public void RemoveFile(string filepath, int max)
             {
-                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey);
+                var k = Registry.CurrentUser.OpenSubKey(RegistryKey);
                 if (k == null)
                 {
                     return;
@@ -470,7 +470,7 @@ namespace OfficeRibbonXEditor.Views.Controls
                         continue;
                     }
 
-                    this.RemoveFile(i, max);
+                    RemoveFile(i, max);
                     i--; // Repeat this loop iteration again
                 }
             }
@@ -482,7 +482,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             private void RemoveFile(int index, int max)
             {
-                var k = Registry.CurrentUser.OpenSubKey(this.RegistryKey, true);
+                var k = Registry.CurrentUser.OpenSubKey(RegistryKey, true);
                 if (k == null)
                 {
                     return;
@@ -511,17 +511,17 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             public XmlPersister()
             {
-                this.Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName + "\\" + ApplicationAttributes.ProductName + "\\" + "RecentFileList.xml");
+                Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName + "\\" + ApplicationAttributes.ProductName + "\\" + "RecentFileList.xml");
             }
 
             public XmlPersister(string filepath)
             {
-                this.Filepath = filepath;
+                Filepath = filepath;
             }
 
             public XmlPersister(Stream stream)
             {
-                this.Stream = stream;
+                Stream = stream;
             }
 
             private string? Filepath { get; }
@@ -530,22 +530,22 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             public List<string> RecentFiles(int max)
             {
-                return this.Load(max);
+                return Load(max);
             }
 
             public void InsertFile(string filepath, int max)
             {
-                this.Update(filepath, true, max);
+                Update(filepath, true, max);
             }
 
             public void RemoveFile(string filepath, int max)
             {
-                this.Update(filepath, false, max);
+                Update(filepath, false, max);
             }
 
             private void Update(string filepath, bool insert, int max)
             {
-                var old = this.Load(max);
+                var old = Load(max);
 
                 var list = new List<string>(old.Count + 1);
 
@@ -556,7 +556,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 CopyExcluding(old, filepath, list, max);
 
-                this.Save(list, max);
+                Save(list, max);
             }
 
             private static void CopyExcluding(List<string> source, string exclude, List<string> target, int max)
@@ -579,13 +579,13 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             private SmartStream OpenStream(FileMode mode)
             {
-                if (!string.IsNullOrEmpty(this.Filepath))
+                if (!string.IsNullOrEmpty(Filepath))
                 {
-                    return new SmartStream(this.Filepath!, mode);
+                    return new SmartStream(Filepath!, mode);
                 }
                 else
                 {
-                    return new SmartStream(this.Stream!);
+                    return new SmartStream(Stream!);
                 }
             }
 
@@ -595,7 +595,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 using (var ms = new MemoryStream())
                 {
-                    using (var ss = this.OpenStream(FileMode.OpenOrCreate))
+                    using (var ss = OpenStream(FileMode.OpenOrCreate))
                     {
                         if (ss.Stream.Length == 0)
                         {
@@ -696,7 +696,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                     x.Flush();
 
-                    using (var ss = this.OpenStream(FileMode.Create))
+                    using (var ss = OpenStream(FileMode.Create))
                     {
                         ss.Stream.SetLength(0);
 
@@ -719,11 +719,11 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             private class SmartStream : IDisposable
             {
-                private readonly bool isStreamOwned;
+                private readonly bool _isStreamOwned;
 
                 public SmartStream(string filepath, FileMode mode)
                 {
-                    this.isStreamOwned = true;
+                    _isStreamOwned = true;
 
                     var directory = Path.GetDirectoryName(filepath);
                     if (directory != null)
@@ -731,13 +731,13 @@ namespace OfficeRibbonXEditor.Views.Controls
                         Directory.CreateDirectory(directory);
                     }
 
-                    this.Stream = File.Open(filepath, mode);
+                    Stream = File.Open(filepath, mode);
                 }
 
                 public SmartStream(Stream stream)
                 {
-                    this.isStreamOwned = false;
-                    this.Stream = stream;
+                    _isStreamOwned = false;
+                    Stream = stream;
                 }
 
                 public Stream Stream { get; private set; }
@@ -749,9 +749,9 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 public void Dispose()
                 {
-                    if (this.isStreamOwned)
+                    if (_isStreamOwned)
                     {
-                        this.Stream?.Dispose();
+                        Stream?.Dispose();
                     }
                 }
             }

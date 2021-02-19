@@ -8,21 +8,17 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     public class DialogBase : ViewModelBase, IContentDialogBase
     {
-        public DialogBase()
-        {
-            this.ClosingCommand = new RelayCommand<CancelEventArgs>(this.ExecuteClosingCommand);
-            this.CloseCommand = new RelayCommand(this.Close);
-        }
-
         public bool IsUnique => true;
 
         public bool IsClosed { get; protected set; }
 
         public bool IsCancelled { get; protected set; } = true;
 
-        public RelayCommand<CancelEventArgs> ClosingCommand { get; }
+        private RelayCommand<CancelEventArgs>? _closingCommand;
+        public RelayCommand<CancelEventArgs> ClosingCommand => _closingCommand ??= new RelayCommand<CancelEventArgs>(ExecuteClosingCommand);
 
-        public RelayCommand CloseCommand { get; }
+        private RelayCommand? _closeCommand;
+        public RelayCommand CloseCommand => _closeCommand ??= new RelayCommand(Close);
 
         public event EventHandler? Closed;
 

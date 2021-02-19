@@ -16,13 +16,13 @@ namespace OfficeRibbonXEditor.Views.Windows
     [ExportView(typeof(MainWindowViewModel))]
     public partial class MainWindow
     {
-        private MainWindowViewModel? viewModel;
+        private MainWindowViewModel? _viewModel;
 
-        private bool suppressRequestBringIntoView;
+        private bool _suppressRequestBringIntoView;
 
         public MainWindow()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
@@ -34,27 +34,27 @@ namespace OfficeRibbonXEditor.Views.Windows
                 return;
             }
 
-            this.viewModel = model;
+            _viewModel = model;
 
-            this.viewModel.InsertRecentFile += (o, e) =>
+            _viewModel.InsertRecentFile += (o, e) =>
             {
                 if (e.Data != null)
                 {
-                    this.RecentFileList.InsertFile(e.Data);
+                    RecentFileList.InsertFile(e.Data);
                 }
             };
 
-            this.viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
+            _viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
 
             // These no longer use interactions in XAML due to the conversion needed for the command parameter
-            this.PreviewDragEnter += this.OnPreviewDragEnter;
-            this.Drop += this.OnDrop;
+            PreviewDragEnter += OnPreviewDragEnter;
+            Drop += OnDrop;
         }
 
         private void OnPreviewDragEnter(object sender, DragEventArgs e)
         {
             var data = new DragData(e.Data);
-            this.viewModel?.PreviewDragEnterCommand.Execute(data);
+            _viewModel?.PreviewDragEnterCommand.Execute(data);
             if (data.Handled)
             {
                 e.Handled = true;
@@ -64,7 +64,7 @@ namespace OfficeRibbonXEditor.Views.Windows
         private void OnDrop(object sender, DragEventArgs e)
         {
             var data = new DragData(e.Data);
-            this.viewModel?.DropCommand.Execute(data);
+            _viewModel?.DropCommand.Execute(data);
             if (data.Handled)
             {
                 e.Handled = true;
@@ -92,7 +92,7 @@ namespace OfficeRibbonXEditor.Views.Windows
         private void OnTreeViewItemRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
         {
             // Ignore re-entrant calls
-            if (this.suppressRequestBringIntoView)
+            if (_suppressRequestBringIntoView)
             {
                 return;
             }
@@ -103,7 +103,7 @@ namespace OfficeRibbonXEditor.Views.Windows
             // Call BringIntoView using a rectangle that extends into "negative space" to the left of our
             // actual control. This allows the vertical scrolling behaviour to operate without adversely
             // affecting the current horizontal scroll position.
-            this.suppressRequestBringIntoView = true;
+            _suppressRequestBringIntoView = true;
 
             if (sender is TreeViewItem item)
             {
@@ -111,7 +111,7 @@ namespace OfficeRibbonXEditor.Views.Windows
                 item.BringIntoView(newTargetRect);
             }
 
-            this.suppressRequestBringIntoView = false;
+            _suppressRequestBringIntoView = false;
         }
 
         // The call to BringIntoView() in OnTreeViewItemSelected is also important
@@ -184,15 +184,15 @@ namespace OfficeRibbonXEditor.Views.Windows
         private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
-            this.viewModel?.OpenTabCommand.Execute(null);
+            _viewModel?.OpenTabCommand.Execute(null);
         }
         
         private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
-            if (this.viewModel != null)
+            if (_viewModel != null)
             {
-                this.viewModel.SelectedItem = newItem;
+                _viewModel.SelectedItem = newItem;
             }
         }
 

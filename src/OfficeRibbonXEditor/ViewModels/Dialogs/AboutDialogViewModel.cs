@@ -9,38 +9,38 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export]
     public class AboutDialogViewModel : DialogBase
     {
-        private readonly IMessageBoxService messageBoxService;
+        private readonly IMessageBoxService _messageBoxService;
 
-        private readonly IUrlHelper urlHelper;
+        private readonly IUrlHelper _urlHelper;
 
         public AboutDialogViewModel(IMessageBoxService messageBoxService, IToolInfo info, IUrlHelper urlHelper)
         {
-            this.messageBoxService = messageBoxService;
-            this.Info = info;
-            this.urlHelper = urlHelper;
-            this.SubmitIssueCommand = new RelayCommand(this.ExecuteSubmitIssueCommand);
-            this.CopyInfoCommand = new RelayCommand(this.ExecuteCopyInfoCommand);
+            _messageBoxService = messageBoxService;
+            Info = info;
+            _urlHelper = urlHelper;
         }
 
         public IToolInfo Info { get; }
 
-        public RelayCommand SubmitIssueCommand { get; }
+        private RelayCommand? _submitIssueCommand;
+        public RelayCommand SubmitIssueCommand => _submitIssueCommand ??= new RelayCommand(ExecuteSubmitIssueCommand);
 
-        public RelayCommand CopyInfoCommand { get; }
+        private RelayCommand? _copyInfoCommand;
+        public RelayCommand CopyInfoCommand => _copyInfoCommand ??= new RelayCommand(ExecuteCopyInfoCommand);
 
         private void ExecuteSubmitIssueCommand()
         {
-            this.urlHelper.OpenIssue();
+            _urlHelper.OpenIssue();
         }
 
         private void ExecuteCopyInfoCommand()
         {
             Clipboard.SetText(
-                $"Version: {this.Info.AssemblyVersion}\n" +
-                $"Runtime:\n {this.Info.RuntimeVersion}\n " +
-                $"Operating System: {this.Info.OperatingSystemVersion}");
+                $"Version: {Info.AssemblyVersion}\n" +
+                $"Runtime:\n {Info.RuntimeVersion}\n " +
+                $"Operating System: {Info.OperatingSystemVersion}");
 
-            this.messageBoxService.Show(
+            _messageBoxService.Show(
                 Strings.Message_VersionCopy_Text,
                 Strings.Message_VersionCopy_Title,
                 MessageBoxButton.OK,

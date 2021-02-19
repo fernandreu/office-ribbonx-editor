@@ -10,26 +10,26 @@ namespace OfficeRibbonXEditor.Helpers.Xml
     {
         public XmlErrorResults(IEnumerable<XmlError> items)
         {
-            this.Items = new List<XmlError>(items);
+            Items = new List<XmlError>(items);
         }
 
         public string Header { get; } = "XML Validation Results";
 
         public List<XmlError> Items { get; }
 
-        public bool IsEmpty => this.Items.Count == 0;
+        public bool IsEmpty => Items.Count == 0;
 
-        public int Count => this.Items.Count;
+        public int Count => Items.Count;
 
         public void AddToPanel(Scintilla editor, Scintilla resultsPanel)
         {
             resultsPanel.ClearAll();
-            foreach (var item in this.Items)
+            foreach (var item in Items)
             {
                 resultsPanel.AppendText($"Ln {item.LineNumber}, Col {item.LinePosition}: {item.Message}\n");
             }
 
-            if (this.Items.Count == 1)
+            if (Items.Count == 1)
             {
                 // Go to that single line immediately
 
@@ -41,14 +41,14 @@ namespace OfficeRibbonXEditor.Helpers.Xml
                 // To prevent this from happening, we introduce a small delay to give the editor time to show the panel
                 // TODO: Find a more robust way to achieve the same effect
 
-                Task.Delay(100).ContinueWith(t => Application.Current.Dispatcher?.Invoke(() => this.GoToPosition(1, editor, resultsPanel)), TaskScheduler.Current);
+                Task.Delay(100).ContinueWith(t => Application.Current.Dispatcher?.Invoke(() => GoToPosition(1, editor, resultsPanel)), TaskScheduler.Current);
             }
         }
 
         public void GoToPosition(int pos, Scintilla editor, Scintilla resultsPanel)
         {
             var selectedLine = resultsPanel.LineFromPosition(pos);
-            var item = this.Items[selectedLine];
+            var item = Items[selectedLine];
             if (item.LineNumber > editor.Lines.Count)
             {
                 return;

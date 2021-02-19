@@ -33,8 +33,8 @@ namespace OfficeRibbonXEditor.Views.Dialogs
 
         public DialogControl? View
         {
-            get => (DialogControl) this.GetValue(ViewProperty);
-            set => this.SetValue(ViewProperty, value);
+            get => (DialogControl) GetValue(ViewProperty);
+            set => SetValue(ViewProperty, value);
         }
 
         public static readonly DependencyProperty ModelProperty = DependencyProperty.Register(
@@ -45,8 +45,8 @@ namespace OfficeRibbonXEditor.Views.Dialogs
 
         public IContentDialogBase Model
         {
-            get => (IContentDialogBase) this.GetValue(ModelProperty);
-            set => this.SetValue(ModelProperty, value);
+            get => (IContentDialogBase) GetValue(ModelProperty);
+            set => SetValue(ModelProperty, value);
         }
 
         private static void OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
@@ -103,13 +103,13 @@ namespace OfficeRibbonXEditor.Views.Dialogs
 
         private void CenterInOwner()
         {
-            if (this.Owner == null)
+            if (Owner == null)
             {
                 return;
             }
 
-            this.Left = this.Owner.Left - (this.Width - this.Owner.Width) / 2;
-            this.Top = this.Owner.Top - (this.Height - this.Owner.Height) / 2;
+            Left = Owner.Left - (Width - Owner.Width) / 2;
+            Top = Owner.Top - (Height - Owner.Height) / 2;
         }
     }
 }

@@ -15,7 +15,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             set
             {
                 base.Position = value;
-                this.Range.Select();
+                Range.Select();
             }
         }
 
@@ -25,7 +25,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             set
             {
                 base.EndPosition = value;
-                this.Range.Select();
+                Range.Select();
             }
         }
 
@@ -35,7 +35,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             set
             {
                 base.Line = value;
-                this.Range.Select();
+                Range.Select();
             }
         }
     }

@@ -8,23 +8,23 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
     [TestFixture]
     public class OfficeDocumentViewModelTests
     {
-        private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
+        private readonly string _sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
-        private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
+        private readonly string _destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
 
-        private readonly string undoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/undo.png");
+        private readonly string _undoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/undo.png");
 
-        private readonly string redoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/redo.png");
+        private readonly string _redoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/redo.png");
 
         [SetUp]
         public void SetUp()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Directory.CreateDirectory(Path.GetDirectoryName(this.destFile));
+            Directory.CreateDirectory(Path.GetDirectoryName(_destFile));
 
-            if (File.Exists(this.destFile))
+            if (File.Exists(_destFile))
             {
-                File.Delete(this.destFile);
+                File.Delete(_destFile);
             }
         }
 
@@ -32,7 +32,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         public void PartShouldBeInserted()
         {
             // Arrange
-            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var doc = new OfficeDocument(_sourceFile))
             using (var viewModel = new OfficeDocumentViewModel(doc))
             {
                 // Act
@@ -47,17 +47,17 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         public void DocumentShouldBeSaved()
         {
             // Arrange
-            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var doc = new OfficeDocument(_sourceFile))
             using (var viewModel = new OfficeDocumentViewModel(doc))
             {
                 viewModel.InsertPart(XmlPart.RibbonX12);
-                Assume.That(File.Exists(this.destFile), Is.False, "File was not deleted before test");
+                Assume.That(File.Exists(_destFile), Is.False, "File was not deleted before test");
 
                 // Act
-                doc.Save(this.destFile);
+                doc.Save(_destFile);
 
                 // Assert
-                Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
+                Assert.IsTrue(File.Exists(_destFile), "File was not saved");
             }
         }
         
@@ -90,36 +90,36 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
                 }
             }
 
-            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var doc = new OfficeDocument(_sourceFile))
             using (var viewModel = new OfficeDocumentViewModel(doc))
             {
                 viewModel.InsertPart(XmlPart.RibbonX12);
                 viewModel.InsertPart(XmlPart.RibbonX14);
 
                 var part = (OfficePartViewModel) viewModel.Children[0];
-                part.InsertIcon(this.undoIcon);
-                part.InsertIcon(this.redoIcon);
+                part.InsertIcon(_undoIcon);
+                part.InsertIcon(_redoIcon);
                 part.RemoveIcon("undo");
                 part = (OfficePartViewModel) viewModel.Children[1];
-                part.InsertIcon(this.redoIcon);
+                part.InsertIcon(_redoIcon);
                 var icon = (IconViewModel) part.Children[0];
                 icon.Name = "changedId";
-                part.InsertIcon(this.redoIcon);
+                part.InsertIcon(_redoIcon);
 
                 // Act / assert
                 CheckIntegrity(viewModel);
 
-                viewModel.Save(false, this.destFile);
+                viewModel.Save(false, _destFile);
             }
 
-            using (var doc = new OfficeDocument(this.destFile))
+            using (var doc = new OfficeDocument(_destFile))
             using (var viewModel = new OfficeDocumentViewModel(doc))
             {
                 CheckIntegrity(viewModel);
-                viewModel.Save(true, this.destFile);
+                viewModel.Save(true, _destFile);
             }
 
-            using (var doc = new OfficeDocument(this.destFile))
+            using (var doc = new OfficeDocument(_destFile))
             using (var viewModel = new OfficeDocumentViewModel(doc))
             {
                 CheckIntegrity(viewModel);

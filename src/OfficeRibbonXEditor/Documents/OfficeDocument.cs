@@ -34,9 +34,9 @@ namespace OfficeRibbonXEditor.Documents
 
         public const string ImagePartRelType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
 
-        private readonly string tempFileName;
+        private readonly string _tempFileName;
         
-        private bool disposed;
+        private bool _disposed;
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. Triggered due to UnderlyingPackage, but this is assigned in Init()
         public OfficeDocument(string fileName)
@@ -51,15 +51,15 @@ namespace OfficeRibbonXEditor.Documents
                 throw new ArgumentException("File name cannot be empty.");
             }
 
-            this.Name = fileName;
+            Name = fileName;
 
-            this.tempFileName = Path.GetTempFileName();
+            _tempFileName = Path.GetTempFileName();
 
-            File.Copy(this.Name, this.tempFileName, true /*overwrite*/);
-            File.SetAttributes(this.tempFileName, FileAttributes.Normal);
+            File.Copy(Name, _tempFileName, true /*overwrite*/);
+            File.SetAttributes(_tempFileName, FileAttributes.Normal);
 
-            this.Init();
-            this.IsDirty = false;
+            Init();
+            IsDirty = false;
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
@@ -75,12 +75,12 @@ namespace OfficeRibbonXEditor.Documents
         {
             get
             {
-                if (this.Parts == null || this.Parts.Count == 0)
+                if (Parts == null || Parts.Count == 0)
                 {
                     return false;
                 }
 
-                foreach (var part in this.Parts)
+                foreach (var part in Parts)
                 {
                     if (part.PartType == XmlPart.RibbonX12 || part.PartType == XmlPart.RibbonX14)
                     {
@@ -92,7 +92,7 @@ namespace OfficeRibbonXEditor.Documents
             }
         }
         
-        public OfficeApplication FileType => MapFileType(Path.GetExtension(this.Name));
+        public OfficeApplication FileType => MapFileType(Path.GetExtension(Name));
 
         public static OfficeApplication MapFileType(string extension)
         {
@@ -135,8 +135,8 @@ namespace OfficeRibbonXEditor.Documents
         public bool HasExternalChanges()
         {
             // TODO: This doesn't work, due to tempFileName being already open. For this to work properly, an extra temporary copy of tempFileName might be required
-            var first = new FileInfo(this.Name);
-            var second = new FileInfo(this.tempFileName);
+            var first = new FileInfo(Name);
+            var second = new FileInfo(_tempFileName);
 
             if (first.Length != second.Length)
             {
@@ -146,22 +146,21 @@ namespace OfficeRibbonXEditor.Documents
             const int BytesToRead = sizeof(long);
 
             var iterations = (int)Math.Ceiling((double)first.Length / BytesToRead);
+
+            using var fs1 = File.Open(Name, FileMode.Open, FileAccess.Read, FileShare.Read);
+            using var fs2 = File.Open(_tempFileName, FileMode.Open, FileAccess.Read, FileShare.Read);
             
-            using (var fs1 = File.Open(this.Name, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var fs2 = File.Open(this.tempFileName, FileMode.Open, FileAccess.Read, FileShare.Read))
+            var one = new byte[BytesToRead];
+            var two = new byte[BytesToRead];
+
+            for (var i = 0; i < iterations; i++)
             {
-                var one = new byte[BytesToRead];
-                var two = new byte[BytesToRead];
+                fs1.Read(one, 0, BytesToRead);
+                fs2.Read(two, 0, BytesToRead);
 
-                for (var i = 0; i < iterations; i++)
+                if (BitConverter.ToInt64(one, 0) != BitConverter.ToInt64(two, 0))
                 {
-                    fs1.Read(one, 0, BytesToRead);
-                    fs2.Read(two, 0, BytesToRead);
-
-                    if (BitConverter.ToInt64(one, 0) != BitConverter.ToInt64(two, 0))
-                    {
-                        return true;
-                    }
+                    return true;
                 }
             }
 
@@ -172,16 +171,16 @@ namespace OfficeRibbonXEditor.Documents
         {
             if (string.IsNullOrEmpty(customFileName))
             {
-                customFileName = this.Name;
+                customFileName = Name;
             }
 
-            if (!this.IsDirty && customFileName == this.Name)
+            if (!IsDirty && customFileName == Name)
             {
                 return;
             }
             
-            this.UnderlyingPackage.Flush();
-            this.UnderlyingPackage.Close();
+            UnderlyingPackage.Flush();
+            UnderlyingPackage.Close();
 
             var info = new FileInfo(customFileName);
             if (info.Exists)
@@ -191,7 +190,7 @@ namespace OfficeRibbonXEditor.Documents
 
             try
             {
-                File.Copy(this.tempFileName, customFileName, true /*overwrite*/);
+                File.Copy(_tempFileName, customFileName, true /*overwrite*/);
                 if (info.Exists && preserveAttributes)
                 {
                     File.SetAttributes(customFileName, info.Attributes);
@@ -199,50 +198,50 @@ namespace OfficeRibbonXEditor.Documents
             }
             finally
             {
-                this.Init();
+                Init();
             }
 
-            this.IsDirty = false;
+            IsDirty = false;
         }
 
         public void RemoveCustomPart(XmlPart partType)
         {
-            if (this.Parts == null)
+            if (Parts == null)
             {
                 return;
             }
 
-            for (var i = this.Parts.Count - 1; i >= 0; i--)
+            for (var i = Parts.Count - 1; i >= 0; i--)
             {
-                if (this.Parts[i].PartType != partType)
+                if (Parts[i].PartType != partType)
                 {
                     continue;
                 }
 
-                var part = this.Parts[i];
+                var part = Parts[i];
                 part.Remove();
                 
-                this.Parts.RemoveAt(i);
+                Parts.RemoveAt(i);
 
-                this.UnderlyingPackage.Flush();
-                this.IsDirty = true;
+                UnderlyingPackage.Flush();
+                IsDirty = true;
             }
         }
 
         public void SaveCustomPart(XmlPart partType, string text)
         {
-            this.SaveCustomPart(partType, text, false /*isCreatingNewPart*/);
+            SaveCustomPart(partType, text, false /*isCreatingNewPart*/);
         }
 
         public void SaveCustomPart(XmlPart partType, string text, bool isCreatingNewPart)
         {
-            var targetPart = this.RetrieveCustomPart(partType);
+            var targetPart = RetrieveCustomPart(partType);
 
             if (targetPart == null)
             {
                 if (isCreatingNewPart)
                 {
-                    targetPart = this.CreateCustomPart(partType);
+                    targetPart = CreateCustomPart(partType);
                 }
                 else
                 {
@@ -252,7 +251,7 @@ namespace OfficeRibbonXEditor.Documents
 
             Debug.Assert(targetPart != null, "targetPart is null when saving custom part");
             targetPart?.Save(text);
-            this.IsDirty = true;
+            IsDirty = true;
         }
 
         public OfficePart CreateCustomPart(XmlPart partType)
@@ -279,38 +278,38 @@ namespace OfficeRibbonXEditor.Documents
             }
 
             var customUiUri = new Uri(relativePath, UriKind.Relative);
-            var relationship = this.UnderlyingPackage.CreateRelationship(customUiUri, TargetMode.Internal, relType);
+            var relationship = UnderlyingPackage.CreateRelationship(customUiUri, TargetMode.Internal, relType);
 
             OfficePart part;
-            if (!this.UnderlyingPackage.PartExists(customUiUri))
+            if (!UnderlyingPackage.PartExists(customUiUri))
             {
-                part = new OfficePart(this.UnderlyingPackage.CreatePart(customUiUri, "application/xml"), partType, relationship.Id);
+                part = new OfficePart(UnderlyingPackage.CreatePart(customUiUri, "application/xml"), partType, relationship.Id);
             }
             else
             {
-                part = new OfficePart(this.UnderlyingPackage.GetPart(customUiUri), partType, relationship.Id);
+                part = new OfficePart(UnderlyingPackage.GetPart(customUiUri), partType, relationship.Id);
             }
 
-            if (this.Parts == null)
+            if (Parts == null)
             {
-                this.Parts = new List<OfficePart>();
+                Parts = new List<OfficePart>();
             }
 
-            this.Parts.Add(part);
-            this.IsDirty = true;
+            Parts.Add(part);
+            IsDirty = true;
 
             return part;
         }
 
         public OfficePart? RetrieveCustomPart(XmlPart partType)
         {
-            Debug.Assert(this.Parts != null, "Document has no xmlParts to retrieve");
-            if (this.Parts == null || this.Parts.Count == 0)
+            Debug.Assert(Parts != null, "Document has no xmlParts to retrieve");
+            if (Parts == null || Parts.Count == 0)
             {
                 return null;
             }
 
-            foreach (var part in this.Parts)
+            foreach (var part in Parts)
             {
                 if (part.PartType == partType)
                 {
@@ -323,27 +322,27 @@ namespace OfficeRibbonXEditor.Documents
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (this.disposed)
+            if (_disposed)
             {
                 return;
             }
 
             if (disposing)
             {
-                this.Name = string.Empty;
-                this.Parts?.Clear();
+                Name = string.Empty;
+                Parts?.Clear();
 
-                this.UnderlyingPackage.Close();
+                UnderlyingPackage.Close();
 
                 try
                 {
-                    File.Delete(this.tempFileName);
+                    File.Delete(_tempFileName);
                 }
                 catch (IOException ex)
                 {
@@ -351,19 +350,19 @@ namespace OfficeRibbonXEditor.Documents
                 }
             }
 
-            this.disposed = true;
+            _disposed = true;
         }
 
         private void Init()
         {
-            this.UnderlyingPackage = Package.Open(this.tempFileName, FileMode.Open, FileAccess.ReadWrite);
+            UnderlyingPackage = Package.Open(_tempFileName, FileMode.Open, FileAccess.ReadWrite);
 
-            if (this.UnderlyingPackage == null)
+            if (UnderlyingPackage == null)
             {
                 throw new InvalidOperationException("Failed to get package");
             }
 
-            this.Parts = new List<OfficePart>();
+            Parts = new List<OfficePart>();
 
             var collection = new[]
             {
@@ -373,16 +372,16 @@ namespace OfficeRibbonXEditor.Documents
             };
             foreach (var (relType, partType) in collection)
             {
-                var relationship = this.UnderlyingPackage.GetRelationshipsByType(relType).FirstOrDefault();
+                var relationship = UnderlyingPackage.GetRelationshipsByType(relType).FirstOrDefault();
                 if (relationship == null)
                 {
                     continue;
                 }
 
                 var uri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (this.UnderlyingPackage.PartExists(uri))
+                if (UnderlyingPackage.PartExists(uri))
                 {
-                    this.Parts.Add(new OfficePart(this.UnderlyingPackage.GetPart(uri), partType, relationship.Id));
+                    Parts.Add(new OfficePart(UnderlyingPackage.GetPart(uri), partType, relationship.Id));
                 }
             }
         }

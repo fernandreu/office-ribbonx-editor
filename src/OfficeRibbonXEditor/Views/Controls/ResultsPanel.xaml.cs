@@ -12,16 +12,16 @@ namespace OfficeRibbonXEditor.Views.Controls
     {
         public ResultsPanel()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.ResultsScintilla.Styles[ScintillaNET.Style.Default].Font = "Consolas";
-            this.ResultsScintilla.Styles[ScintillaNET.Style.Default].Size = 10;
+            ResultsScintilla.Styles[ScintillaNET.Style.Default].Font = "Consolas";
+            ResultsScintilla.Styles[ScintillaNET.Style.Default].Size = 10;
 
-            this.ResultsScintilla.ClearAll();
+            ResultsScintilla.ClearAll();
 
-            this.ResultsScintilla.Scintilla.KeyUp += this.KeyUpEventHandler;
-            this.ResultsScintilla.Scintilla.MouseClick += this.MouseClickEventHandler;
-            this.ResultsScintilla.Scintilla.MouseDoubleClick += this.MouseDoubleClickEventHandler;
+            ResultsScintilla.Scintilla.KeyUp += KeyUpEventHandler;
+            ResultsScintilla.Scintilla.MouseClick += MouseClickEventHandler;
+            ResultsScintilla.Scintilla.MouseDoubleClick += MouseDoubleClickEventHandler;
         }
 
         public IResultCollection? Results { get; private set; }
@@ -34,56 +34,56 @@ namespace OfficeRibbonXEditor.Views.Controls
         /// <param name="results"></param>
         public void UpdateFindAllResults(IResultCollection? results)
         {
-            if (results == null || this.Scintilla == null)
+            if (results == null || Scintilla == null)
             {
                 return;
             }
 
-            this.Results = results;
-            this.Results.AddToPanel(this.Scintilla, this.ResultsScintilla.Scintilla);
+            Results = results;
+            Results.AddToPanel(Scintilla, ResultsScintilla.Scintilla);
         }
 
         private void KeyUpEventHandler(object sender, KeyEventArgs e)
         {
-            if (this.Scintilla == null)
+            if (Scintilla == null)
             {
                 return;
             }
 
-            var pos = this.ResultsScintilla.CurrentPosition;
-            this.Results?.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
+            var pos = ResultsScintilla.CurrentPosition;
+            Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
         }
 
         private void MouseClickEventHandler(object sender, MouseEventArgs e)
         {
-            if (this.Scintilla == null)
+            if (Scintilla == null)
             {
                 return;
             }
 
-            var pos = this.ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
+            var pos = ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
             if (pos == -1)
             {
                 return;
             }
 
-            this.Results?.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
+            Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
         }
 
         private void MouseDoubleClickEventHandler(object sender, MouseEventArgs e)
         {
-            if (this.Scintilla == null)
+            if (Scintilla == null)
             {
                 return;
             }
 
-            var pos = this.ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
+            var pos = ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
             if (pos == -1)
             {
                 return;
             }
             
-            this.Results?.GoToPosition(pos, this.Scintilla, this.ResultsScintilla.Scintilla);
+            Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
         }
     }
 }

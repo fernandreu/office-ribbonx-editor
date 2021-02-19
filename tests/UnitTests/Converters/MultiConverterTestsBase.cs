@@ -28,7 +28,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
             var converter = new TConverter();
 
             // Act
-            var actual = converter.Convert(original, this.ToType, parameter, CultureInfo.CurrentCulture);
+            var actual = converter.Convert(original, ToType, parameter, CultureInfo.CurrentCulture);
             return actual;
         }
 
@@ -38,7 +38,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
             var converter = new TConverter();
 
             // Act
-            var actual = converter.ConvertBack(original, this.FromTypes.ToArray(), parameter, CultureInfo.CurrentCulture);
+            var actual = converter.ConvertBack(original, FromTypes.ToArray(), parameter, CultureInfo.CurrentCulture);
             return actual;
         }
     }

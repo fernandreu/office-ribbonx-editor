@@ -47,14 +47,14 @@ namespace OfficeRibbonXEditor.Converters
         /// </summary>
         private class MethodProxy : ICommand
         {
-            private readonly MethodInfo method;
+            private readonly MethodInfo _method;
 
-            private readonly object sender;
+            private readonly object _sender;
 
             public MethodProxy(MethodInfo method, object sender)
             {
-                this.method = method;
-                this.sender = sender;
+                _method = method;
+                _sender = sender;
             }
 
             /// <summary>
@@ -72,12 +72,12 @@ namespace OfficeRibbonXEditor.Converters
 
             public bool CanExecute(object parameter)
             {
-                return this.sender != null;
+                return _sender != null;
             }
 
             public void Execute(object parameter)
             {
-                this.method.Invoke(this.sender, Array.Empty<object>());
+                _method.Invoke(_sender, Array.Empty<object>());
             }
         }
     }

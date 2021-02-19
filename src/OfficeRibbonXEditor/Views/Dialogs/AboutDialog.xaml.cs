@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     {
         public AboutDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

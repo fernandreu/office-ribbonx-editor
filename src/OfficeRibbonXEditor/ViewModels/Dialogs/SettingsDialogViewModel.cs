@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
-
 using GalaSoft.MvvmLight.Command;
-
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Shell;
 using OfficeRibbonXEditor.ViewModels.Tabs;
-
 using WPFLocalizeExtension.Engine;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
@@ -27,7 +22,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             new CultureInfo("zh-CN"),
         };
 
-        private static readonly ICollection<string> extensions = new List<string>
+        private static readonly ICollection<string> Extensions = new List<string>
         {
             ".docx",
             ".docm",
@@ -50,7 +45,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             ".vstm",
         };
 
-        private readonly string[] usedProperties =
+        private readonly string[] _usedProperties =
         {
             nameof(Settings.Default.TextColor),
             nameof(Settings.Default.BackgroundColor),
@@ -68,60 +63,51 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             nameof(Settings.Default.UICulture),
         };
 
-        private readonly Dictionary<string, object> currentValues = new Dictionary<string, object>();
+        private readonly Dictionary<string, object> _currentValues = new Dictionary<string, object>();
 
         public SettingsDialogViewModel()
         {
-            this.LanguageNames = LanguageChoices.Select(x => x.TextInfo.ToTitleCase(x.NativeName)).ToList();
+            LanguageNames = LanguageChoices.Select(x => x.TextInfo.ToTitleCase(x.NativeName)).ToList();
 
-            this.ResetToDefaultCommand = new RelayCommand(this.ResetToDefault);
-            this.ResetToCurrentCommand = new RelayCommand(this.ResetToCurrent);
-            this.ApplyCommand = new RelayCommand(this.ApplySettings);
-            this.AcceptCommand = new RelayCommand(this.AcceptSettings);
-            this.SetAllAssociationsCommand = new RelayCommand<bool>(this.SetAllAssociations);
-
-            foreach (var extension in extensions)
+            foreach (var extension in Extensions)
             {
                 var association = new FileAssociationViewModel(extension);
-                association.ValueChanged += (o, e) => this.SettingsChanged = true;
-                this.FileAssociations.Add(association);
+                association.ValueChanged += (o, e) => SettingsChanged = true;
+                FileAssociations.Add(association);
             }
 
-            this.language = this.LoadLanguage();
+            _language = LoadLanguage();
 
-            Settings.Default.PropertyChanged += this.SettingsChangedEventHandler;
+            Settings.Default.PropertyChanged += SettingsChangedEventHandler;
         }
 
-        private string? language;
-
+        private string? _language;
         public string? Language
         {
-            get => this.language;
+            get => _language;
             set
             {
-                if (!this.Set(ref this.language, value))
+                if (!Set(ref _language, value))
                 {
                     return;
                 }
 
-                this.SaveLanguage();
+                SaveLanguage();
             }
         }
 
-        private bool settingsChanged;
-
+        private bool _settingsChanged;
         public bool SettingsChanged
         {
-            get => this.settingsChanged;
-            set => this.Set(ref this.settingsChanged, value);
+            get => _settingsChanged;
+            set => Set(ref _settingsChanged, value);
         }
 
-        private bool languageChanged;
-
+        private bool _languageChanged;
         public bool LanguageChanged
         {
-            get => this.languageChanged;
-            set => this.Set(ref this.languageChanged, value);
+            get => _languageChanged;
+            set => Set(ref _languageChanged, value);
         }
 
         public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
@@ -132,25 +118,30 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         // cause issues with the UI testing. Using a raw string list instead
         public ICollection<string> LanguageNames { get; }
 
-        public RelayCommand ResetToDefaultCommand { get; }
+        private RelayCommand? _resetToDefaultCommand;
+        public RelayCommand ResetToDefaultCommand => _resetToDefaultCommand ??= new RelayCommand(ResetToDefault);
 
-        public RelayCommand ResetToCurrentCommand { get; }
+        private RelayCommand? _resetToCurrentCommand;
+        public RelayCommand ResetToCurrentCommand => _resetToCurrentCommand ??= new RelayCommand(ResetToCurrent);
 
-        public RelayCommand ApplyCommand { get; }
+        private RelayCommand? _applyCommand;
+        public RelayCommand ApplyCommand => _applyCommand ??= new RelayCommand(ApplySettings);
 
-        public RelayCommand AcceptCommand { get; }
+        private RelayCommand? _acceptCommand;
+        public RelayCommand AcceptCommand => _acceptCommand ??= new RelayCommand(AcceptSettings);
 
-        public RelayCommand<bool> SetAllAssociationsCommand { get; }
+        private RelayCommand<bool>? _setAllAssociationsCommand;
+        public RelayCommand<bool> SetAllAssociationsCommand => _setAllAssociationsCommand ??= new RelayCommand<bool>(SetAllAssociations);
 
         public bool OnLoaded(ICollection<ITabItemViewModel> payload)
         {
-            this.Tabs.Clear();
+            Tabs.Clear();
             foreach (var tab in payload)
             {
-                this.Tabs.Add(tab);
+                Tabs.Add(tab);
             }
 
-            this.LoadCurrent();
+            LoadCurrent();
             return true;
         }
 
@@ -158,31 +149,31 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         {
             if (e.PropertyName == nameof(Settings.Default.UICulture))
             {
-                this.Language = this.LoadLanguage();
-                this.LanguageChanged = true;
+                Language = LoadLanguage();
+                LanguageChanged = true;
             }
 
-            this.SettingsChanged = true;
+            SettingsChanged = true;
         }
 
         private void LoadCurrent()
         {
-            this.currentValues.Clear();
+            _currentValues.Clear();
 
-            foreach (var name in this.usedProperties)
+            foreach (var name in _usedProperties)
             {
-                this.currentValues[name] = Settings.Default[name];
+                _currentValues[name] = Settings.Default[name];
             }
         }
 
         private void ResetToCurrent()
         {
-            foreach (var pair in this.currentValues)
+            foreach (var pair in _currentValues)
             {
                 Settings.Default[pair.Key] = pair.Value;
             }
 
-            foreach (var association in this.FileAssociations)
+            foreach (var association in FileAssociations)
             {
                 association.ResetToCurrent();
             }
@@ -190,7 +181,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private void ResetToDefault()
         {
-            foreach (var name in this.usedProperties)
+            foreach (var name in _usedProperties)
             {
                 var propertyValue = Settings.Default.PropertyValues[name];
 
@@ -200,29 +191,29 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 Settings.Default[name] = propertyValue.PropertyValue;
             }
 
-            foreach (var association in this.FileAssociations)
+            foreach (var association in FileAssociations)
             {
                 association.ResetToDefault();
             }
 
-            this.ApplySettings();
+            ApplySettings();
         }
 
         private void ApplySettings()
         {
             Settings.Default.Save();
-            this.LoadCurrent();
-            foreach (var tab in this.Tabs.OfType<EditorTabViewModel>())
+            LoadCurrent();
+            foreach (var tab in Tabs.OfType<EditorTabViewModel>())
             {
                 tab.Lexer?.Update();
             }
 
-            foreach (var association in this.FileAssociations)
+            foreach (var association in FileAssociations)
             {
                 association.Apply();
             }
 
-            if (this.LanguageChanged)
+            if (LanguageChanged)
             {
                 LocalizeDictionary.Instance.Culture
                     = CultureInfo.CurrentUICulture
@@ -230,15 +221,15 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                             = new CultureInfo(Settings.Default.UICulture);
             }
 
-            this.SettingsChanged = false;
-            this.LanguageChanged = false;
+            SettingsChanged = false;
+            LanguageChanged = false;
         }
 
         private void AcceptSettings()
         {
-            this.ApplySettings();
-            this.IsCancelled = false;
-            this.Close();
+            ApplySettings();
+            IsCancelled = false;
+            Close();
         }
 
         private string LoadLanguage()
@@ -259,13 +250,13 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         private void SaveLanguage()
         {
             // We do not check the ThreeLetterISOLanguageName in this case because all options should come from the dropdown
-            var foundLanguage = LanguageChoices.FirstOrDefault(x => x.TextInfo.ToTitleCase(x.NativeName) == this.Language);
+            var foundLanguage = LanguageChoices.FirstOrDefault(x => x.TextInfo.ToTitleCase(x.NativeName) == Language);
             Settings.Default.UICulture = foundLanguage.Name;
         }
 
         private void SetAllAssociations(bool newValue)
         {
-            foreach (var association in this.FileAssociations)
+            foreach (var association in FileAssociations)
             {
                 association.NewValue = newValue;
             }
@@ -273,9 +264,9 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         protected override void OnClosing(CancelEventArgs args)
         {
-            if (!args.Cancel && this.IsCancelled)
+            if (!args.Cancel && IsCancelled)
             {
-                this.ResetToCurrent();
+                ResetToCurrent();
             }
         }
     }

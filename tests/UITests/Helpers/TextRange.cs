@@ -14,21 +14,21 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 
         public TextRange(ITextPattern textPattern, IValuePattern valuePattern, ITextRange range)
         {
-            this.TextPattern = textPattern;
-            this.ValuePattern = valuePattern;
-            this.Range = range;
+            TextPattern = textPattern;
+            ValuePattern = valuePattern;
+            Range = range;
         }
 
         public virtual int Position
         {
             get => Range.CompareEndpoints(TextPatternRangeEndpoint.Start, TextPattern.DocumentRange, TextPatternRangeEndpoint.Start);
-            set => Range.MoveEndpointByUnit(TextPatternRangeEndpoint.Start, TextUnit.Character, value - this.Position);
+            set => Range.MoveEndpointByUnit(TextPatternRangeEndpoint.Start, TextUnit.Character, value - Position);
         }
 
         public virtual int EndPosition
         {
             get => Range.CompareEndpoints(TextPatternRangeEndpoint.End, TextPattern.DocumentRange, TextPatternRangeEndpoint.Start);
-            set => Range.MoveEndpointByUnit(TextPatternRangeEndpoint.End, TextUnit.Character, value - this.EndPosition);
+            set => Range.MoveEndpointByUnit(TextPatternRangeEndpoint.End, TextUnit.Character, value - EndPosition);
         }
 
         public virtual int Line
@@ -60,7 +60,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
                     line.Move(TextUnit.Line, 1);
                 }
             }
-            set => Range.Move(TextUnit.Line, value - this.Line);
+            set => Range.Move(TextUnit.Line, value - Line);
         }
 
         public string Text
@@ -68,12 +68,12 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             get => Range.GetText(int.MaxValue);
             set
             {
-                var text = this.ValuePattern.Value.Value;
-                var start = this.Position;
-                text = text.Substring(0, this.Position) + value + text.Substring(this.EndPosition);
+                var text = ValuePattern.Value.Value;
+                var start = Position;
+                text = text.Substring(0, Position) + value + text.Substring(EndPosition);
                 ValuePattern.SetValue(text);
-                this.Position = start;
-                this.EndPosition = start + value.Length;
+                Position = start;
+                EndPosition = start + value.Length;
             }
         }
     }

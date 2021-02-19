@@ -24,48 +24,48 @@ namespace OfficeRibbonXEditor.UITests.Main
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "Disposed in TearDown")]
     public class EditorTabTests
     {
-        private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/SingleXml.xlsx");
+        private readonly string _sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/SingleXml.xlsx");
 
-        private readonly AppManager manager = new AppManager();
+        private readonly AppManager _manager = new AppManager();
 
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-        private TabItem tab;
+        private TabItem _tab;
 
-        private Scintilla editor;
+        private Scintilla _editor;
 
-        private string originalCode;
+        private string _originalCode;
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            this.manager.Launch(sourceFile);
-            var tabView = this.manager.Window?.FindTabView();
+            _manager.Launch(_sourceFile);
+            var tabView = _manager.Window?.FindTabView();
             Assume.That(tabView, Is.Not.Null);
 
-            this.tab = tabView!.FindFirstDescendant(x => x.ByClassName(nameof(EditorTab))).AsTabItem();
-            Assume.That(this.tab, Is.Not.Null, "Editor tab not automatically shown");
+            _tab = tabView!.FindFirstDescendant(x => x.ByClassName(nameof(EditorTab))).AsTabItem();
+            Assume.That(_tab, Is.Not.Null, "Editor tab not automatically shown");
 
-            var scintilla = this.tab.FindFirstDescendant("Editor").AsScintilla();
+            var scintilla = _tab.FindFirstDescendant("Editor").AsScintilla();
             Assume.That(scintilla, Is.Not.Null);
-            this.editor = scintilla!;
+            _editor = scintilla!;
 
-            this.originalCode = this.editor.Text;
-            Assume.That(this.originalCode, Is.Not.Empty);
+            _originalCode = _editor.Text;
+            Assume.That(_originalCode, Is.Not.Empty);
         }
 
         [SetUp]
         public void SetUp()
         {
-            this.editor.Text = this.originalCode;
-            this.editor.Click();
-            this.editor.Selection.Position = 0;
+            _editor.Text = _originalCode;
+            _editor.Click();
+            _editor.Selection.Position = 0;
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.manager.Dispose();
+            _manager.Dispose();
         }
 
         [Test]
@@ -80,8 +80,8 @@ namespace OfficeRibbonXEditor.UITests.Main
             WaitForClipboard();
 
             // Assert
-            Assert.AreEqual(originalCode, Clipboard.GetText());
-            Assert.IsEmpty(this.editor.Text);
+            Assert.AreEqual(_originalCode, Clipboard.GetText());
+            Assert.IsEmpty(_editor.Text);
         }
 
         [Test]
@@ -96,7 +96,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             WaitForClipboard();
 
             // Assert
-            Assert.AreEqual(this.editor.Text, Clipboard.GetText());
+            Assert.AreEqual(_editor.Text, Clipboard.GetText());
         }
 
         [Test]
@@ -108,11 +108,11 @@ namespace OfficeRibbonXEditor.UITests.Main
             
             // Act
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_V);
-            this.manager.App!.WaitWhileBusy();
+            _manager.App!.WaitWhileBusy();
 
             // Assert
-            Assert.AreNotEqual(originalCode, this.editor.Text);
-            Assert.That(this.editor.Text, Contains.Substring(pastedText));
+            Assert.AreNotEqual(_originalCode, _editor.Text);
+            Assert.That(_editor.Text, Contains.Substring(pastedText));
         }
 
         [Test]
@@ -120,15 +120,15 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             // Arrange
             const string contents = "First Line\n    Second Line\nThird Line";
-            this.editor.Text = contents;
-            this.editor.Selection.Position = 0;
+            _editor.Text = contents;
+            _editor.Selection.Position = 0;
 
             // Act
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_D);
-            this.manager.App!.WaitWhileBusy();
+            _manager.App!.WaitWhileBusy();
 
             // Assert
-            Assert.That(this.editor.Text, Contains.Substring("First Line\nFirst Line\n"));
+            Assert.That(_editor.Text, Contains.Substring("First Line\nFirst Line\n"));
         }
 
         [Test]
@@ -150,7 +150,7 @@ namespace OfficeRibbonXEditor.UITests.Main
 
                 // Assert
                 // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
-                Assert.AreEqual(originalCode, this.editor.Text);
+                Assert.AreEqual(_originalCode, _editor.Text);
             }
         }
 
@@ -166,7 +166,7 @@ namespace OfficeRibbonXEditor.UITests.Main
 
             // Assert
             // TODO: Find a proper way of checking whether the folding / unfolding actions really did anything
-            Assert.AreEqual(originalCode, this.editor.Text);
+            Assert.AreEqual(_originalCode, _editor.Text);
         }
 
         [Test]
@@ -178,14 +178,14 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             // Arrange
             var textParts = new [] {"This", "text", "has", "five", "lines"};
-            this.editor.Text = string.Join(Environment.NewLine, textParts);
-            this.editor.Selection.Line = originalLine - 1;
+            _editor.Text = string.Join(Environment.NewLine, textParts);
+            _editor.Selection.Line = originalLine - 1;
 
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.KEY_G); // Go To
             Window? dialog = null;
             Retry.WhileNull(() =>
             {
-                dialog = this.manager.Window!.FindFirstDescendant(x => x.ByControlType(ControlType.Window)).AsWindow();
+                dialog = _manager.Window!.FindFirstDescendant(x => x.ByControlType(ControlType.Window)).AsWindow();
                 return dialog;
             }, TimeSpan.FromSeconds(5));
             Assert.NotNull(dialog, "No dialog launched");
@@ -205,7 +205,7 @@ namespace OfficeRibbonXEditor.UITests.Main
             Thread.Sleep(TimeSpan.FromSeconds(1));
 
             // Assert
-            Assert.AreEqual(expected, this.editor.Selection.Line + 1);
+            Assert.AreEqual(expected, _editor.Selection.Line + 1);
         }
 
         [Test]
@@ -214,16 +214,16 @@ namespace OfficeRibbonXEditor.UITests.Main
         {
             // Arrange
             var textParts = new[] { "This", "text", "has", "five", "lines" };
-            this.editor.Text = string.Join(Environment.NewLine, textParts);
-            this.editor.Selection.Line = line - 1;
+            _editor.Text = string.Join(Environment.NewLine, textParts);
+            _editor.Selection.Line = line - 1;
 
             // Act / Assert
 
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.DIVIDE); // Toggle comment
-            Assert.That(this.editor.Selection.Text, Does.Match($"<\\!--{textParts[line - 1]}-->.*"));
+            Assert.That(_editor.Selection.Text, Does.Match($"<\\!--{textParts[line - 1]}-->.*"));
 
             Keyboard.TypeSimultaneously(VirtualKeyShort.CONTROL, VirtualKeyShort.DIVIDE); // Toggle comment
-            Assert.That(this.editor.Selection.Text, Does.Match($"{textParts[line - 1]}.*"));
+            Assert.That(_editor.Selection.Text, Does.Match($"{textParts[line - 1]}.*"));
         }
 
         private static void WaitForClipboard()

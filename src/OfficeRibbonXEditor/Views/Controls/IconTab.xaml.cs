@@ -11,12 +11,12 @@ namespace OfficeRibbonXEditor.Views.Controls
     /// </summary>
     public partial class IconTab : UserControl
     {
-        private IconTabViewModel? viewModel;
+        private IconTabViewModel? _viewModel;
 
-        private Point scrollMousePoint;
+        private Point _scrollMousePoint;
 
-        private double hOffset = 1;
-        private double vOffset = 1;
+        private double _hOffset = 1;
+        private double _vOffset = 1;
 
         public IconTab()
         {
@@ -39,20 +39,20 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             if (!(args.NewValue is IconTabViewModel model))
             {
-                this.viewModel = null;
+                this._viewModel = null;
                 return;
             }
 
-            this.viewModel = model;
+            this._viewModel = model;
 
             // TODO: Add listeners
         }
 
         private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.scrollMousePoint = e.GetPosition(this.ScrollViewer);
-            this.hOffset = this.ScrollViewer.HorizontalOffset;
-            this.vOffset = this.ScrollViewer.VerticalOffset;
+            this._scrollMousePoint = e.GetPosition(this.ScrollViewer);
+            this._hOffset = this.ScrollViewer.HorizontalOffset;
+            this._vOffset = this.ScrollViewer.VerticalOffset;
             this.ScrollViewer.CaptureMouse();
         }
 
@@ -60,8 +60,8 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             if (this.ScrollViewer.IsMouseCaptured)
             {
-                this.ScrollViewer.ScrollToHorizontalOffset(this.hOffset + (this.scrollMousePoint.X - e.GetPosition(this.ScrollViewer).X));
-                this.ScrollViewer.ScrollToVerticalOffset(this.vOffset + (this.scrollMousePoint.Y - e.GetPosition(this.ScrollViewer).Y));
+                this.ScrollViewer.ScrollToHorizontalOffset(this._hOffset + (this._scrollMousePoint.X - e.GetPosition(this.ScrollViewer).X));
+                this.ScrollViewer.ScrollToVerticalOffset(this._vOffset + (this._scrollMousePoint.Y - e.GetPosition(this.ScrollViewer).Y));
             }
         }
 
@@ -73,9 +73,9 @@ namespace OfficeRibbonXEditor.Views.Controls
         private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-            if (this.viewModel != null)
+            if (this._viewModel != null)
             {
-                this.viewModel.Zoom += Math.Sign(e.Delta);
+                this._viewModel.Zoom += Math.Sign(e.Delta);
             }
         }
     }
