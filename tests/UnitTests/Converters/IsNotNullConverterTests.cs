@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(42, ExpectedResult = true)]
         public object? ConvertTest(object? original)
         {
-            return this.Convert(original);
+            return Convert(original);
         }
 
         [Test]
@@ -20,7 +20,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(true)]
         public void ShouldNotConvertBack(object? original)
         {
-            Assert.Throws<InvalidOperationException>(() => this.ConvertBack(original));
+            Assert.Throws<InvalidOperationException>(() => ConvertBack(original));
         }
     }
 }

@@ -11,7 +11,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(false, ExpectedResult = true)]
         public object? ConvertTest(object? original)
         {
-            return this.Convert(original);
+            return Convert(original);
         }
 
         [Test]
@@ -19,7 +19,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(false, ExpectedResult = true)]
         public object? ConvertBackTest(object? original)
         {
-            return this.ConvertBack(original);
+            return ConvertBack(original);
         }
 
         [Test]
@@ -27,8 +27,8 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("wrong type", typeof(InvalidCastException))]
         public void InvalidTypesShouldThrow(object? original, Type exceptionType)
         {
-            Assert.Throws(exceptionType, () => this.Convert(original));
-            Assert.Throws(exceptionType, () => this.ConvertBack(original));
+            Assert.Throws(exceptionType, () => Convert(original));
+            Assert.Throws(exceptionType, () => ConvertBack(original));
         }
     }
 }

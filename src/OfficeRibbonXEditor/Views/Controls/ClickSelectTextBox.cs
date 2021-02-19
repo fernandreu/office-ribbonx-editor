@@ -9,11 +9,11 @@ namespace OfficeRibbonXEditor.Views.Controls
     {
         public ClickSelectTextBox()
         {
-            this.AddHandler(PreviewMouseLeftButtonDownEvent, 
+            AddHandler(PreviewMouseLeftButtonDownEvent, 
                 new MouseButtonEventHandler(SelectivelyIgnoreMouseButton), true);
-            this.AddHandler(GotKeyboardFocusEvent, 
+            AddHandler(GotKeyboardFocusEvent, 
                 new RoutedEventHandler(SelectAllText), true);
-            this.AddHandler(MouseDoubleClickEvent, 
+            AddHandler(MouseDoubleClickEvent, 
                 new RoutedEventHandler(SelectAllText), true);
         }
 

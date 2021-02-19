@@ -7,51 +7,51 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export]
     public class CallbackDialogViewModel : DialogBase, IContentDialog<string?>
     {
-        private VbaLexer? lexer;
+        private VbaLexer? _lexer;
 
-        private string? code;
+        private string? _code;
 
         public VbaLexer? Lexer
         {
-            get => this.lexer;
+            get => _lexer;
             set
             {
-                if (!this.Set(ref this.lexer, value) || this.Code == null)
+                if (!Set(ref _lexer, value) || Code == null)
                 {
                     return;
                 }
 
-                if (this.Lexer?.Editor == null)
+                if (Lexer?.Editor == null)
                 {
                     return;
                 }
 
-                this.Lexer.Editor.Text = this.Code;
+                Lexer.Editor.Text = Code;
             }
         }
 
         public string? Code
         {
-            get => this.code;
+            get => _code;
             set
             {
-                if (!this.Set(ref this.code, value) || this.Lexer == null)
+                if (!Set(ref _code, value) || Lexer == null)
                 {
                     return;
                 }
 
-                if (this.Lexer?.Editor == null)
+                if (Lexer?.Editor == null)
                 {
                     return;
                 }
 
-                this.Lexer.Editor.Text = this.Code;
+                Lexer.Editor.Text = Code;
             }
         }
 
         public bool OnLoaded(string? payload)
         {
-            this.Code = payload;
+            Code = payload;
             return true;
         }
     }

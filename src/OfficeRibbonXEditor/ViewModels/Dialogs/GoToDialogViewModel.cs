@@ -9,76 +9,70 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export]
     public class GoToDialogViewModel : DialogBase, IContentDialog<ScintillaLexer>
     {
-        public GoToDialogViewModel()
-        {
-            this.AcceptCommand = new RelayCommand(this.ExecuteAcceptCommand);
-        }
+        private RelayCommand? _acceptCommand;
+        public RelayCommand AcceptCommand => _acceptCommand ??= new RelayCommand(ExecuteAcceptCommand);
 
-        public RelayCommand AcceptCommand { get; }
-
-        private ScintillaLexer? lexer;
-
+        private ScintillaLexer? _lexer;
         public ScintillaLexer? Lexer
         {
-            get => this.lexer;
+            get => _lexer;
             set
             {
-                if (!this.Set(ref this.lexer, value))
+                if (!Set(ref _lexer, value))
                 {
                     return;
                 }
 
-                this.RaisePropertyChanged(nameof(this.CurrentLineNumber));
-                this.RaisePropertyChanged(nameof(this.MaximumLineNumber));
+                RaisePropertyChanged(nameof(CurrentLineNumber));
+                RaisePropertyChanged(nameof(MaximumLineNumber));
 
-                if (this.Lexer == null)
+                if (Lexer == null)
                 {
                     return;
                 }
 
-                this.Target = this.CurrentLineNumber;
-                this.LexerChanged?.Invoke(this, EventArgs.Empty);
+                Target = CurrentLineNumber;
+                LexerChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public event EventHandler? LexerChanged;
 
-        public int CurrentLineNumber => (this.Lexer?.Editor?.CurrentLine ?? -1) + 1;
+        public int CurrentLineNumber => (Lexer?.Editor?.CurrentLine ?? -1) + 1;
 
-        public int MaximumLineNumber => this.Lexer?.Editor?.Lines.Count ?? 0;
+        public int MaximumLineNumber => Lexer?.Editor?.Lines.Count ?? 0;
 
-        private int target;
-
+        private int _target;
         public int Target
         {
-            get => this.target;
-            set => this.Set(ref this.target, value);
+            get => _target;
+            set => Set(ref _target, value);
         }
 
         public bool OnLoaded(ScintillaLexer payload)
         {
-            this.Lexer = payload;
+            Lexer = payload;
             return true;
         }
 
         private void ExecuteAcceptCommand()
         {
             // Translate it to 0-based line number
-            var line = this.Target - 1;
+            var line = Target - 1;
 
             // This trimming might not be necessary due to how the IntegerUpDown control will clamp the target 
-            if (line > this.MaximumLineNumber)
+            if (line > MaximumLineNumber)
             {
-                line = this.MaximumLineNumber;
+                line = MaximumLineNumber;
             }
             else if (line < 0)
             {
                 line = 0;
             }
 
-            this.Lexer?.Editor?.Scintilla.Lines[line].Goto();
-            this.Close();
-            this.Lexer?.Editor?.Scintilla.Focus();
+            Lexer?.Editor?.Scintilla.Lines[line].Goto();
+            Close();
+            Lexer?.Editor?.Scintilla.Focus();
         }
     }
 }

@@ -9,33 +9,32 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export]
     public class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception?>
     {
-        private readonly IToolInfo info;
+        private readonly IToolInfo _info;
 
-        private readonly IUrlHelper urlHelper;
+        private readonly IUrlHelper _urlHelper;
 
         public ExceptionDialogViewModel(IToolInfo info, IUrlHelper urlHelper)
         {
-            this.info = info;
-            this.urlHelper = urlHelper;
-            this.ShutdownCommand = new RelayCommand(this.ExecuteShutdownCommand);
-            this.SubmitBugCommand = new RelayCommand(this.ExecuteSubmitBugCommand);
+            _info = info;
+            _urlHelper = urlHelper;
         }
 
-        private Exception? exception;
-
+        private Exception? _exception;
         public Exception? Exception
         {
-            get => this.exception;
-            set => this.Set(ref this.exception, value);
+            get => _exception;
+            set => Set(ref _exception, value);
         }
 
-        public RelayCommand ShutdownCommand { get; }
+        private RelayCommand? _shutdownCommand;
+        public RelayCommand ShutdownCommand => _shutdownCommand ??= new RelayCommand(ExecuteShutdownCommand);
 
-        public RelayCommand SubmitBugCommand { get; }
+        private RelayCommand? _submitBugCommand;
+        public RelayCommand SubmitBugCommand => _submitBugCommand ??= new RelayCommand(ExecuteSubmitBugCommand);
 
         public bool OnLoaded(Exception? payload)
         {
-            this.Exception = payload;
+            Exception = payload;
             return payload != null;
         }
 
@@ -46,19 +45,19 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private void ExecuteSubmitBugCommand()
         {
-            var title =$"{this.exception?.GetType().Name}: {this.Exception?.Message}";
+            var title =$"{_exception?.GetType().Name}: {Exception?.Message}";
             var body = 
                "**Describe the bug**\n\n" +
-               $"```\n{this.exception}\n```\n\n" +
+               $"```\n{_exception}\n```\n\n" +
                "**To Reproduce**\n" +
                "Please describe the steps that lead to the unhandled exception here, including example files if relevant.\n\n" +
                "**Screenshots**\n" +
                "If applicable, add screenshots to help explain how the unhandled exception occurred.\n\n" +
                "**Additional context**\n\n" +
-               $"- Version: {this.info.AssemblyVersion}\n" +
-               $"- Runtime: {this.info.RuntimeVersion}\n" +
-               $"- Operating System: {this.info.OperatingSystemVersion}\n";
-            this.urlHelper.OpenBug(title, body);
+               $"- Version: {_info.AssemblyVersion}\n" +
+               $"- Runtime: {_info.RuntimeVersion}\n" +
+               $"- Operating System: {_info.OperatingSystemVersion}\n";
+            _urlHelper.OpenBug(title, body);
         }
     }
 }

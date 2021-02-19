@@ -14,9 +14,9 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     {
         public SettingsDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.WrapModeBox.ItemsSource = Enum.GetValues(typeof(ScintillaNET.WrapMode)).Cast<ScintillaNET.WrapMode>();
+            WrapModeBox.ItemsSource = Enum.GetValues(typeof(ScintillaNET.WrapMode)).Cast<ScintillaNET.WrapMode>();
         }
     }
 }

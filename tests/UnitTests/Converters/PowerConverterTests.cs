@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         public void ConvertTest(double? exponent, double? baseValue, double? expected)
         {
             // Act
-            var converted = this.Convert(exponent, baseValue);
+            var converted = Convert(exponent, baseValue);
 
             // Assert
             if (expected == null)
@@ -33,7 +33,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         public void ConvertBackTest(double? result, double? baseValue, double? expected)
         {
             // Act
-            var converted = this.ConvertBack(result, baseValue);
+            var converted = ConvertBack(result, baseValue);
 
             // Assert
             if (expected == null)

@@ -17,15 +17,15 @@ namespace OfficeRibbonXEditor.Views.Controls
     /// </summary>
     public partial class EditorTab : UserControl
     {
-        private GridLength lastResultsHeight = new GridLength(150);
+        private GridLength _lastResultsHeight = new GridLength(150);
 
-        private EditorTabViewModel? viewModel;
+        private EditorTabViewModel? _viewModel;
 
         public EditorTab()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.ResultsPanel.Scintilla = this.Editor.Scintilla;
+            ResultsPanel.Scintilla = Editor.Scintilla;
         }
         
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
@@ -41,70 +41,70 @@ namespace OfficeRibbonXEditor.Views.Controls
             {
                 // The way the DataTemplate works means the same control can be re-used for the different tabs, just with a different
                 // DataContext. It is important to ensure the previous part is saved first 
-                previousModel.Part.Contents = this.Editor.Text;
+                previousModel.Part.Contents = Editor.Text;
 
-                previousModel.ReadEditorInfo -= this.OnReadEditorInfo;
-                previousModel.UpdateEditor -= this.OnUpdateEditor;
-                previousModel.ShowResults -= this.OnShowResults;
+                previousModel.ReadEditorInfo -= OnReadEditorInfo;
+                previousModel.UpdateEditor -= OnUpdateEditor;
+                previousModel.ShowResults -= OnShowResults;
 
-                previousModel.Cut -= this.OnCut;
-                previousModel.Copy -= this.OnCopy;
-                previousModel.Paste -= this.OnPaste;
-                previousModel.Undo -= this.OnUndo;
-                previousModel.Redo -= this.OnRedo;
-                previousModel.SelectAll -= this.OnSelectAll;
-                previousModel.Fold -= this.OnFold;
-                previousModel.DuplicateLine -= this.OnDuplicateLine;
+                previousModel.Cut -= OnCut;
+                previousModel.Copy -= OnCopy;
+                previousModel.Paste -= OnPaste;
+                previousModel.Undo -= OnUndo;
+                previousModel.Redo -= OnRedo;
+                previousModel.SelectAll -= OnSelectAll;
+                previousModel.Fold -= OnFold;
+                previousModel.DuplicateLine -= OnDuplicateLine;
             }
 
             if (!(args.NewValue is EditorTabViewModel model))
             {
-                this.viewModel = null;
+                _viewModel = null;
                 return;
             }
 
-            this.viewModel = model;
-            this.viewModel.Lexer = new XmlLexer
+            _viewModel = model;
+            _viewModel.Lexer = new XmlLexer
             {
-                Editor = this.Editor,
+                Editor = Editor,
             };
 
-            this.Editor.Text = this.viewModel.Part.Contents;
-            this.Editor.EmptyUndoBuffer();
+            Editor.Text = _viewModel.Part.Contents;
+            Editor.EmptyUndoBuffer();
 
-            this.viewModel.ReadEditorInfo += this.OnReadEditorInfo;
-            this.viewModel.UpdateEditor += this.OnUpdateEditor;
-            this.viewModel.ShowResults += this.OnShowResults;
+            _viewModel.ReadEditorInfo += OnReadEditorInfo;
+            _viewModel.UpdateEditor += OnUpdateEditor;
+            _viewModel.ShowResults += OnShowResults;
 
-            this.viewModel.Cut += this.OnCut;
-            this.viewModel.Copy += this.OnCopy;
-            this.viewModel.Paste += this.OnPaste;
-            this.viewModel.Undo += this.OnUndo;
-            this.viewModel.Redo += this.OnRedo;
-            this.viewModel.SelectAll += this.OnSelectAll;
-            this.viewModel.Fold += this.OnFold;
-            this.viewModel.DuplicateLine += this.OnDuplicateLine;
+            _viewModel.Cut += OnCut;
+            _viewModel.Copy += OnCopy;
+            _viewModel.Paste += OnPaste;
+            _viewModel.Undo += OnUndo;
+            _viewModel.Redo += OnRedo;
+            _viewModel.SelectAll += OnSelectAll;
+            _viewModel.Fold += OnFold;
+            _viewModel.DuplicateLine += OnDuplicateLine;
         }
 
         private void OnReadEditorInfo(object? sender, DataEventArgs<EditorInfo> e)
         {
             e.Data = new EditorInfo(
-                this.Editor.Text,
-                Tuple.Create(this.Editor.SelectionStart, this.Editor.SelectionEnd));
+                Editor.Text,
+                Tuple.Create(Editor.SelectionStart, Editor.SelectionEnd));
         }
 
         private void OnUpdateEditor(object? sender, EditorChangeEventArgs e)
         {
-            this.Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : this.Editor.TextLength) - e.Start);
-            this.Editor.InsertText(e.Start, e.NewText);
+            Editor.DeleteRange(e.Start, (e.End >= 0 ? e.End : Editor.TextLength) - e.Start);
+            Editor.InsertText(e.Start, e.NewText);
             if (e.UpdateSelection)
             {
-                this.Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
+                Editor.SetSelection(e.Start, e.Start + e.NewText.Length);
             }
 
             if (e.ResetUndoHistory)
             {
-                this.Editor.EmptyUndoBuffer();
+                Editor.EmptyUndoBuffer();
             }
         }
 
@@ -113,67 +113,67 @@ namespace OfficeRibbonXEditor.Views.Controls
             if (e.Data?.IsEmpty ?? true)
             {
                 // No reason to update the panel; simply close it if appropriate
-                if (this.ResultsSplitter.Visibility != Visibility.Collapsed && e.Data?.GetType() == this.ResultsPanel.Results?.GetType())
+                if (ResultsSplitter.Visibility != Visibility.Collapsed && e.Data?.GetType() == ResultsPanel.Results?.GetType())
                 {
                     // In this case, appropriate means: it was previously open and showing data of the same type
-                    this.OnCloseFindResults(sender, e);
+                    OnCloseFindResults(sender, e);
                 }
 
                 return;
             }
 
-            this.ResultsSplitter.Visibility = Visibility.Visible;
-            this.ResultsRow.Height = this.lastResultsHeight;
-            this.ResultsHeader.Content = e.Data.Header;
-            this.ResultsPanel.UpdateFindAllResults(e.Data);
+            ResultsSplitter.Visibility = Visibility.Visible;
+            ResultsRow.Height = _lastResultsHeight;
+            ResultsHeader.Content = e.Data.Header;
+            ResultsPanel.UpdateFindAllResults(e.Data);
         }
 
         private void OnCut(object? sender, EventArgs e)
         {
-            this.Editor.Cut();
+            Editor.Cut();
         }
 
         private void OnCopy(object? sender, EventArgs e)
         {
-            this.Editor.Copy();
+            Editor.Copy();
         }
 
         private void OnPaste(object? sender, EventArgs e)
         {
-            this.Editor.Paste();
+            Editor.Paste();
         }
 
         private void OnUndo(object? sender, EventArgs e)
         {
-            this.Editor.Undo();
+            Editor.Undo();
         }
 
         private void OnRedo(object? sender, EventArgs e)
         {
-            this.Editor.Redo();
+            Editor.Redo();
         }
 
         private void OnSelectAll(object? sender, EventArgs e)
         {
-            this.Editor.SelectAll();
+            Editor.SelectAll();
         }
 
         private void OnScintillaUpdateUi(object? sender, UpdateUIEventArgs e)
         {
-            if (!(this.DataContext is EditorTabViewModel vm))
+            if (!(DataContext is EditorTabViewModel vm))
             {
                 return;
             }
 
-            if (!this.Editor.IsEnabled)
+            if (!Editor.IsEnabled)
             {
                 vm.StatusText = "Ln 0, Col 0";
             }
             else
             {
-                var pos = this.Editor.CurrentPosition;
-                var line = this.Editor.LineFromPosition(pos);
-                var col = this.Editor.GetColumn(pos);
+                var pos = Editor.CurrentPosition;
+                var line = Editor.LineFromPosition(pos);
+                var col = Editor.GetColumn(pos);
 
                 vm.StatusText = $"Ln {line + 1},  Col {col + 1}";
             }
@@ -184,15 +184,15 @@ namespace OfficeRibbonXEditor.Views.Controls
             var action = e.Unfold ? FoldAction.Expand : FoldAction.Contract;
             if (e.CurrentOnly)
             {
-                var index = this.Editor.LineFromPosition(this.Editor.CurrentPosition);
-                var line = this.Editor.Lines[index];
+                var index = Editor.LineFromPosition(Editor.CurrentPosition);
+                var line = Editor.Lines[index];
                 line.FoldChildren(action);
                 return;
             }
 
             if (e.Level <= 0)
             {
-                this.Editor.FoldAll(action);
+                Editor.FoldAll(action);
                 return;
             }
 
@@ -211,10 +211,10 @@ namespace OfficeRibbonXEditor.Views.Controls
         private void OnDuplicateLine(object? sender, EventArgs e)
         {
             // The Scintilla editor has an equivalent Ctrl+D shortcut, but it messes up the automatic indentation, so we do our own version instead
-            var index = this.Editor.LineFromPosition(this.Editor.CurrentPosition);
-            var line = this.Editor.Lines[index];
-            this.Editor.InsertText(line.Position, line.Text);
-            this.Editor.ScrollCaret();
+            var index = Editor.LineFromPosition(Editor.CurrentPosition);
+            var line = Editor.Lines[index];
+            Editor.InsertText(line.Position, line.Text);
+            Editor.ScrollCaret();
         }
 
         // For some reason, the Scintilla editor always seems to have preference over the input gestures.
@@ -265,7 +265,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 // If this is not async, the lines above seem to be ignored and the character is still printed when
                 // launching a dialog (e.g. Ctrl-O). See: https://github.com/fernandreu/office-ribbonx-editor/issues/20
-                this.Dispatcher?.InvokeAsync(() => kb.Command?.Execute(null));
+                Dispatcher?.InvokeAsync(() => kb.Command?.Execute(null));
 
                 return;
             }
@@ -283,9 +283,9 @@ namespace OfficeRibbonXEditor.Views.Controls
                 return;
             }
 
-            var startPos = this.Editor.Lines[this.Editor.LineFromPosition(this.Editor.CurrentPosition)].Position;
+            var startPos = Editor.Lines[Editor.LineFromPosition(Editor.CurrentPosition)].Position;
             var endPos = e.Position;
-            var curLineText = this.Editor.GetTextRange(startPos, endPos - startPos); // Text until the caret
+            var curLineText = Editor.GetTextRange(startPos, endPos - startPos); // Text until the caret
             var indent = Regex.Match(curLineText, "^[ \\t]*");
             e.Text += indent.Value;
             if (Regex.IsMatch(curLineText, "[^/]>\\s*$"))
@@ -297,13 +297,13 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         private void OnCloseFindResults(object? sender, EventArgs e)
         {
-            if (this.ResultsRow.Height.Value > new GridLength(50).Value)
+            if (ResultsRow.Height.Value > new GridLength(50).Value)
             {
-                this.lastResultsHeight = this.ResultsRow.Height;
+                _lastResultsHeight = ResultsRow.Height;
             }
 
-            this.ResultsRow.Height = new GridLength(0);
-            this.ResultsSplitter.Visibility = Visibility.Collapsed;
+            ResultsRow.Height = new GridLength(0);
+            ResultsSplitter.Visibility = Visibility.Collapsed;
         }
     }
 }

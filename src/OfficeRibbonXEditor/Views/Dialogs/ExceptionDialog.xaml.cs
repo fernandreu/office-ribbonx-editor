@@ -13,9 +13,9 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     {
         public ExceptionDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
-            this.Loaded += (o, e) => SystemSounds.Asterisk.Play();
+            Loaded += (o, e) => SystemSounds.Asterisk.Play();
         }
     }
 }

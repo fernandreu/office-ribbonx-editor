@@ -10,18 +10,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 {
     public class IconViewModel : TreeViewItemViewModel
     {
-        private string name;
-
-        private string newName;
-        
-        private bool isEditingId;
-
         public IconViewModel(string name, BitmapImage image, OfficePartViewModel parent)
             : base(parent, false, false)
         {
-            this.Image = image;
-            this.name = name;
-            this.newName = name;
+            Image = image;
+            _name = name;
+            _newName = name;
         }
 
         public IconViewModel(string name, string filePath, OfficePartViewModel parent) 
@@ -31,12 +25,13 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public BitmapImage Image { get; }
 
+        private string _name;
         /// <summary>
         /// Gets or sets the Id of the icon, applying the changes directly to the underlying model
         /// </summary>
         public override string Name
         {
-            get => this.name;
+            get => _name;
             set
             {
                 if (!IsValidId(value))
@@ -46,31 +41,33 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                 
                 // Make sure this.ChangeId() is later called with the previous ID and not the new one
                 // already. Otherwise, the icon will actually not be updated inside the part
-                var previousId = this.name;
+                var previousId = _name;
 
-                if (!this.Set(ref this.name, value))
+                if (!Set(ref _name, value))
                 {
                     return;
                 }
                 
-                this.ChangeId(previousId, value);
+                ChangeId(previousId, value);
             }
         }
 
+        private string _newName;
         /// <summary>
         /// Gets or sets the potentially new ID to be used for the icon. This is used, for example, in
         /// editing mode before committing to use the new ID (in case the user discard the changes)
         /// </summary>
         public string NewName
         {
-            get => this.newName;
-            set => this.Set(ref this.newName, value);
+            get => _newName;
+            set => Set(ref _newName, value);
         }
 
+        private bool _isEditingId;
         public bool IsEditingId
         {
-            get => this.isEditingId;
-            set => this.Set(ref this.isEditingId, value);
+            get => _isEditingId;
+            set => Set(ref _isEditingId, value);
         }
 
         /// <summary>
@@ -78,12 +75,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// </summary>
         public void CommitIdChange()
         {
-            this.IsEditingId = false;
+            IsEditingId = false;
 
-            if (!IsValidId(this.NewName, out var errorMessage))
+            if (!IsValidId(NewName, out var errorMessage))
             {
                 // Revert back the change
-                this.NewName = this.Name;
+                NewName = Name;
                 ServiceLocator.Current.GetInstance<IMessageBoxService>()?.Show(
                     errorMessage, 
                     Strings.Message_ChangeIdError_Title, 
@@ -92,7 +89,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                 return;
             }
 
-            this.Name = this.NewName;
+            Name = NewName;
         }
 
         /// <summary>
@@ -100,13 +97,13 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// </summary>
         public void DiscardIdChange()
         {
-            this.NewName = this.Name;
-            this.IsEditingId = false;
+            NewName = Name;
+            IsEditingId = false;
         }
 
         protected override void SelectionLost()
         {
-            this.IsEditingId = false;
+            IsEditingId = false;
         }
         
         private static bool IsValidId(string id)
@@ -146,9 +143,9 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         private void ChangeId(string oldId, string newId)
         {
-            var viewModel = this.Parent as OfficePartViewModel;
+            var viewModel = Parent as OfficePartViewModel;
             viewModel?.Part?.ChangeImageId(oldId, newId);
-            this.IsEditingId = false;
+            IsEditingId = false;
 
             if (viewModel != null)
             {

@@ -7,19 +7,19 @@ namespace OfficeRibbonXEditor.IntegrationTests.Documents
     [TestFixture]
     public class OfficeDocumentTests
     {
-        private readonly string sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
+        private readonly string _sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
 
-        private readonly string destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
+        private readonly string _destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
 
         [SetUp]
         public void SetUp()
         {
             // ReSharper disable once AssignNullToNotNullAttribute
-            Directory.CreateDirectory(Path.GetDirectoryName(this.destFile));
+            Directory.CreateDirectory(Path.GetDirectoryName(_destFile));
 
-            if (File.Exists(this.destFile))
+            if (File.Exists(_destFile))
             {
-                File.Delete(this.destFile);
+                File.Delete(_destFile);
             }
         }
 
@@ -27,7 +27,7 @@ namespace OfficeRibbonXEditor.IntegrationTests.Documents
         public void DocumentShouldBeOpened()
         {
             // Arrange / act
-            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var doc = new OfficeDocument(_sourceFile))
             {
                 // Assert
                 Assert.IsNotNull(doc.UnderlyingPackage, "Package was not opened");
@@ -38,7 +38,7 @@ namespace OfficeRibbonXEditor.IntegrationTests.Documents
         public void PartShouldBeCreated()
         {
             // Arrange
-            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var doc = new OfficeDocument(_sourceFile))
             {
                 // Act
                 var part = doc.CreateCustomPart(XmlPart.RibbonX12);
@@ -52,13 +52,13 @@ namespace OfficeRibbonXEditor.IntegrationTests.Documents
         public void DocumentShouldBeSaved()
         {
             // Arrange
-            using (var doc = new OfficeDocument(this.sourceFile))
+            using (var doc = new OfficeDocument(_sourceFile))
             {
                 // Act
-                doc.Save(this.destFile);
+                doc.Save(_destFile);
 
                 // Assert
-                Assert.IsTrue(File.Exists(this.destFile), "File was not saved");
+                Assert.IsTrue(File.Exists(_destFile), "File was not saved");
             }
         }
     }

@@ -17,34 +17,30 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         [Test]
         public void CanAddFiles()
         {
-            using (var stream = TempFile())
-            {
-                // Arrange
-                Assume.That(this.Control.RecentFiles, Is.Empty);
+            // Arrange
+            using var stream = TempFile();
+            Assume.That(this.Control.RecentFiles, Is.Empty);
 
-                // Act
-                this.Control.InsertFile(stream.Name);
+            // Act
+            this.Control.InsertFile(stream.Name);
 
-                // Assert
-                Assert.Contains(stream.Name, this.Control?.RecentFiles);
-            }
+            // Assert
+            Assert.Contains(stream.Name, this.Control?.RecentFiles);
         }
 
         [Test]
         public void CanRemoveFiles()
         {
-            using (var stream = TempFile())
-            {
-                // Arrange
-                Assume.That(this.Control.RecentFiles, Is.Empty);
+            // Arrange
+            using var stream = TempFile();
+            Assume.That(this.Control.RecentFiles, Is.Empty);
 
-                // Act
-                this.Control.InsertFile(stream.Name);
-                this.Control.RemoveFile(stream.Name);
+            // Act
+            this.Control.InsertFile(stream.Name);
+            this.Control.RemoveFile(stream.Name);
 
-                // Assert
-                Assert.IsEmpty(this.Control.RecentFiles);
-            }
+            // Assert
+            Assert.IsEmpty(this.Control.RecentFiles);
         }
 
         [TestCase(1)]
@@ -88,49 +84,49 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
 
     public class RecentFileTestsWithFilePersister : RecentFileListTests
     {
-        private string? filePath;
+        private string? _filePath;
 
         [SetUp]
         public void SetUp()
         {
             do
             {
-                this.filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            } while (File.Exists(this.filePath));
+                this._filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            } while (File.Exists(this._filePath));
 
             this.Control = new RecentFileList();
-            this.Control.UseXmlPersister(this.filePath);
+            this.Control.UseXmlPersister(this._filePath);
         }
 
         [TearDown]
         public void TearDown()
         {
-            File.Delete(this.filePath);
+            File.Delete(this._filePath);
         }
     }
 
     public class RecentFileTestsWithRegistryPersister : RecentFileListTests
     {
-        private string? registryKey;
+        private string? _registryKey;
 
         [SetUp]
         public void SetUp()
         {
             do
             {
-                this.registryKey = "Software\\" + Path.GetRandomFileName();
-            } while (Registry.CurrentUser.OpenSubKey(this.registryKey) != null);
+                this._registryKey = "Software\\" + Path.GetRandomFileName();
+            } while (Registry.CurrentUser.OpenSubKey(this._registryKey) != null);
 
             this.Control = new RecentFileList();
-            this.Control.UseRegistryPersister(this.registryKey);
+            this.Control.UseRegistryPersister(this._registryKey);
         }
 
         [TearDown]
         public void TearDown()
         {
-            if (Registry.CurrentUser.OpenSubKey(this.registryKey) != null)
+            if (Registry.CurrentUser.OpenSubKey(this._registryKey) != null)
             {
-                Registry.CurrentUser.DeleteSubKey(this.registryKey);
+                Registry.CurrentUser.DeleteSubKey(this._registryKey);
             }
         }
     }

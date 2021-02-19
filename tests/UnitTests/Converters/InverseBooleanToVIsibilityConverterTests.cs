@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("wrong type", ExpectedResult = Visibility.Visible)]
         public object? ConvertTest(object? original)
         {
-            return this.Convert(original);
+            return Convert(original);
         }
 
         [Test]
@@ -24,7 +24,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("wrong type", ExpectedResult = false)]
         public object? ConvertBackTest(object? original)
         {
-            return this.ConvertBack(original);
+            return ConvertBack(original);
         }
     }
 }

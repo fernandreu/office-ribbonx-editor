@@ -1,9 +1,4 @@
-﻿#region Using Directives
-
-#endregion Using Directives
-
-
-using System;
+﻿using System;
 using System.Runtime.InteropServices;
 
 namespace OfficeRibbonXEditor.Helpers
@@ -13,7 +8,7 @@ namespace OfficeRibbonXEditor.Helpers
     /// The range includes everything if min position is 0 and max position is –1.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct CharacterRange : IEquatable<CharacterRange>
+    public readonly struct CharacterRange : IEquatable<CharacterRange>
     {
         /// <summary>
         /// Character position index immediately preceding the first character in the range.

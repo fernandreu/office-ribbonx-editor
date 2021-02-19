@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(null, ExpectedResult = Visibility.Collapsed)]
         public object? ConvertTest(object? original)
         {
-            return this.Convert(original);
+            return Convert(original);
         }
 
         [Test]
@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(Visibility.Visible)]
         public void ShouldNotConvertBack(object? original)
         {
-            Assert.Throws<InvalidOperationException>(() => this.ConvertBack(original));
+            Assert.Throws<InvalidOperationException>(() => ConvertBack(original));
         }
     }
 }

@@ -14,7 +14,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("string", null, ExpectedResult = false)]
         public object? ConvertTest(object? original, object? parameter)
         {
-            return this.Convert(original, parameter);
+            return Convert(original, parameter);
         }
 
         [Test]
@@ -22,7 +22,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("string", typeof(string))]
         public void ShouldNotConvertBack(object? original, object? parameter)
         {
-            Assert.Throws<InvalidOperationException>(() => this.ConvertBack(original, parameter));
+            Assert.Throws<InvalidOperationException>(() => ConvertBack(original, parameter));
         }
     }
 }

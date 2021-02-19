@@ -14,8 +14,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public string Title
         {
-            get => (string) this.GetValue(TitleProperty);
-            set => this.SetValue(TitleProperty, value);
+            get => (string) GetValue(TitleProperty);
+            set => SetValue(TitleProperty, value);
         }
         
         public static readonly DependencyProperty IconProperty = DependencyProperty.Register(
@@ -25,8 +25,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public ImageSource Icon
         {
-            get => (ImageSource) this.GetValue(IconProperty);
-            set => this.SetValue(IconProperty, value);
+            get => (ImageSource) GetValue(IconProperty);
+            set => SetValue(IconProperty, value);
         }
 
         public static readonly DependencyProperty PreferredWidthProperty = DependencyProperty.Register(
@@ -36,8 +36,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public double PreferredWidth
         {
-            get => (double) this.GetValue(PreferredWidthProperty);
-            set => this.SetValue(PreferredWidthProperty, value);
+            get => (double) GetValue(PreferredWidthProperty);
+            set => SetValue(PreferredWidthProperty, value);
         }
 
         public static readonly DependencyProperty PreferredHeightProperty = DependencyProperty.Register(
@@ -47,8 +47,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public double PreferredHeight
         {
-            get => (double) this.GetValue(PreferredHeightProperty);
-            set => this.SetValue(PreferredHeightProperty, value);
+            get => (double) GetValue(PreferredHeightProperty);
+            set => SetValue(PreferredHeightProperty, value);
         }
 
         public static readonly DependencyProperty SizeToContentProperty = DependencyProperty.Register(
@@ -59,8 +59,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public SizeToContent SizeToContent
         {
-            get => (SizeToContent) this.GetValue(SizeToContentProperty);
-            set => this.SetValue(SizeToContentProperty, value);
+            get => (SizeToContent) GetValue(SizeToContentProperty);
+            set => SetValue(SizeToContentProperty, value);
         }
 
         public static readonly DependencyProperty ResizeModeProperty = DependencyProperty.Register(
@@ -71,8 +71,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public ResizeMode ResizeMode
         {
-            get => (ResizeMode) this.GetValue(ResizeModeProperty);
-            set => this.SetValue(ResizeModeProperty, value);
+            get => (ResizeMode) GetValue(ResizeModeProperty);
+            set => SetValue(ResizeModeProperty, value);
         }
 
         public static readonly DependencyProperty InactiveOpacityProperty = DependencyProperty.Register(
@@ -83,8 +83,8 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public double InactiveOpacity
         {
-            get => (double) this.GetValue(InactiveOpacityProperty);
-            set => this.SetValue(InactiveOpacityProperty, value);
+            get => (double) GetValue(InactiveOpacityProperty);
+            set => SetValue(InactiveOpacityProperty, value);
         }
 
         public DialogHostBase? Host { get; set; }

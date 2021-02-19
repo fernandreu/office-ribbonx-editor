@@ -6,12 +6,12 @@ namespace OfficeRibbonXEditor.Lexers
     {
         protected override void UpdateImplementation()
         {
-            if (this.Editor == null)
+            if (Editor == null)
             {
                 return;
             }
 
-            var editor = this.Editor;
+            var editor = Editor;
 
             editor.TabWidth = Properties.Settings.Default.TabWidth;
             editor.WrapMode = Properties.Settings.Default.WrapMode;

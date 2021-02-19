@@ -7,7 +7,7 @@ namespace OfficeRibbonXEditor.Events
     {
         public MenuClickEventArgs(string filepath)
         {
-            this.Filepath = filepath;
+            Filepath = filepath;
         }
 
         public string Filepath { get; }

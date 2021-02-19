@@ -13,7 +13,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("en-US", ExpectedResult = "English (United States)")]
         public object? ConvertTest(object? original)
         {
-            return this.Convert(null, original);
+            return Convert(null, original);
         }
 
         [Test]

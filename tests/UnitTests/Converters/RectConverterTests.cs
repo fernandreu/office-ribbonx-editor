@@ -19,9 +19,9 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         public void ConvertTest(double width, double height)
         {
             // Act
-            var rect = this.Convert(new object[] {width, height});
+            var rect = Convert(new object[] {width, height});
             Assert.NotNull(rect);
-            Assert.IsTrue(rect?.GetType() == this.ToType);
+            Assert.IsTrue(rect?.GetType() == ToType);
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(true)]
         public void ShouldNotConvertBack(object? original)
         {
-            Assert.Throws<InvalidOperationException>(() => this.ConvertBack(original));
+            Assert.Throws<InvalidOperationException>(() => ConvertBack(original));
         }
     }
 }

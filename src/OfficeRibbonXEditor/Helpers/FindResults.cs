@@ -9,16 +9,16 @@ namespace OfficeRibbonXEditor.Helpers
     {
         public FindResults(IEnumerable<CharacterRange> items)
         {
-            this.Items = new List<CharacterRange>(items);
+            Items = new List<CharacterRange>(items);
         }
 
         public string Header { get; } = "Find Results";
 
         public List<CharacterRange> Items { get; }
 
-        public bool IsEmpty => this.Items.Count == 0;
+        public bool IsEmpty => Items.Count == 0;
 
-        public int Count => this.Items.Count;
+        public int Count => Items.Count;
 
         public void AddToPanel(Scintilla editor, Scintilla resultsPanel)
         {
@@ -32,7 +32,7 @@ namespace OfficeRibbonXEditor.Helpers
             resultsPanel.IndicatorCurrent = indicator.Index;
 
             //Write lines
-            foreach (var item in this.Items)
+            foreach (var item in Items)
             {
                 var startLine = editor.LineFromPosition(item.MinPosition);
                 var endLine = editor.LineFromPosition(item.MaxPosition);
@@ -47,7 +47,7 @@ namespace OfficeRibbonXEditor.Helpers
 
             //Highlight
             var resultLineIndex = 0;
-            foreach (var item in this.Items)
+            foreach (var item in Items)
             {
                 var startLine = editor.LineFromPosition(item.MinPosition);
                 var endLine = editor.LineFromPosition(item.MaxPosition);
@@ -72,7 +72,7 @@ namespace OfficeRibbonXEditor.Helpers
         {
             var selectedLine = resultsPanel.LineFromPosition(pos);
 
-            var charRange = this.Items[selectedLine];
+            var charRange = Items[selectedLine];
             editor.GotoPosition(charRange.MaxPosition);
             editor.GotoPosition(charRange.MinPosition);
             editor.SetSelection(charRange.MinPosition, charRange.MaxPosition);

@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.Helpers
         private const string SubString = "Sub ";
         private const string EndSubString = "\nEnd Sub";
         
-        private readonly HashSet<string> callbackList = new HashSet<string>();
+        private readonly HashSet<string> _callbackList = new HashSet<string>();
 
         private CallbacksBuilder()
         {
@@ -139,9 +139,9 @@ namespace OfficeRibbonXEditor.Helpers
 
             var callbackValue = callback.Value.Substring(callback.Value.LastIndexOf('.') + 1);
 
-            Debug.Assert(this.callbackList != null, "AttributeList is null");
+            Debug.Assert(_callbackList != null, "AttributeList is null");
 
-            if (this.callbackList?.Contains(callbackValue) ?? false)
+            if (_callbackList?.Contains(callbackValue) ?? false)
             {
                 return string.Empty;
             }
@@ -208,7 +208,7 @@ namespace OfficeRibbonXEditor.Helpers
                     return string.Empty;
             }
 
-            this.callbackList?.Add(callbackValue);
+            _callbackList?.Add(callbackValue);
             return result;
         }
 

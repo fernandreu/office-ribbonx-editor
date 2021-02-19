@@ -8,9 +8,9 @@ namespace OfficeRibbonXEditor.ViewModels.Shell
     {
         public FileAssociationViewModel(string extension)
         {
-            this.Extension = extension;
-            this.PreviousValue = GetCurrentValue();
-            this.NewValue = this.PreviousValue;
+            Extension = extension;
+            PreviousValue = GetCurrentValue();
+            NewValue = PreviousValue;
         }
 
         public event EventHandler? ValueChanged; 
@@ -19,54 +19,53 @@ namespace OfficeRibbonXEditor.ViewModels.Shell
 
         private bool PreviousValue { get; set; }
 
-        private bool newValue;
-
+        private bool _newValue;
         public bool NewValue
         {
-            get => this.newValue;
+            get => _newValue;
             set
             {
-                if (!this.Set(ref this.newValue, value))
+                if (!Set(ref _newValue, value))
                 {
                     return;
                 }
 
-                this.ValueChanged?.Invoke(this, EventArgs.Empty);
+                ValueChanged?.Invoke(this, EventArgs.Empty);
             }
         }
 
         public bool GetCurrentValue()
         {
-            return new FileAssociationHelper(this.Extension).CheckAssociation();
+            return new FileAssociationHelper(Extension).CheckAssociation();
         }
 
         public void Apply()
         {
-            if (this.PreviousValue == this.NewValue)
+            if (PreviousValue == NewValue)
             {
                 return;
             }
 
-            if (this.NewValue)
+            if (NewValue)
             {
-                new FileAssociationHelper(this.Extension).AddAssociation();
+                new FileAssociationHelper(Extension).AddAssociation();
             }
             else
             {
-                new FileAssociationHelper(this.Extension).RemoveAssociation();
+                new FileAssociationHelper(Extension).RemoveAssociation();
             }
 
-            this.PreviousValue = this.NewValue;
+            PreviousValue = NewValue;
         }
 
         public void ResetToCurrent()
         {
-            this.NewValue = this.PreviousValue;
+            NewValue = PreviousValue;
         }
 
         public void ResetToDefault()
         {
-            this.NewValue = false;
+            NewValue = false;
         }
     }
 }

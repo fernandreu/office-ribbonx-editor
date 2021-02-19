@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase(null, ExpectedResult = null)]
         public object? ConvertTest(object? original)
         {
-            return this.Convert(original);
+            return Convert(original);
         }
 
         [Test]

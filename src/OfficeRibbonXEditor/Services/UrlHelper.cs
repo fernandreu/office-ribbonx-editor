@@ -12,19 +12,19 @@ namespace OfficeRibbonXEditor.Services
 
         public Process? OpenIssue()
         {
-            return this.OpenExternal(new Uri($"{BaseUrl}/issues/new/choose"));
+            return OpenExternal(new Uri($"{BaseUrl}/issues/new/choose"));
         }
 
         public Process? OpenBug(string title, string body)
         {
             title = Uri.EscapeUriString(title);
             body = Uri.EscapeUriString(body);
-            return this.OpenExternal(new Uri($"{BaseUrl}/issues/new?assignees=&labels=bug&title={title}&body={body}"));
+            return OpenExternal(new Uri($"{BaseUrl}/issues/new?assignees=&labels=bug&title={title}&body={body}"));
         }
 
         public Process? OpenRelease(string version = "latest")
         {
-            return this.OpenExternal(new Uri($"{BaseUrl}/releases/{version}"));
+            return OpenExternal(new Uri($"{BaseUrl}/releases/{version}"));
         }
 
         public Process? OpenExternal(Uri url)

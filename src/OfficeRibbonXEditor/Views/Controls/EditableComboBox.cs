@@ -10,28 +10,28 @@ namespace OfficeRibbonXEditor.Views.Controls
     {
         public EditableComboBox()
         {
-            this.IsEditable = true;
+            IsEditable = true;
         }
 
-        private TextBox? textBox;
+        private TextBox? _textBox;
 
         public TextBox? TextBox
         {
             get
             {
-                if (this.textBox != null)
+                if (_textBox != null)
                 {
-                    return this.textBox;
+                    return _textBox;
                 }
 
-                this.ApplyTemplate();
-                this.textBox = this.Template.FindName("PART_EditableTextBox", this) as TextBox;
-                if (this.textBox == null)
+                ApplyTemplate();
+                _textBox = Template.FindName("PART_EditableTextBox", this) as TextBox;
+                if (_textBox == null)
                 {
                     throw new InvalidOperationException($"Make sure IsEditable is set to true when using an {nameof(EditableComboBox)}");
                 }
 
-                return this.textBox;
+                return _textBox;
             }
         }
 
@@ -39,16 +39,16 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             base.OnApplyTemplate();
 
-            if (this.TextBox != null)
+            if (TextBox != null)
             {
-                this.TextBox.TextChanged += this.OnTextChanged;
+                TextBox.TextChanged += OnTextChanged;
             }
 
-            this.AddHandler(PreviewMouseLeftButtonDownEvent, 
+            AddHandler(PreviewMouseLeftButtonDownEvent, 
                 new MouseButtonEventHandler(SelectivelyIgnoreMouseButton), true);
-            this.AddHandler(GotKeyboardFocusEvent, 
+            AddHandler(GotKeyboardFocusEvent, 
                 new RoutedEventHandler(SelectAllText), true);
-            this.AddHandler(MouseDoubleClickEvent, 
+            AddHandler(MouseDoubleClickEvent, 
                 new RoutedEventHandler(SelectAllText), true);
         }
 
@@ -85,13 +85,13 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             base.OnGotFocus(e);
 
-            this.TextBox?.Focus();
+            TextBox?.Focus();
         }
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
             var txt = (TextBox) sender;
-            txt.TextChanged -= this.OnTextChanged;
+            txt.TextChanged -= OnTextChanged;
             txt.Focus();
         }
     }

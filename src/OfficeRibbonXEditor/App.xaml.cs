@@ -1,16 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Threading;
 using System.Windows;
-using System.Windows.Markup;
 using System.Windows.Threading;
 using Autofac;
-using Autofac.Builder;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
-using OfficeRibbonXEditor.Services;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.ViewModels.Windows;
 using OfficeRibbonXEditor.Views.Dialogs;
@@ -24,9 +20,9 @@ namespace OfficeRibbonXEditor
     /// </summary>
     public partial class App : Application
     {
-        private readonly IContainer container = CreateContainer();
+        private readonly IContainer _container = CreateContainer();
 
-        private readonly Dictionary<IContentDialogBase, DialogHost> dialogs = new Dictionary<IContentDialogBase, DialogHost>();
+        private readonly Dictionary<IContentDialogBase, DialogHost> _dialogs = new Dictionary<IContentDialogBase, DialogHost>();
 
         public App()
         {
@@ -92,7 +88,7 @@ namespace OfficeRibbonXEditor
 
         private void LaunchMainWindow()
         {
-            var windowModel = this.container.Resolve<MainWindowViewModel>();
+            var windowModel = this._container.Resolve<MainWindowViewModel>();
             var window = new MainWindow();
             window.DataContext = windowModel;
             windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
@@ -103,13 +99,13 @@ namespace OfficeRibbonXEditor
 
         private void LaunchDialog(Window mainWindow, IContentDialogBase content, bool showDialog)
         {
-            if (content.IsUnique && !content.IsClosed && this.dialogs.TryGetValue(content, out var dialog))
+            if (content.IsUnique && !content.IsClosed && this._dialogs.TryGetValue(content, out var dialog))
             {
                 dialog.Activate();
                 return;
             }
 
-            var dialogModel = this.container.Resolve<DialogHostViewModel>();
+            var dialogModel = this._container.Resolve<DialogHostViewModel>();
             dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
             dialogModel.Content = content;
             content.Closed += (o, e) => dialog.Close();
@@ -117,7 +113,7 @@ namespace OfficeRibbonXEditor
 
             if (content.IsUnique)
             {
-                this.dialogs[content] = dialog;
+                this._dialogs[content] = dialog;
             }
 
             if (showDialog)
@@ -141,7 +137,7 @@ namespace OfficeRibbonXEditor
                 ex = targetEx.InnerException;
             }
 
-            var dialog = this.container.Resolve<ExceptionDialogViewModel>();
+            var dialog = this._container.Resolve<ExceptionDialogViewModel>();
             dialog.OnLoaded(ex);
             this.LaunchDialog(this.MainWindow, dialog, true);
         }

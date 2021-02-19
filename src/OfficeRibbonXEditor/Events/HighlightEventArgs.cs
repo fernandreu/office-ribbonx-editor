@@ -10,8 +10,8 @@ namespace OfficeRibbonXEditor.Events
 
         public HighlightEventArgs(int lineNumber, int linePosition)
         {
-            this.LineNumber = lineNumber;
-            this.LinePosition = linePosition;
+            LineNumber = lineNumber;
+            LinePosition = linePosition;
         }
 
         public int LineNumber { get; set; }

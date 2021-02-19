@@ -14,7 +14,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
     {
         public FindReplaceDialog()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
@@ -26,16 +26,16 @@ namespace OfficeRibbonXEditor.Views.Dialogs
                 return;
             }
 
-            vm.MoveDialogAway += this.OnMoveDialogAway;
+            vm.MoveDialogAway += OnMoveDialogAway;
 
             EditableComboBox target;
             if (vm.IsFindTabSelected)
             {
-                target = this.FindBox;
+                target = FindBox;
             }
             else
             {
-                target = this.ReplaceBox;
+                target = ReplaceBox;
             }
 
             target.TextBox?.Focus();
@@ -44,7 +44,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
 
         private void OnMoveDialogAway(object? sender, PointEventArgs e)
         {
-            if (this.Host == null)
+            if (Host == null)
             {
                 return;
             }
@@ -53,10 +53,10 @@ namespace OfficeRibbonXEditor.Views.Dialogs
 
             // First, we check if the current position is hiding the selection or not
             var current = new System.Drawing.Rectangle(
-                (int) this.Host.Left - triggerMargin, 
-                (int) this.Host.Top - triggerMargin,
-                (int) this.Host.Width + 2 * triggerMargin, 
-                (int) this.Host.Height + 2 * triggerMargin);
+                (int) Host.Left - triggerMargin, 
+                (int) Host.Top - triggerMargin,
+                (int) Host.Width + 2 * triggerMargin, 
+                (int) Host.Height + 2 * triggerMargin);
 
             if (!current.Contains(e.Data))
             {
@@ -67,28 +67,28 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             // which does not hide the selection
             
             const int margin = 32;
-            var owner = this.Host.Owner;
+            var owner = Host.Owner;
 
             for (var i = 0; i < 2; ++i)
             {
                 for (var j = 0; j < 2; ++j)
                 {
-                    var left = j == 0 ? owner.Left + margin : owner.Left + owner.Width - this.Host.Width - margin;
-                    var top = i == 0 ? owner.Top + margin : owner.Top + owner.Height - this.Host.Height - margin;
+                    var left = j == 0 ? owner.Left + margin : owner.Left + owner.Width - Host.Width - margin;
+                    var top = i == 0 ? owner.Top + margin : owner.Top + owner.Height - Host.Height - margin;
 
                     var r = new System.Drawing.Rectangle(
                         (int) left, 
                         (int) top,
-                        (int) this.Host.Width, 
-                        (int) this.Host.Height);
+                        (int) Host.Width, 
+                        (int) Host.Height);
 
                     if (r.Contains(e.Data))
                     {
                         continue;
                     }
 
-                    this.Host.Left = left;
-                    this.Host.Top = top;
+                    Host.Left = left;
+                    Host.Top = top;
 
                     return;
                 }

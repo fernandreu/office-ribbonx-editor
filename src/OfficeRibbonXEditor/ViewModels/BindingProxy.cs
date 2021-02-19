@@ -15,8 +15,8 @@ namespace OfficeRibbonXEditor.ViewModels
 
         public object Data
         {
-            get => this.GetValue(DataProperty);
-            set => this.SetValue(DataProperty, value);
+            get => GetValue(DataProperty);
+            set => SetValue(DataProperty, value);
         }
 
         protected override Freezable CreateInstanceCore()

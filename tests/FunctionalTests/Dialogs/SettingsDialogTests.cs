@@ -3,7 +3,6 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Extensions;
-using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
@@ -29,14 +28,14 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             nameof(Settings.Default.UICulture),
         };
 
-        private readonly IDictionary<string, object> originalSettings = new Dictionary<string, object>();
+        private readonly IDictionary<string, object> _originalSettings = new Dictionary<string, object>();
 
         [OneTimeSetUp]
         public void SetUp()
         {
             foreach (var settingName in TestableSettings)
             {
-                this.originalSettings[settingName] = Settings.Default[settingName];
+                _originalSettings[settingName] = Settings.Default[settingName];
             }
         }
 
@@ -45,7 +44,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         {
             foreach (var settingName in TestableSettings)
             {
-                Settings.Default[settingName] = this.originalSettings[settingName];
+                Settings.Default[settingName] = _originalSettings[settingName];
             }
 
             Settings.Default.Save();

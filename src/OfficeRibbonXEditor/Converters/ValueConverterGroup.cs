@@ -36,7 +36,7 @@ namespace OfficeRibbonXEditor.Converters
 
         #region Data
 
-        private readonly Dictionary<IValueConverter, ValueConversionAttribute> cachedAttributes = new Dictionary<IValueConverter, ValueConversionAttribute>();
+        private readonly Dictionary<IValueConverter, ValueConversionAttribute> _cachedAttributes = new Dictionary<IValueConverter, ValueConversionAttribute>();
 
         #endregion // Data
 
@@ -44,7 +44,7 @@ namespace OfficeRibbonXEditor.Converters
 
         public ValueConverterGroup()
         {
-            this.Converters.CollectionChanged += this.OnConvertersCollectionChanged;
+            Converters.CollectionChanged += OnConvertersCollectionChanged;
         }
 
         #endregion // Constructor
@@ -64,10 +64,10 @@ namespace OfficeRibbonXEditor.Converters
         {
             var output = value;
 
-            for (var i = 0; i < this.Converters.Count; ++i)
+            for (var i = 0; i < Converters.Count; ++i)
             {
-                var converter = this.Converters[i];
-                var currentTargetType = this.GetTargetType(i, targetType, true);
+                var converter = Converters[i];
+                var currentTargetType = GetTargetType(i, targetType, true);
                 output = converter.Convert(output, currentTargetType, parameter, culture);
 
                 // If the converter returns 'DoNothing' then the binding operation should terminate.
@@ -84,10 +84,10 @@ namespace OfficeRibbonXEditor.Converters
         {
             var output = value;
 
-            for (var i = this.Converters.Count - 1; i > -1; --i)
+            for (var i = Converters.Count - 1; i > -1; --i)
             {
-                var converter = this.Converters[i];
-                var currentTargetType = this.GetTargetType(i, targetType, false);
+                var converter = Converters[i];
+                var currentTargetType = GetTargetType(i, targetType, false);
                 output = converter.ConvertBack(output, currentTargetType, parameter, culture);
 
                 // When a converter returns 'DoNothing' the binding operation should terminate.
@@ -120,9 +120,9 @@ namespace OfficeRibbonXEditor.Converters
             IValueConverter? nextConverter = null;
             if (convert)
             {
-                if (converterIndex < this.Converters.Count - 1)
+                if (converterIndex < Converters.Count - 1)
                 {
-                    nextConverter = this.Converters[converterIndex + 1];
+                    nextConverter = Converters[converterIndex + 1];
                     if (nextConverter == null)
                     {
                         throw new InvalidOperationException("The Converters collection of the ValueConverterGroup contains a null reference at index: " + (converterIndex + 1));
@@ -133,7 +133,7 @@ namespace OfficeRibbonXEditor.Converters
             {
                 if (converterIndex > 0)
                 {
-                    nextConverter = this.Converters[converterIndex - 1];
+                    nextConverter = Converters[converterIndex - 1];
                     if (nextConverter == null)
                     {
                         throw new InvalidOperationException("The Converters collection of the ValueConverterGroup contains a null reference at index: " + (converterIndex - 1));
@@ -143,7 +143,7 @@ namespace OfficeRibbonXEditor.Converters
 
             if (nextConverter != null)
             {
-                var conversionAttribute = this.cachedAttributes[nextConverter];
+                var conversionAttribute = _cachedAttributes[nextConverter];
 
                 // If the Convert method is going to be called, we need to use the SourceType of the next 
                 // converter in the list.  If ConvertBack is called, use the TargetType.
@@ -176,13 +176,13 @@ namespace OfficeRibbonXEditor.Converters
                         continue;
                     }
 
-                    this.cachedAttributes.Remove(converter);
+                    _cachedAttributes.Remove(converter);
                 }
             }
             else if (e.Action == NotifyCollectionChangedAction.Reset)
             {
-                this.cachedAttributes.Clear();
-                convertersToProcess = this.Converters;
+                _cachedAttributes.Clear();
+                convertersToProcess = Converters;
             }
 
             if (convertersToProcess != null && convertersToProcess.Count > 0)
@@ -203,7 +203,7 @@ namespace OfficeRibbonXEditor.Converters
 
                     if (attributes[0] is ValueConversionAttribute typedAttribute)
                     {
-                        this.cachedAttributes.Add(converter, typedAttribute);
+                        _cachedAttributes.Add(converter, typedAttribute);
                     }
                 }
             }

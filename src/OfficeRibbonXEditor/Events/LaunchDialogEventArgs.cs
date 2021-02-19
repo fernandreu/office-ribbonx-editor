@@ -7,8 +7,8 @@ namespace OfficeRibbonXEditor.Events
     {
         public LaunchDialogEventArgs(IContentDialogBase content, bool showDialog = true)
         {
-            this.Content = content;
-            this.ShowDialog = showDialog;
+            Content = content;
+            ShowDialog = showDialog;
         }
 
         public IContentDialogBase Content { get; }

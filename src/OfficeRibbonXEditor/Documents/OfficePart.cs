@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.IO.Packaging;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.Documents
 {
     public class OfficePart
     {
-        private string id;
+        private readonly string _id;
 
         public OfficePart(PackagePart part, XmlPart partType, string relationshipId)
         {
-            this.Part = part;
-            this.PartType = partType;
-            this.id = relationshipId;
-            this.Name = Path.GetFileName(this.Part.Uri.ToString());
+            Part = part;
+            PartType = partType;
+            _id = relationshipId;
+            Name = Path.GetFileName(Part.Uri.ToString());
         }
 
         public PackagePart? Part { get; private set; }
@@ -30,12 +28,12 @@ namespace OfficeRibbonXEditor.Documents
 
         public string ReadContent()
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
             }
 
-            var rd = new StreamReader(this.Part.GetStream(FileMode.Open, FileAccess.Read));
+            var rd = new StreamReader(Part.GetStream(FileMode.Open, FileAccess.Read));
             var text = rd.ReadToEnd();
             rd.Close();
             return text;
@@ -43,7 +41,7 @@ namespace OfficeRibbonXEditor.Documents
         
         public void Save(string text)
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
             }
@@ -54,7 +52,7 @@ namespace OfficeRibbonXEditor.Documents
                 return;
             }
 
-            using (var tw = new StreamWriter(this.Part.GetStream(FileMode.Create, FileAccess.Write)))
+            using (var tw = new StreamWriter(Part.GetStream(FileMode.Create, FileAccess.Write)))
             {
                 tw.Write(text);
             }
@@ -62,22 +60,22 @@ namespace OfficeRibbonXEditor.Documents
 
         public Dictionary<string, BitmapImage> GetImages()
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
             }
 
             var imageCollection = new Dictionary<string, BitmapImage>();
 
-            foreach (var relationship in this.Part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
+            foreach (var relationship in Part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
             {
                 var customImageUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (!this.Part.Package.PartExists(customImageUri))
+                if (!Part.Package.PartExists(customImageUri))
                 {
                     continue;
                 }
 
-                var imagePart = this.Part.Package.GetPart(customImageUri);
+                var imagePart = Part.Package.GetPart(customImageUri);
 
                 var imageStream = imagePart.GetStream(FileMode.Open, FileAccess.Read);
 
@@ -97,9 +95,9 @@ namespace OfficeRibbonXEditor.Documents
 
         public string? AddImage(string filePath, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
-            if (this.PartType != XmlPart.RibbonX12 && this.PartType != XmlPart.RibbonX14)
+            if (PartType != XmlPart.RibbonX12 && PartType != XmlPart.RibbonX14)
             {
-                throw new NotSupportedException($"The part type must be either RibbonX12 or RibbonX14, not {this.PartType}");
+                throw new NotSupportedException($"The part type must be either RibbonX12 or RibbonX14, not {PartType}");
             }
 
             if (filePath == null)
@@ -128,12 +126,12 @@ namespace OfficeRibbonXEditor.Documents
                 throw new ArgumentException("Target Id cannot be empty");
             }
 
-            return this.AddImageHelper(filePath, imageId, alreadyExistingAction);
+            return AddImageHelper(filePath, imageId, alreadyExistingAction);
         }
         
         public void RemoveImage(string imageId)
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException("Part was already removed");
             }
@@ -148,48 +146,48 @@ namespace OfficeRibbonXEditor.Documents
                 return;
             }
 
-            if (!this.Part.RelationshipExists(imageId))
+            if (!Part.RelationshipExists(imageId))
             {
                 return;
             }
 
-            var imageRel = this.Part.GetRelationship(imageId);
+            var imageRel = Part.GetRelationship(imageId);
 
             var imageUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri);
-            if (this.Part.Package.PartExists(imageUri))
+            if (Part.Package.PartExists(imageUri))
             {
-                this.Part.Package.DeletePart(imageUri);
+                Part.Package.DeletePart(imageUri);
             }
 
-            this.Part.DeleteRelationship(imageId);
+            Part.DeleteRelationship(imageId);
         }
 
         public void Remove()
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
             }
 
             // Remove all image parts first
-            foreach (var relationship in this.Part.GetRelationships())
+            foreach (var relationship in Part.GetRelationships())
             {
                 var relUri = PackUriHelper.ResolvePartUri(relationship.SourceUri, relationship.TargetUri);
-                if (this.Part.Package.PartExists(relUri))
+                if (Part.Package.PartExists(relUri))
                 {
-                    this.Part.Package.DeletePart(relUri);
+                    Part.Package.DeletePart(relUri);
                 }
             }
 
-            this.Part.Package.DeleteRelationship(this.id);
-            this.Part.Package.DeletePart(this.Part.Uri);
+            Part.Package.DeleteRelationship(_id);
+            Part.Package.DeletePart(Part.Uri);
 
-            this.Part = null;
+            Part = null;
         }
 
         public void ChangeImageId(string source, string target)
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException("Part was already removed");
             }
@@ -214,26 +212,26 @@ namespace OfficeRibbonXEditor.Documents
                 return;
             }
 
-            if (!this.Part.RelationshipExists(source))
+            if (!Part.RelationshipExists(source))
             {
                 return;
             }
 
-            if (this.Part.RelationshipExists(target))
+            if (Part.RelationshipExists(target))
             {
                 throw new InvalidOperationException($"OOXML part Id \"{target}\" already exists");
             }
 
-            var imageRel = this.Part.GetRelationship(source);
+            var imageRel = Part.GetRelationship(source);
 
             // Find the new Uri for the icon (TODO: PNG assumed)
             var originalUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri);
-            var newRelativeUri = FindFirstAvailableImageUri(this.Part, target, ".png");
+            var newRelativeUri = FindFirstAvailableImageUri(Part, target, ".png");
             var newUri = PackUriHelper.ResolvePartUri(imageRel.SourceUri, newRelativeUri);
 
             // Create the new package part
-            var originalPart = this.Part.Package.GetPart(originalUri);
-            var newPart = this.Part.Package.CreatePart(newUri, originalPart.ContentType, originalPart.CompressionOption);
+            var originalPart = Part.Package.GetPart(originalUri);
+            var newPart = Part.Package.CreatePart(newUri, originalPart.ContentType, originalPart.CompressionOption);
             if (newPart == null)
             {
                 throw new InvalidOperationException("There is no file associated with the icon you are trying to rename");
@@ -252,10 +250,10 @@ namespace OfficeRibbonXEditor.Documents
                 bw.Flush();
             }
 
-            this.Part.Package.DeletePart(originalUri);
-            this.Part.DeleteRelationship(source);
+            Part.Package.DeletePart(originalUri);
+            Part.DeleteRelationship(source);
 
-            this.Part.CreateRelationship(newRelativeUri, imageRel.TargetMode, imageRel.RelationshipType, target);
+            Part.CreateRelationship(newRelativeUri, imageRel.TargetMode, imageRel.RelationshipType, target);
         }
 
         private static string MapImageContentType(string extension)
@@ -283,7 +281,7 @@ namespace OfficeRibbonXEditor.Documents
 
         private string? AddImageHelper(string fileName, string imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
             }
@@ -303,7 +301,7 @@ namespace OfficeRibbonXEditor.Documents
 
             // Check for duplicates and correct ID if necessary
             var originalId = imageId;
-            imageId = FindFirstAvailableImageId(this.Part, imageId);
+            imageId = FindFirstAvailableImageId(Part, imageId);
 
             if (imageId != originalId && !(alreadyExistingAction?.Invoke(originalId, imageId) ?? true))
             {
@@ -311,11 +309,11 @@ namespace OfficeRibbonXEditor.Documents
             }
 
             // Now do the same for the Uri (which does need to coincide with the ID)
-            var imageUri = FindFirstAvailableImageUri(this.Part, originalId, extension);
+            var imageUri = FindFirstAvailableImageUri(Part, originalId, extension);
 
-            var imageRel = this.Part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);
+            var imageRel = Part.CreateRelationship(imageUri, TargetMode.Internal, OfficeDocument.ImagePartRelType, imageId);
 
-            var imagePart = this.Part.Package.CreatePart(
+            var imagePart = Part.Package.CreatePart(
                 PackUriHelper.ResolvePartUri(imageRel.SourceUri, imageRel.TargetUri),
                 MapImageContentType(Path.GetExtension(fileName)));
 
@@ -325,18 +323,17 @@ namespace OfficeRibbonXEditor.Documents
                 return null;
             }
 
-            using (var br = new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite)))
-            using (var bw = new BinaryWriter(imagePart.GetStream(FileMode.Create, FileAccess.Write)))
+            using var br = new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
+            using var bw = new BinaryWriter(imagePart.GetStream(FileMode.Create, FileAccess.Write));
+            
+            var buffer = new byte[1024];
+            int byteCount;
+            while ((byteCount = br.Read(buffer, 0, buffer.Length)) > 0)
             {
-                var buffer = new byte[1024];
-                int byteCount;
-                while ((byteCount = br.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    bw.Write(buffer, 0, byteCount);
-                }
-
-                bw.Flush();
+                bw.Write(buffer, 0, byteCount);
             }
+
+            bw.Flush();
 
             return imageRel.Id;
         }

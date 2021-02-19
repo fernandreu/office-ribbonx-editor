@@ -10,33 +10,33 @@ namespace OfficeRibbonXEditor.Lexers
     /// </summary>
     public abstract class ScintillaLexer
     {
-        private ScintillaWPF? editor;
+        private ScintillaWPF? _editor;
 
-        private int maxLineNumberCharLength;
+        private int _maxLineNumberCharLength;
 
         public ScintillaWPF? Editor
         {
-            get => this.editor;
+            get => _editor;
             set
             {
-                if (this.editor == value)
+                if (_editor == value)
                 {
                     return;
                 }
 
-                if (this.editor != null)
+                if (_editor != null)
                 {
-                    this.editor.UpdateUI -= this.ScintillaUpdateUi;
+                    _editor.UpdateUI -= ScintillaUpdateUi;
                 }
 
-                this.editor = value;
+                _editor = value;
 
-                if (this.editor != null)
+                if (_editor != null)
                 {
-                    this.editor.UpdateUI += this.ScintillaUpdateUi;
+                    _editor.UpdateUI += ScintillaUpdateUi;
                 }
 
-                this.Update();
+                Update();
             }
         }
 
@@ -45,30 +45,30 @@ namespace OfficeRibbonXEditor.Lexers
         /// </summary>
         public void Update()
         {
-            if (this.Editor == null)
+            if (Editor == null)
             {
                 return;
             }
 
-            this.UpdateImplementation();
+            UpdateImplementation();
 
             // Ensure cursor is visible by making it have the same color as the normal text
-            this.Editor.Scintilla.CaretForeColor = this.Editor.Styles[Style.Default].ForeColor;
+            Editor.Scintilla.CaretForeColor = Editor.Styles[Style.Default].ForeColor;
         }
 
         protected abstract void UpdateImplementation();
 
         private void ScintillaUpdateUi(object? sender, UpdateUIEventArgs e)
         {
-            if (this.Editor == null)
+            if (Editor == null)
             {
                 return;
             }
 
             // Did the number of characters in the line number display change?
             // i.e. nnn VS nn, or nnnn VS nn, etc...
-            var charLength = this.Editor.Lines.Count.ToString(CultureInfo.CurrentCulture).Length;
-            if (charLength == this.maxLineNumberCharLength)
+            var charLength = Editor.Lines.Count.ToString(CultureInfo.CurrentCulture).Length;
+            if (charLength == _maxLineNumberCharLength)
             {
                 return;
             }
@@ -77,8 +77,8 @@ namespace OfficeRibbonXEditor.Lexers
             // and include some padding for good measure.
             const int linePadding = 2;
 
-            this.Editor.Margins[0].Width = this.Editor.TextWidth(ScintillaNET.Style.LineNumber, new string('9', charLength + 1)) + linePadding;
-            this.maxLineNumberCharLength = charLength;
+            Editor.Margins[0].Width = Editor.TextWidth(Style.LineNumber, new string('9', charLength + 1)) + linePadding;
+            _maxLineNumberCharLength = charLength;
         }
     }
 }

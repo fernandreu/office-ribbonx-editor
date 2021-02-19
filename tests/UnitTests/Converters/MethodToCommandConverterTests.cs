@@ -9,16 +9,12 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
 {
     public class MethodToCommandConverterTests : ConverterTestsBase<MethodToCommandConverter, object, ICommand>
     {
-        public static IEnumerable ConvertData => new[]
-        {
-            new TestCaseData("string", nameof(string.GetHashCode)),
-        };
-
-        [Test, TestCaseSource(nameof(ConvertData))]
+        [Test]
+        [TestCase("string", nameof(string.GetHashCode))]
         public void ConvertTest(object? original, string? methodName)
         {
             // Act
-            var (methodInfo, sender) = this.ApplyConversion(original, methodName);
+            var (methodInfo, sender) = ApplyConversion(original, methodName);
 
             // Assert
             Assert.NotNull(methodInfo);
@@ -32,21 +28,21 @@ namespace OfficeRibbonXEditor.UnitTests.Converters
         [TestCase("string", typeof(string))]
         public void ShouldNotConvertBack(object? original, object? parameter)
         {
-            Assert.Throws<InvalidOperationException>(() => this.ConvertBack(original, parameter));
+            Assert.Throws<InvalidOperationException>(() => ConvertBack(original, parameter));
         }
 
         private (MethodInfo?, object?) ApplyConversion(object? original, string? methodName)
         {
-            var result = this.Convert(original, methodName);
+            var result = Convert(original, methodName);
             if (result == null)
             {
                 return (null, null);
             }
 
             var type = result.GetType();
-            var methodFieldInfo = type.GetField("method", BindingFlags.NonPublic | BindingFlags.Instance);
+            var methodFieldInfo = type.GetField("_method", BindingFlags.NonPublic | BindingFlags.Instance);
             var methodInfo = methodFieldInfo?.GetValue(result) as MethodInfo;
-            var senderFieldInfo = type.GetField("sender", BindingFlags.NonPublic | BindingFlags.Instance);
+            var senderFieldInfo = type.GetField("_sender", BindingFlags.NonPublic | BindingFlags.Instance);
             var sender = senderFieldInfo?.GetValue(result);
             return (methodInfo, sender);
         }

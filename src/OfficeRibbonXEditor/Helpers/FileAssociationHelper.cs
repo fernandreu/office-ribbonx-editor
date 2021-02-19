@@ -7,16 +7,16 @@ namespace OfficeRibbonXEditor.Helpers
     {
         private const string MenuEntryName = "OfficeXRibbonEdit";
 
-        private readonly string extension;
+        private readonly string _extension;
 
         public FileAssociationHelper(string extension)
         {
-            this.extension = extension;
+            _extension = extension;
         }
 
         public bool CheckAssociation()
         {
-            var type = this.GetFileType();
+            var type = GetFileType();
             if (string.IsNullOrEmpty(type))
             {
                 return false;
@@ -30,7 +30,7 @@ namespace OfficeRibbonXEditor.Helpers
 
         public void RemoveAssociation()
         {
-            var type = this.GetFileType();
+            var type = GetFileType();
             if (string.IsNullOrEmpty(type))
             {
                 return;
@@ -41,7 +41,7 @@ namespace OfficeRibbonXEditor.Helpers
 
         public void AddAssociation()
         {
-            var type = this.GetFileType();
+            var type = GetFileType();
             if (string.IsNullOrEmpty(type))
             {
                 return;
@@ -62,7 +62,7 @@ namespace OfficeRibbonXEditor.Helpers
 
         private string? GetFileType()
         {
-            var key = Registry.ClassesRoot.OpenSubKey(this.extension)?.GetValue(null)?.ToString();
+            var key = Registry.ClassesRoot.OpenSubKey(_extension)?.GetValue(null)?.ToString();
             return key;
         }
 

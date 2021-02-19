@@ -10,6 +10,8 @@ using OfficeRibbonXEditor.Views.Controls.Forms;
 using ScintillaNET;
 using CharacterRange = OfficeRibbonXEditor.Helpers.CharacterRange;
 
+#pragma warning disable 8618 // Uninitialized non-nullable fields. They are all set in OnLoaded instead
+
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     // Using a singleton for this one ensures that the search criteria is preserved, which is especially
@@ -17,22 +19,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export(Lifetime = Lifetime.Singleton)]
     public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
     {
-        private CharacterRange searchRange;
-
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. All fields get initialized in OnLoaded so,
-                               // unless all methods contain safeguards for the exceptional case where OnLoaded is not called, let's not bother with
-                               // nullable types. Not calling OnLoaded should be unusual, and therefore a null reference exception is all you'd need
-        public FindReplaceDialogViewModel()
-        {
-            this.FindNextCommand = new RelayCommand(() => this.FindWrapper(false));
-            this.FindPreviousCommand = new RelayCommand(() => this.FindWrapper(true));
-            this.FindAllCommand = new RelayCommand(this.ExecuteFindAllCommand);
-            this.ReplaceNextCommand = new RelayCommand(() => this.ReplaceWrapper(false));
-            this.ReplacePreviousCommand = new RelayCommand(() => this.ReplaceWrapper(true));
-            this.ReplaceAllCommand = new RelayCommand(this.ExecuteReplaceAllCommand);
-            this.ClearCommand = new RelayCommand(this.ExecuteClearCommand);
-        }
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
+        private CharacterRange _searchRange;
 
         public event EventHandler<PointEventArgs>? MoveDialogAway;
 
@@ -49,486 +36,470 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public IncrementalSearcher IncrementalSearcher { get; private set; }
 
-        private Scintilla scintilla;
+        private Scintilla _scintilla;
 
         public Scintilla Scintilla
         {
-            get => this.scintilla;
+            get => _scintilla;
             set
             {
-                var previous = this.scintilla;
-                if (!this.Set(ref this.scintilla, value))
+                var previous = _scintilla;
+                if (!Set(ref _scintilla, value))
                 {
                     return;
                 }
 
-                if (previous != null && this.IncrementalSearcher != null)
+                if (previous != null && IncrementalSearcher != null)
                 {
-                    previous.Controls.Remove(this.IncrementalSearcher);
+                    previous.Controls.Remove(IncrementalSearcher);
                 }
 
-                this.FindReplace = new FindReplace(this.scintilla);
-                this.FindReplace.FindAllResults += this.FindAllHandler;
+                FindReplace = new FindReplace(_scintilla);
+                FindReplace.FindAllResults += FindAllHandler;
 
-                this.IncrementalSearcher = new IncrementalSearcher
+                IncrementalSearcher = new IncrementalSearcher
                 {
-                    Scintilla = this.Scintilla,
+                    Scintilla = Scintilla,
                     FindReplace = this,
                     Visible = false
                 };
-                this.Scintilla.Controls.Add(this.IncrementalSearcher);
+                Scintilla.Controls.Add(IncrementalSearcher);
             }
         }
 
-        public RelayCommand FindNextCommand { get; }
+        private RelayCommand? _findNextCommand;
+        public RelayCommand FindNextCommand => _findNextCommand ??= new RelayCommand(() => FindWrapper(false));
 
-        public RelayCommand FindPreviousCommand { get; }
+        private RelayCommand? _findPreviousCommand;
+        public RelayCommand FindPreviousCommand => _findPreviousCommand ??= new RelayCommand(() => FindWrapper(true));
+        
+        private RelayCommand? _findAllCommand;
+        public RelayCommand FindAllCommand => _findAllCommand ??= new RelayCommand(ExecuteFindAllCommand);
 
-        public RelayCommand FindAllCommand { get; }
+        private RelayCommand? _replaceNextCommand;
+        public RelayCommand ReplaceNextCommand => _replaceNextCommand ??= new RelayCommand(() => ReplaceWrapper(false));
 
-        public RelayCommand ReplaceNextCommand { get; }
+        private RelayCommand? _replacePreviousCommand;
+        public RelayCommand ReplacePreviousCommand => _replacePreviousCommand ??= new RelayCommand(() => ReplaceWrapper(true));
 
-        public RelayCommand ReplacePreviousCommand { get; }
+        private RelayCommand? _replaceAllCommand;
+        public RelayCommand ReplaceAllCommand => _replaceAllCommand ??= new RelayCommand(ExecuteReplaceAllCommand);
 
-        public RelayCommand ReplaceAllCommand { get; }
-
-        public RelayCommand ClearCommand { get; }
+        private RelayCommand? _clearCommand;
+        public RelayCommand ClearCommand => _clearCommand ??= new RelayCommand(ExecuteClearCommand);
 
         private FindReplace.FindAllResultsEventHandler FindAllHandler { get; set; }
 
-        private bool autoPosition = true;
-
+        private bool _autoPosition = true;
         public bool AutoPosition
         {
-            get => this.autoPosition;
-            set => this.Set(ref this.autoPosition, value);
+            get => _autoPosition;
+            set => Set(ref _autoPosition, value);
         }
 
-        private bool isFindTabSelected = true;
-
+        private bool _isFindTabSelected = true;
         public bool IsFindTabSelected
         {
-            get => this.isFindTabSelected;
-            set => this.Set(ref this.isFindTabSelected, value);
+            get => _isFindTabSelected;
+            set => Set(ref _isFindTabSelected, value);
         }
 
-        private bool isStandardSearch = true;
-
+        private bool _isStandardSearch = true;
         public bool IsStandardSearch
         {
-            get => this.isStandardSearch;
-            set => this.Set(ref this.isStandardSearch, value);
+            get => _isStandardSearch;
+            set => Set(ref _isStandardSearch, value);
         }
 
-        private bool isExtendedSearch;
-
+        private bool _isExtendedSearch;
         public bool IsExtendedSearch
         {
-            get => this.isExtendedSearch;
-            set => this.Set(ref this.isExtendedSearch, value);
+            get => _isExtendedSearch;
+            set => Set(ref _isExtendedSearch, value);
         }
 
-        private bool isRegExSearch;
-
+        private bool _isRegExSearch;
         public bool IsRegExSearch
         {
-            get => this.isRegExSearch;
-            set => this.Set(ref this.isRegExSearch, value);
+            get => _isRegExSearch;
+            set => Set(ref _isRegExSearch, value);
         }
 
-        private bool ignoreCase;
-
+        private bool _ignoreCase;
         public bool IgnoreCase
         {
-            get => this.ignoreCase;
-            set => this.Set(ref this.ignoreCase, value);
+            get => _ignoreCase;
+            set => Set(ref _ignoreCase, value);
         }
 
-        private bool wholeWord;
-
+        private bool _wholeWord;
         public bool WholeWord
         {
-            get => this.wholeWord;
-            set => this.Set(ref this.wholeWord, value);
+            get => _wholeWord;
+            set => Set(ref _wholeWord, value);
         }
 
-        private bool wordStart;
-
+        private bool _wordStart;
         public bool WordStart
         {
-            get => this.wordStart;
-            set => this.Set(ref this.wordStart, value);
+            get => _wordStart;
+            set => Set(ref _wordStart, value);
         }
 
-        private bool isCompiled;
-
+        private bool _isCompiled;
         public bool IsCompiled
         {
-            get => this.isCompiled;
-            set => this.Set(ref this.isCompiled, value);
+            get => _isCompiled;
+            set => Set(ref _isCompiled, value);
         }
 
-        private bool isCultureInvariant;
-
+        private bool _isCultureInvariant;
         public bool IsCultureInvariant
         {
-            get => this.isCultureInvariant;
-            set => this.Set(ref this.isCultureInvariant, value);
+            get => _isCultureInvariant;
+            set => Set(ref _isCultureInvariant, value);
         }
 
-        private bool isEcmaScript;
-
+        private bool _isEcmaScript;
         public bool IsEcmaScript
         {
-            get => this.isEcmaScript;
-            set => this.Set(ref this.isEcmaScript, value);
+            get => _isEcmaScript;
+            set => Set(ref _isEcmaScript, value);
         }
 
-        private bool isExplicitCapture;
-
+        private bool _isExplicitCapture;
         public bool IsExplicitCapture
         {
-            get => this.isExplicitCapture;
-            set => this.Set(ref this.isExplicitCapture, value);
+            get => _isExplicitCapture;
+            set => Set(ref _isExplicitCapture, value);
         }
 
-        private bool ignorePatternWhitespace;
-
+        private bool _ignorePatternWhitespace;
         public bool IgnorePatternWhitespace
         {
-            get => this.ignorePatternWhitespace;
-            set => this.Set(ref this.ignorePatternWhitespace, value);
+            get => _ignorePatternWhitespace;
+            set => Set(ref _ignorePatternWhitespace, value);
         }
 
-        private bool isMultiline;
-
+        private bool _isMultiline;
         public bool IsMultiline
         {
-            get => this.isMultiline;
-            set => this.Set(ref this.isMultiline, value);
+            get => _isMultiline;
+            set => Set(ref _isMultiline, value);
         }
 
-        private bool isRightToLeft;
-
+        private bool _isRightToLeft;
         public bool IsRightToLeft
         {
-            get => this.isRightToLeft;
-            set => this.Set(ref this.isRightToLeft, value);
+            get => _isRightToLeft;
+            set => Set(ref _isRightToLeft, value);
         }
 
-        private bool isSingleLine;
-
+        private bool _isSingleLine;
         public bool IsSingleLine
         {
-            get => this.isSingleLine;
-            set => this.Set(ref this.isSingleLine, value);
+            get => _isSingleLine;
+            set => Set(ref _isSingleLine, value);
         }
 
-        private bool wrap;
-
+        private bool _wrap;
         public bool Wrap
         {
-            get => this.wrap;
-            set => this.Set(ref this.wrap, value);
+            get => _wrap;
+            set => Set(ref _wrap, value);
         }
 
-        private bool searchSelection;
-
+        private bool _searchSelection;
         public bool SearchSelection
         {
-            get => this.searchSelection;
-            set => this.Set(ref this.searchSelection, value);
+            get => _searchSelection;
+            set => Set(ref _searchSelection, value);
         }
 
-        private bool markLine;
-
+        private bool _markLine;
         public bool MarkLine
         {
-            get => this.markLine;
-            set => this.Set(ref this.markLine, value);
+            get => _markLine;
+            set => Set(ref _markLine, value);
         }
 
-        private bool highlightMatches;
-
+        private bool _highlightMatches;
         public bool HighlightMatches
         {
-            get => this.highlightMatches;
-            set => this.Set(ref this.highlightMatches, value);
+            get => _highlightMatches;
+            set => Set(ref _highlightMatches, value);
         }
 
-        private string findText = string.Empty;
-
+        private string _findText = string.Empty;
         public string FindText
         {
-            get => this.findText;
-            set => this.Set(ref this.findText, value);
+            get => _findText;
+            set => Set(ref _findText, value);
         }
 
-        private string replaceText = string.Empty;
-
+        private string _replaceText = string.Empty;
         public string ReplaceText
         {
-            get => this.replaceText;
-            set => this.Set(ref this.replaceText, value);
+            get => _replaceText;
+            set => Set(ref _replaceText, value);
         }
 
-        private string statusText = string.Empty;
-
+        private string _statusText = string.Empty;
         public string StatusText
         {
-            get => this.statusText;
-            set => this.Set(ref this.statusText, value);
+            get => _statusText;
+            set => Set(ref _statusText, value);
         }
 
         private void ExecuteFindAllCommand()
         {
-            if (string.IsNullOrEmpty(this.FindText))
+            if (string.IsNullOrEmpty(FindText))
             {
                 return;
             }
 
-            this.StatusText = string.Empty;
+            StatusText = string.Empty;
 
-            this.ExecuteClearCommand();
+            ExecuteClearCommand();
             int foundCount;
 
-            if (this.IsRegExSearch)
+            if (IsRegExSearch)
             {
                 Regex rr;
                 try
                 {
-                    rr = new Regex(this.FindText, this.GetRegexOptions());
+                    rr = new Regex(FindText, GetRegexOptions());
                 }
                 catch (ArgumentException ex)
                 {
-                    this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
+                    StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                     return;
                 }
 
-                if (this.SearchSelection)
+                if (SearchSelection)
                 {
-                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition)
+                    if (_searchRange.MinPosition == _searchRange.MaxPosition)
                     {
-                        this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
                     }
 
-                    foundCount = this.FindReplace.FindAll(this.searchRange, rr, this.MarkLine, this.HighlightMatches).Count;
+                    foundCount = FindReplace.FindAll(_searchRange, rr, MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    this.searchRange = new CharacterRange();
-                    foundCount = this.FindReplace.FindAll(rr, this.MarkLine, this.HighlightMatches).Count;
+                    _searchRange = new CharacterRange();
+                    foundCount = FindReplace.FindAll(rr, MarkLine, HighlightMatches).Count;
                 }
             }
             else
             {
-                var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                if (this.SearchSelection)
+                var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                if (SearchSelection)
                 {
-                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
-                    foundCount = this.FindReplace.FindAll(this.searchRange, textToFind, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
+                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                    foundCount = FindReplace.FindAll(_searchRange, textToFind, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    this.searchRange = new CharacterRange();
-                    foundCount = this.FindReplace.FindAll(textToFind, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
+                    _searchRange = new CharacterRange();
+                    foundCount = FindReplace.FindAll(textToFind, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
             }
 
-            this.StatusText = $"{Strings.FindReplace_Status_TotalFound}: {foundCount}";
-            this.AddRecentFind();
+            StatusText = $"{Strings.FindReplace_Status_TotalFound}: {foundCount}";
+            AddRecentFind();
         }
 
         private void ExecuteReplaceAllCommand()
         {
-            if (string.IsNullOrEmpty(this.FindText))
+            if (string.IsNullOrEmpty(FindText))
             {
                 return;
             }
 
-            this.StatusText = string.Empty;
+            StatusText = string.Empty;
 
-            this.ExecuteClearCommand();
+            ExecuteClearCommand();
             int foundCount;
 
-            var textToReplace = this.IsExtendedSearch ? FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
+            var textToReplace = IsExtendedSearch ? FindReplace.Transform(ReplaceText) : ReplaceText;
 
-            if (this.IsRegExSearch)
+            if (IsRegExSearch)
             {
                 Regex rr;
                 try
                 {
-                    rr = new Regex(this.FindText, this.GetRegexOptions());
+                    rr = new Regex(FindText, GetRegexOptions());
                 }
                 catch (ArgumentException ex)
                 {
-                    this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
+                    StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                     return;
                 }
 
-                if (this.SearchSelection)
+                if (SearchSelection)
                 {
-                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition)
+                    if (_searchRange.MinPosition == _searchRange.MaxPosition)
                     {
-                        this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
                     }
 
-                    foundCount = this.FindReplace.ReplaceAll(this.searchRange, rr, textToReplace, this.MarkLine, this.HighlightMatches).Count;
+                    foundCount = FindReplace.ReplaceAll(_searchRange, rr, textToReplace, MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    this.searchRange = new CharacterRange();
-                    foundCount = this.FindReplace.ReplaceAll(rr, textToReplace, this.MarkLine, this.HighlightMatches).Count;
+                    _searchRange = new CharacterRange();
+                    foundCount = FindReplace.ReplaceAll(rr, textToReplace, MarkLine, HighlightMatches).Count;
                 }
             }
             else
             {
-                var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                if (this.SearchSelection)
+                var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                if (SearchSelection)
                 {
-                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
-                    foundCount = this.FindReplace.ReplaceAll(this.searchRange, textToFind, textToReplace, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
+                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                    foundCount = FindReplace.ReplaceAll(_searchRange, textToFind, textToReplace, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    this.searchRange = new CharacterRange();
-                    foundCount = this.FindReplace.ReplaceAll(textToFind, textToReplace, this.GetSearchFlags(), this.MarkLine, this.HighlightMatches).Count;
+                    _searchRange = new CharacterRange();
+                    foundCount = FindReplace.ReplaceAll(textToFind, textToReplace, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
             }
 
-            this.StatusText = $"{Strings.FindReplace_Status_TotalReplaced}: {foundCount}";
-            this.AddRecentFind();
-            this.AddRecentReplace();
+            StatusText = $"{Strings.FindReplace_Status_TotalReplaced}: {foundCount}";
+            AddRecentFind();
+            AddRecentReplace();
         }
 
         private void ExecuteClearCommand()
         {
-            this.Scintilla.MarkerDeleteAll(this.FindReplace.Marker.Index);
-            this.FindReplace.ClearAllHighlights();
+            Scintilla.MarkerDeleteAll(FindReplace.Marker.Index);
+            FindReplace.ClearAllHighlights();
         }
 
         private void FindWrapper(bool searchUp)
         {
-            if (string.IsNullOrEmpty(this.FindText))
+            if (string.IsNullOrEmpty(FindText))
             {
                 return;
             }
 
-            this.StatusText = string.Empty;
+            StatusText = string.Empty;
 
             CharacterRange foundRange;
 
             try
             {
-                foundRange = this.FindNext(searchUp);
+                foundRange = FindNext(searchUp);
             }
             catch (ArgumentException ex)
             {
-                this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
+                StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                 return;
             }
 
             if (foundRange.MinPosition == foundRange.MaxPosition)
             {
-                this.StatusText = Strings.FindReplace_Status_NoMatch;
+                StatusText = Strings.FindReplace_Status_NoMatch;
             }
             else
             {
-                if ((searchUp && foundRange.MinPosition < this.Scintilla.AnchorPosition) || (!searchUp && foundRange.MinPosition > this.Scintilla.CurrentPosition))
+                if ((searchUp && foundRange.MinPosition < Scintilla.AnchorPosition) || (!searchUp && foundRange.MinPosition > Scintilla.CurrentPosition))
                 {
-                    this.StatusText = Strings.FindReplace_Status_Wrap;
+                    StatusText = Strings.FindReplace_Status_Wrap;
                 }
 
                 // This should ensure the entire text is visible before it is selected
-                this.Scintilla.GotoPosition(foundRange.MaxPosition);
-                this.Scintilla.GotoPosition(foundRange.MinPosition);
+                Scintilla.GotoPosition(foundRange.MaxPosition);
+                Scintilla.GotoPosition(foundRange.MinPosition);
 
-                this.Scintilla.SetSel(foundRange.MinPosition, foundRange.MaxPosition);
-                this.MoveDialogAwayFromSelection();
+                Scintilla.SetSel(foundRange.MinPosition, foundRange.MaxPosition);
+                MoveDialogAwayFromSelection();
             }
 
-            this.AddRecentFind();
+            AddRecentFind();
         }
 
         private void AddRecentFind()
         {
             // The way a ComboBox works, there is a chance this resets the FindText. This is due to removing the item from the list
             // just temporarily before putting it at the top
-            var text = this.FindText;
-            this.RecentFinds.Add(text);
-            this.FindText = text;
+            var text = FindText;
+            RecentFinds.Add(text);
+            FindText = text;
         }
 
         private void AddRecentReplace()
         {
             // The way a ComboBox works, there is a chance this resets the ReplaceText. This is due to removing the item from the list
             // just temporarily before putting it at the top
-            var text = this.ReplaceText;
-            this.RecentReplaces.Add(text);
-            this.ReplaceText = text;
+            var text = ReplaceText;
+            RecentReplaces.Add(text);
+            ReplaceText = text;
         }
 
         private CharacterRange FindNext(bool searchUp)
         {
             Regex? rr = null;
-            return this.FindNext(searchUp, ref rr);
+            return FindNext(searchUp, ref rr);
         }
 
         private CharacterRange FindNext(bool searchUp, ref Regex? rr)
         {
             CharacterRange foundRange;
 
-            if (this.IsRegExSearch)
+            if (IsRegExSearch)
             {
-                rr = new Regex(this.FindText, this.GetRegexOptions());
+                rr = new Regex(FindText, GetRegexOptions());
 
-                if (this.SearchSelection)
+                if (SearchSelection)
                 {
-                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     if (searchUp)
-                        foundRange = this.FindReplace.FindPrevious(rr, this.Wrap, this.searchRange);
+                        foundRange = FindReplace.FindPrevious(rr, Wrap, _searchRange);
                     else
-                        foundRange = this.FindReplace.FindNext(rr, this.Wrap, this.searchRange);
+                        foundRange = FindReplace.FindNext(rr, Wrap, _searchRange);
                 }
                 else
                 {
-                    this.searchRange = new CharacterRange();
+                    _searchRange = new CharacterRange();
                     if (searchUp)
-                        foundRange = this.FindReplace.FindPrevious(rr, this.Wrap);
+                        foundRange = FindReplace.FindPrevious(rr, Wrap);
                     else
-                        foundRange = this.FindReplace.FindNext(rr, this.Wrap);
+                        foundRange = FindReplace.FindNext(rr, Wrap);
                 }
             }
             else
             {
-                if (this.SearchSelection)
+                if (SearchSelection)
                 {
-                    if (this.searchRange.MinPosition == this.searchRange.MaxPosition) this.searchRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
                     if (searchUp)
                     {
-                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                        foundRange = this.FindReplace.FindPrevious(textToFind, this.Wrap, this.GetSearchFlags(), this.searchRange);
+                        var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                        foundRange = FindReplace.FindPrevious(textToFind, Wrap, GetSearchFlags(), _searchRange);
                     }
                     else
                     {
-                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                        foundRange = this.FindReplace.FindNext(textToFind, this.Wrap, this.GetSearchFlags(), this.searchRange);
+                        var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                        foundRange = FindReplace.FindNext(textToFind, Wrap, GetSearchFlags(), _searchRange);
                     }
                 }
                 else
                 {
-                    this.searchRange = new CharacterRange();
+                    _searchRange = new CharacterRange();
                     if (searchUp)
                     {
-                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                        foundRange = this.FindReplace.FindPrevious(textToFind, this.Wrap, this.GetSearchFlags());
+                        var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                        foundRange = FindReplace.FindPrevious(textToFind, Wrap, GetSearchFlags());
                     }
                     else
                     {
-                        var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                        foundRange = this.FindReplace.FindNext(textToFind, this.Wrap, this.GetSearchFlags());
+                        var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                        foundRange = FindReplace.FindNext(textToFind, Wrap, GetSearchFlags());
                     }
                 }
             }
@@ -538,63 +509,63 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         private void ReplaceWrapper(bool searchUp)
         {
-            if (string.IsNullOrEmpty(this.FindText))
+            if (string.IsNullOrEmpty(FindText))
             {
                 return;
             }
 
-            this.StatusText = string.Empty;
+            StatusText = string.Empty;
 
             CharacterRange nextRange;
             try
             {
-                nextRange = this.ReplaceNext(searchUp);
+                nextRange = ReplaceNext(searchUp);
             }
             catch (ArgumentException ex)
             {
-                this.StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
+                StatusText = $"{Strings.FindReplace_Status_RegExError}: {ex.Message}";
                 return;
             }
 
             if (nextRange.MinPosition == nextRange.MaxPosition)
             {
-                this.StatusText = Strings.FindReplace_Status_NoMatch;
+                StatusText = Strings.FindReplace_Status_NoMatch;
             }
             else
             {
-                if (nextRange.MinPosition < this.Scintilla.AnchorPosition)
+                if (nextRange.MinPosition < Scintilla.AnchorPosition)
                 {
-                    this.StatusText = Strings.FindReplace_Status_Wrap;
+                    StatusText = Strings.FindReplace_Status_Wrap;
                 }
                 
                 // This should ensure the entire text is visible before it is selected
-                this.Scintilla.GotoPosition(nextRange.MaxPosition);
-                this.Scintilla.GotoPosition(nextRange.MinPosition);
+                Scintilla.GotoPosition(nextRange.MaxPosition);
+                Scintilla.GotoPosition(nextRange.MinPosition);
 
-                this.Scintilla.SetSel(nextRange.MinPosition, nextRange.MaxPosition);
+                Scintilla.SetSel(nextRange.MinPosition, nextRange.MaxPosition);
 
-                this.MoveDialogAwayFromSelection();
+                MoveDialogAwayFromSelection();
             }
 
-            this.AddRecentFind();
-            this.AddRecentReplace();
+            AddRecentFind();
+            AddRecentReplace();
         }
 
         private CharacterRange ReplaceNext(bool searchUp)
         {
             Regex? rr = null;
-            var selRange = new CharacterRange(this.scintilla.Selections[0].Start, this.scintilla.Selections[0].End);
+            var selRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
 
             //	We only do the actual replacement if the current selection exactly
             //	matches the find.
             if (selRange.MaxPosition - selRange.MinPosition > 0)
             {
-                if (this.IsRegExSearch)
+                if (IsRegExSearch)
                 {
-                    rr = new Regex(this.FindText, this.GetRegexOptions());
-                    var selRangeText = this.Scintilla.GetTextRange(selRange.MinPosition, selRange.MaxPosition - selRange.MinPosition);
+                    rr = new Regex(FindText, GetRegexOptions());
+                    var selRangeText = Scintilla.GetTextRange(selRange.MinPosition, selRange.MaxPosition - selRange.MinPosition);
 
-                    if (selRange.Equals(this.FindReplace.Find(selRange, rr, false)))
+                    if (selRange.Equals(FindReplace.Find(selRange, rr, false)))
                     {
                         //	If searching up we do the replacement using the range object.
                         //	Otherwise we use the selection object. The reason being if
@@ -605,19 +576,19 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                         //	in the next search.
                         if (searchUp)
                         {
-                            this.scintilla.SelectionStart = selRange.MinPosition;
-                            this.scintilla.SelectionEnd = selRange.MaxPosition;
-                            this.scintilla.ReplaceSelection(rr.Replace(selRangeText, this.ReplaceText));
-                            this.scintilla.GotoPosition(selRange.MinPosition);
+                            _scintilla.SelectionStart = selRange.MinPosition;
+                            _scintilla.SelectionEnd = selRange.MaxPosition;
+                            _scintilla.ReplaceSelection(rr.Replace(selRangeText, ReplaceText));
+                            _scintilla.GotoPosition(selRange.MinPosition);
                         }
                         else
-                            this.Scintilla.ReplaceSelection(rr.Replace(selRangeText, this.ReplaceText));
+                            Scintilla.ReplaceSelection(rr.Replace(selRangeText, ReplaceText));
                     }
                 }
                 else
                 {
-                    var textToFind = this.IsExtendedSearch ? FindReplace.Transform(this.FindText) : this.FindText;
-                    if (selRange.Equals(this.FindReplace.Find(selRange, textToFind, false)))
+                    var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
+                    if (selRange.Equals(FindReplace.Find(selRange, textToFind, false)))
                     {
                         //	If searching up we do the replacement using the range object.
                         //	Otherwise we use the selection object. The reason being if
@@ -628,73 +599,73 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                         //	in the next search.
                         if (searchUp)
                         {
-                            var textToReplace = this.IsExtendedSearch ? FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
-                            this.scintilla.SelectionStart = selRange.MinPosition;
-                            this.scintilla.SelectionEnd = selRange.MaxPosition;
-                            this.scintilla.ReplaceSelection(textToReplace);
+                            var textToReplace = IsExtendedSearch ? FindReplace.Transform(ReplaceText) : ReplaceText;
+                            _scintilla.SelectionStart = selRange.MinPosition;
+                            _scintilla.SelectionEnd = selRange.MaxPosition;
+                            _scintilla.ReplaceSelection(textToReplace);
 
-                            this.scintilla.GotoPosition(selRange.MinPosition);
+                            _scintilla.GotoPosition(selRange.MinPosition);
                         }
                         else
                         {
-                            var textToReplace = this.IsExtendedSearch ? FindReplace.Transform(this.ReplaceText) : this.ReplaceText;
-                            this.Scintilla.ReplaceSelection(textToReplace);
+                            var textToReplace = IsExtendedSearch ? FindReplace.Transform(ReplaceText) : ReplaceText;
+                            Scintilla.ReplaceSelection(textToReplace);
                         }
                     }
                 }
             }
 
-            this.AddRecentFind();
-            this.AddRecentReplace();
+            AddRecentFind();
+            AddRecentReplace();
 
-            return this.FindNext(searchUp, ref rr);
+            return FindNext(searchUp, ref rr);
         }
 
         public RegexOptions GetRegexOptions()
         {
             var ro = RegexOptions.None;
 
-            if (this.IsCompiled)
+            if (IsCompiled)
             {
                 ro |= RegexOptions.Compiled;
             }
 
-            if (this.IsCultureInvariant)
+            if (IsCultureInvariant)
             {
                 ro |= RegexOptions.Compiled;
             }
 
-            if (this.IsEcmaScript)
+            if (IsEcmaScript)
             {
                 ro |= RegexOptions.ECMAScript;
             }
 
-            if (this.IsExplicitCapture)
+            if (IsExplicitCapture)
             {
                 ro |= RegexOptions.ExplicitCapture;
             }
 
-            if (this.IgnoreCase)
+            if (IgnoreCase)
             {
                 ro |= RegexOptions.IgnoreCase;
             }
 
-            if (this.IgnorePatternWhitespace)
+            if (IgnorePatternWhitespace)
             {
                 ro |= RegexOptions.IgnorePatternWhitespace;
             }
 
-            if (this.IsMultiline)
+            if (IsMultiline)
             {
                 ro |= RegexOptions.Multiline;
             }
 
-            if (this.IsRightToLeft)
+            if (IsRightToLeft)
             {
                 ro |= RegexOptions.RightToLeft;
             }
 
-            if (this.IsSingleLine)
+            if (IsSingleLine)
             {
                 ro |= RegexOptions.Singleline;
             }
@@ -706,17 +677,17 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         {
             var sf = SearchFlags.None;
 
-            if (!this.IgnoreCase)
+            if (!IgnoreCase)
             {
                 sf |= SearchFlags.MatchCase;
             }
 
-            if (this.WholeWord)
+            if (WholeWord)
             {
                 sf |= SearchFlags.WholeWord;
             }
 
-            if (this.WordStart)
+            if (WordStart)
             {
                 sf |= SearchFlags.WordStart;
             }
@@ -727,25 +698,25 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         public bool OnLoaded((Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler) payload)
         {
             var (editor, action, handler) = payload;
-            this.FindAllHandler = handler;
-            this.Scintilla = editor;
+            FindAllHandler = handler;
+            Scintilla = editor;
 
             switch (action)
             {
                 case FindReplaceAction.Find:
-                    this.IsFindTabSelected = true;
+                    IsFindTabSelected = true;
                     break;
                 case FindReplaceAction.Replace:
-                    this.IsFindTabSelected = false;
+                    IsFindTabSelected = false;
                     break;
                 case FindReplaceAction.FindNext:
-                    this.FindWrapper(false);
+                    FindWrapper(false);
                     return false;
                 case FindReplaceAction.FindPrevious:
-                    this.FindWrapper(true);
+                    FindWrapper(true);
                     return false;
                 case FindReplaceAction.IncrementalSearch:
-                    this.IncrementalSearcher?.Show();
+                    IncrementalSearcher?.Show();
                     return false;
                 default:
                     throw new NotImplementedException($"Unhandled loading action: {action}");
@@ -756,17 +727,17 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public virtual void MoveDialogAwayFromSelection()
         {
-            if (!this.AutoPosition)
+            if (!AutoPosition)
             {
                 return;
             }
 
-            var pos = this.Scintilla.CurrentPosition;
-            var x = this.Scintilla.PointXFromPosition(pos);
-            var y = this.Scintilla.PointYFromPosition(pos);
+            var pos = Scintilla.CurrentPosition;
+            var x = Scintilla.PointXFromPosition(pos);
+            var y = Scintilla.PointYFromPosition(pos);
 
-            var cursorPoint = this.Scintilla.PointToScreen(new Point(x, y));
-            this.MoveDialogAway?.Invoke(this, new PointEventArgs(cursorPoint));
+            var cursorPoint = Scintilla.PointToScreen(new Point(x, y));
+            MoveDialogAway?.Invoke(this, new PointEventArgs(cursorPoint));
         }
     }
 }

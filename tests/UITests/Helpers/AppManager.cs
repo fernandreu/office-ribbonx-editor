@@ -14,9 +14,9 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 {
     public class AppManager : IDisposable
     {
-        private readonly string exePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "OfficeRibbonXEditor.exe");
+        private readonly string _exePath = Path.Combine(TestContext.CurrentContext.TestDirectory, "OfficeRibbonXEditor.exe");
 
-        private bool disposed;
+        private bool _disposed;
 
         public Application? App { get; private set; }
 
@@ -24,34 +24,34 @@ namespace OfficeRibbonXEditor.UITests.Helpers
 
         public Window? Window { get; private set; }
 
-        public Menu? FileMenu  => this.Window?.FindFirstDescendant(x => x.ByText("File"), TimeSpan.FromSeconds(1)).AsMenu();
+        public Menu? FileMenu  => Window?.FindFirstDescendant(x => x.ByText("File"), TimeSpan.FromSeconds(1)).AsMenu();
 
-        public Menu? HelpMenu => this.Window?.FindFirstDescendant(x => x.ByText("Help"), TimeSpan.FromSeconds(1)).AsMenu();
+        public Menu? HelpMenu => Window?.FindFirstDescendant(x => x.ByText("Help"), TimeSpan.FromSeconds(1)).AsMenu();
 
         public void Launch(params string[] arguments)
         {
             var psi = new ProcessStartInfo
             {
-                FileName = exePath,
+                FileName = _exePath,
                 Arguments = string.Join(" ", arguments.Select(x => $"\"{x}\"")),
                 WorkingDirectory = TestContext.CurrentContext.TestDirectory,
             };
 
-            this.App = Application.Launch(psi);
-            this.Automation = new UIA3Automation();
-            this.App.WaitWhileMainHandleIsMissing(TimeSpan.FromSeconds(10));
-            this.Window = this.App.GetMainWindow(this.Automation, TimeSpan.FromSeconds(10));
-            Assume.That(this.Window, Is.Not.Null, "Cannot find main window");
+            App = Application.Launch(psi);
+            Automation = new UIA3Automation();
+            App.WaitWhileMainHandleIsMissing(TimeSpan.FromSeconds(10));
+            Window = App.GetMainWindow(Automation, TimeSpan.FromSeconds(10));
+            Assume.That(Window, Is.Not.Null, "Cannot find main window");
         }
 
         public Window[] GetTopLevelWindows()
         {
-            if (this.App == null || this.Automation == null)
+            if (App == null || Automation == null)
             {
                 return Array.Empty<Window>();
             }
 
-            return this.App.GetAllTopLevelWindows(this.Automation);
+            return App.GetAllTopLevelWindows(Automation);
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
         /// </summary>
         private void Close()
         {
-            if (this.App == null)
+            if (App == null)
             {
                 return;
             }
@@ -68,26 +68,26 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             var status = TestContext.CurrentContext.Result.Outcome.Status;
             if (status == TestStatus.Failed)
             {
-                this.Window?.TestCapture("MainWindow.png", "Main Window status when the test failed");
+                Window?.TestCapture("MainWindow.png", "Main Window status when the test failed");
 
                 // TODO: Capture all modal windows and top-level windows
             }
 
-            while (this.Window?.ModalWindows.Any() ?? false)
+            while (Window?.ModalWindows.Any() ?? false)
             {
-                this.Window.ModalWindows.First().Close();
-                this.App.WaitWhileBusy();
+                Window.ModalWindows.First().Close();
+                App.WaitWhileBusy();
             }
 
-            this.Window?.Close();
+            Window?.Close();
 
             try
             {
                 // TODO: Loop might not be needed if WaitWhileBusy() is really working
-                for (var attempts = 0; attempts < 10 && !this.App.HasExited; ++attempts)
+                for (var attempts = 0; attempts < 10 && !App.HasExited; ++attempts)
                 {
-                    this.App.WaitWhileBusy();
-                    var dialog = this.Window?.ModalWindows.FirstOrDefault();
+                    App.WaitWhileBusy();
+                    var dialog = Window?.ModalWindows.FirstOrDefault();
                     dialog?.FindFirstChild(x => x.ByName("No")).Click();
                 }
             }
@@ -98,33 +98,33 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             {
             }
 
-            this.Automation?.Dispose();
-            this.App.Close();
+            Automation?.Dispose();
+            App.Close();
         }
 
         /// <summary>Disposes the application.</summary>
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         /// <summary>Disposes the application.</summary>
         protected virtual void Dispose(bool disposing)
         {
-            if (this.disposed)
+            if (_disposed)
             {
                 return;
             }
 
             if (disposing)
             {
-                this.Close();
-                this.App?.Dispose();
-                this.Automation?.Dispose();
+                Close();
+                App?.Dispose();
+                Automation?.Dispose();
             }
 
-            this.disposed = true;
+            _disposed = true;
         }
     }
 }

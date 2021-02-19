@@ -16,43 +16,42 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
     {
         public EditorTabViewModel(OfficePartViewModel part, MainWindowViewModel mainWindow)
         {
-            this.part = part;
-            this.MainWindow = mainWindow;
-
-            this.CutCommand = new RelayCommand(() => this.Cut?.Invoke(this, EventArgs.Empty));
-            this.CopyCommand = new RelayCommand(() => this.Copy?.Invoke(this, EventArgs.Empty));
-            this.PasteCommand = new RelayCommand(() => this.Paste?.Invoke(this, EventArgs.Empty));
-            this.UndoCommand = new RelayCommand(() => this.Undo?.Invoke(this, EventArgs.Empty));
-            this.RedoCommand = new RelayCommand(() => this.Redo?.Invoke(this, EventArgs.Empty));
-            this.SelectAllCommand = new RelayCommand(() => this.SelectAll?.Invoke(this, EventArgs.Empty));
-            this.FoldCommand = new RelayCommand<int>(level => this.Fold?.Invoke(this, new FoldEventArgs(level)));
-            this.UnfoldCommand = new RelayCommand<int>(level => this.Fold?.Invoke(this, new FoldEventArgs(level, true)));
-            this.FoldCurrentCommand = new RelayCommand(() => this.Fold?.Invoke(this, new FoldEventArgs(true)));
-            this.UnfoldCurrentCommand = new RelayCommand(() => this.Fold?.Invoke(this, new FoldEventArgs(true, true)));
-            this.DuplicateLineCommand = new RelayCommand(() => this.DuplicateLine?.Invoke(this, EventArgs.Empty));
+            _part = part;
+            MainWindow = mainWindow;
         }
 
-        public RelayCommand CutCommand { get; }
+        private RelayCommand? _cutCommand;
+        public RelayCommand CutCommand => _cutCommand ??= new RelayCommand(() => Cut?.Invoke(this, EventArgs.Empty));
 
-        public RelayCommand CopyCommand { get; }
+        private RelayCommand? _copyCommand;
+        public RelayCommand CopyCommand => _copyCommand ??= new RelayCommand(() => Copy?.Invoke(this, EventArgs.Empty));
 
-        public RelayCommand PasteCommand { get; }
+        private RelayCommand? _pasteCommand;
+        public RelayCommand PasteCommand => _pasteCommand ??= new RelayCommand(() => Paste?.Invoke(this, EventArgs.Empty));
 
-        public RelayCommand UndoCommand { get; }
+        private RelayCommand? _undoCommand;
+        public RelayCommand UndoCommand => _undoCommand ??= new RelayCommand(() => Undo?.Invoke(this, EventArgs.Empty));
 
-        public RelayCommand RedoCommand { get; }
+        private RelayCommand? _redoCommand;
+        public RelayCommand RedoCommand => _redoCommand ??= new RelayCommand(() => Redo?.Invoke(this, EventArgs.Empty));
 
-        public RelayCommand SelectAllCommand { get; }
+        private RelayCommand? _selectAllCommand;
+        public RelayCommand SelectAllCommand => _selectAllCommand ??= new RelayCommand(() => SelectAll?.Invoke(this, EventArgs.Empty));
 
-        public RelayCommand<int> FoldCommand { get; }
+        private RelayCommand<int>? _foldCommand;
+        public RelayCommand<int> FoldCommand => _foldCommand ??= new RelayCommand<int>(level => Fold?.Invoke(this, new FoldEventArgs(level)));
 
-        public RelayCommand<int> UnfoldCommand { get; }
+        private RelayCommand<int>? _unfoldCommand;
+        public RelayCommand<int> UnfoldCommand => _unfoldCommand ??= new RelayCommand<int>(level => Fold?.Invoke(this, new FoldEventArgs(level, true)));
 
-        public RelayCommand FoldCurrentCommand { get; }
+        private RelayCommand? _foldCurrentCommand;
+        public RelayCommand FoldCurrentCommand => _foldCurrentCommand ??= new RelayCommand(() => Fold?.Invoke(this, new FoldEventArgs(true)));
 
-        public RelayCommand UnfoldCurrentCommand { get; }
+        private RelayCommand? _unfoldCurrentCommand;
+        public RelayCommand UnfoldCurrentCommand => _unfoldCurrentCommand ??= new RelayCommand(() => Fold?.Invoke(this, new FoldEventArgs(true, true)));
 
-        public RelayCommand DuplicateLineCommand { get; }
+        private RelayCommand? _duplicateLineCommand;
+        public RelayCommand DuplicateLineCommand => _duplicateLineCommand ??= new RelayCommand(() => DuplicateLine?.Invoke(this, EventArgs.Empty));
 
         public event EventHandler? Cut;
 
@@ -70,50 +69,46 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public event EventHandler? DuplicateLine;
 
-        private string title = string.Empty;
-
+        private string _title = string.Empty;
         public string Title
         {
-            get => this.title;
-            set => this.Set(ref this.title, value);
+            get => _title;
+            set => Set(ref _title, value);
         }
 
-        private string? statusText;
-
+        private string? _statusText;
         public string? StatusText
         {
-            get => this.statusText;
-            set => this.Set(ref this.statusText, value);
+            get => _statusText;
+            set => Set(ref _statusText, value);
         }
 
-        private int zoom;
-
+        private int _zoom;
         public int Zoom
         {
-            get => this.zoom;
-            set => this.Set(ref this.zoom, value);
+            get => _zoom;
+            set => Set(ref _zoom, value);
         }
 
         public ScintillaLexer? Lexer { get; set; }
 
-        private OfficePartViewModel part;
-
+        private OfficePartViewModel _part;
         public OfficePartViewModel Part
         {
-            get => this.part;
+            get => _part;
             set
             {
-                if (!this.Set(ref this.part, value))
+                if (!Set(ref _part, value))
                 {
                     return;
                 }
 
-                this.RaisePropertyChanged(nameof(this.StatusText));
-                this.RaisePropertyChanged(nameof(this.Item));
+                RaisePropertyChanged(nameof(StatusText));
+                RaisePropertyChanged(nameof(Item));
             }
         }
 
-        public TreeViewItemViewModel Item => this.Part;
+        public TreeViewItemViewModel Item => Part;
 
         public MainWindowViewModel MainWindow { get; set; }
 
@@ -135,37 +130,37 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             get
             {
                 var e = new DataEventArgs<EditorInfo>();
-                this.ReadEditorInfo?.Invoke(this, e);
+                ReadEditorInfo?.Invoke(this, e);
                 return e.Data;
             }
         }
 
         public void OnShowResults(ResultsEventArgs e)
         {
-            this.ShowResults?.Invoke(this, e);
+            ShowResults?.Invoke(this, e);
         }
 
         public void OnUpdateEditor(EditorChangeEventArgs e)
         {
-            this.UpdateEditor?.Invoke(this, e);
+            UpdateEditor?.Invoke(this, e);
         }
 
         public void ApplyChanges()
         {
-            if (!this.Part.CanHaveContents)
+            if (!Part.CanHaveContents)
             {
                 return;
             }
 
             var e = new DataEventArgs<EditorInfo>();
-            this.ReadEditorInfo?.Invoke(this, e);
+            ReadEditorInfo?.Invoke(this, e);
             if (e.Data == null)
             {
                 // This means that event handler was not listened by any view, or the view did not pass the editor contents back for some reason
                 return;
             }
             
-            this.Part.Contents = e.Data.Text;
+            Part.Contents = e.Data.Text;
         }
     }
 }

@@ -7,22 +7,20 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 {
     public class OfficeDocumentViewModel : TreeViewItemViewModel, IDisposable
     {
-        private OfficeDocument document;
+        private bool _partsAddedOrRemoved;
 
-        private bool partsAddedOrRemoved;
-
-        private bool disposed;
+        private bool _disposed;
 
         public OfficeDocumentViewModel(OfficeDocument document) 
             : base(null, false, false)
         {
-            this.document = document;
-            this.LoadParts();
+            Document = document;
+            LoadParts();
         }
 
-        public OfficeDocument Document => this.document;
+        public OfficeDocument Document { get; private set; }
 
-        public override string Name => Path.GetFileName(this.document.Name);
+        public override string Name => Path.GetFileName(Document.Name);
 
         /// <summary>
         /// Gets a value indicating whether any of the parts of this document has unsaved changes.
@@ -31,12 +29,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         {
             get
             {
-                if (this.partsAddedOrRemoved)
+                if (_partsAddedOrRemoved)
                 {
                     return true;
                 }
 
-                foreach (var child in this.Children)
+                foreach (var child in Children)
                 {
                     if (child is OfficePartViewModel part && part.HasUnsavedChanges)
                     {
@@ -52,7 +50,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         {
             get
             {
-                switch (this.document.FileType)
+                switch (Document.FileType)
                 {
                     case OfficeApplication.Excel:
                         return "/Resources/Images/excelwkb.png";
@@ -78,29 +76,29 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         public void Reload()
         {
             // Store the file name (otherwise, it will have been erased after calling Dispose)
-            var fileName = this.document.Name;
+            var fileName = Document.Name;
 
             // Dispose current document (not needed as references to its parts are stored in their View models anyway)
-            this.document.Dispose();
+            Document.Dispose();
 
             // Then, reload it
-            this.document = new OfficeDocument(fileName);
+            Document = new OfficeDocument(fileName);
             
             // Delete all its original parts
             foreach (var type in Enum.GetValues(typeof(XmlPart)).OfType<XmlPart>())
             {
-                this.document.RemoveCustomPart(type);
+                Document.RemoveCustomPart(type);
             }
 
             // Instead, use the parts currently shown in the editor
-            foreach (var part in this.Children.OfType<OfficePartViewModel>())
+            foreach (var part in Children.OfType<OfficePartViewModel>())
             {
                 if (part.Part == null)
                 {
                     continue;
                 }
 
-                this.document.SaveCustomPart(part.Part.PartType, part.OriginalContents, true);
+                Document.SaveCustomPart(part.Part.PartType, part.OriginalContents, true);
                 
                 // Re-map the Part. This ensures that the PackagePart stored internally in OfficePart points to
                 // the right location, in case it is needed
@@ -112,63 +110,63 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         {
             if (reloadFirst)
             {
-                this.Reload();
+                Reload();
             }
 
             // Save each individual part
-            foreach (var part in this.Children.OfType<OfficePartViewModel>())
+            foreach (var part in Children.OfType<OfficePartViewModel>())
             {
                 part.Save();
             }
 
             // Now save the actual document
-            this.document.Save(fileName, preserveAttributes);
+            Document.Save(fileName, preserveAttributes);
 
             // The save operation closes the internal package and re-opens it. Hence, parts need to be re-mapped
-            foreach (var part in this.Children.OfType<OfficePartViewModel>())
+            foreach (var part in Children.OfType<OfficePartViewModel>())
             {
                 if (part.Part == null)
                 {
                     continue;
                 }
 
-                part.Part = this.document.RetrieveCustomPart(part.Part.PartType);
+                part.Part = Document.RetrieveCustomPart(part.Part.PartType);
             }
 
-            this.partsAddedOrRemoved = false;
+            _partsAddedOrRemoved = false;
         }
 
         public void InsertPart(XmlPart type)
         {
             // Check if the part does not exist yet
-            var part = this.document.RetrieveCustomPart(type);
+            var part = Document.RetrieveCustomPart(type);
             if (part != null)
             {
                 return;
             }
 
-            part = this.document.CreateCustomPart(type);
+            part = Document.CreateCustomPart(type);
             var partModel = new OfficePartViewModel(part, this);
-            this.Children.Add(partModel);
+            Children.Add(partModel);
             partModel.IsSelected = true;
-            this.partsAddedOrRemoved = true;
+            _partsAddedOrRemoved = true;
         }
 
         public void RemovePart(XmlPart type)
         {
-            this.document.RemoveCustomPart(type);
-            this.partsAddedOrRemoved = true;
+            Document.RemoveCustomPart(type);
+            _partsAddedOrRemoved = true;
 
-            for (var i = 0; i < this.Children.Count; ++i)
+            for (var i = 0; i < Children.Count; ++i)
             {
-                if (!(this.Children[i] is OfficePartViewModel part) || part.Part == null)
+                if (!(Children[i] is OfficePartViewModel part) || part.Part == null)
                 {
                     continue;
                 }
 
                 if (part.Part.PartType == type)
                 {
-                    this.Children.RemoveAt(i);
+                    Children.RemoveAt(i);
                     return;
                 }
             }
@@ -176,36 +174,36 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         protected override void LoadChildren()
         {
-            this.LoadParts();
+            LoadParts();
         }
 
         private void LoadParts()
         {
-            foreach (var part in this.document.Parts ?? Enumerable.Empty<OfficePart>())
+            foreach (var part in Document.Parts ?? Enumerable.Empty<OfficePart>())
             {
-                this.Children.Add(new OfficePartViewModel(part, this));
+                Children.Add(new OfficePartViewModel(part, this));
             }
         }
 
         public void Dispose()
         {
-            this.Dispose(true);
+            Dispose(true);
             GC.SuppressFinalize(this);
         }
 
         protected virtual void Dispose(bool disposing)
         {
-            if (this.disposed)
+            if (_disposed)
             {
                 return;
             }
 
             if (disposing)
             {
-                this.document?.Dispose();
+                Document?.Dispose();
             }
 
-            this.disposed = true;
+            _disposed = true;
         }
     }
 }

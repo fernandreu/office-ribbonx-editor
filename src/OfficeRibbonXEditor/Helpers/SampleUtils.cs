@@ -7,7 +7,6 @@ namespace OfficeRibbonXEditor.Helpers
 {
     public static class SampleUtils
     {
-
         private static SampleFolderViewModel? ScanSampleFolder(string path)
         {
             var result = new SampleFolderViewModel

@@ -17,21 +17,21 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         protected Scintilla Scintilla { get; set; }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        private Action<IResultCollection?>? findAllAction;
+        private Action<IResultCollection?>? _findAllAction;
 
         [SetUp]
         public virtual void SetUp()
         {
-            this.Scintilla = new Scintilla();
+            Scintilla = new Scintilla();
 
-            this.ViewModel = new FindReplaceDialogViewModel();
-            ViewModel.OnLoaded((this.Scintilla, FindReplaceAction.Find, (o, e) => findAllAction?.Invoke(e.Data)));
+            ViewModel = new FindReplaceDialogViewModel();
+            ViewModel.OnLoaded((Scintilla, FindReplaceAction.Find, (o, e) => _findAllAction?.Invoke(e.Data)));
         }
 
         [TearDown]
         public void TearDown()
         {
-            this.Scintilla.Dispose();
+            Scintilla.Dispose();
         }
 
         // Basic
@@ -52,15 +52,15 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         public bool FindNext(string text, string findText, bool regEx, bool extended)
         {
             // Arrange
-            this.SetText(text);
-            this.ViewModel.FindText = findText;
-            this.ViewModel.IsRegExSearch = regEx;
-            this.ViewModel.IsExtendedSearch = extended;
+            SetText(text);
+            ViewModel.FindText = findText;
+            ViewModel.IsRegExSearch = regEx;
+            ViewModel.IsExtendedSearch = extended;
 
             // Act
-            this.ViewModel.FindNextCommand.Execute(null);
+            ViewModel.FindNextCommand.Execute(null);
 
-            return this.ViewModel.StatusText != "Match could not be found";
+            return ViewModel.StatusText != "Match could not be found";
         }
 
         // Basic
@@ -77,21 +77,21 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         public string ReplaceNext(string text, string findText, string replaceText, bool regEx, bool extended)
         {
             // Arrange
-            this.SetText(text);
-            this.ViewModel.FindText = findText;
-            this.ViewModel.ReplaceText = replaceText;
-            this.ViewModel.IsRegExSearch = regEx;
-            this.ViewModel.IsExtendedSearch = extended;
+            SetText(text);
+            ViewModel.FindText = findText;
+            ViewModel.ReplaceText = replaceText;
+            ViewModel.IsRegExSearch = regEx;
+            ViewModel.IsExtendedSearch = extended;
 
             // Act
 
             // First click merely selects the text to be replaced
-            this.ViewModel.ReplaceNextCommand.Execute(null);
+            ViewModel.ReplaceNextCommand.Execute(null);
 
             // Second one should do the actual replacement
-            this.ViewModel.ReplaceNextCommand.Execute(null);
+            ViewModel.ReplaceNextCommand.Execute(null);
 
-            return this.Scintilla.Text;
+            return Scintilla.Text;
         }
 
         // Basic
@@ -104,15 +104,15 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         public int FindAll(string text, string findText, bool regEx, bool extended)
         {
             // Arrange
-            this.SetText(text);
-            this.ViewModel.FindText = findText;
-            this.ViewModel.IsRegExSearch = regEx;
-            this.ViewModel.IsExtendedSearch = extended;
+            SetText(text);
+            ViewModel.FindText = findText;
+            ViewModel.IsRegExSearch = regEx;
+            ViewModel.IsExtendedSearch = extended;
             IResultCollection? result = null;
-            this.findAllAction = x => result = x;
+            _findAllAction = x => result = x;
 
             // Act
-            this.ViewModel.FindAllCommand.Execute(null);
+            ViewModel.FindAllCommand.Execute(null);
 
             return result?.Count ?? 0;
         }
@@ -126,26 +126,26 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         public string ReplaceAll(string text, string findText, string replaceText, bool regEx, bool extended)
         {
             // Arrange
-            this.SetText(text);
-            this.ViewModel.FindText = findText;
-            this.ViewModel.ReplaceText = replaceText;
-            this.ViewModel.IsRegExSearch = regEx;
-            this.ViewModel.IsExtendedSearch = extended;
+            SetText(text);
+            ViewModel.FindText = findText;
+            ViewModel.ReplaceText = replaceText;
+            ViewModel.IsRegExSearch = regEx;
+            ViewModel.IsExtendedSearch = extended;
 
             // Act
-            this.ViewModel.ReplaceAllCommand.Execute(null);
+            ViewModel.ReplaceAllCommand.Execute(null);
 
-            return this.Scintilla.Text;
+            return Scintilla.Text;
         }
 
         private void SetText(string text)
         {
-            this.Scintilla.Text = text;
-            if (this.ViewModel.SearchSelection)
+            Scintilla.Text = text;
+            if (ViewModel.SearchSelection)
             {
-                this.Scintilla.SelectionStart = 0;
-                this.Scintilla.SelectionEnd = text.Length;
-                Assert.AreEqual(text, this.Scintilla.SelectedText, "Selected text not set up correctly");
+                Scintilla.SelectionStart = 0;
+                Scintilla.SelectionEnd = text.Length;
+                Assert.AreEqual(text, Scintilla.SelectedText, "Selected text not set up correctly");
             }
         }
     }
@@ -155,8 +155,8 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         public override void SetUp()
         {
             base.SetUp();
-            this.ViewModel.SearchSelection = true;
-            this.ViewModel.Wrap = true;
+            ViewModel.SearchSelection = true;
+            ViewModel.Wrap = true;
         }
     }
 }

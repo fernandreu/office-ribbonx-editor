@@ -9,31 +9,28 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 {
     public class OfficePartViewModel : TreeViewItemViewModel
     {
-        private string originalContents;
-
-        private OfficePart? part;
-
         public OfficePartViewModel(OfficePart part, OfficeDocumentViewModel parent) 
             : base(parent, false, contents: part.ReadContent())
         {
-            this.part = part;
-            this.originalContents = this.Contents ?? string.Empty;
-            this.LoadIcons();
+            _part = part;
+            OriginalContents = Contents ?? string.Empty;
+            LoadIcons();
         }
 
-        public string OriginalContents => this.originalContents;
+        public string OriginalContents { get; private set; }
 
+        private OfficePart? _part;
         public OfficePart? Part
         {
-            get => this.part;
-            set => this.Set(ref this.part, value);
+            get => _part;
+            set => Set(ref _part, value);
         }
 
         public bool IconsChanged { get; set; }
 
-        public bool HasUnsavedChanges => this.originalContents != this.Contents || this.IconsChanged;
+        public bool HasUnsavedChanges => OriginalContents != Contents || IconsChanged;
 
-        public override string Name => this.Part?.Name ?? string.Empty;
+        public override string Name => Part?.Name ?? string.Empty;
 
 #pragma warning disable CA1822 // ImageSource does not access instance data and can be made static (but is needed for WPF, in case there are different images one day)
         public string ImageSource => "/Resources/Images/xml.png";  // TODO: That's probably not the only one possible
@@ -41,41 +38,41 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public void InsertIcon(string filePath, string? id = null, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 return;
             }
 
-            id = this.Part.AddImage(filePath, id, alreadyExistingAction);
+            id = Part.AddImage(filePath, id, alreadyExistingAction);
             if (id == null)
             {
                 // This probably means it was cancelled due to alreadyExistingAction
                 return;
             }
 
-            this.Children.Add(new IconViewModel(id, filePath, this));
-            this.IconsChanged = true;
+            Children.Add(new IconViewModel(id, filePath, this));
+            IconsChanged = true;
         }
 
         public void RemoveIcon(string id)
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 return;
             }
 
-            this.Part.RemoveImage(id);
-            for (var i = 0; i < this.Children.Count; ++i)
+            Part.RemoveImage(id);
+            for (var i = 0; i < Children.Count; ++i)
             {
-                if (!(this.Children[i] is IconViewModel icon))
+                if (!(Children[i] is IconViewModel icon))
                 {
                     continue;
                 }
 
                 if (icon.Name == id)
                 {
-                    this.Children.RemoveAt(i);
-                    this.IconsChanged = true;
+                    Children.RemoveAt(i);
+                    IconsChanged = true;
                     return;
                 }
             }
@@ -88,23 +85,23 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// exist in the document anymore)</returns>
         public bool Reload()
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 return false;
             }
 
-            var reloaded = (this.Parent as OfficeDocumentViewModel)?.Document.RetrieveCustomPart(this.Part.PartType);
+            var reloaded = (Parent as OfficeDocumentViewModel)?.Document.RetrieveCustomPart(Part.PartType);
             if (reloaded == null)
             {
                 // Don't do anything if there is no equivalent to reload
                 return false;
             }
 
-            this.originalContents = reloaded.ReadContent();
-            this.part = reloaded;
+            OriginalContents = reloaded.ReadContent();
+            _part = reloaded;
 
-            var children = new List<TreeViewItemViewModel>(this.Children);
-            this.Children.Clear();
+            var children = new List<TreeViewItemViewModel>(Children);
+            Children.Clear();
 
             // Add the icons that were already loaded
             foreach (var icon in children.OfType<IconViewModel>())
@@ -127,7 +124,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                     }
 
                     // Load the image
-                    this.InsertIcon(location, icon.Name);
+                    InsertIcon(location, icon.Name);
                 }
                 finally
                 {
@@ -140,45 +137,45 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public void Save()
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 return;
             }
 
             // Do not simply call Part.Save because that will not flag the part as dirty in the parent document
-            var docModel = this.Parent as OfficeDocumentViewModel;
+            var docModel = Parent as OfficeDocumentViewModel;
             if (docModel?.Document == null)
             {
                 // TODO: Should this throw?
                 return;
             }
 
-            this.Contents ??= string.Empty;
-            docModel.Document.SaveCustomPart(this.Part.PartType, this.Contents);
+            Contents ??= string.Empty;
+            docModel.Document.SaveCustomPart(Part.PartType, Contents);
 
-            this.Part = docModel.Document.RetrieveCustomPart(this.Part.PartType);
-            this.LoadIcons();
+            Part = docModel.Document.RetrieveCustomPart(Part.PartType);
+            LoadIcons();
 
-            this.originalContents = this.Contents;
-            this.IconsChanged = false;
+            OriginalContents = Contents;
+            IconsChanged = false;
         }
 
         protected override void LoadChildren()
         {
-            this.LoadIcons();
+            LoadIcons();
         }
 
         private void LoadIcons()
         {
-            if (this.Part == null)
+            if (Part == null)
             {
                 return;
             }
 
-            this.Children.Clear();
-            foreach (var image in this.Part.GetImages())
+            Children.Clear();
+            foreach (var image in Part.GetImages())
             {
-                this.Children.Add(new IconViewModel(image.Key, image.Value, this));
+                Children.Add(new IconViewModel(image.Key, image.Value, this));
             }
         }
     }
