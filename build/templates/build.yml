@@ -26,8 +26,11 @@ steps:
   displayName: 'Build solution'
   inputs:
     command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(buildConfiguration) -p:TargetFramework=${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
+    # The generators cannot be specified directly because it would mess up netstandard2.0 being the only target framework
+    projects: |
+      src/OfficeRibbonXEditor/*.csproj
+      tests/**/*.csproj
+    arguments: '--configuration $(buildConfiguration) --framework ${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
 
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
 # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
@@ -46,7 +49,7 @@ steps:
     arguments: >-
       --no-build
       --configuration $(buildConfiguration)
-      /p:TargetFramework=${{ parameters.targetFramework }}
+      --framework ${{ parameters.targetFramework }}
       /p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       /p:CollectCoverage=${{ parameters.coverage }}
       /p:Exclude=[Scintilla*]*

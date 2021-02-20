@@ -20,4 +20,4 @@ steps:
   displayName: 'Use .NET SDK'
   inputs:
     packageType: sdk
-    version: 5.0.100
+    version: 5.0.103

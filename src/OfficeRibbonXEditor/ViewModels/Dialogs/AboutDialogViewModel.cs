@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Resources;
@@ -7,7 +7,7 @@ using OfficeRibbonXEditor.Resources;
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     [Export]
-    public class AboutDialogViewModel : DialogBase
+    public partial class AboutDialogViewModel : DialogBase
     {
         private readonly IMessageBoxService _messageBoxService;
 
@@ -22,17 +22,16 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public IToolInfo Info { get; }
 
-        private RelayCommand? _submitIssueCommand;
-        public RelayCommand SubmitIssueCommand => _submitIssueCommand ??= new RelayCommand(ExecuteSubmitIssueCommand);
-
-        private RelayCommand? _copyInfoCommand;
-        public RelayCommand CopyInfoCommand => _copyInfoCommand ??= new RelayCommand(ExecuteCopyInfoCommand);
-
+        [GenerateCommand]
         private void ExecuteSubmitIssueCommand()
         {
             _urlHelper.OpenIssue();
         }
 
+        /// <summary>
+        /// Copies some useful machine info that can be put into a GitHub issue
+        /// </summary>
+        [GenerateCommand]
         private void ExecuteCopyInfoCommand()
         {
             Clipboard.SetText(

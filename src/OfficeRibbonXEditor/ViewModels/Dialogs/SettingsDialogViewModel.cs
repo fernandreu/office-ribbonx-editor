@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
@@ -13,7 +14,7 @@ using WPFLocalizeExtension.Engine;
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     [Export]
-    public class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
+    public partial class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
     {
         public static readonly ICollection<CultureInfo> LanguageChoices = new[]
         {
@@ -118,21 +119,6 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         // cause issues with the UI testing. Using a raw string list instead
         public ICollection<string> LanguageNames { get; }
 
-        private RelayCommand? _resetToDefaultCommand;
-        public RelayCommand ResetToDefaultCommand => _resetToDefaultCommand ??= new RelayCommand(ResetToDefault);
-
-        private RelayCommand? _resetToCurrentCommand;
-        public RelayCommand ResetToCurrentCommand => _resetToCurrentCommand ??= new RelayCommand(ResetToCurrent);
-
-        private RelayCommand? _applyCommand;
-        public RelayCommand ApplyCommand => _applyCommand ??= new RelayCommand(ApplySettings);
-
-        private RelayCommand? _acceptCommand;
-        public RelayCommand AcceptCommand => _acceptCommand ??= new RelayCommand(AcceptSettings);
-
-        private RelayCommand<bool>? _setAllAssociationsCommand;
-        public RelayCommand<bool> SetAllAssociationsCommand => _setAllAssociationsCommand ??= new RelayCommand<bool>(SetAllAssociations);
-
         public bool OnLoaded(ICollection<ITabItemViewModel> payload)
         {
             Tabs.Clear();
@@ -166,6 +152,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
         }
 
+        [GenerateCommand]
         private void ResetToCurrent()
         {
             foreach (var pair in _currentValues)
@@ -179,6 +166,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
         }
 
+        [GenerateCommand]
         private void ResetToDefault()
         {
             foreach (var name in _usedProperties)
@@ -199,6 +187,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             ApplySettings();
         }
 
+        [GenerateCommand(Name = "ApplyCommand")]
         private void ApplySettings()
         {
             Settings.Default.Save();
@@ -225,6 +214,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             LanguageChanged = false;
         }
 
+        [GenerateCommand(Name = "AcceptCommand")]
         private void AcceptSettings()
         {
             ApplySettings();
@@ -254,6 +244,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             Settings.Default.UICulture = foundLanguage.Name;
         }
 
+        [GenerateCommand]
         private void SetAllAssociations(bool newValue)
         {
             foreach (var association in FileAssociations)

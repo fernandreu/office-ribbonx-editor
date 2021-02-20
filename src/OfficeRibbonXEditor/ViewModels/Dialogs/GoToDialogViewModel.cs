@@ -1,5 +1,5 @@
 ﻿using System;
-using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Lexers;
@@ -7,11 +7,8 @@ using OfficeRibbonXEditor.Lexers;
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     [Export]
-    public class GoToDialogViewModel : DialogBase, IContentDialog<ScintillaLexer>
+    public partial class GoToDialogViewModel : DialogBase, IContentDialog<ScintillaLexer>
     {
-        private RelayCommand? _acceptCommand;
-        public RelayCommand AcceptCommand => _acceptCommand ??= new RelayCommand(ExecuteAcceptCommand);
-
         private ScintillaLexer? _lexer;
         public ScintillaLexer? Lexer
         {
@@ -55,6 +52,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             return true;
         }
 
+        [GenerateCommand]
         private void ExecuteAcceptCommand()
         {
             // Translate it to 0-based line number

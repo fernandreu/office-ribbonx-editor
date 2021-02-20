@@ -1,21 +1,18 @@
 ﻿using System;
 using System.ComponentModel;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     [Export]
-    public class DialogHostViewModel : ViewModelBase
+    public partial class DialogHostViewModel : ViewModelBase
     {
         private IContentDialogBase? _content;
 
         public event EventHandler? ShowingDialog;
-
-        private RelayCommand<CancelEventArgs>? _closingCommand;
-        public RelayCommand<CancelEventArgs> ClosingCommand => _closingCommand ??= new RelayCommand<CancelEventArgs>(ExecuteClosingCommand);
 
         public event EventHandler? Closed;
 
@@ -25,6 +22,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => Set(ref _content, value);
         }
 
+        [GenerateCommand]
         private void ExecuteClosingCommand(CancelEventArgs args)
         {
             _content?.ClosingCommand.Execute(args);
