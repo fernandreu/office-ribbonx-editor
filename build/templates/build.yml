@@ -19,6 +19,7 @@ steps:
     projectName: '$(SonarProjectName)'
     projectVersion: '$(Build.BuildNumber)'
     extraProperties: |
+      sonar.exclusions
       sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.opencover.xml
 
@@ -67,7 +68,7 @@ steps:
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(false, succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 - task: SonarCloudPublish@1
   condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
