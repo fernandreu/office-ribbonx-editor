@@ -30,7 +30,7 @@ steps:
     projects: |
       src/OfficeRibbonXEditor/*.csproj
       tests/**/*.csproj
-    arguments: '--configuration $(buildConfiguration) -p:TargetFramework=${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
+    arguments: '--configuration $(buildConfiguration) --framework ${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
 
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
 # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
@@ -49,7 +49,7 @@ steps:
     arguments: >-
       --no-build
       --configuration $(buildConfiguration)
-      /p:TargetFramework=${{ parameters.targetFramework }}
+      --framework ${{ parameters.targetFramework }}
       /p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       /p:CollectCoverage=${{ parameters.coverage }}
       /p:Exclude=[Scintilla*]*
