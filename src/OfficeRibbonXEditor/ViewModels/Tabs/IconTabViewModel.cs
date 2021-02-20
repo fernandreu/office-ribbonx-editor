@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Documents;
@@ -9,7 +9,7 @@ using OfficeRibbonXEditor.ViewModels.Windows;
 
 namespace OfficeRibbonXEditor.ViewModels.Tabs
 {
-    public class IconTabViewModel : ViewModelBase, ITabItemViewModel
+    public partial class IconTabViewModel : ViewModelBase, ITabItemViewModel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. The icon field is actually initialized when setting the Icon property
         public IconTabViewModel(IconViewModel icon, MainWindowViewModel mainWindow)
@@ -18,9 +18,6 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             MainWindow = mainWindow;
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-
-        private RelayCommand? _resetGridCommand;
-        public RelayCommand ResetGridCommand => _resetGridCommand ??= new RelayCommand(ResetGridSettings);
 
         private string _title = string.Empty;
         public string Title
@@ -95,6 +92,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             MainWindow.AdjustTabTitles();
         }
 
+        [GenerateCommand(Name = "ResetGridCommand")]
         public static void ResetGridSettings()
         {
             Settings.Default.IconGridMargin = 0;

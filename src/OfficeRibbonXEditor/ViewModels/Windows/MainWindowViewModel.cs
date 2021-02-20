@@ -17,6 +17,7 @@ using System.Xml.Schema;
 using AsyncAwaitBestPractices;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Documents;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
@@ -38,7 +39,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
     [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "Shown in a message box anyway")]
     [Export]
-    public class MainWindowViewModel : ViewModelBase, IDisposable
+    public partial class MainWindowViewModel : ViewModelBase, IDisposable
     {
         private readonly IMessageBoxService _messageBoxService;
 
@@ -223,115 +224,6 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         public bool CanInsertXml14Part => (SelectedItem is OfficeDocumentViewModel model) && model.Document.RetrieveCustomPart(XmlPart.RibbonX14) == null;
 
-        private RelayCommand? _openDocumentCommand;
-        public RelayCommand OpenDocumentCommand => _openDocumentCommand ??= new RelayCommand(ExecuteOpenDocumentCommand);
-
-        private RelayCommand<TreeViewItemViewModel>? _openTabCommand;
-        public RelayCommand<TreeViewItemViewModel> OpenTabCommand => _openTabCommand ??= new RelayCommand<TreeViewItemViewModel>(ExecuteOpenTabCommand);
-
-        private RelayCommand? _saveCommand;
-        public RelayCommand SaveCommand => _saveCommand ??= new RelayCommand(ExecuteSaveCommand);
-
-        private RelayCommand? _saveAllCommand;
-        public RelayCommand SaveAllCommand => _saveAllCommand ??= new RelayCommand(ExecuteSaveAllCommand);
-
-        private RelayCommand? _saveAsCommand;
-        public RelayCommand SaveAsCommand => _saveAsCommand ??= new RelayCommand(() => ExecuteSaveAsCommand(true));
-
-        private RelayCommand? _saveACopyAsCommand;
-        public RelayCommand SaveACopyAsCommand => _saveACopyAsCommand ??= new RelayCommand(() => ExecuteSaveAsCommand(false));
-
-        private RelayCommand? _closeDocumentCommand;
-        public RelayCommand CloseDocumentCommand => _closeDocumentCommand ??= new RelayCommand(ExecuteCloseDocumentCommand);
-
-        private RelayCommand? _insertXml14Command;
-        public RelayCommand InsertXml14Command => _insertXml14Command ??= new RelayCommand(() => CurrentDocument?.InsertPart(XmlPart.RibbonX14));
-
-        private RelayCommand? _insertXml12Command;
-        public RelayCommand InsertXml12Command => _insertXml12Command ??= new RelayCommand(() => CurrentDocument?.InsertPart(XmlPart.RibbonX12));
-
-        private RelayCommand<XmlSampleViewModel>? _insertXmlSampleCommand;
-        public RelayCommand<XmlSampleViewModel> InsertXmlSampleCommand => _insertXmlSampleCommand ??= new RelayCommand<XmlSampleViewModel>(ExecuteInsertXmlSampleCommand);
-
-        private RelayCommand? _insertIconsCommand;
-        public RelayCommand InsertIconsCommand => _insertIconsCommand ??= new RelayCommand(ExecuteInsertIconsCommand);
-
-        private RelayCommand? _changeIconIdCommand;
-        public RelayCommand ChangeIconIdCommand => _changeIconIdCommand ??= new RelayCommand(ExecuteChangeIconIdCommand);
-
-        private RelayCommand? _toggleCommentCommand;
-        public RelayCommand ToggleCommentCommand => _toggleCommentCommand ??= new RelayCommand(ExecuteToggleCommentCommand);
-
-        private RelayCommand? _removeCommand;
-        public RelayCommand RemoveCommand => _removeCommand ??= new RelayCommand(ExecuteRemoveItemCommand);
-
-        private RelayCommand? _validateCommand;
-        public RelayCommand ValidateCommand => _validateCommand ??= new RelayCommand(() => ValidateXml(true));
-
-        private RelayCommand? _showSettingsCommand;
-        public RelayCommand ShowSettingsCommand => _showSettingsCommand ??= new RelayCommand(ExecuteShowSettingsCommand);
-
-        private RelayCommand? _showAboutCommand;
-        public RelayCommand ShowAboutCommand => _showAboutCommand ??= new RelayCommand(() => LaunchDialog<AboutDialogViewModel>(true));
-
-        private RelayCommand? _generateCallbacksCommand;
-        public RelayCommand GenerateCallbacksCommand => _generateCallbacksCommand ??= new RelayCommand(ExecuteGenerateCallbacksCommand);
-
-        private RelayCommand? _goToCommand;
-        public RelayCommand GoToCommand => _goToCommand ??= new RelayCommand(ExecuteGoToCommand);
-
-        private RelayCommand? _findCommand;
-        public RelayCommand FindCommand => _findCommand ??= new RelayCommand(() => PerformFindReplaceAction(FindReplaceAction.Find));
-
-        private RelayCommand? _findNextCommand;
-        public RelayCommand FindNextCommand => _findNextCommand ??= new RelayCommand(() => PerformFindReplaceAction(FindReplaceAction.FindNext));
-
-        private RelayCommand? _findPreviousCommand;
-        public RelayCommand FindPreviousCommand => _findPreviousCommand ??= new RelayCommand(() => PerformFindReplaceAction(FindReplaceAction.FindPrevious));
-
-        private RelayCommand? _incrementalSearchCommand;
-        public RelayCommand IncrementalSearchCommand => _incrementalSearchCommand ??= new RelayCommand(() => PerformFindReplaceAction(FindReplaceAction.IncrementalSearch));
-
-        private RelayCommand? _replaceCommand;
-        public RelayCommand ReplaceCommand => _replaceCommand ??= new RelayCommand(() => PerformFindReplaceAction(FindReplaceAction.Replace));
-
-        private RelayCommand<string>? _recentFileClickCommand;
-        public RelayCommand<string> RecentFileClickCommand => _recentFileClickCommand ??= new RelayCommand<string>(FinishOpeningFile);
-
-        private RelayCommand? _newerVersionCommand;
-        public RelayCommand NewerVersionCommand => _newerVersionCommand ??= new RelayCommand(ExecuteNewerVersionCommand);
-
-        private RelayCommand<CancelEventArgs>? _closingCommand;
-        /// <summary>
-        /// Gets the command that handles the (cancellable) closing of the entire application, getting typically triggered by the view
-        /// </summary>
-        public RelayCommand<CancelEventArgs> ClosingCommand => _closingCommand ??= new RelayCommand<CancelEventArgs>(ExecuteClosingCommand);
-
-        private RelayCommand? _closeCommand;
-        /// <summary>
-        /// Gets the command that triggers the closing of the view. If linked with the view, this will also trigger the ClosingCommand,
-        /// and hence no checks of whether documents should be saved first will be done.
-        /// </summary>
-        public RelayCommand CloseCommand => _closeCommand ??= new RelayCommand(ExecuteCloseCommand);
-
-        private RelayCommand<ITabItemViewModel>? _closeTabCommand;
-        public RelayCommand<ITabItemViewModel> CloseTabCommand => _closeTabCommand ??= new RelayCommand<ITabItemViewModel>(ExecuteCloseTabCommand);
-
-        private RelayCommand<DragData>? _previewDragEnterCommand;
-        /// <summary>
-        /// Gets the command that starts the drag / drop action for opening files
-        /// </summary>
-        public RelayCommand<DragData> PreviewDragEnterCommand => _previewDragEnterCommand ??= new RelayCommand<DragData>(ExecutePreviewDragCommand);
-
-        private RelayCommand<DragData>? _dropCommand;
-        /// <summary>
-        /// Gets the command that finishes the drag / drop action for opening files
-        /// </summary>
-        public RelayCommand<DragData> DropCommand => _dropCommand ??= new RelayCommand<DragData>(ExecuteDropCommand);
-
-        private RelayCommand<string>? _openHepLinkCommand;
-        public RelayCommand<string> OpenHelpLinkCommand => _openHepLinkCommand ??= new RelayCommand<string>(ExecuteOpenHelpLinkCommand);
-
         /// <summary>
         /// Gets a list of headers which will be shown in the "Useful links" menu, together with the links they point to
         /// </summary>
@@ -443,6 +335,21 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             return content;
         }
 
+        [GenerateCommand]
+        private void ExecuteFindCommand() => PerformFindReplaceAction(FindReplaceAction.Find);
+
+        [GenerateCommand]
+        private void ExecuteFindNextCommand() => PerformFindReplaceAction(FindReplaceAction.FindNext);
+
+        [GenerateCommand]
+        private void ExecuteFindPreviousCommand() => PerformFindReplaceAction(FindReplaceAction.FindPrevious);
+
+        [GenerateCommand]
+        private void ExecuteReplaceCommand() => PerformFindReplaceAction(FindReplaceAction.Replace);
+
+        [GenerateCommand]
+        private void ExecuteIncrementalSearchCommand() => PerformFindReplaceAction(FindReplaceAction.IncrementalSearch);
+
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
             if (!(SelectedTab is EditorTabViewModel tab))
@@ -462,6 +369,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 (o, e) => tab.OnShowResults(e)));
         }
 
+        [GenerateCommand]
         private void ExecuteCloseDocumentCommand()
         {
             var doc = CurrentDocument;
@@ -494,6 +402,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             DocumentList.Remove(doc);
         }
 
+        [GenerateCommand]
         private void ExecuteOpenTabCommand(TreeViewItemViewModel? viewModel = null)
         {
             if (viewModel == null)
@@ -511,6 +420,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        [GenerateCommand]
         public void ExecuteCloseTabCommand(ITabItemViewModel? tab = null)
         {
             tab ??= _selectedTab;
@@ -535,6 +445,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        [GenerateCommand]
         private void ExecuteInsertIconsCommand()
         {
             if (!(SelectedItem is OfficePartViewModel))
@@ -548,6 +459,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// <summary>
         /// This method does not change the icon Id per se, just enables the possibility of doing so in the view
         /// </summary>
+        [GenerateCommand]
         private void ExecuteChangeIconIdCommand()
         {
             if (!(SelectedItem is IconViewModel icon))
@@ -583,7 +495,8 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
-        private void ExecuteRemoveItemCommand()
+        [GenerateCommand]
+        private void ExecuteRemoveCommand()
         {
             if (SelectedItem is OfficePartViewModel part)
             {
@@ -650,6 +563,10 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        /// <summary>
+        /// Handles the (cancellable) closing of the entire application, getting typically triggered by the view
+        /// </summary>
+        [GenerateCommand]
         private void ExecuteClosingCommand(CancelEventArgs e)
         {
             foreach (var tab in OpenTabs)
@@ -685,12 +602,21 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        /// <summary>
+        /// Triggers the closing of the view. If linked with the view, this will also trigger the ClosingCommand,
+        /// and hence no checks of whether documents should be saved first will be done.
+        /// </summary>
+        [GenerateCommand]
         private void ExecuteCloseCommand()
         {
             Closed?.Invoke(this, EventArgs.Empty);
         }
 
-        private void ExecutePreviewDragCommand(DragData data)
+        /// <summary>
+        /// starts the drag / drop action for opening files
+        /// </summary>
+        [GenerateCommand]
+        private void ExecutePreviewDragEnterCommand(DragData data)
         {
             if (!data.Data.GetDataPresent(DataFormats.FileDrop))
             {
@@ -710,6 +636,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             data.Handled = true;
         }
 
+        [GenerateCommand]
         private void ExecuteDropCommand(DragData data)
         {
             if (!data.Data.GetDataPresent(DataFormats.FileDrop))
@@ -730,6 +657,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             data.Handled = true;
         }
 
+        [GenerateCommand]
         private void ExecuteOpenDocumentCommand()
         {
             string[] filters =
@@ -749,6 +677,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         }
 
         [SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Resource deallocation handled in VM's Dispose() already")]
+        [GenerateCommand(Name = "RecentFileClickCommand")]
         private void FinishOpeningFile(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
@@ -895,6 +824,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             tab.Title = result;
         }
 
+        [GenerateCommand]
         private void ExecuteSaveCommand()
         {
             if (CurrentDocument == null)
@@ -920,6 +850,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        [GenerateCommand]
         private void ExecuteSaveAllCommand()
         {
             foreach (var tab in OpenTabs)
@@ -940,7 +871,13 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
-        private void ExecuteSaveAsCommand(bool renameCurrent)
+        [GenerateCommand]
+        private void ExecuteSaveAsCommand() => SaveAs(true);
+
+        [GenerateCommand]
+        private void ExecuteSaveACopyAsCommand() => SaveAs(false);
+
+        private void SaveAs(bool renameCurrent)
         {
             var doc = CurrentDocument;
             if (doc == null)
@@ -1046,11 +983,19 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 Settings.Default.ShowDefaultSamples);
         }
 
+        [GenerateCommand]
+        private void ExecuteInsertXml14Command() => CurrentDocument?.InsertPart(XmlPart.RibbonX14);
+
+        [GenerateCommand]
+        private void ExecuteInsertXml12Command() => CurrentDocument?.InsertPart(XmlPart.RibbonX12);
+
         /// <summary>
         /// Inserts an XML sample to the selected document in the tree
         /// </summary>
+        [GenerateCommand]
         private void ExecuteInsertXmlSampleCommand(XmlSampleViewModel sample)
         {
+
             // TODO: This command should be clearer with its target
             // Right now, it is the selected item, but users might find it more intuitive to insert the sample in
             // the already opened tab. To fix this, the easiest thing to do would be to have a separate command for
@@ -1128,6 +1073,9 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        [GenerateCommand]
+        private void ExecuteValidateCommand() => ValidateXml(true);
+
         private bool ValidateXml(bool showValidMessage)
         {
             if (!(SelectedTab is EditorTabViewModel tab))
@@ -1165,6 +1113,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             return false;
         }
 
+        [GenerateCommand]
         private void ExecuteGenerateCallbacksCommand()
         {
             // TODO: Check whether any text is selected, and generate callbacks only for that text
@@ -1207,6 +1156,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
         }
 
+        [GenerateCommand]
         private void ExecuteGoToCommand()
         {
             if (!(SelectedTab is EditorTabViewModel tab))
@@ -1223,6 +1173,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             LaunchDialog<GoToDialogViewModel, ScintillaLexer>(lexer);
         }
 
+        [GenerateCommand]
         private void ExecuteToggleCommentCommand()
         {
             if (!(SelectedTab is EditorTabViewModel tab))
@@ -1288,6 +1239,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             NewerVersion = await versionChecker.CheckVersionAsync().ConfigureAwait(false);
         }
 
+        [GenerateCommand]
         private void ExecuteNewerVersionCommand()
         {
             var result = _messageBoxService.Show(
@@ -1304,11 +1256,13 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             _urlHelper.OpenRelease();
         }
 
+        [GenerateCommand]
         private void ExecuteOpenHelpLinkCommand(string url)
         {
             _urlHelper.OpenExternal(new Uri(url));
         }
 
+        [GenerateCommand]
         private void ExecuteShowSettingsCommand()
         {
             var dialog = LaunchDialog<SettingsDialogViewModel, ICollection<ITabItemViewModel>>(OpenTabs);
@@ -1322,6 +1276,9 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 XmlSamples = LoadXmlSamples();
             };
         }
+
+        [GenerateCommand]
+        private void ExecuteShowAboutCommand() => LaunchDialog<AboutDialogViewModel>(true);
 
         private void OnTreeViewItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

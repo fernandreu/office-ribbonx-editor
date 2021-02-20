@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -17,7 +18,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     // Using a singleton for this one ensures that the search criteria is preserved, which is especially
     // important for find next / previous commands
     [Export(Lifetime = Lifetime.Singleton)]
-    public class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
+    public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
     {
         private CharacterRange _searchRange;
 
@@ -66,27 +67,6 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 Scintilla.Controls.Add(IncrementalSearcher);
             }
         }
-
-        private RelayCommand? _findNextCommand;
-        public RelayCommand FindNextCommand => _findNextCommand ??= new RelayCommand(() => FindWrapper(false));
-
-        private RelayCommand? _findPreviousCommand;
-        public RelayCommand FindPreviousCommand => _findPreviousCommand ??= new RelayCommand(() => FindWrapper(true));
-        
-        private RelayCommand? _findAllCommand;
-        public RelayCommand FindAllCommand => _findAllCommand ??= new RelayCommand(ExecuteFindAllCommand);
-
-        private RelayCommand? _replaceNextCommand;
-        public RelayCommand ReplaceNextCommand => _replaceNextCommand ??= new RelayCommand(() => ReplaceWrapper(false));
-
-        private RelayCommand? _replacePreviousCommand;
-        public RelayCommand ReplacePreviousCommand => _replacePreviousCommand ??= new RelayCommand(() => ReplaceWrapper(true));
-
-        private RelayCommand? _replaceAllCommand;
-        public RelayCommand ReplaceAllCommand => _replaceAllCommand ??= new RelayCommand(ExecuteReplaceAllCommand);
-
-        private RelayCommand? _clearCommand;
-        public RelayCommand ClearCommand => _clearCommand ??= new RelayCommand(ExecuteClearCommand);
 
         private FindReplace.FindAllResultsEventHandler FindAllHandler { get; set; }
 
@@ -251,6 +231,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => Set(ref _statusText, value);
         }
 
+        [GenerateCommand]
         private void ExecuteFindAllCommand()
         {
             if (string.IsNullOrEmpty(FindText))
@@ -310,6 +291,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             AddRecentFind();
         }
 
+        [GenerateCommand]
         private void ExecuteReplaceAllCommand()
         {
             if (string.IsNullOrEmpty(FindText))
@@ -372,11 +354,18 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             AddRecentReplace();
         }
 
+        [GenerateCommand]
         private void ExecuteClearCommand()
         {
             Scintilla.MarkerDeleteAll(FindReplace.Marker.Index);
             FindReplace.ClearAllHighlights();
         }
+
+        [GenerateCommand]
+        private void ExecuteFindNextCommand() => FindWrapper(false);
+
+        [GenerateCommand]
+        private void ExecuteFindPreviousCommand() => FindWrapper(true);
 
         private void FindWrapper(bool searchUp)
         {
@@ -506,6 +495,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
             return foundRange;
         }
+
+        [GenerateCommand]
+        private void ExecuteReplaceNextCommand() => ReplaceWrapper(false);
+
+        [GenerateCommand]
+        private void ExecuteReplacePreviousCommand() => ReplaceWrapper(true);
 
         private void ReplaceWrapper(bool searchUp)
         {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Windows;
-using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     [Export]
-    public class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception?>
+    public partial class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception?>
     {
         private readonly IToolInfo _info;
 
@@ -26,23 +26,19 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             set => Set(ref _exception, value);
         }
 
-        private RelayCommand? _shutdownCommand;
-        public RelayCommand ShutdownCommand => _shutdownCommand ??= new RelayCommand(ExecuteShutdownCommand);
-
-        private RelayCommand? _submitBugCommand;
-        public RelayCommand SubmitBugCommand => _submitBugCommand ??= new RelayCommand(ExecuteSubmitBugCommand);
-
         public bool OnLoaded(Exception? payload)
         {
             Exception = payload;
             return payload != null;
         }
 
+        [GenerateCommand]
         private void ExecuteShutdownCommand()
         {
             Application.Current.MainWindow?.Close();
         }
 
+        [GenerateCommand]
         private void ExecuteSubmitBugCommand()
         {
             var title =$"{_exception?.GetType().Name}: {Exception?.Message}";

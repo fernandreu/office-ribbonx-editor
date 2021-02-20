@@ -31,6 +31,9 @@
 
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 
+    <!--This is needed for source generators to work-->
+    <IncludePackageReferencesDuringMarkupCompilation>true</IncludePackageReferencesDuringMarkupCompilation>
+    
     <!-- SonarQube needs this -->
     <ProjectGuid>{A2A7BCC6-735E-4424-93A4-4EA5255E01FC}</ProjectGuid>
   </PropertyGroup>
@@ -63,6 +66,13 @@
 
   <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference
+      Include="..\Generators\Generators.csproj"
+      OutputItemType="Analyzer"
+      ReferenceOutputAssembly="false"/>
   </ItemGroup>
 
   <ItemGroup>

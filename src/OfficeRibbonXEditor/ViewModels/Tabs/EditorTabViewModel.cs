@@ -1,6 +1,6 @@
 ﻿using System;
 using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
+using Generators;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -12,46 +12,13 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 {
     using ResultsEventArgs = DataEventArgs<IResultCollection>;
 
-    public class EditorTabViewModel : ViewModelBase, ITabItemViewModel
+    public partial class EditorTabViewModel : ViewModelBase, ITabItemViewModel
     {
         public EditorTabViewModel(OfficePartViewModel part, MainWindowViewModel mainWindow)
         {
             _part = part;
             MainWindow = mainWindow;
         }
-
-        private RelayCommand? _cutCommand;
-        public RelayCommand CutCommand => _cutCommand ??= new RelayCommand(() => Cut?.Invoke(this, EventArgs.Empty));
-
-        private RelayCommand? _copyCommand;
-        public RelayCommand CopyCommand => _copyCommand ??= new RelayCommand(() => Copy?.Invoke(this, EventArgs.Empty));
-
-        private RelayCommand? _pasteCommand;
-        public RelayCommand PasteCommand => _pasteCommand ??= new RelayCommand(() => Paste?.Invoke(this, EventArgs.Empty));
-
-        private RelayCommand? _undoCommand;
-        public RelayCommand UndoCommand => _undoCommand ??= new RelayCommand(() => Undo?.Invoke(this, EventArgs.Empty));
-
-        private RelayCommand? _redoCommand;
-        public RelayCommand RedoCommand => _redoCommand ??= new RelayCommand(() => Redo?.Invoke(this, EventArgs.Empty));
-
-        private RelayCommand? _selectAllCommand;
-        public RelayCommand SelectAllCommand => _selectAllCommand ??= new RelayCommand(() => SelectAll?.Invoke(this, EventArgs.Empty));
-
-        private RelayCommand<int>? _foldCommand;
-        public RelayCommand<int> FoldCommand => _foldCommand ??= new RelayCommand<int>(level => Fold?.Invoke(this, new FoldEventArgs(level)));
-
-        private RelayCommand<int>? _unfoldCommand;
-        public RelayCommand<int> UnfoldCommand => _unfoldCommand ??= new RelayCommand<int>(level => Fold?.Invoke(this, new FoldEventArgs(level, true)));
-
-        private RelayCommand? _foldCurrentCommand;
-        public RelayCommand FoldCurrentCommand => _foldCurrentCommand ??= new RelayCommand(() => Fold?.Invoke(this, new FoldEventArgs(true)));
-
-        private RelayCommand? _unfoldCurrentCommand;
-        public RelayCommand UnfoldCurrentCommand => _unfoldCurrentCommand ??= new RelayCommand(() => Fold?.Invoke(this, new FoldEventArgs(true, true)));
-
-        private RelayCommand? _duplicateLineCommand;
-        public RelayCommand DuplicateLineCommand => _duplicateLineCommand ??= new RelayCommand(() => DuplicateLine?.Invoke(this, EventArgs.Empty));
 
         public event EventHandler? Cut;
 
@@ -162,5 +129,39 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             
             Part.Contents = e.Data.Text;
         }
+
+        [GenerateCommand]
+        private void RaiseCut() => Cut?.Invoke(this, EventArgs.Empty);
+
+        [GenerateCommand]
+        private void RaiseCopy() => Copy?.Invoke(this, EventArgs.Empty);
+
+        [GenerateCommand]
+        private void RaisePaste() => Paste?.Invoke(this, EventArgs.Empty);
+
+        [GenerateCommand]
+        private void RaiseUndo() => Undo?.Invoke(this, EventArgs.Empty);
+
+        [GenerateCommand]
+        private void RaiseRedo() => Redo?.Invoke(this, EventArgs.Empty);
+
+        [GenerateCommand]
+        private void RaiseSelectAll() => SelectAll?.Invoke(this, EventArgs.Empty);
+
+        [GenerateCommand]
+        private void RaiseFold(int level) => Fold?.Invoke(this, new FoldEventArgs(level));
+
+        [GenerateCommand]
+        private void RaiseUnfold(int level) => Fold?.Invoke(this, new FoldEventArgs(level, true));
+
+        [GenerateCommand]
+        private void RaiseFoldCurrent() => Fold?.Invoke(this, new FoldEventArgs(true));
+
+        [GenerateCommand]
+        private void RaiseUnfoldCurrent() => Fold?.Invoke(this, new FoldEventArgs(true, true));
+
+        [GenerateCommand]
+        private void RaiseDuplicateLine() => DuplicateLine?.Invoke(this, EventArgs.Empty);
+
     }
 }
