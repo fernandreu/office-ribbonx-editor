@@ -20,4 +20,9 @@ steps:
   displayName: 'Use .NET SDK'
   inputs:
     packageType: sdk
-    version: 5.0.100
+    version: 5.0.103
+
+- task: NuGetToolInstaller@1
+  displayName: 'Use NuGet'
+  inputs:
+    versionSpec: 5.8.0

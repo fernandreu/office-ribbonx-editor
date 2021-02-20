@@ -38,6 +38,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalTests", "tests\Fu
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{C346825D-3DC7-4AF6-A415-BFEB2E6465AB}"
 	ProjectSection(SolutionItems) = preProject
+		build\templates\build.yml = build\templates\build.yml
+		build\templates\pre-steps.yml = build\templates\pre-steps.yml
 		build\templates\publish.yml = build\templates\publish.yml
 		build\templates\sign-and-publish.yml = build\templates\sign-and-publish.yml
 	EndProjectSection
@@ -57,7 +59,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "install", "install", "{DEDA
 		build\install\setup.iss = build\install\setup.iss
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Generators", "src\Generators\Generators.csproj", "{5E2BE3AE-9226-4808-89BA-485F92531E5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generators", "src\Generators\Generators.csproj", "{5E2BE3AE-9226-4808-89BA-485F92531E5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
