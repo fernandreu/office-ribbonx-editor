@@ -20,7 +20,7 @@ steps:
     zipAfterPublish: false
     arguments: >-
       --configuration $(buildConfiguration)
-      -p:TargetFramework=${{ parameters.targetFramework }}
+      --framework ${{ parameters.targetFramework }}
       -p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       --runtime win-x64
       --self-contained ${{ parameters.selfContained }}
