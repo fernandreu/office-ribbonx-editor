@@ -26,7 +26,10 @@ steps:
   displayName: 'Build solution'
   inputs:
     command: build
-    projects: '**/*.csproj'
+    # The generators cannot be specified directly because it would mess up netstandard2.0 being the only target framework
+    projects: |
+      src/OfficeRibbonXEditor/*.csproj
+      tests/**/*.csproj
     arguments: '--configuration $(buildConfiguration) -p:TargetFramework=${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
 
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.

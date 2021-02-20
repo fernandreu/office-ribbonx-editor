@@ -16,11 +16,6 @@ steps:
     filePath: 'build/PreBuild.ps1'
     arguments: '"$(Build.BuildId)"'
 
-- task: NuGetToolInstaller@1
-  displayName: 'Use NuGet'
-  inputs:
-    versionSpec: 5.9.0-preview.2
-
 - task: UseDotNet@2
   displayName: 'Use .NET SDK'
   inputs:
