@@ -19,7 +19,7 @@ steps:
     projectName: '$(SonarProjectName)'
     projectVersion: '$(Build.BuildNumber)'
     extraProperties: |
-      sonar.exclusions=**/*.Generated.cs
+      sonar.exclusions=**/*.CommandGenerator.cs
       sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
       sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.opencover.xml
 
