@@ -29,6 +29,9 @@
     <!--This also allows caching NuGet packages in Azure Pipelines-->
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
+    <!--This limits the dlls that will be published to only those that will actually be used-->
+    <SatelliteResourceLanguages>en;es-ES;zh-CN</SatelliteResourceLanguages>
+
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 
     <!--This is needed for source generators to work-->
