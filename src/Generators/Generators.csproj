@@ -2,8 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <BuildOutputTargetFolder>analyzers</BuildOutputTargetFolder>
   </PropertyGroup>
 
   <ItemGroup>
