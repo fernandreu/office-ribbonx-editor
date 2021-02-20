@@ -19,8 +19,7 @@ steps:
 - task: NuGetToolInstaller@1
   displayName: 'Use NuGet'
   inputs:
-    versionSpec: 5.8.1
-    checkLatest: true
+    versionSpec: 5.7.0
 
 - task: UseDotNet@2
   displayName: 'Use .NET SDK'
