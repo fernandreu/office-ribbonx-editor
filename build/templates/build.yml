@@ -10,7 +10,7 @@ steps:
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
   inputs:
     SonarCloud: 'fernandreu-SonarCloud'
     organization: '$(SonarOrganization)'
@@ -68,7 +68,7 @@ steps:
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
 
 - task: SonarCloudPublish@1
   condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
