@@ -56,7 +56,7 @@ stages:
       parameters:
         tag: '.NET'
         targetFramework: $(targetFramework)
-        sonarCloud: false
+        sonarCloud: true
         coverage: true
         sign: false
 
