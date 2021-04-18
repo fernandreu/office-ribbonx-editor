@@ -6,6 +6,7 @@
 [![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.6.1-informational)](https://dotnet.microsoft.com/download)
 [![.NET](https://img.shields.io/badge/.NET-%3E%3D%205.0.0-informational)](https://dotnet.microsoft.com/download)
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/CI%20Pipeline?branchName=master&stageName=Build)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandreu_office-ribbonx-editor&metric=alert_status)](https://sonarcloud.io/dashboard?id=fernandreu_office-ribbonx-editor)
 
 **Translators welcome! See [below](#do-you-want-to-see-the-tool-in-your-language).**
 
