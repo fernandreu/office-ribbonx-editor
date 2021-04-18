@@ -10,7 +10,7 @@ steps:
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
   inputs:
     SonarCloud: 'fernandreu-SonarCloud'
     organization: '$(SonarOrganization)'
