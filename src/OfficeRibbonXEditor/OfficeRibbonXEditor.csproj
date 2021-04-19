@@ -30,7 +30,7 @@
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
 
     <!--This limits the dlls that will be published to only those that will actually be used-->
-    <SatelliteResourceLanguages>en;es-ES;zh-CN</SatelliteResourceLanguages>
+    <SatelliteResourceLanguages>en;es-ES;de-DE;zh-CN</SatelliteResourceLanguages>
 
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 
