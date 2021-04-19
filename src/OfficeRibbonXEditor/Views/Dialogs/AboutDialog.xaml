@@ -44,6 +44,8 @@
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4,0,0" Text="{lex:Loc About.Translators}"/>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,0,0,4">
             - <controls:ExternalHyperlink NavigateUri="https://github.com/bitaller">bitaller</controls:ExternalHyperlink>: <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=zh-CN}"/> 
+            <LineBreak/>
+            - <controls:ExternalHyperlink NavigateUri="https://github.com/carpac">carpac</controls:ExternalHyperlink>: <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=de-DE}"/>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" FontStyle="Italic">
             This tool is a fork of the original <controls:ExternalHyperlink NavigateUri="https://github.com/OfficeDev/office-custom-ui-editor">Custom UI Editor for Microsoft Office</controls:ExternalHyperlink>, 
