@@ -157,7 +157,7 @@
     <value>Callbacks Viewer</value>
   </data>
   <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
-    <value>Change ID</value>
+    <value>Symbol-ID ändern</value>
   </data>
   <data name="ContextMenu.TreeView.Close" xml:space="preserve">
     <value>Schließen</value>
@@ -322,25 +322,25 @@
     <value>ECMAScript</value>
   </data>
   <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
-    <value>E_xplicit Capture</value>
+    <value>E_indeutige Suche</value>
   </data>
   <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
     <value>Groß-/Kleinschreibung i_gnorieren</value>
   </data>
   <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
-    <value>Ignore Pattern Whitespace</value>
+    <value>Leerzeichen ignorieren</value>
   </data>
   <data name="FindReplace.Options.Invariant" xml:space="preserve">
-    <value>C_ulture Invariant</value>
+    <value>R_egionale Einstellungen</value>
   </data>
   <data name="FindReplace.Options.Multiline" xml:space="preserve">
-    <value>Multiline</value>
+    <value>Mehrzeilig</value>
   </data>
   <data name="FindReplace.Options.RightToLeft" xml:space="preserve">
     <value>Rechts nach links</value>
   </data>
   <data name="FindReplace.Options.Singleline" xml:space="preserve">
-    <value>Singleline</value>
+    <value>Einzeilig</value>
   </data>
   <data name="FindReplace.Replace" xml:space="preserve">
     <value>E_rsetzen</value>
@@ -361,7 +361,7 @@
     <value>Search Type</value>
   </data>
   <data name="FindReplace.SearchType.Extended" xml:space="preserve">
-    <value>E_xtended (\n, \r, \t, \0)</value>
+    <value>E_rweitert (\n, \r, \t, \0)</value>
   </data>
   <data name="FindReplace.SearchType.Regular" xml:space="preserve">
     <value>R_egulärer Ausdruck</value>
@@ -370,7 +370,7 @@
     <value>_Standard</value>
   </data>
   <data name="FindReplace.Selection" xml:space="preserve">
-    <value>Search Selection</value>
+    <value>Selektion durchsuchen</value>
   </data>
   <data name="FindReplace.Status.NoMatch" xml:space="preserve">
     <value>Der Suchbegriff konnte nicht gefunden werden</value>
@@ -379,10 +379,10 @@
     <value>Fehler in Regulärem Ausdruck</value>
   </data>
   <data name="FindReplace.Status.TotalFound" xml:space="preserve">
-    <value>Gefunden insgesamt</value>
+    <value>Insgesamt gefunden</value>
   </data>
   <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
-    <value>Ersetzt insgesamt</value>
+    <value>Insgesamt ersetzt</value>
   </data>
   <data name="FindReplace.Status.Wrap" xml:space="preserve">
     <value>Suche beginnt wieder am Anfang des Dokuments bzw. der Auswahl</value>
@@ -400,7 +400,7 @@
     <value>A_ktuelle Zeilennummer</value>
   </data>
   <data name="GoTo.DesiredLine" xml:space="preserve">
-    <value>Gehe zu Zeilennummer</value>
+    <value>Gehe zur Zeilennummer</value>
   </data>
   <data name="GoTo.MaxLine" xml:space="preserve">
     <value>_Maximale Zeilennummer</value>
@@ -484,7 +484,7 @@
     <value>Kopie speichern unter...</value>
   </data>
   <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
-    <value>Vollständig separate Kopie des aktuellen Dokuments speichern</value>
+    <value>Vollständige separate Kopie des aktuellen Dokuments speichern</value>
   </data>
   <data name="Menu.File.Settings" xml:space="preserve">
     <value>Einstellungen...</value>
@@ -657,7 +657,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Neue Zeilen einrücken</value>
   </data>
   <data name="Settings.Editor.FontSize" xml:space="preserve">
-    <value>Schriftgrad</value>
+    <value>Schriftgrösse</value>
   </data>
   <data name="Settings.Editor.TabWidth" xml:space="preserve">
     <value>Tabulator-Breite</value>
@@ -687,7 +687,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Zusätzlich zu ladende XML-Vorlagen:</value>
   </data>
   <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
-    <value>Ein Pfad pro Zeile. Pfade können entweder XML-Dateien sein oder Ordner mit XML-Dateien sein. Sie können auch relativ zum Ordner dieses Tools sein</value>
+    <value>Ein Pfad pro Zeile. Pfade können entweder XML-Dateien oder Ordner mit XML-Dateien sein. Sie können auch relativ zum Ordner dieses Tools sein</value>
   </data>
   <data name="Settings.Misc.Language" xml:space="preserve">
     <value>Sprache</value>
@@ -753,7 +753,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Überprüfen, ob die aktuelle XML-Datei mit dem entsprechenden Schema konform ist</value>
   </data>
   <data name="ToolBar.VersionAvailable" xml:space="preserve">
-    <value>v{0} verfügbar!</value>
+    <value>v{0} ist verfügbar!</value>
     <comment>{0} ist der Platzhalter für die Verison, z.B. "1.2.3"</comment>
   </data>
   <data name="Validation.MutuallyExclusive" xml:space="preserve">
