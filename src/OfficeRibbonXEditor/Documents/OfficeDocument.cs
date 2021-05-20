@@ -53,7 +53,10 @@ namespace OfficeRibbonXEditor.Documents
 
             Name = fileName;
 
-            _tempFileName = Path.GetTempFileName();
+            do
+            {
+                _tempFileName = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            } while (File.Exists(_tempFileName));
 
             File.Copy(Name, _tempFileName, true /*overwrite*/);
             File.SetAttributes(_tempFileName, FileAttributes.Normal);
