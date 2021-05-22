@@ -765,4 +765,14 @@ Está completamente seguro de que quiere abrir este documento de nuevo?</value>
   <data name="About.Translators" xml:space="preserve">
     <value>Traductores:</value>
   </data>
+  <data name="Message.CorruptedSettings.Text" xml:space="preserve">
+    <value>El archivo de ajustes de usuario en la siguiente ubicación está corrupto pero no se puede eliminar:
+
+{0}
+
+Por favor, elimina este archivo manualmente y reinicia la aplicación. Su ubicación se ha copiado al portapapeles.</value>
+  </data>
+  <data name="Message.CorruptedSettings.Title" xml:space="preserve">
+    <value>Ajustes Corruptos</value>
+  </data>
 </root>

@@ -1377,6 +1377,28 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The user settings file at following location is corrupted but cannot be deleted:
+        ///
+        ///{0}
+        ///
+        ///Please delete this file manually and restart the app. Its folder location has been copied to the clipboard..
+        /// </summary>
+        public static string Message_CorruptedSettings_Text {
+            get {
+                return ResourceManager.GetString("Message.CorruptedSettings.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Corrupted Settings.
+        /// </summary>
+        public static string Message_CorruptedSettings_Title {
+            get {
+                return ResourceManager.GetString("Message.CorruptedSettings.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This custom UI file already has an icon with id {0}. Do you want to insert the new icon with id {1} instead?.
         /// </summary>
         public static string Message_IconExists_Text {

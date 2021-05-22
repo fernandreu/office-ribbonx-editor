@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Threading;
@@ -7,6 +9,7 @@ using Autofac;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
+using OfficeRibbonXEditor.Resources;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.ViewModels.Windows;
 using OfficeRibbonXEditor.Views.Dialogs;
@@ -27,15 +30,6 @@ namespace OfficeRibbonXEditor
         public App()
         {
             this.Dispatcher.UnhandledException += this.OnUnhandledException;
-
-            if (Settings.Default.UpgradeRequired)
-            {
-                Settings.Default.Upgrade();
-                Settings.Default.UpgradeRequired = false;
-                Settings.Default.Save();
-            }
-
-            InitializeCultures();
         }
 
         public static IContainer CreateContainer()
@@ -65,7 +59,66 @@ namespace OfficeRibbonXEditor
         {
             base.OnStartup(e);
 
+            if (!UpgradeSettings())
+            {
+                return;
+            }
+
+            InitializeCultures();
+
             this.LaunchMainWindow();
+        }
+
+        private void Restart()
+        {
+            System.Windows.Forms.Application.Restart();
+            Shutdown();
+        }
+
+        private bool UpgradeSettings()
+        {
+            try
+            {
+                if (Settings.Default.UpgradeRequired)
+                {
+                    Settings.Default.Upgrade();
+                    Settings.Default.UpgradeRequired = false;
+                    Settings.Default.Save();
+                }
+            }
+            catch (ConfigurationErrorsException)
+            {
+                // The user settings file must be corrupted; delete it and restart the app
+
+                string path;
+                try
+                {
+                    var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
+                    path = config.FilePath;
+                }
+                catch (ConfigurationErrorsException ex)
+                {
+                    path = ex.Filename;
+                }
+
+                try
+                {
+                    File.Delete(path);
+                    Restart();
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show(
+                        string.Format(CultureInfo.InvariantCulture, Strings.Message_CorruptedSettings_Text, path),
+                        Strings.Message_CorruptedSettings_Title,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Warning);
+                }
+
+                return false;
+            }
+
+            return true;
         }
 
         private static void InitializeCultures()
