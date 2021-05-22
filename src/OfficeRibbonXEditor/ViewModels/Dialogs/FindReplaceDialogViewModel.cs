@@ -627,7 +627,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
             if (IsCultureInvariant)
             {
-                ro |= RegexOptions.Compiled;
+                ro |= RegexOptions.CultureInvariant;
             }
 
             if (IsEcmaScript)
