@@ -766,7 +766,7 @@
     <value>翻译志愿者:</value>
   </data>
   <data name="Message.CorruptedSettings.Text" xml:space="preserve">
-    <value>The user settings file at following location is corrupted but cannot be deleted:
+    <value>The user settings file at the following location is corrupted and cannot be deleted:
 
 {0}
 

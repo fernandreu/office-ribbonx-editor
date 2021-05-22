@@ -124,7 +124,7 @@
     <value>Schließen</value>
   </data>
   <data name="About.CopyVersion" xml:space="preserve">
-    <value>Versionsinformation kopieren</value>
+    <value>Versionsinformationen kopieren</value>
   </data>
   <data name="About.License" xml:space="preserve">
     <value>Lizenz:</value>
@@ -154,7 +154,7 @@
     <value>Version:</value>
   </data>
   <data name="Callbacks.Title" xml:space="preserve">
-    <value>Callbacks Viewer</value>
+    <value>Methodenbetrachter</value>
   </data>
   <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
     <value>Symbol-ID ändern</value>
@@ -286,7 +286,7 @@
     <value>Microsoft Word-Dokumente|*.do?x;*.do?m</value>
   </data>
   <data name="FindReplace.Find" xml:space="preserve">
-    <value>_Suchen</value>
+    <value>S_uchen</value>
   </data>
   <data name="FindReplace.FindAll" xml:space="preserve">
     <value>Alle suchen</value>
@@ -295,13 +295,13 @@
     <value>_Leeren</value>
   </data>
   <data name="FindReplace.FindAll.HighlightMatches" xml:space="preserve">
-    <value>Fundstellen _hervorheben</value>
+    <value>Ergebnisse _hervorheben</value>
   </data>
   <data name="FindReplace.FindAll.MarkLine" xml:space="preserve">
     <value>Zeile _markieren</value>
   </data>
   <data name="FindReplace.FindAll.Ok" xml:space="preserve">
-    <value>_Alle suchen</value>
+    <value>Alle _suchen</value>
   </data>
   <data name="FindReplace.FindNext" xml:space="preserve">
     <value>Suche nächstes</value>
@@ -316,22 +316,22 @@
     <value>Optionen</value>
   </data>
   <data name="FindReplace.Options.Compiled" xml:space="preserve">
-    <value>_Kompiliert</value>
+    <value>Kom_piliert</value>
   </data>
   <data name="FindReplace.Options.ECMAScript" xml:space="preserve">
     <value>ECMAScript</value>
   </data>
   <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
-    <value>E_indeutige Suche</value>
+    <value>_Eindeutige Suche</value>
   </data>
   <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
-    <value>Groß-/Kleinschreibung i_gnorieren</value>
+    <value>Groß-/Kleins_chreibung ignorieren</value>
   </data>
   <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
     <value>Leerzeichen ignorieren</value>
   </data>
   <data name="FindReplace.Options.Invariant" xml:space="preserve">
-    <value>R_egionale Einstellungen</value>
+    <value>Sprache ignorieren</value>
   </data>
   <data name="FindReplace.Options.Multiline" xml:space="preserve">
     <value>Mehrzeilig</value>
@@ -343,10 +343,10 @@
     <value>Einzeilig</value>
   </data>
   <data name="FindReplace.Replace" xml:space="preserve">
-    <value>E_rsetzen</value>
+    <value>Erset_zen</value>
   </data>
   <data name="FindReplace.ReplaceAll" xml:space="preserve">
-    <value>_Alle ersetzen</value>
+    <value>Alle ersetzen</value>
   </data>
   <data name="FindReplace.ReplaceNext" xml:space="preserve">
     <value>Ersetze _nächstes</value>
@@ -358,16 +358,16 @@
     <value>Ersetzen</value>
   </data>
   <data name="FindReplace.SearchType" xml:space="preserve">
-    <value>Search Type</value>
+    <value>Suchmodus</value>
   </data>
   <data name="FindReplace.SearchType.Extended" xml:space="preserve">
-    <value>E_rweitert (\n, \r, \t, \0)</value>
+    <value>Er_weitert (\n, \r, \t, \0)</value>
   </data>
   <data name="FindReplace.SearchType.Regular" xml:space="preserve">
-    <value>R_egulärer Ausdruck</value>
+    <value>_Regulärer Ausdruck</value>
   </data>
   <data name="FindReplace.SearchType.Standard" xml:space="preserve">
-    <value>_Standard</value>
+    <value>S_tandard</value>
   </data>
   <data name="FindReplace.Selection" xml:space="preserve">
     <value>Selektion durchsuchen</value>
@@ -391,7 +391,7 @@
     <value>Suchen und Ersetzen</value>
   </data>
   <data name="FindReplace.Wrap" xml:space="preserve">
-    <value>Am Ende von _vorne beginnen</value>
+    <value>Am Ende von v_orne beginnen</value>
   </data>
   <data name="GoTo.Cancel" xml:space="preserve">
     <value>Abbrechen</value>
@@ -403,7 +403,7 @@
     <value>Gehe zur Zeilennummer</value>
   </data>
   <data name="GoTo.MaxLine" xml:space="preserve">
-    <value>_Maximale Zeilennummer</value>
+    <value>Ma_ximale Zeilennummer</value>
   </data>
   <data name="GoTo.Ok" xml:space="preserve">
     <value>OK</value>
@@ -415,7 +415,7 @@
     <value>Office RibbonX Editor</value>
   </data>
   <data name="Menu.Edit" xml:space="preserve">
-    <value>B_earbeiten</value>
+    <value>_Bearbeiten</value>
   </data>
   <data name="Menu.Edit.Copy" xml:space="preserve">
     <value>Kopieren</value>
@@ -484,13 +484,13 @@
     <value>Kopie speichern unter...</value>
   </data>
   <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
-    <value>Vollständige separate Kopie des aktuellen Dokuments speichern</value>
+    <value>Vollständige Kopie des aktuellen Dokuments speichern</value>
   </data>
   <data name="Menu.File.Settings" xml:space="preserve">
     <value>Einstellungen...</value>
   </data>
   <data name="Menu.Help" xml:space="preserve">
-    <value>_Hilfe</value>
+    <value>Hil_fe</value>
   </data>
   <data name="Menu.Help.About" xml:space="preserve">
     <value>Über</value>
@@ -499,7 +499,7 @@
     <value>Hilfreiche Links</value>
   </data>
   <data name="Menu.Insert" xml:space="preserve">
-    <value>_Einfügen</value>
+    <value>Einfü_gen</value>
   </data>
   <data name="Menu.Insert.Icons" xml:space="preserve">
     <value>Icons...</value>
@@ -514,7 +514,7 @@
     <value>Beispiel-XML</value>
   </data>
   <data name="Menu.View" xml:space="preserve">
-    <value>A_nsicht</value>
+    <value>Ans_icht</value>
   </data>
   <data name="Menu.View.FoldAll" xml:space="preserve">
     <value>Alle einklappen</value>
@@ -545,7 +545,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Dokument bereits geöffnet</value>
   </data>
   <data name="Message.CallbackError.Title" xml:space="preserve">
-    <value>Fehler beim Generieren von Callbacks</value>
+    <value>Fehler beim Generieren von den VBA-Methoden</value>
   </data>
   <data name="Message.ChangeIdError.Title" xml:space="preserve">
     <value>Fehler beim Ändern der Icon-ID</value>
@@ -579,22 +579,22 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Neuere Version verfügbar</value>
   </data>
   <data name="Message.NoCallbacks.Text" xml:space="preserve">
-    <value>Es gibt keinen zu generierenden Callback.</value>
+    <value>Es gibt keine zu generierenden Methoden.</value>
   </data>
   <data name="Message.NoCallbacks.Title" xml:space="preserve">
-    <value>Callbacks generieren</value>
+    <value>VBA-Methoden generieren</value>
   </data>
   <data name="Message.OpenError.Title" xml:space="preserve">
     <value>Fehler beim Öffnen des Office-Dokuments</value>
   </data>
   <data name="Message.RemoveIcon.Text" xml:space="preserve">
-    <value>Diese Aktion kann nicht rückgängig gemacht werden. Ist das in Ordnung?</value>
+    <value>Diese Aktion kann nicht rückgängig gemacht werden. Bist du dir sicher?</value>
   </data>
   <data name="Message.RemoveIcon.Title" xml:space="preserve">
     <value>Icon entfernen</value>
   </data>
   <data name="Message.RemovePart.Text" xml:space="preserve">
-    <value>Diese Aktion kann nicht rückgängig gemacht werden. Ist das in Ordnung?</value>
+    <value>Diese Aktion kann nicht rückgängig gemacht werden. Bist du dir sicher?</value>
   </data>
   <data name="Message.RemovePart.Title" xml:space="preserve">
     <value>XML-Bereich entfernen</value>
@@ -609,10 +609,10 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>XML ist valide</value>
   </data>
   <data name="Message.VersionCopy.Text" xml:space="preserve">
-    <value>Die Versionsinformation wurde in die Zwischenablage kopiert.</value>
+    <value>Die Versionsinformationen wurden in die Zwischenablage kopiert.</value>
   </data>
   <data name="Message.VersionCopy.Title" xml:space="preserve">
-    <value>Versionsinformation kopiert</value>
+    <value>Versionsinformationen kopiert</value>
   </data>
   <data name="OpenDialog.Document.Title" xml:space="preserve">
     <value>OOXML-Dokument öffnen</value>
@@ -633,7 +633,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Editor-Farben</value>
   </data>
   <data name="Settings.Colors.Attribute" xml:space="preserve">
-    <value>Attribute</value>
+    <value>Eigenschaften</value>
   </data>
   <data name="Settings.Colors.Background" xml:space="preserve">
     <value>Hintergrund</value>
@@ -705,10 +705,10 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Einstellungen</value>
   </data>
   <data name="ToolBar.Callbacks" xml:space="preserve">
-    <value>Callbacks generieren</value>
+    <value>VBA-Methoden generieren</value>
   </data>
   <data name="ToolBar.Callbacks.ToolTip" xml:space="preserve">
-    <value>Callbacks für die aktuelle XML-Datei generieren</value>
+    <value>VBA-Methoden für die aktuelle XML-Datei generieren</value>
   </data>
   <data name="ToolBar.InsertIcons" xml:space="preserve">
     <value>Icons einfügen</value>
@@ -766,13 +766,13 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Übersetzer:</value>
   </data>
   <data name="Message.CorruptedSettings.Text" xml:space="preserve">
-    <value>The user settings file at following location is corrupted but cannot be deleted:
+    <value>Die Benutzereinstellungen sind beschädigt. Die Datei befindet sich am folgenden Ort und kann nicht gelöscht werden:
 
 {0}
 
-Please delete this file manually and restart the app. Its folder location has been copied to the clipboard.</value>
+Bitte lösche die Datei manuell und starte die Anwendung neu. Der Dateipfad wurde in die Zwischenablage kopiert.</value>
   </data>
   <data name="Message.CorruptedSettings.Title" xml:space="preserve">
-    <value>Corrupted Settings</value>
+    <value>Beschädigte Benutzereinstellungen</value>
   </data>
 </root>
