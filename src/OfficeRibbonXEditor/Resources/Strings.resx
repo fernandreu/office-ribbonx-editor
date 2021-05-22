@@ -765,4 +765,14 @@ Are you completely sure you want to open this document again?</value>
   <data name="About.Translators" xml:space="preserve">
     <value>Translators:</value>
   </data>
+  <data name="Message.CorruptedSettings.Text" xml:space="preserve">
+    <value>The user settings file at following location is corrupted but cannot be deleted:
+
+{0}
+
+Please delete this file manually and restart the app. Its folder location has been copied to the clipboard.</value>
+  </data>
+  <data name="Message.CorruptedSettings.Title" xml:space="preserve">
+    <value>Corrupted Settings</value>
+  </data>
 </root>
