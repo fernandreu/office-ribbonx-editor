@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using Microsoft.Win32;
 
 namespace OfficeRibbonXEditor.Helpers
@@ -54,7 +55,14 @@ namespace OfficeRibbonXEditor.Helpers
                 return;
             }
             key.SetValue(null, "Edit with OfficeRibbonXEditor");
+
             var exePath = Assembly.GetExecutingAssembly().Location;
+            if (exePath.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+            {
+                // .NET Core splits the executable and the main entry assembly into two
+                exePath = exePath.Substring(0, exePath.Length - "dll".Length) + "exe";
+            }
+
             key.SetValue("Icon", exePath);
             var subKey = key.CreateSubKey("command");
             subKey?.SetValue(null, $"\"{exePath}\" \"%1\"");
