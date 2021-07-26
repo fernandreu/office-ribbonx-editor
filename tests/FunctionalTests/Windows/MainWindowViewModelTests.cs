@@ -474,7 +474,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Act / assert: Open the same file in exclusive mode
             using (File.Open(_destFile, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                AssertMessage(() => _viewModel.SaveCommand.Execute(), MessageBoxImage.Error);
+                AssertMessage(() => _viewModel.SaveCommand.Execute(null), MessageBoxImage.Error);
             }
         }
 

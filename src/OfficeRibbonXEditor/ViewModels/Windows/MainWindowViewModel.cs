@@ -384,7 +384,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 var result = _messageBoxService.Show(string.Format(CultureInfo.InvariantCulture, Strings.Message_CloseUnsavedDoc_Text, doc.Name), Strings.Message_CloseUnsavedDoc_Title, MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
                 if (result == MessageBoxResult.Yes)
                 {
-                    SaveCommand.Execute();
+                    SaveCommand.Execute(doc);
                 }
                 else if (result == MessageBoxResult.Cancel)
                 {
@@ -585,7 +585,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                         MessageBoxImage.Warning);
                     if (result == MessageBoxResult.Yes)
                     {
-                        SaveCommand.Execute();
+                        SaveCommand.Execute(doc);
                     }
                     else if (result == MessageBoxResult.Cancel)
                     {
@@ -825,9 +825,10 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         }
 
         [GenerateCommand]
-        private void ExecuteSaveCommand()
+        private void ExecuteSaveCommand(OfficeDocumentViewModel? document)
         {
-            if (CurrentDocument == null)
+            document ??= CurrentDocument;
+            if (document == null)
             {
                 return;
             }
@@ -841,7 +842,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             {
                 using (new CursorOverride(this, Cursors.Wait))
                 {
-                    CurrentDocument.Save(ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
+                    document.Save(ReloadOnSave, preserveAttributes: Settings.Default.PreserveAttributes);
                 }
             }
             catch (Exception ex)
