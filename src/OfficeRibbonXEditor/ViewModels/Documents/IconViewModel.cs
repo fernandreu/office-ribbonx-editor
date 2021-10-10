@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml;
@@ -36,15 +38,25 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             {
                 if (!IsValidId(value))
                 {
+                    NewName = _name;
                     return;
                 }
                 
+                if (Parent?.Children?.OfType<IconViewModel>()?.Any(x => x.Name == value) ?? false)
+                {
+                    // There is already an icon with the same name. It could be this same icon and not
+                    // a sibling, in which case the Set() call below would have returned false anyway
+                    NewName = _name;
+                    return;
+                }
+
                 // Make sure this.ChangeId() is later called with the previous ID and not the new one
                 // already. Otherwise, the icon will actually not be updated inside the part
                 var previousId = _name;
 
                 if (!Set(ref _name, value))
                 {
+                    NewName = _name; // This should do nothing, since both should coincide
                     return;
                 }
                 
