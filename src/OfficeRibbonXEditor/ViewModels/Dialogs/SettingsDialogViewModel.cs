@@ -19,8 +19,10 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         public static readonly ICollection<CultureInfo> LanguageChoices = new[]
         {
             new CultureInfo("en-US"),
-            new CultureInfo("es-ES"),
             new CultureInfo("de-DE"),
+            new CultureInfo("es-ES"),
+            new CultureInfo("fr-FR"),
+            new CultureInfo("nl-NL"),
             new CultureInfo("zh-CN"),
         };
 

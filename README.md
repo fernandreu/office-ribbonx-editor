@@ -145,4 +145,6 @@ how your translation looks (you will be able to see it from the build artifacts 
 ### Special thanks to all translators so far
 
 - Chinese: [bitaller](https://github.com/bitaller)
+- Dutch: [pplanch](https://github.com/pplanch)
+- French: [pplanch](https://github.com/pplanch)
 - German: [carpac](https://github.com/carpac), [Claythve](https://github.com/Claythve)
