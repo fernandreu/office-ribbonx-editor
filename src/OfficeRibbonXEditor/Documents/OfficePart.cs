@@ -341,15 +341,16 @@ namespace OfficeRibbonXEditor.Documents
         private static string FindFirstAvailableImageId(PackagePart part, string imageId)
         {
             var index = 0;
+            var renamed = imageId;
             while (true)
             {
-                if (!part.RelationshipExists(imageId))
+                if (!part.RelationshipExists(renamed))
                 {
-                    return imageId;
+                    return renamed;
                 }
 
-                Debug.Write($"A relationship '{imageId}' already exists");
-                imageId = $"{imageId}{index++}";
+                Debug.Write($"A relationship '{renamed}' already exists");
+                renamed = $"{imageId}{index++}";
             }
         }
 
