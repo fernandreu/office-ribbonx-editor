@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using GalaSoft.MvvmLight.Command;
@@ -20,8 +21,6 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
     [Export(Lifetime = Lifetime.Singleton)]
     public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
     {
-        private CharacterRange _searchRange;
-
         public event EventHandler<PointEventArgs>? MoveDialogAway;
 
         public RecentListViewModel<string> RecentFinds { get; } = new RecentListViewModel<string>();
@@ -259,16 +258,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
                 if (SearchSelection)
                 {
-                    if (_searchRange.MinPosition == _searchRange.MaxPosition)
-                    {
-                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
-                    }
-
-                    foundCount = FindReplace.FindAll(_searchRange, rr, MarkLine, HighlightMatches).Count;
+                    var searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                    foundCount = FindReplace.FindAll(searchRange, rr, MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    _searchRange = new CharacterRange();
                     foundCount = FindReplace.FindAll(rr, MarkLine, HighlightMatches).Count;
                 }
             }
@@ -277,12 +271,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
                 if (SearchSelection)
                 {
-                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
-                    foundCount = FindReplace.FindAll(_searchRange, textToFind, GetSearchFlags(), MarkLine, HighlightMatches).Count;
+                    var searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                    foundCount = FindReplace.FindAll(searchRange, textToFind, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    _searchRange = new CharacterRange();
                     foundCount = FindReplace.FindAll(textToFind, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
             }
@@ -321,16 +314,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
                 if (SearchSelection)
                 {
-                    if (_searchRange.MinPosition == _searchRange.MaxPosition)
-                    {
-                        _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
-                    }
-
-                    foundCount = FindReplace.ReplaceAll(_searchRange, rr, textToReplace, MarkLine, HighlightMatches).Count;
+                    var searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                    foundCount = FindReplace.ReplaceAll(searchRange, rr, textToReplace, MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    _searchRange = new CharacterRange();
                     foundCount = FindReplace.ReplaceAll(rr, textToReplace, MarkLine, HighlightMatches).Count;
                 }
             }
@@ -339,12 +327,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
                 if (SearchSelection)
                 {
-                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
-                    foundCount = FindReplace.ReplaceAll(_searchRange, textToFind, textToReplace, GetSearchFlags(), MarkLine, HighlightMatches).Count;
+                    var searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
+                    foundCount = FindReplace.ReplaceAll(searchRange, textToFind, textToReplace, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
                 else
                 {
-                    _searchRange = new CharacterRange();
                     foundCount = FindReplace.ReplaceAll(textToFind, textToReplace, GetSearchFlags(), MarkLine, HighlightMatches).Count;
                 }
             }
@@ -444,16 +431,14 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
                 if (SearchSelection)
                 {
-                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
-
+                    var searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
                     if (searchUp)
-                        foundRange = FindReplace.FindPrevious(rr, Wrap, _searchRange);
+                        foundRange = FindReplace.FindPrevious(rr, Wrap, searchRange);
                     else
-                        foundRange = FindReplace.FindNext(rr, Wrap, _searchRange);
+                        foundRange = FindReplace.FindNext(rr, Wrap, searchRange);
                 }
                 else
                 {
-                    _searchRange = new CharacterRange();
                     if (searchUp)
                         foundRange = FindReplace.FindPrevious(rr, Wrap);
                     else
@@ -464,22 +449,20 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             {
                 if (SearchSelection)
                 {
-                    if (_searchRange.MinPosition == _searchRange.MaxPosition) _searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
-
+                    var searchRange = new CharacterRange(_scintilla.Selections[0].Start, _scintilla.Selections[0].End);
                     if (searchUp)
                     {
                         var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
-                        foundRange = FindReplace.FindPrevious(textToFind, Wrap, GetSearchFlags(), _searchRange);
+                        foundRange = FindReplace.FindPrevious(textToFind, Wrap, GetSearchFlags(), searchRange);
                     }
                     else
                     {
                         var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
-                        foundRange = FindReplace.FindNext(textToFind, Wrap, GetSearchFlags(), _searchRange);
+                        foundRange = FindReplace.FindNext(textToFind, Wrap, GetSearchFlags(), searchRange);
                     }
                 }
                 else
                 {
-                    _searchRange = new CharacterRange();
                     if (searchUp)
                     {
                         var textToFind = IsExtendedSearch ? FindReplace.Transform(FindText) : FindText;
