@@ -46,6 +46,12 @@
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=zh-CN}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/bitaller">bitaller</controls:ExternalHyperlink>
             <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=nl-NL}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/pplanch">pplanch</controls:ExternalHyperlink>
+            <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=fr-FR}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/pplanch">pplanch</controls:ExternalHyperlink>
+            <LineBreak/>
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=de-DE}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/carpac">carpac</controls:ExternalHyperlink>,
                 <controls:ExternalHyperlink NavigateUri="https://github.com/Claythve">Claythve</controls:ExternalHyperlink>

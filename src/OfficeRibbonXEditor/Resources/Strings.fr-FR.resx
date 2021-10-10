@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -118,37 +118,37 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About.Author" xml:space="preserve">
-    <value>Author:</value>
+    <value>Auteur:</value>
   </data>
   <data name="About.Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Fermer</value>
   </data>
   <data name="About.CopyVersion" xml:space="preserve">
-    <value>Copy version information</value>
+    <value>Informations sur la version de la copie</value>
   </data>
   <data name="About.License" xml:space="preserve">
-    <value>License:</value>
+    <value>Licence:</value>
   </data>
   <data name="About.OperatingSystem" xml:space="preserve">
-    <value>Operating System:</value>
+    <value>Système opérateur:</value>
   </data>
   <data name="About.Paragraph1" xml:space="preserve">
-    <value>Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas.</value>
+    <value>Office RibbonX Editor est un outil autonome, open source et gratuit permettant de modifier la partie de l'interface utilisateur personnalisée du format de fichier de document ouvert Office. Il contient à la fois des schémas d'interface utilisateur personnalisés Office 2007 et Office 2010.</value>
   </data>
   <data name="About.Paragraph2" xml:space="preserve">
-    <value>The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including Office 2013, Office 2016, Office 2019 and Office 365.</value>
+    <value>Le schéma d'interface utilisateur personnalisé d'Office 2010 est le schéma le plus récent et il est toujours utilisé dans les versions d'Office les plus récentes, notamment Office 2013, Office 2016, Office 2019 et Office 365.</value>
   </data>
   <data name="About.ProjectPage" xml:space="preserve">
-    <value>Project Page:</value>
+    <value>Page de Project:</value>
   </data>
   <data name="About.Runtime" xml:space="preserve">
     <value>Runtime:</value>
   </data>
   <data name="About.SubmitIssue" xml:space="preserve">
-    <value>Submit an issue</value>
+    <value>Soumettre un problème</value>
   </data>
   <data name="About.Title" xml:space="preserve">
-    <value>About Office RibbonX Editor</value>
+    <value>Plus d’infos sur Office RibbonX Editor</value>
   </data>
   <data name="About.Version" xml:space="preserve">
     <value>Version:</value>
@@ -157,622 +157,622 @@
     <value>Callbacks Viewer</value>
   </data>
   <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
-    <value>Change ID</value>
+    <value>Changement ID</value>
   </data>
   <data name="ContextMenu.TreeView.Close" xml:space="preserve">
-    <value>Close</value>
+    <value>Fermer</value>
   </data>
   <data name="ContextMenu.TreeView.InsertIcons" xml:space="preserve">
-    <value>Insert Icons...</value>
+    <value>Insérer des icônes...</value>
   </data>
   <data name="ContextMenu.TreeView.InsertOffice2007" xml:space="preserve">
-    <value>Insert Office 2007 Custom UI Part</value>
+    <value>Insérer Office 2007 Custom UI Part</value>
   </data>
   <data name="ContextMenu.TreeView.InsertOffice2010" xml:space="preserve">
-    <value>Insert Office 2010+ Custom UI Part</value>
+    <value>Insérer Office 2010+ Custom UI Part</value>
   </data>
   <data name="ContextMenu.TreeView.Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Ouvrir</value>
   </data>
   <data name="ContextMenu.TreeView.Remove" xml:space="preserve">
-    <value>Remove</value>
+    <value>Supprimer</value>
   </data>
   <data name="ContextMenu.TreeView.Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Enregistrer</value>
   </data>
   <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
-    <value>Save As...</value>
+    <value>Enregistrer sous...</value>
   </data>
   <data name="Editor.ZoomFactor" xml:space="preserve">
-    <value>Zoom Factor:</value>
+    <value>Facteur de Zoom:</value>
   </data>
   <data name="Exception.CloseDialog" xml:space="preserve">
-    <value>Close this Dialog</value>
+    <value>Fermer cette boîte de dialogue</value>
   </data>
   <data name="Exception.Disclaimer" xml:space="preserve">
-    <value>If you keep using the tool after this exception, it might start to malfunction.</value>
+    <value>Si vous continuez à utiliser l'outil après cette exception, il peut commencer à mal fonctionner.</value>
   </data>
   <data name="Exception.ShutdownApp" xml:space="preserve">
-    <value>Shutdown Application</value>
+    <value>Terminer Application</value>
   </data>
   <data name="Exception.SubmitBug" xml:space="preserve">
-    <value>Submit Bug Report</value>
+    <value>Soumettre un rapport d’erreur</value>
   </data>
   <data name="Exception.Title" xml:space="preserve">
-    <value>Unhandled Exception Occurred</value>
+    <value>Une erreur non traitée s'est produite</value>
   </data>
   <data name="Filter.All" xml:space="preserve">
-    <value>All Files (*.*)|*.*</value>
+    <value>Tous les fichiers (*.*)|*.*</value>
   </data>
   <data name="Filter.AllOfficeDocuments" xml:space="preserve">
-    <value>All Office Documents|*.???x;*.???m</value>
+    <value>Tous les documents Office|*.???x;*.???m</value>
   </data>
   <data name="Filter.ExcelDocuments" xml:space="preserve">
-    <value>Microsoft Excel Workbooks|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
+    <value>Cahiers d'exercices Microsoft Excel|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
   </data>
   <data name="Filter.Icons" xml:space="preserve">
-    <value>Supported Icons|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
+    <value>Icônes prises en charge|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
   </data>
   <data name="Filter.PowerPointDocuments" xml:space="preserve">
-    <value>Microsoft PowerPoint Presentations|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
+    <value>Présentations Microsoft PowerPoint|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
   </data>
   <data name="Filter.VisioDocuments" xml:space="preserve">
-    <value>Microsoft Visio Drawings|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
+    <value>Dessins Microsoft Visio|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
   </data>
   <data name="Filter.SaveAs0" xml:space="preserve">
-    <value>Excel Workbook|*.xlsx</value>
+    <value>classeur Excel|*.xlsx</value>
   </data>
   <data name="Filter.SaveAs1" xml:space="preserve">
-    <value>Excel Macro-Enabled Workbook|*.xlsm</value>
+    <value>Classeur Excel avec macros|*.xlsm</value>
   </data>
   <data name="Filter.SaveAs10" xml:space="preserve">
     <value>PowerPoint Show|*.ppsx</value>
   </data>
   <data name="Filter.SaveAs11" xml:space="preserve">
-    <value>PowerPoint Macro-Enabled Show|*.ppsm</value>
+    <value>PowerPoint Show avec macros|*.ppsm</value>
   </data>
   <data name="Filter.SaveAs12" xml:space="preserve">
-    <value>PowerPoint Add-in|*.ppam</value>
+    <value>Complément PowerPoint|*.ppam</value>
   </data>
   <data name="Filter.SaveAs13" xml:space="preserve">
-    <value>Word Document|*.docx</value>
+    <value>Document Word|*.docx</value>
   </data>
   <data name="Filter.SaveAs14" xml:space="preserve">
-    <value>Word Macro-Enabled Document|*.docm</value>
+    <value>Document Word avec macros|*.docm</value>
   </data>
   <data name="Filter.SaveAs15" xml:space="preserve">
-    <value>Word Template|*.dotx</value>
+    <value>Modèle Word|*.dotx</value>
   </data>
   <data name="Filter.SaveAs16" xml:space="preserve">
-    <value>Word Macro-Enabled Template|*.dotm</value>
+    <value>Modèle Word avec macros|*.dotm</value>
   </data>
   <data name="Filter.SaveAs17" xml:space="preserve">
-    <value>Visio Diagram|*.vsdx</value>
+    <value>Diagramme Visio|*.vsdx</value>
   </data>
   <data name="Filter.SaveAs18" xml:space="preserve">
-    <value>Visio Macro-Enabled Diagram|*.vsdm</value>
+    <value>Diagramme Visio avec macro’s|*.vsdm</value>
   </data>
   <data name="Filter.SaveAs19" xml:space="preserve">
-    <value>Visio Template|*.vstx</value>
+    <value>Modèle Visio|*.vstx</value>
   </data>
   <data name="Filter.SaveAs20" xml:space="preserve">
-    <value>Visio Macro-Enabled Template|*.vstm</value>
+    <value>Modèle Visio avec macros|*.vstm</value>
   </data>
   <data name="Filter.SaveAs2" xml:space="preserve">
-    <value>Excel Binary Workbook|*.xlsb</value>
+    <value>Classeur binaire Excel|*.xlsb</value>
   </data>
   <data name="Filter.SaveAs3" xml:space="preserve">
-    <value>Excel Template|*.xltx</value>
+    <value>Modèle Excel|*.xltx</value>
   </data>
   <data name="Filter.SaveAs4" xml:space="preserve">
-    <value>Excel Macro-Enabled Template|*.xltm</value>
+    <value>Modèle Excel avec macros|*.xltm</value>
   </data>
   <data name="Filter.SaveAs5" xml:space="preserve">
-    <value>Excel Add-in|*.xlam</value>
+    <value>Complément Excel|*.xlam</value>
   </data>
   <data name="Filter.SaveAs6" xml:space="preserve">
-    <value>PowerPoint Presentation|*.pptx</value>
+    <value>Présentation PowerPoint|*.pptx</value>
   </data>
   <data name="Filter.SaveAs7" xml:space="preserve">
-    <value>PowerPoint Macro-Enabled Presentation|*.pptm</value>
+    <value>Présentation PowerPoint avec macros|*.pptm</value>
   </data>
   <data name="Filter.SaveAs8" xml:space="preserve">
-    <value>PowerPoint Template|*.potx</value>
+    <value>Modèle PowerPoint|*.potx</value>
   </data>
   <data name="Filter.SaveAs9" xml:space="preserve">
-    <value>PowerPoint Macro-Enabled Template|*.potm</value>
+    <value>Modèle PowerPoint avec macros|*.potm</value>
   </data>
   <data name="Filter.WordDocuments" xml:space="preserve">
-    <value>Microsoft Word Documents|*.do?x;*.do?m</value>
+    <value>Documents Microsoft Word|*.do?x;*.do?m</value>
   </data>
   <data name="FindReplace.Find" xml:space="preserve">
-    <value>_Find</value>
+    <value>_Chercher</value>
   </data>
   <data name="FindReplace.FindAll" xml:space="preserve">
-    <value>Find All</value>
+    <value>Chercher tous</value>
   </data>
   <data name="FindReplace.FindAll.Clear" xml:space="preserve">
-    <value>C_lear</value>
+    <value>E_faccer</value>
   </data>
   <data name="FindReplace.FindAll.HighlightMatches" xml:space="preserve">
-    <value>_Highlight Matches</value>
+    <value>_Surligner Correspondences</value>
   </data>
   <data name="FindReplace.FindAll.MarkLine" xml:space="preserve">
-    <value>_Mark Line</value>
+    <value>_Surligner Ligne</value>
   </data>
   <data name="FindReplace.FindAll.Ok" xml:space="preserve">
-    <value>Find _All</value>
+    <value>Chercher _Tous</value>
   </data>
   <data name="FindReplace.FindNext" xml:space="preserve">
-    <value>Find Next</value>
+    <value>Chercher Suivant</value>
   </data>
   <data name="FindReplace.FindPrevious" xml:space="preserve">
-    <value>Find Previous</value>
+    <value>Chercher Précédent</value>
   </data>
   <data name="FindReplace.FindTab" xml:space="preserve">
-    <value>Find</value>
+    <value>Chercher</value>
   </data>
   <data name="FindReplace.Options" xml:space="preserve">
     <value>Options</value>
   </data>
   <data name="FindReplace.Options.Compiled" xml:space="preserve">
-    <value>_Compiled</value>
+    <value>_Compilé</value>
   </data>
   <data name="FindReplace.Options.ECMAScript" xml:space="preserve">
     <value>ECMAScript</value>
   </data>
   <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
-    <value>E_xplicit Capture</value>
+    <value>C_apture Explicite</value>
   </data>
   <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
-    <value>I_gnore Case</value>
+    <value>I_gnorer Majuscules</value>
   </data>
   <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
-    <value>Ignore Pattern Whitespace</value>
+    <value>Ignorer espaces blancs du modèle</value>
   </data>
   <data name="FindReplace.Options.Invariant" xml:space="preserve">
-    <value>C_ulture Invariant</value>
+    <value>Indépendent de C_ulture</value>
   </data>
   <data name="FindReplace.Options.Multiline" xml:space="preserve">
-    <value>Multiline</value>
+    <value>Multi-ligne</value>
   </data>
   <data name="FindReplace.Options.RightToLeft" xml:space="preserve">
-    <value>Right To Left</value>
+    <value>Droit à Gauche</value>
   </data>
   <data name="FindReplace.Options.Singleline" xml:space="preserve">
-    <value>Singleline</value>
+    <value>Ligne Simple</value>
   </data>
   <data name="FindReplace.Replace" xml:space="preserve">
-    <value>_Replace</value>
+    <value>_Remplacer</value>
   </data>
   <data name="FindReplace.ReplaceAll" xml:space="preserve">
-    <value>Replace _All</value>
+    <value>Remplacer _Tous</value>
   </data>
   <data name="FindReplace.ReplaceNext" xml:space="preserve">
-    <value>Replace _Next</value>
+    <value>Remplacer _Suivant</value>
   </data>
   <data name="FindReplace.ReplacePrevious" xml:space="preserve">
-    <value>Replace _Previous</value>
+    <value>Remplacer _Précédent</value>
   </data>
   <data name="FindReplace.ReplaceTab" xml:space="preserve">
-    <value>Replace</value>
+    <value>Remplacer</value>
   </data>
   <data name="FindReplace.SearchType" xml:space="preserve">
-    <value>Search Type</value>
+    <value>Chercher Type</value>
   </data>
   <data name="FindReplace.SearchType.Extended" xml:space="preserve">
-    <value>E_xtended (\n, \r, \t, \0)</value>
+    <value>E_largi (\n, \r, \t, \0)</value>
   </data>
   <data name="FindReplace.SearchType.Regular" xml:space="preserve">
-    <value>Regular _Expression</value>
+    <value>Expression _régulière</value>
   </data>
   <data name="FindReplace.SearchType.Standard" xml:space="preserve">
     <value>_Standard</value>
   </data>
   <data name="FindReplace.Selection" xml:space="preserve">
-    <value>Search Selection</value>
+    <value>Chercher Selection</value>
   </data>
   <data name="FindReplace.Status.NoMatch" xml:space="preserve">
-    <value>Match could not be found</value>
+    <value>Correspondence ne pouvait pas être trouvée</value>
   </data>
   <data name="FindReplace.Status.RegExError" xml:space="preserve">
-    <value>Error in Regular Expression</value>
+    <value>Erreur dans Expression Régulière</value>
   </data>
   <data name="FindReplace.Status.TotalFound" xml:space="preserve">
-    <value>Total found</value>
+    <value>Total trouvé</value>
   </data>
   <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
-    <value>Total replaced</value>
+    <value>Total remplacé</value>
   </data>
   <data name="FindReplace.Status.Wrap" xml:space="preserve">
-    <value>Search match wrapped to the beginning of the document / selection</value>
+    <value>Correspondence de recherche renvoyé au debut de document / selection</value>
   </data>
   <data name="FindReplace.Title" xml:space="preserve">
-    <value>Find and Replace</value>
+    <value>Chercher et Remplacer</value>
   </data>
   <data name="FindReplace.Wrap" xml:space="preserve">
-    <value>_Wrap</value>
+    <value>_Renvoyer</value>
   </data>
   <data name="GoTo.Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Annuler</value>
   </data>
   <data name="GoTo.CurrentLine" xml:space="preserve">
-    <value>_Current line number</value>
+    <value>_Numéro de ligne actuelle</value>
   </data>
   <data name="GoTo.DesiredLine" xml:space="preserve">
-    <value>Go to line number</value>
+    <value>Passer à ligne numéro</value>
   </data>
   <data name="GoTo.MaxLine" xml:space="preserve">
-    <value>_Maximum line number</value>
+    <value>_Maximum numéro des lignes</value>
   </data>
   <data name="GoTo.Ok" xml:space="preserve">
-    <value>OK</value>
+    <value>Oké</value>
   </data>
   <data name="GoTo.Title" xml:space="preserve">
-    <value>Go To Line</value>
+    <value>Passer à Ligne</value>
   </data>
   <data name="MainWindow.Title" xml:space="preserve">
     <value>Office RibbonX Editor</value>
   </data>
   <data name="Menu.Edit" xml:space="preserve">
-    <value>_Edit</value>
+    <value>_Éditer</value>
   </data>
   <data name="Menu.Edit.Copy" xml:space="preserve">
-    <value>Copy</value>
+    <value>Copier</value>
   </data>
   <data name="Menu.Edit.Cut" xml:space="preserve">
-    <value>Cut</value>
+    <value>Couper</value>
   </data>
   <data name="Menu.Edit.DuplicateLine" xml:space="preserve">
-    <value>Duplicate Line</value>
+    <value>Dupliquer la ligne</value>
   </data>
   <data name="Menu.Edit.Find" xml:space="preserve">
-    <value>Find...</value>
+    <value>Chercher…</value>
   </data>
   <data name="Menu.Edit.FindNext" xml:space="preserve">
-    <value>Find Next</value>
+    <value>Chercher Suivant</value>
   </data>
   <data name="Menu.Edit.FindPrevious" xml:space="preserve">
-    <value>Find Previous</value>
+    <value>Chercher Précédent</value>
   </data>
   <data name="Menu.Edit.GoTo" xml:space="preserve">
-    <value>Go To Line...</value>
+    <value>Passer à Ligne…</value>
   </data>
   <data name="Menu.Edit.Incremental" xml:space="preserve">
-    <value>Incremental Search...</value>
+    <value>Recherche Incrémentale …</value>
   </data>
   <data name="Menu.Edit.Paste" xml:space="preserve">
-    <value>Paste</value>
+    <value>Coller</value>
   </data>
   <data name="Menu.Edit.Redo" xml:space="preserve">
-    <value>Redo</value>
+    <value>Refaire</value>
   </data>
   <data name="Menu.Edit.Replace" xml:space="preserve">
-    <value>Replace...</value>
+    <value>Remplacer…</value>
   </data>
   <data name="Menu.Edit.SelectAll" xml:space="preserve">
-    <value>Select All</value>
+    <value>Sélectionner Tous</value>
   </data>
   <data name="Menu.Edit.Undo" xml:space="preserve">
-    <value>Undo</value>
+    <value>Annuler</value>
   </data>
   <data name="Menu.File" xml:space="preserve">
-    <value>_File</value>
+    <value>_Fichier</value>
   </data>
   <data name="Menu.File.Close" xml:space="preserve">
-    <value>Close Current Document</value>
+    <value>Fermer Document Actuel</value>
   </data>
   <data name="Menu.File.Exit" xml:space="preserve">
-    <value>Exit</value>
+    <value>Sortir</value>
   </data>
   <data name="Menu.File.Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Ouvrir</value>
   </data>
   <data name="Menu.File.Save" xml:space="preserve">
-    <value>Save Current Document</value>
+    <value>Enregistrer Document Actuel</value>
   </data>
   <data name="Menu.File.SaveAll" xml:space="preserve">
-    <value>Save All Documents</value>
+    <value>Enregistrer Tous Documents</value>
   </data>
   <data name="Menu.File.SaveAs" xml:space="preserve">
-    <value>Save As...</value>
+    <value>Enregistrer Sous...</value>
   </data>
   <data name="Menu.File.SaveAs.ToolTip" xml:space="preserve">
     <value>Save the current document with a different name</value>
   </data>
   <data name="Menu.FIle.SaveCopy" xml:space="preserve">
-    <value>Save a Copy As...</value>
+    <value>Enregistrer Une Copie Sous…</value>
   </data>
   <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
-    <value>Save a completely separate copy of the current document</value>
+    <value>Enregistrer une copie complètement séparée du document actuel</value>
   </data>
   <data name="Menu.File.Settings" xml:space="preserve">
-    <value>Settings...</value>
+    <value>Paramètres…</value>
   </data>
   <data name="Menu.Help" xml:space="preserve">
-    <value>_Help</value>
+    <value>_Aide</value>
   </data>
   <data name="Menu.Help.About" xml:space="preserve">
-    <value>About</value>
+    <value>À Propos</value>
   </data>
   <data name="Menu.Help.UsefulLinks" xml:space="preserve">
-    <value>Useful Links</value>
+    <value>Liens Utiles</value>
   </data>
   <data name="Menu.Insert" xml:space="preserve">
-    <value>_Insert</value>
+    <value>_Insérer</value>
   </data>
   <data name="Menu.Insert.Icons" xml:space="preserve">
-    <value>Icons...</value>
+    <value>Icônes...</value>
   </data>
   <data name="Menu.Insert.Office2007" xml:space="preserve">
-    <value>Office 2007 Custom UI Part</value>
+    <value>Office 2007 Partie d’Interface Utilisateur Personnalisée</value>
   </data>
   <data name="Menu.Insert.Office2010" xml:space="preserve">
-    <value>Office 2010+ Custom UI Part</value>
+    <value>Office 2010+ Partie d’Interface Utilisateur Personnalisée</value>
   </data>
   <data name="Menu.Insert.Sample" xml:space="preserve">
-    <value>Sample XML</value>
+    <value>Exemple XML</value>
   </data>
   <data name="Menu.View" xml:space="preserve">
-    <value>_View</value>
+    <value>_Affichage</value>
   </data>
   <data name="Menu.View.FoldAll" xml:space="preserve">
-    <value>Fold All</value>
+    <value>Plier Tous</value>
   </data>
   <data name="Menu.View.FoldCurrent" xml:space="preserve">
-    <value>Fold Current Level</value>
+    <value>Plier Niveau Actuel</value>
   </data>
   <data name="Menu.View.FoldLevel" xml:space="preserve">
-    <value>Fold Level</value>
-    <comment>The menu title for folding a specific level</comment>
+    <value>Plier Niveau</value>
+    <comment>Titre du Menu pour Plier un Niveau Spécifique</comment>
   </data>
   <data name="Menu.View.UnfoldAll" xml:space="preserve">
-    <value>Unfold All</value>
+    <value>Déplier Tous</value>
   </data>
   <data name="Menu.View.UnfoldCurrent" xml:space="preserve">
-    <value>Unfold Current Level</value>
+    <value>Déplier Niveau Actuel</value>
   </data>
   <data name="Menu.View.UnfoldLevel" xml:space="preserve">
-    <value>Unfold Level</value>
-    <comment>The menu title for unfolding a specific level</comment>
+    <value>Déplier Niveau</value>
+    <comment>Titre du Menu pour Déplier un Niveau Spécifique</comment>
   </data>
   <data name="Message.AlreadyOpen.Text" xml:space="preserve">
-    <value>The document '{0}' is already open. Opening a document more than once is dangerous and can lead to loss of data, unless you save it with a different name straight away.
+    <value>Le document '{0}' est déjà ouvert. Ouvrir un document plusieurs fois est dangereux et peut entraîner une perte de données, à moins que vous ne l'enregistriez immédiatement sous un nom différent.
 
-Are you completely sure you want to open this document again?</value>
+Êtes-vous complètement sûr de vouloir rouvrir ce document?</value>
   </data>
   <data name="Message.AlreadyOpen.Title" xml:space="preserve">
-    <value>Document Already Open</value>
+    <value>Document Déjà Ouvert</value>
   </data>
   <data name="Message.CallbackError.Title" xml:space="preserve">
-    <value>Error Generating Callbacks</value>
+    <value>Erreur de génération de rappels</value>
   </data>
   <data name="Message.ChangeIdError.Title" xml:space="preserve">
-    <value>Error Changing Icon ID</value>
+    <value>Erreur lors de la modification de l'ID de l'icône</value>
   </data>
   <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
-    <value>File {0} has unsaved changes. Do you want to save them before closing it?</value>
+    <value>Le fichier {0} contient des modifications non enregistrées. Voulez-vous les enregistrer avant de le fermer ?</value>
     <comment>{0} is the placeholder for the file name</comment>
   </data>
   <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
-    <value>Unsaved Changes</value>
+    <value>Modifications Non Enregistrées</value>
   </data>
   <data name="Message.IconExists.Text" xml:space="preserve">
-    <value>This custom UI file already has an icon with id {0}. Do you want to insert the new icon with id {1} instead?</value>
+    <value>Ce fichier d'interface utilisateur personnalisé a déjà une icône avec l'ID {0}. Voulez-vous plutôt insérer la nouvelle icône avec l'identifiant {1} ?</value>
   </data>
   <data name="Message.IconExists.Title" xml:space="preserve">
-    <value>Icon Already Exists</value>
+    <value>L'icône existe déjà</value>
   </data>
   <data name="Message.InsertSample.Text" xml:space="preserve">
-    <value>This will insert the sample XML code on the current cursor position. Are you sure you want to continue?</value>
+    <value>Cela insérera l'exemple de code XML sur la position actuelle du curseur. Es-tu sur de vouloir continuer?</value>
   </data>
   <data name="Message.InsertSample.Title" xml:space="preserve">
-    <value>Insert XML Sample</value>
+    <value>Insérer exemple de XML</value>
   </data>
   <data name="Message.InsertSampleError.Title" xml:space="preserve">
-    <value>Error inserting XML sample</value>
+    <value>Erreur lors de l'insertion de l'échantillon XML</value>
   </data>
   <data name="Message.NewVersion.Text" xml:space="preserve">
-    <value>Release version {0} is now available. Do you want to download it?</value>
+    <value>La version {0} est maintenant disponible. Voulez-vous le télécharger ?</value>
   </data>
   <data name="Message.NewVersion.Title" xml:space="preserve">
-    <value>Newer Version Available</value>
+    <value>Nouvelle version disponible</value>
   </data>
   <data name="Message.NoCallbacks.Text" xml:space="preserve">
-    <value>There is no callback to be generated.</value>
+    <value>Il n'y a pas de rappel à générer.</value>
   </data>
   <data name="Message.NoCallbacks.Title" xml:space="preserve">
-    <value>Generate Callbacks</value>
+    <value>Générer des Rappels</value>
   </data>
   <data name="Message.OpenError.Title" xml:space="preserve">
-    <value>Error opening Office document</value>
+    <value>Erreur lors de l'ouverture du document Office</value>
   </data>
   <data name="Message.RemoveIcon.Text" xml:space="preserve">
-    <value>This action cannot be undone. Are you sure you want to continue?</value>
+    <value>Cette action ne peut pas être annulée. Êtes-vous sûr de vouloir continuer ?</value>
   </data>
   <data name="Message.RemoveIcon.Title" xml:space="preserve">
-    <value>Remove Icon</value>
+    <value>Supprimer l’Icône</value>
   </data>
   <data name="Message.RemovePart.Text" xml:space="preserve">
-    <value>This action cannot be undone. Are you sure you want to continue?</value>
+    <value>Cette action ne peut pas être annulée. Êtes-vous sûr de vouloir continuer ?</value>
   </data>
   <data name="Message.RemovePart.Title" xml:space="preserve">
-    <value>Remove XML part</value>
+    <value>Supprimer la Partie XML</value>
   </data>
   <data name="Message.SaveError.Title" xml:space="preserve">
-    <value>Error saving Office document</value>
+    <value>Erreur lors de l'enregistrement du document Office</value>
   </data>
   <data name="Message.ValidXml.Text" xml:space="preserve">
-    <value>Custom UI XML is well formed.</value>
+    <value>L'interface utilisateur XML personnalisée est bien formée.</value>
   </data>
   <data name="Message.ValidXml.Title" xml:space="preserve">
-    <value>XML is Valid</value>
+    <value>XML is Valide</value>
   </data>
   <data name="Message.VersionCopy.Text" xml:space="preserve">
-    <value>The version information has been copied to the clipboard.</value>
+    <value>Les informations de version ont été copiées dans le presse-papiers.</value>
   </data>
   <data name="Message.VersionCopy.Title" xml:space="preserve">
-    <value>Version Information Copied</value>
+    <value>Informations de version Copiées</value>
   </data>
   <data name="OpenDialog.Document.Title" xml:space="preserve">
-    <value>Open OOXML Document</value>
+    <value>Ouvrir le document OOXML</value>
   </data>
   <data name="OpenDialog.Icons.Title" xml:space="preserve">
-    <value>Insert Custom Icons</value>
+    <value>Insérer des icônes personnalisées</value>
   </data>
   <data name="SaveDialog.SaveAs.Title" xml:space="preserve">
-    <value>Save OOXML Document</value>
+    <value>Enregistrer le document OOXML</value>
   </data>
   <data name="Settings.Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Accepter</value>
   </data>
   <data name="Settings.Apply" xml:space="preserve">
-    <value>Apply</value>
+    <value>Appliquer</value>
   </data>
   <data name="Settings.Colors" xml:space="preserve">
-    <value>Editor colors</value>
+    <value>Couleurs de l’Éditeur</value>
   </data>
   <data name="Settings.Colors.Attribute" xml:space="preserve">
-    <value>Attribute</value>
+    <value>Attribut</value>
   </data>
   <data name="Settings.Colors.Background" xml:space="preserve">
-    <value>Background</value>
+    <value>Arrière-Plans</value>
   </data>
   <data name="Settings.Colors.Comment" xml:space="preserve">
-    <value>Comment</value>
+    <value>Commenter</value>
   </data>
   <data name="Settings.Colors.Default" xml:space="preserve">
-    <value>Normal Text</value>
+    <value>Texte normal</value>
   </data>
   <data name="Settings.Colors.String" xml:space="preserve">
-    <value>String</value>
+    <value>Chaîne</value>
   </data>
   <data name="Settings.Colors.Tag" xml:space="preserve">
     <value>Tag</value>
   </data>
   <data name="Settings.Editor" xml:space="preserve">
-    <value>Other editor settings</value>
+    <value>Autres paramètres de l'éditeur</value>
   </data>
   <data name="Settings.Editor.AutoIndent" xml:space="preserve">
-    <value>Auto-indent new lines</value>
+    <value>Mettre en retrait automatiquement les nouvelles lignes</value>
   </data>
   <data name="Settings.Editor.FontSize" xml:space="preserve">
-    <value>Font Size</value>
+    <value>Taille de police</value>
   </data>
   <data name="Settings.Editor.TabWidth" xml:space="preserve">
-    <value>Tab Width</value>
+    <value>Largeur de l'onglet</value>
   </data>
   <data name="Settings.Editor.WrapMode" xml:space="preserve">
-    <value>Wrap Mode</value>
+    <value>mode de retour à la ligne</value>
   </data>
   <data name="Settings.FileAssociations" xml:space="preserve">
-    <value>File Associations</value>
+    <value>Les associations de fichiers</value>
   </data>
   <data name="Settings.FileAssociations.CheckAll" xml:space="preserve">
-    <value>Check All</value>
+    <value>Tout Cocher</value>
   </data>
   <data name="Settings.FileAssociations.ToolTip" xml:space="preserve">
-    <value>A context menu entry will appear in Windows Explorer to edit these files directly with the tool</value>
+    <value>Une entrée de menu contextuel apparaîtra dans l'explorateur Windows pour éditer ces fichiers directement avec l'outil</value>
   </data>
   <data name="Settings.FileAssociations.UncheckAll" xml:space="preserve">
-    <value>Uncheck All</value>
+    <value>Décocher Tout</value>
   </data>
   <data name="Settings.Misc" xml:space="preserve">
-    <value>Misc</value>
+    <value>Divers</value>
   </data>
   <data name="Settings.Misc.DefaultTemplates" xml:space="preserve">
-    <value>Show default XML templates in the Insert menu</value>
+    <value>Afficher les modèles XML par défaut dans le menu Insertion</value>
   </data>
   <data name="Settings.Misc.ExtraTemplates" xml:space="preserve">
-    <value>Additional XML templates to load:</value>
+    <value>Modèles XML supplémentaires à charger :</value>
   </data>
   <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
-    <value>One path per line. Paths can be either XML files or folders containing those. They can also be relative to the tool's folder</value>
+    <value>Un chemin par ligne. Les chemins peuvent être des fichiers XML ou des dossiers contenant ceux-ci. Ils peuvent aussi être relatifs au dossier de l'outil</value>
   </data>
   <data name="Settings.Misc.Language" xml:space="preserve">
-    <value>Language</value>
+    <value>Langue</value>
   </data>
   <data name="Settings.Misc.PreserveAttributes" xml:space="preserve">
-    <value>Preserve file attributes when saving an already existing document</value>
+    <value>Conserver les attributs de fichier lors de l'enregistrement d'un document déjà existant</value>
   </data>
   <data name="Settings.Misc.PreserveAttributes.ToolTip" xml:space="preserve">
-    <value>If checked, read-only files will keep to be read-only after saving them for example</value>
+    <value>Si coché, les fichiers en lecture seule resteront en lecture seule après les avoir enregistrés par exemple</value>
   </data>
   <data name="Settings.ResetDefaults" xml:space="preserve">
-    <value>Reset Defaults</value>
+    <value>Réinitialiser par défaut</value>
   </data>
   <data name="Settings.Title" xml:space="preserve">
-    <value>Settings</value>
+    <value>Paramètres</value>
   </data>
   <data name="ToolBar.Callbacks" xml:space="preserve">
-    <value>Generate Callbacks</value>
+    <value>Générer des rappels</value>
   </data>
   <data name="ToolBar.Callbacks.ToolTip" xml:space="preserve">
-    <value>Generate callbacks for the current XML file</value>
+    <value>Générer des rappels pour le fichier XML actuel</value>
   </data>
   <data name="ToolBar.InsertIcons" xml:space="preserve">
-    <value>Insert Icons</value>
+    <value>Insérer Icônes</value>
   </data>
   <data name="ToolBar.InsertIcons.ToolTip" xml:space="preserve">
-    <value>Insert Icons</value>
+    <value>Insérer Icônes</value>
   </data>
   <data name="ToolBar.Open" xml:space="preserve">
-    <value>Open</value>
+    <value>Ouvrir</value>
   </data>
   <data name="ToolBar.Open.ToolTip" xml:space="preserve">
-    <value>Open an Office document</value>
+    <value>Ouvrir un document Office</value>
   </data>
   <data name="ToolBar.ReloadOnSave" xml:space="preserve">
-    <value>Reload on Save</value>
+    <value>Recharger sur Enregistrer</value>
   </data>
   <data name="ToolBar.ReloadOnSave.ToolTip" xml:space="preserve">
-    <value>To ensure you do not delete changes made externally, you can reload the documents right before they are to be saved</value>
+    <value>Pour vous assurer de ne pas supprimer les modifications apportées en externe, vous pouvez recharger les documents juste avant de les enregistrer</value>
   </data>
   <data name="ToolBar.Save" xml:space="preserve">
-    <value>Save</value>
+    <value>Enregistrer</value>
   </data>
   <data name="ToolBar.Save.ToolTip" xml:space="preserve">
-    <value>Save the current Office document</value>
+    <value>Enregistrer le document Office actuel</value>
   </data>
   <data name="ToolBar.Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Paramètres</value>
   </data>
   <data name="ToolBar.Settings.ToolTip" xml:space="preserve">
-    <value>View the editor settings</value>
+    <value>Afficher les paramètres de l'éditeur</value>
   </data>
   <data name="ToolBar.ShowWhitespaces.ToolTip" xml:space="preserve">
-    <value>Show space, tab and line end characters in the editor</value>
+    <value>Afficher les espaces, les tabulations et les caractères de fin de ligne dans l'éditeur</value>
   </data>
   <data name="ToolBar.ToggleComment.ToolTip" xml:space="preserve">
-    <value>Comment / uncomment the currently selected lines</value>
+    <value>Commenter/décommenter les lignes actuellement sélectionnées</value>
   </data>
   <data name="ToolBar.Validate" xml:space="preserve">
-    <value>Validate</value>
+    <value>Valider</value>
   </data>
   <data name="ToolBar.Validate.ToolTip" xml:space="preserve">
-    <value>Check whether the current XML file conforms to its corresponding schema</value>
+    <value>Vérifiez si le fichier XML actuel est conforme à son schéma correspondant</value>
   </data>
   <data name="ToolBar.VersionAvailable" xml:space="preserve">
     <value>v{0} Available!</value>
-    <comment>{0} is the placeholder for the version, e.g. "1.2.3"</comment>
+    <comment>{0} est l'espace réservé pour la version, par ex. "1.2.3"</comment>
   </data>
   <data name="Validation.MutuallyExclusive" xml:space="preserve">
-    <value>You can only define one of the following attributes in an element: {0}</value>
+    <value>Vous ne pouvez définir qu'un des attributs suivants dans un élément : {0}</value>
   </data>
   <data name="Validation.WrongNamespace" xml:space="preserve">
-    <value>Unknown namespace "{0}". Custom UI XML namespace must be "{1}"</value>
+    <value>Espace de noms inconnu "{0}". L'espace de noms XML de l'interface utilisateur personnalisée doit être "{1}"</value>
   </data>
   <data name="About.Translators" xml:space="preserve">
-    <value>Translators:</value>
+    <value>Traducteurs:</value>
   </data>
   <data name="Message.CorruptedSettings.Text" xml:space="preserve">
-    <value>The user settings file at the following location is corrupted and cannot be deleted:
+    <value>Le fichier de paramètres utilisateur à l'emplacement suivant est corrompu et ne peut pas être supprimé :
 
 {0}
 
-Please delete this file manually and restart the app. Its folder location has been copied to the clipboard.</value>
+Veuillez supprimer ce fichier manuellement et redémarrer l'application. Son emplacement de dossier a été copié dans le presse-papiers.</value>
   </data>
   <data name="Message.CorruptedSettings.Title" xml:space="preserve">
-    <value>Corrupted Settings</value>
+    <value>Paramètres corrompus</value>
   </data>
 </root>
