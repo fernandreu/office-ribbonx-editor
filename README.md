@@ -148,3 +148,4 @@ how your translation looks (you will be able to see it from the build artifacts 
 - Dutch: [pplanch](https://github.com/pplanch)
 - French: [pplanch](https://github.com/pplanch)
 - German: [carpac](https://github.com/carpac), [Claythve](https://github.com/Claythve)
+- Turkish: [fatihmeh](https://github.com/fatihmeh)
