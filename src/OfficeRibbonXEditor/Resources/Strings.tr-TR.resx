@@ -1,0 +1,778 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About.Author" xml:space="preserve">
+    <value>Yazar:</value>
+  </data>
+  <data name="About.Close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="About.CopyVersion" xml:space="preserve">
+    <value>Versiyon bilgisini kopyala</value>
+  </data>
+  <data name="About.License" xml:space="preserve">
+    <value>Lisans:</value>
+  </data>
+  <data name="About.OperatingSystem" xml:space="preserve">
+    <value>İşletim Sistemi:</value>
+  </data>
+  <data name="About.Paragraph1" xml:space="preserve">
+    <value>Office RibbonX Editor, Office Open Document-Format yapısının Custom-UI bölümünü düzenlemek için ücretsiz, açık kaynaklı, bağımsız bir araçtır. Hem Office 2007 hem de Office 2010 Custom-UI taslaklarını kapsar.</value>
+  </data>
+  <data name="About.Paragraph2" xml:space="preserve">
+    <value>Office 2010 custom-UI taslağı en son şemadır ve hala en son Office sürümlerinde, Office 2013, Office 2016, Office 2019 ve Office 365 dahil olmak üzere kullanılmaktadır.</value>
+  </data>
+  <data name="About.ProjectPage" xml:space="preserve">
+    <value>Proje Sayfası:</value>
+  </data>
+  <data name="About.Runtime" xml:space="preserve">
+    <value>Runtime:</value>
+  </data>
+  <data name="About.SubmitIssue" xml:space="preserve">
+    <value>Sorun bildirin</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>Office RibbonX Editor Hakkında</value>
+  </data>
+  <data name="About.Version" xml:space="preserve">
+    <value>Versiyon:</value>
+  </data>
+  <data name="Callbacks.Title" xml:space="preserve">
+    <value>Callback Görüntüleyicisi</value>
+  </data>
+  <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
+    <value>ID Değiştir</value>
+  </data>
+  <data name="ContextMenu.TreeView.Close" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertIcons" xml:space="preserve">
+    <value>İkon ekle...</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2007" xml:space="preserve">
+    <value>Custom Office 2007 UI Parçası Ekle</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2010" xml:space="preserve">
+    <value>Custom Office 2010+ UI Parçası Ekle</value>
+  </data>
+  <data name="ContextMenu.TreeView.Open" xml:space="preserve">
+    <value>Aç</value>
+  </data>
+  <data name="ContextMenu.TreeView.Remove" xml:space="preserve">
+    <value>Kaldır</value>
+  </data>
+  <data name="ContextMenu.TreeView.Save" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
+    <value>Farklı Kaydet...</value>
+  </data>
+  <data name="Editor.ZoomFactor" xml:space="preserve">
+    <value>Zoom Değeri:</value>
+  </data>
+  <data name="Exception.CloseDialog" xml:space="preserve">
+    <value>Bu Pencereyi Kapat</value>
+  </data>
+  <data name="Exception.Disclaimer" xml:space="preserve">
+    <value>Eğer aracı bu hatadan sonra kullanmaya devam ederseniz, çalışmasında aksaklık olabilir.</value>
+  </data>
+  <data name="Exception.ShutdownApp" xml:space="preserve">
+    <value>Uygulamayı Sonlandır</value>
+  </data>
+  <data name="Exception.SubmitBug" xml:space="preserve">
+    <value>Hata Raporu Gönder</value>
+  </data>
+  <data name="Exception.Title" xml:space="preserve">
+    <value>Beklenmeyen Hata Oluştu</value>
+  </data>
+  <data name="Filter.All" xml:space="preserve">
+    <value>Bütün Dosyalar (*.*)|*.*</value>
+  </data>
+  <data name="Filter.AllOfficeDocuments" xml:space="preserve">
+    <value>Tüm Office Belgeleri|*.???x;*.???m</value>
+  </data>
+  <data name="Filter.ExcelDocuments" xml:space="preserve">
+    <value>Microsoft Excel Çalışma Sayfaları|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
+  </data>
+  <data name="Filter.Icons" xml:space="preserve">
+    <value>Desteklenen İkonlar|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
+  </data>
+  <data name="Filter.PowerPointDocuments" xml:space="preserve">
+    <value>Microsoft PowerPoint Sunumları|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
+  </data>
+  <data name="Filter.VisioDocuments" xml:space="preserve">
+    <value>Microsoft Visio Çizimleri|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
+  </data>
+  <data name="Filter.SaveAs0" xml:space="preserve">
+    <value>Excel Çalışma Kitabı|*.xlsx</value>
+  </data>
+  <data name="Filter.SaveAs1" xml:space="preserve">
+    <value>Excel Makro Etkinleştirilmiş Çalışma Kitabı|*.xlsm</value>
+  </data>
+  <data name="Filter.SaveAs10" xml:space="preserve">
+    <value>PowerPoint Gösterisi|*.ppsx</value>
+  </data>
+  <data name="Filter.SaveAs11" xml:space="preserve">
+    <value>PowerPoint Makro Etkinleştirilmiş Gösterisi|*.ppsm</value>
+  </data>
+  <data name="Filter.SaveAs12" xml:space="preserve">
+    <value>PowerPoint Eklentisi|*.ppam</value>
+  </data>
+  <data name="Filter.SaveAs13" xml:space="preserve">
+    <value>Word Belgesi|*.docx</value>
+  </data>
+  <data name="Filter.SaveAs14" xml:space="preserve">
+    <value>Word Makro Etkinleştirilmiş Belgesi|*.docm</value>
+  </data>
+  <data name="Filter.SaveAs15" xml:space="preserve">
+    <value>Word Şablonu|*.dotx</value>
+  </data>
+  <data name="Filter.SaveAs16" xml:space="preserve">
+    <value>Word Makro Etkinleştirilmiş Şablonu|*.dotm</value>
+  </data>
+  <data name="Filter.SaveAs17" xml:space="preserve">
+    <value>Visio Diagramı|*.vsdx</value>
+  </data>
+  <data name="Filter.SaveAs18" xml:space="preserve">
+    <value>Visio Makro Etkinleştirilmiş Diagramı|*.vsdm</value>
+  </data>
+  <data name="Filter.SaveAs19" xml:space="preserve">
+    <value>Visio Şablonu|*.vstx</value>
+  </data>
+  <data name="Filter.SaveAs20" xml:space="preserve">
+    <value>Visio Makro Etkinleştirilmiş Şablonu|*.vstm</value>
+  </data>
+  <data name="Filter.SaveAs2" xml:space="preserve">
+    <value>Excel İkili Çalışma Kitabı|*.xlsb</value>
+  </data>
+  <data name="Filter.SaveAs3" xml:space="preserve">
+    <value>Excel Şablonu|*.xltx</value>
+  </data>
+  <data name="Filter.SaveAs4" xml:space="preserve">
+    <value>Excel Makro Etkinleştirilmiş Şablonu|*.xltm</value>
+  </data>
+  <data name="Filter.SaveAs5" xml:space="preserve">
+    <value>Excel Eklentisi|*.xlam</value>
+  </data>
+  <data name="Filter.SaveAs6" xml:space="preserve">
+    <value>PowerPoint Sunumu|*.pptx</value>
+  </data>
+  <data name="Filter.SaveAs7" xml:space="preserve">
+    <value>PowerPoint Makro Etkinleştirilmiş Sunumu|*.pptm</value>
+  </data>
+  <data name="Filter.SaveAs8" xml:space="preserve">
+    <value>PowerPoint Şablonu|*.potx</value>
+  </data>
+  <data name="Filter.SaveAs9" xml:space="preserve">
+    <value>PowerPoint Makro Etkinleştirilmiş Şablonu|*.potm</value>
+  </data>
+  <data name="Filter.WordDocuments" xml:space="preserve">
+    <value>Microsoft Word Belgeleri|*.do?x;*.do?m</value>
+  </data>
+  <data name="FindReplace.Find" xml:space="preserve">
+    <value>_Bul</value>
+  </data>
+  <data name="FindReplace.FindAll" xml:space="preserve">
+    <value>Tümünü Bul</value>
+  </data>
+  <data name="FindReplace.FindAll.Clear" xml:space="preserve">
+    <value>_Temizle</value>
+  </data>
+  <data name="FindReplace.FindAll.HighlightMatches" xml:space="preserve">
+    <value>Eşleşmeleri Vurgu_la</value>
+  </data>
+  <data name="FindReplace.FindAll.MarkLine" xml:space="preserve">
+    <value>_Çizgiyi İşaretle</value>
+  </data>
+  <data name="FindReplace.FindAll.Ok" xml:space="preserve">
+    <value>Tümünü B_ul</value>
+  </data>
+  <data name="FindReplace.FindNext" xml:space="preserve">
+    <value>Sonrakini Bul</value>
+  </data>
+  <data name="FindReplace.FindPrevious" xml:space="preserve">
+    <value>Öncekini Bul</value>
+  </data>
+  <data name="FindReplace.FindTab" xml:space="preserve">
+    <value>Bul</value>
+  </data>
+  <data name="FindReplace.Options" xml:space="preserve">
+    <value>Seçenekler</value>
+  </data>
+  <data name="FindReplace.Options.Compiled" xml:space="preserve">
+    <value>Derlenmiş</value>
+  </data>
+  <data name="FindReplace.Options.ECMAScript" xml:space="preserve">
+    <value>ECMAScript</value>
+  </data>
+  <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
+    <value>_Açık Yakalama</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
+    <value>Büyük/küçük Harf Yo_ksay</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
+    <value>Desen Boşluklarını Yoksay</value>
+  </data>
+  <data name="FindReplace.Options.Invariant" xml:space="preserve">
+    <value>Kültür Değişme_zi</value>
+  </data>
+  <data name="FindReplace.Options.Multiline" xml:space="preserve">
+    <value>Çoklu Satır</value>
+  </data>
+  <data name="FindReplace.Options.RightToLeft" xml:space="preserve">
+    <value>Sağdan Sola</value>
+  </data>
+  <data name="FindReplace.Options.Singleline" xml:space="preserve">
+    <value>Tek Satır</value>
+  </data>
+  <data name="FindReplace.Replace" xml:space="preserve">
+    <value>De_ğiştir</value>
+  </data>
+  <data name="FindReplace.ReplaceAll" xml:space="preserve">
+    <value>_Hepsini Değiştir</value>
+  </data>
+  <data name="FindReplace.ReplaceNext" xml:space="preserve">
+    <value>_Sonrakini Değiştir</value>
+  </data>
+  <data name="FindReplace.ReplacePrevious" xml:space="preserve">
+    <value>_Öncekini Değiştir</value>
+  </data>
+  <data name="FindReplace.ReplaceTab" xml:space="preserve">
+    <value>Değiştir</value>
+  </data>
+  <data name="FindReplace.SearchType" xml:space="preserve">
+    <value>Tür Ara</value>
+  </data>
+  <data name="FindReplace.SearchType.Extended" xml:space="preserve">
+    <value>Geni_şletilmiş (\n, \r, \t, \0)</value>
+  </data>
+  <data name="FindReplace.SearchType.Regular" xml:space="preserve">
+    <value>Kurallı İ_fade</value>
+  </data>
+  <data name="FindReplace.SearchType.Standard" xml:space="preserve">
+    <value>Sta_ndart</value>
+  </data>
+  <data name="FindReplace.Selection" xml:space="preserve">
+    <value>Seçimi Ara</value>
+  </data>
+  <data name="FindReplace.Status.NoMatch" xml:space="preserve">
+    <value>Eşleşme bulunamadı</value>
+  </data>
+  <data name="FindReplace.Status.RegExError" xml:space="preserve">
+    <value>Normal İfadede Hata</value>
+  </data>
+  <data name="FindReplace.Status.TotalFound" xml:space="preserve">
+    <value>Toplam bulundu</value>
+  </data>
+  <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
+    <value>Toplam değiştirildi</value>
+  </data>
+  <data name="FindReplace.Status.Wrap" xml:space="preserve">
+    <value>Belgenin / seçimin başına kaydırılmış arama eşleşmesi</value>
+  </data>
+  <data name="FindReplace.Title" xml:space="preserve">
+    <value>Bul ve Değiştir</value>
+  </data>
+  <data name="FindReplace.Wrap" xml:space="preserve">
+    <value>Kaydı_r</value>
+  </data>
+  <data name="GoTo.Cancel" xml:space="preserve">
+    <value>İptal</value>
+  </data>
+  <data name="GoTo.CurrentLine" xml:space="preserve">
+    <value>Me_vcut satır no</value>
+  </data>
+  <data name="GoTo.DesiredLine" xml:space="preserve">
+    <value>Satır Numarasına Git</value>
+  </data>
+  <data name="GoTo.MaxLine" xml:space="preserve">
+    <value>_Maksimum satır numarası</value>
+  </data>
+  <data name="GoTo.Ok" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="GoTo.Title" xml:space="preserve">
+    <value>Satıra Git</value>
+  </data>
+  <data name="MainWindow.Title" xml:space="preserve">
+    <value>Office RibbonX Editor</value>
+  </data>
+  <data name="Menu.Edit" xml:space="preserve">
+    <value>D_üzenle</value>
+  </data>
+  <data name="Menu.Edit.Copy" xml:space="preserve">
+    <value>Kopyala</value>
+  </data>
+  <data name="Menu.Edit.Cut" xml:space="preserve">
+    <value>Kes</value>
+  </data>
+  <data name="Menu.Edit.DuplicateLine" xml:space="preserve">
+    <value>Satır Çoğalt</value>
+  </data>
+  <data name="Menu.Edit.Find" xml:space="preserve">
+    <value>Bul...</value>
+  </data>
+  <data name="Menu.Edit.FindNext" xml:space="preserve">
+    <value>Sonrakini Bul</value>
+  </data>
+  <data name="Menu.Edit.FindPrevious" xml:space="preserve">
+    <value>Öncekini Bul</value>
+  </data>
+  <data name="Menu.Edit.GoTo" xml:space="preserve">
+    <value>Satıra Git...</value>
+  </data>
+  <data name="Menu.Edit.Incremental" xml:space="preserve">
+    <value>Devamlı Arama...</value>
+  </data>
+  <data name="Menu.Edit.Paste" xml:space="preserve">
+    <value>Yapıştır</value>
+  </data>
+  <data name="Menu.Edit.Redo" xml:space="preserve">
+    <value>Tekrar Uygula</value>
+  </data>
+  <data name="Menu.Edit.Replace" xml:space="preserve">
+    <value>Değiştir...</value>
+  </data>
+  <data name="Menu.Edit.SelectAll" xml:space="preserve">
+    <value>Tümünü Seç</value>
+  </data>
+  <data name="Menu.Edit.Undo" xml:space="preserve">
+    <value>Geri Al</value>
+  </data>
+  <data name="Menu.File" xml:space="preserve">
+    <value>_Dosya</value>
+  </data>
+  <data name="Menu.File.Close" xml:space="preserve">
+    <value>Açık Olan Belgeyi Kapat</value>
+  </data>
+  <data name="Menu.File.Exit" xml:space="preserve">
+    <value>Kapat</value>
+  </data>
+  <data name="Menu.File.Open" xml:space="preserve">
+    <value>Aç</value>
+  </data>
+  <data name="Menu.File.Save" xml:space="preserve">
+    <value>Açık Olan Belgeyi Kaydet</value>
+  </data>
+  <data name="Menu.File.SaveAll" xml:space="preserve">
+    <value>Tüm Belgeleri Kaydet</value>
+  </data>
+  <data name="Menu.File.SaveAs" xml:space="preserve">
+    <value>Farklı Kaydet...</value>
+  </data>
+  <data name="Menu.File.SaveAs.ToolTip" xml:space="preserve">
+    <value>Mevcut belgeyi farklı bir isimle kaydet</value>
+  </data>
+  <data name="Menu.FIle.SaveCopy" xml:space="preserve">
+    <value>Kopyayı Farklı Kaydet...</value>
+  </data>
+  <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
+    <value>Mevcut belgenin tamamen farklı bir kopyasını kaydet</value>
+  </data>
+  <data name="Menu.File.Settings" xml:space="preserve">
+    <value>Ayarlar...</value>
+  </data>
+  <data name="Menu.Help" xml:space="preserve">
+    <value>_Yardım</value>
+  </data>
+  <data name="Menu.Help.About" xml:space="preserve">
+    <value>Hakkında</value>
+  </data>
+  <data name="Menu.Help.UsefulLinks" xml:space="preserve">
+    <value>Kullanışlı Linkler</value>
+  </data>
+  <data name="Menu.Insert" xml:space="preserve">
+    <value>_Ekle</value>
+  </data>
+  <data name="Menu.Insert.Icons" xml:space="preserve">
+    <value>İkonlar...</value>
+  </data>
+  <data name="Menu.Insert.Office2007" xml:space="preserve">
+    <value>Office 2007 Custom UI Parçası</value>
+  </data>
+  <data name="Menu.Insert.Office2010" xml:space="preserve">
+    <value>Office 2010+ Custom UI Parçası</value>
+  </data>
+  <data name="Menu.Insert.Sample" xml:space="preserve">
+    <value>Örnek XML</value>
+  </data>
+  <data name="Menu.View" xml:space="preserve">
+    <value>_Görüntü</value>
+  </data>
+  <data name="Menu.View.FoldAll" xml:space="preserve">
+    <value>Tümünü Daralt</value>
+  </data>
+  <data name="Menu.View.FoldCurrent" xml:space="preserve">
+    <value>Mevcut Kademeyi Daralt</value>
+  </data>
+  <data name="Menu.View.FoldLevel" xml:space="preserve">
+    <value>Kademeyi Daralt</value>
+    <comment>Belirli bir kademeyi daraltmak için menü başlığı</comment>
+  </data>
+  <data name="Menu.View.UnfoldAll" xml:space="preserve">
+    <value>Tümünü Genişlet</value>
+  </data>
+  <data name="Menu.View.UnfoldCurrent" xml:space="preserve">
+    <value>Mevcut Kademeyi Genişlet</value>
+  </data>
+  <data name="Menu.View.UnfoldLevel" xml:space="preserve">
+    <value>Kademeyi Genişlet</value>
+    <comment>Belirli bir kademeyi genişletmek için menü başlığı</comment>
+  </data>
+  <data name="Message.AlreadyOpen.Text" xml:space="preserve">
+    <value>'{0}' belgesi zaten açık. Bir belgeyi birden fazla kez açmak tehlikelidir ve hemen farklı bir adla kaydetmediğiniz sürece veri kaybına neden olabilir.
+
+Bu belgeyi tekrar açmak istediğinizden tamamen emin misiniz?</value>
+  </data>
+  <data name="Message.AlreadyOpen.Title" xml:space="preserve">
+    <value>Belge Zaten Açık</value>
+  </data>
+  <data name="Message.CallbackError.Title" xml:space="preserve">
+    <value>Callback Oluştururken Hata</value>
+  </data>
+  <data name="Message.ChangeIdError.Title" xml:space="preserve">
+    <value>İkon ID Değiştirirken Hata</value>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
+    <value>{0} dosyası kaydedilmemiş değişiklere sahip. Kapatmadan önce kaydetmek ister misiniz?</value>
+    <comment>{0} dosya ismi için ayrılmış bilgi alanıdır.</comment>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
+    <value>Kaydedilmemiş Değişiklikler</value>
+  </data>
+  <data name="Message.IconExists.Text" xml:space="preserve">
+    <value>Bu Custom UI dosyası hazırda {0} id ile bir ikona sahip. Yerine {1} id ile yeni ikonu eklemek ister misiniz?</value>
+  </data>
+  <data name="Message.IconExists.Title" xml:space="preserve">
+    <value>İkon Zaten Mevcut</value>
+  </data>
+  <data name="Message.InsertSample.Text" xml:space="preserve">
+    <value>Bu örnek XML kodunu mevcut imleç pozisyonuna ekleyecek. Devam etmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="Message.InsertSample.Title" xml:space="preserve">
+    <value>XML Örneği Ekle</value>
+  </data>
+  <data name="Message.InsertSampleError.Title" xml:space="preserve">
+    <value>XML örneği eklerken hata</value>
+  </data>
+  <data name="Message.NewVersion.Text" xml:space="preserve">
+    <value>Dağıtım versiyonu {0} şimdi erişilebilir. Yüklemek ister misiniz?</value>
+  </data>
+  <data name="Message.NewVersion.Title" xml:space="preserve">
+    <value>Yeni Versiyon Mevcut</value>
+  </data>
+  <data name="Message.NoCallbacks.Text" xml:space="preserve">
+    <value>Oluşturulacak hiçbir callback yok.</value>
+  </data>
+  <data name="Message.NoCallbacks.Title" xml:space="preserve">
+    <value>Callback Oluştur</value>
+  </data>
+  <data name="Message.OpenError.Title" xml:space="preserve">
+    <value>Office belgesi açarken hata</value>
+  </data>
+  <data name="Message.RemoveIcon.Text" xml:space="preserve">
+    <value>Bu eylem geri alınamaz. Devam etmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="Message.RemoveIcon.Title" xml:space="preserve">
+    <value>İkonu kaldır</value>
+  </data>
+  <data name="Message.RemovePart.Text" xml:space="preserve">
+    <value>Bu eylem geri alınamaz. Devam etmek istediğinize emin misiniz?</value>
+  </data>
+  <data name="Message.RemovePart.Title" xml:space="preserve">
+    <value>XML kısmını kaldır</value>
+  </data>
+  <data name="Message.SaveError.Title" xml:space="preserve">
+    <value>Office belgesi kaydedilirken hata</value>
+  </data>
+  <data name="Message.ValidXml.Text" xml:space="preserve">
+    <value>Custom UI XML uygun formda.</value>
+  </data>
+  <data name="Message.ValidXml.Title" xml:space="preserve">
+    <value>XML geçerli</value>
+  </data>
+  <data name="Message.VersionCopy.Text" xml:space="preserve">
+    <value>Versiyon bilgisi panoya kopyalandı.</value>
+  </data>
+  <data name="Message.VersionCopy.Title" xml:space="preserve">
+    <value>Versiyon Bilgisi Kopyalandı</value>
+  </data>
+  <data name="OpenDialog.Document.Title" xml:space="preserve">
+    <value>OOXML Dökümanı Aç</value>
+  </data>
+  <data name="OpenDialog.Icons.Title" xml:space="preserve">
+    <value>Özel İkonlar Ekle</value>
+  </data>
+  <data name="SaveDialog.SaveAs.Title" xml:space="preserve">
+    <value>OOXML Belgesi Kaydet</value>
+  </data>
+  <data name="Settings.Accept" xml:space="preserve">
+    <value>Kabul Et</value>
+  </data>
+  <data name="Settings.Apply" xml:space="preserve">
+    <value>Uygula</value>
+  </data>
+  <data name="Settings.Colors" xml:space="preserve">
+    <value>Editör renkleri</value>
+  </data>
+  <data name="Settings.Colors.Attribute" xml:space="preserve">
+    <value>Nitelik</value>
+  </data>
+  <data name="Settings.Colors.Background" xml:space="preserve">
+    <value>Arka Plan</value>
+  </data>
+  <data name="Settings.Colors.Comment" xml:space="preserve">
+    <value>Yorum</value>
+  </data>
+  <data name="Settings.Colors.Default" xml:space="preserve">
+    <value>Normal Yazı</value>
+  </data>
+  <data name="Settings.Colors.String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="Settings.Colors.Tag" xml:space="preserve">
+    <value>Etiket</value>
+  </data>
+  <data name="Settings.Editor" xml:space="preserve">
+    <value>Diğer editör ayarları</value>
+  </data>
+  <data name="Settings.Editor.AutoIndent" xml:space="preserve">
+    <value>Yeni Satırları Auto-indent Yap</value>
+  </data>
+  <data name="Settings.Editor.FontSize" xml:space="preserve">
+    <value>Font Boyutu</value>
+  </data>
+  <data name="Settings.Editor.TabWidth" xml:space="preserve">
+    <value>Tab Genişliği</value>
+  </data>
+  <data name="Settings.Editor.WrapMode" xml:space="preserve">
+    <value>Kaydırma Modu</value>
+  </data>
+  <data name="Settings.FileAssociations" xml:space="preserve">
+    <value>Dosya ilişkilendirmeleri</value>
+  </data>
+  <data name="Settings.FileAssociations.CheckAll" xml:space="preserve">
+    <value>Tümünü seç</value>
+  </data>
+  <data name="Settings.FileAssociations.ToolTip" xml:space="preserve">
+    <value>Bu dosyaları doğrudan araçla düzenlemek için Windows Gezgini'nde bir bağlam menüsü girişi görünecektir</value>
+  </data>
+  <data name="Settings.FileAssociations.UncheckAll" xml:space="preserve">
+    <value>Tüm Seçimleri Kaldır</value>
+  </data>
+  <data name="Settings.Misc" xml:space="preserve">
+    <value>Diğer</value>
+  </data>
+  <data name="Settings.Misc.DefaultTemplates" xml:space="preserve">
+    <value>Ekle menüsünde varsayılan XML şablonlarını göster</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates" xml:space="preserve">
+    <value>Yüklenecek ek XML şablonları:</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
+    <value>Satır başına bir izlek. İzlekler, XML dosyaları veya bunları içeren klasörler olabilir. Ayrıca aracın klasörüne göre de olabilirler</value>
+  </data>
+  <data name="Settings.Misc.Language" xml:space="preserve">
+    <value>Dil</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes" xml:space="preserve">
+    <value>Halihazırda var olan bir belgeyi kaydederken dosya niteliklerini koru</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes.ToolTip" xml:space="preserve">
+    <value>İşaretlenirse, salt okunur dosyalar, kaydedildikten sonra salt okunur olmaya devam eder</value>
+  </data>
+  <data name="Settings.ResetDefaults" xml:space="preserve">
+    <value>Varsayılanlara Sıfırla</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="ToolBar.Callbacks" xml:space="preserve">
+    <value>Callback Oluştur</value>
+  </data>
+  <data name="ToolBar.Callbacks.ToolTip" xml:space="preserve">
+    <value>Mevcut XML dosyası için callback oluştur</value>
+  </data>
+  <data name="ToolBar.InsertIcons" xml:space="preserve">
+    <value>İkon Ekle</value>
+  </data>
+  <data name="ToolBar.InsertIcons.ToolTip" xml:space="preserve">
+    <value>İkon Ekle</value>
+  </data>
+  <data name="ToolBar.Open" xml:space="preserve">
+    <value>Aç</value>
+  </data>
+  <data name="ToolBar.Open.ToolTip" xml:space="preserve">
+    <value>Office belgesi aç</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave" xml:space="preserve">
+    <value>Kaydedince Yeniden Yükle</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave.ToolTip" xml:space="preserve">
+    <value>Harici olarak yapılan değişiklikleri silmediğinizden emin olmak için, belgeleri kaydedilmeden hemen önce yeniden yükleyebilirsiniz</value>
+  </data>
+  <data name="ToolBar.Save" xml:space="preserve">
+    <value>Kaydet</value>
+  </data>
+  <data name="ToolBar.Save.ToolTip" xml:space="preserve">
+    <value>Açık olan Office belgesini kaydet</value>
+  </data>
+  <data name="ToolBar.Settings" xml:space="preserve">
+    <value>Ayarlar</value>
+  </data>
+  <data name="ToolBar.Settings.ToolTip" xml:space="preserve">
+    <value>Editör ayarlarını görüntüle</value>
+  </data>
+  <data name="ToolBar.ShowWhitespaces.ToolTip" xml:space="preserve">
+    <value>Editörde boşluk, sekme ve satır sonu karakterlerini göster</value>
+  </data>
+  <data name="ToolBar.ToggleComment.ToolTip" xml:space="preserve">
+    <value>Seçili satırları yorumla / yorumunu kaldır</value>
+  </data>
+  <data name="ToolBar.Validate" xml:space="preserve">
+    <value>Doğrula</value>
+  </data>
+  <data name="ToolBar.Validate.ToolTip" xml:space="preserve">
+    <value>Geçerli XML dosyasının ilgili şemasına uygun olup olmadığını kontrol edin</value>
+  </data>
+  <data name="ToolBar.VersionAvailable" xml:space="preserve">
+    <value>v{0} Mevcut!</value>
+    <comment>{0} örn. "1.2.3" versiyonu için ayrılmış bilgi alanıdır</comment>
+  </data>
+  <data name="Validation.MutuallyExclusive" xml:space="preserve">
+    <value>Bir öğede aşağıdaki niteliklerden yalnızca birini tanımlayabilirsiniz: {0}</value>
+  </data>
+  <data name="Validation.WrongNamespace" xml:space="preserve">
+    <value>Bilinmeyen namespace "{0}". Custom UI XML namespace mutlaka "{1}" olmalıdır</value>
+  </data>
+  <data name="About.Translators" xml:space="preserve">
+    <value>Çevirmenler:</value>
+  </data>
+  <data name="Message.CorruptedSettings.Text" xml:space="preserve">
+    <value>Aşağıdaki konumdaki kullanıcı ayarları dosyası bozuk ve silinemez:
+
+{0}
+
+Lütfen bu dosyayı manuel olarak silin ve uygulamayı yeniden başlatın. Klasör konumu panoya kopyalandı.</value>
+  </data>
+  <data name="Message.CorruptedSettings.Title" xml:space="preserve">
+    <value>Ayarlar Bozuk</value>
+  </data>
+</root>
