@@ -10,7 +10,7 @@
     <RootNamespace>OfficeRibbonXEditor.UnitTests</RootNamespace>
 
     <Nullable>enable</Nullable>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
 
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>

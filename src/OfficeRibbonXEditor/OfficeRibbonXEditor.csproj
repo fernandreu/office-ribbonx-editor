@@ -26,8 +26,8 @@
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
 
-    <!--This also allows caching NuGet packages in Azure Pipelines-->
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <!--This also allows caching NuGet packages in Azure Pipelines. No longer used because it seemed to cause more harm than good-->
+    <!--<RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>-->
 
     <!--This limits the dlls that will be published to only those that will actually be used-->
     <SatelliteResourceLanguages>en;es-ES;de-DE;zh-CN</SatelliteResourceLanguages>
@@ -104,12 +104,4 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
-  <!--This ensures runtime config files are copied to the test projects (especially the UI project) so that the tool can be tested properly in .NET Core 3.X-->
-  <Target Name="AddRuntimeDependenciesToContent" Condition=" '$(TargetFrameworkIdentifier)' == '.NETCoreApp'" BeforeTargets="GetCopyToOutputDirectoryItems" DependsOnTargets="GenerateBuildDependencyFile;GenerateBuildRuntimeConfigurationFiles">
-    <ItemGroup>
-      <ContentWithTargetPath Include="$(ProjectDepsFilePath)" CopyToOutputDirectory="PreserveNewest" TargetPath="$(ProjectDepsFileName)" />
-      <ContentWithTargetPath Include="$(ProjectRuntimeConfigFilePath)" CopyToOutputDirectory="PreserveNewest" TargetPath="$(ProjectRuntimeConfigFileName)" />
-    </ItemGroup>
-  </Target>
 </Project>
