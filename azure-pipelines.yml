@@ -49,7 +49,7 @@ stages:
   - job: NetCoreTesting
     displayName: .NET Testing
     variables:
-      targetFramework: net5.0-windows
+      targetFramework: net6.0-windows
 
     steps:
     - template: build/templates/build.yml
@@ -100,13 +100,13 @@ stages:
       - template: build/templates/publish.yml
         parameters:
           tag: '.NET'
-          targetFramework: net5.0-windows
+          targetFramework: net6.0-windows
         
       - template: build/templates/publish.yml
         parameters:
           tag: 'Self-Contained .NET'
           selfContained: true
-          targetFramework: net5.0-windows
+          targetFramework: net6.0-windows
 
 - stage: Release
   dependsOn: Build
