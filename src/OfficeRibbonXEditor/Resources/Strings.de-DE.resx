@@ -551,11 +551,11 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Fehler beim Ändern der Icon-ID</value>
   </data>
   <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
-    <value>Datei {0} hat nichtgespeicherte Änderungen. Möchtest Du sie speichern, bevor die Datei geschlossen wird?</value>
+    <value>Datei {0} hat nicht gespeicherte Änderungen. Möchtest Du sie speichern, bevor die Datei geschlossen wird?</value>
     <comment>{0} ist der Platzhalter für den Dateinamen</comment>
   </data>
   <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
-    <value>Nichtgespeicherte Änderungen</value>
+    <value>Nicht gespeicherte Änderungen</value>
   </data>
   <data name="Message.IconExists.Text" xml:space="preserve">
     <value>Diese Custom UI-Datei hat bereits ein Icon mit der ID {0}. Möchtest Du stattdessen das neue Icon mit den ID {1} einfügen?</value>
@@ -657,7 +657,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
     <value>Neue Zeilen einrücken</value>
   </data>
   <data name="Settings.Editor.FontSize" xml:space="preserve">
-    <value>Schriftgrösse</value>
+    <value>Schriftgröße</value>
   </data>
   <data name="Settings.Editor.TabWidth" xml:space="preserve">
     <value>Tabulator-Breite</value>
@@ -754,7 +754,7 @@ Bist Du absolut sicher, dass Du dieses Dokument ein weiteres Mal öffnen möchte
   </data>
   <data name="ToolBar.VersionAvailable" xml:space="preserve">
     <value>v{0} ist verfügbar!</value>
-    <comment>{0} ist der Platzhalter für die Verison, z.B. "1.2.3"</comment>
+    <comment>{0} ist der Platzhalter für die Version, z.B. "1.2.3"</comment>
   </data>
   <data name="Validation.MutuallyExclusive" xml:space="preserve">
     <value>Du kannst nur eines der folgenden Attribute in einem Element definieren: {0}</value>
