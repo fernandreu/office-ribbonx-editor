@@ -143,21 +143,21 @@ stages:
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5-Binaries.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Binaries.zip'
           - powershell: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET5-Installer.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Installer.exe"
           - task: ArchiveFiles@2
             displayName: 'Archive Self-Contained .NET Binaries'
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained .NET Binaries'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET5-Binaries.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Binaries.zip'
           - powershell: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/Self-Contained .NET Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET5-Installer.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Installer.exe"
             displayName: 'Copy Self-Contained .NET Installer'
           - task: GitHubRelease@1
             displayName: 'Create GitHub Release'
