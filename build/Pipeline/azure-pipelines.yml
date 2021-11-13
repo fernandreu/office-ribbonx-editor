@@ -39,7 +39,7 @@ stages:
       targetFramework: net6.0-windows
 
     steps:
-    - template: Pipeline/build.yml
+    - template: build.yml
       parameters:
         tag: '.NET'
         targetFramework: $(targetFramework)
