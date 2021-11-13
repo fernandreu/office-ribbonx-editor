@@ -61,9 +61,6 @@ stages:
     displayName: Publish
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     dependsOn: Testing
-    pool:
-      name: default
-      demands: CodeSign
 
     steps:
       - template: pre-steps.yml

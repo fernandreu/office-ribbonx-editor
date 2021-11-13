@@ -1,7 +1,7 @@
 parameters:
-  tag: '.NET Framework'
+  tag: '.NET'
   selfContained: false
-  targetFramework: 'net461'
+  targetFramework: 'net6.0-windows'
   sign: true
 
 steps:
@@ -21,7 +21,6 @@ steps:
     arguments: >-
       --configuration $(buildConfiguration)
       --framework ${{ parameters.targetFramework }}
-      -p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       --runtime win-x64
       --self-contained ${{ parameters.selfContained }}
       --output "$(Build.ArtifactStagingDirectory)"
@@ -31,7 +30,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
-    filePath: 'build/sign/sign-windows.ps1'
+    filePath: '../Scripts/Sign/sign-windows.ps1'
     arguments: '"$(Build.ArtifactStagingDirectory)"'
 
 - task: PublishPipelineArtifact@1
@@ -50,7 +49,7 @@ steps:
     /DCopyright="$(ExtractedCopyright)"
     /DVersionPrefix="$(ExtractedVersionPrefix)"
     /DInputFolder="$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor"
-    /DOutputFolder="../../src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
+    /DOutputFolder="$(Build.SourcesDirectory)/src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
   displayName: Generate ${{ parameters.tag }} installer
 
 - task: CopyFiles@2
@@ -58,7 +57,7 @@ steps:
   inputs:
     sourceFolder: ''
     contents: |
-      src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}/OfficeRibbonXEditor.exe
+      $(Build.SourcesDirectory)/src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}/OfficeRibbonXEditor.exe
     targetFolder: '$(Build.ArtifactStagingDirectory)'
     cleanTargetFolder: true # Optional
     flattenFolders: true # Optional
@@ -78,7 +77,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
-    filePath: 'build/sign/sign-windows.ps1'
+    filePath: '../Scripts/Sign/sign-windows.ps1'
     arguments: '"$(Build.ArtifactStagingDirectory)"'
 
 - task: PublishPipelineArtifact@1
