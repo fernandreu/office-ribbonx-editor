@@ -147,5 +147,5 @@ how your translation looks (you will be able to see it from the build artifacts 
 - Chinese: [bitaller](https://github.com/bitaller)
 - Dutch: [pplanch](https://github.com/pplanch)
 - French: [pplanch](https://github.com/pplanch)
-- German: [carpac](https://github.com/carpac), [Claythve](https://github.com/Claythve)
+- German: [carpac](https://github.com/carpac), [Claythve](https://github.com/Claythve), [Mo-Gul](https://github.com/Mo-Gul)
 - Turkish: [fatihmeh](https://github.com/fatihmeh)
