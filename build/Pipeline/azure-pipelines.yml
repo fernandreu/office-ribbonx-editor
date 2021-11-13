@@ -60,7 +60,7 @@ stages:
   - job: Publish
     displayName: Publish
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    dependsOn: NetCoreTesting
+    dependsOn: Testing
     pool:
       name: default
       demands: CodeSign
