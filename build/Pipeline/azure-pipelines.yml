@@ -46,7 +46,7 @@ stages:
         tag: '.NET'
         targetFramework: $(targetFramework)
         sonarCloud: true
-        coverage: false
+        coverage: true
         #sonarCloud: $(isMasterBranch)
         #coverage: $(isMasterBranch)
 
