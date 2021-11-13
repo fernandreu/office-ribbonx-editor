@@ -52,7 +52,7 @@ stages:
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
-    condition: and(succeeded(), isMasterBranch, ${{ parameters.createRelease }} )
+    condition: and(succeeded(), $(isMasterBranch), ${{ parameters.createRelease }} )
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
@@ -62,7 +62,7 @@ stages:
 
   - job: Publish
     displayName: Publish
-    condition: and(succeeded(), isMasterBranch)
+    condition: and(succeeded(), $(isMasterBranch))
     dependsOn: Testing
 
     steps:
@@ -81,7 +81,7 @@ stages:
 
 - stage: Release
   dependsOn: Build
-  condition: and(succeeded(), isMasterBranch, ${{ parameters.createRelease }} )
+  condition: and(succeeded(), $(isMasterBranch), ${{ parameters.createRelease }} )
 
   jobs:
   - deployment: Deploy
