@@ -10,7 +10,7 @@ steps:
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
-  condition: and(succeeded(), ${{ parameters.sonarCloud }} )
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
   inputs:
     SonarCloud: 'fernandreu-SonarCloud'
     organization: '$(SonarOrganization)'
@@ -39,6 +39,7 @@ steps:
       --no-build
       --configuration $(buildConfiguration)
       --framework ${{ parameters.targetFramework }}
+      /p:CopyLocalLockFileAssemblies=true
       /p:CollectCoverage=${{ parameters.coverage }}
       /p:Exclude=[Scintilla*]*
       /p:IncludeTestAssembly=true
@@ -48,15 +49,15 @@ steps:
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
-  condition: and(succeeded(), ${{ parameters.coverage }} )
+  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true') )
   inputs:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.${{ parameters.targetFramework }}.cobertura.xml'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  condition: and(succeeded(), ${{ parameters.sonarCloud }} )
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true') )
 
 - task: SonarCloudPublish@1
-  condition: and(succeeded(), ${{ parameters.sonarCloud }} )
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true') )
   displayName: 'Publish SonarCloud quality gate results'

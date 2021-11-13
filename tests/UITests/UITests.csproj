@@ -20,6 +20,8 @@
     <ProjectGuid>{BA0E6FC1-EE48-42AB-AF21-0349EC51FE52}</ProjectGuid>
     
     <SonarQubeTestProject>true</SonarQubeTestProject>
+    
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>

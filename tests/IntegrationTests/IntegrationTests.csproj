@@ -16,6 +16,8 @@
     <ProjectGuid>{240C0BA9-5B29-430F-9325-2C0D74A1ED35}</ProjectGuid>
 
     <SonarQubeTestProject>true</SonarQubeTestProject>
+    
+    <PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
