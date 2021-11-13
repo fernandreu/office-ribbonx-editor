@@ -1,7 +1,7 @@
 parameters:
-  targetFramework: 'net461'
-  tag: '.NET Framework'
-  sonarCloud: false
+  targetFramework: 'net6.0-windows'
+  tag: '.NET'
+  sonarCloud: true
   coverage: true
 
 steps:
@@ -27,31 +27,27 @@ steps:
   displayName: 'Build solution'
   inputs:
     command: build
-    # The generators cannot be specified directly because it would mess up netstandard2.0 being the only target framework
-    projects: |
-      src/OfficeRibbonXEditor/*.csproj
-      tests/**/*.csproj
-    arguments: '--configuration $(buildConfiguration) --framework ${{ parameters.targetFramework }} -p:_InstallerTargetFramework=${{ parameters.targetFramework }}'
+    projects: $(Build.SourcesDirectory)/*.sln
+    arguments: '--configuration $(buildConfiguration)'
 
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
 # See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
-- task: PowerShell@2
-  displayName: 'Copy PresentationFramework.dll to test folders'
-  inputs:
-    targetType: 'filePath'
-    filePath: 'build/CopyLibraries.ps1'
-    arguments: '"$(buildConfiguration)" "${{ parameters.targetFramework }}"'
+#- task: PowerShell@2
+#  displayName: 'Copy PresentationFramework.dll to test folders'
+#  inputs:
+#    targetType: 'filePath'
+#    filePath: '../Scripts/CopyLibraries.ps1'
+#    arguments: '"$(buildConfiguration)" "${{ parameters.targetFramework }}"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Run Tests'
   inputs:
     command: test
-    projects: '**/*Tests.csproj'
+    projects: '$(Build.SourcesDirectory)/**/*Tests.csproj'
     arguments: >-
       --no-build
       --configuration $(buildConfiguration)
       --framework ${{ parameters.targetFramework }}
-      /p:_InstallerTargetFramework=${{ parameters.targetFramework }}
       /p:CollectCoverage=${{ parameters.coverage }}
       /p:Exclude=[Scintilla*]*
       /p:IncludeTestAssembly=true

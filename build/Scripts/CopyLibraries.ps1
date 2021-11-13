@@ -10,7 +10,7 @@ if (Test-Path $dllPath -PathType Leaf) {
     Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
     exit 1
 }
-Get-ChildItem -Path ./tests -Directory | 
+Get-ChildItem -Path ../../tests -Directory | 
 ForEach-Object { 
     $destination = Join-Path $_.FullName "bin/$buildConfiguration/$targetFramework/"
     Write-Host "Copying dll to folder: $destination"

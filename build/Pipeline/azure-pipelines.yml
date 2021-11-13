@@ -33,26 +33,13 @@ stages:
 - stage: Build
   jobs:
 
-  - job: NetFrameworkTesting
-    displayName: .NET Framework Testing
-    variables:
-      targetFramework: net461
-
-    steps:
-    - template: build/templates/build.yml
-      parameters:
-        tag: '.NET Framework'
-        targetFramework: $(targetFramework)
-        sonarCloud: false
-        coverage: false
-
-  - job: NetCoreTesting
-    displayName: .NET Testing
+  - job: Testing
+    displayName: Testing
     variables:
       targetFramework: net6.0-windows
 
     steps:
-    - template: build/templates/build.yml
+    - template: Pipeline/build.yml
       parameters:
         tag: '.NET'
         targetFramework: $(targetFramework)
@@ -67,27 +54,11 @@ stages:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
       inputs:
-        targetPath: 'build/ReleaseScripts' 
+        targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: NETFrameworkPublish
-    displayName: .NET Framework Publish
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    dependsOn: NetFrameworkTesting
-    pool:
-      name: default
-      demands: CodeSign
-
-    steps:
-    - template: build/templates/pre-steps.yml
-
-    - template: build/templates/publish.yml
-      parameters:
-        tag: '.NET Framework'
-        targetFramework: net461
-
-  - job: NETCorePublish
-    displayName: .NET Publish
+  - job: Publish
+    displayName: Publish
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
     dependsOn: NetCoreTesting
     pool:
@@ -95,14 +66,14 @@ stages:
       demands: CodeSign
 
     steps:
-      - template: build/templates/pre-steps.yml
+      - template: pre-steps.yml
   
-      - template: build/templates/publish.yml
+      - template: publish.yml
         parameters:
           tag: '.NET'
           targetFramework: net6.0-windows
         
-      - template: build/templates/publish.yml
+      - template: publish.yml
         parameters:
           tag: 'Self-Contained .NET'
           selfContained: true
@@ -192,10 +163,10 @@ stages:
                   shouldn't need to install the .NET Framework redistributable yourself, as
                   this is shipped with Windows 10 nowadays. Otherwise, download the latest
                   runtime [here](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)
-                - **.NET (5):** This requires at least version 5.0 of the
+                - **.NET (6):** This requires at least version 6.0 of the
                   [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
                   (the one for desktop apps is enough)
-                - **Self-contained .NET:** This also uses the .NET 5.0 runtime, but this is
+                - **Self-contained .NET:** This also uses the .NET 6.0 runtime, but this is
                   embedded in the `.zip` file / installer, so you won't need to install anything
                   else. As a drawback, the resulting tool is much larger in file size
                   
