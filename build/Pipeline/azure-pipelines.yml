@@ -18,7 +18,7 @@ trigger:
     - '**/*.md'
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'windows-2022'
 
 variables:
 - group: GitHubPATGroup
@@ -28,6 +28,8 @@ variables:
   value: '**/*.sln'
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
+- name: isMasterBranch
+  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 stages:
 - stage: Build
@@ -45,11 +47,12 @@ stages:
         targetFramework: $(targetFramework)
         sonarCloud: true
         coverage: true
-        sign: false
+        #sonarCloud: $(isMasterBranch)
+        #coverage: $(isMasterBranch)
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }} )
+    condition: and(succeeded(), isMasterBranch, ${{ parameters.createRelease }} )
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
@@ -59,7 +62,7 @@ stages:
 
   - job: Publish
     displayName: Publish
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    condition: and(succeeded(), isMasterBranch)
     dependsOn: Testing
 
     steps:
@@ -78,7 +81,7 @@ stages:
 
 - stage: Release
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }} )
+  condition: and(succeeded(), isMasterBranch, ${{ parameters.createRelease }} )
 
   jobs:
   - deployment: Deploy

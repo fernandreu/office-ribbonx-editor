@@ -1,8 +1,8 @@
 parameters:
   targetFramework: 'net6.0-windows'
   tag: '.NET'
-  sonarCloud: true
-  coverage: true
+  sonarCloud: false
+  coverage: false
 
 steps:
 
@@ -10,7 +10,7 @@ steps:
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ${{ parameters.sonarCloud }} )
   inputs:
     SonarCloud: 'fernandreu-SonarCloud'
     organization: '$(SonarOrganization)'
@@ -30,15 +30,6 @@ steps:
     projects: $(Build.SourcesDirectory)/*.sln
     arguments: '--configuration $(buildConfiguration)'
 
-# This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
-# See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
-#- task: PowerShell@2
-#  displayName: 'Copy PresentationFramework.dll to test folders'
-#  inputs:
-#    targetType: 'filePath'
-#    filePath: '../Scripts/CopyLibraries.ps1'
-#    arguments: '"$(buildConfiguration)" "${{ parameters.targetFramework }}"'
-
 - task: DotNetCoreCLI@2
   displayName: 'Run Tests'
   inputs:
@@ -57,15 +48,15 @@ steps:
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
-  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true'))
+  condition: and(succeeded(), ${{ parameters.coverage }} )
   inputs:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.${{ parameters.targetFramework }}.cobertura.xml'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ${{ parameters.sonarCloud }} )
 
 - task: SonarCloudPublish@1
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+  condition: and(succeeded(), ${{ parameters.sonarCloud }} )
   displayName: 'Publish SonarCloud quality gate results'
