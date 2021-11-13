@@ -100,7 +100,8 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             }
             catch (COMException)
             {
-                // This is new. Accessing ModalWindows can cause:
+                // This is new from .NET 6. Accessing ModalWindows can cause:
+
                 // Error Message:
                 //  TearDown: System.Runtime.InteropServices.COMException : Catastrophic failure(0x8000FFFF(E_UNEXPECTED))
                 // Stack Trace:
@@ -115,6 +116,8 @@ namespace OfficeRibbonXEditor.UITests.Helpers
                 //  at OfficeRibbonXEditor.UITests.Helpers.AppManager.Dispose(Boolean disposing) in D:\a\1\s\tests\UITests\Helpers\AppManager.cs:line 122
                 //  at OfficeRibbonXEditor.UITests.Helpers.AppManager.Dispose() in D:\a\1\s\tests\UITests\Helpers\AppManager.cs:line 108
                 //  at OfficeRibbonXEditor.UITests.Main.MainWindowTests.TearDown() in D:\a\1\s\tests\UITests\Main\MainWindowTests.cs:line 37
+
+                // Unfortunately, this might mean that the code coverage won't be collected correctly for the tests which cause this
             }
 
             Automation?.Dispose();
