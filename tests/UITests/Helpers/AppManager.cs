@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FlaUI.Core;
 using FlaUI.Core.AutomationElements;
 using FlaUI.Core.Exceptions;
@@ -96,6 +97,24 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             }
             catch (InvalidOperationException)
             {
+            }
+            catch (COMException)
+            {
+                // This is new. Accessing ModalWindows can cause:
+                // Error Message:
+                //  TearDown: System.Runtime.InteropServices.COMException : Catastrophic failure(0x8000FFFF(E_UNEXPECTED))
+                // Stack Trace:
+                // --TearDown
+                //  at Interop.UIAutomationClient.IUIAutomationElement.FindAll(TreeScope scope, IUIAutomationCondition condition)
+                //  at FlaUI.UIA3.UIA3FrameworkAutomationElement.FindAll(TreeScope treeScope, ConditionBase condition)
+                //  at FlaUI.Core.AutomationElements.AutomationElement.FindAll(TreeScope treeScope, ConditionBase condition)
+                //  at FlaUI.Core.AutomationElements.AutomationElement.FindAllChildren(ConditionBase condition)
+                //  at FlaUI.Core.AutomationElements.AutomationElement.FindAllChildren(Func`2 conditionFunc)
+                //  at FlaUI.Core.AutomationElements.Window.get_ModalWindows()
+                //  at OfficeRibbonXEditor.UITests.Helpers.AppManager.Close() in D:\a\1\s\tests\UITests\Helpers\AppManager.cs:line 90
+                //  at OfficeRibbonXEditor.UITests.Helpers.AppManager.Dispose(Boolean disposing) in D:\a\1\s\tests\UITests\Helpers\AppManager.cs:line 122
+                //  at OfficeRibbonXEditor.UITests.Helpers.AppManager.Dispose() in D:\a\1\s\tests\UITests\Helpers\AppManager.cs:line 108
+                //  at OfficeRibbonXEditor.UITests.Main.MainWindowTests.TearDown() in D:\a\1\s\tests\UITests\Main\MainWindowTests.cs:line 37
             }
 
             Automation?.Dispose();
