@@ -15,7 +15,7 @@ steps:
   displayName: 'Prepare standard app package (dotnet publish)'
   inputs:
     command: publish
-    projects: '**/OfficeRibbonXEditor.csproj'
+    projects: '$(Build.SourcesDirectory)/**/OfficeRibbonXEditor.csproj'
     publishWebProjects: false
     zipAfterPublish: false
     arguments: >-
@@ -30,7 +30,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
-    filePath: '../Scripts/Sign/sign-windows.ps1'
+    filePath: '$(Build.SourcesDirectory)/build/Scripts/Sign/sign-windows.ps1'
     arguments: '"$(Build.ArtifactStagingDirectory)"'
 
 - task: PublishPipelineArtifact@1
@@ -40,7 +40,7 @@ steps:
     artifactName: '${{ parameters.tag }} Binaries'
 
 - script: >-
-    "C:\Program Files (x86)\Inno Setup 6\iscc.exe" build/install/setup.iss
+    "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "$(Build.SourcesDirectory)/build/Installer/setup.iss""
     /DAssemblyName="$(ExtractedAssemblyName)"
     /DAssemblyTitle="$(ExtractedAssemblyTitle)"
     /DAuthors="$(ExtractedAuthors)"
@@ -77,7 +77,7 @@ steps:
   condition: and(succeeded(), ${{ parameters.sign }} )
   inputs:
     targetType: 'filePath'
-    filePath: '../Scripts/Sign/sign-windows.ps1'
+    filePath: '$(Build.SourcesDirectory)/builds/Scripts/Sign/sign-windows.ps1'
     arguments: '"$(Build.ArtifactStagingDirectory)"'
 
 - task: PublishPipelineArtifact@1

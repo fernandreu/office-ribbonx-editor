@@ -4,7 +4,7 @@ steps:
   displayName: 'Run pre-build script'
   inputs:
     targetType: 'filePath'
-    filePath: '../Scripts/PreBuild.ps1'
+    filePath: '$(Build.SourcesDirectory)/build/Scripts/PreBuild.ps1'
     arguments: '"$(Build.BuildId)"'
 
 - task: UseDotNet@2
