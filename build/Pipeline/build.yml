@@ -31,7 +31,7 @@ steps:
     arguments: '--configuration $(buildConfiguration)'
     
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
-# See: https://github.com/tonerdo/coverlet/blob/master/Documentation/KnowIssues.md#4-failed-to-resolve-assembly-during-instrumentation
+# See: https://github.com/coverlet-coverage/coverlet/issues/1221
 - task: PowerShell@2
   displayName: 'Copy PresentationFramework.dll to test folders'
   condition: and(succeeded(), ${{ parameters.coverage }} )
@@ -55,7 +55,7 @@ steps:
       /p:IncludeTestAssembly=true
       /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
       /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
-      /p:mergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.json
+      /p:MergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.json
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'

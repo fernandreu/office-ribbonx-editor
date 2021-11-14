@@ -36,23 +36,27 @@ if ($null -eq $runtimePath) {
 
 $runtimePath = Join-Path $runtimePath $runtimeVersion
 Write-Host "Found target runtime: $runtimePath"
-$dllPath = Join-Path $runtimePath "PresentationFramework.dll"
 
-if (Test-Path $dllPath -PathType Leaf) {
-    Write-Host "Found dll to be copied in: $dllPath"
-} else {
-    $message = "Cannot find dll to be copied in: $dllPath"
-    Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
-    exit 1
-}
+$fileNames = @('PresentationFramework.dll', 'WindowsBase.dll')
+foreach ($fileName in $fileNames) {
+    $dllPath = Join-Path $runtimePath $fileName
 
-Get-ChildItem -Path "$PSScriptRoot/../../tests" -Directory | 
-ForEach-Object { 
-    $destination = Join-Path $_.FullName "bin/$buildConfiguration/$targetFramework/"
-    Write-Host "Copying dll to folder: $destination"
-    if (Test-Path $destination -PathType Container) {
-        Copy-Item $dllPath $destination
+    if (Test-Path $dllPath -PathType Leaf) {
+        Write-Host "Found dll to be copied in: $dllPath"
     } else {
-        Write-Output "Folder does not exist. Skipping..."
+        $message = "Cannot find dll to be copied in: $dllPath"
+        Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
+        exit 1
+    }
+
+    Get-ChildItem -Path "$PSScriptRoot/../../tests" -Directory | 
+    ForEach-Object { 
+        $destination = Join-Path $_.FullName "bin/$buildConfiguration/$targetFramework/"
+        Write-Host "Copying dll to folder: $destination"
+        if (Test-Path $destination -PathType Container) {
+            Copy-Item $dllPath $destination
+        } else {
+            Write-Output "Folder does not exist. Skipping..."
+        }
     }
 }
