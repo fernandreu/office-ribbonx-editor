@@ -45,7 +45,7 @@ steps:
     artifactName: '${{ parameters.tag }} Binaries'
 
 - script: >-
-    "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "$(Build.SourcesDirectory)/build/Installer/setup.iss"
+    "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "$(Build.SourcesDirectory)\build\Installer\setup.iss"
     /DAssemblyName="$(ExtractedAssemblyName)"
     /DAssemblyTitle="$(ExtractedAssemblyTitle)"
     /DAuthors="$(ExtractedAuthors)"
@@ -53,8 +53,8 @@ steps:
     /DDescription="$(ExtractedDescription)"
     /DCopyright="$(ExtractedCopyright)"
     /DVersionPrefix="$(ExtractedVersionPrefix)"
-    /DInputFolder="$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor"
-    /DOutputFolder="$(Build.SourcesDirectory)/src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
+    /DInputFolder="$(Build.ArtifactStagingDirectory)\OfficeRibbonXEditor"
+    /DOutputFolder="$(Build.SourcesDirectory)\src\OfficeRibbonXEditor\bin\Installer\${{ parameters.targetFramework }}"
   displayName: Generate ${{ parameters.tag }} installer
 
 - task: CopyFiles@2
