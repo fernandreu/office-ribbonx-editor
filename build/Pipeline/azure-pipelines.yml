@@ -18,7 +18,7 @@ trigger:
     - '**/*.md'
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'windows-2022'
 
 variables:
 - group: GitHubPATGroup
@@ -68,6 +68,9 @@ stages:
 
     steps:
     - template: pre-steps.yml
+
+    - script: choco isntall innosetup
+      displayName: Install InnoSetup
 
     - task: PowerShell@2
       displayName: 'Generate Self-Signed Certificate'
