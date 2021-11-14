@@ -58,8 +58,8 @@ function Set-Signatures {
             Write-Host "Skipping as it is already signed: $($file.FullName)"
             continue
         }
-        
-        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.digicert.com' | Out-Null
+
+        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.comodoca.com/rfc3161' | Out-Null
         Write-Host "Signed: $($file.FullName)"
     }
 }
