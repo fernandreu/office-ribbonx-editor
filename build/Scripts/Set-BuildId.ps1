@@ -30,13 +30,13 @@ function Set-BuildId {
         [IO.File]::WriteAllText($_.FullName, $joined)
     
         Write-Host "Extracted variables:"
-        Export-Variable $c 'AssemblyName'
-        Export-Variable $c 'AssemblyTitle'
-        Export-Variable $c 'Authors'
-        Export-Variable $c 'Copyright'
-        Export-Variable $c 'Description'
-        Export-Variable $c 'PackageProjectUrl'
-        Export-Variable $c 'VersionPrefix'
+        Export-Variable -Lines $c -PropertyName 'AssemblyName'
+        Export-Variable -Lines $c -PropertyName 'AssemblyTitle'
+        Export-Variable -Lines $c -PropertyName 'Authors'
+        Export-Variable -Lines $c -PropertyName 'Copyright'
+        Export-Variable -Lines $c -PropertyName 'Description'
+        Export-Variable -Lines $c -PropertyName 'PackageProjectUrl'
+        Export-Variable -Lines $c -PropertyName 'VersionPrefix'
     }
 }
 

@@ -42,7 +42,7 @@ function New-Certificate {
     Write-Host "##vso[task.setvariable variable=$VariableName;isOutput=true]$base64"
 
     if (-not [string]::IsNullOrEmpty($PublicKeyPath)) {
-        Export-Certificate -Cert $cert -FilePath $PublicKeyPath -Type CERT
+        Export-Certificate -Cert $cert -FilePath $PublicKeyPath -Type CERT | Out-Null
     }
 }
 
