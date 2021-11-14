@@ -1,11 +1,11 @@
 steps:
 
 - task: PowerShell@2
-  displayName: 'Run pre-build script'
+  displayName: 'Set Build ID'
   inputs:
     targetType: 'filePath'
-    filePath: '$(Build.SourcesDirectory)/build/Scripts/PreBuild.ps1'
-    arguments: '"$(Build.BuildId)"'
+    filePath: '$(Build.SourcesDirectory)/build/Scripts/Set-BuildId.ps1'
+    arguments: '-BuildId "$(Build.BuildId)"'
 
 - task: UseDotNet@2
   displayName: 'Use .NET SDK'

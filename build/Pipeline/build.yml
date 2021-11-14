@@ -33,12 +33,12 @@ steps:
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
 # See: https://github.com/coverlet-coverage/coverlet/issues/1221
 - task: PowerShell@2
-  displayName: 'Copy PresentationFramework.dll to test folders'
+  displayName: 'Copy WPF dlls to test folders'
   condition: and(succeeded(), ${{ parameters.coverage }} )
   inputs:
     targetType: 'filePath'
-    filePath: '$(Build.SourcesDirectory)/build/Scripts/CopyLibraries.ps1'
-    arguments: '"$(buildConfiguration)" "${{ parameters.targetFramework }}"'
+    filePath: '$(Build.SourcesDirectory)/build/Scripts/Copy-WPFLibraries.ps1'
+    arguments: '-BuildConfiguration "$(buildConfiguration)" -TargetFramework "${{ parameters.targetFramework }}"'
 
 - task: DotNetCoreCLI@2
   displayName: 'Run Tests'

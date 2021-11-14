@@ -29,7 +29,8 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch
-  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  value: true
+  # value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 stages:
 - stage: Build
@@ -52,7 +53,7 @@ stages:
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['isMasterBranch'], true), ${{ parameters.createRelease }} )
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
@@ -60,28 +61,63 @@ stages:
         targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: Publish
-    displayName: Publish
-    condition: and(succeeded(), eq(variables['isMasterBranch'], true))
-    dependsOn: Testing
+  - job: Certificate
+    displayName: Generate Certificate
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
 
     steps:
-      - template: pre-steps.yml
-  
-      - template: publish.yml
-        parameters:
-          tag: '.NET'
-          targetFramework: net6.0-windows
+    - task: PowerShell@2
+      displayName: 'Generate Self-Signed Certificate'
+      inputs:
+        targetType: 'filePath'
+        filePath: '$(Build.SourcesDirectory)/build/Scripts/New-Certificate.ps1'
+        arguments: >-
+          -Subject "OfficeRibbonXEditor"
+          -FriendlyName "Office RibbonX Editor"
+          -VariableName "PfxCertificate"
+          -CertificatePassword "tmp"
+          -PublicKeyPath "$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer"
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Certificate'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer' 
+        artifactName: 'Code Signing Certificate'
+
+  - job: SlimPublish
+    displayName: Slim Publish
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
+    dependsOn:
+    - Testing
+    - Certificate
+
+    steps:
+    - template: pre-steps.yml
+
+    - template: publish.yml
+      parameters:
+        tag: '.NET'
+        targetFramework: net6.0-windows
         
-      - template: publish.yml
-        parameters:
-          tag: 'Self-Contained .NET'
-          selfContained: true
-          targetFramework: net6.0-windows
+  - job: SelfContainedPublish
+    displayName: Self-Contained Publish
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
+    dependsOn:
+    - Testing
+    - Certificate
+
+    steps:
+    - template: pre-steps.yml
+
+    - template: publish.yml
+      parameters:
+        tag: 'Self-Contained .NET'
+        selfContained: true
+        targetFramework: net6.0-windows
 
 - stage: Release
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['isMasterBranch'], true), ${{ parameters.createRelease }} )
+  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
 
   jobs:
   - deployment: Deploy

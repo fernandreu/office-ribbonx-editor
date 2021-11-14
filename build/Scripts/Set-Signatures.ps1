@@ -1,7 +1,5 @@
 $_SIGN_TOOL = 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\signtool.exe'
 
-$_CERT_NAME = 'Open Source Developer, Fernando Andreu'
-
 function Get-IsSuitable {
     param(
         [Object] $File,
@@ -34,9 +32,19 @@ function Get-Files {
 }
 
 function Set-Signatures {
+    [Diagnostics.CodeAnalysis.SuppressMessage("PSAvoidUsingPlainTextForPassword", "")]
     param(
-        [string] $Source
+        [Parameter(Mandatory = $true)]
+        [string] $Source,
+
+        [Parameter(Mandatory = $true)]
+        [string] $Base64Certificate,
+
+        [Parameter(Mandatory = $true)]
+        [string] $CertificatePassword
     )
+
+    
 
     # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
     $files = Get-Files -Source $Source -Filters *.msi,*.exe
@@ -50,4 +58,6 @@ function Set-Signatures {
     }
 }
 
-Set-Signatures $args[0]
+if ($MyInvocation.InvocationName -ne '.') {
+    Set-Signatures @args
+}
