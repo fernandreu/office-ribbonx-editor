@@ -92,7 +92,7 @@ stages:
       parameters:
         tag: '.NET'
         targetFramework: net6.0-windows
-        certificate: $(pfxCertificate)
+        certificate: $(PfxCertificate)
         
     - template: publish.yml
       parameters:

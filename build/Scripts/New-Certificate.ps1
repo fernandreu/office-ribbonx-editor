@@ -39,7 +39,7 @@ function New-Certificate {
     $base64 = [System.Convert]::ToBase64String($bytes)
     Remove-Item -Path $certPath
 
-    Write-Host "##vso[task.setvariable variable=$VariableName;isOutput=true;issecret=true]$base64"
+    Write-Host "##vso[task.setvariable variable=$VariableName;issecret=true]$base64"
 
     if (-not [string]::IsNullOrEmpty($PublicKeyPath)) {
         Export-Certificate -Cert $cert -FilePath $PublicKeyPath -Type CERT | Out-Null
