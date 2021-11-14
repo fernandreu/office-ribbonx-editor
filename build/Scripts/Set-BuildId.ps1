@@ -1,6 +1,7 @@
 function Export-Variable {
     param(
         [Parameter(Mandatory = $true)]
+        [AllowEmptyString()]
         [string[]] $Lines,
 
         [Parameter(Mandatory = $true)]
@@ -25,6 +26,7 @@ function Set-BuildId {
     ForEach-Object {
         $c = ($_ | Get-Content -encoding UTF8)
         $c = $c -replace '(<VersionPrefix>\d+\.\d+\.\d+)\.(\d)(</VersionPrefix>)', "`$1.$BuildId`$3"
+        $c = [string[]]$c
         $joined = $c -join "`r`n"
         Write-Host "Resulting project:`n$joined"
         [IO.File]::WriteAllText($_.FullName, $joined)
