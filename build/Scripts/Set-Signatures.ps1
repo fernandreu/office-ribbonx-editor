@@ -59,7 +59,7 @@ function Set-Signatures {
             continue
         }
 
-        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.comodoca.com/rfc3161' | Out-Null
+        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.globalsign.com/?signature=sha2' | Out-Null
         Write-Host "Signed: $($file.FullName)"
     }
 }
