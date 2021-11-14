@@ -49,7 +49,7 @@ function Set-Signatures {
     [System.IO.File]::WriteAllBytes($certPath, $bytes)
 
     $securePassword = ConvertTo-SecureString -String $CertificatePassword -Force -AsPlainText
-    $cert = Get-PfxData -FilePath $certPath -Password $securePassword
+    $cert = Get-PfxCertificate -FilePath $certPath -Password $securePassword
     Remove-Item -Path $certPath
 
     # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
