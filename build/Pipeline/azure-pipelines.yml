@@ -69,7 +69,7 @@ stages:
     steps:
     - template: pre-steps.yml
 
-    - script: choco isntall innosetup
+    - script: choco install innosetup
       displayName: Install InnoSetup
 
     - task: PowerShell@2
