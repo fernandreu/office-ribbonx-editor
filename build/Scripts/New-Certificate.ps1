@@ -46,6 +46,4 @@ function New-Certificate {
     }
 }
 
-if ($MyInvocation.InvocationName -ne '.') {
-    New-Certificate @args
-}
+New-Certificate @args

@@ -40,6 +40,4 @@ function Set-BuildId {
     }
 }
 
-if ($MyInvocation.InvocationName -ne '.') {
-    Set-BuildId @args
-}
+Set-BuildId @args

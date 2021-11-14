@@ -77,6 +77,4 @@ function Copy-WPFLibraries {
     }
 }
 
-if ($MyInvocation.InvocationName -ne '.') {
-    Copy-WPFLibraries @args
-}
+Copy-WPFLibraries @args
