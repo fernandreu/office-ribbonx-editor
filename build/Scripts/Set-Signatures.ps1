@@ -50,10 +50,16 @@ function Set-Signatures {
     Remove-Item -Path $certPath
 
     # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
-    $files = Get-Files -Source $Source -Filters *.msi,*.exe
+    $files = Get-Files -Source $Source -Filters *.msi,*.exe,*.dll
     Write-Host "Found $($files.Count) files to sign"
     foreach ($file in $files) {
-        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert
+        $signature = Get-AuthenticodeSignature -FilePath $file.FullName
+        if ($signature.Status -eq 'Valid') {
+            Write-Host "Skipping as it is already signed: $($file.FullName)"
+            continue
+        }
+        
+        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.digicert.com' | Out-Null
         Write-Host "Signed: $($file.FullName)"
     }
 }

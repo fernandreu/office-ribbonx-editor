@@ -45,7 +45,7 @@ steps:
     artifactName: '${{ parameters.tag }} Binaries'
 
 - script: >-
-    "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "$(Build.SourcesDirectory)/build/Installer/setup.iss""
+    "C:\Program Files (x86)\Inno Setup 6\iscc.exe" "$(Build.SourcesDirectory)/build/Installer/setup.iss"
     /DAssemblyName="$(ExtractedAssemblyName)"
     /DAssemblyTitle="$(ExtractedAssemblyTitle)"
     /DAuthors="$(ExtractedAuthors)"
