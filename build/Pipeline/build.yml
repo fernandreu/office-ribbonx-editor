@@ -21,7 +21,7 @@ steps:
     extraProperties: |
       sonar.exclusions=$(Build.SourcesDirectory)/**/*.CommandGenerator.cs
       sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
-      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.opencover.xml
+      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.opencover.xml
 
 - task: DotNetCoreCLI@2
   displayName: 'Build solution'
@@ -55,14 +55,14 @@ steps:
       /p:IncludeTestAssembly=true
       /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
       /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
-      /p:MergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.${{ parameters.targetFramework }}.json
+      /p:MergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.json
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
   condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true') )
   inputs:
     codeCoverageTool: 'cobertura'
-    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.${{ parameters.targetFramework }}.cobertura.xml'
+    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
