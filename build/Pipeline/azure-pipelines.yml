@@ -61,11 +61,14 @@ stages:
         targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: Certificate
-    displayName: Generate Certificate
+  - job: Publish
+    displayName: Publish
     condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
+    dependsOn: Testing
 
     steps:
+    - template: pre-steps.yml
+
     - task: PowerShell@2
       displayName: 'Generate Self-Signed Certificate'
       inputs:
@@ -85,44 +88,18 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer' 
         artifactName: 'Code Signing Certificate'
 
-  - job: SlimPublish
-    displayName: Slim Publish
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
-    dependsOn:
-    - Testing
-    - Certificate
-    variables:
-    - name: pfxCertificate
-      value: $[ dependencies.Certificate.outputs['PfxCertificate'] ]
-
-    steps:
-    - template: pre-steps.yml
-
     - template: publish.yml
       parameters:
         tag: '.NET'
         targetFramework: net6.0-windows
         certificate: $(pfxCertificate)
         
-  - job: SelfContainedPublish
-    displayName: Self-Contained Publish
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
-    dependsOn:
-    - Testing
-    - Certificate
-    variables:
-    - name: pfxCertificate
-      value: $[ dependencies.Certificate.outputs['PfxCertificate'] ]
-
-    steps:
-    - template: pre-steps.yml
-
     - template: publish.yml
       parameters:
         tag: 'Self-Contained .NET'
         selfContained: true
         targetFramework: net6.0-windows
-        certificate: $(pfxCertificate)
+        certificate: $(PfxCertificate)
 
 - stage: Release
   dependsOn: Build
