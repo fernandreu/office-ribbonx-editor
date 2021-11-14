@@ -69,6 +69,7 @@ stages:
     - task: PowerShell@2
       displayName: 'Generate Self-Signed Certificate'
       inputs:
+        pwsh: true
         targetType: 'filePath'
         filePath: '$(Build.SourcesDirectory)/build/Scripts/New-Certificate.ps1'
         arguments: >-
@@ -130,6 +131,7 @@ stages:
           - task: PowerShell@2
             displayName: 'Check Version'
             inputs:
+              pwsh: true
               targetType: 'filePath'
               filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
               arguments: '"$(Pipeline.Workspace)"'
@@ -140,7 +142,7 @@ stages:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
               includeRootFolder: false
               archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Binaries.zip'
-          - powershell: >-
+          - pwsh: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
               -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Installer.exe"
@@ -151,7 +153,7 @@ stages:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
               includeRootFolder: false
               archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Binaries.zip'
-          - powershell: >-
+          - pwsh: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
               -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Installer.exe"
@@ -161,7 +163,7 @@ stages:
               rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained .NET Binaries'
               includeRootFolder: false
               archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Binaries.zip'
-          - powershell: >-
+          - pwsh: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/Self-Contained .NET Installer/OfficeRibbonXEditor.exe"
               -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Installer.exe"

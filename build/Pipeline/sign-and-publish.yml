@@ -11,6 +11,7 @@ steps:
 - task: PowerShell@2
   displayName: 'Sign ${{ parameters.artifactName }}'
   inputs:
+    pwsh: true
     targetType: inline
     ignoreLASTEXITCODE: true
     script: |

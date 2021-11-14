@@ -3,9 +3,10 @@ steps:
 - task: PowerShell@2
   displayName: 'Set Build ID'
   inputs:
+    pwsh: true
     targetType: 'filePath'
     filePath: '$(Build.SourcesDirectory)/build/Scripts/Set-BuildId.ps1'
-    arguments: '-BuildId "$(Build.BuildId)"'
+    arguments: '-BuildId "$(Build.BuildId)" -ProjectFile "$(Build.SourcesDirectory)/src/OfficeRibbonXEditor/OfficeRibbonXEditor.csproj"'
 
 - task: UseDotNet@2
   displayName: 'Use .NET SDK'

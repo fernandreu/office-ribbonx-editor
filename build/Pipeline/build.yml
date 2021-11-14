@@ -36,6 +36,7 @@ steps:
   displayName: 'Copy WPF dlls to test folders'
   condition: and(succeeded(), ${{ parameters.coverage }} )
   inputs:
+    pwsh: true
     targetType: 'filePath'
     filePath: '$(Build.SourcesDirectory)/build/Scripts/Copy-WPFLibraries.ps1'
     arguments: '-BuildConfiguration "$(buildConfiguration)" -TargetFramework "${{ parameters.targetFramework }}"'
