@@ -40,7 +40,7 @@
 function Get-OutputFolders {
     $projectFolders = Get-ChildItem -Path "$PSScriptRoot/../../tests" -Directory
     foreach ($projectFolder in $projectFolders) {
-        $destination = Join-Path $_.FullName "bin/$buildConfiguration/$targetFramework/"
+        $destination = Join-Path $projectFolder.FullName "bin/$buildConfiguration/$targetFramework/"
         if (Test-Path $destination -PathType Container) {
             Write-Output $destination
         }

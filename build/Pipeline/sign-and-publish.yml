@@ -1,5 +1,5 @@
 parameters:
-  artifactName: '.NET Framework Executable'
+  artifactName: '.NET Executable'
 
 steps:
 - task: DownloadPipelineArtifact@2

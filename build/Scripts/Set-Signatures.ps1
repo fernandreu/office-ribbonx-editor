@@ -44,17 +44,20 @@ function Set-Signatures {
         [string] $CertificatePassword
     )
 
-    
+    $certPath = 'cert.pfx'
+    $bytes = [System.Convert]::FromBase64String($Base64Certificate)
+    [System.IO.File]::WriteAllBytes($certPath, $bytes)
+
+    $securePassword = ConvertTo-SecureString -String $CertificatePassword -Force -AsPlainText
+    $cert = Get-PfxData -FilePath $certPath -Password $securePassword
+    Remove-Item -Path $certPath
 
     # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
     $files = Get-Files -Source $Source -Filters *.msi,*.exe
-    if ($files.Count -ne 0) {
-        Write-Host "Found $($files.Count) files to sign"
-        $fileList = $files -join ' '
-        $arguments = "sign /n `"$_CERT_NAME`" /tr http://time.certum.pl /fd sha256 /a $fileList"
-        Start-Process -FilePath "$_SIGN_TOOL" -NoNewWindow -Wait -ArgumentList $arguments
-    } else {
-        Write-Host 'Found no files to sign'
+    Write-Host "Found $($files.Count) files to sign"
+    foreach ($file in $files) {
+        Set-AuthenticodeSignature -FilePath $file -Certificate $cert
+        Write-Host "Signed: $file"
     }
 }
 
