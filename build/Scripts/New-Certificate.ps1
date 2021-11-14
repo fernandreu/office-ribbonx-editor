@@ -32,14 +32,14 @@ function New-Certificate {
 
     # Export it as PFX
     $certPath = 'cert.pfx'
-    $securePassword = ConvertTo-SecureString  -String $CertificatePassword -Force -AsPlainText
+    $securePassword = ConvertTo-SecureString -String $CertificatePassword -Force -AsPlainText
     Export-PfxCertificate -Cert $cert -FilePath $certPath -Password $securePassword | Out-Null
 
     $bytes = Get-Content $certPath -AsByteStream -Raw
     $base64 = [System.Convert]::ToBase64String($bytes)
     Remove-Item -Path $certPath
 
-    Write-Host "##vso[task.setvariable variable=$VariableName;isOutput=true]$base64"
+    Write-Host "##vso[task.setvariable variable=$VariableName;isOutput=true;issecret=true]$base64"
 
     if (-not [string]::IsNullOrEmpty($PublicKeyPath)) {
         Export-Certificate -Cert $cert -FilePath $PublicKeyPath -Type CERT | Out-Null
