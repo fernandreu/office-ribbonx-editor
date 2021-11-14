@@ -17,6 +17,8 @@ function New-Certificate {
         [string] $PublicKeyPath
     )
 
+    update-Module PKI 
+
     $cert = New-SelfSignedCertificate `
         -Type CodeSigningCert `
         -Subject "CN=$Subject" `
