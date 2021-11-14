@@ -21,14 +21,11 @@ function Get-Files {
         [string[]] $Filters
     )
 
-    $files = [System.Collections.Generic.List[string]]@()
     foreach ($file in (Get-ChildItem -Path $Source -File -Recurse)) {
         if (Get-IsSuitable -File $file -Filters $Filters) {
-            $files.Add("`"$($file.FullName)`"") | Out-Null
+            Write-Output $file
         }
     }
-
-    return $files
 }
 
 function Set-Signatures {
@@ -56,8 +53,8 @@ function Set-Signatures {
     $files = Get-Files -Source $Source -Filters *.msi,*.exe
     Write-Host "Found $($files.Count) files to sign"
     foreach ($file in $files) {
-        Set-AuthenticodeSignature -FilePath $file -Certificate $cert
-        Write-Host "Signed: $file"
+        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert
+        Write-Host "Signed: $($file.FullName)"
     }
 }
 
