@@ -24,6 +24,7 @@ function New-Certificate {
         -KeyAlgorithm RSA `
         -KeyLength 2048 `
         -KeyUsage DigitalSignature `
+        -KeyExportPolicy Exportable `
         -NotAfter (Get-Date).AddYears(5) `
         -CertStoreLocation "Cert:\CurrentUser\My"
 
