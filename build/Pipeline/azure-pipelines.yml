@@ -84,6 +84,8 @@ stages:
           -VariableName "PfxCertificate"
           -CertificatePassword "$(CODESIGN_PASSWORD)"
           -PublicKeyPath "$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer"
+          -Base64Signer "$(CODESIGN_SIGNER)"
+          -SignerPassword "$(CODESIGN_SIGNER_PASSWORD)"
 
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Certificate'
