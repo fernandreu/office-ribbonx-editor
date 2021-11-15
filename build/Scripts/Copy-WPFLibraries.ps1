@@ -10,7 +10,7 @@
     # We will search for the highest version of Microsoft.WindowsDesktop.App
     $runtimeVersion = "0.0.0"
     $runtimePath = $null
-
+    
     foreach ($line in $runtimes) {
         $collection = ($line | Select-String -Pattern "Microsoft\.WindowsDesktop\.App (.*?) \[(.*?)\]")
         if ($null -eq $collection -or $collection.Matches.Length -eq 0) {
