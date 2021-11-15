@@ -34,7 +34,7 @@ steps:
 # See: https://github.com/coverlet-coverage/coverlet/issues/1221
 - task: PowerShell@2
   displayName: 'Copy WPF dlls to test folders'
-  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true')
+  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true'))
   inputs:
     pwsh: true
     targetType: 'filePath'
@@ -60,15 +60,15 @@ steps:
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
-  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true') )
+  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true'))
   inputs:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true') )
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
 
 - task: SonarCloudPublish@1
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true') )
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
   displayName: 'Publish SonarCloud quality gate results'
