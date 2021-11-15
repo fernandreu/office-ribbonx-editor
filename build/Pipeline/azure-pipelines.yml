@@ -29,8 +29,7 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch
-  value: true
-  # value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 stages:
 - stage: Build
@@ -46,10 +45,11 @@ stages:
       parameters:
         tag: '.NET'
         targetFramework: $(targetFramework)
-        sonarCloud: false
-        coverage: false
-        #sonarCloud: $(isMasterBranch)
-        #coverage: $(isMasterBranch)
+        sonarCloud: true
+        coverage: true
+        # If CI builds take too long:
+        # sonarCloud: $(isMasterBranch)
+        # coverage: $(isMasterBranch)
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
@@ -127,17 +127,6 @@ stages:
               arguments: '"$(Pipeline.Workspace)"'
 
           - task: ArchiveFiles@2
-            displayName: 'Archive .NET Framework Binaries'
-            inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
-              includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Binaries.zip'
-          - pwsh: >-
-              Copy-Item
-              -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Installer.exe"
-            displayName: 'Copy .NET Framework Installer'
-          - task: ArchiveFiles@2
             displayName: 'Archive .NET Binaries'
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
@@ -177,31 +166,27 @@ stages:
                 ## How to install / use
                 
                 Download one of the items from the `Assets` section below. If in doubt, I would
-                recommend using the .NET Framework Installer.
+                recommend using the self-contained installer.
 
                 There are two types of downloads available:
+
                 - **Binaries:** These are just a `.zip` file ready to be extracted, with no
                   installation necessary. No entry will be created in the control panel's program
                   list
                 - **Installers:** A typical self-extracting installer which will require admin
                   rights
-                                
-                For each of those download types, the tool comes in three variants:
-                - **.NET Framework:** This was the main variant in the past. Typically, you
-                  shouldn't need to install the .NET Framework redistributable yourself, as
-                  this is shipped with Windows 10 nowadays. Otherwise, download the latest
-                  runtime [here](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)
-                - **.NET (6):** This requires at least version 6.0 of the
-                  [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
-                  (the one for desktop apps is enough)
-                - **Self-contained .NET:** This also uses the .NET 6.0 runtime, but this is
-                  embedded in the `.zip` file / installer, so you won't need to install anything
-                  else. As a drawback, the resulting tool is much larger in file size
-                  
-                Due to some technical limitations, the .NET Framework variants no longer consist
-                of a single `.exe` file once extracted / installed. Instead, it will contain a
-                collection of DLLs and other auxiliary files too, similarly to other variants.
+                
+                For each of those download types, there are two variants:
 
+                - **.NET:** This requires at least version 6.0 of the
+                  [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
+                  installed (the one for desktop apps is enough)
+                - **Self-contained .NET:** For these, the .NET runtime is included with the
+                  installation, so you won't need to install anything else. As a drawback, the
+                  resulting tool is much larger in file size
+                  
+                **Starting from version 2.0, .NET Framework is no longer supported. For more
+                information, see #188.**
 
               assets: '$(Build.ArtifactStagingDirectory)/*.*'
               isDraft: true
