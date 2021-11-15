@@ -25,6 +25,8 @@ function New-Certificate {
 
     $signer = $null
     if (-not [string]::IsNullOrEmpty($Base64Signer)) {
+        Write-Host "Certificate length: $($Base64Signer.Length)"
+        Write-Host "Password length: $($SignerPassword.Length)" 
         $signerPath = "signer.pfx"
         $bytes = [System.Convert]::FromBase64String($Base64Signer)
         [System.IO.File]::WriteAllBytes($signerPath, $bytes)
