@@ -56,7 +56,7 @@ function Set-Signatures {
                 continue
             }
     
-            & $_SIGN_TOOL sign /f $certPath /p $CertificatePassword /tr 'http://timestamp.digicert.com' /td sha256 /fd sha256 "$($file.FullName)"
+            & $_SIGN_TOOL sign /f $certPath /p $CertificatePassword /tr 'http://timestamp.digicert.com' /td sha256 /fd sha256 "$($file.FullName)" | Out-Null
             if ($LASTEXITCODE -ne 0) {
                 $message = "signtool returned $LASTEXITCODE for file $($file.FullName)"
                 Write-Host "##vso[task.setvariable variable=ErrorMessage]$message"

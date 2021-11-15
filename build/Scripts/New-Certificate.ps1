@@ -17,6 +17,8 @@ function New-Certificate {
         [string] $PublicKeyPath
     )
 
+    # Pipelines should take around ~5 min, so a 60min lifespan is more than enough. It does no matter
+    # if the certificate has expired by the time the user checks it, as long as it is timestamped
     $cert = New-SelfSignedCertificate `
         -Type CodeSigningCert `
         -Subject "CN=$Subject" `
@@ -25,7 +27,7 @@ function New-Certificate {
         -KeyLength 2048 `
         -KeyUsage DigitalSignature `
         -KeyExportPolicy Exportable `
-        -NotAfter (Get-Date).AddYears(5) `
+        -NotAfter (Get-Date).AddMinutes(60) `
         -CertStoreLocation "Cert:\CurrentUser\My"
 
     # We don't actually need the certificate in the store, at least for this job. Remove it from there
