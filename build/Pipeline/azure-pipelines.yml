@@ -18,7 +18,7 @@ trigger:
     - '**/*.md'
 
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'windows-2022'
 
 variables:
 - group: GitHubPATGroup
@@ -28,89 +28,87 @@ variables:
   value: '**/*.sln'
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
+- name: isMasterBranch
+  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
 
 stages:
 - stage: Build
   jobs:
 
-  - job: NetFrameworkTesting
-    displayName: .NET Framework Testing
-    variables:
-      targetFramework: net461
-
-    steps:
-    - template: build/templates/build.yml
-      parameters:
-        tag: '.NET Framework'
-        targetFramework: $(targetFramework)
-        sonarCloud: false
-        coverage: false
-
-  - job: NetCoreTesting
-    displayName: .NET Testing
+  - job: Testing
+    displayName: Testing
     variables:
       targetFramework: net6.0-windows
 
     steps:
-    - template: build/templates/build.yml
+    - template: build.yml
       parameters:
         tag: '.NET'
         targetFramework: $(targetFramework)
         sonarCloud: true
         coverage: true
-        sign: false
+        # If CI builds take too long:
+        # sonarCloud: $(isMasterBranch)
+        # coverage: $(isMasterBranch)
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }} )
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
       inputs:
-        targetPath: 'build/ReleaseScripts' 
+        targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: NETFrameworkPublish
-    displayName: .NET Framework Publish
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    dependsOn: NetFrameworkTesting
-    pool:
-      name: default
-      demands: CodeSign
+  - job: Publish
+    displayName: Publish
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
+    dependsOn: Testing
 
     steps:
-    - template: build/templates/pre-steps.yml
+    - template: pre-steps.yml
 
-    - template: build/templates/publish.yml
+    - script: choco install innosetup
+      displayName: Install InnoSetup
+
+    - task: PowerShell@2
+      displayName: 'Generate Self-Signed Certificate'
+      inputs:
+        pwsh: true
+        targetType: 'filePath'
+        filePath: '$(Build.SourcesDirectory)/build/Scripts/New-Certificate.ps1'
+        arguments: >-
+          -Subject 'OfficeRibbonXEditor'
+          -FriendlyName 'Office RibbonX Editor'
+          -VariableName 'PfxCertificate'
+          -CertificatePassword '$(CODESIGN_PASSWORD)'
+          -PublicKeyPath '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer'
+          -Base64Signer '$(CODESIGN_SIGNER)'
+          -SignerPassword '$(CODESIGN_SIGNER_PASSWORD)'
+
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Certificate'
+      inputs:
+        targetPath: '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer' 
+        artifactName: 'Code Signing Certificate'
+
+    - template: publish.yml
       parameters:
-        tag: '.NET Framework'
-        targetFramework: net461
-
-  - job: NETCorePublish
-    displayName: .NET Publish
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
-    dependsOn: NetCoreTesting
-    pool:
-      name: default
-      demands: CodeSign
-
-    steps:
-      - template: build/templates/pre-steps.yml
-  
-      - template: build/templates/publish.yml
-        parameters:
-          tag: '.NET'
-          targetFramework: net6.0-windows
+        tag: '.NET'
+        targetFramework: net6.0-windows
+        certificate: $(PfxCertificate)
         
-      - template: build/templates/publish.yml
-        parameters:
-          tag: 'Self-Contained .NET'
-          selfContained: true
-          targetFramework: net6.0-windows
+    - template: publish.yml
+      parameters:
+        tag: 'Self-Contained .NET'
+        selfContained: true
+        targetFramework: net6.0-windows
+        certificate: $(PfxCertificate)
 
 - stage: Release
   dependsOn: Build
-  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'), ${{ parameters.createRelease }} )
+  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
 
   jobs:
   - deployment: Deploy
@@ -123,28 +121,18 @@ stages:
           - task: PowerShell@2
             displayName: 'Check Version'
             inputs:
+              pwsh: true
               targetType: 'filePath'
               filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
               arguments: '"$(Pipeline.Workspace)"'
 
-          - task: ArchiveFiles@2
-            displayName: 'Archive .NET Framework Binaries'
-            inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Framework Binaries'
-              includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Binaries.zip'
-          - powershell: >-
-              Copy-Item
-              -Path "$(Pipeline.Workspace)/.NET Framework Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NETFramework-Installer.exe"
-            displayName: 'Copy .NET Framework Installer'
           - task: ArchiveFiles@2
             displayName: 'Archive .NET Binaries'
             inputs:
               rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
               includeRootFolder: false
               archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Binaries.zip'
-          - powershell: >-
+          - pwsh: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
               -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Installer.exe"
@@ -154,7 +142,7 @@ stages:
               rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained .NET Binaries'
               includeRootFolder: false
               archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Binaries.zip'
-          - powershell: >-
+          - pwsh: >-
               Copy-Item
               -Path "$(Pipeline.Workspace)/Self-Contained .NET Installer/OfficeRibbonXEditor.exe"
               -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Installer.exe"
@@ -178,31 +166,27 @@ stages:
                 ## How to install / use
                 
                 Download one of the items from the `Assets` section below. If in doubt, I would
-                recommend using the .NET Framework Installer.
+                recommend using the self-contained installer.
 
                 There are two types of downloads available:
+
                 - **Binaries:** These are just a `.zip` file ready to be extracted, with no
                   installation necessary. No entry will be created in the control panel's program
                   list
                 - **Installers:** A typical self-extracting installer which will require admin
                   rights
-                                
-                For each of those download types, the tool comes in three variants:
-                - **.NET Framework:** This was the main variant in the past. Typically, you
-                  shouldn't need to install the .NET Framework redistributable yourself, as
-                  this is shipped with Windows 10 nowadays. Otherwise, download the latest
-                  runtime [here](https://dotnet.microsoft.com/download/dotnet-framework/thank-you/net48-web-installer)
-                - **.NET (5):** This requires at least version 5.0 of the
-                  [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
-                  (the one for desktop apps is enough)
-                - **Self-contained .NET:** This also uses the .NET 5.0 runtime, but this is
-                  embedded in the `.zip` file / installer, so you won't need to install anything
-                  else. As a drawback, the resulting tool is much larger in file size
-                  
-                Due to some technical limitations, the .NET Framework variants no longer consist
-                of a single `.exe` file once extracted / installed. Instead, it will contain a
-                collection of DLLs and other auxiliary files too, similarly to other variants.
+                
+                For each of those download types, there are two variants:
 
+                - **.NET:** This requires at least version 6.0 of the
+                  [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
+                  installed (the one for desktop apps is enough)
+                - **Self-contained .NET:** For these, the .NET runtime is included with the
+                  installation, so you won't need to install anything else. As a drawback, the
+                  resulting tool is much larger in file size
+                  
+                **Starting from version 2.0, .NET Framework is no longer supported. For more
+                information, see #188.**
 
               assets: '$(Build.ArtifactStagingDirectory)/*.*'
               isDraft: true

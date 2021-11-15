@@ -264,4 +264,6 @@ __pycache__/
 
 # Local history
 .localhistory/
-/build/sign/test.ps1
+
+# Temporary scripts to test the pipeline ones
+/build/Scripts/_Test/

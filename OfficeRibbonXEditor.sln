@@ -1,14 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29318.209
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OfficeRibbonXEditor", "src\OfficeRibbonXEditor\OfficeRibbonXEditor.csproj", "{A2A7BCC6-735E-4424-93A4-4EA5255E01FC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{62BC0A54-36D3-47DD-8A1B-44AE03DDB305}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "root", "root", "{62BC0A54-36D3-47DD-8A1B-44AE03DDB305}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		azure-pipelines.yml = azure-pipelines.yml
 		CONTRIBUTING.md = CONTRIBUTING.md
 		LICENSE = LICENSE
 		README.md = README.md
@@ -16,12 +15,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{017FBD33-4473-4DD2-ADEA-CAA00B695055}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D8B42177-9C73-48C9-971E-1D435353FF17}"
-	ProjectSection(SolutionItems) = preProject
-		build\CopyLibraries.ps1 = build\CopyLibraries.ps1
-		build\PreBuild.ps1 = build\PreBuild.ps1
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{46AC6013-D81B-4D5F-ADE8-79F429782266}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,30 +29,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IntegrationTests", "tests\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunctionalTests", "tests\FunctionalTests\FunctionalTests.csproj", "{8E404929-0EA1-41BF-AA5F-5CD75B1EE4FC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{C346825D-3DC7-4AF6-A415-BFEB2E6465AB}"
-	ProjectSection(SolutionItems) = preProject
-		build\templates\build.yml = build\templates\build.yml
-		build\templates\pre-steps.yml = build\templates\pre-steps.yml
-		build\templates\publish.yml = build\templates\publish.yml
-		build\templates\sign-and-publish.yml = build\templates\sign-and-publish.yml
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UITests", "tests\UITests\UITests.csproj", "{BA0E6FC1-EE48-42AB-AF21-0349EC51FE52}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sign", "sign", "{F74BE762-F575-4011-A85E-725CDC28D2AE}"
-	ProjectSection(SolutionItems) = preProject
-		build\sign\github-release-sign.ps1 = build\sign\github-release-sign.ps1
-		build\sign\remote-sign.ps1 = build\sign\remote-sign.ps1
-		build\sign\sign.bat = build\sign\sign.bat
-		build\sign\sign.ps1 = build\sign\sign.ps1
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "install", "install", "{DEDAFECB-4AF8-4D7D-AE78-1C785D3B63FE}"
-	ProjectSection(SolutionItems) = preProject
-		build\install\setup.iss = build\install\setup.iss
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Generators", "src\Generators\Generators.csproj", "{5E2BE3AE-9226-4808-89BA-485F92531E5B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "build", "build\build.csproj", "{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -117,20 +91,29 @@ Global
 		{5E2BE3AE-9226-4808-89BA-485F92531E5B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5E2BE3AE-9226-4808-89BA-485F92531E5B}.Release|x86.ActiveCfg = Release|Any CPU
 		{5E2BE3AE-9226-4808-89BA-485F92531E5B}.Release|x86.Build.0 = Release|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Debug|x86.Build.0 = Debug|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Release|x86.ActiveCfg = Release|Any CPU
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A2A7BCC6-735E-4424-93A4-4EA5255E01FC} = {017FBD33-4473-4DD2-ADEA-CAA00B695055}
+		{017FBD33-4473-4DD2-ADEA-CAA00B695055} = {62BC0A54-36D3-47DD-8A1B-44AE03DDB305}
+		{46AC6013-D81B-4D5F-ADE8-79F429782266} = {62BC0A54-36D3-47DD-8A1B-44AE03DDB305}
+		{5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF} = {62BC0A54-36D3-47DD-8A1B-44AE03DDB305}
 		{D1A56613-DC3E-4DF9-A560-6456CDF89378} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
 		{240C0BA9-5B29-430F-9325-2C0D74A1ED35} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
 		{8E404929-0EA1-41BF-AA5F-5CD75B1EE4FC} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
-		{C346825D-3DC7-4AF6-A415-BFEB2E6465AB} = {D8B42177-9C73-48C9-971E-1D435353FF17}
 		{BA0E6FC1-EE48-42AB-AF21-0349EC51FE52} = {5FB6177B-63FD-4817-A7ED-D1FA2D6EBEAF}
-		{F74BE762-F575-4011-A85E-725CDC28D2AE} = {D8B42177-9C73-48C9-971E-1D435353FF17}
-		{DEDAFECB-4AF8-4D7D-AE78-1C785D3B63FE} = {D8B42177-9C73-48C9-971E-1D435353FF17}
 		{5E2BE3AE-9226-4808-89BA-485F92531E5B} = {017FBD33-4473-4DD2-ADEA-CAA00B695055}
+		{A4799BB3-C644-4B4F-BC94-D2B68F4EF9C9} = {62BC0A54-36D3-47DD-8A1B-44AE03DDB305}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8E5E4631-F9D6-43A1-B677-FD1B0C599606}

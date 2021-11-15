@@ -34,6 +34,10 @@ request:
 	- Documentation for every file / class / member: there is no strong reason to
 	  increase the size of the source code files if the comments are not going
 	  to be meaningful and / or the element might be self-explanatory.
+	- Naming convention: recently, I have switched to naming private fields with a
+	  leading underscore, such as `_privateField`. As a consequence, I have decided
+	  to no longer use `this.` everywhere, since the distinction between a local
+	  variable and a private field is now clearer.
 - Follow the MVVM pattern, clearly separating the view from the view model.
 - Use dependency injection when actions need to be mocked during unit test (e.g. 
   displaying a message box or a file dialog).
@@ -43,5 +47,3 @@ request:
   `d:DataContext` attributes in those cases where it is not automatically inferred.
 - It is always better to have at least one unit test that ensures that a bug is
   fixed or a new feature works as intended.
-- All resources should be embedded in the executable (my objective is to have a
-  standalone tool which does not require installation or a special folder structure).

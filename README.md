@@ -149,3 +149,24 @@ how your translation looks (you will be able to see it from the build artifacts 
 - French: [pplanch](https://github.com/pplanch)
 - German: [carpac](https://github.com/carpac), [Claythve](https://github.com/Claythve), [Mo-Gul](https://github.com/Mo-Gul)
 - Turkish: [fatihmeh](https://github.com/fatihmeh)
+
+## Code Signing
+
+The tool is no longer being signed using a certificate from a trusted root certification authority. Instead, each
+build now uses a temporary, unique code signing certificate. Those will be signed using the following self-signed
+certificate:
+
+- Subject: `github.com/fernandreu`
+- Thumbprint: `62530bc980ec95d70a9a0abf931a4c28877ef4c6`
+
+This will give issues with Microsoft SmartScreen, but you should be able to skip any warnings. If you are unsure if
+you should skip those warnings, there are a couple of things you could check:
+
+- You can verify that the installer / binaries have been signed with a certificate whose root certificate matches the
+  details above. If some bundled dlls were already signed (e.g. official Microsoft libraries), their original
+  signatures will be kept
+- The details of the temporary code signing certificates will also be made available for each build / release (just
+  the public ones, such as the thumbprint or the public key). Hence, you can also check that the certificate used for
+  the binaries / installer matches those details
+  
+For more information, see #185.

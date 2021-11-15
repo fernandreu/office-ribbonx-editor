@@ -1,0 +1,74 @@
+parameters:
+  targetFramework: 'net6.0-windows'
+  tag: '.NET'
+  sonarCloud: false
+  coverage: false
+
+steps:
+
+- template: pre-steps.yml
+
+- task: SonarCloudPrepare@1
+  displayName: 'Prepare SonarCloud analysis'
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  inputs:
+    SonarCloud: 'fernandreu-SonarCloud'
+    organization: '$(SonarOrganization)'
+    scannerMode: 'MSBuild'
+    projectKey: '$(SonarProjectKey)'
+    projectName: '$(SonarProjectName)'
+    projectVersion: '$(Build.BuildNumber)'
+    extraProperties: |
+      sonar.exclusions=$(Build.SourcesDirectory)/**/*.CommandGenerator.cs
+      sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)/*.trx
+      sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.opencover.xml
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build solution'
+  inputs:
+    command: build
+    projects: $(Build.SourcesDirectory)/*.sln
+    arguments: '--configuration $(buildConfiguration)'
+    
+# This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
+# See: https://github.com/coverlet-coverage/coverlet/issues/1221
+- task: PowerShell@2
+  displayName: 'Copy WPF dlls to test folders'
+  condition: and(succeeded(), ${{ parameters.coverage }} )
+  inputs:
+    pwsh: true
+    targetType: 'filePath'
+    filePath: '$(Build.SourcesDirectory)/build/Scripts/Copy-WPFLibraries.ps1'
+    arguments: '-BuildConfiguration "$(buildConfiguration)" -TargetFramework "${{ parameters.targetFramework }}"'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run Tests'
+  inputs:
+    command: test
+    projects: '$(Build.SourcesDirectory)/**/*Tests.csproj'
+    arguments: >-
+      --no-build
+      --configuration $(buildConfiguration)
+      --framework ${{ parameters.targetFramework }}
+      /p:CopyLocalLockFileAssemblies=true
+      /p:CollectCoverage=${{ parameters.coverage }}
+      /p:Exclude=[Scintilla*]*
+      /p:IncludeTestAssembly=true
+      /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
+      /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
+      /p:MergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.json
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage report'
+  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true') )
+  inputs:
+    codeCoverageTool: 'cobertura'
+    summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
+
+- task: SonarCloudAnalyze@1
+  displayName: 'Run SonarCloud code analysis'
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true') )
+
+- task: SonarCloudPublish@1
+  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true') )
+  displayName: 'Publish SonarCloud quality gate results'
