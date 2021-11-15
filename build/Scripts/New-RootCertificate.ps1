@@ -10,11 +10,14 @@ function New-RootCertificate {
         [securestring] $CertificatePassword,
 
         [Parameter()]
-        [int] $MonthLifespan = 120
+        [int] $MonthLifespan = 120,
+
+        [Parameter()]
+        [switch] $Keep = $false
     )
 
     $cert = New-SelfSignedCertificate `
-        -Type CodeSigningCert `
+        -Type Custom `
         -Subject "CN=$Subject" `
         -FriendlyName $FriendlyName `
         -KeyAlgorithm RSA `
@@ -24,7 +27,9 @@ function New-RootCertificate {
         -NotAfter (Get-Date).AddMonths($MonthLifespan) `
         -CertStoreLocation "Cert:\CurrentUser\My"
 
-    # Unlike for New-Certificate.ps1, we will leave the certificate in the store as a backup
+    if (-not $Keep) {
+        Get-ChildItem Cert:\CurrentUser\My\$($cert.Thumbprint) | Remove-Item
+    }
 
     # Export it as PFX
     $certPath = 'cert.pfx'
