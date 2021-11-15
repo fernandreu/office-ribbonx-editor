@@ -169,4 +169,4 @@ you should skip those warnings, there are a couple of things you could check:
   the public ones, such as the thumbprint or the public key). Hence, you can also check that the certificate used for
   the binaries / installer matches those details
   
-For more information, see #185.
+For more information, see [#185](https://github.com/fernandreu/office-ribbonx-editor/issues/185).
