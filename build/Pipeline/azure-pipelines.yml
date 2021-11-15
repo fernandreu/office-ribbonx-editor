@@ -48,8 +48,8 @@ stages:
         # Note: the SonarCloud analysis cannot be published from PRs originated from forks due to the variable
         # group being secret. To run it for this repo's PRs only, check System.PullRequest.IsFork. Otherwise,
         # it is just simpler / faster to run it for the master branch only
-        sonarCloud: $(isMasterBranch)
-        coverage: $(isMasterBranch)
+        sonarCloud: $[ variables['isMasterBranch'] ]
+        coverage: $[ variables['isMasterBranch'] ]
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
