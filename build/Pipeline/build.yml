@@ -1,9 +1,3 @@
-parameters:
-  targetFramework: 'net6.0-windows'
-  tag: '.NET'
-  sonarCloud: false
-  coverage: false
-
 steps:
 
 - template: pre-steps.yml
