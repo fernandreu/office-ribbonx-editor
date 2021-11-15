@@ -25,37 +25,41 @@ function New-Certificate {
 
     $signer = $null
     if (-not [string]::IsNullOrEmpty($Base64Signer)) {
-        Write-Host "Certificate length: $($Base64Signer.Length)"
-        Write-Host "Password is: '$SignerPassword'"
-        Write-Host "Password length: $($SignerPassword.Length)" 
         $signerPath = "signer.pfx"
         $bytes = [System.Convert]::FromBase64String($Base64Signer)
         [System.IO.File]::WriteAllBytes($signerPath, $bytes)
         $securePassword = ConvertTo-SecureString -String $SignerPassword -Force -AsPlainText
         try {
             $signer = Get-PfxCertificate -FilePath $signerPath -Password $securePassword -NoPromptForPassword
+            Import-PfxCertificate -FilePath $signerPath -Password $securePassword -CertStoreLocation "Cert:\CurrentUser\My" -Exportable
         } finally {
             Remove-Item -Path $signerPath
         }
     }
 
-    # Pipelines should take around ~5 min, so a 60min lifespan is more than enough. It does no matter
-    # if the certificate has expired by the time the user checks it, as long as it is timestamped
-    $cert = New-SelfSignedCertificate `
-        -Type CodeSigningCert `
-        -Subject "CN=$Subject" `
-        -FriendlyName $FriendlyName `
-        -KeyAlgorithm RSA `
-        -KeyLength 2048 `
-        -KeyUsage DigitalSignature `
-        -KeyExportPolicy ExportableEncrypted `
-        -NotAfter (Get-Date).AddMinutes(60) `
-        -CertStoreLocation "Cert:\CurrentUser\My" `
-        -Signer $signer
+    try {
+        # Pipelines should take around ~5 min, so a 60min lifespan is more than enough. It does no matter
+        # if the certificate has expired by the time the user checks it, as long as it is timestamped    
+        $cert = New-SelfSignedCertificate `
+            -Type CodeSigningCert `
+            -Subject "CN=$Subject" `
+            -FriendlyName $FriendlyName `
+            -KeyAlgorithm RSA `
+            -KeyLength 2048 `
+            -KeyUsage DigitalSignature `
+            -KeyExportPolicy ExportableEncrypted `
+            -NotAfter (Get-Date).AddMinutes(60) `
+            -CertStoreLocation "Cert:\CurrentUser\My" `
+            -Signer $signer
+    } finally {
+        if ($null -ne $signer) {
+            Get-ChildItem Cert:\CurrentUser\My\$($signer.Thumbprint) | Remove-Item
+        }
 
-    # We don't actually need the certificate in the store, at least for this job. Remove it from there
-    Get-ChildItem Cert:\CurrentUser\My\$($cert.Thumbprint) | Remove-Item
-
+        # We don't actually need the certificate in the store, at least for this job. Remove it from there
+        Get-ChildItem Cert:\CurrentUser\My\$($cert.Thumbprint) | Remove-Item
+    }
+    
     # Export it as PFX
     $certPath = 'cert.pfx'
     $securePassword = ConvertTo-SecureString -String $CertificatePassword -Force -AsPlainText
