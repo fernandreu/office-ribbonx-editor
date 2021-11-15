@@ -34,9 +34,9 @@ steps:
     targetType: 'filePath'
     filePath: '$(Build.SourcesDirectory)/build/Scripts/Set-Signatures.ps1'
     arguments: >-
-      -Source "$(Build.ArtifactStagingDirectory)"
-      -Base64Certificate "${{ parameters.certificate }}"
-      -CertificatePassword "$(CODESIGN_PASSWORD)"
+      -Source '$(Build.ArtifactStagingDirectory)'
+      -Base64Certificate '${{ parameters.certificate }}'
+      -CertificatePassword '$(CODESIGN_PASSWORD)'
 
 - task: PublishPipelineArtifact@1
   displayName: 'Publish ${{ parameters.tag }} binaries'
@@ -86,9 +86,9 @@ steps:
     targetType: 'filePath'
     filePath: '$(Build.SourcesDirectory)/build/Scripts/Set-Signatures.ps1'
     arguments: >-
-      -Source "$(Build.ArtifactStagingDirectory)"
-      -Base64Certificate "${{ parameters.certificate }}"
-      -CertificatePassword "$(CODESIGN_PASSWORD)"
+      -Source '$(Build.ArtifactStagingDirectory)'
+      -Base64Certificate '${{ parameters.certificate }}'
+      -CertificatePassword '$(CODESIGN_PASSWORD)'
 
 - task: PublishPipelineArtifact@1
   displayName: 'Publish ${{ parameters.tag }} Installer'

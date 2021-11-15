@@ -46,6 +46,10 @@ function Set-Signatures {
     [System.IO.File]::WriteAllBytes($certPath, $bytes)
 
     try {
+        # Validate the certificate and password are correct
+        $securePassword = ConvertTo-SecureString -String $CertificatePassword -AsPlainText -Force
+        $cert = Get-PfxCertificate -FilePath $certPath -Password $securePassword -NoPromptForPassword
+        
         # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
         $files = Get-Files -Source $Source -Filters *.msi,*.exe,*.dll
         Write-Host "Found $($files.Count) files to sign"
