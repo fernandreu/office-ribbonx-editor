@@ -45,22 +45,28 @@ function Set-Signatures {
     $bytes = [System.Convert]::FromBase64String($Base64Certificate)
     [System.IO.File]::WriteAllBytes($certPath, $bytes)
 
-    $securePassword = ConvertTo-SecureString -String $CertificatePassword -Force -AsPlainText
-    $cert = Get-PfxCertificate -FilePath $certPath -Password $securePassword
-    Remove-Item -Path $certPath
+    try {
+        # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
+        $files = Get-Files -Source $Source -Filters *.msi,*.exe,*.dll
+        Write-Host "Found $($files.Count) files to sign"
+        foreach ($file in $files) {
+            $signature = Get-AuthenticodeSignature -FilePath $file.FullName
+            if ($signature.Status -eq 'Valid') {
+                Write-Host "Skipping as it is already signed: $($file.FullName)"
+                continue
+            }
+    
+            & $_SIGN_TOOL sign /f $certPath /p $CertificatePassword /tr 'http://timestamp.digicert.com' /td sha256 /fd sha256 "$($file.FullName)"
+            if ($LASTEXITCODE -ne 0) {
+                $message = "signtool returned $LASTEXITCODE for file $($file.FullName)"
+                Write-Host "##vso[task.setvariable variable=ErrorMessage]$message"
+                throw $message
+            }
 
-    # Only performing sha256 signatures for now. Dlls might need to be left untouched to speed things up
-    $files = Get-Files -Source $Source -Filters *.msi,*.exe,*.dll
-    Write-Host "Found $($files.Count) files to sign"
-    foreach ($file in $files) {
-        $signature = Get-AuthenticodeSignature -FilePath $file.FullName
-        if ($signature.Status -eq 'Valid') {
-            Write-Host "Skipping as it is already signed: $($file.FullName)"
-            continue
+            Write-Host "Signed: $($file.FullName)"
         }
-
-        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.globalsign.com/scripts/timstamp.dll' -HashAlgorithm SHA256 | Out-Null
-        Write-Host "Signed: $($file.FullName)"
+    } finally {
+        Remove-Item -Path $certPath
     }
 }
 

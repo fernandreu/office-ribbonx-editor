@@ -67,7 +67,7 @@ function Copy-WPFLibraries {
             Write-Host "Found dll to be copied: $dllPath"
         } else {
             $message = "Cannot find dll to be copied: $dllPath"
-            Write-Host "$("##vso[task.setvariable variable=ErrorMessage]") $message"
+            Write-Host "##vso[task.setvariable variable=ErrorMessage]$message"
             throw $message
         }
 
