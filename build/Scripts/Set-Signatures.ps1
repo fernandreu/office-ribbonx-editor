@@ -59,7 +59,7 @@ function Set-Signatures {
             continue
         }
 
-        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://sha256timestamp.ws.symantec.com/sha256/timestamp' -HashAlgorithm SHA256 | Out-Null
+        Set-AuthenticodeSignature -FilePath $file.FullName -Certificate $cert -TimestampServer 'http://timestamp.globalsign.com/scripts/timstamp.dll' -HashAlgorithm SHA256 | Out-Null
         Write-Host "Signed: $($file.FullName)"
     }
 }
