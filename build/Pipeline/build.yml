@@ -34,7 +34,7 @@ steps:
 # See: https://github.com/coverlet-coverage/coverlet/issues/1221
 - task: PowerShell@2
   displayName: 'Copy WPF dlls to test folders'
-  condition: and(succeeded(), ${{ parameters.coverage }} )
+  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true')
   inputs:
     pwsh: true
     targetType: 'filePath'
