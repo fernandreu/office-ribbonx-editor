@@ -1,10 +1,20 @@
+parameters:
+  targetFramework: 'net6.0-windows'
+
+variables:
+  # Note: the SonarCloud analysis cannot be published from PRs originated from forks due to the variable
+  # group being secret. To run it for this repo's PRs only, check System.PullRequest.IsFork. Otherwise,
+  # it is just simpler / faster to run it for the master branch only
+  sonarCloud: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  coverage: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+
 steps:
 
 - template: pre-steps.yml
 
 - task: SonarCloudPrepare@1
   displayName: 'Prepare SonarCloud analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  condition: and(succeeded(), eq(variables['sonarCloud'], 'true'))
   inputs:
     SonarCloud: 'fernandreu-SonarCloud'
     organization: '$(SonarOrganization)'
@@ -28,7 +38,7 @@ steps:
 # See: https://github.com/coverlet-coverage/coverlet/issues/1221
 - task: PowerShell@2
   displayName: 'Copy WPF dlls to test folders'
-  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true'))
+  condition: and(succeeded(), eq(variables['coverage'], 'true'))
   inputs:
     pwsh: true
     targetType: 'filePath'
@@ -45,7 +55,7 @@ steps:
       --configuration $(buildConfiguration)
       --framework ${{ parameters.targetFramework }}
       /p:CopyLocalLockFileAssemblies=true
-      /p:CollectCoverage=${{ parameters.coverage }}
+      /p:CollectCoverage=$(coverage)
       /p:Exclude=[Scintilla*]*
       /p:IncludeTestAssembly=true
       /p:CoverletOutputFormat=json%2Ccobertura%2Copencover
@@ -54,15 +64,15 @@ steps:
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage report'
-  condition: and(succeeded(), eq('${{ parameters.coverage }}', 'true'))
+  condition: and(succeeded(), eq(variables['coverage'], 'true'))
   inputs:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run SonarCloud code analysis'
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  condition: and(succeeded(), eq(variables['sonarCloud'], 'true'))
 
 - task: SonarCloudPublish@1
-  condition: and(succeeded(), eq('${{ parameters.sonarCloud }}', 'true'))
+  condition: and(succeeded(), eq(variables['sonarCloud'], 'true'))
   displayName: 'Publish SonarCloud quality gate results'
