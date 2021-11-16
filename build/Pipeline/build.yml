@@ -1,13 +1,6 @@
 parameters:
   targetFramework: 'net6.0-windows'
 
-variables:
-  # Note: the SonarCloud analysis cannot be published from PRs originated from forks due to the variable
-  # group being secret. To run it for this repo's PRs only, check System.PullRequest.IsFork. Otherwise,
-  # it is just simpler / faster to run it for the master branch only
-  sonarCloud: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
-  coverage: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
-
 steps:
 
 - template: pre-steps.yml
