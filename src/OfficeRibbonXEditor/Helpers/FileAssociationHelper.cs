@@ -23,9 +23,7 @@ namespace OfficeRibbonXEditor.Helpers
                 return false;
             }
 
-#pragma warning disable CS8604 // Possible null reference argument (warning triggered after string.IsNullOrEmpty, which is incorrect).
             var menuKey = GetMenuKey(type, false);
-#pragma warning restore CS8604 // Possible null reference argument.
             return menuKey != null;
         }
 
@@ -37,7 +35,15 @@ namespace OfficeRibbonXEditor.Helpers
                 return;
             }
 
-            Registry.CurrentUser.DeleteSubKeyTree($@"Software\Classes\{type}\shell\{MenuEntryName}");
+            try
+            {
+                Registry.CurrentUser.DeleteSubKeyTree($@"Software\Classes\{type}\shell\{MenuEntryName}");
+            }
+            catch (ArgumentException)
+            {
+                // Most likely, the key does not exist. This should not occur unless the registry was modified
+                // externally in the meantime.
+            }
         }
 
         public void AddAssociation()
@@ -60,7 +66,7 @@ namespace OfficeRibbonXEditor.Helpers
             if (exePath.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
             {
                 // .NET Core splits the executable and the main entry assembly into two
-                exePath = exePath.Substring(0, exePath.Length - "dll".Length) + "exe";
+                exePath = exePath[..^"dll".Length] + "exe";
             }
 
             key.SetValue("Icon", exePath);
@@ -74,7 +80,7 @@ namespace OfficeRibbonXEditor.Helpers
             return key;
         }
 
-        private static RegistryKey GetMenuKey(string fileType, bool writable = true)
+        private static RegistryKey? GetMenuKey(string fileType, bool writable = true)
         {
             var key = Registry.CurrentUser.OpenSubKey($@"Software\Classes\{fileType}\shell\{MenuEntryName}", writable);
             return key;
