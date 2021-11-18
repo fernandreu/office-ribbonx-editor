@@ -162,7 +162,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             FileMenu.SubmenuOpened += FileMenuSubmenuOpened;
         }
 
-        private void FileMenuSubmenuOpened(object sender, RoutedEventArgs e)
+        private void FileMenuSubmenuOpened(object? sender, RoutedEventArgs e)
         {
             SetMenuItems();
         }
@@ -265,7 +265,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             return files;
         }
 
-        private void MenuItemClick(object sender, EventArgs e)
+        private void MenuItemClick(object? sender, EventArgs e)
         {
             if (sender is MenuItem menuItem)
             {
@@ -464,7 +464,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 for (var i = 0; i < max; i++)
                 {
-                    var s = (string)k.GetValue(Key(i));
+                    var s = (string?)k.GetValue(Key(i));
                     if (s == null || !s.Equals(filepath, StringComparison.CurrentCultureIgnoreCase))
                     {
                         continue;

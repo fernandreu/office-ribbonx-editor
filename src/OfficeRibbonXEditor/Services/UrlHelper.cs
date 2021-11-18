@@ -17,8 +17,8 @@ namespace OfficeRibbonXEditor.Services
 
         public Process? OpenBug(string title, string body)
         {
-            title = Uri.EscapeUriString(title);
-            body = Uri.EscapeUriString(body);
+            title = Uri.EscapeDataString(title);
+            body = Uri.EscapeDataString(body);
             return OpenExternal(new Uri($"{BaseUrl}/issues/new?assignees=&labels=bug&title={title}&body={body}"));
         }
 

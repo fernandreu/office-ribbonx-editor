@@ -73,29 +73,29 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
 
         #region Event Handlers
 
-        private void brnPrevious_Click(object sender, EventArgs e)
+        private void brnPrevious_Click(object? sender, EventArgs e)
         {
             FindPrevious();
         }
 
-        private void btnClearHighlights_Click(object sender, EventArgs e)
+        private void btnClearHighlights_Click(object? sender, EventArgs e)
         {
             if (_scintilla == null)
                 return;
             _findReplace?.FindReplace.ClearAllHighlights();
         }
 
-        private void btnHighlightAll_Click(object sender, EventArgs e)
+        private void btnHighlightAll_Click(object? sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(txtFind.Text))
                 return;
             if (_scintilla == null)
                 return;
 
-            _findReplace?.FindReplace.FindAll((string) txtFind.Text, false, true);
+            _findReplace?.FindReplace.FindAll(txtFind.Text, false, true);
         }
 
-        private void btnNext_Click(object sender, EventArgs e)
+        private void btnNext_Click(object? sender, EventArgs e)
         {
             FindNext();
         }
@@ -212,7 +212,7 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
             MoveFormAwayFromSelection();
         }
 
-        private void FindKeyDownEventHandler(object sender, KeyEventArgs e)
+        private void FindKeyDownEventHandler(object? sender, KeyEventArgs e)
         {
             switch (e.KeyCode)
             {
@@ -234,7 +234,7 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
             }
         }
 
-        private void FindTextChangedEventHandler(object sender, EventArgs e)
+        private void FindTextChangedEventHandler(object? sender, EventArgs e)
         {
             txtFind.BackColor = SystemColors.Window;
             if (string.IsNullOrEmpty(txtFind.Text))

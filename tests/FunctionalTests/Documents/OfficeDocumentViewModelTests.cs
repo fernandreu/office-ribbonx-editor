@@ -19,8 +19,14 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         [SetUp]
         public void SetUp()
         {
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Directory.CreateDirectory(Path.GetDirectoryName(_destFile));
+            var directory = Path.GetDirectoryName(_sourceFile);
+            if (directory == null)
+            {
+                Assert.Fail("Wrong _sourceFile path");
+                return; // Not needed, but suppreses nullable warnings below
+            }
+
+            Directory.CreateDirectory(directory);
 
             if (File.Exists(_destFile))
             {

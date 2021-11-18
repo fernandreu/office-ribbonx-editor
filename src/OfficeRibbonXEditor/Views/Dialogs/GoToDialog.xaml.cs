@@ -20,7 +20,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             TargetBox.ValueChanged += OnValueChanged;
         }
 
-        private void OnValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void OnValueChanged(object? sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TargetBox.ValueChanged -= OnValueChanged;
             TargetBox.Focus();

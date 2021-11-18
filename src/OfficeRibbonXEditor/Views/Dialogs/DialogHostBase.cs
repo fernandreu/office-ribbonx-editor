@@ -98,7 +98,13 @@ namespace OfficeRibbonXEditor.Views.Dialogs
                 throw new ArgumentException($"Type {contentDialogType.Name} does not have a registered control");
             }
 
-            return (DialogControl) Activator.CreateInstance(viewType);
+            var instance = (DialogControl?)Activator.CreateInstance(viewType);
+            if (instance == null)
+            {
+                throw new ArgumentException($"Cannot generate view of type {viewType?.Name} for dialog view model of type {contentDialogType.Name}");
+            }
+
+            return instance;
         }
 
         private void CenterInOwner()

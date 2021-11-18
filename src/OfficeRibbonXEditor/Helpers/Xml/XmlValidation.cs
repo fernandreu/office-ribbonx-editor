@@ -61,7 +61,7 @@ namespace OfficeRibbonXEditor.Helpers.Xml
                     string.Format(CultureInfo.InvariantCulture, Strings.Validation_WrongNamespace, ns, targetSchema.TargetNamespace)));
             }
 
-            void ValidateHandler(object o, ValidationEventArgs e)
+            void ValidateHandler(object? o, ValidationEventArgs e)
             {
                 errorList?.Add(new XmlError(
                     e.Exception.LineNumber,

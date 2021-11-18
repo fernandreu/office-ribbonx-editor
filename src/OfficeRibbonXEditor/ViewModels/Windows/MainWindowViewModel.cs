@@ -970,10 +970,29 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private static Hashtable LoadXmlSchemas()
         {
+            var missing = new List<XmlPart>();
+
+            var schema12 = Schema.Load(XmlPart.RibbonX12);
+            if (schema12 == null)
+            {
+                missing.Add(XmlPart.RibbonX12);
+            }
+
+            var schema14 = Schema.Load(XmlPart.RibbonX14);
+            if (schema14 == null)
+            {
+                missing.Add(XmlPart.RibbonX14);
+            }
+
+            if (missing.Count > 0)
+            {
+                throw new InvalidOperationException($"The following schemas are invalid: {string.Join(", ", missing)}. The tool might be corrupted");
+            }
+
             return new Hashtable(2)
             {
-                {XmlPart.RibbonX12, Schema.Load(XmlPart.RibbonX12)},
-                {XmlPart.RibbonX14, Schema.Load(XmlPart.RibbonX14)},
+                {XmlPart.RibbonX12, schema12},
+                {XmlPart.RibbonX14, schema14},
             };
         }
 
@@ -1049,11 +1068,10 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (_customUiSchemas != null &&
                     part.Part != null &&
                     _customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && 
-                    _customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema)
+                    _customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema &&
+                    otherSchema.TargetNamespace != null)
                 {
-#pragma warning disable CA1307 // Specify StringComparison (this option is not available in .NET Framework 4.6.1)
-                    data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
-#pragma warning restore CA1307 // Specify StringComparison
+                    data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace, StringComparison.OrdinalIgnoreCase);
                 }
 
                 // Event might be raised too soon (when the view still does not exist). Hence, update part as well
@@ -1281,7 +1299,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteShowAboutCommand() => LaunchDialog<AboutDialogViewModel>(true);
 
-        private void OnTreeViewItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnTreeViewItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Move)
             {

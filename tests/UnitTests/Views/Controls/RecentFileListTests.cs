@@ -19,13 +19,13 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         {
             // Arrange
             using var stream = TempFile();
-            Assume.That(this.Control.RecentFiles, Is.Empty);
+            Assume.That(Control.RecentFiles, Is.Empty);
 
             // Act
-            this.Control.InsertFile(stream.Name);
+            Control.InsertFile(stream.Name);
 
             // Assert
-            Assert.Contains(stream.Name, this.Control?.RecentFiles);
+            Assert.Contains(stream.Name, Control?.RecentFiles);
         }
 
         [Test]
@@ -33,14 +33,14 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         {
             // Arrange
             using var stream = TempFile();
-            Assume.That(this.Control.RecentFiles, Is.Empty);
+            Assume.That(Control.RecentFiles, Is.Empty);
 
             // Act
-            this.Control.InsertFile(stream.Name);
-            this.Control.RemoveFile(stream.Name);
+            Control.InsertFile(stream.Name);
+            Control.RemoveFile(stream.Name);
 
             // Assert
-            Assert.IsEmpty(this.Control.RecentFiles);
+            Assert.IsEmpty(Control.RecentFiles);
         }
 
         [TestCase(1)]
@@ -49,7 +49,7 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         public void CannotPassMaxLimit(int maxFiles)
         {
             // Arrange
-            this.Control.MaxNumberOfFiles = maxFiles;
+            Control.MaxNumberOfFiles = maxFiles;
             var collection = new List<FileStream>(maxFiles + 5);
             for (var i = 0; i < maxFiles + 5; ++i)
             {
@@ -59,13 +59,13 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
             // Act
             foreach (var stream in collection)
             {
-                this.Control.InsertFile(stream.Name);
+                Control.InsertFile(stream.Name);
             }
 
             // Assert
             try
             {
-                Assert.AreEqual(maxFiles, this.Control.RecentFiles.Count);
+                Assert.AreEqual(maxFiles, Control.RecentFiles.Count);
             }
             finally
             {
@@ -91,17 +91,20 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         {
             do
             {
-                this._filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            } while (File.Exists(this._filePath));
+                _filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+            } while (File.Exists(_filePath));
 
-            this.Control = new RecentFileList();
-            this.Control.UseXmlPersister(this._filePath);
+            Control = new RecentFileList();
+            Control.UseXmlPersister(_filePath);
         }
 
         [TearDown]
         public void TearDown()
         {
-            File.Delete(this._filePath);
+            if (_filePath != null && File.Exists(_filePath))
+            {
+                File.Delete(_filePath);
+            }
         }
     }
 
@@ -114,19 +117,19 @@ namespace OfficeRibbonXEditor.UnitTests.Views.Controls
         {
             do
             {
-                this._registryKey = "Software\\" + Path.GetRandomFileName();
-            } while (Registry.CurrentUser.OpenSubKey(this._registryKey) != null);
+                _registryKey = "Software\\" + Path.GetRandomFileName();
+            } while (Registry.CurrentUser.OpenSubKey(_registryKey) != null);
 
-            this.Control = new RecentFileList();
-            this.Control.UseRegistryPersister(this._registryKey);
+            Control = new RecentFileList();
+            Control.UseRegistryPersister(_registryKey);
         }
 
         [TearDown]
         public void TearDown()
         {
-            if (Registry.CurrentUser.OpenSubKey(this._registryKey) != null)
+            if (_registryKey != null && Registry.CurrentUser.OpenSubKey(_registryKey) != null)
             {
-                Registry.CurrentUser.DeleteSubKey(this._registryKey);
+                Registry.CurrentUser.DeleteSubKey(_registryKey);
             }
         }
     }

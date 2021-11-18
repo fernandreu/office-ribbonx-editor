@@ -53,8 +53,13 @@ namespace OfficeRibbonXEditor.Helpers
             return result;
         }
 
-        private void GenerateCallback(XmlNode node, StringBuilder result)
+        private void GenerateCallback(XmlNode? node, StringBuilder result)
         {
+            if (node == null)
+            {
+                return;
+            }
+
             if (node.Attributes != null)
             {
                 foreach (XmlAttribute? attribute in node.Attributes)

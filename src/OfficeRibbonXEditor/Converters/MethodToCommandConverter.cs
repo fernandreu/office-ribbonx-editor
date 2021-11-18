@@ -64,18 +64,18 @@ namespace OfficeRibbonXEditor.Converters
             /// Do not throw an exception in the add block, because WPF will automatically
             /// subscribe to it anyway.
             /// </summary>
-            public event EventHandler CanExecuteChanged
+            public event EventHandler? CanExecuteChanged
             {
                 add { }
                 remove { }
             }
 
-            public bool CanExecute(object parameter)
+            public bool CanExecute(object? parameter)
             {
                 return _sender != null;
             }
 
-            public void Execute(object parameter)
+            public void Execute(object? parameter)
             {
                 _method.Invoke(_sender, Array.Empty<object>());
             }

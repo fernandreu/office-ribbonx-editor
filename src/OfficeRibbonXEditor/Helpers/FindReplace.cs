@@ -45,9 +45,9 @@ namespace OfficeRibbonXEditor.Helpers
 
 		public event ReplaceAllResultsEventHandler? ReplaceAllResults;
 
-		public delegate void FindAllResultsEventHandler(object sender, ResultsEventArgs findAllResults);
+		public delegate void FindAllResultsEventHandler(object? sender, ResultsEventArgs findAllResults);
 
-		public delegate void ReplaceAllResultsEventHandler(object sender, ResultsEventArgs replaceAllResults);
+		public delegate void ReplaceAllResultsEventHandler(object? sender, ResultsEventArgs replaceAllResults);
 
 		public void ClearAllHighlights()
 		{

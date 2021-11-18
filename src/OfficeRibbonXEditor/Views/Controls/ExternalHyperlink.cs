@@ -32,7 +32,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             RequestNavigate += OnRequestNavigate;
         }
 
-        private void OnRequestNavigate(object sender, RequestNavigateEventArgs e)
+        private void OnRequestNavigate(object? sender, RequestNavigateEventArgs e)
         {
             OpenUrlCommand.Execute(e.Uri);
             e.Handled = true;

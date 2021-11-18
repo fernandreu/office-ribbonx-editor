@@ -158,7 +158,7 @@ namespace OfficeRibbonXEditor.Converters
 
         #region OnConvertersCollectionChanged
 
-        private void OnConvertersCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnConvertersCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             // The 'Converters' collection has been modified, so validate that each value converter it now
             // contains is decorated with ValueConversionAttribute and then cache the attribute value.
@@ -167,7 +167,7 @@ namespace OfficeRibbonXEditor.Converters
             {
                 convertersToProcess = e.NewItems;
             }
-            else if (e.Action == NotifyCollectionChangedAction.Remove)
+            else if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
             {
                 foreach (IValueConverter? converter in e.OldItems)
                 {
