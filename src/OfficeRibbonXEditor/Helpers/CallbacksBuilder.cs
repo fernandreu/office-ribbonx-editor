@@ -106,35 +106,6 @@ namespace OfficeRibbonXEditor.Helpers
             }
         }
 
-        private static string? GetControlId(XmlNode node)
-        {
-            if (node.NodeType != XmlNodeType.Element || node.Attributes == null)
-            {
-                return null;
-            }
-            try
-            {
-                foreach (XmlAttribute? attribute in node.Attributes)
-                {
-                    if (attribute == null)
-                    {
-                        continue;
-                    }
-
-                    if (attribute.Name == "id" || attribute.Name == "idMso" || attribute.Name == "idQ")
-                    {
-                        return attribute.Value.Substring(attribute.Value.LastIndexOf(':') + 1);
-                    }
-                }
-            }
-            catch (XmlException ex)
-            {
-                Debug.Assert(false, ex.Message);
-            }
-
-            return null;
-        }
-
         private string GenerateCallback(XmlAttribute callback)
         {
             if (string.IsNullOrEmpty(callback.Value))
@@ -215,6 +186,35 @@ namespace OfficeRibbonXEditor.Helpers
 
             _callbackList?.Add(callbackValue);
             return result;
+        }
+
+        private static string? GetControlId(XmlNode node)
+        {
+            if (node.NodeType != XmlNodeType.Element || node.Attributes == null)
+            {
+                return null;
+            }
+            try
+            {
+                foreach (XmlAttribute? attribute in node.Attributes)
+                {
+                    if (attribute == null)
+                    {
+                        continue;
+                    }
+
+                    if (attribute.Name == "id" || attribute.Name == "idMso" || attribute.Name == "idQ")
+                    {
+                        return attribute.Value.Substring(attribute.Value.LastIndexOf(':') + 1);
+                    }
+                }
+            }
+            catch (XmlException ex)
+            {
+                Debug.Assert(false, ex.Message);
+            }
+
+            return null;
         }
 
         private static string GenerateOnLoadCallback(string callback)

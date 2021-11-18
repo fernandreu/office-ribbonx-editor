@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             ResultsScintilla.Scintilla.KeyUp += KeyUpEventHandler;
             ResultsScintilla.Scintilla.MouseClick += MouseClickEventHandler;
-            ResultsScintilla.Scintilla.MouseDoubleClick += MouseDoubleClickEventHandler;
+            ResultsScintilla.Scintilla.MouseDoubleClick += MouseClickEventHandler;
         }
 
         public IResultCollection? Results { get; private set; }
@@ -67,22 +67,6 @@ namespace OfficeRibbonXEditor.Views.Controls
                 return;
             }
 
-            Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
-        }
-
-        private void MouseDoubleClickEventHandler(object? sender, MouseEventArgs e)
-        {
-            if (Scintilla == null)
-            {
-                return;
-            }
-
-            var pos = ResultsScintilla.CharPositionFromPointClose(e.Location.X, e.Location.Y);
-            if (pos == -1)
-            {
-                return;
-            }
-            
             Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
         }
     }

@@ -45,7 +45,7 @@ namespace OfficeRibbonXEditor.Converters
         /// Tailored implementation of ICommand so that it holds the reference to the method and the sender. This
         /// avoids possible capture scope issues in lambdas
         /// </summary>
-        private class MethodProxy : ICommand
+        private sealed class MethodProxy : ICommand
         {
             private readonly MethodInfo _method;
 
@@ -59,16 +59,9 @@ namespace OfficeRibbonXEditor.Converters
 
             /// <summary>
             /// The CanExecute property of this command will never change, but we still need
-            /// to define the corresponding event. The explicit add / remove declaration
-            /// avoids wasting the space of the backing field while suppressing warning C0067.
-            /// Do not throw an exception in the add block, because WPF will automatically
-            /// subscribe to it anyway.
+            /// to define the corresponding event
             /// </summary>
-            public event EventHandler? CanExecuteChanged
-            {
-                add { }
-                remove { }
-            }
+            public event EventHandler? CanExecuteChanged;
 
             public bool CanExecute(object? parameter)
             {

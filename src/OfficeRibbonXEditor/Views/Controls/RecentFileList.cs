@@ -344,24 +344,18 @@ namespace OfficeRibbonXEditor.Views.Controls
                 }
             }
             
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            // ReSharper disable once MemberCanBePrivate.Local
             public static string Title { get; }
 
             public static string CompanyName { get; }
 
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            // ReSharper disable once MemberCanBePrivate.Local
             public static string Copyright { get; }
 
             public static string ProductName { get; }
 
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            // ReSharper disable once MemberCanBePrivate.Local
             public static string Version { get; }
         }
 
-        private class RecentFile
+        private sealed class RecentFile
         {
             public RecentFile(int number, string filepath)
             {
@@ -392,7 +386,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
         
-        private class RegistryPersister : IPersist
+        private sealed class RegistryPersister : IPersist
         {
             public RegistryPersister()
             {
@@ -507,7 +501,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
         
-        private class XmlPersister : IPersist
+        private sealed class XmlPersister : IPersist
         {
             public XmlPersister()
             {
@@ -717,7 +711,7 @@ namespace OfficeRibbonXEditor.Views.Controls
                 }
             }
 
-            private class SmartStream : IDisposable
+            private sealed class SmartStream : IDisposable
             {
                 private readonly bool _isStreamOwned;
 

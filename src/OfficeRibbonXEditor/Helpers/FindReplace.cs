@@ -31,10 +31,6 @@ namespace OfficeRibbonXEditor.Helpers
 		    Indicator.Alpha = 100;
 		    Indicator.Style = IndicatorStyle.RoundBox;
 		    Indicator.Under = true;
-
-            ////this.window.Scintilla = this.scintilla;
-            ////this.window.FindReplace = this;
-            ////this.window.KeyPressed += this._window_KeyPressed;
         }
 
         public Indicator Indicator { get; set; }
@@ -110,10 +106,7 @@ namespace OfficeRibbonXEditor.Helpers
 				var range = new CharacterRange();
 				while (m.Success)
 				{
-					//TODO - check that removing the byte count does not upset anything
-					//int start = r.cpMin + _scintilla.Encoding.GetByteCount(text.Substring(0, m.Index));
-					//int end = _scintilla.Encoding.GetByteCount(text.Substring(m.Index, m.Length));
-					var start = r.MinPosition + text.Substring(0, m.Index).Length;
+					var start = r.MinPosition + text[..m.Index].Length;
 					var end = text.Substring(m.Index, m.Length).Length;
 
 					range = new CharacterRange(start, start + end);
@@ -124,10 +117,7 @@ namespace OfficeRibbonXEditor.Helpers
 			}
 			else
 			{
-				//TODO - check that removing the byte count does not upset anything
-				//int start = r.cpMin + _scintilla.Encoding.GetByteCount(text.Substring(0, m.Index));
-				//int end = _scintilla.Encoding.GetByteCount(text.Substring(m.Index, m.Length));
-				var start = r.MinPosition + text.Substring(0, m.Index).Length;
+				var start = r.MinPosition + text[..m.Index].Length;
 				var end = text.Substring(m.Index, m.Length).Length;
 
 				return new CharacterRange(start, start + end);

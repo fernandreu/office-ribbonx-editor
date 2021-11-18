@@ -25,26 +25,26 @@ namespace OfficeRibbonXEditor.Views.Windows
             InitializeComponent();
         }
 
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(args);
+            base.OnPropertyChanged(e);
 
-            if (args.Property != DataContextProperty || !(args.NewValue is MainWindowViewModel model))
+            if (e.Property != DataContextProperty || e.NewValue is not MainWindowViewModel model)
             {
                 return;
             }
 
             _viewModel = model;
 
-            _viewModel.InsertRecentFile += (o, e) =>
+            _viewModel.InsertRecentFile += (o, args) =>
             {
-                if (e.Data != null)
+                if (args.Data != null)
                 {
-                    RecentFileList.InsertFile(e.Data);
+                    RecentFileList.InsertFile(args.Data);
                 }
             };
 
-            _viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
+            _viewModel.SetGlobalCursor += (o, args) => Mouse.OverrideCursor = args.Data;
 
             // These no longer use interactions in XAML due to the conversion needed for the command parameter
             PreviewDragEnter += OnPreviewDragEnter;
@@ -170,7 +170,7 @@ namespace OfficeRibbonXEditor.Views.Windows
 
         private void OnIdTextVisible(object? sender, DependencyPropertyChangedEventArgs e)
         {
-            if ((bool)e.NewValue == false)
+            if ((bool)e.NewValue)
             {
                 return;
             }

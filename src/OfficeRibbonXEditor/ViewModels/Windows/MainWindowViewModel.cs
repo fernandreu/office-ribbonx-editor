@@ -229,7 +229,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// </summary>
         public IDictionary<string, string> HelpLinks { get; } = new Dictionary<string, string>
         {
-            { "Change the Ribbon in Excel 2007 and up | Ron de Bruin Excel Automation", "http://www.rondebruin.nl/win/s2/win001.htm" },
+            { "Change the Ribbon in Excel 2007 and up | Ron de Bruin Excel Automation", "https://www.rondebruin.nl/win/s2/win001.htm" },
             { "Customize the 2007 Office Fluent Ribbon for Developers | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx" },
             { "Introduction to the Office 2010 Backstage View for Developers | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx" },
             { "Office Fluent UI Command Identifiers | OfficeDev on GitHub", "https://github.com/OfficeDev/office-fluent-ui-command-identifiers" },
@@ -1391,11 +1391,13 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// Manages temporary cursors (such as the wait one) via the disposable pattern.
         /// Adapted from: https://stackoverflow.com/a/675686/1712861
         /// </summary>
-        private class CursorOverride : IDisposable
+        private sealed class CursorOverride : IDisposable
         {
             private readonly MainWindowViewModel _viewModel;
 
-            private static readonly Stack<Cursor> Stack = new Stack<Cursor>();
+            private static readonly Stack<Cursor> Stack = new();
+
+            private bool _disposedValue;
 
             public CursorOverride(MainWindowViewModel viewModel, Cursor cursor)
             {
@@ -1410,7 +1412,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 }
             }
 
-            public void Dispose()
+            public void RestoreCursor()
             {
                 var current = Stack.Pop();
 
@@ -1420,6 +1422,26 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 {
                     _viewModel.SetGlobalCursor?.Invoke(_viewModel, new DataEventArgs<Cursor>(cursor));
                 }
+            }
+
+            private void Dispose(bool disposing)
+            {
+                if (!_disposedValue)
+                {
+                    if (disposing)
+                    {
+                        RestoreCursor();
+                    }
+
+                    _disposedValue = true;
+                }
+            }
+
+            public void Dispose()
+            {
+                // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+                Dispose(disposing: true);
+                GC.SuppressFinalize(this);
             }
         }
     }

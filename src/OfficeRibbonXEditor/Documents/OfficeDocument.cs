@@ -26,6 +26,7 @@ namespace OfficeRibbonXEditor.Documents
 
     public class OfficeDocument : IDisposable
     {
+#pragma warning disable S5332 // HTTP is insecure. Not really much we can do about that for XML schemas
         public const string CustomUiPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/extensibility";
 
         public const string CustomUi14PartRelType = "http://schemas.microsoft.com/office/2007/relationships/ui/extensibility";
@@ -33,6 +34,7 @@ namespace OfficeRibbonXEditor.Documents
         public const string QatPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/customization";
 
         public const string ImagePartRelType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
+#pragma warning restore S5332
 
         private readonly string _tempFileName;
         
@@ -126,48 +128,6 @@ namespace OfficeRibbonXEditor.Documents
 
             Debug.Assert(false, "Unrecognized extension passed");
             return OfficeApplication.Xml;
-        }
-
-        /// <summary>
-        /// Determines whether the file loaded for this OfficeDocument has suffered external
-        /// modifications since this instance was created
-        /// </summary>
-        /// <returns>
-        /// Whether there were external changes or not
-        /// </returns>
-        public bool HasExternalChanges()
-        {
-            // TODO: This doesn't work, due to tempFileName being already open. For this to work properly, an extra temporary copy of tempFileName might be required
-            var first = new FileInfo(Name);
-            var second = new FileInfo(_tempFileName);
-
-            if (first.Length != second.Length)
-            {
-                return true;
-            }
-
-            const int BytesToRead = sizeof(long);
-
-            var iterations = (int)Math.Ceiling((double)first.Length / BytesToRead);
-
-            using var fs1 = File.Open(Name, FileMode.Open, FileAccess.Read, FileShare.Read);
-            using var fs2 = File.Open(_tempFileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-            
-            var one = new byte[BytesToRead];
-            var two = new byte[BytesToRead];
-
-            for (var i = 0; i < iterations; i++)
-            {
-                fs1.Read(one, 0, BytesToRead);
-                fs2.Read(two, 0, BytesToRead);
-
-                if (BitConverter.ToInt64(one, 0) != BitConverter.ToInt64(two, 0))
-                {
-                    return true;
-                }
-            }
-
-            return false;
         }
 
         public void Save(string? customFileName = null, bool preserveAttributes = true)

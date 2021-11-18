@@ -8,23 +8,30 @@ namespace OfficeRibbonXEditor.Services
     [Export(typeof(IUrlHelper))]
     public class UrlHelper : IUrlHelper
     {
-        private const string BaseUrl = "https://github.com/fernandreu/office-ribbonx-editor";
+        private const string DefaultBaseUrl = "https://github.com/fernandreu/office-ribbonx-editor";
+
+        private readonly string _baseUrl;
+
+        public UrlHelper(string? baseUrl = null)
+        {
+            _baseUrl = baseUrl ?? DefaultBaseUrl;
+        }
 
         public Process? OpenIssue()
         {
-            return OpenExternal(new Uri($"{BaseUrl}/issues/new/choose"));
+            return OpenExternal(new Uri($"{_baseUrl}/issues/new/choose"));
         }
 
         public Process? OpenBug(string title, string body)
         {
             title = Uri.EscapeDataString(title);
             body = Uri.EscapeDataString(body);
-            return OpenExternal(new Uri($"{BaseUrl}/issues/new?assignees=&labels=bug&title={title}&body={body}"));
+            return OpenExternal(new Uri($"{_baseUrl}/issues/new?assignees=&labels=bug&title={title}&body={body}"));
         }
 
         public Process? OpenRelease(string version = "latest")
         {
-            return OpenExternal(new Uri($"{BaseUrl}/releases/{version}"));
+            return OpenExternal(new Uri($"{_baseUrl}/releases/{version}"));
         }
 
         public Process? OpenExternal(Uri url)
