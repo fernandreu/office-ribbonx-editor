@@ -23,16 +23,16 @@ namespace OfficeRibbonXEditor.Views.Controls
             InitializeComponent();
         }
         
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(args);
+            base.OnPropertyChanged(e);
 
-            if (args.Property != DataContextProperty)
+            if (e.Property != DataContextProperty)
             {
                 return;
             }
 
-            if (args.NewValue is not IconTabViewModel model)
+            if (e.NewValue is not IconTabViewModel model)
             {
                 _viewModel = null;
                 return;

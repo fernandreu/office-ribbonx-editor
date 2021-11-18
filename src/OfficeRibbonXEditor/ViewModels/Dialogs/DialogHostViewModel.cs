@@ -35,7 +35,6 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public void Close()
         {
-            var args = new CancelEventArgs();
             Closed?.Invoke(this, EventArgs.Empty);
         }
     }

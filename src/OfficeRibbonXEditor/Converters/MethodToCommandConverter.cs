@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
@@ -62,6 +63,7 @@ namespace OfficeRibbonXEditor.Converters
             /// the corresponding event. The empty add / remove is a way to tell the compiler (or the code
             /// readers) that this event is only added for the sake of the ICommand interface
             /// </summary>
+            [SuppressMessage("SonarLint", "S108", Justification = "Warning is due to empty blocks. As explained above, we are doing this on purpose")]
             public event EventHandler? CanExecuteChanged
             {
                 add {}

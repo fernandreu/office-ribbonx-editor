@@ -470,7 +470,8 @@ namespace OfficeRibbonXEditor.Helpers
 				Scintilla.SelectionStart = r.MinPosition;
 				Scintilla.SelectionEnd = r.MaxPosition;
 				Scintilla.ReplaceSelection(replaceString);
-				r = new CharacterRange(r.MinPosition, startPos = r.MinPosition + replaceString.Length);
+				startPos = r.MinPosition + replaceString.Length;
+				r = new CharacterRange(r.MinPosition, startPos);
 				endPos += diff;
 
 				results.Add(r);
