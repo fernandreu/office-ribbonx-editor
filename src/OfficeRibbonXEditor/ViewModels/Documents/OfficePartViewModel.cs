@@ -64,7 +64,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             Part.RemoveImage(id);
             for (var i = 0; i < Children.Count; ++i)
             {
-                if (!(Children[i] is IconViewModel icon))
+                if (Children[i] is not IconViewModel icon)
                 {
                     continue;
                 }
@@ -76,6 +76,13 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                     return;
                 }
             }
+        }
+
+        public void ChangeIconId(string oldId, string newId)
+        {
+            Part?.ChangeImageId(oldId, newId);
+            IconsChanged = true;
+            SortedChildren.Refresh();
         }
 
         /// <summary>
