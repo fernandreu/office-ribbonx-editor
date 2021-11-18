@@ -19,10 +19,10 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         [SetUp]
         public void SetUp()
         {
-            var directory = Path.GetDirectoryName(_sourceFile);
+            var directory = Path.GetDirectoryName(_destFile);
             if (directory == null)
             {
-                Assert.Fail("Wrong _sourceFile path");
+                Assert.Fail("Wrong _destFile path");
                 return; // Not needed, but suppreses nullable warnings below
             }
 
@@ -38,33 +38,30 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         public void PartShouldBeInserted()
         {
             // Arrange
-            using (var doc = new OfficeDocument(_sourceFile))
-            using (var viewModel = new OfficeDocumentViewModel(doc))
-            {
-                // Act
-                viewModel.InsertPart(XmlPart.RibbonX12);
+            using var doc = new OfficeDocument(_sourceFile);
+            using var viewModel = new OfficeDocumentViewModel(doc);
+            
+            // Act
+            viewModel.InsertPart(XmlPart.RibbonX12);
 
-                // Assert
-                Assert.AreEqual(1, viewModel.Children.Count);
-            }
+            // Assert
+            Assert.AreEqual(1, viewModel.Children.Count);
         }
 
         [Test]
         public void DocumentShouldBeSaved()
         {
             // Arrange
-            using (var doc = new OfficeDocument(_sourceFile))
-            using (var viewModel = new OfficeDocumentViewModel(doc))
-            {
-                viewModel.InsertPart(XmlPart.RibbonX12);
-                Assume.That(File.Exists(_destFile), Is.False, "File was not deleted before test");
+            using var doc = new OfficeDocument(_sourceFile);
+            using var viewModel = new OfficeDocumentViewModel(doc);
+            viewModel.InsertPart(XmlPart.RibbonX12);
+            Assume.That(File.Exists(_destFile), Is.False, "File was not deleted before test");
 
-                // Act
-                doc.Save(_destFile);
+            // Act
+            doc.Save(_destFile);
 
-                // Assert
-                Assert.IsTrue(File.Exists(_destFile), "File was not saved");
-            }
+            // Assert
+            Assert.IsTrue(File.Exists(_destFile), "File was not saved");
         }
         
         /// <summary>
@@ -74,7 +71,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Documents
         public void ReloadOnSaveTest()
         {
             // Arrange
-            void CheckIntegrity(OfficeDocumentViewModel innerModel)
+            static void CheckIntegrity(OfficeDocumentViewModel innerModel)
             {
                 Assert.AreEqual(2, innerModel.Children.Count);
 
