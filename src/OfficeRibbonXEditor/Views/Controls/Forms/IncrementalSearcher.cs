@@ -123,14 +123,12 @@ namespace OfficeRibbonXEditor.Views.Controls.Forms
                 Point newLocation;
                 if (cursorPoint.Y < (Screen.PrimaryScreen.Bounds.Height / 2))
                 {
-                    //TODO - replace line height with ScintillaNET command, when added
                     var lineHeight = Scintilla.DirectMessage(sciTextHeight, IntPtr.Zero, IntPtr.Zero).ToInt32();
                     // Top half of the screen
                     newLocation = new Point(r.X, cursorPoint.Y + lineHeight * 2);
                 }
                 else
                 {
-                    //TODO - replace line height with ScintillaNET command, when added
                     int lineHeight = Scintilla.DirectMessage(sciTextHeight, IntPtr.Zero, IntPtr.Zero).ToInt32();
                     // Bottom half of the screen
                     newLocation = new Point(r.X, cursorPoint.Y - Height - (lineHeight * 2));

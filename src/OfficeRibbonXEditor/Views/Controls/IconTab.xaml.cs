@@ -32,20 +32,13 @@ namespace OfficeRibbonXEditor.Views.Controls
                 return;
             }
 
-            if (args.OldValue is IconTabViewModel previousModel)
-            {
-                // TODO: Remove listeners
-            }
-
-            if (!(args.NewValue is IconTabViewModel model))
+            if (args.NewValue is not IconTabViewModel model)
             {
                 _viewModel = null;
                 return;
             }
 
             _viewModel = model;
-
-            // TODO: Add listeners
         }
 
         private void OnPreviewMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)

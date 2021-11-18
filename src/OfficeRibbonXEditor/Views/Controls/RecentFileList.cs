@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -228,7 +229,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
 
             _separator = new Separator();
-            FileMenu.Items.Insert(++index, _separator);
+            FileMenu.Items.Insert(index + 1, _separator);
         }
 
         private string GetMenuItemText(int index, string filepath, string displayPath)

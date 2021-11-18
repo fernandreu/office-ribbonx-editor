@@ -58,10 +58,15 @@ namespace OfficeRibbonXEditor.Converters
             }
 
             /// <summary>
-            /// The CanExecute property of this command will never change, but we still need
-            /// to define the corresponding event
+            /// The CanExecute property of this command will never change, but we still need to define the
+            /// the corresponding event. The empty add / remove is a way to tell the compiler (or the code
+            /// readers) that this event is only added for the sake of the ICommand interface
             /// </summary>
-            public event EventHandler? CanExecuteChanged;
+            public event EventHandler? CanExecuteChanged
+            {
+                add {}
+                remove {}
+            }
 
             public bool CanExecute(object? parameter)
             {
