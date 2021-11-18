@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
@@ -24,9 +25,9 @@ namespace OfficeRibbonXEditor.Documents
         Xml,
     }
 
+    [SuppressMessage("SonarLint", "S5332", Justification = "The warning is about the XML schemas being insecure due to HTTP, but there's nothing to do about that")]
     public class OfficeDocument : IDisposable
     {
-#pragma warning disable S5332 // HTTP is insecure. Not really much we can do about that for XML schemas
         public const string CustomUiPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/extensibility";
 
         public const string CustomUi14PartRelType = "http://schemas.microsoft.com/office/2007/relationships/ui/extensibility";
@@ -34,7 +35,6 @@ namespace OfficeRibbonXEditor.Documents
         public const string QatPartRelType = "http://schemas.microsoft.com/office/2006/relationships/ui/customization";
 
         public const string ImagePartRelType = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image";
-#pragma warning restore S5332
 
         private readonly string _tempFileName;
         
