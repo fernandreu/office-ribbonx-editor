@@ -831,7 +831,7 @@
                     </HierarchicalDataTemplate>
                     <HierarchicalDataTemplate
                         DataType="{x:Type documents:OfficePartViewModel}"
-                        ItemsSource="{Binding Children}">
+                        ItemsSource="{Binding SortedChildren}">
                         <StackPanel Orientation="Horizontal"
                                     Tag="{Binding ElementName=Window, Path=DataContext}">
                             <Image Width="16" Height="16" Margin="3,0" Source="{Binding ImageSource}"/>

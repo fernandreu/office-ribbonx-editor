@@ -1,5 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 using GalaSoft.MvvmLight;
+using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {
@@ -14,6 +17,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         public virtual string Name { get; set; } = string.Empty;
 
         protected TreeViewItemViewModel(TreeViewItemViewModel? parent, bool lazyLoadChildren, bool canHaveContents = true, string? contents = null)
+            : this()
         {
             Parent = parent;
 
@@ -30,6 +34,8 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         // This is used to create the DummyChild instance.
         private TreeViewItemViewModel()
         {
+            SortedChildren = (ListCollectionView)CollectionViewSource.GetDefaultView(Children);
+            SortedChildren.CustomSort = new CustomTreeViewItemSorter();
         }
 
         /// <summary>
@@ -37,6 +43,8 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// </summary>
         public ObservableCollection<TreeViewItemViewModel> Children { get; } = new ObservableCollection<TreeViewItemViewModel>();
         
+        public ListCollectionView SortedChildren { get; }
+
         /// <summary>
         /// Returns true if this object's Children have not yet been populated.
         /// </summary>

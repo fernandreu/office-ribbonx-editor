@@ -155,14 +155,12 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         private void ChangeId(string oldId, string newId)
         {
-            var viewModel = Parent as OfficePartViewModel;
-            viewModel?.Part?.ChangeImageId(oldId, newId);
-            IsEditingId = false;
-
-            if (viewModel != null)
+            if (Parent is OfficePartViewModel viewModel)
             {
-                viewModel.IconsChanged = true;
+                viewModel?.ChangeIconId(oldId, newId);
             }
+
+            IsEditingId = false;
         }
     }
 }
