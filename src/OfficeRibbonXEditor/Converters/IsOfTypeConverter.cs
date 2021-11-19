@@ -9,7 +9,7 @@ namespace OfficeRibbonXEditor.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || !(parameter is Type type))
+            if (value == null || parameter is not Type type)
             {
                 return false;
             }

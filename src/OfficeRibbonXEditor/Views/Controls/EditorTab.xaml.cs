@@ -160,7 +160,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         private void OnScintillaUpdateUi(object? sender, UpdateUIEventArgs e)
         {
-            if (!(DataContext is EditorTabViewModel vm))
+            if (DataContext is not EditorTabViewModel vm)
             {
                 return;
             }
@@ -229,7 +229,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             foreach (var ib in window.InputBindings)
             {
-                if (!(ib is KeyBinding kb))
+                if (ib is not KeyBinding kb)
                 {
                     return;
                 }

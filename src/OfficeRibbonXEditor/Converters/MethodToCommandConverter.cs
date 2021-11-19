@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.Converters
     {
         public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || !(parameter is string methodName))
+            if (value == null || parameter is not string methodName)
             {
                 Debug.WriteLine("Either the path or the ConverterParameter of MethodToCommandConverter are null");
                 return value;

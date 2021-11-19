@@ -10,7 +10,7 @@ namespace OfficeRibbonXEditor.Converters
     {
         public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is System.Drawing.Color color))
+            if (value is not System.Drawing.Color color)
             {
                 return null;
             }
@@ -20,7 +20,7 @@ namespace OfficeRibbonXEditor.Converters
 
         public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (!(value is Color color))
+            if (value is not Color color)
             {
                 return null;
             }

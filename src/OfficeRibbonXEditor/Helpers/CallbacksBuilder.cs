@@ -113,7 +113,7 @@ namespace OfficeRibbonXEditor.Helpers
                 return string.Empty;
             }
 
-            var callbackValue = callback.Value.Substring(callback.Value.LastIndexOf('.') + 1);
+            var callbackValue = callback.Value[(callback.Value.LastIndexOf('.') + 1)..];
 
             Debug.Assert(_callbackList != null, "AttributeList is null");
 
@@ -205,7 +205,7 @@ namespace OfficeRibbonXEditor.Helpers
 
                     if (attribute.Name == "id" || attribute.Name == "idMso" || attribute.Name == "idQ")
                     {
-                        return attribute.Value.Substring(attribute.Value.LastIndexOf(':') + 1);
+                        return attribute.Value[(attribute.Value.LastIndexOf(':') + 1)..];
                     }
                 }
             }

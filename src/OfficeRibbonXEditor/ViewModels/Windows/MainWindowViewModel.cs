@@ -352,7 +352,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -448,7 +448,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteInsertIconsCommand()
         {
-            if (!(SelectedItem is OfficePartViewModel))
+            if (SelectedItem is not OfficePartViewModel)
             {
                 return;
             }
@@ -462,7 +462,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteChangeIconIdCommand()
         {
-            if (!(SelectedItem is IconViewModel icon))
+            if (SelectedItem is not IconViewModel icon)
             {
                 return;
             }
@@ -472,7 +472,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private void FinishInsertingIcons(IEnumerable<string> filePaths)
         {
-            if (!(SelectedItem is OfficePartViewModel part))
+            if (SelectedItem is not OfficePartViewModel part)
             {
                 // If OpenFileDialog opens modally, this should not happen
                 return;
@@ -623,7 +623,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
+            if (data.Data.GetData(DataFormats.FileDrop) is not string[] files)
             {
                 return;
             }
@@ -644,7 +644,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
+            if (data.Data.GetData(DataFormats.FileDrop) is not string[] files)
             {
                 return;
             }
@@ -907,7 +907,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             for (i = 0; i < filters.Count - 1; i++)
             {
                 // -1 to exclude all files
-                var otherExt = filters[i].Split('|')[1].Substring(1);
+                var otherExt = filters[i].Split('|')[1][1..];
                 if (ext == otherExt)
                 {
                     break;
@@ -1035,7 +1035,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 SelectedItem = doc.Children[0];
             }
             
-            if (!(SelectedItem is OfficePartViewModel part))
+            if (SelectedItem is not OfficePartViewModel part)
             {
                 return;
             }
@@ -1097,7 +1097,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private bool ValidateXml(bool showValidMessage)
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return false;
             }
@@ -1106,7 +1106,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var part = tab.Part;
 
             // Test to see if text is XML first
-            if (_customUiSchemas == null || part.Part == null || !(_customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
+            if (_customUiSchemas == null || part.Part == null || _customUiSchemas[part.Part.PartType] is not XmlSchema targetSchema)
             {
                 return false;
             }
@@ -1143,7 +1143,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             SelectedTab.ApplyChanges();
             
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -1178,7 +1178,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteGoToCommand()
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -1195,7 +1195,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteToggleCommentCommand()
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -1223,7 +1223,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
 
             // TODO: Use a StringBuilder
-            var lines = data.Text.Substring(start, end - start).Split(new[] { newLine }, StringSplitOptions.None);
+            var lines = data.Text[start..end].Split(new[] { newLine }, StringSplitOptions.None);
             for (var i = 0; i < lines.Length; ++i)
             {
                 var trimmed = lines[i].Trim();
@@ -1237,12 +1237,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (trimmed.StartsWith("<!--", StringComparison.OrdinalIgnoreCase) && trimmed.EndsWith("-->", StringComparison.OrdinalIgnoreCase))
                 {
                     // Remove the comment characters
-                    lines[i] = lines[i].Substring(0, index) + trimmed.Substring(4, trimmed.Length - 7) + lines[i].Substring(index + trimmed.Length);
+                    lines[i] = lines[i][..index] + trimmed[4..^3] + lines[i][(index + trimmed.Length)..];
                 }
                 else
                 {
                     // Add the comment characters
-                    lines[i] = lines[i].Substring(0, index) + "<!--" + trimmed + "-->" + lines[i].Substring(index + trimmed.Length);
+                    lines[i] = lines[i][..index] + "<!--" + trimmed + "-->" + lines[i][(index + trimmed.Length)..];
                 }
             }
 

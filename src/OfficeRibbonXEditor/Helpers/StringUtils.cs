@@ -67,10 +67,10 @@ namespace OfficeRibbonXEditor.Helpers
             // Long enough to shorten. If path is a UNC path, root may be rather long
             if (root.Length + 6 >= maxLength)
             {
-                return root + lastElement.Substring(0, 3) + "...";
+                return root + lastElement[..3] + "...";
             }
 
-            return pathName.Substring(0, maxLength - 3) + "...";
+            return pathName[..(maxLength - 3)] + "...";
         }
 
         private static string ShortenRootAndFileName(string root, string lastElement, int maxLength)
@@ -92,7 +92,7 @@ namespace OfficeRibbonXEditor.Helpers
                 len = maxLength - root.Length - 3;
             }
 
-            return root + lastElement.Substring(0, len) + "...";
+            return root + lastElement[..len] + "...";
         }
 
         private static string ShortenFull(string root, string pathName, string[] elements, int maxLength)

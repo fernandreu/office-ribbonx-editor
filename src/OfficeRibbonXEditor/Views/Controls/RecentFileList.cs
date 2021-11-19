@@ -144,7 +144,7 @@ namespace OfficeRibbonXEditor.Views.Controls
         // ReSharper disable StyleCop.SA1126
         private void HookFileMenu()
         {
-            if (!(Parent is MenuItem parent))
+            if (Parent is not MenuItem parent)
             {
                 throw new InvalidOperationException("Parent must be a MenuItem");
             }
@@ -506,7 +506,7 @@ namespace OfficeRibbonXEditor.Views.Controls
         {
             public XmlPersister()
             {
-                Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName + "\\" + ApplicationAttributes.ProductName + "\\" + "RecentFileList.xml");
+                Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName, ApplicationAttributes.ProductName, "RecentFileList.xml");
             }
 
             public XmlPersister(string filepath)
