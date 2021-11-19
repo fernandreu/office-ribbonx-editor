@@ -28,23 +28,13 @@ namespace OfficeRibbonXEditor.Helpers
         /// <param name="maxPosition">The maximum, or end position.</param>
         public CharacterRange(int minPosition, int maxPosition)
         {
-            this.MinPosition = minPosition;
-            this.MaxPosition = maxPosition;
-        }
-
-        public override bool Equals(object? obj)
-        {
-            if (!(obj is CharacterRange other))
-            {
-                return false;
-            }
-
-            return this.Equals(other);
+            MinPosition = minPosition;
+            MaxPosition = maxPosition;
         }
 
         public override int GetHashCode()
         {
-            return 31 * this.MinPosition + 17 ^ this.MaxPosition;
+            return 31 * MinPosition + 17 ^ MaxPosition;
         }
 
         public static bool operator ==(CharacterRange left, CharacterRange right)
@@ -57,9 +47,19 @@ namespace OfficeRibbonXEditor.Helpers
             return !(left == right);
         }
 
+        public override bool Equals(object? obj)
+        {
+            if (obj is not CharacterRange other)
+            {
+                return false;
+            }
+
+            return Equals(other);
+        }
+
         public bool Equals(CharacterRange other)
         {
-            return this.MinPosition == other.MinPosition && this.MaxPosition == other.MaxPosition;
+            return MinPosition == other.MinPosition && MaxPosition == other.MaxPosition;
         }
     }
 }

@@ -32,9 +32,10 @@ namespace OfficeRibbonXEditor.UnitTests.Xml
             // Arrange
             var content = string.Empty;
             var schema = Schema.Load(partType);
+            Assert.IsNotNull(schema);
 
             // Act
-            var errors = XmlValidation.Validate(content, schema);
+            var errors = XmlValidation.Validate(content, schema!);
 
             return !errors.Any();
         }
@@ -63,10 +64,12 @@ namespace OfficeRibbonXEditor.UnitTests.Xml
         {
             // Arrange
             var schema = Schema.Load(options.Schema);
+            Assert.NotNull(schema);
+
             var xml = Smart.Format(options.Content ?? string.Empty, options);
 
             // Act
-            var errors = XmlValidation.Validate(xml, schema);
+            var errors = XmlValidation.Validate(xml, schema!);
 
             return !errors.Any();
         }

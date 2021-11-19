@@ -20,62 +20,55 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         public IconTab()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
         
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(args);
+            base.OnPropertyChanged(e);
 
-            if (args.Property != DataContextProperty)
+            if (e.Property != DataContextProperty)
             {
                 return;
             }
 
-            if (args.OldValue is IconTabViewModel previousModel)
+            if (e.NewValue is not IconTabViewModel model)
             {
-                // TODO: Remove listeners
-            }
-
-            if (!(args.NewValue is IconTabViewModel model))
-            {
-                this._viewModel = null;
+                _viewModel = null;
                 return;
             }
 
-            this._viewModel = model;
-
-            // TODO: Add listeners
+            _viewModel = model;
         }
 
-        private void OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void OnPreviewMouseLeftButtonDown(object? sender, MouseButtonEventArgs e)
         {
-            this._scrollMousePoint = e.GetPosition(this.ScrollViewer);
-            this._hOffset = this.ScrollViewer.HorizontalOffset;
-            this._vOffset = this.ScrollViewer.VerticalOffset;
-            this.ScrollViewer.CaptureMouse();
+            _scrollMousePoint = e.GetPosition(ScrollViewer);
+            _hOffset = ScrollViewer.HorizontalOffset;
+            _vOffset = ScrollViewer.VerticalOffset;
+            ScrollViewer.CaptureMouse();
         }
 
-        private void OnPreviewMouseMove(object sender, MouseEventArgs e)
+        private void OnPreviewMouseMove(object? sender, MouseEventArgs e)
         {
-            if (this.ScrollViewer.IsMouseCaptured)
+            if (ScrollViewer.IsMouseCaptured)
             {
-                this.ScrollViewer.ScrollToHorizontalOffset(this._hOffset + (this._scrollMousePoint.X - e.GetPosition(this.ScrollViewer).X));
-                this.ScrollViewer.ScrollToVerticalOffset(this._vOffset + (this._scrollMousePoint.Y - e.GetPosition(this.ScrollViewer).Y));
+                ScrollViewer.ScrollToHorizontalOffset(_hOffset + (_scrollMousePoint.X - e.GetPosition(ScrollViewer).X));
+                ScrollViewer.ScrollToVerticalOffset(_vOffset + (_scrollMousePoint.Y - e.GetPosition(ScrollViewer).Y));
             }
         }
 
-        private void OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void OnPreviewMouseLeftButtonUp(object? sender, MouseButtonEventArgs e)
         {
-            this.ScrollViewer.ReleaseMouseCapture();
+            ScrollViewer.ReleaseMouseCapture();
         }
 
-        private void OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        private void OnPreviewMouseWheel(object? sender, MouseWheelEventArgs e)
         {
             e.Handled = true;
-            if (this._viewModel != null)
+            if (_viewModel != null)
             {
-                this._viewModel.Zoom += Math.Sign(e.Delta);
+                _viewModel.Zoom += Math.Sign(e.Delta);
             }
         }
     }

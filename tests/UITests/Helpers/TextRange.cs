@@ -70,7 +70,7 @@ namespace OfficeRibbonXEditor.UITests.Helpers
             {
                 var text = ValuePattern.Value.Value;
                 var start = Position;
-                text = text.Substring(0, Position) + value + text.Substring(EndPosition);
+                text = text[..Position] + value + text[EndPosition..];
                 ValuePattern.SetValue(text);
                 Position = start;
                 EndPosition = start + value.Length;

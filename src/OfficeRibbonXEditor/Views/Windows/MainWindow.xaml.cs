@@ -25,33 +25,33 @@ namespace OfficeRibbonXEditor.Views.Windows
             InitializeComponent();
         }
 
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(args);
+            base.OnPropertyChanged(e);
 
-            if (args.Property != DataContextProperty || !(args.NewValue is MainWindowViewModel model))
+            if (e.Property != DataContextProperty || e.NewValue is not MainWindowViewModel model)
             {
                 return;
             }
 
             _viewModel = model;
 
-            _viewModel.InsertRecentFile += (o, e) =>
+            _viewModel.InsertRecentFile += (o, args) =>
             {
-                if (e.Data != null)
+                if (args.Data != null)
                 {
-                    RecentFileList.InsertFile(e.Data);
+                    RecentFileList.InsertFile(args.Data);
                 }
             };
 
-            _viewModel.SetGlobalCursor += (o, e) => Mouse.OverrideCursor = e.Data;
+            _viewModel.SetGlobalCursor += (o, args) => Mouse.OverrideCursor = args.Data;
 
             // These no longer use interactions in XAML due to the conversion needed for the command parameter
             PreviewDragEnter += OnPreviewDragEnter;
             Drop += OnDrop;
         }
 
-        private void OnPreviewDragEnter(object sender, DragEventArgs e)
+        private void OnPreviewDragEnter(object? sender, DragEventArgs e)
         {
             var data = new DragData(e.Data);
             _viewModel?.PreviewDragEnterCommand.Execute(data);
@@ -61,7 +61,7 @@ namespace OfficeRibbonXEditor.Views.Windows
             }
         }
 
-        private void OnDrop(object sender, DragEventArgs e)
+        private void OnDrop(object? sender, DragEventArgs e)
         {
             var data = new DragData(e.Data);
             _viewModel?.DropCommand.Execute(data);
@@ -79,7 +79,7 @@ namespace OfficeRibbonXEditor.Views.Windows
         /// <returns>The item found, or null otherwise</returns>
         private static TreeViewItem? VisualUpwardSearch(DependencyObject? source)
         {
-            while (source != null && !(source is TreeViewItem))
+            while (source != null && source is not TreeViewItem)
             {
                 source = VisualTreeHelper.GetParent(source);
             }
@@ -89,7 +89,7 @@ namespace OfficeRibbonXEditor.Views.Windows
 
         #region Disable horizontal scrolling when selecting TreeView item
 
-        private void OnTreeViewItemRequestBringIntoView(object sender, RequestBringIntoViewEventArgs e)
+        private void OnTreeViewItemRequestBringIntoView(object? sender, RequestBringIntoViewEventArgs e)
         {
             // Ignore re-entrant calls
             if (_suppressRequestBringIntoView)
@@ -115,9 +115,12 @@ namespace OfficeRibbonXEditor.Views.Windows
         }
 
         // The call to BringIntoView() in OnTreeViewItemSelected is also important
-        private void OnTreeViewItemSelected(object sender, RoutedEventArgs e)
+        private void OnTreeViewItemSelected(object? sender, RoutedEventArgs e)
         {
-            var item = (TreeViewItem)sender;
+            if (sender is not TreeViewItem item)
+            {
+                return;
+            }
 
             // Correctly handle horizontally scrolling for programmatically selected items
             item.BringIntoView();
@@ -132,7 +135,7 @@ namespace OfficeRibbonXEditor.Views.Windows
         /// </summary>
         /// <param name="sender">The sender of the right click</param>
         /// <param name="e">The event arguments</param>
-        private void OnTreeViewRightClick(object sender, MouseButtonEventArgs e)
+        private void OnTreeViewRightClick(object? sender, MouseButtonEventArgs e)
         {
             var treeViewItem = VisualUpwardSearch(e.OriginalSource as DependencyObject);
 
@@ -143,14 +146,14 @@ namespace OfficeRibbonXEditor.Views.Windows
             }
         }
 
-        private void OnChangeIdTextDown(object sender, KeyEventArgs e)
+        private void OnChangeIdTextDown(object? sender, KeyEventArgs e)
         {
-            if (!(sender is TextBox textBox))
+            if (sender is not TextBox textBox)
             {
                 return;
             }
 
-            if (!(textBox.DataContext is IconViewModel icon))
+            if (textBox.DataContext is not IconViewModel icon)
             {
                 return;
             }
@@ -165,14 +168,14 @@ namespace OfficeRibbonXEditor.Views.Windows
             }
         }
 
-        private void OnIdTextVisible(object sender, DependencyPropertyChangedEventArgs e)
+        private void OnIdTextVisible(object? sender, DependencyPropertyChangedEventArgs e)
         {
-            if ((bool)e.NewValue == false)
+            if ((bool)e.NewValue)
             {
                 return;
             }
 
-            if (!(sender is TextBox textBox))
+            if (sender is not TextBox textBox)
             {
                 return;
             }
@@ -181,13 +184,13 @@ namespace OfficeRibbonXEditor.Views.Windows
             textBox.SelectAll();
         }
 
-        private void OnPreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void OnPreviewMouseDoubleClick(object? sender, MouseButtonEventArgs e)
         {
             e.Handled = true;
             _viewModel?.OpenTabCommand.Execute(null);
         }
         
-        private void OnDocumentViewSelectionChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void OnDocumentViewSelectionChanged(object? sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var newItem = e.NewValue as TreeViewItemViewModel;
             if (_viewModel != null)
@@ -196,15 +199,20 @@ namespace OfficeRibbonXEditor.Views.Windows
             }
         }
 
-        private void OnToolBarLoaded(object sender, RoutedEventArgs e)
+        private void OnToolBarLoaded(object? sender, RoutedEventArgs e)
         {
+            if (sender is not ToolBar toolBar)
+            {
+                return;
+            }
+
             // This removes overflow icon at the right (see https://stackoverflow.com/questions/1050953)
-            var toolBar = sender as ToolBar;
-            if (toolBar?.Template.FindName("OverflowGrid", toolBar) is FrameworkElement overflowGrid)
+            if (toolBar.Template.FindName("OverflowGrid", toolBar) is FrameworkElement overflowGrid)
             {
                 overflowGrid.Visibility = Visibility.Collapsed;
             }
-            if (toolBar?.Template.FindName("MainPanelBorder", toolBar) is FrameworkElement mainPanelBorder)
+
+            if (toolBar.Template.FindName("MainPanelBorder", toolBar) is FrameworkElement mainPanelBorder)
             {
                 mainPanelBorder.Margin = new Thickness();
             }

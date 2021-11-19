@@ -57,9 +57,9 @@ namespace OfficeRibbonXEditor.Helpers
             var key = Registry.CurrentUser.CreateSubKey($@"Software\Classes\{type}\shell\{MenuEntryName}");
             if (key == null)
             {
-                // TODO: Throw
                 return;
             }
+
             key.SetValue(null, "Edit with OfficeRibbonXEditor");
 
             var exePath = Assembly.GetExecutingAssembly().Location;

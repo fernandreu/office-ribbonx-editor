@@ -10,7 +10,7 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
             Path = path;
         }
 
-        public override string Name => System.IO.Path.GetFileNameWithoutExtension(this.Path);
+        public override string Name => System.IO.Path.GetFileNameWithoutExtension(Path);
 
         public string Path { get; }
 
@@ -18,13 +18,15 @@ namespace OfficeRibbonXEditor.ViewModels.Samples
         {
             try
             {
-                return File.ReadAllText(this.Path);
+                return File.ReadAllText(Path);
             }
             catch (IOException)
             {
+                // Files probably does not exist
             }
             catch (UnauthorizedAccessException)
             {
+                // User does not have access to the file / folder
             }
 
             return string.Empty;

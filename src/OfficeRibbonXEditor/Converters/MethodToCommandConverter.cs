@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Windows.Data;
@@ -20,7 +21,7 @@ namespace OfficeRibbonXEditor.Converters
     {
         public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null || !(parameter is string methodName))
+            if (value == null || parameter is not string methodName)
             {
                 Debug.WriteLine("Either the path or the ConverterParameter of MethodToCommandConverter are null");
                 return value;
@@ -45,7 +46,7 @@ namespace OfficeRibbonXEditor.Converters
         /// Tailored implementation of ICommand so that it holds the reference to the method and the sender. This
         /// avoids possible capture scope issues in lambdas
         /// </summary>
-        private class MethodProxy : ICommand
+        private sealed class MethodProxy : ICommand
         {
             private readonly MethodInfo _method;
 
@@ -58,24 +59,23 @@ namespace OfficeRibbonXEditor.Converters
             }
 
             /// <summary>
-            /// The CanExecute property of this command will never change, but we still need
-            /// to define the corresponding event. The explicit add / remove declaration
-            /// avoids wasting the space of the backing field while suppressing warning C0067.
-            /// Do not throw an exception in the add block, because WPF will automatically
-            /// subscribe to it anyway.
+            /// The CanExecute property of this command will never change, but we still need to define the
+            /// the corresponding event. The empty add / remove is a way to tell the compiler (or the code
+            /// readers) that this event is only added for the sake of the ICommand interface
             /// </summary>
-            public event EventHandler CanExecuteChanged
+            [SuppressMessage("SonarLint", "S108", Justification = "Warning is due to empty blocks. As explained above, we are doing this on purpose")]
+            public event EventHandler? CanExecuteChanged
             {
-                add { }
-                remove { }
+                add {}
+                remove {}
             }
 
-            public bool CanExecute(object parameter)
+            public bool CanExecute(object? parameter)
             {
                 return _sender != null;
             }
 
-            public void Execute(object parameter)
+            public void Execute(object? parameter)
             {
                 _method.Invoke(_sender, Array.Empty<object>());
             }

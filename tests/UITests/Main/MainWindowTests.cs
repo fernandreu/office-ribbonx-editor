@@ -130,7 +130,7 @@ namespace OfficeRibbonXEditor.UITests.Main
                     x => x.Name.StartsWith("1: ", StringComparison.OrdinalIgnoreCase) && x.Name.EndsWith(fileName, StringComparison.OrdinalIgnoreCase)))
                 .Result;
             Assert.NotNull(entry, "Recent file entry for opened file not found");
-            entry.Click();
+            entry!.Click();
             _manager.App.WaitWhileBusy();
             Assert.IsNotEmpty(treeView.Items, "Recent file not opened");
         }

@@ -46,28 +46,16 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             }
         }
 
-        public string? ImageSource  // TODO: Use the actual ImagesResource file somehow
+        public string? ImageSource => Document.FileType switch
         {
-            get
-            {
-                switch (Document.FileType)
-                {
-                    case OfficeApplication.Excel:
-                        return "/Resources/Images/excelwkb.png";
-                    case OfficeApplication.PowerPoint:
-                        return "/Resources/Images/pptpre.png";
-                    case OfficeApplication.Word:
-                        return "/Resources/Images/worddoc.png";
-                    case OfficeApplication.Visio:
-                        return "/Resources/Images/visiodoc.png";
-                    case OfficeApplication.Xml:
-                        return "/Resources/Images/xml.png";
-                    default:
-                        return null;
-                }
-            }
-        }
-
+            OfficeApplication.Excel => "/Resources/Images/excelwkb.png",
+            OfficeApplication.PowerPoint => "/Resources/Images/pptpre.png",
+            OfficeApplication.Word => "/Resources/Images/worddoc.png",
+            OfficeApplication.Visio => "/Resources/Images/visiodoc.png",
+            OfficeApplication.Xml => "/Resources/Images/xml.png",
+            _ => null,
+        };
+        
         /// <summary>
         /// Reloads the associated Office document, but keeping the OfficeParts currently shown in the GUI. This
         /// ensures that, if the files have been modified externally, the program is still looking at their latest
@@ -159,7 +147,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
             for (var i = 0; i < Children.Count; ++i)
             {
-                if (!(Children[i] is OfficePartViewModel part) || part.Part == null)
+                if (Children[i] is not OfficePartViewModel part || part.Part == null)
                 {
                     continue;
                 }

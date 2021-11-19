@@ -18,11 +18,11 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             InitializeComponent();
         }
 
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(args);
+            base.OnPropertyChanged(e);
 
-            if (args.Property != DataContextProperty || !(args.NewValue is CallbackDialogViewModel model))
+            if (e.Property != DataContextProperty || e.NewValue is not CallbackDialogViewModel model)
             {
                 return;
             }

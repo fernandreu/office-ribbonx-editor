@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -135,7 +136,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             return true;
         }
 
-        private void SettingsChangedEventHandler(object sender, PropertyChangedEventArgs e)
+        private void SettingsChangedEventHandler(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Settings.Default.UICulture))
             {
@@ -245,6 +246,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         {
             // We do not check the ThreeLetterISOLanguageName in this case because all options should come from the dropdown
             var foundLanguage = LanguageChoices.FirstOrDefault(x => x.TextInfo.ToTitleCase(x.NativeName) == Language);
+
+            if (foundLanguage == null)
+            {
+                throw new InvalidOperationException($"The language '{Language}' was not found amongst the internally stored languages. The tool might be corrupted");
+            }
+
             Settings.Default.UICulture = foundLanguage.Name;
         }
 

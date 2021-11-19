@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             ResultsScintilla.Scintilla.KeyUp += KeyUpEventHandler;
             ResultsScintilla.Scintilla.MouseClick += MouseClickEventHandler;
-            ResultsScintilla.Scintilla.MouseDoubleClick += MouseDoubleClickEventHandler;
+            ResultsScintilla.Scintilla.MouseDoubleClick += MouseClickEventHandler;
         }
 
         public IResultCollection? Results { get; private set; }
@@ -43,7 +43,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             Results.AddToPanel(Scintilla, ResultsScintilla.Scintilla);
         }
 
-        private void KeyUpEventHandler(object sender, KeyEventArgs e)
+        private void KeyUpEventHandler(object? sender, KeyEventArgs e)
         {
             if (Scintilla == null)
             {
@@ -54,35 +54,19 @@ namespace OfficeRibbonXEditor.Views.Controls
             Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
         }
 
-        private void MouseClickEventHandler(object sender, MouseEventArgs e)
+        private void MouseClickEventHandler(object? sender, MouseEventArgs e)
         {
             if (Scintilla == null)
             {
                 return;
             }
 
-            var pos = ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
+            var pos = ResultsScintilla.CharPositionFromPointClose(e.Location.X, e.Location.Y);
             if (pos == -1)
             {
                 return;
             }
 
-            Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
-        }
-
-        private void MouseDoubleClickEventHandler(object sender, MouseEventArgs e)
-        {
-            if (Scintilla == null)
-            {
-                return;
-            }
-
-            var pos = ResultsScintilla.CharPositionFromPointClose((e.Location).X, (e.Location).Y);
-            if (pos == -1)
-            {
-                return;
-            }
-            
             Results?.GoToPosition(pos, Scintilla, ResultsScintilla.Scintilla);
         }
     }

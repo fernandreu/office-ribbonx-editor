@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OfficeRibbonXEditor.ViewModels.Documents;
 
 namespace OfficeRibbonXEditor.Extensions
@@ -15,9 +16,14 @@ namespace OfficeRibbonXEditor.Extensions
 
             if (reference == null)
             {
-                yield break;
+                return Enumerable.Empty<TreeViewItemViewModel>();
             }
 
+            return FindItemsByNameInternal(list, reference, excludeSelf);
+        }
+
+        private static IEnumerable<TreeViewItemViewModel> FindItemsByNameInternal(IEnumerable<TreeViewItemViewModel> list, TreeViewItemViewModel reference, bool excludeSelf)
+        {
             foreach (var item in list)
             {
                 if (excludeSelf && ReferenceEquals(item, reference))

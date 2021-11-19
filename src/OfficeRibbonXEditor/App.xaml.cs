@@ -134,7 +134,7 @@ namespace OfficeRibbonXEditor
                         = new CultureInfo(Settings.Default.UICulture);
         }
 
-        private void ApplicationExit(object sender, ExitEventArgs e)
+        private void ApplicationExit(object? sender, ExitEventArgs e)
         {
             Settings.Default.Save();
         }
@@ -179,7 +179,7 @@ namespace OfficeRibbonXEditor
             }
         }
 
-        private void OnUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void OnUnhandledException(object? sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
 

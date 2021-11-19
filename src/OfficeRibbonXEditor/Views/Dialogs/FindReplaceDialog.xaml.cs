@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
         {
             base.OnPropertyChanged(e);
 
-            if (e.Property != DataContextProperty || !(e.NewValue is FindReplaceDialogViewModel vm))
+            if (e.Property != DataContextProperty || e.NewValue is not FindReplaceDialogViewModel vm)
             {
                 return;
             }

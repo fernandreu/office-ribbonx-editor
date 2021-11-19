@@ -20,7 +20,7 @@ namespace Generators
     sealed class GenerateCommandAttribute : Attribute
     {
         public GenerateCommandAttribute() {}
-        public string Name { get; set; }
+        public string? Name { get; set; }
     }
 }
 ";
@@ -68,9 +68,9 @@ namespace Generators
             }
 
             // Group the fields by class, and generate the source
-            foreach (var group in methodSymbols.GroupBy(x => x.ContainingType))
+            foreach (var group in methodSymbols.GroupBy(x => x.ContainingType, SymbolEqualityComparer.Default))
             {
-                var classSource = ProcessClass(context, group.Key, group.ToList(), attributeSymbol, taskSymbol);
+                var classSource = ProcessClass(context, (INamedTypeSymbol)group.Key, group.ToList(), attributeSymbol, taskSymbol);
                 if (classSource == null)
                 {
                     continue;
@@ -144,8 +144,6 @@ namespace {namespaceName}
 
             var commandType = methodType.SpecialType == SpecialType.System_Void ? RelayCommandReference : AsyncCommandReference;
             var suffix = methodSymbol.Parameters.Length == 0 ? string.Empty : $"<{methodSymbol.Parameters[0].Type.ToDisplayString()}>";
-
-            //context.ReportDiagnostic(methodSymbol, "SG9999", $"Doc ID for {methodSymbol.Name}: {methodSymbol.GetDocumentationCommentId()}");
 
             var text = $@"
         private {commandType}{suffix}? {fieldName};

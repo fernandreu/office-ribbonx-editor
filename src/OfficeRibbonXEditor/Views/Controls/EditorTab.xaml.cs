@@ -28,16 +28,16 @@ namespace OfficeRibbonXEditor.Views.Controls
             ResultsPanel.Scintilla = Editor.Scintilla;
         }
         
-        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs args)
+        protected override void OnPropertyChanged(DependencyPropertyChangedEventArgs e)
         {
-            base.OnPropertyChanged(args);
+            base.OnPropertyChanged(e);
 
-            if (args.Property != DataContextProperty)
+            if (e.Property != DataContextProperty)
             {
                 return;
             }
 
-            if (args.OldValue is EditorTabViewModel previousModel)
+            if (e.OldValue is EditorTabViewModel previousModel)
             {
                 // The way the DataTemplate works means the same control can be re-used for the different tabs, just with a different
                 // DataContext. It is important to ensure the previous part is saved first 
@@ -57,7 +57,7 @@ namespace OfficeRibbonXEditor.Views.Controls
                 previousModel.DuplicateLine -= OnDuplicateLine;
             }
 
-            if (!(args.NewValue is EditorTabViewModel model))
+            if (e.NewValue is not EditorTabViewModel model)
             {
                 _viewModel = null;
                 return;
@@ -160,7 +160,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
         private void OnScintillaUpdateUi(object? sender, UpdateUIEventArgs e)
         {
-            if (!(DataContext is EditorTabViewModel vm))
+            if (DataContext is not EditorTabViewModel vm)
             {
                 return;
             }
@@ -229,7 +229,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
             foreach (var ib in window.InputBindings)
             {
-                if (!(ib is KeyBinding kb))
+                if (ib is not KeyBinding kb)
                 {
                     return;
                 }

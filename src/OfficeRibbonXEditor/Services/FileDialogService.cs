@@ -20,7 +20,7 @@ namespace OfficeRibbonXEditor.Services
                               RestoreDirectory = true,
                               FileName = fileName ?? string.Empty
                           };
-            ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o).FileName);
+            ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o!).FileName);
             return ofd.ShowDialog();
         }
 
@@ -35,14 +35,14 @@ namespace OfficeRibbonXEditor.Services
                               FileName = fileName ?? string.Empty,
                               Multiselect = true
                           };
-            ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o).FileNames);
+            ofd.FileOk += (o, e) => completedAction(((OpenFileDialog)o!).FileNames);
             return ofd.ShowDialog();
         }
         
         public bool? SaveFileDialog(string title, string filter, Action<string> completedAction, string? fileName = null, int filterIndex = 0)
         {
             var sfd = new SaveFileDialog { Title = title, Filter = filter, FilterIndex = filterIndex, FileName = fileName ?? string.Empty };
-            sfd.FileOk += (o, e) => completedAction(((SaveFileDialog)o).FileName);
+            sfd.FileOk += (o, e) => completedAction(((SaveFileDialog)o!).FileName);
             return sfd.ShowDialog();
         }
     }

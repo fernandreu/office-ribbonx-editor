@@ -17,6 +17,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -143,7 +144,7 @@ namespace OfficeRibbonXEditor.Views.Controls
         // ReSharper disable StyleCop.SA1126
         private void HookFileMenu()
         {
-            if (!(Parent is MenuItem parent))
+            if (Parent is not MenuItem parent)
             {
                 throw new InvalidOperationException("Parent must be a MenuItem");
             }
@@ -162,7 +163,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             FileMenu.SubmenuOpened += FileMenuSubmenuOpened;
         }
 
-        private void FileMenuSubmenuOpened(object sender, RoutedEventArgs e)
+        private void FileMenuSubmenuOpened(object? sender, RoutedEventArgs e)
         {
             SetMenuItems();
         }
@@ -228,7 +229,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
 
             _separator = new Separator();
-            FileMenu.Items.Insert(++index, _separator);
+            FileMenu.Items.Insert(index + 1, _separator);
         }
 
         private string GetMenuItemText(int index, string filepath, string displayPath)
@@ -265,7 +266,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             return files;
         }
 
-        private void MenuItemClick(object sender, EventArgs e)
+        private void MenuItemClick(object? sender, EventArgs e)
         {
             if (sender is MenuItem menuItem)
             {
@@ -344,24 +345,18 @@ namespace OfficeRibbonXEditor.Views.Controls
                 }
             }
             
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            // ReSharper disable once MemberCanBePrivate.Local
             public static string Title { get; }
 
             public static string CompanyName { get; }
 
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            // ReSharper disable once MemberCanBePrivate.Local
             public static string Copyright { get; }
 
             public static string ProductName { get; }
 
-            // ReSharper disable once UnusedAutoPropertyAccessor.Local
-            // ReSharper disable once MemberCanBePrivate.Local
             public static string Version { get; }
         }
 
-        private class RecentFile
+        private sealed class RecentFile
         {
             public RecentFile(int number, string filepath)
             {
@@ -392,7 +387,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
         
-        private class RegistryPersister : IPersist
+        private sealed class RegistryPersister : IPersist
         {
             public RegistryPersister()
             {
@@ -464,7 +459,7 @@ namespace OfficeRibbonXEditor.Views.Controls
 
                 for (var i = 0; i < max; i++)
                 {
-                    var s = (string)k.GetValue(Key(i));
+                    var s = (string?)k.GetValue(Key(i));
                     if (s == null || !s.Equals(filepath, StringComparison.CurrentCultureIgnoreCase))
                     {
                         continue;
@@ -507,11 +502,11 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
         
-        private class XmlPersister : IPersist
+        private sealed class XmlPersister : IPersist
         {
             public XmlPersister()
             {
-                Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName + "\\" + ApplicationAttributes.ProductName + "\\" + "RecentFileList.xml");
+                Filepath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), ApplicationAttributes.CompanyName, ApplicationAttributes.ProductName, "RecentFileList.xml");
             }
 
             public XmlPersister(string filepath)
@@ -717,7 +712,7 @@ namespace OfficeRibbonXEditor.Views.Controls
                 }
             }
 
-            private class SmartStream : IDisposable
+            private sealed class SmartStream : IDisposable
             {
                 private readonly bool _isStreamOwned;
 

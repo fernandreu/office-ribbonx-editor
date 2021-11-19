@@ -51,7 +51,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs
 
         private static void OnModelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
         {
-            if (!(sender is DialogHost host))
+            if (sender is not DialogHost host)
             {
                 return;
             }
@@ -68,12 +68,6 @@ namespace OfficeRibbonXEditor.Views.Dialogs
             view.Host = host;
             host.Content = view;
             host.SizeToContent = SizeToContent.Manual;
-            // TODO: This does not work as expected in WPF (as opposed to Windows Forms), so disabled for now
-            // The main reason is that the window can only be made transparent if it has WindowStyle set to None,
-            // which means the dialog will need its own border, close controls, etc, and would lose the look and
-            // feel of the main window.
-            ////host.Deactivated += (o, args) => host.Opacity = view.InactiveOpacity;
-            ////host.Activated += (o, args) => host.Opacity = 1.0;
 
             // What follows is done here and not in XAML bindings because there can be sizing issues otherwise
 
@@ -98,7 +92,13 @@ namespace OfficeRibbonXEditor.Views.Dialogs
                 throw new ArgumentException($"Type {contentDialogType.Name} does not have a registered control");
             }
 
-            return (DialogControl) Activator.CreateInstance(viewType);
+            var instance = (DialogControl?)Activator.CreateInstance(viewType);
+            if (instance == null)
+            {
+                throw new ArgumentException($"Cannot generate view of type {viewType?.Name} for dialog view model of type {contentDialogType.Name}");
+            }
+
+            return instance;
         }
 
         private void CenterInOwner()

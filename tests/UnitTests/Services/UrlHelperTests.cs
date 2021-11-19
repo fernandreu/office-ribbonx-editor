@@ -41,8 +41,10 @@ namespace OfficeRibbonXEditor.UnitTests.Services
                 // merged with an already opened browsed. Not much can be done then, other
                 // than keeping it open
             }
-
-            // The assert is implicit: this should not throw in .NET Core anymore [#88]
+            catch (Exception ex)
+            {
+                Assert.Fail($"Expected no exceptions, but got: {ex}");
+            }
         }
     }
 }

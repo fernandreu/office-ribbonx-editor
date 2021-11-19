@@ -53,8 +53,13 @@ namespace OfficeRibbonXEditor.Helpers
             return result;
         }
 
-        private void GenerateCallback(XmlNode node, StringBuilder result)
+        private void GenerateCallback(XmlNode? node, StringBuilder result)
         {
+            if (node == null)
+            {
+                return;
+            }
+
             if (node.Attributes != null)
             {
                 foreach (XmlAttribute? attribute in node.Attributes)
@@ -101,35 +106,6 @@ namespace OfficeRibbonXEditor.Helpers
             }
         }
 
-        private static string? GetControlId(XmlNode node)
-        {
-            if (node.NodeType != XmlNodeType.Element || node.Attributes == null)
-            {
-                return null;
-            }
-            try
-            {
-                foreach (XmlAttribute? attribute in node.Attributes)
-                {
-                    if (attribute == null)
-                    {
-                        continue;
-                    }
-
-                    if (attribute.Name == "id" || attribute.Name == "idMso" || attribute.Name == "idQ")
-                    {
-                        return attribute.Value.Substring(attribute.Value.LastIndexOf(':') + 1);
-                    }
-                }
-            }
-            catch (XmlException ex)
-            {
-                Debug.Assert(false, ex.Message);
-            }
-
-            return null;
-        }
-
         private string GenerateCallback(XmlAttribute callback)
         {
             if (string.IsNullOrEmpty(callback.Value))
@@ -137,7 +113,7 @@ namespace OfficeRibbonXEditor.Helpers
                 return string.Empty;
             }
 
-            var callbackValue = callback.Value.Substring(callback.Value.LastIndexOf('.') + 1);
+            var callbackValue = callback.Value[(callback.Value.LastIndexOf('.') + 1)..];
 
             Debug.Assert(_callbackList != null, "AttributeList is null");
 
@@ -210,6 +186,35 @@ namespace OfficeRibbonXEditor.Helpers
 
             _callbackList?.Add(callbackValue);
             return result;
+        }
+
+        private static string? GetControlId(XmlNode node)
+        {
+            if (node.NodeType != XmlNodeType.Element || node.Attributes == null)
+            {
+                return null;
+            }
+            try
+            {
+                foreach (XmlAttribute? attribute in node.Attributes)
+                {
+                    if (attribute == null)
+                    {
+                        continue;
+                    }
+
+                    if (attribute.Name == "id" || attribute.Name == "idMso" || attribute.Name == "idQ")
+                    {
+                        return attribute.Value[(attribute.Value.LastIndexOf(':') + 1)..];
+                    }
+                }
+            }
+            catch (XmlException ex)
+            {
+                Debug.Assert(false, ex.Message);
+            }
+
+            return null;
         }
 
         private static string GenerateOnLoadCallback(string callback)

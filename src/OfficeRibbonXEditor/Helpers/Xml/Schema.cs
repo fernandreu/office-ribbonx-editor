@@ -8,7 +8,7 @@ namespace OfficeRibbonXEditor.Helpers.Xml
 {
     public static class Schema
     {
-        public static XmlSchema Load(XmlPart partType)
+        public static XmlSchema? Load(XmlPart partType)
         {
             var resource = partType == XmlPart.RibbonX12 ? SchemasResource.customUI : SchemasResource.customui14;
             using var stringReader = new StringReader(resource);

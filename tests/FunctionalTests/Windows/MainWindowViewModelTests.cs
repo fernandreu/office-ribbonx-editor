@@ -49,8 +49,14 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             MockOpenFile(_sourceFile);
             MockSaveFile(_destFile);
             
-            // ReSharper disable once AssignNullToNotNullAttribute
-            Directory.CreateDirectory(Path.GetDirectoryName(_destFile));
+            var directory = Path.GetDirectoryName(_destFile);
+            if (directory == null)
+            {
+                Assert.Fail("Wrong _destFile path");
+                return; // Not needed except to suppress nullable warnings
+            }
+
+            Directory.CreateDirectory(directory);
 
             if (File.Exists(_destFile))
             {

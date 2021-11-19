@@ -229,7 +229,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// </summary>
         public IDictionary<string, string> HelpLinks { get; } = new Dictionary<string, string>
         {
-            { "Change the Ribbon in Excel 2007 and up | Ron de Bruin Excel Automation", "http://www.rondebruin.nl/win/s2/win001.htm" },
+            { "Change the Ribbon in Excel 2007 and up | Ron de Bruin Excel Automation", "https://www.rondebruin.nl/win/s2/win001.htm" },
             { "Customize the 2007 Office Fluent Ribbon for Developers | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/aa338202(v=office.14).aspx" },
             { "Introduction to the Office 2010 Backstage View for Developers | Microsoft Docs", "https://msdn.microsoft.com/en-us/library/ee691833(office.14).aspx" },
             { "Office Fluent UI Command Identifiers | OfficeDev on GitHub", "https://github.com/OfficeDev/office-fluent-ui-command-identifiers" },
@@ -352,7 +352,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         public void PerformFindReplaceAction(FindReplaceAction action)
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -448,7 +448,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteInsertIconsCommand()
         {
-            if (!(SelectedItem is OfficePartViewModel))
+            if (SelectedItem is not OfficePartViewModel)
             {
                 return;
             }
@@ -462,7 +462,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteChangeIconIdCommand()
         {
-            if (!(SelectedItem is IconViewModel icon))
+            if (SelectedItem is not IconViewModel icon)
             {
                 return;
             }
@@ -472,7 +472,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private void FinishInsertingIcons(IEnumerable<string> filePaths)
         {
-            if (!(SelectedItem is OfficePartViewModel part))
+            if (SelectedItem is not OfficePartViewModel part)
             {
                 // If OpenFileDialog opens modally, this should not happen
                 return;
@@ -623,7 +623,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
+            if (data.Data.GetData(DataFormats.FileDrop) is not string[] files)
             {
                 return;
             }
@@ -644,7 +644,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 return;
             }
 
-            if (!(data.Data.GetData(DataFormats.FileDrop) is string[] files))
+            if (data.Data.GetData(DataFormats.FileDrop) is not string[] files)
             {
                 return;
             }
@@ -907,7 +907,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             for (i = 0; i < filters.Count - 1; i++)
             {
                 // -1 to exclude all files
-                var otherExt = filters[i].Split('|')[1].Substring(1);
+                var otherExt = filters[i].Split('|')[1][1..];
                 if (ext == otherExt)
                 {
                     break;
@@ -970,10 +970,29 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private static Hashtable LoadXmlSchemas()
         {
+            var missing = new List<XmlPart>();
+
+            var schema12 = Schema.Load(XmlPart.RibbonX12);
+            if (schema12 == null)
+            {
+                missing.Add(XmlPart.RibbonX12);
+            }
+
+            var schema14 = Schema.Load(XmlPart.RibbonX14);
+            if (schema14 == null)
+            {
+                missing.Add(XmlPart.RibbonX14);
+            }
+
+            if (missing.Count > 0)
+            {
+                throw new InvalidOperationException($"The following schemas are invalid: {string.Join(", ", missing)}. The tool might be corrupted");
+            }
+
             return new Hashtable(2)
             {
-                {XmlPart.RibbonX12, Schema.Load(XmlPart.RibbonX12)},
-                {XmlPart.RibbonX14, Schema.Load(XmlPart.RibbonX14)},
+                {XmlPart.RibbonX12, schema12},
+                {XmlPart.RibbonX14, schema14},
             };
         }
 
@@ -1016,7 +1035,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 SelectedItem = doc.Children[0];
             }
             
-            if (!(SelectedItem is OfficePartViewModel part))
+            if (SelectedItem is not OfficePartViewModel part)
             {
                 return;
             }
@@ -1049,11 +1068,10 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (_customUiSchemas != null &&
                     part.Part != null &&
                     _customUiSchemas[part.Part.PartType] is XmlSchema thisSchema && 
-                    _customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema)
+                    _customUiSchemas[part.Part.PartType == XmlPart.RibbonX12 ? XmlPart.RibbonX14 : XmlPart.RibbonX12] is XmlSchema otherSchema &&
+                    otherSchema.TargetNamespace != null)
                 {
-#pragma warning disable CA1307 // Specify StringComparison (this option is not available in .NET Framework 4.6.1)
-                    data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace);
-#pragma warning restore CA1307 // Specify StringComparison
+                    data = data.Replace(otherSchema.TargetNamespace, thisSchema.TargetNamespace, StringComparison.OrdinalIgnoreCase);
                 }
 
                 // Event might be raised too soon (when the view still does not exist). Hence, update part as well
@@ -1079,7 +1097,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private bool ValidateXml(bool showValidMessage)
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return false;
             }
@@ -1088,7 +1106,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             var part = tab.Part;
 
             // Test to see if text is XML first
-            if (_customUiSchemas == null || part.Part == null || !(_customUiSchemas[part.Part.PartType] is XmlSchema targetSchema))
+            if (_customUiSchemas == null || part.Part == null || _customUiSchemas[part.Part.PartType] is not XmlSchema targetSchema)
             {
                 return false;
             }
@@ -1125,7 +1143,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
             SelectedTab.ApplyChanges();
             
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -1160,7 +1178,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteGoToCommand()
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -1177,7 +1195,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteToggleCommentCommand()
         {
-            if (!(SelectedTab is EditorTabViewModel tab))
+            if (SelectedTab is not EditorTabViewModel tab)
             {
                 return;
             }
@@ -1205,7 +1223,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
 
             // TODO: Use a StringBuilder
-            var lines = data.Text.Substring(start, end - start).Split(new[] { newLine }, StringSplitOptions.None);
+            var lines = data.Text[start..end].Split(new[] { newLine }, StringSplitOptions.None);
             for (var i = 0; i < lines.Length; ++i)
             {
                 var trimmed = lines[i].Trim();
@@ -1219,12 +1237,12 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 if (trimmed.StartsWith("<!--", StringComparison.OrdinalIgnoreCase) && trimmed.EndsWith("-->", StringComparison.OrdinalIgnoreCase))
                 {
                     // Remove the comment characters
-                    lines[i] = lines[i].Substring(0, index) + trimmed.Substring(4, trimmed.Length - 7) + lines[i].Substring(index + trimmed.Length);
+                    lines[i] = lines[i][..index] + trimmed[4..^3] + lines[i][(index + trimmed.Length)..];
                 }
                 else
                 {
                     // Add the comment characters
-                    lines[i] = lines[i].Substring(0, index) + "<!--" + trimmed + "-->" + lines[i].Substring(index + trimmed.Length);
+                    lines[i] = lines[i][..index] + "<!--" + trimmed + "-->" + lines[i][(index + trimmed.Length)..];
                 }
             }
 
@@ -1281,7 +1299,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         [GenerateCommand]
         private void ExecuteShowAboutCommand() => LaunchDialog<AboutDialogViewModel>(true);
 
-        private void OnTreeViewItemCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        private void OnTreeViewItemCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
         {
             if (e.Action == NotifyCollectionChangedAction.Move)
             {
@@ -1373,11 +1391,13 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// Manages temporary cursors (such as the wait one) via the disposable pattern.
         /// Adapted from: https://stackoverflow.com/a/675686/1712861
         /// </summary>
-        private class CursorOverride : IDisposable
+        private sealed class CursorOverride : IDisposable
         {
             private readonly MainWindowViewModel _viewModel;
 
-            private static readonly Stack<Cursor> Stack = new Stack<Cursor>();
+            private static readonly Stack<Cursor> Stack = new();
+
+            private bool _disposedValue;
 
             public CursorOverride(MainWindowViewModel viewModel, Cursor cursor)
             {
@@ -1392,7 +1412,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 }
             }
 
-            public void Dispose()
+            public void RestoreCursor()
             {
                 var current = Stack.Pop();
 
@@ -1402,6 +1422,26 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 {
                     _viewModel.SetGlobalCursor?.Invoke(_viewModel, new DataEventArgs<Cursor>(cursor));
                 }
+            }
+
+            private void Dispose(bool disposing)
+            {
+                if (!_disposedValue)
+                {
+                    if (disposing)
+                    {
+                        RestoreCursor();
+                    }
+
+                    _disposedValue = true;
+                }
+            }
+
+            public void Dispose()
+            {
+                // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+                Dispose(disposing: true);
+                GC.SuppressFinalize(this);
             }
         }
     }

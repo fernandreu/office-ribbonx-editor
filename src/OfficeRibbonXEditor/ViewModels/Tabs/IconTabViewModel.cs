@@ -82,7 +82,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             // No changes need to be applied in an icon tab
         }
         
-        private void OnIconPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void OnIconPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName != nameof(IconViewModel.Name))
             {

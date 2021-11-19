@@ -14,10 +14,11 @@ namespace OfficeRibbonXEditor.Services
     [Export(typeof(IVersionChecker))]
     public class VersionChecker : IVersionChecker
     {
+        [SuppressMessage("SonarLint", "S1075", Justification = "This warning is due to the hard-coded url. If this ever change (e.g. repo is moved), the code will need changes overall anyway")]
         private const string CheckUrl = "https://api.github.com/repos/fernandreu/office-ribbonx-editor/releases/latest";
 
         [SuppressMessage("Design", "CA1031:Do not catch general exception types", Justification = "<Pending>")]
-        public async Task<string?> CheckVersionAsync(CancellationToken cancelToken = default(CancellationToken))
+        public async Task<string?> CheckVersionAsync(CancellationToken cancelToken = default)
         {
             try
             {
@@ -38,7 +39,7 @@ namespace OfficeRibbonXEditor.Services
             }
         }
 
-        private async Task<Version?> GetVersionAsync(CancellationToken cancelToken)
+        private static async Task<Version?> GetVersionAsync(CancellationToken cancelToken)
         {
             using var httpClient = new HttpClient();
             httpClient.DefaultRequestHeaders.Add("Accept", "application/vnd.github.v3+json");
