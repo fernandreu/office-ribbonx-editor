@@ -29,7 +29,8 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch
-  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  #value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  value: true
 
 stages:
 - stage: Build
@@ -106,6 +107,7 @@ stages:
         tag: 'Self-Contained .NET'
         selfContained: true
         targetFramework: net6.0-windows
+        runtimeArgument: '--runtime win-x64'
         certificate: $(PfxCertificate)
 
 - stage: Release

@@ -2,6 +2,7 @@ parameters:
   tag: '.NET'
   selfContained: false
   targetFramework: 'net6.0-windows'
+  runtimeArgument: ''
   sign: true
   certificate: ''
 
@@ -22,7 +23,7 @@ steps:
     arguments: >-
       --configuration $(buildConfiguration)
       --framework ${{ parameters.targetFramework }}
-      --runtime win-x64
+      ${{ parameters.runtimeArgument }}
       --self-contained ${{ parameters.selfContained }}
       --output "$(Build.ArtifactStagingDirectory)"
 
