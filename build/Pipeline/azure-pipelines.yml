@@ -104,7 +104,7 @@ stages:
         
   - template: publish.yml
     parameters:
-      jobName: 'SelfContained-x64'
+      jobName: 'SelfContained_x64'
       jobDisplayName: 'Self-Contained - x64'
       artifactName: 'Self-Contained - x64'
       selfContained: true
@@ -112,7 +112,7 @@ stages:
 
   - template: publish.yml
     parameters:
-      jobName: 'SelfContained-arm64'
+      jobName: 'SelfContained_arm64'
       jobDisplayName: 'Self-Contained - arm64'
       artifactName: 'Self-Contained - arm64'
       selfContained: true
