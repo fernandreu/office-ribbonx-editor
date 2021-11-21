@@ -54,23 +54,8 @@ stages:
       parameters:
         targetFramework: $(targetFramework)
 
-  - job: ReleaseScripts
-    displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
-    steps:
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish Release Scripts'
-      inputs:
-        targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
-        artifactName: 'ReleaseScripts'
-
-- stage: Publish
-  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
-  dependsOn: Build
-  jobs:
-
   - job: Certificate
-
+    condition: and(eq(variables['isMasterBranch'], 'true'))
     steps:
     - task: PowerShell@2
       name: GenerateCertificate
@@ -93,6 +78,21 @@ stages:
       inputs:
         targetPath: '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer' 
         artifactName: 'Code Signing Certificate'
+
+  - job: ReleaseScripts
+    displayName: Publish Release Scripts
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
+    steps:
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Release Scripts'
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
+        artifactName: 'ReleaseScripts'
+
+- stage: Publish
+  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
+  dependsOn: Build
+  jobs:
 
   - template: publish.yml
     parameters:
