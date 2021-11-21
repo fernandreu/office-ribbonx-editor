@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About.Author" xml:space="preserve">
     <value>Author:</value>
@@ -774,5 +774,11 @@ Please delete this file manually and restart the app. Its folder location has be
   </data>
   <data name="Message.CorruptedSettings.Title" xml:space="preserve">
     <value>Corrupted Settings</value>
+  </data>
+  <data name="About.OSArchitecture" xml:space="preserve">
+    <value>OS Architecture:</value>
+  </data>
+  <data name="About.ProcessorArchitecture" xml:space="preserve">
+    <value>Processor Architecture:</value>
   </data>
 </root>

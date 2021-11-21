@@ -39,6 +39,12 @@
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
             <TextBlock FontWeight="Bold" Text="{lex:Loc About.OperatingSystem}"/> <TextBlock AutomationProperties.AutomationId="OsVersionBox" Text="{Binding Info.OperatingSystemVersion}"/>
         </TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.ProcessorArchitecture}"/> <TextBlock AutomationProperties.AutomationId="ProcessorArchitetureBox" Text="{Binding Info.ProcessArchitecture}"/>
+        </TextBlock>
+        <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,2">
+            <TextBlock FontWeight="Bold" Text="{lex:Loc About.OSArchitecture}"/> <TextBlock AutomationProperties.AutomationId="OSArchitetureBox" Text="{Binding Info.OSArchitecture}"/>
+        </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,8,0,4" Text="{lex:Loc About.Paragraph1}"/>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" Text="{lex:Loc About.Paragraph2}"/>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4,0,0" Text="{lex:Loc About.Translators}"/>

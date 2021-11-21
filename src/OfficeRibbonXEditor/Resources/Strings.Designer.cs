@@ -19,7 +19,7 @@ namespace OfficeRibbonXEditor.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -106,6 +106,15 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OS Architecture:.
+        /// </summary>
+        public static string About_OSArchitecture {
+            get {
+                return ResourceManager.GetString("About.OSArchitecture", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas..
         /// </summary>
         public static string About_Paragraph1 {
@@ -120,6 +129,15 @@ namespace OfficeRibbonXEditor.Resources {
         public static string About_Paragraph2 {
             get {
                 return ResourceManager.GetString("About.Paragraph2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processor Architecture:.
+        /// </summary>
+        public static string About_ProcessorArchitecture {
+            get {
+                return ResourceManager.GetString("About.ProcessorArchitecture", resourceCulture);
             }
         }
         
@@ -1377,7 +1395,7 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user settings file at following location is corrupted but cannot be deleted:
+        ///   Looks up a localized string similar to The user settings file at the following location is corrupted and cannot be deleted:
         ///
         ///{0}
         ///
@@ -1984,7 +2002,7 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to v{0} Avalilable!.
+        ///   Looks up a localized string similar to v{0} Available!.
         /// </summary>
         public static string ToolBar_VersionAvailable {
             get {
