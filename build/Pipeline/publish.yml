@@ -15,7 +15,7 @@ jobs:
   variables:
     PfxCertificate: $[ dependencies.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
     ${{ if parameters.selfContained }}:
-      runtimeArgument: --runtime win-${{ architecture }}
+      runtimeArgument: --runtime win-${{ parameters.architecture }}
     ${{ else }}:
       runtimeArgument: ''
 
