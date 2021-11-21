@@ -13,8 +13,8 @@ jobs:
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
   dependsOn: Certificate
   variables:
-    PfxCertificate: $[ dependencies.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
-    ${{ if parameters.selfContained }}:
+    PfxCertificate: $[ dependencies.Certificate.outputs['PfxCertificate'] ]
+    ${{ if eq(parameters.selfContained, true) }}:
       runtimeArgument: --runtime win-${{ parameters.architecture }}
     ${{ else }}:
       runtimeArgument: ''
