@@ -15,7 +15,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Prepare standard app package (dotnet publish)'
-  condition: and(succeeded(), not( $${{ parameters.selfContained }} ) )
+  condition: and(succeeded(), not( ${{ parameters.selfContained }} ) )
   inputs:
     command: publish
     projects: '$(Build.SourcesDirectory)/**/OfficeRibbonXEditor.csproj'
@@ -29,7 +29,7 @@ steps:
       
 - task: DotNetCoreCLI@2
   displayName: 'Prepare standard app package (dotnet publish)'
-  condition: and(succeeded(), $${{ parameters.selfContained }})
+  condition: and(succeeded(), ${{ parameters.selfContained }})
   inputs:
     command: publish
     projects: '$(Build.SourcesDirectory)/**/OfficeRibbonXEditor.csproj'
