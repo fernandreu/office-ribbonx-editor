@@ -11,7 +11,6 @@ jobs:
 - job: ${{ parameters.jobName }}
   displayName: ${{ parameters.jobDisplayName }}
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
-  dependsOn: Certificate
   variables:
     PfxCertificate: $[ stageDependencies.Testing.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
     ${{ if eq(parameters.selfContained, true) }}:

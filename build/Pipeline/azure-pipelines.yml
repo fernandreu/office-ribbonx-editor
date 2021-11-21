@@ -36,8 +36,8 @@ stages:
 - stage: Build
   jobs:
 
-  - job: Testing
-    displayName: Testing
+  - job: Test
+    displayName: Test
     variables:
       targetFramework: net6.0-windows
       # Note: the SonarCloud analysis cannot be published from PRs originated from forks due to the variable
