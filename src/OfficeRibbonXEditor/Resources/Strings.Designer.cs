@@ -106,15 +106,6 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OS Architecture:.
-        /// </summary>
-        public static string About_OSArchitecture {
-            get {
-                return ResourceManager.GetString("About.OSArchitecture", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Office RibbonX Editor is a free, open source, standalone tool to edit the Custom UI part of Office open document file format. It contains both Office 2007 and Office 2010 custom UI schemas..
         /// </summary>
         public static string About_Paragraph1 {
@@ -129,15 +120,6 @@ namespace OfficeRibbonXEditor.Resources {
         public static string About_Paragraph2 {
             get {
                 return ResourceManager.GetString("About.Paragraph2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Processor Architecture:.
-        /// </summary>
-        public static string About_ProcessorArchitecture {
-            get {
-                return ResourceManager.GetString("About.ProcessorArchitecture", resourceCulture);
             }
         }
         

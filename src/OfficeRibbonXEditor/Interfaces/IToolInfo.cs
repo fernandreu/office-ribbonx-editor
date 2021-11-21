@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace OfficeRibbonXEditor.Interfaces
+﻿namespace OfficeRibbonXEditor.Interfaces
 {
     public interface IToolInfo
     {
@@ -19,9 +17,5 @@ namespace OfficeRibbonXEditor.Interfaces
         string RuntimeVersion { get; }
 
         string OperatingSystemVersion { get; }
-
-        Architecture ProcessArchitecture { get; }
-
-        Architecture OSArchitecture { get; }
     }
 }

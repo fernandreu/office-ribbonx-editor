@@ -775,10 +775,4 @@ Por favor, elimina este archivo manualmente y reinicia la aplicación. Su ubicac
   <data name="Message.CorruptedSettings.Title" xml:space="preserve">
     <value>Ajustes Corruptos</value>
   </data>
-  <data name="About.OSArchitecture" xml:space="preserve">
-    <value>Architectura del Sistema Operativo:</value>
-  </data>
-  <data name="About.ProcessorArchitecture" xml:space="preserve">
-    <value>Arquitectura del Procesador:</value>
-  </data>
 </root>

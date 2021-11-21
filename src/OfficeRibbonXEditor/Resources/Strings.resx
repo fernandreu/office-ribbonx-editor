@@ -775,10 +775,4 @@ Please delete this file manually and restart the app. Its folder location has be
   <data name="Message.CorruptedSettings.Title" xml:space="preserve">
     <value>Corrupted Settings</value>
   </data>
-  <data name="About.OSArchitecture" xml:space="preserve">
-    <value>OS Architecture:</value>
-  </data>
-  <data name="About.ProcessorArchitecture" xml:space="preserve">
-    <value>Processor Architecture:</value>
-  </data>
 </root>
