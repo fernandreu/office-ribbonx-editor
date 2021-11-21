@@ -64,18 +64,16 @@ stages:
         targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
         artifactName: 'ReleaseScripts'
 
-  - job: Publish
-    displayName: Publish
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
-    dependsOn: Testing
+- stage: Publish
+  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
+  dependsOn: Build
+  jobs:
+
+  - job: Certificate
 
     steps:
-    - template: pre-steps.yml
-
-    - script: choco install innosetup
-      displayName: Install InnoSetup
-
     - task: PowerShell@2
+      name: GenerateCertificate
       displayName: 'Generate Self-Signed Certificate'
       inputs:
         pwsh: true
@@ -96,30 +94,32 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer' 
         artifactName: 'Code Signing Certificate'
 
-    - template: publish.yml
-      parameters:
-        tag: '.NET'
-        targetFramework: net6.0-windows
-        certificate: $(PfxCertificate)
+  - template: publish.yml
+    parameters:
+      jobName: 'FrameworkDependent'
+      jobDisplayName: 'Framework Dependent'
+      artifactName: 'Framework Dependent'
+      selfContained: false
+      architecture: x64
         
-    - template: publish.yml
-      parameters:
-        tag: 'Self-Contained .NET (x64)'
-        selfContained: true
-        targetFramework: net6.0-windows
-        architecture: x64
-        certificate: $(PfxCertificate)
-        
-    - template: publish.yml
-      parameters:
-        tag: 'Self-Contained .NET (arm64)'
-        selfContained: true
-        targetFramework: net6.0-windows
-        architecture: arm64
-        certificate: $(PfxCertificate)
+  - template: publish.yml
+    parameters:
+      jobName: 'SelfContained-x64'
+      jobDisplayName: 'Self-Contained - x64'
+      artifactName: 'Self-Contained - x64'
+      selfContained: true
+      architecture: x64
 
+  - template: publish.yml
+    parameters:
+      jobName: 'SelfContained-arm64'
+      jobDisplayName: 'Self-Contained - arm64'
+      artifactName: 'Self-Contained - arm64'
+      selfContained: true
+      architecture: arm64
+  
 - stage: Release
-  dependsOn: Build
+  dependsOn: Publish
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
 
   jobs:
