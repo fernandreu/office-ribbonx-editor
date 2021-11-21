@@ -55,7 +55,7 @@ stages:
         targetFramework: $(targetFramework)
 
   - job: Certificate
-    condition: and(eq(variables['isMasterBranch'], 'true'))
+    condition: eq(variables['isMasterBranch'], 'true')
     steps:
     - task: PowerShell@2
       name: GenerateCertificate
