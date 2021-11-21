@@ -104,10 +104,18 @@ stages:
         
     - template: publish.yml
       parameters:
-        tag: 'Self-Contained .NET'
+        tag: 'Self-Contained .NET (x64)'
         selfContained: true
         targetFramework: net6.0-windows
-        runtimeArgument: '--runtime win-x64'
+        architecture: x64
+        certificate: $(PfxCertificate)
+        
+    - template: publish.yml
+      parameters:
+        tag: 'Self-Contained .NET (arm64)'
+        selfContained: true
+        targetFramework: net6.0-windows
+        architecture: arm64
         certificate: $(PfxCertificate)
 
 - stage: Release

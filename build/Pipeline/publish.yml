@@ -2,7 +2,7 @@ parameters:
   tag: '.NET'
   selfContained: false
   targetFramework: 'net6.0-windows'
-  runtimeArgument: ''
+  architecture: ''
   sign: true
   certificate: ''
 
@@ -15,6 +15,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Prepare standard app package (dotnet publish)'
+  condition: and(succeeded(), not( $${{ parameters.selfContained }} ) )
   inputs:
     command: publish
     projects: '$(Build.SourcesDirectory)/**/OfficeRibbonXEditor.csproj'
@@ -23,7 +24,21 @@ steps:
     arguments: >-
       --configuration $(buildConfiguration)
       --framework ${{ parameters.targetFramework }}
-      ${{ parameters.runtimeArgument }}
+      --self-contained ${{ parameters.selfContained }}
+      --output "$(Build.ArtifactStagingDirectory)"
+      
+- task: DotNetCoreCLI@2
+  displayName: 'Prepare standard app package (dotnet publish)'
+  condition: and(succeeded(), $${{ parameters.selfContained }})
+  inputs:
+    command: publish
+    projects: '$(Build.SourcesDirectory)/**/OfficeRibbonXEditor.csproj'
+    publishWebProjects: false
+    zipAfterPublish: false
+    arguments: >-
+      --configuration $(buildConfiguration)
+      --framework ${{ parameters.targetFramework }}
+      --runtime win-${{ parameters.architecture }}
       --self-contained ${{ parameters.selfContained }}
       --output "$(Build.ArtifactStagingDirectory)"
 

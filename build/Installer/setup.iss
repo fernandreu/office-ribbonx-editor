@@ -60,8 +60,8 @@ OutputDir={#OutputFolder}
 OutputBaseFilename={#AssemblyName}
 UninstallDisplayIcon={app}\{#ExeName}
 AllowNoIcons=yes
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesAllowed=x64 arm64
+ArchitecturesInstallIn64BitMode=x64 arm64
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"
