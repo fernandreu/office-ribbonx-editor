@@ -12,7 +12,7 @@ jobs:
   displayName: ${{ parameters.jobDisplayName }}
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
   variables:
-    PfxCertificate: $[ stageDependencies.Testing.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
+    PfxCertificate: $[ stageDependencies.Build.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
     ${{ if eq(parameters.selfContained, true) }}:
       runtimeArgument: --runtime win-${{ parameters.architecture }}
     ${{ else }}:
