@@ -16,7 +16,7 @@ jobs:
     ${{ if eq(parameters.selfContained, true) }}:
       runtimeArgument: --runtime win-${{ parameters.architecture }}
     ${{ else }}:
-      runtimeArgument: --runtime win
+      runtimeArgument: ''
 
   steps:
   - template: pre-steps.yml
