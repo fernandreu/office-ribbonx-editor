@@ -96,12 +96,20 @@ stages:
 
   - template: publish.yml
     parameters:
-      jobName: 'FrameworkDependent'
-      jobDisplayName: 'Framework Dependent'
-      artifactName: 'Framework Dependent'
+      jobName: 'FrameworkDependent_x64'
+      jobDisplayName: 'Framework Dependent - x64'
+      artifactName: 'Framework Dependent - x64'
       selfContained: false
       architecture: x64
         
+  - template: publish.yml
+    parameters:
+      jobName: 'FrameworkDependent_arm64'
+      jobDisplayName: 'Framework Dependent - arm64'
+      artifactName: 'Framework Dependent - arm64'
+      selfContained: false
+      architecture: arm64
+
   - template: publish.yml
     parameters:
       jobName: 'SelfContained_x64'

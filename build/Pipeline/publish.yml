@@ -13,10 +13,7 @@ jobs:
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
   variables:
     PfxCertificate: $[ stageDependencies.Build.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
-    ${{ if eq(parameters.selfContained, true) }}:
-      runtimeArgument: --runtime win-${{ parameters.architecture }}
-    ${{ else }}:
-      runtimeArgument: ''
+    runtimeArgument: --runtime win-${{ parameters.architecture }}
 
   steps:
   - template: pre-steps.yml
