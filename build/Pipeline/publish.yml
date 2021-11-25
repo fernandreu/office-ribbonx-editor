@@ -13,7 +13,6 @@ jobs:
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
   variables:
     PfxCertificate: $[ stageDependencies.Build.Certificate.outputs['GenerateCertificate.PfxCertificate'] ]
-    runtimeArgument: --runtime win-${{ parameters.architecture }}
 
   steps:
   - template: pre-steps.yml
@@ -40,7 +39,7 @@ jobs:
         --framework ${{ parameters.targetFramework }}
         --self-contained ${{ parameters.selfContained }}
         --output "$(Build.ArtifactStagingDirectory)"
-        $(runtimeArgument)
+        --runtime win-${{ parameters.architecture }}
         
   - task: PowerShell@2
     displayName: 'Sign binaries'
@@ -71,6 +70,7 @@ jobs:
       /DVersionPrefix="$(ExtractedVersionPrefix)"
       /DInputFolder="$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor"
       /DOutputFolder="$(Build.SourcesDirectory)/src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
+      /DSupportedArchitectures="${{ parameters.architecture }}"
     displayName: Generate installer
 
   - task: CopyFiles@2
