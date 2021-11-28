@@ -43,11 +43,17 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         private MainWindowViewModel _viewModel;
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
+        private readonly RedistributableDetails _redistributableDetails = new("v1.2.3", "x86", new Uri("http://localhost"))
+        {
+            NeedsDownload = false,
+        };
+
         [SetUp]
         public void SetUp()
         {
             MockOpenFile(_sourceFile);
             MockSaveFile(_destFile);
+            MockRedistributableCheck();
             
             var directory = Path.GetDirectoryName(_destFile);
             if (directory == null)
@@ -660,6 +666,12 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             _fileSvc.Setup(x => x.SaveFileDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<string>(), It.IsAny<int>()))
                 .Returns(true)
                 .Callback<string, string, Action<string>, string, int>((title, filter, action, fileName, filterIndex) => action(path));
+        }
+
+        private void MockRedistributableCheck()
+        {
+            _versionChecker.Setup(x => x.CheckRedistributableVersion())
+                .Returns(_redistributableDetails);
         }
 
         private void AssertMessage(Action action, MessageBoxImage image, MessageBoxResult result = MessageBoxResult.OK, string message = "Message not shown")
