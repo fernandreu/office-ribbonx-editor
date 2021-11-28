@@ -1444,6 +1444,26 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The tool needs at least {0} of the Microsoft Visual C++ Redistributable ({1}) installed, but it could not be detected in your machine. This will most likely result in crashes when opening the editor tabs.
+        ///
+        ///Do you want to download the latest redistributable package now?.
+        /// </summary>
+        public static string Message_MissingRedistributable_Text {
+            get {
+                return ResourceManager.GetString("Message.MissingRedistributable.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing VC++ Redistributable.
+        /// </summary>
+        public static string Message_MissingRedistributable_Title {
+            get {
+                return ResourceManager.GetString("Message.MissingRedistributable.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Release version {0} is now available. Do you want to download it?.
         /// </summary>
         public static string Message_NewVersion_Text {

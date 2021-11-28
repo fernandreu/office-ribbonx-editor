@@ -276,8 +276,26 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
         /// Called by the application to perform any action that might depend on the window having been
         /// set up already (usually because they depend on events listened in the window).
         /// </summary>
-        public void OnLoaded()
+        public bool OnLoaded()
         {
+            var redistDetails = _versionChecker.CheckRedistributableVersion();
+            if (redistDetails.NeedsDownload)
+            {
+                var result = _messageBoxService.Show(
+                    string.Format(Strings.Message_MissingRedistributable_Text, redistDetails.NeededVersion, redistDetails.ProcessArchitecture), 
+                    Strings.Message_MissingRedistributable_Title, 
+                    MessageBoxButton.YesNoCancel, 
+                    MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    _urlHelper.OpenExternal(redistDetails.DownloadLink);
+                }
+                else if (result == MessageBoxResult.Cancel)
+                {
+                    return false;
+                }
+            }
+
             foreach (var file in Environment.GetCommandLineArgs().Skip(1))
             {
                 if (!File.Exists(file))
@@ -289,6 +307,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
             }
 
             CheckVersionAsync(_versionChecker).SafeFireAndForget();
+            return true;
         }
 
         public IContentDialogBase LaunchDialog<TDialog>(bool showDialog = false) where TDialog : IContentDialogBase
@@ -1255,7 +1274,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private async Task CheckVersionAsync(IVersionChecker versionChecker)
         {
-            NewerVersion = await versionChecker.CheckVersionAsync().ConfigureAwait(false);
+            NewerVersion = await versionChecker.CheckToolVersionAsync().ConfigureAwait(false);
         }
 
         [GenerateCommand]

@@ -14,7 +14,7 @@ The Office RibbonX Editor is a standalone tool to edit the Custom UI part of Off
 It contains both Office 2007 and Office 2010 custom UI schemas.
 
 The Office 2010 custom UI schema is the latest schema and it's still being used in the latest versions of Office including
-Office 2013, Office 2016 and Office 365.
+Office 2019, Office 2021 and Office 365.
 
 To learn more about how to use these identifiers to customize the Office ribbon, backstage, and context menus visit:
  - [Change the Ribbon in Excel 2007-2016](https://www.rondebruin.nl/win/s2/win001.htm)
@@ -25,9 +25,10 @@ To learn more about how to use these identifiers to customize the Office ribbon,
 
 ## Improvements
 
-This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than
-trying to address those limitations by performing small contributions to the original project, this repo offers a complete redesign
-of the project in Windows Presentation Foundation (WPF).
+This GitHub project is a fork of [Custom UI Editor for Microsoft Office](https://github.com/OfficeDev/office-custom-ui-editor). Built
+on Windows Forms, the original editor by Microsoft is useful on its own, but it has some limitations. Rather than trying to address
+those limitations by performing small contributions to the original project, this repo offers a complete redesign of the project in
+Windows Presentation Foundation (WPF).
 
 Features of this overhauled editor include:
 - [ScintillaNET](https://github.com/jacobslusser/ScintillaNET) (via [SctintillaNET.WPF](https://github.com/Stumpii/ScintillaNET.WPF/tree/master/ScintillaNET.WPF)) as text editor, with seamless syntax highlighting
