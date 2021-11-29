@@ -34,6 +34,11 @@ namespace OfficeRibbonXEditor
 
         public static IContainer CreateContainer()
         {
+            return CreateContainerBuilder().Build();
+        }
+
+        internal static ContainerBuilder CreateContainerBuilder()
+        {
             var result = new ContainerBuilder();
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -52,7 +57,7 @@ namespace OfficeRibbonXEditor
                 }
             }
 
-            return result.Build();
+            return result;
         }
 
         protected override void OnStartup(StartupEventArgs e)
