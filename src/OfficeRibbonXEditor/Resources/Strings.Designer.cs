@@ -19,7 +19,7 @@ namespace OfficeRibbonXEditor.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Strings {
@@ -1377,7 +1377,7 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The user settings file at following location is corrupted but cannot be deleted:
+        ///   Looks up a localized string similar to The user settings file at the following location is corrupted and cannot be deleted:
         ///
         ///{0}
         ///
@@ -1440,6 +1440,26 @@ namespace OfficeRibbonXEditor.Resources {
         public static string Message_InsertSampleError_Title {
             get {
                 return ResourceManager.GetString("Message.InsertSampleError.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The tool needs at least {0} of the Microsoft Visual C++ Redistributable ({1}) installed, but it could not be detected in your machine. This will most likely result in crashes when opening the editor tabs.
+        ///
+        ///Do you want to download the latest redistributable package now?.
+        /// </summary>
+        public static string Message_MissingRedistributable_Text {
+            get {
+                return ResourceManager.GetString("Message.MissingRedistributable.Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing VC++ Redistributable.
+        /// </summary>
+        public static string Message_MissingRedistributable_Title {
+            get {
+                return ResourceManager.GetString("Message.MissingRedistributable.Title", resourceCulture);
             }
         }
         
@@ -1984,7 +2004,7 @@ namespace OfficeRibbonXEditor.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to v{0} Avalilable!.
+        ///   Looks up a localized string similar to v{0} Available!.
         /// </summary>
         public static string ToolBar_VersionAvailable {
             get {

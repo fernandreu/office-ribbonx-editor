@@ -84,8 +84,8 @@ namespace OfficeRibbonXEditor.Services
             }
         }
 
-        public string RuntimeVersion => RuntimeInformation.FrameworkDescription;
+        public string RuntimeVersion => $"{RuntimeInformation.FrameworkDescription} ({RuntimeInformation.ProcessArchitecture})";
 
-        public string OperatingSystemVersion => RuntimeInformation.OSDescription;
+        public string OperatingSystemVersion => $"{RuntimeInformation.OSDescription} ({RuntimeInformation.OSArchitecture})";
     }
 }

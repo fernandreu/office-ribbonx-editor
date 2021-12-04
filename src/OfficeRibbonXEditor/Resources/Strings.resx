@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About.Author" xml:space="preserve">
     <value>Author:</value>
@@ -774,5 +774,14 @@ Please delete this file manually and restart the app. Its folder location has be
   </data>
   <data name="Message.CorruptedSettings.Title" xml:space="preserve">
     <value>Corrupted Settings</value>
+  </data>
+  <data name="Message.MissingRedistributable.Text" xml:space="preserve">
+    <value>The tool needs at least {0} of the Microsoft Visual C++ Redistributable ({1}) installed, but it could not be detected in your machine. This will most likely result in crashes when opening the editor tabs.
+
+Do you want to download the latest redistributable package now?</value>
+    <comment>{0} is the placeholder for the version, e.g. "v14.16". {1} is the placeholder for the architecture, e.g. "arm64" / "x64"</comment>
+  </data>
+  <data name="Message.MissingRedistributable.Title" xml:space="preserve">
+    <value>Missing VC++ Redistributable</value>
   </data>
 </root>

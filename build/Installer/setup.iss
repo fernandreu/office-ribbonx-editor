@@ -32,6 +32,9 @@
 #ifndef VersionPrefix
   #define VersionPrefix GetFileVersion(InputFolder + '/' + ExeName)
 #endif
+#ifndef SupportedArchitectures
+  #define SupportedArchitectures x64 arm64
+#endif
 
 
 [Setup]
@@ -60,8 +63,8 @@ OutputDir={#OutputFolder}
 OutputBaseFilename={#AssemblyName}
 UninstallDisplayIcon={app}\{#ExeName}
 AllowNoIcons=yes
-ArchitecturesAllowed=x64
-ArchitecturesInstallIn64BitMode=x64
+ArchitecturesAllowed={#SupportedArchitectures}
+ArchitecturesInstallIn64BitMode={#SupportedArchitectures}
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"

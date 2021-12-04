@@ -1,109 +1,66 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
-using Autofac;
-using Moq;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Documents;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
+using OfficeRibbonXEditor.FunctionalTests.Helpers;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Samples;
-using OfficeRibbonXEditor.ViewModels.Windows;
 
 namespace OfficeRibbonXEditor.FunctionalTests.Windows
 {
     [TestFixture]
-    public sealed class MainWindowViewModelTests : IDisposable
+    public sealed class MainWindowViewModelTests
     {
-        private readonly Mock<IMessageBoxService> _msgSvc = new Mock<IMessageBoxService>();
-
-        private readonly Mock<IFileDialogService> _fileSvc = new Mock<IFileDialogService>();
-
-        private readonly Mock<IVersionChecker> _versionChecker = new Mock<IVersionChecker>();
-
-        private readonly Mock<IUrlHelper> _urlHelper = new Mock<IUrlHelper>();
-
-        private readonly IContainer _container = App.CreateContainer();
-
         private readonly string _sourceFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/Blank.xlsx");
-
-        private readonly string _destFile = Path.Combine(TestContext.CurrentContext.TestDirectory, "Output/BlankSaved.xlsx");
 
         private readonly string _undoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/undo.png");
 
         private readonly string _redoIcon = Path.Combine(TestContext.CurrentContext.TestDirectory, "Resources/redo.png");
 
-#pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. This is defined in SetUp anyway
-        private MainWindowViewModel _viewModel;
-#pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
-
-        [SetUp]
-        public void SetUp()
-        {
-            MockOpenFile(_sourceFile);
-            MockSaveFile(_destFile);
-            
-            var directory = Path.GetDirectoryName(_destFile);
-            if (directory == null)
-            {
-                Assert.Fail("Wrong _destFile path");
-                return; // Not needed except to suppress nullable warnings
-            }
-
-            Directory.CreateDirectory(directory);
-
-            if (File.Exists(_destFile))
-            {
-                File.Delete(_destFile);
-            }
-
-            _viewModel = new MainWindowViewModel(
-                _msgSvc.Object, 
-                _fileSvc.Object, 
-                _versionChecker.Object, 
-                _container.Resolve<IDialogProvider>(),
-                _urlHelper.Object);
-            _viewModel.OnLoaded();
-        }
-
         [Test]
-        public void DocumentShouldBeOpened()
+        public void OpenDocument_Existing_ShouldBeOpened()
         {
             // Arrange / act
-            var doc = OpenSource();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
 
             // Assert
             Assert.AreEqual("Blank.xlsx", doc.Name);
         }
 
         [Test]
-        public void DocumentShouldBeSaved()
+        public void SaveAs_CorrectPath_ShouldBeSaved()
         {
             // Arrange
-            OpenSource();
-            Assume.That(File.Exists(_destFile), Is.False, "Output file was not deleted before unit test");
-            
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+
+            using var folder = new TempFolder();
+            var destination = Path.Combine(folder.FullName, "Saved.xlsx");
+
             // Act
-            _viewModel.SaveAsCommand.Execute();
+            wrapper.SaveAs(doc, destination);
             
             // Assert
-            Assert.IsTrue(File.Exists(_destFile), "File was not saved");
+            Assert.IsTrue(File.Exists(destination), "File was not saved");
         }
 
         [Test]
-        public void Xml12PartShouldBeInserted()
+        public void InsertXml12_PartShouldBeInserted()
         {
             // Arrange
-            var doc = OpenSource();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
 
             // Act
-            _viewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12Command.Execute();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
@@ -112,13 +69,14 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         }
 
         [Test]
-        public void Xml14PartShouldBeInserted()
+        public void InsertXml14_PartShouldBeInserted()
         {
             // Arrange
-            var doc = OpenSource();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
 
             // Act
-            _viewModel.InsertXml14Command.Execute();
+            wrapper.ViewModel.InsertXml14Command.Execute();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
@@ -127,53 +85,56 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         }
 
         [Test]
-        public void Xml12PartShouldNotBeInsertedIfAlreadyExists()
+        public void InsertXml12_PartAlreadyExists_ShouldNotBeInserted()
         {
             // Arrange
-            var (doc, _) = OpenAndInsertPart(XmlPart.RibbonX12, false);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (doc, _) = wrapper.OpenAndInsertPart(_sourceFile, XmlPart.RibbonX12, false);
 
             // Act
-            _viewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12Command.Execute();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count, "Part was inserted twice");
         }
         
         [Test]
-        public void Xml14PartShouldNotBeInsertedIfAlreadyExists()
+        public void InsertXml14_PartAlreadyExists_ShouldNotBeInserted()
         {
             // Arrange
-            var (doc, _) = OpenAndInsertPart(XmlPart.RibbonX14, false);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (doc, _) = wrapper.OpenAndInsertPart(_sourceFile, XmlPart.RibbonX14, false);
 
             // Act
-            _viewModel.InsertXml14Command.Execute();
+            wrapper.ViewModel.InsertXml14Command.Execute();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count, "Part was inserted twice");
         }
 
         [Test]
-        public void PartShouldBeRemoved()
+        public void Remove_PartSelected_ShouldBeRemoved()
         {
             // Arrange
-            var (doc, _) = OpenAndInsertPart();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (doc, _) = wrapper.OpenAndInsertPart(_sourceFile);
 
             // Act
-            _viewModel.RemoveCommand.Execute();
+            wrapper.ViewModel.RemoveCommand.Execute();
 
             // Assert
             Assert.IsEmpty(doc.Children, "Part was not removed");
         }
 
         [Test]
-        public void IconShouldBeInserted()
+        public void InsertIcons_SingleChosen_ShouldBeInserted()
         {
             // Arrange
-            var (_, part) = OpenAndInsertPart();
-            MockOpenFiles(_undoIcon);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (_, part) = wrapper.OpenAndInsertPart(_sourceFile);
 
             // Act
-            _viewModel.InsertIconsCommand.Execute();
+            wrapper.InsertIcons(part, _undoIcon);
 
             // Assert
             Assert.AreEqual(1, part.Children.Count);
@@ -181,16 +142,14 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         }
 
         [Test]
-        public void MultipleIconsShouldBeInserted()
+        public void InsertIcons_MultipleChosen_AllIconsShouldBeInserted()
         {
             // Arrange
-            var (_, part) = OpenAndInsertPart();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (_, part) = wrapper.OpenAndInsertPart(_sourceFile);
 
             // Act
-            MockOpenFiles(_undoIcon);
-            _viewModel.InsertIconsCommand.Execute();
-            MockOpenFiles(_redoIcon);
-            _viewModel.InsertIconsCommand.Execute();
+            wrapper.InsertIcons(part, _undoIcon, _redoIcon);
 
             // Assert
             Assert.AreEqual(2, part.Children.Count);
@@ -199,17 +158,17 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         }
 
         [Test]
-        public void IconShouldBeRemoved()
+        public void Remove_IconSelected_ShouldBeRemoved()
         {
             // Arrange
-            var (_, part) = OpenAndInsertPart();
-            MockOpenFiles(_undoIcon);
-            _viewModel.InsertIconsCommand.Execute();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (_, part) = wrapper.OpenAndInsertPart(_sourceFile);
+            wrapper.InsertIcons(part, _undoIcon);
             Assume.That(part.Children, Is.Not.Empty, "Icon was not inserted");
-            _viewModel.SelectedItem = part.Children[0];
+            wrapper.ViewModel.SelectedItem = part.Children[0];
 
             // Act
-            _viewModel.RemoveCommand.Execute();
+            wrapper.ViewModel.RemoveCommand.Execute();
 
             // Assert
             Assert.IsEmpty(part.Children, "Icon was not removed");
@@ -219,93 +178,97 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         /// Checks if a warning is shown after inserting a part in a document and then trying to close it
         /// </summary>
         [Test]
-        public void ClosingDocumentAfterInsertingPartShouldGiveWarningMessage()
+        public void CloseDocument_PartWasInserted_ShouldGiveWarningMessage()
         {
             // Arrange
-            OpenSource();
-            _viewModel.InsertXml12Command.Execute();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+            wrapper.ViewModel.InsertXml12Command.Execute();
 
             // Act / assert
-            AssertMessage(_viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
+            wrapper.AssertMessage(wrapper.ViewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
         }
         
         /// <summary>
         /// Checks if a warning is shown when a part is removed
         /// </summary>
         [Test]
-        public void RemovingPartShouldGiveWarningMessage()
+        public void RemovePart_ShouldGiveWarningMessage()
         {
             // Arrange
-            var doc = OpenSource();
-            _viewModel.InsertXml12Command.Execute();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+            wrapper.ViewModel.InsertXml12Command.Execute();
             var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
             Assume.That(part, Is.Not.Null, "No Office part available");
-            _viewModel.SelectedItem = part;
+            wrapper.ViewModel.SelectedItem = part;
 
             // Act / assert
-            AssertMessage(_viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+            wrapper.AssertMessage(wrapper.ViewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
         }
 
         /// <summary>
         /// Checks if a warning is shown when a part is removed and the document is about to be closed
         /// </summary>
         [Test]
-        public void ClosingDocumentAfterRemovingPartShouldGiveWarningMessage()
+        public void CloseDocument_PartWasRemoved_GiveWarningMessage()
         {
             // Arrange
-            var doc = OpenSource();
-            _viewModel.InsertXml12Command.Execute();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+            wrapper.ViewModel.InsertXml12Command.Execute();
             var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
             Assume.That(part, Is.Not.Null, "No Office part available");
-            _viewModel.SelectedItem = part;
+            wrapper.ViewModel.SelectedItem = part;
 
             // Act
-            _viewModel.RemoveCommand.Execute();
+            wrapper.ViewModel.RemoveCommand.Execute();
 
             // Assert
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            AssertMessage(_viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            wrapper.AssertMessage(wrapper.ViewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         /// <summary>
         /// Checks if a warning is shown when removing an icon and when closing the document after that
         /// </summary>
         [Test]
-        public void RemoveIconWarningTest()
+        public void CloseDocument_IconsRemoved_ShouldShowWarning()
         {
-            // Open a document, insert a part and select it
-            var doc = OpenSource();
-            _viewModel.InsertXml12Command.Execute();
-            _viewModel.SelectedItem = doc.Children[0];
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (doc, part) = wrapper.OpenAndInsertPart(_sourceFile);
 
             // Insert an icon and save the document
-            MockOpenFiles(_redoIcon);
-            _viewModel.InsertIconsCommand.Execute();
-            _viewModel.SaveAsCommand.Execute();
+            wrapper.InsertIcons(part, _redoIcon);
+
+            using var folder = new TempFolder();
+            var destination = Path.Combine(folder.FullName, "Output.xlsx");
+            wrapper.SaveAs(doc, destination);
             Assert.IsFalse(doc.HasUnsavedChanges, "The icon insertion was apparently not saved");
 
             // Remove it and do the appropriate checks
-            _viewModel.SelectedItem = doc.Children.FirstOrDefault(c => c is OfficePartViewModel)?.Children.FirstOrDefault(c => c is IconViewModel);
-            Assert.IsNotNull(_viewModel.SelectedItem, "Icon was apparently not created");
-            AssertMessage(_viewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+            wrapper.ViewModel.SelectedItem = doc.Children.FirstOrDefault(c => c is OfficePartViewModel)?.Children.FirstOrDefault(c => c is IconViewModel);
+            Assert.IsNotNull(wrapper.ViewModel.SelectedItem, "Icon was apparently not created");
+            wrapper.AssertMessage(wrapper.ViewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            AssertMessage(_viewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            wrapper.AssertMessage(wrapper.ViewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         /// <summary>
         /// Checks if the XML validation provides the expected result for a few sample cases
         /// </summary>
         [Test]
-        public void XmlValidationTest()
+        public void ValidateXml_ShouldProduceExpectedResult()
         {
-            var doc = OpenSource();
-            Assume.That(_viewModel.SelectedItem?.CanHaveContents, Is.False);
-            
-            _viewModel.InsertXml12Command.Execute();
-            _viewModel.SelectedItem = doc.Children[0];
-            Assert.IsTrue(_viewModel.SelectedItem.CanHaveContents);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+            Assume.That(wrapper.ViewModel.SelectedItem?.CanHaveContents, Is.False);
 
-            var tmp = _viewModel.OpenPartTab();
+            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.SelectedItem = doc.Children[0];
+            Assert.IsTrue(wrapper.ViewModel.SelectedItem.CanHaveContents);
+
+            var tmp = wrapper.ViewModel.OpenPartTab();
             Assert.NotNull(tmp);
             var tab = tmp!;
 
@@ -318,7 +281,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                 }
 
                 tab.ShowResults += Handler;
-                _viewModel.ValidateCommand.Execute();
+                wrapper.ViewModel.ValidateCommand.Execute();
                 tab.ShowResults -= Handler;
 
                 Assert.AreEqual(expected, actual, message);
@@ -339,19 +302,20 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         /// Checks whether the callbacks window would show the callbacks we would expect
         /// </summary>
         [Test]
-        public void GenerateCallbacksTest()
+        public void GenerateCallbacks_ShouldProduceExpectedCallback()
         {
-            var doc = OpenSource();
-            _viewModel.InsertXml12Command.Execute();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+            wrapper.ViewModel.InsertXml12Command.Execute();
             var part = doc.Children[0];
-            _viewModel.SelectedItem = part;
+            wrapper.ViewModel.SelectedItem = part;
 
-            var tab = _viewModel.OpenPartTab();
+            var tab = wrapper.ViewModel.OpenPartTab();
             Assert.NotNull(tab);
 
             // This should show a message saying there are no callbacks to be generated
             part.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            AssertMessage(_viewModel.GenerateCallbacksCommand.Execute, MessageBoxImage.Information);
+            wrapper.AssertMessage(wrapper.ViewModel.GenerateCallbacksCommand.Execute, MessageBoxImage.Information);
 
             // This should contain a single callback for the onLoad event
             part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
@@ -361,23 +325,24 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                 Assert.IsTrue(((CallbackDialogViewModel) e.Content).Code?.StartsWith("'Callback for customUI.onLoad", StringComparison.OrdinalIgnoreCase), "Expected callback not generated");
             }
 
-            _viewModel.LaunchingDialog += Handler;
-            _viewModel.GenerateCallbacksCommand.Execute();
-            _viewModel.LaunchingDialog -= Handler;  // Just in case we add other checks later
+            wrapper.ViewModel.LaunchingDialog += Handler;
+            wrapper.ViewModel.GenerateCallbacksCommand.Execute();
+            wrapper.ViewModel.LaunchingDialog -= Handler;  // Just in case we add other checks later
         }
 
         [Test]
-        public void CanLaunchSettingsDialog()
+        public void ShowSettings_DialogShouldBeShown()
         {
             // Arrange
+            using var wrapper = new MainWindowViewModelWrapper();
             IContentDialogBase? content = null;
-            _viewModel.LaunchingDialog += (o, e) =>
+            wrapper.ViewModel.LaunchingDialog += (o, e) =>
             {
                 content = e.Content;
             };
 
             // Act
-            _viewModel.ShowSettingsCommand.Execute();
+            wrapper.ViewModel.ShowSettingsCommand.Execute();
 
             // Assert
             Assert.IsInstanceOf(typeof(SettingsDialogViewModel), content);
@@ -386,19 +351,20 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         }
 
         [Test]
-        public void CanLaunchSettingsDialog_WithEditorTab()
+        public void ShowSettings_WithOpenTabs_TabsShouldBeAssignedToDialog()
         {
             // Arrange
-            var (_, part) = OpenAndInsertPart();
-            _viewModel.OpenTabCommand.Execute(part);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (_, part) = wrapper.OpenAndInsertPart(_sourceFile);
+            wrapper.ViewModel.OpenTabCommand.Execute(part);
             IContentDialogBase? content = null;
-            _viewModel.LaunchingDialog += (o, e) =>
+            wrapper.ViewModel.LaunchingDialog += (o, e) =>
             {
                 content = e.Content;
             };
 
             // Act
-            _viewModel.ShowSettingsCommand.Execute();
+            wrapper.ViewModel.ShowSettingsCommand.Execute();
 
             // Assert
             Assert.IsInstanceOf(typeof(SettingsDialogViewModel), content);
@@ -407,61 +373,62 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         }
 
         [Test]
-        public void TabTitlesAreAdjusted()
+        public void MultipleTabs_SameNames_TitleShouldIncludeDocumentName()
         {
             // Arrange
-            var (_, part) = OpenAndInsertPart();
-            _viewModel.OpenTabCommand.Execute(part);
-            var tab = _viewModel.SelectedTab;
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (_, part) = wrapper.OpenAndInsertPart(_sourceFile);
+            wrapper.ViewModel.OpenTabCommand.Execute(part);
+            var tab = wrapper.ViewModel.SelectedTab;
             Assume.That(tab, Is.Not.Null, "Tab is null");
             var original = tab!.Title;
 
             // Act / assert
 
             // We open the same document again (confirming that action first), and check if the title changed
-            AssertMessage(() => OpenAndInsertPart(), MessageBoxImage.Warning, MessageBoxResult.Yes);
+            wrapper.AssertMessage(() => wrapper.OpenAndInsertPart(_sourceFile), MessageBoxImage.Warning, MessageBoxResult.Yes);
             Assert.AreNotEqual(original, tab.Title);
 
             // We close the newly opened document, and check if the title is back to normal
-            _viewModel.CloseDocumentCommand.Execute();
+            wrapper.ViewModel.CloseDocumentCommand.Execute();
             Assert.AreEqual(original, tab.Title);
         }
 
         [Test]
         [TestCase(true)]
         [TestCase(false)]
-        public void CanCloseTabs(bool explicitly)
+        public void CloseTab_TabShouldBeClosed(bool explicitly)
         {
             // Arrange
-            var (_, part) = OpenAndInsertPart();
-            _viewModel.OpenTabCommand.Execute(part);
-            var tab = _viewModel.SelectedTab;
+            using var wrapper = new MainWindowViewModelWrapper();
+            var (_, part) = wrapper.OpenAndInsertPart(_sourceFile);
+            wrapper.ViewModel.OpenTabCommand.Execute(part);
+            var tab = wrapper.ViewModel.SelectedTab;
             Assume.That(tab, Is.Not.Null, "Tab is null");
 
             // Act
-            _viewModel.CloseTabCommand.Execute(explicitly ? tab : null);
+            wrapper.ViewModel.CloseTabCommand.Execute(explicitly ? tab : null);
 
             // Assert
-            Assert.IsEmpty(_viewModel.OpenTabs);
+            Assert.IsEmpty(wrapper.ViewModel.OpenTabs);
         }
 
         /// <summary>
         /// Checks whether the sample XML files are inserted as we would expect
         /// </summary>
         [Test]
-        public void InsertSampleInNonExistingPart()
+        public void InsertSample_NonExistingPart_ShouldCreatePart()
         {
-            var doc = OpenSource();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
             
-            var sample = _viewModel.XmlSamples?.Items.OfType<XmlSampleViewModel>().First();  // This shouldn't be null; if it is, the test will be a means to detect that too
-            _viewModel.InsertXmlSampleCommand.Execute(sample);
+            var sample = wrapper.ViewModel.XmlSamples?.Items.OfType<XmlSampleViewModel>().First();  // This shouldn't be null; if it is, the test will be a means to detect that too
+            wrapper.ViewModel.InsertXmlSampleCommand.Execute(sample);
             var part = doc.Children.First(); // Again, this should not be null
 
             // It is expected that the part created will be an Office 2007 one, but the templates are for Office 2010+. This gets automatically replaced
             // at insertion time
-#pragma warning disable CA1307 // Missing StringComparison because it is not available in .NET Framework 4.6.1
-            var contents = sample?.ReadContents().Replace("2009/07", "2006/01") ?? string.Empty;
-#pragma warning restore CA1307
+            var contents = sample?.ReadContents().Replace("2009/07", "2006/01", StringComparison.OrdinalIgnoreCase) ?? string.Empty;
             Assert.AreEqual(contents, part.Contents, "Sample XML file not created with the expected contents");
         }
 
@@ -469,18 +436,19 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         /// Checks whether a file being saved while opened in another program is detected correctly and does not cause any crash
         /// </summary>
         [Test]
-        public void SaveInUseTest()
+        public void Save_FileInUse_ShouldShowError()
         {
             // Arrange
-            File.Copy(_sourceFile, _destFile);
-            MockOpenFile(_destFile);
-            _viewModel.OpenDocumentCommand.Execute();
-            _viewModel.SelectedItem = _viewModel.DocumentList[0];
+            using var wrapper = new MainWindowViewModelWrapper();
+            using var folder = new TempFolder();
+            var destination = Path.Combine(folder.FullName, "Output.xlsx");
+            File.Copy(_sourceFile, destination);
+            var doc = wrapper.OpenDocument(destination, true);
 
             // Act / assert: Open the same file in exclusive mode
-            using (File.Open(_destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (File.Open(destination, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                AssertMessage(() => _viewModel.SaveCommand.Execute(null), MessageBoxImage.Error);
+                wrapper.AssertMessage(() => wrapper.ViewModel.SaveCommand.Execute(null), MessageBoxImage.Error);
             }
         }
 
@@ -488,17 +456,20 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         /// Checks whether a file being saved with the Save As... option while opened in another program is detected correctly and does not cause any crash
         /// </summary>
         [Test]
-        public void SaveAsInUseTest()
+        public void SaveAs_FileInUse_ShouldShowError()
         {
             // Arrange
-            OpenSource();
-            _viewModel.SaveAsCommand.Execute();
+            using var wrapper = new MainWindowViewModelWrapper();
+            var doc = wrapper.OpenDocument(_sourceFile);
+
+            using var folder = new TempFolder();
+            var destination = Path.Combine(folder.FullName, "Output.xlsx");
+            wrapper.SaveAs(doc, destination);
 
             // Act / assert: Open the same file in exclusive mode
-            // Act / assert: Open the same file in exclusive mode
-            using (File.Open(_destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (File.Open(destination, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                AssertMessage(() => _viewModel.SaveAsCommand.Execute(), MessageBoxImage.Error);
+                wrapper.AssertMessage(() => wrapper.SaveAs(doc, destination), MessageBoxImage.Error);
             }
         }
 
@@ -506,45 +477,84 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         /// Checks whether a file being saved while opened in another program is detected correctly and does not cause any crash
         /// </summary>
         [Test]
-        public void SaveAllInUseTest()
+        public void SaveAll_FileInUse_ShouldShowError()
         {
             // Arrange
-            File.Copy(_sourceFile, _destFile);
-            MockOpenFile(_destFile);
-            _viewModel.OpenDocumentCommand.Execute();
-            _viewModel.SelectedItem = _viewModel.DocumentList[0];
+            using var wrapper = new MainWindowViewModelWrapper();
+            using var folder = new TempFolder();
+            var destination = Path.Combine(folder.FullName, "Output.xlsx");
+            File.Copy(_sourceFile, destination);
+            var doc = wrapper.OpenDocument(destination, true);
 
             // Act / assert: Open the same file in exclusive mode
-            using (File.Open(_destFile, FileMode.Open, FileAccess.Read, FileShare.None))
+            using (File.Open(destination, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                AssertMessage(() => _viewModel.SaveAllCommand.Execute(), MessageBoxImage.Error);
+                wrapper.AssertMessage(() => wrapper.ViewModel.SaveAllCommand.Execute(), MessageBoxImage.Error);
             }
         }
 
         [Test]
-        public void CanOpenHelpPages()
+        public void OpenHelpLink_ExternalLinkShgouldBeLaunched()
         {
             // Arrange
+            using var wrapper = new MainWindowViewModelWrapper();
+
             var triggered = false;
-            _urlHelper.Setup(x => x.OpenExternal(It.IsAny<Uri>())).Callback(() => triggered = true);
+            wrapper.OpenExternalAction = x => triggered = true;
 
-            try
+            foreach (var pair in wrapper.ViewModel.HelpLinks)
             {
-                foreach (var pair in _viewModel.HelpLinks)
-                {
-                    triggered = false;
+                triggered = false;
 
-                    // Act
-                    _viewModel.OpenHelpLinkCommand.Execute(pair.Value);
+                // Act
+                wrapper.ViewModel.OpenHelpLinkCommand.Execute(pair.Value);
 
-                    // Assert
-                    Assert.True(triggered);
-                }
+                // Assert
+                Assert.True(triggered);
             }
-            finally
-            {
-                _urlHelper.Reset();
-            }
+        }
+
+        [Test]
+        public void OnLoaded_NoRedist_CancelWarning_ShouldCloseApp()
+        {
+            // Arrange
+            using var wrapper = new MainWindowViewModelWrapper();
+            wrapper.RedistributableDetails.NeedsDownload = true;
+
+            // Act / assert
+            wrapper.AssertMessage(() => Assert.IsFalse(wrapper.ViewModel.OnLoaded()), MessageBoxImage.Warning, MessageBoxResult.Cancel);
+        }
+
+        [Test]
+        public void OnLoaded_NoRedist_YesOnWarning_ShouldOpenDownloadLink()
+        {
+            // Arrange
+            using var wrapper = new MainWindowViewModelWrapper();
+            wrapper.RedistributableDetails.NeedsDownload = true;
+            Uri? openedUri = null;
+            wrapper.OpenExternalAction = uri => openedUri = uri;
+
+            // Act
+            wrapper.AssertMessage(() => Assert.IsTrue(wrapper.ViewModel.OnLoaded()), MessageBoxImage.Warning, MessageBoxResult.Yes);
+
+            // Assert
+            Assert.AreEqual(wrapper.RedistributableDetails.DownloadLink, openedUri, "Unexpected download link");
+        }
+
+        [Test]
+        public void OnLoaded_NoRedist_NoOnWarning_ShouldStartNormally()
+        {
+            // Arrange
+            using var wrapper = new MainWindowViewModelWrapper();
+            wrapper.RedistributableDetails.NeedsDownload = true;
+            Uri? openedUri = null;
+            wrapper.OpenExternalAction = uri => openedUri = uri;
+
+            // Act
+            wrapper.AssertMessage(() => Assert.IsTrue(wrapper.ViewModel.OnLoaded()), MessageBoxImage.Warning, MessageBoxResult.No);
+
+            // Assert
+            Assert.IsNull(openedUri, "Download link was still launched");
         }
 
         public static readonly TestCaseData[] DragData =
@@ -560,10 +570,11 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         public bool TestPreviewDragEnter(string dataFormat, bool existingFile, bool forceReturnNull)
         {
             // Arrange
-            var e = MockDragData(dataFormat, forceReturnNull, existingFile);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var e = CreateDragData(dataFormat, existingFile, forceReturnNull);
 
             // Act
-            _viewModel.PreviewDragEnterCommand.Execute(e);
+            wrapper.ViewModel.PreviewDragEnterCommand.Execute(e);
             
             // Assert
             return e.Handled;
@@ -574,112 +585,33 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         public bool TestDrop(string dataFormat, bool existingFile, bool forceReturnNull)
         {
             // Arrange
-            var e = MockDragData(dataFormat, forceReturnNull, existingFile);
+            using var wrapper = new MainWindowViewModelWrapper();
+            var e = CreateDragData(dataFormat, existingFile, forceReturnNull);
 
             // Act
-            _viewModel.DropCommand.Execute(e);
+            wrapper.ViewModel.DropCommand.Execute(e);
 
             // Assert
-            return _viewModel.DocumentList.Count > 0;
+            return wrapper.ViewModel.DocumentList.Count > 0;
         }
 
-        private DragData MockDragData(string dataFormat, bool forceReturnNull, bool existingFile)
+        private DragData CreateDragData(string dataFormat, bool existingFile, bool forceReturnNull)
         {
-            var dataMock = new Mock<IDataObject>();
-            dataMock.Setup(x => x.GetDataPresent(It.IsAny<string>()))
-                .Returns<string>(x => x == dataFormat);
-            dataMock.Setup(x => x.GetData(It.IsAny<string>()))
-#pragma warning disable CS8603 // Possible null reference return.
-                .Returns<string>(x => x != dataFormat || forceReturnNull ? null : new[] { existingFile ? _sourceFile : "abcd.efgh" });
-#pragma warning restore CS8603 // Possible null reference return.
-            return new DragData(dataMock.Object);
-        }
-
-        /// <summary>
-        /// Opens the document given by sourceFile
-        /// </summary>
-        /// <param name="select">Whether the document should be selected once it has been opened</param>
-        /// <returns>The opened document</returns>
-        private OfficeDocumentViewModel OpenSource(bool select = true)
-        {
-            _viewModel.OpenDocumentCommand.Execute();
-            Assume.That(_viewModel.DocumentList, Is.Not.Empty);
-            var doc = _viewModel.DocumentList[_viewModel.DocumentList.Count - 1];
-            if (select)
+            object? data;
+            if (forceReturnNull)
             {
-                _viewModel.SelectedItem = doc;
+                data = null;
             }
-
-            return doc;
-        }
-
-        private Tuple<OfficeDocumentViewModel, OfficePartViewModel> OpenAndInsertPart(XmlPart partType = XmlPart.RibbonX12, bool select = true)
-        {
-            var doc = OpenSource();
-            if (partType == XmlPart.RibbonX12)
+            else if (existingFile)
             {
-                _viewModel.InsertXml12Command.Execute();
+                data = new[] { _sourceFile };
             }
             else
             {
-                _viewModel.InsertXml14Command.Execute();
+                data = new[] { "abcd.efgh" };
             }
 
-            Assume.That(doc.Children, Is.Not.Empty, "XML part was not inserted");
-            Assume.That(doc.Children[0], Is.InstanceOf<OfficePartViewModel>(), "Wrong class was inserted");
-
-            if (select)
-            {
-                _viewModel.SelectedItem = doc.Children[0];
-            }
-
-            return Tuple.Create(doc, (OfficePartViewModel)doc.Children[0]);
-        }
-
-        private void MockOpenFile(string path)
-        {
-            _fileSvc.Setup(x => x.OpenFileDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(true)
-                .Callback<string, string, Action<string>, string, int>((title, filter, action, fileName, filterIndex) => action(path));
-        }
-
-        private void MockOpenFiles(string path)
-        {
-            MockOpenFiles(new[] { path });
-        }
-
-        private void MockOpenFiles(IEnumerable<string> paths)
-        {
-            _fileSvc.Setup(x => x.OpenFilesDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<IEnumerable<string>>>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(true)
-                .Callback<string, string, Action<IEnumerable<string>>, string, int>((title, filter, action, fileName, filterIndex) => action(paths));
-        }
-
-        private void MockSaveFile(string path)
-        {
-            _fileSvc.Setup(x => x.SaveFileDialog(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Action<string>>(), It.IsAny<string>(), It.IsAny<int>()))
-                .Returns(true)
-                .Callback<string, string, Action<string>, string, int>((title, filter, action, fileName, filterIndex) => action(path));
-        }
-
-        private void AssertMessage(Action action, MessageBoxImage image, MessageBoxResult result = MessageBoxResult.OK, string message = "Message not shown")
-        {
-            var count = 0;
-            try
-            {
-                _msgSvc.Setup(x => x.Show(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), image)).Returns(result).Callback(() => ++count);
-                action();
-                Assert.AreEqual(1, count, message);
-            }
-            finally
-            {
-                _msgSvc.Reset();
-            }
-        }
-
-        public void Dispose()
-        {
-            _viewModel?.Dispose();
+            return ContainerWrapper.CreateDragData(dataFormat, data);
         }
     }
 }

@@ -29,14 +29,15 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch
-  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  #value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  value: true
 
 stages:
 - stage: Build
   jobs:
 
-  - job: Testing
-    displayName: Testing
+  - job: Test
+    displayName: Test
     variables:
       targetFramework: net6.0-windows
       # Note: the SonarCloud analysis cannot be published from PRs originated from forks due to the variable
@@ -53,28 +54,11 @@ stages:
       parameters:
         targetFramework: $(targetFramework)
 
-  - job: ReleaseScripts
-    displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
+  - job: Certificate
+    condition: eq(variables['isMasterBranch'], 'true')
     steps:
-    - task: PublishPipelineArtifact@1
-      displayName: 'Publish Release Scripts'
-      inputs:
-        targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
-        artifactName: 'ReleaseScripts'
-
-  - job: Publish
-    displayName: Publish
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
-    dependsOn: Testing
-
-    steps:
-    - template: pre-steps.yml
-
-    - script: choco install innosetup
-      displayName: Install InnoSetup
-
     - task: PowerShell@2
+      name: GenerateCertificate
       displayName: 'Generate Self-Signed Certificate'
       inputs:
         pwsh: true
@@ -95,21 +79,55 @@ stages:
         targetPath: '$(Build.ArtifactStagingDirectory)/CodeSigningCertificate.cer' 
         artifactName: 'Code Signing Certificate'
 
-    - template: publish.yml
-      parameters:
-        tag: '.NET'
-        targetFramework: net6.0-windows
-        certificate: $(PfxCertificate)
-        
-    - template: publish.yml
-      parameters:
-        tag: 'Self-Contained .NET'
-        selfContained: true
-        targetFramework: net6.0-windows
-        certificate: $(PfxCertificate)
+  - job: ReleaseScripts
+    displayName: Publish Release Scripts
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
+    steps:
+    - task: PublishPipelineArtifact@1
+      displayName: 'Publish Release Scripts'
+      inputs:
+        targetPath: '$(Build.SourcesDirectory)/build/Scripts/ReleaseScripts' 
+        artifactName: 'ReleaseScripts'
 
-- stage: Release
+- stage: Publish
+  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
   dependsOn: Build
+  jobs:
+
+  - template: publish.yml
+    parameters:
+      jobName: 'FrameworkDependent_x64'
+      jobDisplayName: 'Framework Dependent - x64'
+      artifactName: 'Framework Dependent - x64'
+      selfContained: false
+      architecture: x64
+        
+  - template: publish.yml
+    parameters:
+      jobName: 'FrameworkDependent_arm64'
+      jobDisplayName: 'Framework Dependent - arm64'
+      artifactName: 'Framework Dependent - arm64'
+      selfContained: false
+      architecture: arm64
+
+  - template: publish.yml
+    parameters:
+      jobName: 'SelfContained_x64'
+      jobDisplayName: 'Self-Contained - x64'
+      artifactName: 'Self-Contained - x64'
+      selfContained: true
+      architecture: x64
+
+  - template: publish.yml
+    parameters:
+      jobName: 'SelfContained_arm64'
+      jobDisplayName: 'Self-Contained - arm64'
+      artifactName: 'Self-Contained - arm64'
+      selfContained: true
+      architecture: arm64
+  
+- stage: Release
+  dependsOn: Publish
   condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
 
   jobs:

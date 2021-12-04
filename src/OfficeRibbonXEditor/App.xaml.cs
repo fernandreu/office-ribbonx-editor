@@ -34,6 +34,11 @@ namespace OfficeRibbonXEditor
 
         public static IContainer CreateContainer()
         {
+            return CreateContainerBuilder().Build();
+        }
+
+        internal static ContainerBuilder CreateContainerBuilder()
+        {
             var result = new ContainerBuilder();
 
             foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -52,7 +57,7 @@ namespace OfficeRibbonXEditor
                 }
             }
 
-            return result.Build();
+            return result;
         }
 
         protected override void OnStartup(StartupEventArgs e)
@@ -146,7 +151,12 @@ namespace OfficeRibbonXEditor
             window.DataContext = windowModel;
             windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
             windowModel.Closed += (o, e) => window.Close();
-            windowModel.OnLoaded();
+            if (!windowModel.OnLoaded())
+            {
+                window.Close();
+                return;
+            }
+
             window.Show();
         }
 
