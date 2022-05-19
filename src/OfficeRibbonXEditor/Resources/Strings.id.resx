@@ -1,0 +1,787 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About.Author" xml:space="preserve">
+    <value>Penulis:</value>
+  </data>
+  <data name="About.Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="About.CopyVersion" xml:space="preserve">
+    <value>Salinan informasi versi</value>
+  </data>
+  <data name="About.License" xml:space="preserve">
+    <value>Lisensi:</value>
+  </data>
+  <data name="About.OperatingSystem" xml:space="preserve">
+    <value>Sistem Operasi:</value>
+  </data>
+  <data name="About.Paragraph1" xml:space="preserve">
+    <value>Office RibbonX Editor adalah gratis, open source, alat mandiri untuk mengedit bagian UI Kustom dari format file dokumen terbuka Office. Ini berisi skema UI kustom Office 2007 dan Office 2010.</value>
+  </data>
+  <data name="About.Paragraph2" xml:space="preserve">
+    <value>Skema UI kustom Office 2010 adalah skema terbaru dan masih digunakan di versi terbaru Office termasuk Office 2013, Office 2016, Office 2019 dan Office 365.</value>
+  </data>
+  <data name="About.ProjectPage" xml:space="preserve">
+    <value>Halaman Proyek:</value>
+  </data>
+  <data name="About.Runtime" xml:space="preserve">
+    <value>Waktu proses:</value>
+  </data>
+  <data name="About.SubmitIssue" xml:space="preserve">
+    <value>Kirim masalah</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>Tentang Office RibbonX Editor</value>
+  </data>
+  <data name="About.Version" xml:space="preserve">
+    <value>Versi:</value>
+  </data>
+  <data name="Callbacks.Title" xml:space="preserve">
+    <value>Panampil Callback</value>
+  </data>
+  <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
+    <value>Ubah ID</value>
+  </data>
+  <data name="ContextMenu.TreeView.Close" xml:space="preserve">
+    <value>Tutup</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertIcons" xml:space="preserve">
+    <value>Sisipkan Ikon...</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2007" xml:space="preserve">
+    <value>Tambah bagian Office 2007 Custom UI</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2010" xml:space="preserve">
+    <value>Tambah bagian Office 2010+ Custom UI</value>
+  </data>
+  <data name="ContextMenu.TreeView.Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+  <data name="ContextMenu.TreeView.Remove" xml:space="preserve">
+    <value>Hapus</value>
+  </data>
+  <data name="ContextMenu.TreeView.Save" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+  <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
+    <value>Simpan Sebagai...</value>
+  </data>
+  <data name="Editor.ZoomFactor" xml:space="preserve">
+    <value>Faktor Zoom:</value>
+  </data>
+  <data name="Exception.CloseDialog" xml:space="preserve">
+    <value>Tutup Dialog ini</value>
+  </data>
+  <data name="Exception.Disclaimer" xml:space="preserve">
+    <value>Jika Anda terus menggunakan alat ini setelah pengecualian ini, alat ini mungkin mulai tidak berfungsi.</value>
+  </data>
+  <data name="Exception.ShutdownApp" xml:space="preserve">
+    <value>Matikan Aplikasi</value>
+  </data>
+  <data name="Exception.SubmitBug" xml:space="preserve">
+    <value>Kirim Laporan Bug</value>
+  </data>
+  <data name="Exception.Title" xml:space="preserve">
+    <value>Terjadi Pengecualian yang Tidak Tertangani</value>
+  </data>
+  <data name="Filter.All" xml:space="preserve">
+    <value>Semua File (*.*)|*.*</value>
+  </data>
+  <data name="Filter.AllOfficeDocuments" xml:space="preserve">
+    <value>Semua Dokumen Office|*.???x;*.???m</value>
+  </data>
+  <data name="Filter.ExcelDocuments" xml:space="preserve">
+    <value>Microsoft Excel Workbooks|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
+  </data>
+  <data name="Filter.Icons" xml:space="preserve">
+    <value>Ikon yang Didukung|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
+  </data>
+  <data name="Filter.PowerPointDocuments" xml:space="preserve">
+    <value>Microsoft PowerPoint Presentations|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
+  </data>
+  <data name="Filter.VisioDocuments" xml:space="preserve">
+    <value>Microsoft Visio Drawings|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
+  </data>
+  <data name="Filter.SaveAs0" xml:space="preserve">
+    <value>Excel Workbook|*.xlsx</value>
+  </data>
+  <data name="Filter.SaveAs1" xml:space="preserve">
+    <value>Excel Macro-Enabled Workbook|*.xlsm</value>
+  </data>
+  <data name="Filter.SaveAs10" xml:space="preserve">
+    <value>PowerPoint Show|*.ppsx</value>
+  </data>
+  <data name="Filter.SaveAs11" xml:space="preserve">
+    <value>PowerPoint Macro-Enabled Show|*.ppsm</value>
+  </data>
+  <data name="Filter.SaveAs12" xml:space="preserve">
+    <value>PowerPoint Add-in|*.ppam</value>
+  </data>
+  <data name="Filter.SaveAs13" xml:space="preserve">
+    <value>Word Document|*.docx</value>
+  </data>
+  <data name="Filter.SaveAs14" xml:space="preserve">
+    <value>Word Macro-Enabled Document|*.docm</value>
+  </data>
+  <data name="Filter.SaveAs15" xml:space="preserve">
+    <value>Word Template|*.dotx</value>
+  </data>
+  <data name="Filter.SaveAs16" xml:space="preserve">
+    <value>Word Macro-Enabled Template|*.dotm</value>
+  </data>
+  <data name="Filter.SaveAs17" xml:space="preserve">
+    <value>Visio Diagram|*.vsdx</value>
+  </data>
+  <data name="Filter.SaveAs18" xml:space="preserve">
+    <value>Visio Macro-Enabled Diagram|*.vsdm</value>
+  </data>
+  <data name="Filter.SaveAs19" xml:space="preserve">
+    <value>Visio Template|*.vstx</value>
+  </data>
+  <data name="Filter.SaveAs20" xml:space="preserve">
+    <value>Visio Macro-Enabled Template|*.vstm</value>
+  </data>
+  <data name="Filter.SaveAs2" xml:space="preserve">
+    <value>Excel Binary Workbook|*.xlsb</value>
+  </data>
+  <data name="Filter.SaveAs3" xml:space="preserve">
+    <value>Excel Template|*.xltx</value>
+  </data>
+  <data name="Filter.SaveAs4" xml:space="preserve">
+    <value>Excel Macro-Enabled Template|*.xltm</value>
+  </data>
+  <data name="Filter.SaveAs5" xml:space="preserve">
+    <value>Excel Add-in|*.xlam</value>
+  </data>
+  <data name="Filter.SaveAs6" xml:space="preserve">
+    <value>PowerPoint Presentation|*.pptx</value>
+  </data>
+  <data name="Filter.SaveAs7" xml:space="preserve">
+    <value>PowerPoint Macro-Enabled Presentation|*.pptm</value>
+  </data>
+  <data name="Filter.SaveAs8" xml:space="preserve">
+    <value>PowerPoint Template|*.potx</value>
+  </data>
+  <data name="Filter.SaveAs9" xml:space="preserve">
+    <value>PowerPoint Macro-Enabled Template|*.potm</value>
+  </data>
+  <data name="Filter.WordDocuments" xml:space="preserve">
+    <value>Microsoft Word Documents|*.do?x;*.do?m</value>
+  </data>
+  <data name="FindReplace.Find" xml:space="preserve">
+    <value>_Cari</value>
+  </data>
+  <data name="FindReplace.FindAll" xml:space="preserve">
+    <value>Cari Semua</value>
+  </data>
+  <data name="FindReplace.FindAll.Clear" xml:space="preserve">
+    <value>C_lear</value>
+  </data>
+  <data name="FindReplace.FindAll.HighlightMatches" xml:space="preserve">
+    <value>_Sorot Kecocokan</value>
+  </data>
+  <data name="FindReplace.FindAll.MarkLine" xml:space="preserve">
+    <value>_Tandai Garis</value>
+  </data>
+  <data name="FindReplace.FindAll.Ok" xml:space="preserve">
+    <value>Cari _Semua</value>
+  </data>
+  <data name="FindReplace.FindNext" xml:space="preserve">
+    <value>Cari Berikutnya</value>
+  </data>
+  <data name="FindReplace.FindPrevious" xml:space="preserve">
+    <value>Cari Sebelumnya</value>
+  </data>
+  <data name="FindReplace.FindTab" xml:space="preserve">
+    <value>Cari</value>
+  </data>
+  <data name="FindReplace.Options" xml:space="preserve">
+    <value>Opsi</value>
+  </data>
+  <data name="FindReplace.Options.Compiled" xml:space="preserve">
+    <value>_Dikompilasi</value>
+  </data>
+  <data name="FindReplace.Options.ECMAScript" xml:space="preserve">
+    <value>Skrip ECMA</value>
+  </data>
+  <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
+    <value>Tangkapan Eksplisit</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
+    <value>Abaikan Kasus</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
+    <value>Abaikan Pola Spasi</value>
+  </data>
+  <data name="FindReplace.Options.Invariant" xml:space="preserve">
+    <value>C_ulture Invariant</value>
+  </data>
+  <data name="FindReplace.Options.Multiline" xml:space="preserve">
+    <value>Multiline</value>
+  </data>
+  <data name="FindReplace.Options.RightToLeft" xml:space="preserve">
+    <value>Kanan Ke Kiri</value>
+  </data>
+  <data name="FindReplace.Options.Singleline" xml:space="preserve">
+    <value>Singleline</value>
+  </data>
+  <data name="FindReplace.Replace" xml:space="preserve">
+    <value>_Ganti</value>
+  </data>
+  <data name="FindReplace.ReplaceAll" xml:space="preserve">
+    <value>Ganti _Semua</value>
+  </data>
+  <data name="FindReplace.ReplaceNext" xml:space="preserve">
+    <value>Ganti _Selanjutnya</value>
+  </data>
+  <data name="FindReplace.ReplacePrevious" xml:space="preserve">
+    <value>Ganti _Sebelumnya</value>
+  </data>
+  <data name="FindReplace.ReplaceTab" xml:space="preserve">
+    <value>Ganti</value>
+  </data>
+  <data name="FindReplace.SearchType" xml:space="preserve">
+    <value>Search Type</value>
+  </data>
+  <data name="FindReplace.SearchType.Extended" xml:space="preserve">
+    <value>E_xtended (\n, \r, \t, \0)</value>
+  </data>
+  <data name="FindReplace.SearchType.Regular" xml:space="preserve">
+    <value>Regular _Expression</value>
+  </data>
+  <data name="FindReplace.SearchType.Standard" xml:space="preserve">
+    <value>_Standard</value>
+  </data>
+  <data name="FindReplace.Selection" xml:space="preserve">
+    <value>Pilihan Penelusuran</value>
+  </data>
+  <data name="FindReplace.Status.NoMatch" xml:space="preserve">
+    <value>Kecocokan tidak dapat ditemukan</value>
+  </data>
+  <data name="FindReplace.Status.RegExError" xml:space="preserve">
+    <value>Kesalahan dalam Ekspresi Reguler</value>
+  </data>
+  <data name="FindReplace.Status.TotalFound" xml:space="preserve">
+    <value>Total ditemukan</value>
+  </data>
+  <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
+    <value>Total diganti</value>
+  </data>
+  <data name="FindReplace.Status.Wrap" xml:space="preserve">
+    <value>Kecocokan pencarian dibungkus dengan awal dokumen / pilihan</value>
+  </data>
+  <data name="FindReplace.Title" xml:space="preserve">
+    <value>Cari dan Ganti</value>
+  </data>
+  <data name="FindReplace.Wrap" xml:space="preserve">
+    <value>_Wrap</value>
+  </data>
+  <data name="GoTo.Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="GoTo.CurrentLine" xml:space="preserve">
+    <value>_Nomor baris saat ini</value>
+  </data>
+  <data name="GoTo.DesiredLine" xml:space="preserve">
+    <value>Pergi ke nomor baris</value>
+  </data>
+  <data name="GoTo.MaxLine" xml:space="preserve">
+    <value>_Jumlah baris maksimum</value>
+  </data>
+  <data name="GoTo.Ok" xml:space="preserve">
+    <value>Oke</value>
+  </data>
+  <data name="GoTo.Title" xml:space="preserve">
+    <value>Pergi Ke Baris</value>
+  </data>
+  <data name="MainWindow.Title" xml:space="preserve">
+    <value>Office RibbonX Editor</value>
+  </data>
+  <data name="Menu.Edit" xml:space="preserve">
+    <value>_Edit</value>
+  </data>
+  <data name="Menu.Edit.Copy" xml:space="preserve">
+    <value>Salin</value>
+  </data>
+  <data name="Menu.Edit.Cut" xml:space="preserve">
+    <value>Potong</value>
+  </data>
+  <data name="Menu.Edit.DuplicateLine" xml:space="preserve">
+    <value>Garis Duplikat</value>
+  </data>
+  <data name="Menu.Edit.Find" xml:space="preserve">
+    <value>Cari...</value>
+  </data>
+  <data name="Menu.Edit.FindNext" xml:space="preserve">
+    <value>Cari Berikutnya</value>
+  </data>
+  <data name="Menu.Edit.FindPrevious" xml:space="preserve">
+    <value>Cari Sebelumnya</value>
+  </data>
+  <data name="Menu.Edit.GoTo" xml:space="preserve">
+    <value>Ke Baris...</value>
+  </data>
+  <data name="Menu.Edit.Incremental" xml:space="preserve">
+    <value>Penelusuran Inkremental...</value>
+  </data>
+  <data name="Menu.Edit.Paste" xml:space="preserve">
+    <value>Tempel</value>
+  </data>
+  <data name="Menu.Edit.Redo" xml:space="preserve">
+    <value>Ulangi</value>
+  </data>
+  <data name="Menu.Edit.Replace" xml:space="preserve">
+    <value>Ganti...</value>
+  </data>
+  <data name="Menu.Edit.SelectAll" xml:space="preserve">
+    <value>Pilih Semua</value>
+  </data>
+  <data name="Menu.Edit.Undo" xml:space="preserve">
+    <value>Batalkan</value>
+  </data>
+  <data name="Menu.File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="Menu.File.Close" xml:space="preserve">
+    <value>Tutup Dokumen Saat Ini</value>
+  </data>
+  <data name="Menu.File.Exit" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="Menu.File.Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+  <data name="Menu.File.Save" xml:space="preserve">
+    <value>Simpan Dokumen Saat Ini</value>
+  </data>
+  <data name="Menu.File.SaveAll" xml:space="preserve">
+    <value>Simpan Semua Dokumen</value>
+  </data>
+  <data name="Menu.File.SaveAs" xml:space="preserve">
+    <value>Simpan Sebagai...</value>
+  </data>
+  <data name="Menu.File.SaveAs.ToolTip" xml:space="preserve">
+    <value>Simpan dokumen saat ini dengan nama yang berbeda</value>
+  </data>
+  <data name="Menu.FIle.SaveCopy" xml:space="preserve">
+    <value>Simpan Salinan Sebagai...</value>
+  </data>
+  <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
+    <value>Simpan salinan dokumen saat ini yang sepenuhnya terpisah</value>
+  </data>
+  <data name="Menu.File.Settings" xml:space="preserve">
+    <value>Setelan...</value>
+  </data>
+  <data name="Menu.Help" xml:space="preserve">
+    <value>_Bantuan</value>
+  </data>
+  <data name="Menu.Help.About" xml:space="preserve">
+    <value>Tentang</value>
+  </data>
+  <data name="Menu.Help.UsefulLinks" xml:space="preserve">
+    <value>Tautan Berguna</value>
+  </data>
+  <data name="Menu.Insert" xml:space="preserve">
+    <value>_Sisipkan</value>
+  </data>
+  <data name="Menu.Insert.Icons" xml:space="preserve">
+    <value>Ikon...</value>
+  </data>
+  <data name="Menu.Insert.Office2007" xml:space="preserve">
+    <value>Bagian Office 2007 Custom UI</value>
+  </data>
+  <data name="Menu.Insert.Office2010" xml:space="preserve">
+    <value>Bagian Office 2010+ Custom UI</value>
+  </data>
+  <data name="Menu.Insert.Sample" xml:space="preserve">
+    <value>Contoh XML</value>
+  </data>
+  <data name="Menu.View" xml:space="preserve">
+    <value>_Lihat</value>
+  </data>
+  <data name="Menu.View.FoldAll" xml:space="preserve">
+    <value>Lipat Semua</value>
+  </data>
+  <data name="Menu.View.FoldCurrent" xml:space="preserve">
+    <value>Lipat Level Saat Ini</value>
+  </data>
+  <data name="Menu.View.FoldLevel" xml:space="preserve">
+    <value>Level Lipat</value>
+    <comment>Judul menu untuk melipat level tertentu</comment>
+  </data>
+  <data name="Menu.View.UnfoldAll" xml:space="preserve">
+    <value>Buka Semua</value>
+  </data>
+  <data name="Menu.View.UnfoldCurrent" xml:space="preserve">
+    <value>Buka Level Saat Ini</value>
+  </data>
+  <data name="Menu.View.UnfoldLevel" xml:space="preserve">
+    <value>Tingkat Buka</value>
+    <comment>Judul menu untuk membuka level tertentu</comment>
+  </data>
+  <data name="Message.AlreadyOpen.Text" xml:space="preserve">
+    <value>Dokumen '{0}' sudah terbuka. Membuka dokumen lebih dari sekali berbahaya dan dapat menyebabkan hilangnya data, kecuali jika Anda langsung menyimpannya dengan nama yang berbeda.
+
+	Apakah Anda benar-benar yakin ingin membuka dokumen ini lagi?</value>
+  </data>
+  <data name="Message.AlreadyOpen.Title" xml:space="preserve">
+    <value>Dokumen Sudah Terbuka</value>
+  </data>
+  <data name="Message.CallbackError.Title" xml:space="preserve">
+    <value>Kesalahan Menghasilkan Callback</value>
+  </data>
+  <data name="Message.ChangeIdError.Title" xml:space="preserve">
+    <value>Kesalahan Mengubah ID Ikon</value>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
+    <value>File {0} memiliki perubahan yang belum disimpan. Apakah Anda ingin menyimpannya sebelum menutupnya?</value>
+    <comment>{0} adalah pengganti untuk nama file</comment>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
+    <value>Perubahan yang Belum Disimpan</value>
+  </data>
+  <data name="Message.IconExists.Text" xml:space="preserve">
+    <value>File UI khusus ini sudah memiliki ikon dengan id {0}. Apakah Anda ingin menyisipkan ikon baru dengan id {1} sebagai gantinya?</value>
+  </data>
+  <data name="Message.IconExists.Title" xml:space="preserve">
+    <value>Ikon Sudah Ada</value>
+  </data>
+  <data name="Message.InsertSample.Text" xml:space="preserve">
+    <value>Ini akan menyisipkan contoh kode XML pada posisi kursor saat ini. Yakin ingin melanjutkan?</value>
+  </data>
+  <data name="Message.InsertSample.Title" xml:space="preserve">
+    <value>Sisipkan Contoh XML</value>
+  </data>
+  <data name="Message.InsertSampleError.Title" xml:space="preserve">
+    <value>Kesalahan saat memasukkan sampel XML</value>
+  </data>
+  <data name="Message.NewVersion.Text" xml:space="preserve">
+    <value>Versi rilis {0} sekarang tersedia. Apakah Anda ingin mengunduhnya?</value>
+  </data>
+  <data name="Message.NewVersion.Title" xml:space="preserve">
+    <value>Tersedia Versi Lebih Baru</value>
+  </data>
+  <data name="Message.NoCallbacks.Text" xml:space="preserve">
+    <value>Tidak ada panggilan balik yang akan dibuat.</value>
+  </data>
+  <data name="Message.NoCallbacks.Title" xml:space="preserve">
+    <value>Hasilkan Callback</value>
+  </data>
+  <data name="Message.OpenError.Title" xml:space="preserve">
+    <value>Kesalahan saat membuka dokumen Office</value>
+  </data>
+  <data name="Message.RemoveIcon.Text" xml:space="preserve">
+    <value>Tindakan ini tidak dapat dibatalkan. Yakin ingin melanjutkan?</value>
+  </data>
+  <data name="Message.RemoveIcon.Title" xml:space="preserve">
+    <value>Hapus Ikon</value>
+  </data>
+  <data name="Message.RemovePart.Text" xml:space="preserve">
+    <value>Tindakan ini tidak dapat dibatalkan. Yakin ingin melanjutkan?</value>
+  </data>
+  <data name="Message.RemovePart.Title" xml:space="preserve">
+    <value>Hapus bagian XML</value>
+  </data>
+  <data name="Message.SaveError.Title" xml:space="preserve">
+    <value>Kesalahan saat menyimpan dokumen Office</value>
+  </data>
+  <data name="Message.ValidXml.Text" xml:space="preserve">
+    <value>XML UI khusus telah dibentuk dengan baik.</value>
+  </data>
+  <data name="Message.ValidXml.Title" xml:space="preserve">
+    <value>XML Valid</value>
+  </data>
+  <data name="Message.VersionCopy.Text" xml:space="preserve">
+    <value>Informasi versi telah disalin ke clipboard.</value>
+  </data>
+  <data name="Message.VersionCopy.Title" xml:space="preserve">
+    <value>Informasi Versi Disalin</value>
+  </data>
+  <data name="OpenDialog.Document.Title" xml:space="preserve">
+    <value>Buka Dokumen OOXML</value>
+  </data>
+  <data name="OpenDialog.Icons.Title" xml:space="preserve">
+    <value>Sisipkan Ikon Kustom</value>
+  </data>
+  <data name="SaveDialog.SaveAs.Title" xml:space="preserve">
+    <value>Simpan Dokumen OOXML</value>
+  </data>
+  <data name="Settings.Accept" xml:space="preserve">
+    <value>Terima</value>
+  </data>
+  <data name="Settings.Apply" xml:space="preserve">
+    <value>Terapkan</value>
+  </data>
+  <data name="Settings.Colors" xml:space="preserve">
+    <value>Warna editor</value>
+  </data>
+  <data name="Settings.Colors.Attribute" xml:space="preserve">
+    <value>Atribut</value>
+  </data>
+  <data name="Settings.Colors.Background" xml:space="preserve">
+    <value>Latar Belakang</value>
+  </data>
+  <data name="Settings.Colors.Comment" xml:space="preserve">
+    <value>Komentar</value>
+  </data>
+  <data name="Settings.Colors.Default" xml:space="preserve">
+    <value>Teks Normal</value>
+  </data>
+  <data name="Settings.Colors.String" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="Settings.Colors.Tag" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="Settings.Editor" xml:space="preserve">
+    <value>Setelan editor lainnya</value>
+  </data>
+  <data name="Settings.Editor.AutoIndent" xml:space="preserve">
+    <value>Indentasi baris baru secara otomatis</value>
+  </data>
+  <data name="Settings.Editor.FontSize" xml:space="preserve">
+    <value>Ukuran Font</value>
+  </data>
+  <data name="Settings.Editor.TabWidth" xml:space="preserve">
+    <value>Lebar Tab</value>
+  </data>
+  <data name="Settings.Editor.WrapMode" xml:space="preserve">
+    <value>Mode Wrap</value>
+  </data>
+  <data name="Settings.FileAssociations" xml:space="preserve">
+    <value>Asosiasi File</value>
+  </data>
+  <data name="Settings.FileAssociations.CheckAll" xml:space="preserve">
+    <value>Centang Semua</value>
+  </data>
+  <data name="Settings.FileAssociations.ToolTip" xml:space="preserve">
+    <value>Entri menu konteks akan muncul di Windows Explorer untuk mengedit file-file ini secara langsung dengan alat ini</value>
+  </data>
+  <data name="Settings.FileAssociations.UncheckAll" xml:space="preserve">
+    <value>Hapus centang Semua</value>
+  </data>
+  <data name="Settings.Misc" xml:space="preserve">
+    <value>Lainnya</value>
+  </data>
+  <data name="Settings.Misc.DefaultTemplates" xml:space="preserve">
+    <value>Tampilkan template XML default di menu Sisipkan</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates" xml:space="preserve">
+    <value>Templat XML tambahan untuk dimuat:</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
+    <value>Satu jalur per baris. Path dapat berupa file XML atau folder yang berisi itu. Mereka juga dapat menjadi relatif terhadap folder alat</value>
+  </data>
+  <data name="Settings.Misc.Language" xml:space="preserve">
+    <value>Bahasa</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes" xml:space="preserve">
+    <value>Pertahankan atribut file saat menyimpan dokumen yang sudah ada</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes.ToolTip" xml:space="preserve">
+    <value>Jika dicentang, file hanya-baca akan tetap menjadi hanya-baca setelah menyimpannya misalnya</value>
+  </data>
+  <data name="Settings.ResetDefaults" xml:space="preserve">
+    <value>Setel Ulang Default</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Setelan</value>
+  </data>
+  <data name="ToolBar.Callbacks" xml:space="preserve">
+    <value>Hasilkan Callback</value>
+  </data>
+  <data name="ToolBar.Callbacks.ToolTip" xml:space="preserve">
+    <value>Hasilkan panggilan balik untuk file XML saat ini</value>
+  </data>
+  <data name="ToolBar.InsertIcons" xml:space="preserve">
+    <value>Sisipkan Ikon</value>
+  </data>
+  <data name="ToolBar.InsertIcons.ToolTip" xml:space="preserve">
+    <value>Sisipkan Ikon</value>
+  </data>
+  <data name="ToolBar.Open" xml:space="preserve">
+    <value>Buka</value>
+  </data>
+  <data name="ToolBar.Open.ToolTip" xml:space="preserve">
+    <value>Buka dokumen Office</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave" xml:space="preserve">
+    <value>Muat ulang saat Simpan</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave.ToolTip" xml:space="preserve">
+    <value>Untuk memastikan Anda tidak menghapus perubahan yang dibuat secara eksternal, Anda dapat memuat ulang dokumen tepat sebelum disimpan</value>
+  </data>
+  <data name="ToolBar.Save" xml:space="preserve">
+    <value>Simpan</value>
+  </data>
+  <data name="ToolBar.Save.ToolTip" xml:space="preserve">
+    <value>Simpan dokumen Office saat ini</value>
+  </data>
+  <data name="ToolBar.Settings" xml:space="preserve">
+    <value>Setelan</value>
+  </data>
+  <data name="ToolBar.Settings.ToolTip" xml:space="preserve">
+    <value>Melihat pengaturan editor</value>
+  </data>
+  <data name="ToolBar.ShowWhitespaces.ToolTip" xml:space="preserve">
+    <value>Tampilkan spasi, tab, dan karakter akhir baris di editor</value>
+  </data>
+  <data name="ToolBar.ToggleComment.ToolTip" xml:space="preserve">
+    <value>Komentar / batalkan komentar pada baris yang dipilih saat ini</value>
+  </data>
+  <data name="ToolBar.Validate" xml:space="preserve">
+    <value>Validasi</value>
+  </data>
+  <data name="ToolBar.Validate.ToolTip" xml:space="preserve">
+    <value>Periksa apakah file XML saat ini sesuai dengan skema yang sesuai</value>
+  </data>
+  <data name="ToolBar.VersionAvailable" xml:space="preserve">
+    <value>v{0} Tersedia!</value>
+    <comment>{0} adalah pengganti untuk versi tersebut, misalnya "1.2.3"</comment>
+  </data>
+  <data name="Validation.MutuallyExclusive" xml:space="preserve">
+    <value>Anda hanya dapat menentukan salah satu atribut berikut dalam sebuah elemen: {0}</value>
+  </data>
+  <data name="Validation.WrongNamespace" xml:space="preserve">
+    <value>Ruang nama tidak dikenal "{0}". Ruang nama XML UI khusus harus "{1}"</value>
+  </data>
+  <data name="About.Translators" xml:space="preserve">
+    <value>Penerjemah:</value>
+  </data>
+  <data name="Message.CorruptedSettings.Text" xml:space="preserve">
+    <value>File pengaturan pengguna di lokasi berikut ini rusak dan tidak dapat dihapus:
+
+{0}
+
+Hapus file ini secara manual dan mulai ulang aplikasi. Lokasi foldernya telah disalin ke clipboard.</value>
+  </data>
+  <data name="Message.CorruptedSettings.Title" xml:space="preserve">
+    <value>Setelan Rusak</value>
+  </data>
+  <data name="Message.MissingRedistributable.Text" xml:space="preserve">
+    <value>Alat ini membutuhkan setidaknya {0} Microsoft Visual C++ Redistributable ({1}) yang diinstal, tetapi tidak dapat dideteksi di mesin Anda. Ini kemungkinan besar akan mengakibatkan crash saat membuka tab editor.
+
+Apakah Anda ingin mengunduh paket terbaru yang dapat didistribusikan ulang sekarang?</value>
+    <comment>{0} adalah pengganti untuk versi tersebut, misalnya "v14.16". {1} adalah pengganti untuk arsitektur, misalnya. "arm64" / "x64"</comment>
+  </data>
+  <data name="Message.MissingRedistributable.Title" xml:space="preserve">
+    <value>VC++ yang Tidak Dapat Didistribusikan Ulang</value>
+  </data>
+</root>
