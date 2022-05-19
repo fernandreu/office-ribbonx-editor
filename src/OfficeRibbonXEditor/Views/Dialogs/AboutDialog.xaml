@@ -57,6 +57,9 @@
                 <controls:ExternalHyperlink NavigateUri="https://github.com/Claythve">Claythve</controls:ExternalHyperlink>,
                 <controls:ExternalHyperlink NavigateUri="https://github.com/Mo-Gul">Mo-Gul</controls:ExternalHyperlink>
             <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=id-ID}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/aliishaq-zz">aliishaq-zz</controls:ExternalHyperlink>
+            <LineBreak/>
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=tr-TR}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/fatihmeh">fatihmeh</controls:ExternalHyperlink>
         </TextBlock>
