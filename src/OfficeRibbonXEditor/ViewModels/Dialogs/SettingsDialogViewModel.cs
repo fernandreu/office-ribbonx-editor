@@ -25,6 +25,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             new CultureInfo("fr-FR"),
             new CultureInfo("id-ID"),
             new CultureInfo("nl-NL"),
+            new CultureInfo("pt-BR"),
             new CultureInfo("tr-TR"),
             new CultureInfo("zh-CN"),
         };
