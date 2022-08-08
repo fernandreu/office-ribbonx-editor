@@ -5,12 +5,13 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml;
 using CommonServiceLocator;
+using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {
-    public class IconViewModel : TreeViewItemViewModel
+    public partial class IconViewModel : TreeViewItemViewModel
     {
         public IconViewModel(string name, BitmapImage image, OfficePartViewModel parent)
             : base(parent, false, false)
@@ -64,23 +65,15 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             }
         }
 
-        private string _newName;
         /// <summary>
         /// Gets or sets the potentially new ID to be used for the icon. This is used, for example, in
         /// editing mode before committing to use the new ID (in case the user discard the changes)
         /// </summary>
-        public string NewName
-        {
-            get => _newName;
-            set => SetProperty(ref _newName, value);
-        }
+        [ObservableProperty]
+        private string _newName;
 
+        [ObservableProperty]
         private bool _isEditingId;
-        public bool IsEditingId
-        {
-            get => _isEditingId;
-            set => SetProperty(ref _isEditingId, value);
-        }
 
         /// <summary>
         /// Attempts to apply the NewName property to the Id one, but cancels the action if the ID is invalid

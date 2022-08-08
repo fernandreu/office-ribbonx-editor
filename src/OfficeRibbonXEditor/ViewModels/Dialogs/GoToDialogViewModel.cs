@@ -1,4 +1,5 @@
 ﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -39,12 +40,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public int MaximumLineNumber => Lexer?.Editor?.Lines.Count ?? 0;
 
+        [ObservableProperty]
         private int _target;
-        public int Target
-        {
-            get => _target;
-            set => SetProperty(ref _target, value);
-        }
 
         public bool OnLoaded(ScintillaLexer payload)
         {

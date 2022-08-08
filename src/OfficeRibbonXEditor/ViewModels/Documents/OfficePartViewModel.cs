@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Documents;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
 {
-    public class OfficePartViewModel : TreeViewItemViewModel
+    public partial class OfficePartViewModel : TreeViewItemViewModel
     {
         public OfficePartViewModel(OfficePart part, OfficeDocumentViewModel parent) 
             : base(parent, false, contents: part.ReadContent())
@@ -19,12 +20,8 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public string OriginalContents { get; private set; }
 
+        [ObservableProperty]
         private OfficePart? _part;
-        public OfficePart? Part
-        {
-            get => _part;
-            set => SetProperty(ref _part, value);
-        }
 
         public bool IconsChanged { get; set; }
 

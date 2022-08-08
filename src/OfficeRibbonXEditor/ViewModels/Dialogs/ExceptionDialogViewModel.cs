@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -19,12 +20,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             _urlHelper = urlHelper;
         }
 
+        [ObservableProperty]
         private Exception? _exception;
-        public Exception? Exception
-        {
-            get => _exception;
-            set => SetProperty(ref _exception, value);
-        }
 
         public bool OnLoaded(Exception? payload)
         {

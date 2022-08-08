@@ -9,7 +9,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : ObservableObject
+    public partial class TreeViewItemViewModel : ObservableObject
     {
         private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
@@ -49,67 +49,50 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         /// </summary>
         public bool HasDummyChild => Children.Count == 1 && Children[0] == DummyChild;
         
-        private bool _isExpanded;
         /// <summary>
         /// Gets or sets a value indicating whether the TreeViewItem associated with this object is expanded.
         /// </summary>
-        public bool IsExpanded
+        [ObservableProperty]
+        private bool _isExpanded;
+
+        partial void OnIsExpandedChanged(bool value)
         {
-            get => _isExpanded;
-            set
+            // Expand all the way up to the root.
+            if (value && Parent != null)
             {
-                if (!SetProperty(ref _isExpanded, value))
-                {
-                    return;
-                }
+                Parent.IsExpanded = true;
+            }
 
-                // Expand all the way up to the root.
-                if (_isExpanded && Parent != null)
-                {
-                    Parent.IsExpanded = true;
-                }
-
-                // Lazy load the child items, if necessary.
-                if (HasDummyChild)
-                {
-                    Children.Remove(DummyChild);
-                    LoadChildren();
-                }
+            // Lazy load the child items, if necessary.
+            if (HasDummyChild)
+            {
+                Children.Remove(DummyChild);
+                LoadChildren();
             }
         }
-
-        private bool _isSelected;
+        
         /// <summary>
         /// Gets or sets a value indicating whether the TreeViewItem associated with this object is selected.
         /// </summary>
-        public bool IsSelected
+        [ObservableProperty]
+        private bool _isSelected;
+
+        partial void OnIsSelectedChanged(bool value)
         {
-            get => _isSelected;
-            set
+            if (value)
             {
-                if (SetProperty(ref _isSelected, value) && _isSelected)
-                {
-                    IsExpanded = true; // To select something, you should be able to see it
-                }
+                IsExpanded = true;
             }
         }
-
-        private bool _canHaveContents;
+        
         /// <summary>
         /// Gets or sets a value indicating whether this TreeViewItem can have contents edited in the code control
         /// </summary>
-        public bool CanHaveContents
-        {
-            get => _canHaveContents;
-            set => SetProperty(ref _canHaveContents, value);
-        }
+        [ObservableProperty]
+        private bool _canHaveContents;
 
+        [ObservableProperty]
         private string? _contents;
-        public string? Contents
-        {
-            get => _contents;
-            set => SetProperty(ref _contents, value);
-        }
         
         public TreeViewItemViewModel? Parent { get; }
 

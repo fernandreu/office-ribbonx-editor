@@ -19,12 +19,8 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
+        [ObservableProperty]
         private string _title = string.Empty;
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
 
         public string? StatusText
         {
@@ -39,41 +35,31 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             }
         }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(StatusText))]
+        [NotifyPropertyChangedFor(nameof(Item))]
         private IconViewModel _icon;
-        public IconViewModel Icon
+
+        partial void OnIconChanging(IconViewModel? value)
         {
-            get => _icon;
-            set
+            if (value != null)
             {
-                var previous = _icon;
-                if (!SetProperty(ref _icon, value))
-                {
-                    return;
-                }
-
-                if (previous != null)
-                {
-                    previous.PropertyChanged -= OnIconPropertyChanged;
-                }
-
-                if (value != null)
-                {
-                    value.PropertyChanged += OnIconPropertyChanged;
-                }
-
-                OnPropertyChanged(nameof(StatusText));
-                OnPropertyChanged(nameof(Item));
+                value.PropertyChanged -= OnIconPropertyChanged;
             }
         }
 
+        partial void OnIconChanged(IconViewModel? value)
+        {
+            if (value != null)
+            {
+                value.PropertyChanged += OnIconPropertyChanged;
+            }
+        }
+        
         public TreeViewItemViewModel Item => Icon;
 
+        [ObservableProperty]
         private int _zoom;
-        public int Zoom
-        {
-            get => _zoom;
-            set => SetProperty(ref _zoom, value);
-        }
 
         public MainWindowViewModel MainWindow { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Helpers;
@@ -32,201 +33,103 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         /// </summary>
         public FindReplace FindReplace { get; private set; }
 
-        public IncrementalSearcher IncrementalSearcher { get; private set; }
+        public IncrementalSearcher? IncrementalSearcher { get; private set; }
 
+        [ObservableProperty]
         private Scintilla _scintilla;
 
-        public Scintilla Scintilla
+        partial void OnScintillaChanging(Scintilla? value)
         {
-            get => _scintilla;
-            set
+            if (value != null && IncrementalSearcher != null)
             {
-                var previous = _scintilla;
-                if (!SetProperty(ref _scintilla, value))
-                {
-                    return;
-                }
-
-                if (previous != null && IncrementalSearcher != null)
-                {
-                    previous.Controls.Remove(IncrementalSearcher);
-                }
-
-                FindReplace = new FindReplace(_scintilla);
-                FindReplace.FindAllResults += FindAllHandler;
-
-                IncrementalSearcher = new IncrementalSearcher
-                {
-                    Scintilla = Scintilla,
-                    FindReplace = this,
-                    Visible = false
-                };
-                Scintilla.Controls.Add(IncrementalSearcher);
+                value.Controls.Remove(IncrementalSearcher);
             }
         }
 
+        partial void OnScintillaChanged(Scintilla? value)
+        {
+            FindReplace = new FindReplace(_scintilla);
+            FindReplace.FindAllResults += FindAllHandler;
+
+            IncrementalSearcher = new IncrementalSearcher
+            {
+                Scintilla = Scintilla,
+                FindReplace = this,
+                Visible = false
+            };
+            Scintilla.Controls.Add(IncrementalSearcher);
+        }
+        
         private FindReplace.FindAllResultsEventHandler FindAllHandler { get; set; }
 
+        [ObservableProperty]
         private bool _autoPosition = true;
-        public bool AutoPosition
-        {
-            get => _autoPosition;
-            set => SetProperty(ref _autoPosition, value);
-        }
 
+        [ObservableProperty]
         private bool _isFindTabSelected = true;
-        public bool IsFindTabSelected
-        {
-            get => _isFindTabSelected;
-            set => SetProperty(ref _isFindTabSelected, value);
-        }
 
+        [ObservableProperty]
         private bool _isStandardSearch = true;
-        public bool IsStandardSearch
-        {
-            get => _isStandardSearch;
-            set => SetProperty(ref _isStandardSearch, value);
-        }
 
+        [ObservableProperty]
         private bool _isExtendedSearch;
-        public bool IsExtendedSearch
-        {
-            get => _isExtendedSearch;
-            set => SetProperty(ref _isExtendedSearch, value);
-        }
 
+        [ObservableProperty]
         private bool _isRegExSearch;
-        public bool IsRegExSearch
-        {
-            get => _isRegExSearch;
-            set => SetProperty(ref _isRegExSearch, value);
-        }
 
+        [ObservableProperty]
         private bool _ignoreCase;
-        public bool IgnoreCase
-        {
-            get => _ignoreCase;
-            set => SetProperty(ref _ignoreCase, value);
-        }
 
+        [ObservableProperty]
         private bool _wholeWord;
-        public bool WholeWord
-        {
-            get => _wholeWord;
-            set => SetProperty(ref _wholeWord, value);
-        }
 
+        [ObservableProperty]
         private bool _wordStart;
-        public bool WordStart
-        {
-            get => _wordStart;
-            set => SetProperty(ref _wordStart, value);
-        }
 
+        [ObservableProperty]
         private bool _isCompiled;
-        public bool IsCompiled
-        {
-            get => _isCompiled;
-            set => SetProperty(ref _isCompiled, value);
-        }
 
+        [ObservableProperty]
         private bool _isCultureInvariant;
-        public bool IsCultureInvariant
-        {
-            get => _isCultureInvariant;
-            set => SetProperty(ref _isCultureInvariant, value);
-        }
 
+        [ObservableProperty]
         private bool _isEcmaScript;
-        public bool IsEcmaScript
-        {
-            get => _isEcmaScript;
-            set => SetProperty(ref _isEcmaScript, value);
-        }
 
+        [ObservableProperty]
         private bool _isExplicitCapture;
-        public bool IsExplicitCapture
-        {
-            get => _isExplicitCapture;
-            set => SetProperty(ref _isExplicitCapture, value);
-        }
 
+        [ObservableProperty]
         private bool _ignorePatternWhitespace;
-        public bool IgnorePatternWhitespace
-        {
-            get => _ignorePatternWhitespace;
-            set => SetProperty(ref _ignorePatternWhitespace, value);
-        }
 
+        [ObservableProperty]
         private bool _isMultiline;
-        public bool IsMultiline
-        {
-            get => _isMultiline;
-            set => SetProperty(ref _isMultiline, value);
-        }
 
+        [ObservableProperty]
         private bool _isRightToLeft;
-        public bool IsRightToLeft
-        {
-            get => _isRightToLeft;
-            set => SetProperty(ref _isRightToLeft, value);
-        }
 
+        [ObservableProperty]
         private bool _isSingleLine;
-        public bool IsSingleLine
-        {
-            get => _isSingleLine;
-            set => SetProperty(ref _isSingleLine, value);
-        }
 
+        [ObservableProperty]
         private bool _wrap;
-        public bool Wrap
-        {
-            get => _wrap;
-            set => SetProperty(ref _wrap, value);
-        }
 
+        [ObservableProperty]
         private bool _searchSelection;
-        public bool SearchSelection
-        {
-            get => _searchSelection;
-            set => SetProperty(ref _searchSelection, value);
-        }
 
+        [ObservableProperty]
         private bool _markLine;
-        public bool MarkLine
-        {
-            get => _markLine;
-            set => SetProperty(ref _markLine, value);
-        }
 
+        [ObservableProperty]
         private bool _highlightMatches;
-        public bool HighlightMatches
-        {
-            get => _highlightMatches;
-            set => SetProperty(ref _highlightMatches, value);
-        }
 
+        [ObservableProperty]
         private string _findText = string.Empty;
-        public string FindText
-        {
-            get => _findText;
-            set => SetProperty(ref _findText, value);
-        }
 
+        [ObservableProperty]
         private string _replaceText = string.Empty;
-        public string ReplaceText
-        {
-            get => _replaceText;
-            set => SetProperty(ref _replaceText, value);
-        }
 
+        [ObservableProperty]
         private string _statusText = string.Empty;
-        public string StatusText
-        {
-            get => _statusText;
-            set => SetProperty(ref _statusText, value);
-        }
 
         [RelayCommand]
         private void FindAll()

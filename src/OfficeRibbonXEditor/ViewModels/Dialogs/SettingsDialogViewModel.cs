@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -88,34 +89,19 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             Settings.Default.PropertyChanged += SettingsChangedEventHandler;
         }
 
+        [ObservableProperty]
         private string? _language;
-        public string? Language
-        {
-            get => _language;
-            set
-            {
-                if (!SetProperty(ref _language, value))
-                {
-                    return;
-                }
 
-                SaveLanguage();
-            }
+        partial void OnLanguageChanged(string? value)
+        {
+            SaveLanguage();
         }
 
+        [ObservableProperty]
         private bool _settingsChanged;
-        public bool SettingsChanged
-        {
-            get => _settingsChanged;
-            set => SetProperty(ref _settingsChanged, value);
-        }
 
+        [ObservableProperty]
         private bool _languageChanged;
-        public bool LanguageChanged
-        {
-            get => _languageChanged;
-            set => SetProperty(ref _languageChanged, value);
-        }
 
         public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
 

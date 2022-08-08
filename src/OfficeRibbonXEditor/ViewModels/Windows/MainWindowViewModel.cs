@@ -52,24 +52,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         private readonly Dictionary<Type, IContentDialogBase> _dialogs = new Dictionary<Type, IContentDialogBase>();
 
-        /// <summary>
-        /// Whether documents should be reloaded right before being saved.
-        /// </summary>
-        private bool _reloadOnSave = true;
-
-        /// <summary>
-        /// Whether the editor should make the whitespace / EOL characters visible.
-        /// </summary>
-        private bool _showWhitespaces;
-
-        /// <summary>
-        /// The version string of a newer release, if available
-        /// </summary>
-        private string? _newerVersion;
-
         private readonly Hashtable? _customUiSchemas;
-
-        private TreeViewItemViewModel? _selectedItem;
 
         private bool _disposed;
 
@@ -114,103 +97,78 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
 
         public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
 
+        [ObservableProperty]
         private SampleFolderViewModel? _xmlSamples;
-
-        public SampleFolderViewModel? XmlSamples
-        {
-            get => _xmlSamples;
-            set => SetProperty(ref _xmlSamples, value);
-        }
 
         public ObservableCollection<ITabItemViewModel> OpenTabs { get; } = new ObservableCollection<ITabItemViewModel>();
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(IsEditorTabSelected))]
         private ITabItemViewModel? _selectedTab;
 
-        public ITabItemViewModel? SelectedTab
+        partial void OnSelectedTabChanged(ITabItemViewModel? value)
         {
-            get => _selectedTab;
-            set
+            if (value != null)
             {
-                if (!SetProperty(ref _selectedTab, value))
-                {
-                    return;
-                }
-
-                if (value != null)
-                {
-                    // This should help the user locate the item in the tree view
-                    SelectedItem = value.Item;
-                }
-
-                OnPropertyChanged(nameof(IsEditorTabSelected));
+                // This should help the user locate the item in the tree view
+                SelectedItem = value.Item;
             }
         }
-
+        
         /// <summary>
-        /// Gets or sets a value indicating whether documents should be reloaded right before being saved.
+        /// Whether documents should be reloaded right before being saved.
         /// </summary>
-        public bool ReloadOnSave
-        {
-            get => _reloadOnSave;
-            set => SetProperty(ref _reloadOnSave, value);
-        }
+        [ObservableProperty]
+        private bool _reloadOnSave = true;
+        
+        /// <summary>
+        /// Whether the editor should make the whitespace / EOL characters visible.
+        /// </summary>
+        [ObservableProperty]
+        private bool _showWhitespaces;
 
-        public bool ShowWhitespaces
+        partial void OnShowWhitespacesChanged(bool value)
         {
-            get => _showWhitespaces;
-            set
+            Settings.Default.ShowWhitespace = value;
+            foreach (var tab in OpenTabs.OfType<EditorTabViewModel>())
             {
-                if (!SetProperty(ref _showWhitespaces, value))
-                {
-                    return;
-                }
+                tab.Lexer?.Update();
+            }
+        }
+        
+        /// <summary>
+        /// The version string of a newer release, if available
+        /// </summary>
+        [ObservableProperty]
+        private string? _newerVersion;
 
-                Settings.Default.ShowWhitespace = value;
-                foreach (var tab in OpenTabs.OfType<EditorTabViewModel>())
-                {
-                    tab.Lexer?.Update();
-                }
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(CurrentDocument))]
+        [NotifyPropertyChangedFor(nameof(IsDocumentSelected))]
+        [NotifyPropertyChangedFor(nameof(IsPartSelected))]
+        [NotifyPropertyChangedFor(nameof(IsIconSelected))]
+        [NotifyPropertyChangedFor(nameof(CanInsertXml12Part))]
+        [NotifyPropertyChangedFor(nameof(CanInsertXml14Part))]
+        private TreeViewItemViewModel? _selectedItem;
+
+        partial void OnSelectedItemChanging(TreeViewItemViewModel? value)
+        {
+            if (value is IconViewModel icon)
+            {
+                // Stop showing the editing textbox when the focus changes to something else.
+                // See: https://github.com/fernandreu/office-ribbonx-editor/issues/32
+                icon.CommitIdChange();
             }
         }
 
-        public string? NewerVersion
+        partial void OnSelectedItemChanged(TreeViewItemViewModel? value)
         {
-            get => _newerVersion;
-            set => SetProperty(ref _newerVersion, value);
-        }
-
-        public TreeViewItemViewModel? SelectedItem
-        {
-            get => _selectedItem;
-            set
+            if (SelectedItem != null)
             {
-                var previousItem = _selectedItem;
-                if (!SetProperty(ref _selectedItem, value))
-                {
-                    return;
-                }
-
-                if (previousItem is IconViewModel icon)
-                {
-                    // Stop showing the editing textbox when the focus changes to something else.
-                    // See: https://github.com/fernandreu/office-ribbonx-editor/issues/32
-                    icon.CommitIdChange();
-                }
-
-                if (SelectedItem != null)
-                {
-                    SelectedItem.IsSelected = true;
-                }
-
-                OnPropertyChanged(nameof(CurrentDocument));
-                OnPropertyChanged(nameof(IsDocumentSelected));
-                OnPropertyChanged(nameof(IsPartSelected));
-                OnPropertyChanged(nameof(IsIconSelected));
-                OnPropertyChanged(nameof(CanInsertXml12Part));
-                OnPropertyChanged(nameof(CanInsertXml14Part));
+                SelectedItem.IsSelected = true;
             }
         }
-
+        
         public bool IsDocumentSelected => SelectedItem is OfficeDocumentViewModel;
 
         public bool IsPartSelected => SelectedItem is OfficePartViewModel;

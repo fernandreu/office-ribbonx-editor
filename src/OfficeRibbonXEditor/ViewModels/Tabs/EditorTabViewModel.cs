@@ -36,45 +36,22 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 
         public event EventHandler? DidDuplicateLine;
 
+        [ObservableProperty]
         private string _title = string.Empty;
-        public string Title
-        {
-            get => _title;
-            set => SetProperty(ref _title, value);
-        }
 
+        [ObservableProperty]
         private string? _statusText;
-        public string? StatusText
-        {
-            get => _statusText;
-            set => SetProperty(ref _statusText, value);
-        }
 
+        [ObservableProperty]
         private int _zoom;
-        public int Zoom
-        {
-            get => _zoom;
-            set => SetProperty(ref _zoom, value);
-        }
 
         public ScintillaLexer? Lexer { get; set; }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(StatusText))]
+        [NotifyPropertyChangedFor(nameof(Item))]
         private OfficePartViewModel _part;
-        public OfficePartViewModel Part
-        {
-            get => _part;
-            set
-            {
-                if (!SetProperty(ref _part, value))
-                {
-                    return;
-                }
-
-                OnPropertyChanged(nameof(StatusText));
-                OnPropertyChanged(nameof(Item));
-            }
-        }
-
+        
         public TreeViewItemViewModel Item => Part;
 
         public MainWindowViewModel MainWindow { get; set; }
