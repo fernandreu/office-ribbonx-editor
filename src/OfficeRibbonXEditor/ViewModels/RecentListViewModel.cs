@@ -1,9 +1,9 @@
 ﻿using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace OfficeRibbonXEditor.ViewModels
 {
-    public class RecentListViewModel<T> : ViewModelBase
+    public class RecentListViewModel<T> : ObservableObject
     {
         public ObservableCollection<T> Values { get; } = new ObservableCollection<T>();
 

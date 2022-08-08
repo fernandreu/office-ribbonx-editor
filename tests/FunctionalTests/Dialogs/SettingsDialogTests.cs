@@ -60,7 +60,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             Assume.That(Settings.Default[settingName], Is.Not.EqualTo(current));
 
             // Act
-            dialog.ResetToCurrentCommand.Execute();
+            dialog.ResetToCurrent();
 
             // Assert
             Assert.AreEqual(current, Settings.Default[settingName]);
@@ -71,7 +71,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
         {
             // Arrange
             var dialog = Launch();
-            dialog.ResetToDefaultCommand.Execute();
+            dialog.ResetToDefault();
             var original = Settings.Default[settingName];
             var current = AlterSetting(original, settingName, dialog);
             Settings.Default[settingName] = current;
@@ -81,10 +81,10 @@ namespace OfficeRibbonXEditor.FunctionalTests.Dialogs
             dialog.OnLoaded(new List<ITabItemViewModel>()); // This reloads current settings stored in dialog
 
             // Act / assert
-            dialog.ResetToCurrentCommand.Execute();
+            dialog.ResetToCurrent();
             Assert.That(Settings.Default[settingName], Is.Not.EqualTo(original));
             Assert.That(Settings.Default[settingName], Is.EqualTo(current));
-            dialog.ResetToDefaultCommand.Execute();
+            dialog.ResetToDefault();
             Assert.That(Settings.Default[settingName], Is.EqualTo(original));
             Assert.That(Settings.Default[settingName], Is.Not.EqualTo(current));
         }

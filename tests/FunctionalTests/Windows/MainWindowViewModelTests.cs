@@ -60,7 +60,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             var doc = wrapper.OpenDocument(_sourceFile);
 
             // Act
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
@@ -76,7 +76,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             var doc = wrapper.OpenDocument(_sourceFile);
 
             // Act
-            wrapper.ViewModel.InsertXml14Command.Execute();
+            wrapper.ViewModel.InsertXml14();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count);
@@ -92,7 +92,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             var (doc, _) = wrapper.OpenAndInsertPart(_sourceFile, XmlPart.RibbonX12, false);
 
             // Act
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count, "Part was inserted twice");
@@ -106,7 +106,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             var (doc, _) = wrapper.OpenAndInsertPart(_sourceFile, XmlPart.RibbonX14, false);
 
             // Act
-            wrapper.ViewModel.InsertXml14Command.Execute();
+            wrapper.ViewModel.InsertXml14();
 
             // Assert
             Assert.AreEqual(1, doc.Children.Count, "Part was inserted twice");
@@ -120,7 +120,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             var (doc, _) = wrapper.OpenAndInsertPart(_sourceFile);
 
             // Act
-            wrapper.ViewModel.RemoveCommand.Execute();
+            wrapper.ViewModel.Remove();
 
             // Assert
             Assert.IsEmpty(doc.Children, "Part was not removed");
@@ -168,7 +168,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             wrapper.ViewModel.SelectedItem = part.Children[0];
 
             // Act
-            wrapper.ViewModel.RemoveCommand.Execute();
+            wrapper.ViewModel.Remove();
 
             // Assert
             Assert.IsEmpty(part.Children, "Icon was not removed");
@@ -183,10 +183,10 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Arrange
             using var wrapper = new MainWindowViewModelWrapper();
             var doc = wrapper.OpenDocument(_sourceFile);
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
 
             // Act / assert
-            wrapper.AssertMessage(wrapper.ViewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
+            wrapper.AssertMessage(wrapper.ViewModel.CloseDocument, MessageBoxImage.Warning, MessageBoxResult.Cancel, "Insert XML not detected as change");
         }
         
         /// <summary>
@@ -198,13 +198,13 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Arrange
             using var wrapper = new MainWindowViewModelWrapper();
             var doc = wrapper.OpenDocument(_sourceFile);
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
             var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
             Assume.That(part, Is.Not.Null, "No Office part available");
             wrapper.ViewModel.SelectedItem = part;
 
             // Act / assert
-            wrapper.AssertMessage(wrapper.ViewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+            wrapper.AssertMessage(wrapper.ViewModel.Remove, MessageBoxImage.Warning, MessageBoxResult.Yes);
         }
 
         /// <summary>
@@ -216,17 +216,17 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Arrange
             using var wrapper = new MainWindowViewModelWrapper();
             var doc = wrapper.OpenDocument(_sourceFile);
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
             var part = doc.Children.FirstOrDefault(p => p is OfficePartViewModel);
             Assume.That(part, Is.Not.Null, "No Office part available");
             wrapper.ViewModel.SelectedItem = part;
 
             // Act
-            wrapper.ViewModel.RemoveCommand.Execute();
+            wrapper.ViewModel.Remove();
 
             // Assert
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            wrapper.AssertMessage(wrapper.ViewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            wrapper.AssertMessage(wrapper.ViewModel.CloseDocument, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         /// <summary>
@@ -249,9 +249,9 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Remove it and do the appropriate checks
             wrapper.ViewModel.SelectedItem = doc.Children.FirstOrDefault(c => c is OfficePartViewModel)?.Children.FirstOrDefault(c => c is IconViewModel);
             Assert.IsNotNull(wrapper.ViewModel.SelectedItem, "Icon was apparently not created");
-            wrapper.AssertMessage(wrapper.ViewModel.RemoveCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Yes);
+            wrapper.AssertMessage(wrapper.ViewModel.Remove, MessageBoxImage.Warning, MessageBoxResult.Yes);
             Assert.IsTrue(doc.HasUnsavedChanges, "No unsaved changes detected after removing a part");
-            wrapper.AssertMessage(wrapper.ViewModel.CloseDocumentCommand.Execute, MessageBoxImage.Warning, MessageBoxResult.Cancel);
+            wrapper.AssertMessage(wrapper.ViewModel.CloseDocument, MessageBoxImage.Warning, MessageBoxResult.Cancel);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             var doc = wrapper.OpenDocument(_sourceFile);
             Assume.That(wrapper.ViewModel.SelectedItem?.CanHaveContents, Is.False);
 
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
             wrapper.ViewModel.SelectedItem = doc.Children[0];
             Assert.IsTrue(wrapper.ViewModel.SelectedItem.CanHaveContents);
 
@@ -281,7 +281,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
                 }
 
                 tab.ShowResults += Handler;
-                wrapper.ViewModel.ValidateCommand.Execute();
+                wrapper.ViewModel.Validate();
                 tab.ShowResults -= Handler;
 
                 Assert.AreEqual(expected, actual, message);
@@ -306,7 +306,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
         {
             using var wrapper = new MainWindowViewModelWrapper();
             var doc = wrapper.OpenDocument(_sourceFile);
-            wrapper.ViewModel.InsertXml12Command.Execute();
+            wrapper.ViewModel.InsertXml12();
             var part = doc.Children[0];
             wrapper.ViewModel.SelectedItem = part;
 
@@ -315,7 +315,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
 
             // This should show a message saying there are no callbacks to be generated
             part.Contents = @"<customUI xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
-            wrapper.AssertMessage(wrapper.ViewModel.GenerateCallbacksCommand.Execute, MessageBoxImage.Information);
+            wrapper.AssertMessage(wrapper.ViewModel.GenerateCallbacks, MessageBoxImage.Information);
 
             // This should contain a single callback for the onLoad event
             part.Contents = @"<customUI onLoad=""CustomLoad"" xmlns=""http://schemas.microsoft.com/office/2006/01/customui""><ribbon></ribbon></customUI>";
@@ -326,7 +326,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             }
 
             wrapper.ViewModel.LaunchingDialog += Handler;
-            wrapper.ViewModel.GenerateCallbacksCommand.Execute();
+            wrapper.ViewModel.GenerateCallbacks();
             wrapper.ViewModel.LaunchingDialog -= Handler;  // Just in case we add other checks later
         }
 
@@ -342,7 +342,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             };
 
             // Act
-            wrapper.ViewModel.ShowSettingsCommand.Execute();
+            wrapper.ViewModel.ShowSettings();
 
             // Assert
             Assert.IsInstanceOf(typeof(SettingsDialogViewModel), content);
@@ -364,7 +364,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             };
 
             // Act
-            wrapper.ViewModel.ShowSettingsCommand.Execute();
+            wrapper.ViewModel.ShowSettings();
 
             // Assert
             Assert.IsInstanceOf(typeof(SettingsDialogViewModel), content);
@@ -390,7 +390,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             Assert.AreNotEqual(original, tab.Title);
 
             // We close the newly opened document, and check if the title is back to normal
-            wrapper.ViewModel.CloseDocumentCommand.Execute();
+            wrapper.ViewModel.CloseDocument();
             Assert.AreEqual(original, tab.Title);
         }
 
@@ -489,7 +489,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Windows
             // Act / assert: Open the same file in exclusive mode
             using (File.Open(destination, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                wrapper.AssertMessage(() => wrapper.ViewModel.SaveAllCommand.Execute(), MessageBoxImage.Error);
+                wrapper.AssertMessage(() => wrapper.ViewModel.SaveAll(), MessageBoxImage.Error);
             }
         }
 

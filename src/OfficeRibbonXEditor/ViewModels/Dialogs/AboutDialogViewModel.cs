@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using Generators;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Resources;
@@ -22,8 +22,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public IToolInfo Info { get; }
 
-        [GenerateCommand]
-        private void ExecuteSubmitIssueCommand()
+        [RelayCommand]
+        private void SubmitIssue()
         {
             _urlHelper.OpenIssue();
         }
@@ -31,8 +31,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         /// <summary>
         /// Copies some useful machine info that can be put into a GitHub issue
         /// </summary>
-        [GenerateCommand]
-        private void ExecuteCopyInfoCommand()
+        [RelayCommand]
+        private void CopyInfo()
         {
             Clipboard.SetText(
                 $"Version: {Info.AssemblyVersion}\n" +

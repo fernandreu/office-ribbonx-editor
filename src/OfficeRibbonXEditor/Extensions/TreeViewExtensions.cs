@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CommunityToolkit.Diagnostics;
 using OfficeRibbonXEditor.ViewModels.Documents;
 
 namespace OfficeRibbonXEditor.Extensions
@@ -9,11 +10,7 @@ namespace OfficeRibbonXEditor.Extensions
     {
         public static IEnumerable<TreeViewItemViewModel> FindItemsByName(this IEnumerable<TreeViewItemViewModel> list, TreeViewItemViewModel? reference, bool excludeSelf = true)
         {
-            if (list == null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-
+            Guard.IsNotNull(list);
             if (reference == null)
             {
                 return Enumerable.Empty<TreeViewItemViewModel>();

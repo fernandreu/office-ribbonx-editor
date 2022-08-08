@@ -1,10 +1,10 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.ViewModels.Shell
 {
-    public class FileAssociationViewModel : ViewModelBase
+    public class FileAssociationViewModel : ObservableObject
     {
         public FileAssociationViewModel(string extension)
         {
@@ -25,7 +25,7 @@ namespace OfficeRibbonXEditor.ViewModels.Shell
             get => _newValue;
             set
             {
-                if (!Set(ref _newValue, value))
+                if (!SetProperty(ref _newValue, value))
                 {
                     return;
                 }

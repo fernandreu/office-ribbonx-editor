@@ -1,6 +1,6 @@
 ﻿using System;
-using GalaSoft.MvvmLight;
-using Generators;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
 {
     using ResultsEventArgs = DataEventArgs<IResultCollection>;
 
-    public partial class EditorTabViewModel : ViewModelBase, ITabItemViewModel
+    public partial class EditorTabViewModel : ObservableObject, ITabItemViewModel
     {
         public EditorTabViewModel(OfficePartViewModel part, MainWindowViewModel mainWindow)
         {
@@ -20,61 +20,38 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             MainWindow = mainWindow;
         }
 
-        public event EventHandler? Cut;
+        public event EventHandler? DidCut;
 
-        public event EventHandler? Copy;
+        public event EventHandler? DidCopy;
 
-        public event EventHandler? Paste;
+        public event EventHandler? DidPaste;
 
-        public event EventHandler? Undo;
+        public event EventHandler? DidUndo;
 
-        public event EventHandler? Redo;
+        public event EventHandler? DidRedo;
 
-        public event EventHandler? SelectAll;
+        public event EventHandler? DidSelectAll;
 
-        public event EventHandler<FoldEventArgs>? Fold;
+        public event EventHandler<FoldEventArgs>? DidFold;
 
-        public event EventHandler? DuplicateLine;
+        public event EventHandler? DidDuplicateLine;
 
+        [ObservableProperty]
         private string _title = string.Empty;
-        public string Title
-        {
-            get => _title;
-            set => Set(ref _title, value);
-        }
 
+        [ObservableProperty]
         private string? _statusText;
-        public string? StatusText
-        {
-            get => _statusText;
-            set => Set(ref _statusText, value);
-        }
 
+        [ObservableProperty]
         private int _zoom;
-        public int Zoom
-        {
-            get => _zoom;
-            set => Set(ref _zoom, value);
-        }
 
         public ScintillaLexer? Lexer { get; set; }
 
+        [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(StatusText))]
+        [NotifyPropertyChangedFor(nameof(Item))]
         private OfficePartViewModel _part;
-        public OfficePartViewModel Part
-        {
-            get => _part;
-            set
-            {
-                if (!Set(ref _part, value))
-                {
-                    return;
-                }
-
-                RaisePropertyChanged(nameof(StatusText));
-                RaisePropertyChanged(nameof(Item));
-            }
-        }
-
+        
         public TreeViewItemViewModel Item => Part;
 
         public MainWindowViewModel MainWindow { get; set; }
@@ -130,38 +107,37 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             Part.Contents = e.Data.Text;
         }
 
-        [GenerateCommand]
-        private void RaiseCut() => Cut?.Invoke(this, EventArgs.Empty);
+        [RelayCommand]
+        private void Cut() => DidCut?.Invoke(this, EventArgs.Empty);
 
-        [GenerateCommand]
-        private void RaiseCopy() => Copy?.Invoke(this, EventArgs.Empty);
+        [RelayCommand]
+        private void Copy() => DidCopy?.Invoke(this, EventArgs.Empty);
 
-        [GenerateCommand]
-        private void RaisePaste() => Paste?.Invoke(this, EventArgs.Empty);
+        [RelayCommand]
+        private void Paste() => DidPaste?.Invoke(this, EventArgs.Empty);
 
-        [GenerateCommand]
-        private void RaiseUndo() => Undo?.Invoke(this, EventArgs.Empty);
+        [RelayCommand]
+        private void Undo() => DidUndo?.Invoke(this, EventArgs.Empty);
 
-        [GenerateCommand]
-        private void RaiseRedo() => Redo?.Invoke(this, EventArgs.Empty);
+        [RelayCommand]
+        private void Redo() => DidRedo?.Invoke(this, EventArgs.Empty);
 
-        [GenerateCommand]
-        private void RaiseSelectAll() => SelectAll?.Invoke(this, EventArgs.Empty);
+        [RelayCommand]
+        private void SelectAll() => DidSelectAll?.Invoke(this, EventArgs.Empty);
 
-        [GenerateCommand]
-        private void RaiseFold(int level) => Fold?.Invoke(this, new FoldEventArgs(level));
+        [RelayCommand]
+        private void Fold(int level) => DidFold?.Invoke(this, new FoldEventArgs(level));
 
-        [GenerateCommand]
-        private void RaiseUnfold(int level) => Fold?.Invoke(this, new FoldEventArgs(level, true));
+        [RelayCommand]
+        private void Unfold(int level) => DidFold?.Invoke(this, new FoldEventArgs(level, true));
 
-        [GenerateCommand]
-        private void RaiseFoldCurrent() => Fold?.Invoke(this, new FoldEventArgs(true));
+        [RelayCommand]
+        private void FoldCurrent() => DidFold?.Invoke(this, new FoldEventArgs(true));
 
-        [GenerateCommand]
-        private void RaiseUnfoldCurrent() => Fold?.Invoke(this, new FoldEventArgs(true, true));
+        [RelayCommand]
+        private void UnfoldCurrent() => DidFold?.Invoke(this, new FoldEventArgs(true, true));
 
-        [GenerateCommand]
-        private void RaiseDuplicateLine() => DuplicateLine?.Invoke(this, EventArgs.Empty);
-
+        [RelayCommand]
+        private void DuplicateLine() => DidDuplicateLine?.Invoke(this, EventArgs.Empty);
     }
 }

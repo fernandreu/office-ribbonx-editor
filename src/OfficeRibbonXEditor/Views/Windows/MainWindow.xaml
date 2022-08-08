@@ -6,10 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:properties="clr-namespace:OfficeRibbonXEditor.Properties"
     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:resources="clr-namespace:OfficeRibbonXEditor.Resources"
     xmlns:converters="clr-namespace:OfficeRibbonXEditor.Converters"
-    xmlns:mvvmlight="http://www.galasoft.ch/mvvmlight"
     xmlns:samples="clr-namespace:OfficeRibbonXEditor.ViewModels.Samples"
     xmlns:tabs="clr-namespace:OfficeRibbonXEditor.ViewModels.Tabs"
     xmlns:documents="clr-namespace:OfficeRibbonXEditor.ViewModels.Documents"
@@ -33,11 +31,6 @@
     x:Name="Window"
     AllowDrop="True"
     d:DataContext="{d:DesignInstance windows:MainWindowViewModel}">
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Closing">
-            <mvvmlight:EventToCommand Command="{Binding ClosingCommand}" PassEventArgsToCommand="True"/>
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
     <Window.Resources>
         <converters:IsNotNullConverter x:Key="IsNotNullConverter"/>
         <Style TargetType="Image">
@@ -709,7 +702,7 @@
                 <Button
                     FontWeight="Bold"
                     Visibility="{Binding NewerVersion, Converter={StaticResource StringToVisibilityConverter}}"
-                    Command="{Binding NewerVersionCommand}">
+                    Command="{Binding OpenNewerVersionCommand}">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="/Resources/Images/bricks.png" Width="16" Height="16"/>
                         <TextBlock Margin="3,0,0,0" VerticalAlignment="Center">

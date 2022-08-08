@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
-using Generators;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
@@ -19,12 +20,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             _urlHelper = urlHelper;
         }
 
+        [ObservableProperty]
         private Exception? _exception;
-        public Exception? Exception
-        {
-            get => _exception;
-            set => Set(ref _exception, value);
-        }
 
         public bool OnLoaded(Exception? payload)
         {
@@ -32,14 +29,14 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             return payload != null;
         }
 
-        [GenerateCommand]
-        private void ExecuteShutdownCommand()
+        [RelayCommand]
+        private void Shutdown()
         {
             Application.Current.MainWindow?.Close();
         }
 
-        [GenerateCommand]
-        private void ExecuteSubmitBugCommand()
+        [RelayCommand]
+        private void SubmitBug()
         {
             var title =$"{_exception?.GetType().Name}: {Exception?.Message}";
             var body = 

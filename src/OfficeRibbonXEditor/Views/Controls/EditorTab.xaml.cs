@@ -47,14 +47,14 @@ namespace OfficeRibbonXEditor.Views.Controls
                 previousModel.UpdateEditor -= OnUpdateEditor;
                 previousModel.ShowResults -= OnShowResults;
 
-                previousModel.Cut -= OnCut;
-                previousModel.Copy -= OnCopy;
-                previousModel.Paste -= OnPaste;
-                previousModel.Undo -= OnUndo;
-                previousModel.Redo -= OnRedo;
-                previousModel.SelectAll -= OnSelectAll;
-                previousModel.Fold -= OnFold;
-                previousModel.DuplicateLine -= OnDuplicateLine;
+                previousModel.DidCut -= OnDidCut;
+                previousModel.DidCopy -= OnDidCopy;
+                previousModel.DidPaste -= OnDidPaste;
+                previousModel.DidUndo -= OnDidUndo;
+                previousModel.DidRedo -= OnDidRedo;
+                previousModel.DidSelectAll -= OnDidSelectAll;
+                previousModel.DidFold -= OnDidFold;
+                previousModel.DidDuplicateLine -= OnDidDuplicateLine;
             }
 
             if (e.NewValue is not EditorTabViewModel model)
@@ -76,14 +76,14 @@ namespace OfficeRibbonXEditor.Views.Controls
             _viewModel.UpdateEditor += OnUpdateEditor;
             _viewModel.ShowResults += OnShowResults;
 
-            _viewModel.Cut += OnCut;
-            _viewModel.Copy += OnCopy;
-            _viewModel.Paste += OnPaste;
-            _viewModel.Undo += OnUndo;
-            _viewModel.Redo += OnRedo;
-            _viewModel.SelectAll += OnSelectAll;
-            _viewModel.Fold += OnFold;
-            _viewModel.DuplicateLine += OnDuplicateLine;
+            _viewModel.DidCut += OnDidCut;
+            _viewModel.DidCopy += OnDidCopy;
+            _viewModel.DidPaste += OnDidPaste;
+            _viewModel.DidUndo += OnDidUndo;
+            _viewModel.DidRedo += OnDidRedo;
+            _viewModel.DidSelectAll += OnDidSelectAll;
+            _viewModel.DidFold += OnDidFold;
+            _viewModel.DidDuplicateLine += OnDidDuplicateLine;
         }
 
         private void OnReadEditorInfo(object? sender, DataEventArgs<EditorInfo> e)
@@ -128,32 +128,32 @@ namespace OfficeRibbonXEditor.Views.Controls
             ResultsPanel.UpdateFindAllResults(e.Data);
         }
 
-        private void OnCut(object? sender, EventArgs e)
+        private void OnDidCut(object? sender, EventArgs e)
         {
             Editor.Cut();
         }
 
-        private void OnCopy(object? sender, EventArgs e)
+        private void OnDidCopy(object? sender, EventArgs e)
         {
             Editor.Copy();
         }
 
-        private void OnPaste(object? sender, EventArgs e)
+        private void OnDidPaste(object? sender, EventArgs e)
         {
             Editor.Paste();
         }
 
-        private void OnUndo(object? sender, EventArgs e)
+        private void OnDidUndo(object? sender, EventArgs e)
         {
             Editor.Undo();
         }
 
-        private void OnRedo(object? sender, EventArgs e)
+        private void OnDidRedo(object? sender, EventArgs e)
         {
             Editor.Redo();
         }
 
-        private void OnSelectAll(object? sender, EventArgs e)
+        private void OnDidSelectAll(object? sender, EventArgs e)
         {
             Editor.SelectAll();
         }
@@ -179,7 +179,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
 
-        private void OnFold(object? sender, FoldEventArgs e)
+        private void OnDidFold(object? sender, FoldEventArgs e)
         {
             var action = e.Unfold ? FoldAction.Expand : FoldAction.Contract;
             if (e.CurrentOnly)
@@ -208,7 +208,7 @@ namespace OfficeRibbonXEditor.Views.Controls
             }
         }
 
-        private void OnDuplicateLine(object? sender, EventArgs e)
+        private void OnDidDuplicateLine(object? sender, EventArgs e)
         {
             // The Scintilla editor has an equivalent Ctrl+D shortcut, but it messes up the automatic indentation, so we do our own version instead
             var index = Editor.LineFromPosition(Editor.CurrentPosition);

@@ -12,7 +12,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Helpers
         {
             FileToBeOpened = path;
             var count = ViewModel.DocumentList.Count;
-            ViewModel.OpenDocumentCommand.Execute();
+            ViewModel.OpenDocument();
             Assert.That(ViewModel.DocumentList.Count, Is.EqualTo(count + 1), $"Document did not open: {path}");
             var doc = ViewModel.DocumentList[^1];
             if (select)
@@ -28,11 +28,11 @@ namespace OfficeRibbonXEditor.FunctionalTests.Helpers
             var doc = OpenDocument(path);
             if (partType == XmlPart.RibbonX12)
             {
-                ViewModel.InsertXml12Command.Execute();
+                ViewModel.InsertXml12();
             }
             else
             {
-                ViewModel.InsertXml14Command.Execute();
+                ViewModel.InsertXml14();
             }
 
             Assert.That(doc.Children, Is.Not.Empty, "XML part was not interested");
@@ -50,7 +50,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Helpers
         {
             ViewModel.SelectedItem = document;
             FileToBeSaved = destination;
-            ViewModel.SaveAsCommand.Execute();
+            ViewModel.SaveAs();
             FileToBeSaved = null;
         }
 
@@ -58,7 +58,7 @@ namespace OfficeRibbonXEditor.FunctionalTests.Helpers
         {
             FilesToBeOpened = icons;
             ViewModel.SelectedItem = part;
-            ViewModel.InsertIconsCommand.Execute();
+            ViewModel.InsertIcons();
             FilesToBeOpened = null;
         }
     }

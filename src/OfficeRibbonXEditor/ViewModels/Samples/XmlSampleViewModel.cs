@@ -1,9 +1,9 @@
-﻿using GalaSoft.MvvmLight;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Samples
 {
-    public abstract class XmlSampleViewModel : ViewModelBase, ISampleMenuItem
+    public abstract class XmlSampleViewModel : ObservableObject, ISampleMenuItem
     {
         public abstract string Name { get; }
 

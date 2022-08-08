@@ -5,6 +5,7 @@ using System.IO;
 using System.IO.Packaging;
 using System.Windows.Media.Imaging;
 using System.Xml;
+using CommunityToolkit.Diagnostics;
 
 namespace OfficeRibbonXEditor.Documents
 {
@@ -95,55 +96,28 @@ namespace OfficeRibbonXEditor.Documents
 
         public string? AddImage(string filePath, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
+            Guard.IsNotNullOrEmpty(filePath);
+            
             if (PartType != XmlPart.RibbonX12 && PartType != XmlPart.RibbonX14)
             {
                 throw new NotSupportedException($"The part type must be either RibbonX12 or RibbonX14, not {PartType}");
             }
 
-            if (filePath == null)
-            {
-                throw new ArgumentNullException(nameof(filePath));
-            }
-
-            if (filePath.Length == 0)
-            {
-                throw new ArgumentException("File path cannot be empty");
-            }
-
             var fileName = Path.GetFileNameWithoutExtension(filePath);
-            if (imageId == null)
-            {
-                imageId = XmlConvert.EncodeName(fileName);
-            }
-
-            if (imageId == null)
-            {
-                throw new ArgumentNullException(nameof(imageId));
-            }
-
-            if (imageId.Length == 0)
-            {
-                throw new ArgumentException("Target Id cannot be empty");
-            }
-
+            
+            imageId ??= XmlConvert.EncodeName(fileName);
+            Guard.IsNotNullOrEmpty(imageId);
+            
             return AddImageHelper(filePath, imageId, alreadyExistingAction);
         }
         
         public void RemoveImage(string imageId)
         {
+            Guard.IsNotNullOrEmpty(imageId);
+            
             if (Part == null)
             {
                 throw new InvalidOperationException("Part was already removed");
-            }
-
-            if (imageId == null)
-            {
-                throw new ArgumentNullException(nameof(imageId));
-            }
-
-            if (imageId.Length == 0)
-            {
-                return;
             }
 
             if (!Part.RelationshipExists(imageId))
@@ -187,24 +161,12 @@ namespace OfficeRibbonXEditor.Documents
 
         public void ChangeImageId(string source, string target)
         {
+            Guard.IsNotNull(source);
+            Guard.IsNotNullOrEmpty(target);
+            
             if (Part == null)
             {
                 throw new InvalidOperationException("Part was already removed");
-            }
-
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (target == null)
-            {
-                throw new ArgumentNullException(nameof(target));
-            }
-
-            if (target.Length == 0)
-            {
-                throw new ArgumentException("Target Id cannot be empty");
             }
 
             if (source == target)
@@ -258,15 +220,7 @@ namespace OfficeRibbonXEditor.Documents
 
         private static string MapImageContentType(string extension)
         {
-            if (extension == null)
-            {
-                throw new ArgumentNullException(nameof(extension));
-            }
-
-            if (extension.Length == 0)
-            {
-                throw new ArgumentException("Extension cannot be empty.");
-            }
+            Guard.IsNotNullOrEmpty(extension);
 
             var extLowerCase = extension.ToUpperInvariant();
 
@@ -281,14 +235,11 @@ namespace OfficeRibbonXEditor.Documents
 
         private string? AddImageHelper(string fileName, string imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
+            Guard.IsNotNullOrEmpty(fileName);
+            
             if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
-            }
-
-            if (fileName == null)
-            {
-                throw new ArgumentNullException(nameof(fileName));
             }
 
             Debug.Assert(File.Exists(fileName), fileName + " does not exist.");
