@@ -17,7 +17,7 @@ namespace OfficeRibbonXEditor.UnitTests.Models
             Settings.Default.Save();
 
             // Act
-            IconTabViewModel.ResetGridSettings();
+            IconTabViewModel.ResetGrid();
 
             // Assert
             Assert.AreNotEqual(-16, Settings.Default.IconGridSize);

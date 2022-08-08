@@ -22,6 +22,11 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
 
         public override string Name => Path.GetFileName(Document.Name);
 
+        public void RaiseNameChanged()
+        {
+            OnPropertyChanged(nameof(Name));
+        }
+        
         /// <summary>
         /// Gets a value indicating whether any of the parts of this document has unsaved changes.
         /// </summary>

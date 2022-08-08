@@ -46,9 +46,9 @@ namespace OfficeRibbonXEditor.Views.Windows
 
             _viewModel.SetGlobalCursor += (o, args) => Mouse.OverrideCursor = args.Data;
 
-            // These no longer use interactions in XAML due to the conversion needed for the command parameter
             PreviewDragEnter += OnPreviewDragEnter;
             Drop += OnDrop;
+            Closing += (o, args) => _viewModel.ClosingCommand.Execute(args);
         }
 
         private void OnPreviewDragEnter(object? sender, DragEventArgs e)

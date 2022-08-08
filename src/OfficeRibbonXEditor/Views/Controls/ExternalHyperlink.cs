@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Services;
 
 namespace OfficeRibbonXEditor.Views.Controls

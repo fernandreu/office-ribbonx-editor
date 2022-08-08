@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
-using GalaSoft.MvvmLight.Command;
+using CommunityToolkit.Mvvm.Input;
 
 namespace OfficeRibbonXEditor.Interfaces
 {
@@ -25,7 +25,7 @@ namespace OfficeRibbonXEditor.Interfaces
         /// </summary>
         bool IsCancelled { get; }
 
-        RelayCommand<CancelEventArgs> ClosingCommand { get; }
+        IRelayCommand<CancelEventArgs> ClosingCommand { get; }
 
         event EventHandler Closed;
     }

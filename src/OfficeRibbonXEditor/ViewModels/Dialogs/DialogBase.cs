@@ -1,12 +1,12 @@
 ﻿using System;
 using System.ComponentModel;
-using GalaSoft.MvvmLight;
-using Generators;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
-    public partial class DialogBase : ViewModelBase, IContentDialogBase
+    public partial class DialogBase : ObservableObject, IContentDialogBase
     {
         public bool IsUnique => true;
 
@@ -16,14 +16,14 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
 
         public event EventHandler? Closed;
 
-        [GenerateCommand(Name = "CloseCommand")]
+        [RelayCommand]
         public void Close()
         {
             this.Closed?.Invoke(this, EventArgs.Empty);
         }
 
-        [GenerateCommand]
-        private void ExecuteClosingCommand(CancelEventArgs args)
+        [RelayCommand]
+        private void Closing(CancelEventArgs args)
         {
             this.OnClosing(args);
             if (args.Cancel)

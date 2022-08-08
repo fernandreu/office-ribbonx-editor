@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Windows.Data;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents
@@ -10,7 +9,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
     /// Base class for all ViewModel classes displayed by TreeViewItems.  
     /// This acts as an adapter between a raw data object and a TreeViewItem.
     /// </summary>
-    public class TreeViewItemViewModel : ViewModelBase
+    public class TreeViewItemViewModel : ObservableObject
     {
         private static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
@@ -59,7 +58,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             get => _isExpanded;
             set
             {
-                if (!Set(ref _isExpanded, value))
+                if (!SetProperty(ref _isExpanded, value))
                 {
                     return;
                 }
@@ -88,7 +87,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             get => _isSelected;
             set
             {
-                if (Set(ref _isSelected, value) && _isSelected)
+                if (SetProperty(ref _isSelected, value) && _isSelected)
                 {
                     IsExpanded = true; // To select something, you should be able to see it
                 }
@@ -102,14 +101,14 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         public bool CanHaveContents
         {
             get => _canHaveContents;
-            set => Set(ref _canHaveContents, value);
+            set => SetProperty(ref _canHaveContents, value);
         }
 
         private string? _contents;
         public string? Contents
         {
             get => _contents;
-            set => Set(ref _contents, value);
+            set => SetProperty(ref _contents, value);
         }
         
         public TreeViewItemViewModel? Parent { get; }

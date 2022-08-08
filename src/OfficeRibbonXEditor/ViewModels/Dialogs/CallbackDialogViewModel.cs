@@ -16,7 +16,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             get => _lexer;
             set
             {
-                if (!Set(ref _lexer, value) || Code == null)
+                if (!SetProperty(ref _lexer, value) || Code == null)
                 {
                     return;
                 }
@@ -35,7 +35,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             get => _code;
             set
             {
-                if (!Set(ref _code, value) || Lexer == null)
+                if (!SetProperty(ref _code, value) || Lexer == null)
                 {
                     return;
                 }

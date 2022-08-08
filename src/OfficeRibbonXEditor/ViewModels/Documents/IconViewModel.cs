@@ -54,7 +54,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
                 // already. Otherwise, the icon will actually not be updated inside the part
                 var previousId = _name;
 
-                if (!Set(ref _name, value))
+                if (!SetProperty(ref _name, value))
                 {
                     NewName = _name; // This should do nothing, since both should coincide
                     return;
@@ -72,14 +72,14 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         public string NewName
         {
             get => _newName;
-            set => Set(ref _newName, value);
+            set => SetProperty(ref _newName, value);
         }
 
         private bool _isEditingId;
         public bool IsEditingId
         {
             get => _isEditingId;
-            set => Set(ref _isEditingId, value);
+            set => SetProperty(ref _isEditingId, value);
         }
 
         /// <summary>

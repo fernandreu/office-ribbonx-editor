@@ -1,14 +1,14 @@
 ﻿using System;
 using System.ComponentModel;
-using GalaSoft.MvvmLight;
-using Generators;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Dialogs
 {
     [Export]
-    public partial class DialogHostViewModel : ViewModelBase
+    public partial class DialogHostViewModel : ObservableObject
     {
         private IContentDialogBase? _content;
 
@@ -19,11 +19,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         public IContentDialogBase? Content
         {
             get => _content;
-            set => Set(ref _content, value);
+            set => SetProperty(ref _content, value);
         }
 
-        [GenerateCommand]
-        private void ExecuteClosingCommand(CancelEventArgs args)
+        [RelayCommand]
+        private void Closing(CancelEventArgs args)
         {
             _content?.ClosingCommand.Execute(args);
         }

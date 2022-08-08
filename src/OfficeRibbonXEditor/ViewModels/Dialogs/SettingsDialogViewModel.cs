@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
-using GalaSoft.MvvmLight.Command;
-using Generators;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
@@ -95,7 +94,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             get => _language;
             set
             {
-                if (!Set(ref _language, value))
+                if (!SetProperty(ref _language, value))
                 {
                     return;
                 }
@@ -108,14 +107,14 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         public bool SettingsChanged
         {
             get => _settingsChanged;
-            set => Set(ref _settingsChanged, value);
+            set => SetProperty(ref _settingsChanged, value);
         }
 
         private bool _languageChanged;
         public bool LanguageChanged
         {
             get => _languageChanged;
-            set => Set(ref _languageChanged, value);
+            set => SetProperty(ref _languageChanged, value);
         }
 
         public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
@@ -159,8 +158,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
         }
 
-        [GenerateCommand]
-        private void ResetToCurrent()
+        [RelayCommand]
+        public void ResetToCurrent()
         {
             foreach (var pair in _currentValues)
             {
@@ -173,8 +172,8 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
         }
 
-        [GenerateCommand]
-        private void ResetToDefault()
+        [RelayCommand]
+        public void ResetToDefault()
         {
             foreach (var name in _usedProperties)
             {
@@ -191,11 +190,11 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
                 association.ResetToDefault();
             }
 
-            ApplySettings();
+            Apply();
         }
 
-        [GenerateCommand(Name = "ApplyCommand")]
-        private void ApplySettings()
+        [RelayCommand]
+        private void Apply()
         {
             Settings.Default.Save();
             LoadCurrent();
@@ -221,10 +220,10 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             LanguageChanged = false;
         }
 
-        [GenerateCommand(Name = "AcceptCommand")]
-        private void AcceptSettings()
+        [RelayCommand]
+        private void Accept()
         {
-            ApplySettings();
+            Apply();
             IsCancelled = false;
             Close();
         }
@@ -257,7 +256,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             Settings.Default.UICulture = foundLanguage.Name;
         }
 
-        [GenerateCommand]
+        [RelayCommand]
         private void SetAllAssociations(bool newValue)
         {
             foreach (var association in FileAssociations)

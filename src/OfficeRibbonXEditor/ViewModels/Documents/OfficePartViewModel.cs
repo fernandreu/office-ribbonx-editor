@@ -23,7 +23,7 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
         public OfficePart? Part
         {
             get => _part;
-            set => Set(ref _part, value);
+            set => SetProperty(ref _part, value);
         }
 
         public bool IconsChanged { get; set; }

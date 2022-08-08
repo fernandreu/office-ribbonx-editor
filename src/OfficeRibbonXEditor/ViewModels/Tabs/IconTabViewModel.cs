@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Drawing;
-using GalaSoft.MvvmLight;
-using Generators;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Documents;
@@ -9,7 +9,7 @@ using OfficeRibbonXEditor.ViewModels.Windows;
 
 namespace OfficeRibbonXEditor.ViewModels.Tabs
 {
-    public partial class IconTabViewModel : ViewModelBase, ITabItemViewModel
+    public partial class IconTabViewModel : ObservableObject, ITabItemViewModel
     {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. The icon field is actually initialized when setting the Icon property
         public IconTabViewModel(IconViewModel icon, MainWindowViewModel mainWindow)
@@ -23,7 +23,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         public string Title
         {
             get => _title;
-            set => Set(ref _title, value);
+            set => SetProperty(ref _title, value);
         }
 
         public string? StatusText
@@ -46,7 +46,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             set
             {
                 var previous = _icon;
-                if (!Set(ref _icon, value))
+                if (!SetProperty(ref _icon, value))
                 {
                     return;
                 }
@@ -61,8 +61,8 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
                     value.PropertyChanged += OnIconPropertyChanged;
                 }
 
-                RaisePropertyChanged(nameof(StatusText));
-                RaisePropertyChanged(nameof(Item));
+                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(Item));
             }
         }
 
@@ -72,7 +72,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         public int Zoom
         {
             get => _zoom;
-            set => Set(ref _zoom, value);
+            set => SetProperty(ref _zoom, value);
         }
 
         public MainWindowViewModel MainWindow { get; set; }
@@ -92,8 +92,8 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             MainWindow.AdjustTabTitles();
         }
 
-        [GenerateCommand(Name = "ResetGridCommand")]
-        public static void ResetGridSettings()
+        [RelayCommand]
+        public static void ResetGrid()
         {
             Settings.Default.IconGridMargin = 0;
             Settings.Default.IconGridMainColor = Color.White;

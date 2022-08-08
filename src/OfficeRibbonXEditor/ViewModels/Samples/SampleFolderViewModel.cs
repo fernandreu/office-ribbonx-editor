@@ -1,10 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using GalaSoft.MvvmLight;
+using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.ViewModels.Samples
 {
-    public class SampleFolderViewModel : ViewModelBase, ISampleMenuItem
+    public class SampleFolderViewModel : ObservableObject, ISampleMenuItem
     {
         public string Name { get; set; } = string.Empty;
 
