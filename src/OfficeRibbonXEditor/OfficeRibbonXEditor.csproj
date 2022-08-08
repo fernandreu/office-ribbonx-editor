@@ -71,10 +71,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Generators\Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Properties\Settings.Designer.cs">
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <AutoGen>True</AutoGen>
