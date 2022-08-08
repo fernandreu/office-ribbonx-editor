@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Events;

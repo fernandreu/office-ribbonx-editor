@@ -44,6 +44,7 @@
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.5" />
     <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="CommonServiceLocator" Version="2.0.6" />
+    <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Dragablz" Version="0.0.3.223" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />

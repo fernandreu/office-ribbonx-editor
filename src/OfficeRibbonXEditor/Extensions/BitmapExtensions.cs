@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Windows.Media.Imaging;
+using CommunityToolkit.Diagnostics;
 
 namespace OfficeRibbonXEditor.Extensions
 {
@@ -9,11 +10,7 @@ namespace OfficeRibbonXEditor.Extensions
     {
         public static BitmapImage AsBitmapImage(this Bitmap bitmap)
         {
-            if (bitmap == null)
-            {
-                throw new ArgumentNullException(nameof(bitmap));
-            }
-
+            Guard.IsNotNull(bitmap);
             var ms = new MemoryStream();
             bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
             var image = new BitmapImage();

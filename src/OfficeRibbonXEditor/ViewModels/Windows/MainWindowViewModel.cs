@@ -897,7 +897,7 @@ namespace OfficeRibbonXEditor.ViewModels.Windows
                 doc.Name, 
                 i + 1);
         }
-
+        
         private void FinishSavingFile(string fileName, bool renameCurrent)
         {
             if (string.IsNullOrEmpty(fileName))

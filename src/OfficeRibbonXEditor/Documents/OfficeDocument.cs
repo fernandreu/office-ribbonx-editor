@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.IO.Packaging;
 using System.Linq;
+using CommunityToolkit.Diagnostics;
 
 namespace OfficeRibbonXEditor.Documents
 {
@@ -43,16 +44,8 @@ namespace OfficeRibbonXEditor.Documents
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. Triggered due to UnderlyingPackage, but this is assigned in Init()
         public OfficeDocument(string fileName)
         {
-            if (fileName == null)
-            {
-                throw new ArgumentNullException(nameof(fileName));
-            }
-
-            if (fileName.Length == 0)
-            {
-                throw new ArgumentException("File name cannot be empty.");
-            }
-
+            Guard.IsNotNullOrEmpty(fileName);
+            
             Name = fileName;
 
             do
