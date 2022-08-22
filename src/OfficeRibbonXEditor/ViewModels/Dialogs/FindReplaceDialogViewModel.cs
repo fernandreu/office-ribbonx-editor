@@ -39,7 +39,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
         [ObservableProperty]
         private Scintilla _scintilla;
 
-        partial void OnScintillaChanging(Scintilla? value)
+        partial void OnScintillaChanging(Scintilla value)
         {
             if (value != null && IncrementalSearcher != null)
             {
@@ -47,7 +47,7 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs
             }
         }
 
-        partial void OnScintillaChanged(Scintilla? value)
+        partial void OnScintillaChanged(Scintilla value)
         {
             FindReplace = new FindReplace(_scintilla);
             FindReplace.FindAllResults += FindAllHandler;

@@ -179,7 +179,17 @@ namespace OfficeRibbonXEditor.ViewModels.Documents
             Children.Clear();
             foreach (var image in Part.GetImages())
             {
-                Children.Add(new IconViewModel(image.Key, image.Value, this));
+                var bmp = new BitmapImage();
+
+                using (var imageStream = image.Value.GetStream(FileMode.Open, FileAccess.Read))
+                {
+                    bmp.BeginInit();
+                    bmp.StreamSource = imageStream;
+                    bmp.CacheOption = BitmapCacheOption.OnLoad;
+                    bmp.EndInit();
+                }
+
+                Children.Add(new IconViewModel(image.Key, bmp, this));
             }
         }
     }

@@ -10,7 +10,7 @@
     <Description>A tool to edit the Custom UI part of Office documents.</Description>
     <PackageProjectUrl>https://github.com/fernandreu/office-ribbonx-editor</PackageProjectUrl>
 
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
@@ -44,7 +44,6 @@
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.5" />
     <PackageReference Include="Autofac" Version="6.4.0" />
     <PackageReference Include="CommonServiceLocator" Version="2.0.6" />
-    <PackageReference Include="CommunityToolkit.Diagnostics" Version="8.0.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
     <PackageReference Include="Dragablz" Version="0.0.3.223" />
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
@@ -69,6 +68,11 @@
 
   <ItemGroup>
     <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OfficeRibbonXEditor.CommandLine\OfficeRibbonXEditor.CommandLine.csproj" />
+    <ProjectReference Include="..\OfficeRibbonXEditor.Common\OfficeRibbonXEditor.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -97,4 +101,14 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
+
+  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
+    <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
+
+    <ItemGroup>
+      <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
+      <Analyzer Remove="@(Analyzer)" />
+      <Analyzer Include="@(FilteredAnalyzer)" />
+    </ItemGroup>
+  </Target>
 </Project>

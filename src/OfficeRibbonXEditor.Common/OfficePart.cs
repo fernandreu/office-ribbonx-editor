@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Diagnostics;
 using System.IO.Packaging;
-using System.Windows.Media.Imaging;
 using System.Xml;
 using CommunityToolkit.Diagnostics;
 
@@ -59,14 +55,14 @@ namespace OfficeRibbonXEditor.Documents
             }
         }
 
-        public Dictionary<string, BitmapImage> GetImages()
+        public Dictionary<string, PackagePart> GetImages()
         {
             if (Part == null)
             {
                 throw new InvalidOperationException($"Part was already removed");
             }
 
-            var imageCollection = new Dictionary<string, BitmapImage>();
+            var imageCollection = new Dictionary<string, PackagePart>();
 
             foreach (var relationship in Part.GetRelationshipsByType(OfficeDocument.ImagePartRelType))
             {
@@ -78,17 +74,7 @@ namespace OfficeRibbonXEditor.Documents
 
                 var imagePart = Part.Package.GetPart(customImageUri);
 
-                var imageStream = imagePart.GetStream(FileMode.Open, FileAccess.Read);
-
-                var image = new BitmapImage();
-                image.BeginInit();
-                image.StreamSource = imageStream;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.EndInit();
-
-                imageCollection.Add(relationship.Id, image);
-                
-                imageStream.Close();
+                imageCollection.Add(relationship.Id, imagePart);
             }
 
             return imageCollection;

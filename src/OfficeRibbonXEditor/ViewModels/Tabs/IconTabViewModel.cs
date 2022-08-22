@@ -40,7 +40,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
         [NotifyPropertyChangedFor(nameof(Item))]
         private IconViewModel _icon;
 
-        partial void OnIconChanging(IconViewModel? value)
+        partial void OnIconChanging(IconViewModel value)
         {
             if (value != null)
             {
@@ -48,7 +48,7 @@ namespace OfficeRibbonXEditor.ViewModels.Tabs
             }
         }
 
-        partial void OnIconChanged(IconViewModel? value)
+        partial void OnIconChanged(IconViewModel value)
         {
             if (value != null)
             {
