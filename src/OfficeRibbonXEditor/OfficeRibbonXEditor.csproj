@@ -10,7 +10,7 @@
     <Description>A tool to edit the Custom UI part of Office documents.</Description>
     <PackageProjectUrl>https://github.com/fernandreu/office-ribbonx-editor</PackageProjectUrl>
 
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>

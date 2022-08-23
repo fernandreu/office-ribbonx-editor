@@ -80,7 +80,7 @@ namespace OfficeRibbonXEditor.Documents
             return imageCollection;
         }
 
-        public string? AddImage(string filePath, string? imageId, Func<string?, string?, bool>? alreadyExistingAction = null)
+        public string? AddImage(string filePath, string? imageId = null, Func<string?, string?, bool>? alreadyExistingAction = null)
         {
             Guard.IsNotNullOrEmpty(filePath);
             

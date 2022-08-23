@@ -181,12 +181,7 @@ namespace OfficeRibbonXEditor.Documents
             }
         }
 
-        public void SaveCustomPart(XmlPart partType, string text)
-        {
-            SaveCustomPart(partType, text, false /*isCreatingNewPart*/);
-        }
-
-        public void SaveCustomPart(XmlPart partType, string text, bool isCreatingNewPart)
+        public void SaveCustomPart(XmlPart partType, string text, bool isCreatingNewPart = false)
         {
             var targetPart = RetrieveCustomPart(partType);
 
