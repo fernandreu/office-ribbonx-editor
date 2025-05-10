@@ -1,14 +1,13 @@
-﻿namespace OfficeRibbonXEditor.Helpers
+﻿namespace OfficeRibbonXEditor.Helpers;
+
+public enum FindReplaceAction
 {
-    public enum FindReplaceAction
-    {
-        Find,
-        Replace,
-        FindNext,
-        FindPrevious,
-        ReplaceNext,
-        ReplacePrevious,
-        FindAll,
-        IncrementalSearch,
-    }
+    Find,
+    Replace,
+    FindNext,
+    FindPrevious,
+    ReplaceNext,
+    ReplacePrevious,
+    FindAll,
+    IncrementalSearch,
 }

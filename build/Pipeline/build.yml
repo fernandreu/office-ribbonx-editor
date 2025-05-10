@@ -1,5 +1,5 @@
 parameters:
-  targetFramework: 'net6.0-windows'
+  targetFramework: 'net9.0-windows'
 
 steps:
 

@@ -2,14 +2,13 @@
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
-namespace OfficeRibbonXEditor.Services
+namespace OfficeRibbonXEditor.Services;
+
+[Export(typeof(IMessageBoxService))]
+public class MessageBoxService : IMessageBoxService
 {
-    [Export(typeof(IMessageBoxService))]
-    public class MessageBoxService : IMessageBoxService
+    public MessageBoxResult Show(string text, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None)
     {
-        public MessageBoxResult Show(string text, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None)
-        {
-            return MessageBox.Show(text, caption, button, image);
-        }
+        return MessageBox.Show(text, caption, button, image);
     }
 }

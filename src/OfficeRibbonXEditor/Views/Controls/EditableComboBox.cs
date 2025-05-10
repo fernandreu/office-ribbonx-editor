@@ -4,98 +4,97 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace OfficeRibbonXEditor.Views.Controls
+namespace OfficeRibbonXEditor.Views.Controls;
+
+public class EditableComboBox : ComboBox
 {
-    public class EditableComboBox : ComboBox
+    public EditableComboBox()
     {
-        public EditableComboBox()
-        {
-            IsEditable = true;
-        }
+        IsEditable = true;
+    }
 
-        private TextBox? _textBox;
+    private TextBox? _textBox;
 
-        public TextBox? TextBox
+    public TextBox? TextBox
+    {
+        get
         {
-            get
+            if (_textBox != null)
             {
-                if (_textBox != null)
-                {
-                    return _textBox;
-                }
-
-                ApplyTemplate();
-                _textBox = Template.FindName("PART_EditableTextBox", this) as TextBox;
-                if (_textBox == null)
-                {
-                    throw new InvalidOperationException($"Make sure IsEditable is set to true when using an {nameof(EditableComboBox)}");
-                }
-
                 return _textBox;
             }
-        }
 
-        public override void OnApplyTemplate()
-        {
-            base.OnApplyTemplate();
-
-            if (TextBox != null)
+            ApplyTemplate();
+            _textBox = Template.FindName("PART_EditableTextBox", this) as TextBox;
+            if (_textBox == null)
             {
-                TextBox.TextChanged += OnTextChanged;
+                throw new InvalidOperationException($"Make sure IsEditable is set to true when using an {nameof(EditableComboBox)}");
             }
 
-            AddHandler(PreviewMouseLeftButtonDownEvent, 
-                new MouseButtonEventHandler(SelectivelyIgnoreMouseButton), true);
-            AddHandler(GotKeyboardFocusEvent, 
-                new RoutedEventHandler(SelectAllText), true);
-            AddHandler(MouseDoubleClickEvent, 
-                new RoutedEventHandler(SelectAllText), true);
+            return _textBox;
+        }
+    }
+
+    public override void OnApplyTemplate()
+    {
+        base.OnApplyTemplate();
+
+        if (TextBox != null)
+        {
+            TextBox.TextChanged += OnTextChanged;
         }
 
-        private static void SelectivelyIgnoreMouseButton(object? sender, MouseButtonEventArgs e)
-        {
-            // Find the TextBox
-            DependencyObject? parent = e.OriginalSource as UIElement;
-            while (parent != null && parent is not System.Windows.Controls.TextBox)
-                parent = VisualTreeHelper.GetParent(parent);
+        AddHandler(PreviewMouseLeftButtonDownEvent, 
+            new MouseButtonEventHandler(SelectivelyIgnoreMouseButton), true);
+        AddHandler(GotKeyboardFocusEvent, 
+            new RoutedEventHandler(SelectAllText), true);
+        AddHandler(MouseDoubleClickEvent, 
+            new RoutedEventHandler(SelectAllText), true);
+    }
 
-            if (parent != null)
+    private static void SelectivelyIgnoreMouseButton(object? sender, MouseButtonEventArgs e)
+    {
+        // Find the TextBox
+        DependencyObject? parent = e.OriginalSource as UIElement;
+        while (parent != null && parent is not System.Windows.Controls.TextBox)
+            parent = VisualTreeHelper.GetParent(parent);
+
+        if (parent != null)
+        {
+            var textBox = (TextBox)parent;
+            if (!textBox.IsKeyboardFocusWithin)
             {
-                var textBox = (TextBox)parent;
-                if (!textBox.IsKeyboardFocusWithin)
-                {
-                    // If the text box is not yet focused, give it the focus and
-                    // stop further processing of this click event.
-                    textBox.Focus();
-                    e.Handled = true;
-                }
+                // If the text box is not yet focused, give it the focus and
+                // stop further processing of this click event.
+                textBox.Focus();
+                e.Handled = true;
             }
         }
+    }
 
-        private static void SelectAllText(object? sender, RoutedEventArgs e)
+    private static void SelectAllText(object? sender, RoutedEventArgs e)
+    {
+        if (e.OriginalSource is TextBox textBox)
         {
-            if (e.OriginalSource is TextBox textBox)
-            {
-                textBox.SelectAll();
-            }
+            textBox.SelectAll();
+        }
+    }
+
+    protected override void OnGotFocus(RoutedEventArgs e)
+    {
+        base.OnGotFocus(e);
+
+        TextBox?.Focus();
+    }
+
+    private void OnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (sender is not TextBox txt)
+        {
+            return;
         }
 
-        protected override void OnGotFocus(RoutedEventArgs e)
-        {
-            base.OnGotFocus(e);
-
-            TextBox?.Focus();
-        }
-
-        private void OnTextChanged(object? sender, TextChangedEventArgs e)
-        {
-            if (sender is not TextBox txt)
-            {
-                return;
-            }
-
-            txt.TextChanged -= OnTextChanged;
-            txt.Focus();
-        }
+        txt.TextChanged -= OnTextChanged;
+        txt.Focus();
     }
 }

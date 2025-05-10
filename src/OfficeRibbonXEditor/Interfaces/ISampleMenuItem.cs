@@ -1,7 +1,6 @@
-﻿namespace OfficeRibbonXEditor.Interfaces
+﻿namespace OfficeRibbonXEditor.Interfaces;
+
+public interface ISampleMenuItem
 {
-    public interface ISampleMenuItem
-    {
-        string Name { get; }
-    }
+    string Name { get; }
 }

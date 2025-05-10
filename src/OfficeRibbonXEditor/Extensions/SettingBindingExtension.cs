@@ -10,27 +10,26 @@
 
 using System.Windows.Data;
 
-namespace OfficeRibbonXEditor.Extensions
+namespace OfficeRibbonXEditor.Extensions;
+
+public class SettingBindingExtension : Binding
 {
-    public class SettingBindingExtension : Binding
+    public SettingBindingExtension()
     {
-        public SettingBindingExtension()
-        {
-            Initialize();
-        }
+        Initialize();
+    }
 
-        public SettingBindingExtension(string path)
-            : base(path)
-        {
-            Initialize();
-        }
+    public SettingBindingExtension(string path)
+        : base(path)
+    {
+        Initialize();
+    }
 
-        private void Initialize()
-        {
-            Source = Properties.Settings.Default;
+    private void Initialize()
+    {
+        Source = Properties.Settings.Default;
 
-            // Beware: TwoWay or OneWayToSource does not work with app settings
-            Mode = BindingMode.TwoWay;
-        }
+        // Beware: TwoWay or OneWayToSource does not work with app settings
+        Mode = BindingMode.TwoWay;
     }
 }

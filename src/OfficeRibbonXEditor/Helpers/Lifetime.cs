@@ -1,8 +1,7 @@
-﻿namespace OfficeRibbonXEditor.Helpers
+﻿namespace OfficeRibbonXEditor.Helpers;
+
+public enum Lifetime
 {
-    public enum Lifetime
-    {
-        Singleton,
-        Transient
-    }
+    Singleton,
+    Transient
 }

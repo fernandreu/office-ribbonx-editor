@@ -11,16 +11,16 @@
     <PackageProjectUrl>https://github.com/fernandreu/office-ribbonx-editor</PackageProjectUrl>
 
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
     <PreserveCompilationContext>false</PreserveCompilationContext>
-    <WarningsAsErrors>NU1605</WarningsAsErrors>
     <NoWarn>NU1701</NoWarn>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>13.0</LangVersion>
     <Nullable>enable</Nullable>
+    <WarningsAsErrors>NU1605;nullable</WarningsAsErrors>
 
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -41,21 +41,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="6.0.5" />
-    <PackageReference Include="Autofac" Version="6.4.0" />
-    <PackageReference Include="CommonServiceLocator" Version="2.0.6" />
-    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0" />
-    <PackageReference Include="Dragablz" Version="0.0.3.223" />
-    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.3.0" />
+    <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="9.0.0" />
+    <PackageReference Include="Autofac" Version="8.3.0" />
+    <PackageReference Include="CommonServiceLocator" Version="2.0.7" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="Dragablz" Version="0.0.3.234" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.7.25104.5739" />
     <PackageReference Include="fernandreu.ScintillaNET.WPF" Version="3.1.0" />
-    <PackageReference Include="log4net" Version="2.0.15" />
-    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+    <PackageReference Include="log4net" Version="3.0.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="System.Resources.Extensions" Version="6.0.0" />
+    <PackageReference Include="System.Resources.Extensions" Version="9.0.4" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
-    <PackageReference Include="WPFLocalizeExtension" Version="3.9.4" />
+    <PackageReference Include="WPFLocalizeExtension" Version="3.10.0" />
   </ItemGroup>
 
   <ItemGroup>

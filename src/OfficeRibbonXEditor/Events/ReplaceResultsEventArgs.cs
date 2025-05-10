@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using OfficeRibbonXEditor.Helpers;
 
-namespace OfficeRibbonXEditor.Events
+namespace OfficeRibbonXEditor.Events;
+
+public class ReplaceResultsEventArgs : EventArgs
 {
-    public class ReplaceResultsEventArgs : EventArgs
+    public ReplaceResultsEventArgs(FindReplace findReplace, List<CharacterRange> replaceAllResults)
     {
-        public ReplaceResultsEventArgs(FindReplace findReplace, List<CharacterRange> replaceAllResults)
-        {
-            FindReplace = findReplace;
-            ReplaceAllResults = replaceAllResults ?? new List<CharacterRange>();
-        }
-
-        public FindReplace FindReplace { get; set; }
-
-        public List<CharacterRange> ReplaceAllResults { get; }
+        FindReplace = findReplace;
+        ReplaceAllResults = replaceAllResults ?? new List<CharacterRange>();
     }
+
+    public FindReplace FindReplace { get; set; }
+
+    public List<CharacterRange> ReplaceAllResults { get; }
 }

@@ -2,70 +2,69 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Helpers;
 
-namespace OfficeRibbonXEditor.ViewModels.Shell
+namespace OfficeRibbonXEditor.ViewModels.Shell;
+
+public class FileAssociationViewModel : ObservableObject
 {
-    public class FileAssociationViewModel : ObservableObject
+    public FileAssociationViewModel(string extension)
     {
-        public FileAssociationViewModel(string extension)
+        Extension = extension;
+        PreviousValue = GetCurrentValue();
+        NewValue = PreviousValue;
+    }
+
+    public event EventHandler? ValueChanged; 
+
+    public string Extension { get; }
+
+    private bool PreviousValue { get; set; }
+
+    private bool _newValue;
+    public bool NewValue
+    {
+        get => _newValue;
+        set
         {
-            Extension = extension;
-            PreviousValue = GetCurrentValue();
-            NewValue = PreviousValue;
-        }
-
-        public event EventHandler? ValueChanged; 
-
-        public string Extension { get; }
-
-        private bool PreviousValue { get; set; }
-
-        private bool _newValue;
-        public bool NewValue
-        {
-            get => _newValue;
-            set
-            {
-                if (!SetProperty(ref _newValue, value))
-                {
-                    return;
-                }
-
-                ValueChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
-
-        public bool GetCurrentValue()
-        {
-            return new FileAssociationHelper(Extension).CheckAssociation();
-        }
-
-        public void Apply()
-        {
-            if (PreviousValue == NewValue)
+            if (!SetProperty(ref _newValue, value))
             {
                 return;
             }
 
-            if (NewValue)
-            {
-                new FileAssociationHelper(Extension).AddAssociation();
-            }
-            else
-            {
-                new FileAssociationHelper(Extension).RemoveAssociation();
-            }
-
-            PreviousValue = NewValue;
+            ValueChanged?.Invoke(this, EventArgs.Empty);
         }
+    }
 
-        public void ResetToCurrent()
+    public bool GetCurrentValue()
+    {
+        return new FileAssociationHelper(Extension).CheckAssociation();
+    }
+
+    public void Apply()
+    {
+        if (PreviousValue == NewValue)
         {
-            NewValue = PreviousValue;
+            return;
         }
 
-        public void ResetToDefault()
+        if (NewValue)
         {
-            NewValue = false;
+            new FileAssociationHelper(Extension).AddAssociation();
         }
+        else
+        {
+            new FileAssociationHelper(Extension).RemoveAssociation();
+        }
+
+        PreviousValue = NewValue;
+    }
+
+    public void ResetToCurrent()
+    {
+        NewValue = PreviousValue;
+    }
+
+    public void ResetToDefault()
+    {
+        NewValue = false;
     }
 }

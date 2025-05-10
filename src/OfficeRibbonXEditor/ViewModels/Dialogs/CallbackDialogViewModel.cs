@@ -3,40 +3,39 @@ using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Lexers;
 
-namespace OfficeRibbonXEditor.ViewModels.Dialogs
+namespace OfficeRibbonXEditor.ViewModels.Dialogs;
+
+[Export]
+public partial class CallbackDialogViewModel : DialogBase, IContentDialog<string?>
 {
-    [Export]
-    public partial class CallbackDialogViewModel : DialogBase, IContentDialog<string?>
+    [ObservableProperty]
+    private VbaLexer? _lexer;
+
+    partial void OnLexerChanged(VbaLexer? value) => OnConfigChanged();
+        
+    [ObservableProperty]
+    private string? _code;
+
+    partial void OnCodeChanged(string? value) => OnConfigChanged();
+        
+    private void OnConfigChanged()
     {
-        [ObservableProperty]
-        private VbaLexer? _lexer;
-
-        partial void OnLexerChanged(VbaLexer? value) => OnConfigChanged();
-        
-        [ObservableProperty]
-        private string? _code;
-
-        partial void OnCodeChanged(string? value) => OnConfigChanged();
-        
-        private void OnConfigChanged()
+        if (Lexer == null || Code == null)
         {
-            if (Lexer == null || Code == null)
-            {
-                return;
-            }
+            return;
+        }
             
-            if (Lexer?.Editor == null)
-            {
-                return;
-            }
-
-            Lexer.Editor.Text = Code;
-        }
-        
-        public bool OnLoaded(string? payload)
+        if (Lexer?.Editor == null)
         {
-            Code = payload;
-            return true;
+            return;
         }
+
+        Lexer.Editor.Text = Code;
+    }
+        
+    public bool OnLoaded(string? payload)
+    {
+        Code = payload;
+        return true;
     }
 }

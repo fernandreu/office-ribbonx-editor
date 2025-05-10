@@ -1,21 +1,20 @@
 ﻿using System;
 
-namespace OfficeRibbonXEditor.Events
+namespace OfficeRibbonXEditor.Events;
+
+public class HighlightEventArgs : EventArgs
 {
-    public class HighlightEventArgs : EventArgs
+    public HighlightEventArgs()
     {
-        public HighlightEventArgs()
-        {
-        }
-
-        public HighlightEventArgs(int lineNumber, int linePosition)
-        {
-            LineNumber = lineNumber;
-            LinePosition = linePosition;
-        }
-
-        public int LineNumber { get; set; }
-
-        public int LinePosition { get; set; }
     }
+
+    public HighlightEventArgs(int lineNumber, int linePosition)
+    {
+        LineNumber = lineNumber;
+        LinePosition = linePosition;
+    }
+
+    public int LineNumber { get; set; }
+
+    public int LinePosition { get; set; }
 }

@@ -1,17 +1,16 @@
 ﻿using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Interfaces
+namespace OfficeRibbonXEditor.Interfaces;
+
+public interface IResultCollection
 {
-    public interface IResultCollection
-    {
-        string Header { get; }
+    string Header { get; }
 
-        bool IsEmpty { get; }
+    bool IsEmpty { get; }
 
-        int Count { get; }
+    int Count { get; }
 
-        void AddToPanel(Scintilla editor, Scintilla resultsPanel);
+    void AddToPanel(Scintilla editor, Scintilla resultsPanel);
 
-        void GoToPosition(int pos, Scintilla editor, Scintilla resultsPanel);
-    }
+    void GoToPosition(int pos, Scintilla editor, Scintilla resultsPanel);
 }

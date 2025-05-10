@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Diagnostics;
 using McMaster.Extensions.CommandLineUtils;
 using OfficeRibbonXEditor.Documents;
-using System.ComponentModel.DataAnnotations;
 
 namespace OfficeRibbonXEditor.CommandLine.Commands;
 

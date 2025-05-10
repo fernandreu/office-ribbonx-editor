@@ -1,7 +1,6 @@
-﻿namespace OfficeRibbonXEditor.Interfaces
+﻿namespace OfficeRibbonXEditor.Interfaces;
+
+public interface IDialogProvider
 {
-    public interface IDialogProvider
-    {
-        T ResolveDialog<T>() where T : IContentDialogBase;
-    }
+    T ResolveDialog<T>() where T : IContentDialogBase;
 }
