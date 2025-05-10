@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Diagnostics;
+using JetBrains.Annotations;
 using McMaster.Extensions.CommandLineUtils;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 
 namespace OfficeRibbonXEditor.CommandLine.Commands;
 
@@ -13,15 +14,18 @@ public class InsertCommand : BaseUpdateCommand
 
     [Option("--type <TYPE>", Description = "The type of Custom UI file. If not given, it will be inferred from the filename")]
     [AllowedValues("12", "14")]
+    [UsedImplicitly]
     public string? Type { get; set; }
 
     [Option("-x|--xml <FILE>", Description = "The custom UI xml file to be inserted")]
     [FileExists]
     [Required]
+    [UsedImplicitly]
     public string? CustomUiFile { get; set; }
 
     [Option("-i|--icons <FOLDER>", Description = "A folder with images to be inserted together with the custom UI file. The file names will be used as IDs")]
     [DirectoryExists]
+    [UsedImplicitly]
     public string? IconsFolder { get; set; }
 
     public override int OnExecute(CommandLineApplication app)

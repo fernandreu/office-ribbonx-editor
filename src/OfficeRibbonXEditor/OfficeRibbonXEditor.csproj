@@ -5,7 +5,7 @@
     <AssemblyTitle>Office RibbonX Editor</AssemblyTitle>
     <Authors>Fernando Andreu</Authors>
     <VersionPrefix>1.9.0.0</VersionPrefix>
-    <Copyright>Copyright (c) 2022 Fernando Andreu</Copyright>
+    <Copyright>Copyright (c) 2025 Fernando Andreu</Copyright>
     <NeutralLanguage>en-GB</NeutralLanguage>
     <Description>A tool to edit the Custom UI part of Office documents.</Description>
     <PackageProjectUrl>https://github.com/fernandreu/office-ribbonx-editor</PackageProjectUrl>

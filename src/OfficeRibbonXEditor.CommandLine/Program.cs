@@ -1,11 +1,13 @@
 ﻿using McMaster.Extensions.CommandLineUtils;
 using OfficeRibbonXEditor.CommandLine.Commands;
 using System.Diagnostics;
+using JetBrains.Annotations;
 
 namespace OfficeRibbonXEditor.CommandLine;
 
 [Command(Name = "OfficeRibbonXEditor", Description = "A command-line interface to edit the custom UI of Office files")]
 [Subcommand(typeof(ExtractCommand), typeof(InsertCommand))]
+[UsedImplicitly]
 public class Program : BaseCommand
 {
     public Program(IConsole console) : base(console)

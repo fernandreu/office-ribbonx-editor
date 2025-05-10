@@ -17,7 +17,7 @@ using System.Xml.Schema;
 using AsyncAwaitBestPractices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Helpers;

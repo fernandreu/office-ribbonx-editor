@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents;
 

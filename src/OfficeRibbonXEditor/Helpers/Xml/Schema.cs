@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Xml;
 using System.Xml.Schema;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.Helpers.Xml;

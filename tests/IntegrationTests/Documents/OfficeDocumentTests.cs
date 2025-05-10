@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 
 namespace OfficeRibbonXEditor.IntegrationTests.Documents;
 

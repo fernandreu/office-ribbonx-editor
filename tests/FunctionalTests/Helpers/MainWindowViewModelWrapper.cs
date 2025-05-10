@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Windows;

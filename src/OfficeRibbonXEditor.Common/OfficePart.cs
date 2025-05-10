@@ -3,7 +3,7 @@ using System.IO.Packaging;
 using System.Xml;
 using CommunityToolkit.Diagnostics;
 
-namespace OfficeRibbonXEditor.Documents;
+namespace OfficeRibbonXEditor.Common;
 
 public class OfficePart
 {
@@ -49,10 +49,8 @@ public class OfficePart
             return;
         }
 
-        using (var tw = new StreamWriter(Part.GetStream(FileMode.Create, FileAccess.Write)))
-        {
-            tw.Write(text);
-        }
+        using var tw = new StreamWriter(Part.GetStream(FileMode.Create, FileAccess.Write));
+        tw.Write(text);
     }
 
     public Dictionary<string, PackagePart> GetImages()

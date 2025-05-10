@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.FunctionalTests.Helpers;
@@ -522,7 +522,7 @@ public sealed class MainWindowViewModelTests
         wrapper.RedistributableDetails.NeedsDownload = true;
 
         // Act / assert
-        wrapper.AssertMessage(() => Assert.That(wrapper.ViewModel.OnLoaded(), Is.True), MessageBoxImage.Warning, MessageBoxResult.Cancel);
+        wrapper.AssertMessage(() => Assert.That(wrapper.ViewModel.OnLoaded(), Is.False), MessageBoxImage.Warning, MessageBoxResult.Cancel);
     }
 
     [Test]

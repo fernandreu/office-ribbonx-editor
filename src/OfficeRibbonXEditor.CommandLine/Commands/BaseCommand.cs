@@ -1,4 +1,5 @@
-﻿using McMaster.Extensions.CommandLineUtils;
+﻿using JetBrains.Annotations;
+using McMaster.Extensions.CommandLineUtils;
 
 namespace OfficeRibbonXEditor.CommandLine.Commands;
 
@@ -12,8 +13,10 @@ public abstract class BaseCommand
     }
 
     [Option("-q|--quiet", Description = "Suppress normal output messages. This does not suppress errors")]
+    [UsedImplicitly]
     public bool IsQuiet { get; set; }
 
+    [UsedImplicitly]
     public virtual int OnExecute(CommandLineApplication app)
     {
         app.ShowHelp();

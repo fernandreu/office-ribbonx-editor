@@ -1,10 +1,9 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.IO.Packaging;
 using CommunityToolkit.Diagnostics;
 
-namespace OfficeRibbonXEditor.Documents;
+namespace OfficeRibbonXEditor.Common;
 
 public enum XmlPart
 {
@@ -89,7 +88,7 @@ public class OfficeDocument : IDisposable
         
     public OfficeApplication FileType => MapFileType(Path.GetExtension(Name));
 
-    public static OfficeApplication MapFileType(string extension)
+    public static OfficeApplication MapFileType(string? extension)
     {
         if (extension == null)
         {
@@ -238,10 +237,7 @@ public class OfficeDocument : IDisposable
             part = new OfficePart(UnderlyingPackage.GetPart(customUiUri), partType, relationship.Id);
         }
 
-        if (Parts == null)
-        {
-            Parts = new List<OfficePart>();
-        }
+        Parts ??= [];
 
         Parts.Add(part);
         IsDirty = true;
