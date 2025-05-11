@@ -78,7 +78,7 @@ public class VersionChecker : IVersionChecker
         }
 
         var isInstalledObject = key.GetValue("Installed");
-        if (isInstalledObject is not int isInstalled || isInstalled != 1)
+        if (isInstalledObject is not 1)
         {
             return result;
         }

@@ -21,7 +21,7 @@ namespace OfficeRibbonXEditor;
 /// <summary>
 /// Interaction logic for App
 /// </summary>
-public partial class App : Application
+public partial class App
 {
     private readonly IContainer _container = CreateContainer();
 

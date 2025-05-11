@@ -1,5 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+  <Import Project="..\..\build\Common.props" />
   <PropertyGroup>
     <AssemblyName>OfficeRibbonXEditor</AssemblyName>
     <AssemblyTitle>Office RibbonX Editor</AssemblyTitle>
@@ -11,16 +11,12 @@
     <PackageProjectUrl>https://github.com/fernandreu/office-ribbonx-editor</PackageProjectUrl>
 
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>$(TargetFramework)-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
     <PreserveCompilationContext>false</PreserveCompilationContext>
-    <NoWarn>NU1701</NoWarn>
-    <LangVersion>13.0</LangVersion>
-    <Nullable>enable</Nullable>
-    <WarningsAsErrors>NU1605;nullable</WarningsAsErrors>
 
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +36,14 @@
     <ProjectGuid>{A2A7BCC6-735E-4424-93A4-4EA5255E01FC}</ProjectGuid>
   </PropertyGroup>
 
+  <ItemGroup>
+    <!-- This causes ambiguity with WPF types -->
+    <Using Remove="System.Windows.Forms"/>
+    
+    <!-- This causes ambiguity with System.Windows.Media.Color and CharacterRange -->
+    <Using Remove="System.Drawing"/>
+  </ItemGroup>
+  
   <ItemGroup>
     <PackageReference Include="AsyncAwaitBestPractices.MVVM" Version="9.0.0" />
     <PackageReference Include="Autofac" Version="8.3.0" />
@@ -101,14 +105,4 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
-
-  <Target Name="RemoveDuplicateAnalyzers" BeforeTargets="CoreCompile">
-    <!-- Work around https://github.com/dotnet/wpf/issues/6792 -->
-
-    <ItemGroup>
-      <FilteredAnalyzer Include="@(Analyzer-&gt;Distinct())" />
-      <Analyzer Remove="@(Analyzer)" />
-      <Analyzer Include="@(FilteredAnalyzer)" />
-    </ItemGroup>
-  </Target>
 </Project>

@@ -1,0 +1,17 @@
+<Project>
+  <PropertyGroup>
+    <ApplicationName>Office RibbonX Editor</ApplicationName>
+    <Authors>Fernando Andreu</Authors>
+    <VersionNumber>1.9.0</VersionNumber>
+    <BuildNumber>0</BuildNumber>
+    <Version>$(VersionNumber).$(BuildNumber)</Version>
+    <CopyrightYear>$([System.DateTime]::Now.ToString("yyyy"))</CopyrightYear>
+    <Copyright>Copyright (c) $(CopyrightYear) $(Authors)</Copyright>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <WarningsAsErrors>NU1605;nullable</WarningsAsErrors>
+    <LangVersion>13.0</LangVersion>
+    <NoWarn>NU1701</NoWarn>
+  </PropertyGroup>
+</Project>

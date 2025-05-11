@@ -494,7 +494,7 @@ public sealed class MainWindowViewModelTests
     }
 
     [Test]
-    public void OpenHelpLink_ExternalLinkShgouldBeLaunched()
+    public void OpenHelpLink_ExternalLinkShouldBeLaunched()
     {
         // Arrange
         using var wrapper = new MainWindowViewModelWrapper();

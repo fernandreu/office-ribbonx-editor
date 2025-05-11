@@ -2,12 +2,14 @@ $sourcePath = $args[0]
 
 # Do the signed artifacts exist?
 $artifactsToCheck = @(
-    '.NET Framework Binaries';
-    '.NET Framework Installer';
-    '.NET Binaries';
-    '.NET Installer';
-    'Self-Contained .NET Binaries';
-    'Self-Contained .NET Installer'
+    'Framework Dependent - x64';
+    'Framework Dependent - arm64';
+    'Self-Contained - x64';
+    'Self-Contained - arm64'
+    'Framework Dependent - x64 - Installer';
+    'Framework Dependent - arm64 - Installer';
+    'Self-Contained - x64 - Installer';
+    'Self-Contained - arm64 - Installer'
 )
 $missing = [System.Collections.Generic.List[string]]@()
 $path = $null

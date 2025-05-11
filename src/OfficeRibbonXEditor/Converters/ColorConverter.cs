@@ -8,7 +8,7 @@ namespace OfficeRibbonXEditor.Converters;
 [ValueConversion(typeof(System.Drawing.Color), typeof(Color))]
 public class ColorConverter : IValueConverter
 {
-    public object? Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not System.Drawing.Color color)
         {
@@ -18,7 +18,7 @@ public class ColorConverter : IValueConverter
         return Color.FromArgb(color.A, color.R, color.G, color.B);
     }
 
-    public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value is not Color color)
         {
