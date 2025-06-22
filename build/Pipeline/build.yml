@@ -55,12 +55,13 @@ steps:
       /p:CoverletOutput=$(Build.SourcesDirectory)/TestResults/CodeCoverage/
       /p:MergeWith=$(Build.SourcesDirectory)/TestResults/CodeCoverage/coverage.json
 
-- task: PublishCodeCoverageResults@1
+- task: PublishCodeCoverageResults@2
   displayName: 'Publish code coverage report'
   condition: and(succeeded(), eq(variables['coverage'], 'true'))
   inputs:
-    codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
+    pathToSources: '$(Build.SourcesDirectory)'
+    failIfCoverageEmpty: true
 
 - task: SonarCloudAnalyze@3
   displayName: 'Run SonarCloud code analysis'
