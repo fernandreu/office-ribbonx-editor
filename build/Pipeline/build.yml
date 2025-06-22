@@ -5,13 +5,13 @@ steps:
 
 - template: pre-steps.yml
 
-- task: SonarCloudPrepare@1
+- task: SonarCloudPrepare@3
   displayName: 'Prepare SonarCloud analysis'
   condition: and(succeeded(), eq(variables['sonarCloud'], 'true'))
   inputs:
     SonarCloud: 'fernandreu-SonarCloud'
     organization: '$(SonarOrganization)'
-    scannerMode: 'MSBuild'
+    scannerMode: 'dotnet'
     projectKey: '$(SonarProjectKey)'
     projectName: '$(SonarProjectName)'
     projectVersion: '$(Build.BuildNumber)'
@@ -62,10 +62,10 @@ steps:
     codeCoverageTool: 'cobertura'
     summaryFileLocation: '$(Build.SourcesDirectory)/TestResults/**/coverage.cobertura.xml'
 
-- task: SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@3
   displayName: 'Run SonarCloud code analysis'
   condition: and(succeeded(), eq(variables['sonarCloud'], 'true'))
 
-- task: SonarCloudPublish@1
+- task: SonarCloudPublish@3
   condition: and(succeeded(), eq(variables['sonarCloud'], 'true'))
   displayName: 'Publish SonarCloud quality gate results'
