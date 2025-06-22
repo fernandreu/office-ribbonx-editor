@@ -40,6 +40,7 @@ jobs:
         --self-contained ${{ parameters.selfContained }}
         --output "$(Build.ArtifactStagingDirectory)"
         --runtime win-${{ parameters.architecture }}
+        /p:SelfContained=${{ parameters.selfContained }}
         
   - task: PowerShell@2
     displayName: 'Sign binaries'
