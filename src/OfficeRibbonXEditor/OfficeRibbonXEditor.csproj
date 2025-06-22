@@ -17,6 +17,8 @@
     <RootNamespace>OfficeRibbonXEditor</RootNamespace>
     <ApplicationIcon>Resources\Images\ApplicationIcon.ico</ApplicationIcon>
     <PreserveCompilationContext>false</PreserveCompilationContext>
+    
+    <SelfContained Condition="'$(SELF_CONTAINED)' != ''">$(SELF_CONTAINED)</SelfContained>
 
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>

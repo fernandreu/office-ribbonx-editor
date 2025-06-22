@@ -17,6 +17,10 @@ jobs:
   steps:
   - template: pre-steps.yml
 
+  - pwsh: >-
+      Write-Host '##vso[task.setvariable variable=SelfContained;]${{ parameters.selfContained }}'
+    displayName: Set SelfContained variable
+
   - script: choco install innosetup
     displayName: Install InnoSetup
 
@@ -37,10 +41,8 @@ jobs:
       arguments: >-
         --configuration $(buildConfiguration)
         --framework ${{ parameters.targetFramework }}
-        --self-contained ${{ parameters.selfContained }}
         --output "$(Build.ArtifactStagingDirectory)"
         --runtime win-${{ parameters.architecture }}
-        /p:SelfContained=${{ parameters.selfContained }}
         
   - task: PowerShell@2
     displayName: 'Sign binaries'

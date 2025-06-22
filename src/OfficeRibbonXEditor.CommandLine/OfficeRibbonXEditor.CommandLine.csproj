@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <PublishTrimmed>true</PublishTrimmed>
+    <SelfContained Condition="'$(SELF_CONTAINED)' != ''">$(SELF_CONTAINED)</SelfContained>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System.ComponentModel.DataAnnotations.RequiredAttribute" Alias="RequiredAttribute" />
