@@ -2,8 +2,8 @@
   <PropertyGroup>
     <ApplicationName>Office RibbonX Editor</ApplicationName>
     <Authors>Fernando Andreu</Authors>
-    <VersionNumber>1.9.0</VersionNumber>
-    <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
+    <VersionNumber>2.0.0</VersionNumber>
+    <BuildNumber>$(BUILD_ID)</BuildNumber>
     <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
     <Version>$(VersionNumber).$(BuildNumber)</Version>
     <CopyrightYear>$([System.DateTime]::Now.ToString("yyyy"))</CopyrightYear>

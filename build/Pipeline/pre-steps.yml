@@ -1,8 +1,8 @@
 steps:
 
 - pwsh: >-
-    Write-Host '##vso[task.setvariable variable=BuildNumber;]$(Build.BuildId)'
-  displayName: 'Set Build Number'
+    Write-Host '##vso[task.setvariable variable=build.id;]$(Build.BuildId)'
+  displayName: 'Set BUILD_ID variable'
     
 - task: UseDotNet@2
   displayName: 'Use .NET SDK'
