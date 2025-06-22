@@ -29,9 +29,9 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch
-  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  # value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
   # Use this when needing to test the publishing on a PR
-  #value: true
+  value: 'true'
 
 stages:
 - stage: Build
