@@ -1,13 +1,10 @@
 steps:
 
 - task: PowerShell@2
-  displayName: 'Set Build ID'
-  inputs:
-    pwsh: true
-    targetType: 'filePath'
-    filePath: '$(Build.SourcesDirectory)/build/Scripts/Set-BuildId.ps1'
-    arguments: '-BuildId "$(Build.BuildId)" -ProjectFile "$(Build.SourcesDirectory)/src/OfficeRibbonXEditor/OfficeRibbonXEditor.csproj"'
-
+  displayName: 'Set Build Number'
+  pwsh: >-
+    Write-Host '##vso[task.setvariable variable=BuildNumber;]$(Build.BuildId)'
+    
 - task: UseDotNet@2
   displayName: 'Use .NET SDK'
   inputs:

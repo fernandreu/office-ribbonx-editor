@@ -3,7 +3,8 @@
     <ApplicationName>Office RibbonX Editor</ApplicationName>
     <Authors>Fernando Andreu</Authors>
     <VersionNumber>1.9.0</VersionNumber>
-    <BuildNumber>0</BuildNumber>
+    <BuildNumber>$(BUILD_NUMBER)</BuildNumber>
+    <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
     <Version>$(VersionNumber).$(BuildNumber)</Version>
     <CopyrightYear>$([System.DateTime]::Now.ToString("yyyy"))</CopyrightYear>
     <Copyright>Copyright (c) $(CopyrightYear) $(Authors)</Copyright>
