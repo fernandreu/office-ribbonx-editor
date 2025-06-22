@@ -18,7 +18,8 @@
     <PreserveCompilationContext>false</PreserveCompilationContext>
     
     <SelfContained Condition="'$(SELF_CONTAINED)' != ''">$(SELF_CONTAINED)</SelfContained>
-
+    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+    
     <DebugType>full</DebugType>
     <DebugSymbols>true</DebugSymbols>
 
