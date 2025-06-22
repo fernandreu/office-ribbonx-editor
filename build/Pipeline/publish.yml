@@ -18,7 +18,7 @@ jobs:
   - template: pre-steps.yml
 
   - pwsh: >-
-      Write-Host '##vso[task.setvariable variable=SelfContained;]${{ parameters.self.contained }}'
+      Write-Host '##vso[task.setvariable variable=self.contained;]${{ parameters.selfContained }}'
     displayName: Set SELF_CONTAINED variable
 
   - script: choco install innosetup
