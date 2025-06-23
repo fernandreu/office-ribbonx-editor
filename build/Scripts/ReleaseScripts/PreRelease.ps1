@@ -2,10 +2,10 @@ $sourcePath = $args[0]
 
 # Do the signed artifacts exist?
 $artifactsToCheck = @(
-    'Framework Dependent - x64';
-    'Framework Dependent - arm64';
-    'Self-Contained - x64';
-    'Self-Contained - arm64'
+    'Framework Dependent - x64 - Binaries';
+    'Framework Dependent - arm64 - Binaries';
+    'Self-Contained - x64 - Binaries';
+    'Self-Contained - arm64 - Binaries'
     'Framework Dependent - x64 - Installer';
     'Framework Dependent - arm64 - Installer';
     'Self-Contained - x64 - Installer';
@@ -15,13 +15,28 @@ $missing = [System.Collections.Generic.List[string]]@()
 $path = $null
 foreach ($artifact in $artifactsToCheck) {
     $path = "$sourcePath/$artifact/OfficeRibbonXEditor.exe"
-    if (-not (Test-Path $path -PathType Leaf) -or (Get-AuthenticodeSignature -FilePath $path).Status -ne 'Valid') {
-        $missing.Add($path) | Out-Null
+    if (-not (Test-Path $path -PathType Leaf)) {
+        $missing.Add($artifact) | Out-Null
     }
 }
 
 if ($missing.Count -ne 0) {
-    $message = "The following artifacts were not found or were not signed correctly: $($missing -join ', ')"
+    $message = "The following artifacts were not found: $($missing -join ', ')"
+    Write-Host "##vso[task.LogIssue type=error;] $message"
+    exit 1
+}
+
+$missing = [System.Collections.Generic.List[string]]@()
+$path = $null
+foreach ($artifact in $artifactsToCheck) {
+    $path = "$sourcePath/$artifact/OfficeRibbonXEditor.exe"
+    if ((Get-AuthenticodeSignature -FilePath $path).Status -ne 'Valid') {
+        $missing.Add($artifact) | Out-Null
+    }
+}
+
+if ($missing.Count -ne 0) {
+    $message = "The following artifacts contained no signature or it was invalid: $($missing -join ', ')"
     Write-Host "##vso[task.LogIssue type=error;] $message"
     exit 1
 }
