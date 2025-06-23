@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ApplicationName>Office RibbonX Editor</ApplicationName>
     <Authors>Fernando Andreu</Authors>
-    <VersionNumber>1.10.0</VersionNumber>
+    <VersionNumber>2.0.0</VersionNumber>
     <BuildNumber>$(BUILD_ID)</BuildNumber>
     <BuildNumber Condition="'$(BuildNumber)' == ''">0</BuildNumber>
     <Version>$(VersionNumber).$(BuildNumber)</Version>

@@ -1,9 +1,3 @@
-parameters:
-- name: createRelease
-  displayName: Create GitHub Release
-  default: false
-  type: boolean
-
 trigger:
   branches:
     include:
@@ -29,9 +23,9 @@ variables:
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch
-  value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
+  # value: $[ eq(variables['Build.SourceBranch'], 'refs/heads/master') ]
   # Use this when needing to test the publishing on a PR
-  # value: 'true'
+  value: 'true'
 
 stages:
 - stage: Build
@@ -82,7 +76,7 @@ stages:
 
   - job: ReleaseScripts
     displayName: Publish Release Scripts
-    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
+    condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
     steps:
     - task: PublishPipelineArtifact@1
       displayName: 'Publish Release Scripts'
@@ -129,7 +123,7 @@ stages:
   
 - stage: Release
   dependsOn: Publish
-  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'), ${{ parameters.createRelease }} )
+  condition: and(succeeded(), eq(variables['isMasterBranch'], 'true'))
 
   jobs:
   - deployment: Deploy
@@ -148,26 +142,53 @@ stages:
               arguments: '"$(Pipeline.Workspace)"'
 
           - task: ArchiveFiles@2
-            displayName: 'Archive .NET Binaries'
+            displayName: 'Archive framework-dependent arm64 binaries'
             inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/.NET Binaries'
+              rootFolderOrFile: '$(Pipeline.Workspace)/Framework Dependent - arm64 - Binaries'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Binaries.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.framework-dependent.arm64.zip'
           - pwsh: >-
               Copy-Item
-              -Path "$(Pipeline.Workspace)/.NET Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-NET6-Installer.exe"
+              -Path "$(Pipeline.Workspace)/Framework Dependent - arm64 - Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.framework-dependent.arm64.installer.exe"
+            displayName: 'Copy framework-dependent arm64 installer'
+
           - task: ArchiveFiles@2
-            displayName: 'Archive Self-Contained .NET Binaries'
+            displayName: 'Archive framework-dependent x64 binaries'
             inputs:
-              rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained .NET Binaries'
+              rootFolderOrFile: '$(Pipeline.Workspace)/Framework Dependent - x64 - Binaries'
               includeRootFolder: false
-              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Binaries.zip'
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.framework-dependent.x64.zip'
           - pwsh: >-
               Copy-Item
-              -Path "$(Pipeline.Workspace)/Self-Contained .NET Installer/OfficeRibbonXEditor.exe"
-              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor-SelfContained-NET6-Installer.exe"
-            displayName: 'Copy Self-Contained .NET Installer'
+              -Path "$(Pipeline.Workspace)/Framework Dependent - x64 - Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.framework-dependent.x64.installer.exe"
+            displayName: 'Copy framework-dependent x64 installer'
+
+          - task: ArchiveFiles@2
+            displayName: 'Archive self-contained arm64 binaries'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained - arm64 - Binaries'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.self-contained.arm64.zip'
+          - pwsh: >-
+              Copy-Item
+              -Path "$(Pipeline.Workspace)/Self-Contained - arm64 - Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.self-contained.arm64.installer.exe"
+            displayName: 'Copy self-contained arm64 installer'
+
+          - task: ArchiveFiles@2
+            displayName: 'Archive self-contained x64 binaries'
+            inputs:
+              rootFolderOrFile: '$(Pipeline.Workspace)/Self-Contained - x64 - Binaries'
+              includeRootFolder: false
+              archiveFile: '$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.self-contained.x64.zip'
+          - pwsh: >-
+              Copy-Item
+              -Path "$(Pipeline.Workspace)/Self-Contained - x64 - Installer/OfficeRibbonXEditor.exe"
+              -Destination "$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor.self-contained.x64.installer.exe"
+            displayName: 'Copy self-contained x64 installer'
+
           - task: GitHubRelease@1
             displayName: 'Create GitHub Release'
             inputs:
@@ -199,10 +220,10 @@ stages:
                 
                 For each of those download types, there are two variants:
 
-                - **.NET:** This requires at least version 6.0 of the
+                - **Framework-dependent:** This requires at least version 9.0 of the
                   [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
                   installed (the one for desktop apps is enough)
-                - **Self-contained .NET:** For these, the .NET runtime is included with the
+                - **Self-contained:** For these, the .NET runtime is included with the
                   installation, so you won't need to install anything else. As a drawback, the
                   resulting tool is much larger in file size
                   
@@ -210,6 +231,6 @@ stages:
                 information, see #188.**
 
               assets: '$(Build.ArtifactStagingDirectory)/*.*'
-              isDraft: true
+              isPreRelease: true
               changeLogType: issueBased
               changeLogLabels: '[{ "label" : "enhancement", "displayName" : "Enhancements", "state" : "closed" }, { "label" : "bug", "displayName" : "Bugs", "state" : "closed" }]'

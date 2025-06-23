@@ -50,7 +50,7 @@ public class VersionChecker : IVersionChecker
 
         var uri = new Uri(CheckUrl);
         using var response = await httpClient.GetAsync(uri, cancelToken).ConfigureAwait(false);
-        var contentString = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        var contentString = await response.Content.ReadAsStringAsync(cancelToken).ConfigureAwait(false);
 
         // We just need the "tag_name" field from the response. We could deserialize everything with
         // JSON.Net and obtain that field, but that adds an extra (mid-size) library just for one
