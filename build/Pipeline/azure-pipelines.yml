@@ -139,7 +139,10 @@ stages:
               pwsh: true
               targetType: 'filePath'
               filePath: '$(Pipeline.Workspace)/ReleaseScripts/PreRelease.ps1'
-              arguments: '"$(Pipeline.Workspace)" "$(CODESIGN_SIGNER)" "$(CODESIGN_SIGNER_PASSWORD)"'
+              arguments: >-
+                '$(Pipeline.Workspace)'
+                '$(CODESIGN_SIGNER)'
+                '$(CODESIGN_SIGNER_PASSWORD)'
 
           - task: ArchiveFiles@2
             displayName: 'Archive framework-dependent arm64 binaries'

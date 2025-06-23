@@ -2,13 +2,16 @@ $sourcePath = $args[0]
 $base64signer = $args[1]
 $signerPassword = $args[2]
 
+Write-Host "Source path: '$sourcePath'"
+Write-Host "Signer: '$base64signer'"
+Write-Host "Signer password: '$signerPassword'"
+
 # Install the certificate as an authority in this agent to ensure the signature validation step is accurate
 $signerPath = "signer.pfx"
 $bytes = [System.Convert]::FromBase64String($base64Signer)
 [System.IO.File]::WriteAllBytes($signerPath, $bytes)
 $securePassword = ConvertTo-SecureString -String $SignerPassword -Force -AsPlainText
 try {
-    $signer = Get-PfxCertificate -FilePath $signerPath -Password $securePassword -NoPromptForPassword
     Import-PfxCertificate -FilePath $signerPath -Password $securePassword -CertStoreLocation "Cert:\LocalMachine\Root"
 } finally {
     Remove-Item -Path $signerPath
