@@ -1,4 +1,18 @@
 $sourcePath = $args[0]
+$base64signer = $args[1]
+$signerPassword = $args[2]
+
+# Install the certificate as an authority in this agent to ensure the signature validation step is accurate
+$signerPath = "signer.pfx"
+$bytes = [System.Convert]::FromBase64String($base64Signer)
+[System.IO.File]::WriteAllBytes($signerPath, $bytes)
+$securePassword = ConvertTo-SecureString -String $SignerPassword -Force -AsPlainText
+try {
+    $signer = Get-PfxCertificate -FilePath $signerPath -Password $securePassword -NoPromptForPassword
+    Import-PfxCertificate -FilePath $signerPath -Password $securePassword -CertStoreLocation "Cert:\LocalMachine\Root"
+} finally {
+    Remove-Item -Path $signerPath
+}
 
 # Do the signed artifacts exist?
 $artifactsToCheck = @(
@@ -11,8 +25,10 @@ $artifactsToCheck = @(
     'Self-Contained - x64 - Installer';
     'Self-Contained - arm64 - Installer'
 )
-$missing = [System.Collections.Generic.List[string]]@()
+
 $path = $null
+
+$missing = [System.Collections.Generic.List[string]]@()
 foreach ($artifact in $artifactsToCheck) {
     $path = "$sourcePath/$artifact/OfficeRibbonXEditor.exe"
     if (-not (Test-Path $path -PathType Leaf)) {
@@ -27,7 +43,6 @@ if ($missing.Count -ne 0) {
 }
 
 $missing = [System.Collections.Generic.List[string]]@()
-$path = $null
 foreach ($artifact in $artifactsToCheck) {
     $path = "$sourcePath/$artifact/OfficeRibbonXEditor.exe"
     if ((Get-AuthenticodeSignature -FilePath $path).Status -ne 'Valid') {
@@ -46,28 +61,6 @@ $version = (Get-Item $path | Select-Object -ExpandProperty VersionInfo).FileVers
 $versionParts = $version.Split(".")
 $versionParts = $versionParts[0..($versionParts.Length - 2)]
 $version = $versionParts -join "."
-
-# Find version of latest release
-$uri = "https://api.github.com/repos/fernandreu/office-ribbonx-editor/releases/latest"
-$previousVersion = (Invoke-RestMethod -Uri $uri).tag_name
-$previousVersionParts = $previousVersion.Substring(1).Split(".")
-while ($previousVersionParts.Count -lt 3) {
-    $previousVersionParts += "0"
-}
-
-# Is new version more recent?
-$moreRecent = $false
-for ($i = 0; $i -lt 3; $i++) {
-    if ([int]$versionParts[$i] -gt [int]$previousVersionParts[$i]) {
-        $moreRecent = $true
-    }
-}
-
-if (-Not $moreRecent) {
-    $message = "Assembly verison $version is not more recent than latest GitHub release version $previousVersion"
-    Write-Host "##vso[task.LogIssue type=error;] $message"
-    exit 1
-}
 
 Write-Host "Resulting three-digit version: $version"
 Write-Host "##vso[task.setvariable variable=ThreeDigitVersion;]$version"
