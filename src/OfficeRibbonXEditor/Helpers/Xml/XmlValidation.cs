@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Schema;
@@ -11,25 +9,25 @@ namespace OfficeRibbonXEditor.Helpers.Xml;
 
 public static class XmlValidation
 {
-    private static readonly IList<HashSet<string>> MutuallyExclusiveAttributes = new List<HashSet<string>>
-    {
-        new HashSet<string> {"title", "getTitle"},
-        new HashSet<string> {"enabled", "getEnabled"},
-        new HashSet<string> {"visible", "getVisible"},
-        new HashSet<string> {"label", "getLabel"},
-        new HashSet<string> {"keytip", "getKeytip"},
-        new HashSet<string> {"screentip", "getScreentip"},
-        new HashSet<string> {"supertip", "getSupertip"},
-        new HashSet<string> {"description", "getDescription"},
-        new HashSet<string> {"altText", "getAltText"},
-        new HashSet<string> {"showLabel", "getShowLabel"},
-        new HashSet<string> {"helperText", "getHelperText"},
-        new HashSet<string> {"showImage", "getShowImage"},
-        new HashSet<string> {"size", "getSize"},
-        new HashSet<string> {"id", "idMso", "idQ"},
-        new HashSet<string> {"image", "imageMso", "getImage"},
-        new HashSet<string> {"insertBeforeMso", "insertAfterMso", "insertBeforeQ", "insertAfterQ"},
-    };
+    private static readonly List<HashSet<string>> MutuallyExclusiveAttributes =
+    [
+        new() { "title", "getTitle" },
+        new() { "enabled", "getEnabled" },
+        new() { "visible", "getVisible" },
+        new() { "label", "getLabel" },
+        new() { "keytip", "getKeytip" },
+        new() { "screentip", "getScreentip" },
+        new() { "supertip", "getSupertip" },
+        new() { "description", "getDescription" },
+        new() { "altText", "getAltText" },
+        new() { "showLabel", "getShowLabel" },
+        new() { "helperText", "getHelperText" },
+        new() { "showImage", "getShowImage" },
+        new() { "size", "getSize" },
+        new() { "id", "idMso", "idQ" },
+        new() { "image", "imageMso", "getImage" },
+        new() { "insertBeforeMso", "insertAfterMso", "insertBeforeQ", "insertAfterQ" }
+    ];
 
     public static IList<XmlError> Validate(string? xml, XmlSchema targetSchema)
     {

@@ -74,9 +74,9 @@ public class AppManager : IDisposable
             // TODO: Capture all modal windows and top-level windows
         }
 
-        while (Window?.ModalWindows.Any() ?? false)
+        while ((Window?.ModalWindows.Length ?? 0) > 0)
         {
-            Window.ModalWindows.First().Close();
+            Window!.ModalWindows[0].Close();
             App.WaitWhileBusy();
         }
 
@@ -94,9 +94,11 @@ public class AppManager : IDisposable
         }
         catch (NoClickablePointException)
         {
+            // Ignore
         }
         catch (InvalidOperationException)
         {
+            // Ignore
         }
         catch (COMException)
         {

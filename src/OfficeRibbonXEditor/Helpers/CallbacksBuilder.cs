@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Text;
 using System.Xml;
 
@@ -12,7 +10,7 @@ public class CallbacksBuilder
     private const string SubString = "Sub ";
     private const string EndSubString = "\nEnd Sub";
         
-    private readonly HashSet<string> _callbackList = new HashSet<string>();
+    private readonly HashSet<string> _callbackList = [];
 
     private CallbacksBuilder()
     {
@@ -60,49 +58,48 @@ public class CallbacksBuilder
             return;
         }
 
-        if (node.Attributes != null)
+        foreach (var attribute in node.Attributes?.Cast<XmlAttribute?>() ?? [])
         {
-            foreach (XmlAttribute? attribute in node.Attributes)
+            if (attribute == null)
             {
-                if (attribute == null)
-                {
-                    continue;
-                }
-
-                var callback = GenerateCallback(attribute);
-                if (string.IsNullOrEmpty(callback))
-                {
-                    continue;
-                }
-
-                var controlId = GetControlId(node);
-                result.Append("'Callback for ");
-                if (string.IsNullOrEmpty(controlId))
-                {
-                    result.Append(node.Name + "." + attribute.Name);
-                }
-                else
-                {
-                    result.Append(controlId + " " + attribute.Name);
-                }
-
-                result.Append("\n");
-                result.Append(callback);
-                result.Append("\n\n");
+                continue;
             }
+
+            var callback = GenerateCallback(attribute);
+            if (string.IsNullOrEmpty(callback))
+            {
+                continue;
+            }
+
+            var controlId = GetControlId(node);
+            result.Append("'Callback for ");
+            if (string.IsNullOrEmpty(controlId))
+            {
+                result.Append(node.Name + "." + attribute.Name);
+            }
+            else
+            {
+                result.Append(controlId + " " + attribute.Name);
+            }
+
+            result.Append('\n');
+            result.Append(callback);
+            result.Append("\n\n");
         }
 
-        if (node.HasChildNodes)
+        if (!node.HasChildNodes)
         {
-            foreach (XmlNode? child in node.ChildNodes)
+            return;
+        }
+        
+        foreach (XmlNode? child in node.ChildNodes)
+        {
+            if (child == null)
             {
-                if (child == null)
-                {
-                    continue;
-                }
-
-                GenerateCallback(child, result);
+                continue;
             }
+
+            GenerateCallback(child, result);
         }
     }
 
@@ -115,9 +112,7 @@ public class CallbacksBuilder
 
         var callbackValue = callback.Value[(callback.Value.LastIndexOf('.') + 1)..];
 
-        Debug.Assert(_callbackList != null, "AttributeList is null");
-
-        if (_callbackList?.Contains(callbackValue) ?? false)
+        if (_callbackList.Contains(callbackValue))
         {
             return string.Empty;
         }
@@ -184,7 +179,7 @@ public class CallbacksBuilder
                 return string.Empty;
         }
 
-        _callbackList?.Add(callbackValue);
+        _callbackList.Add(callbackValue);
         return result;
     }
 

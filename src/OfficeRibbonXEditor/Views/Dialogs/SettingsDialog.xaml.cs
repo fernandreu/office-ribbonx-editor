@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using OfficeRibbonXEditor.Helpers;
+﻿using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
 using OfficeRibbonXEditor.Views.Controls;
 
@@ -16,6 +14,6 @@ public partial class SettingsDialog : DialogControl
     {
         InitializeComponent();
 
-        WrapModeBox.ItemsSource = Enum.GetValues(typeof(ScintillaNET.WrapMode)).Cast<ScintillaNET.WrapMode>();
+        WrapModeBox.ItemsSource = Enum.GetValues<ScintillaNET.WrapMode>();
     }
 }

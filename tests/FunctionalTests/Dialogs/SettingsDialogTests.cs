@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
 using OfficeRibbonXEditor.ViewModels.Dialogs;
@@ -28,7 +27,7 @@ public class SettingsDialogTests
         nameof(Settings.Default.UICulture),
     };
 
-    private readonly IDictionary<string, object> _originalSettings = new Dictionary<string, object>();
+    private readonly Dictionary<string, object> _originalSettings = [];
 
     [OneTimeSetUp]
     public void SetUp()

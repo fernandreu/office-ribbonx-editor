@@ -286,9 +286,9 @@ public partial class EditorTab : UserControl
         var startPos = Editor.Lines[Editor.LineFromPosition(Editor.CurrentPosition)].Position;
         var endPos = e.Position;
         var curLineText = Editor.GetTextRange(startPos, endPos - startPos); // Text until the caret
-        var indent = Regex.Match(curLineText, "^[ \\t]*");
+        var indent = IndentRegex().Match(curLineText);
         e.Text += indent.Value;
-        if (Regex.IsMatch(curLineText, "[^/]>\\s*$"))
+        if (LineRegex().IsMatch(curLineText))
         {
             // If the previous line finished with an open tag, add an indentation level to the next one 
             e.Text += new string(' ', Properties.Settings.Default.TabWidth);
@@ -305,4 +305,10 @@ public partial class EditorTab : UserControl
         ResultsRow.Height = new GridLength(0);
         ResultsSplitter.Visibility = Visibility.Collapsed;
     }
+
+    [GeneratedRegex("^[ \\t]*")]
+    private static partial Regex IndentRegex();
+    
+    [GeneratedRegex("[^/]>\\s*$")]
+    private static partial Regex LineRegex();
 }

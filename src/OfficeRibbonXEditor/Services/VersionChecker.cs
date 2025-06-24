@@ -15,7 +15,7 @@ using OfficeRibbonXEditor.Interfaces;
 namespace OfficeRibbonXEditor.Services;
 
 [Export(typeof(IVersionChecker))]
-public class VersionChecker : IVersionChecker
+public partial class VersionChecker : IVersionChecker
 {
     [SuppressMessage("SonarLint", "S1075", Justification = "This warning is due to the hard-coded url. If this ever change (e.g. repo is moved), the code will need changes overall anyway")]
     private const string CheckUrl = "https://api.github.com/repos/fernandreu/office-ribbonx-editor/releases/latest";
@@ -55,7 +55,7 @@ public class VersionChecker : IVersionChecker
         // We just need the "tag_name" field from the response. We could deserialize everything with
         // JSON.Net and obtain that field, but that adds an extra (mid-size) library just for one
         // field. Hence, using RegEx instead, which should do just fine.
-        var match = Regex.Match(contentString, "\\\"tag_name\\\".*?:.*?\\\"v(.*?)\\\"");
+        var match = VersionRegex().Match(contentString);
         return match.Success ? new Version(match.Groups[1].Value) : null;
     }
 
@@ -100,4 +100,7 @@ public class VersionChecker : IVersionChecker
         result.NeedsDownload = version < neededVersion;
         return result;
     }
+
+    [GeneratedRegex("\\\"tag_name\\\".*?:.*?\\\"v(.*?)\\\"")]
+    private static partial Regex VersionRegex();
 }

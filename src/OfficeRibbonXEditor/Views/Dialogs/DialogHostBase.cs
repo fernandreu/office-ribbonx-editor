@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Windows;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -10,7 +8,7 @@ namespace OfficeRibbonXEditor.Views.Dialogs;
 
 public class DialogHostBase : Window
 {
-    private static readonly IDictionary<Type, Type> RegisteredViews = new Dictionary<Type, Type>();
+    private static readonly Dictionary<Type, Type> RegisteredViews = [];
 
     static DialogHostBase()
     {

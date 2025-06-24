@@ -21,11 +21,13 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs;
 [Export(Lifetime = Lifetime.Singleton)]
 public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<ValueTuple<Scintilla, FindReplaceAction, FindReplace.FindAllResultsEventHandler>>
 {
+    public static readonly TimeSpan DefaultRegexTimeout = TimeSpan.FromSeconds(1);
+    
     public event EventHandler<PointEventArgs>? MoveDialogAway;
 
-    public RecentListViewModel<string> RecentFinds { get; } = new RecentListViewModel<string>();
+    public RecentListViewModel<string> RecentFinds { get; } = new();
 
-    public RecentListViewModel<string> RecentReplaces { get; } = new RecentListViewModel<string>();
+    public RecentListViewModel<string> RecentReplaces { get; } = new();
 
     /// <summary>
     /// Gets the internal <see cref="OfficeRibbonXEditor.Helpers.FindReplace"/> instance that performs the actual find / replace
@@ -150,7 +152,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
             Regex rr;
             try
             {
-                rr = new Regex(FindText, GetRegexOptions());
+                rr = new Regex(FindText, GetRegexOptions(), DefaultRegexTimeout);
             }
             catch (ArgumentException ex)
             {
@@ -206,7 +208,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
             Regex rr;
             try
             {
-                rr = new Regex(FindText, GetRegexOptions());
+                rr = new Regex(FindText, GetRegexOptions(), DefaultRegexTimeout);
             }
             catch (ArgumentException ex)
             {
@@ -249,9 +251,6 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
         Scintilla.MarkerDeleteAll(FindReplace.Marker.Index);
         FindReplace.ClearAllHighlights();
     }
-
-    [RelayCommand]
-    private void FindNext() => FindWrapper(false);
 
     [RelayCommand]
     private void FindPrevious() => FindWrapper(true);
@@ -317,6 +316,9 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
         ReplaceText = text;
     }
 
+    [RelayCommand]
+    private void FindNext() => FindWrapper(false);
+
     private CharacterRange FindNext(bool searchUp)
     {
         Regex? rr = null;
@@ -329,7 +331,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
 
         if (IsRegExSearch)
         {
-            rr = new Regex(FindText, GetRegexOptions());
+            rr = new Regex(FindText, GetRegexOptions(), DefaultRegexTimeout);
 
             if (SearchSelection)
             {
@@ -382,9 +384,6 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
     }
 
     [RelayCommand]
-    private void ReplaceNext() => ReplaceWrapper(false);
-
-    [RelayCommand]
     private void ReplacePrevious() => ReplaceWrapper(true);
 
     private void ReplaceWrapper(bool searchUp)
@@ -431,6 +430,9 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
         AddRecentReplace();
     }
 
+    [RelayCommand]
+    private void ReplaceNext() => ReplaceWrapper(false);
+
     private CharacterRange ReplaceNext(bool searchUp)
     {
         Regex? rr = null;
@@ -442,7 +444,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
         {
             if (IsRegExSearch)
             {
-                rr = new Regex(FindText, GetRegexOptions());
+                rr = new Regex(FindText, GetRegexOptions(), DefaultRegexTimeout);
                 var selRangeText = Scintilla.GetTextRange(selRange.MinPosition, selRange.MaxPosition - selRange.MinPosition);
 
                 if (selRange.Equals(FindReplace.Find(selRange, rr, false)))

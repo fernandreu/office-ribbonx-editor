@@ -78,7 +78,7 @@ public class OfficeDocumentViewModel : TreeViewItemViewModel, IDisposable
         Document = new OfficeDocument(fileName);
             
         // Delete all its original parts
-        foreach (var type in Enum.GetValues(typeof(XmlPart)).OfType<XmlPart>())
+        foreach (var type in Enum.GetValues<XmlPart>())
         {
             Document.RemoveCustomPart(type);
         }
