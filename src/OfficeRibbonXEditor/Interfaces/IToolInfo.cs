@@ -1,21 +1,20 @@
-﻿namespace OfficeRibbonXEditor.Interfaces
+﻿namespace OfficeRibbonXEditor.Interfaces;
+
+public interface IToolInfo
 {
-    public interface IToolInfo
-    {
-        string AssemblyTitle { get; }
+    string AssemblyTitle { get; }
 
-        string AssemblyVersion { get; }
+    string AssemblyVersion { get; }
 
-        string AssemblyDescription { get; }
+    string AssemblyDescription { get; }
 
-        string AssemblyProduct { get; }
+    string AssemblyProduct { get; }
 
-        string AssemblyCopyright { get; }
+    string AssemblyCopyright { get; }
 
-        string AssemblyCompany { get; }
+    string AssemblyCompany { get; }
 
-        string RuntimeVersion { get; }
+    string RuntimeVersion { get; }
 
-        string OperatingSystemVersion { get; }
-    }
+    string OperatingSystemVersion { get; }
 }

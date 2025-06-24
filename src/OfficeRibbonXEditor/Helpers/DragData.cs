@@ -1,16 +1,15 @@
 ﻿using System.Windows;
 
-namespace OfficeRibbonXEditor.Helpers
+namespace OfficeRibbonXEditor.Helpers;
+
+public class DragData
 {
-    public class DragData
+    public DragData(IDataObject data)
     {
-        public DragData(IDataObject data)
-        {
-            Data = data;
-        }
-
-        public IDataObject Data { get; }
-
-        public bool Handled { get; set; }
+        Data = data;
     }
+
+    public IDataObject Data { get; }
+
+    public bool Handled { get; set; }
 }

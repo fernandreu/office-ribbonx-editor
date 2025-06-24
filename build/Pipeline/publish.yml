@@ -3,7 +3,7 @@ parameters:
   jobDisplayName: 'Framework Dependent' 
   artifactName: 'Framework Dependent'
   selfContained: false
-  targetFramework: 'net6.0-windows'
+  targetFramework: 'net9.0-windows'
   architecture: ''
   sign: true
 
@@ -16,6 +16,10 @@ jobs:
 
   steps:
   - template: pre-steps.yml
+
+  - pwsh: >-
+      Write-Host '##vso[task.setvariable variable=self.contained;]${{ parameters.selfContained }}'
+    displayName: Set SELF_CONTAINED variable
 
   - script: choco install innosetup
     displayName: Install InnoSetup
@@ -37,7 +41,6 @@ jobs:
       arguments: >-
         --configuration $(buildConfiguration)
         --framework ${{ parameters.targetFramework }}
-        --self-contained ${{ parameters.selfContained }}
         --output "$(Build.ArtifactStagingDirectory)"
         --runtime win-${{ parameters.architecture }}
         
@@ -61,13 +64,6 @@ jobs:
 
   - script: >-
       iscc.exe "$(Build.SourcesDirectory)/build/Installer/setup.iss"
-      /DAssemblyName="$(ExtractedAssemblyName)"
-      /DAssemblyTitle="$(ExtractedAssemblyTitle)"
-      /DAuthors="$(ExtractedAuthors)"
-      /DProjectUrl="$(ExtractedPackageProjectUrl)"
-      /DDescription="$(ExtractedDescription)"
-      /DCopyright="$(ExtractedCopyright)"
-      /DVersionPrefix="$(ExtractedVersionPrefix)"
       /DInputFolder="$(Build.ArtifactStagingDirectory)/OfficeRibbonXEditor"
       /DOutputFolder="$(Build.SourcesDirectory)/src/OfficeRibbonXEditor/bin/Installer/${{ parameters.targetFramework }}"
       /DSupportedArchitectures="${{ parameters.architecture }}"

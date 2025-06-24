@@ -1,9 +1,8 @@
 ﻿using System.Windows;
 
-namespace OfficeRibbonXEditor.Interfaces
+namespace OfficeRibbonXEditor.Interfaces;
+
+public interface IMessageBoxService
 {
-    public interface IMessageBoxService
-    {
-        MessageBoxResult Show(string text, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None);
-    }
+    MessageBoxResult Show(string text, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None);
 }

@@ -4,60 +4,59 @@ using System.Windows;
 using OfficeRibbonXEditor.Interfaces;
 using ScintillaNET;
 
-namespace OfficeRibbonXEditor.Helpers.Xml
+namespace OfficeRibbonXEditor.Helpers.Xml;
+
+public class XmlErrorResults : IResultCollection
 {
-    public class XmlErrorResults : IResultCollection
+    public XmlErrorResults(IEnumerable<XmlError> items)
     {
-        public XmlErrorResults(IEnumerable<XmlError> items)
+        Items = new List<XmlError>(items);
+    }
+
+    public string Header { get; } = "XML Validation Results";
+
+    public List<XmlError> Items { get; }
+
+    public bool IsEmpty => Items.Count == 0;
+
+    public int Count => Items.Count;
+
+    public void AddToPanel(Scintilla editor, Scintilla resultsPanel)
+    {
+        resultsPanel.ClearAll();
+        foreach (var item in Items)
         {
-            Items = new List<XmlError>(items);
+            resultsPanel.AppendText($"Ln {item.LineNumber}, Col {item.LinePosition}: {item.Message}\n");
         }
 
-        public string Header { get; } = "XML Validation Results";
-
-        public List<XmlError> Items { get; }
-
-        public bool IsEmpty => Items.Count == 0;
-
-        public int Count => Items.Count;
-
-        public void AddToPanel(Scintilla editor, Scintilla resultsPanel)
+        if (Items.Count == 1)
         {
-            resultsPanel.ClearAll();
-            foreach (var item in Items)
-            {
-                resultsPanel.AppendText($"Ln {item.LineNumber}, Col {item.LinePosition}: {item.Message}\n");
-            }
+            // Go to that single line immediately
 
-            if (Items.Count == 1)
-            {
-                // Go to that single line immediately
+            // There is a chance that the following happens:
+            // - The panel is initially hidden
+            // - The line to be selected is below the visible region of the editor
+            // - The line gets selected before the panel is shown
+            // - When shown, the panel hides the line
+            // To prevent this from happening, we introduce a small delay to give the editor time to show the panel
+            // TODO: Find a more robust way to achieve the same effect
 
-                // There is a chance that the following happens:
-                // - The panel is initially hidden
-                // - The line to be selected is below the visible region of the editor
-                // - The line gets selected before the panel is shown
-                // - When shown, the panel hides the line
-                // To prevent this from happening, we introduce a small delay to give the editor time to show the panel
-                // TODO: Find a more robust way to achieve the same effect
+            Task.Delay(100).ContinueWith(t => Application.Current.Dispatcher?.Invoke(() => GoToPosition(1, editor, resultsPanel)), TaskScheduler.Current);
+        }
+    }
 
-                Task.Delay(100).ContinueWith(t => Application.Current.Dispatcher?.Invoke(() => GoToPosition(1, editor, resultsPanel)), TaskScheduler.Current);
-            }
+    public void GoToPosition(int pos, Scintilla editor, Scintilla resultsPanel)
+    {
+        var selectedLine = resultsPanel.LineFromPosition(pos);
+        var item = Items[selectedLine];
+        if (item.LineNumber > editor.Lines.Count)
+        {
+            return;
         }
 
-        public void GoToPosition(int pos, Scintilla editor, Scintilla resultsPanel)
-        {
-            var selectedLine = resultsPanel.LineFromPosition(pos);
-            var item = Items[selectedLine];
-            if (item.LineNumber > editor.Lines.Count)
-            {
-                return;
-            }
-
-            var targetLine = editor.Lines[item.LineNumber - 1];
-            editor.SetSelection(targetLine.Position, targetLine.Position + targetLine.Length);
-            editor.ScrollCaret();
-            editor.Focus();
-        }
+        var targetLine = editor.Lines[item.LineNumber - 1];
+        editor.SetSelection(targetLine.Position, targetLine.Position + targetLine.Length);
+        editor.ScrollCaret();
+        editor.Focus();
     }
 }

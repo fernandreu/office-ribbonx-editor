@@ -2,21 +2,20 @@
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
-namespace OfficeRibbonXEditor.Services
+namespace OfficeRibbonXEditor.Services;
+
+[Export(typeof(IDialogProvider))]
+public class DialogProvider : IDialogProvider
 {
-    [Export(typeof(IDialogProvider))]
-    public class DialogProvider : IDialogProvider
+    private readonly ILifetimeScope _container;
+
+    public DialogProvider(ILifetimeScope container)
     {
-        private readonly ILifetimeScope _container;
+        _container = container;
+    }
 
-        public DialogProvider(ILifetimeScope container)
-        {
-            _container = container;
-        }
-
-        public T ResolveDialog<T>() where T : IContentDialogBase
-        {
-            return _container.Resolve<T>();
-        }
+    public T ResolveDialog<T>() where T : IContentDialogBase
+    {
+        return _container.Resolve<T>();
     }
 }

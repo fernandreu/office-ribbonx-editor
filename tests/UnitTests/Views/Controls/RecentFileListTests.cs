@@ -5,132 +5,131 @@ using Microsoft.Win32;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Views.Controls;
 
-namespace OfficeRibbonXEditor.UnitTests.Views.Controls
+namespace OfficeRibbonXEditor.UnitTests.Views.Controls;
+
+[Apartment(ApartmentState.STA)]
+public abstract class RecentFileListTests
 {
-    [Apartment(ApartmentState.STA)]
-    public abstract class RecentFileListTests
-    {
 #pragma warning disable CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable. Always defined in SetUp
-        protected RecentFileList Control { get; set; }
+    protected RecentFileList Control { get; set; }
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
-        [Test]
-        public void CanAddFiles()
+    [Test]
+    public void CanAddFiles()
+    {
+        // Arrange
+        using var stream = TempFile();
+        Assume.That(Control.RecentFiles, Is.Empty);
+
+        // Act
+        Control.InsertFile(stream.Name);
+
+        // Assert
+        Assert.That(Control.RecentFiles, Does.Contain(stream.Name));
+    }
+
+    [Test]
+    public void CanRemoveFiles()
+    {
+        // Arrange
+        using var stream = TempFile();
+        Assume.That(Control.RecentFiles, Is.Empty);
+
+        // Act
+        Control.InsertFile(stream.Name);
+        Control.RemoveFile(stream.Name);
+
+        // Assert
+        Assert.That(Control.RecentFiles, Is.Empty);
+    }
+
+    [TestCase(1)]
+    [TestCase(5)]
+    [TestCase(10)]
+    public void CannotPassMaxLimit(int maxFiles)
+    {
+        // Arrange
+        Control.MaxNumberOfFiles = maxFiles;
+        var collection = new List<FileStream>(maxFiles + 5);
+        for (var i = 0; i < maxFiles + 5; ++i)
         {
-            // Arrange
-            using var stream = TempFile();
-            Assume.That(Control.RecentFiles, Is.Empty);
-
-            // Act
-            Control.InsertFile(stream.Name);
-
-            // Assert
-            Assert.Contains(stream.Name, Control?.RecentFiles);
+            collection.Add(TempFile());
         }
 
-        [Test]
-        public void CanRemoveFiles()
+        // Act
+        foreach (var stream in collection)
         {
-            // Arrange
-            using var stream = TempFile();
-            Assume.That(Control.RecentFiles, Is.Empty);
-
-            // Act
             Control.InsertFile(stream.Name);
-            Control.RemoveFile(stream.Name);
-
-            // Assert
-            Assert.IsEmpty(Control.RecentFiles);
         }
 
-        [TestCase(1)]
-        [TestCase(5)]
-        [TestCase(10)]
-        public void CannotPassMaxLimit(int maxFiles)
+        // Assert
+        try
         {
-            // Arrange
-            Control.MaxNumberOfFiles = maxFiles;
-            var collection = new List<FileStream>(maxFiles + 5);
-            for (var i = 0; i < maxFiles + 5; ++i)
-            {
-                collection.Add(TempFile());
-            }
-
-            // Act
+            Assert.That(Control.RecentFiles.Count, Is.EqualTo(maxFiles));
+        }
+        finally
+        {
             foreach (var stream in collection)
             {
-                Control.InsertFile(stream.Name);
-            }
-
-            // Assert
-            try
-            {
-                Assert.AreEqual(maxFiles, Control.RecentFiles.Count);
-            }
-            finally
-            {
-                foreach (var stream in collection)
-                {
-                    stream.Close();
-                }
-            }
-        }
-
-        private static FileStream TempFile()
-        {
-            return new FileStream(Path.GetTempFileName(), FileMode.OpenOrCreate, FileAccess.Read, FileShare.None, 4096, FileOptions.DeleteOnClose);
-        }
-    }
-
-    public class RecentFileTestsWithFilePersister : RecentFileListTests
-    {
-        private string? _filePath;
-
-        [SetUp]
-        public void SetUp()
-        {
-            do
-            {
-                _filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-            } while (File.Exists(_filePath));
-
-            Control = new RecentFileList();
-            Control.UseXmlPersister(_filePath);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            if (_filePath != null && File.Exists(_filePath))
-            {
-                File.Delete(_filePath);
+                stream.Close();
             }
         }
     }
 
-    public class RecentFileTestsWithRegistryPersister : RecentFileListTests
+    private static FileStream TempFile()
     {
-        private string? _registryKey;
+        return new FileStream(Path.GetTempFileName(), FileMode.OpenOrCreate, FileAccess.Read, FileShare.None, 4096, FileOptions.DeleteOnClose);
+    }
+}
 
-        [SetUp]
-        public void SetUp()
+public class RecentFileTestsWithFilePersister : RecentFileListTests
+{
+    private string? _filePath;
+
+    [SetUp]
+    public void SetUp()
+    {
+        do
         {
-            do
-            {
-                _registryKey = "Software\\" + Path.GetRandomFileName();
-            } while (Registry.CurrentUser.OpenSubKey(_registryKey) != null);
+            _filePath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+        } while (File.Exists(_filePath));
 
-            Control = new RecentFileList();
-            Control.UseRegistryPersister(_registryKey);
+        Control = new RecentFileList();
+        Control.UseXmlPersister(_filePath);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        if (_filePath != null && File.Exists(_filePath))
+        {
+            File.Delete(_filePath);
         }
+    }
+}
 
-        [TearDown]
-        public void TearDown()
+public class RecentFileTestsWithRegistryPersister : RecentFileListTests
+{
+    private string? _registryKey;
+
+    [SetUp]
+    public void SetUp()
+    {
+        do
         {
-            if (_registryKey != null && Registry.CurrentUser.OpenSubKey(_registryKey) != null)
-            {
-                Registry.CurrentUser.DeleteSubKey(_registryKey);
-            }
+            _registryKey = "Software\\" + Path.GetRandomFileName();
+        } while (Registry.CurrentUser.OpenSubKey(_registryKey) != null);
+
+        Control = new RecentFileList();
+        Control.UseRegistryPersister(_registryKey);
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        if (_registryKey != null && Registry.CurrentUser.OpenSubKey(_registryKey) != null)
+        {
+            Registry.CurrentUser.DeleteSubKey(_registryKey);
         }
     }
 }

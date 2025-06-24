@@ -1,15 +1,13 @@
 ﻿using System;
 
-namespace OfficeRibbonXEditor.Events
+namespace OfficeRibbonXEditor.Events;
+
+public class MenuClickEventArgs : EventArgs
 {
-
-    public class MenuClickEventArgs : EventArgs
+    public MenuClickEventArgs(string filepath)
     {
-        public MenuClickEventArgs(string filepath)
-        {
-            Filepath = filepath;
-        }
-
-        public string Filepath { get; }
+        Filepath = filepath;
     }
+
+    public string Filepath { get; }
 }

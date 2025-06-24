@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace OfficeRibbonXEditor.Interfaces
+namespace OfficeRibbonXEditor.Interfaces;
+
+public interface IUrlHelper
 {
-    public interface IUrlHelper
-    {
-        Process? OpenIssue();
+    Process? OpenIssue();
 
-        Process? OpenBug(string title, string body);
+    Process? OpenBug(string title, string body);
 
-        Process? OpenRelease(string version = "latest");
+    Process? OpenRelease(string version = "latest");
 
-        Process? OpenExternal(Uri url);
-    }
+    Process? OpenExternal(Uri url);
 }

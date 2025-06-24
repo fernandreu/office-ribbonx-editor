@@ -1,21 +1,20 @@
 ﻿using System;
 
-namespace OfficeRibbonXEditor.Helpers
+namespace OfficeRibbonXEditor.Helpers;
+
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+public class ExportAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-    public class ExportAttribute : Attribute
+    public Type? InterfaceType { get; }
+
+    public ExportAttribute()
     {
-        public Type? InterfaceType { get; }
-
-        public ExportAttribute()
-        {
-        }
-
-        public ExportAttribute(Type interfaceType)
-        {
-            InterfaceType = interfaceType;
-        }
-
-        public Lifetime Lifetime { get; set; } = Lifetime.Transient;
     }
+
+    public ExportAttribute(Type interfaceType)
+    {
+        InterfaceType = interfaceType;
+    }
+
+    public Lifetime Lifetime { get; set; } = Lifetime.Transient;
 }

@@ -4,38 +4,37 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Interfaces;
 
-namespace OfficeRibbonXEditor.ViewModels.Dialogs
+namespace OfficeRibbonXEditor.ViewModels.Dialogs;
+
+public partial class DialogBase : ObservableObject, IContentDialogBase
 {
-    public partial class DialogBase : ObservableObject, IContentDialogBase
+    public bool IsUnique => true;
+
+    public bool IsClosed { get; protected set; }
+
+    public bool IsCancelled { get; protected set; } = true;
+
+    public event EventHandler? Closed;
+
+    [RelayCommand]
+    public void Close()
     {
-        public bool IsUnique => true;
+        this.Closed?.Invoke(this, EventArgs.Empty);
+    }
 
-        public bool IsClosed { get; protected set; }
-
-        public bool IsCancelled { get; protected set; } = true;
-
-        public event EventHandler? Closed;
-
-        [RelayCommand]
-        public void Close()
+    [RelayCommand]
+    private void Closing(CancelEventArgs args)
+    {
+        this.OnClosing(args);
+        if (args.Cancel)
         {
-            this.Closed?.Invoke(this, EventArgs.Empty);
+            return;
         }
 
-        [RelayCommand]
-        private void Closing(CancelEventArgs args)
-        {
-            this.OnClosing(args);
-            if (args.Cancel)
-            {
-                return;
-            }
+        this.IsClosed = true;
+    }
 
-            this.IsClosed = true;
-        }
-
-        protected virtual void OnClosing(CancelEventArgs args)
-        {
-        }
+    protected virtual void OnClosing(CancelEventArgs args)
+    {
     }
 }

@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Insert": {
+      "commandName": "Project",
+      "commandLineArgs": "insert\r\n--xml \"C:\\Users\\FernA\\source\\repos\\office-ribbonx-editor\\tests\\IntegrationTests\\bin\\Debug\\net9.0-windows\\Resources\\customUI.xml\"\r\n\"C:\\Users\\FernA\\source\\repos\\office-ribbonx-editor\\tests\\IntegrationTests\\bin\\Debug\\net9.0-windows\\Resources\\Blank.xlsx\""
+    },
+    "Help": {
+      "commandName": "Project",
+      "commandLineArgs": "--help"
+    }
+  }
+}

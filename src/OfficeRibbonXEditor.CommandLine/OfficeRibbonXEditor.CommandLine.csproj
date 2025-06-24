@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <Import Project="..\..\build\Common.props" />
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <PublishTrimmed>true</PublishTrimmed>
+    <SelfContained Condition="'$(SELF_CONTAINED)' != ''">$(SELF_CONTAINED)</SelfContained>
+    <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+  </PropertyGroup>
+  <ItemGroup>
+    <Using Include="System.ComponentModel.DataAnnotations.RequiredAttribute" Alias="RequiredAttribute" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OfficeRibbonXEditor.Common\OfficeRibbonXEditor.Common.csproj" />
+  </ItemGroup>
+</Project>

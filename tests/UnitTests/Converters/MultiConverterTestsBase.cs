@@ -4,42 +4,41 @@ using System.Globalization;
 using System.Windows.Data;
 using NUnit.Framework;
 
-namespace OfficeRibbonXEditor.UnitTests.Converters
+namespace OfficeRibbonXEditor.UnitTests.Converters;
+
+public abstract class MultiConverterTestsBase<TConverter> where TConverter : IMultiValueConverter, new()
 {
-    public abstract class MultiConverterTestsBase<TConverter> where TConverter : IMultiValueConverter, new()
+    protected abstract List<Type> FromTypes { get; }
+
+    protected abstract Type ToType { get; }
+
+    [Test]
+    public void HasValueConversionAttribute()
     {
-        protected abstract List<Type> FromTypes { get; }
+        // Arrange / act
+        var attributes = typeof(TConverter).GetCustomAttributes(typeof(ValueConversionAttribute), false);
 
-        protected abstract Type ToType { get; }
+        // Assert
+        Assert.That(attributes, Is.Not.Empty);
+    }
 
-        [Test]
-        public void HasValueConversionAttribute()
-        {
-            // Arrange / act
-            var attributes = typeof(TConverter).GetCustomAttributes(typeof(ValueConversionAttribute), false);
+    protected virtual object? Convert(object[] original, object? parameter = null)
+    {
+        // Arrange
+        var converter = new TConverter();
 
-            // Assert
-            Assert.IsNotEmpty(attributes);
-        }
+        // Act
+        var actual = converter.Convert(original, ToType, parameter, CultureInfo.CurrentCulture);
+        return actual;
+    }
 
-        protected virtual object? Convert(object[] original, object? parameter = null)
-        {
-            // Arrange
-            var converter = new TConverter();
+    protected virtual object? ConvertBack(object? original, object? parameter = null)
+    {
+        // Arrange
+        var converter = new TConverter();
 
-            // Act
-            var actual = converter.Convert(original, ToType, parameter, CultureInfo.CurrentCulture);
-            return actual;
-        }
-
-        protected virtual object? ConvertBack(object? original, object? parameter = null)
-        {
-            // Arrange
-            var converter = new TConverter();
-
-            // Act
-            var actual = converter.ConvertBack(original, FromTypes.ToArray(), parameter, CultureInfo.CurrentCulture);
-            return actual;
-        }
+        // Act
+        var actual = converter.ConvertBack(original, FromTypes.ToArray(), parameter, CultureInfo.CurrentCulture);
+        return actual;
     }
 }

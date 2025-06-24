@@ -1,20 +1,19 @@
 ﻿using OfficeRibbonXEditor.ViewModels.Documents;
 using OfficeRibbonXEditor.ViewModels.Windows;
 
-namespace OfficeRibbonXEditor.Interfaces
+namespace OfficeRibbonXEditor.Interfaces;
+
+public interface ITabItemViewModel
 {
-    public interface ITabItemViewModel
-    {
-        string Title { get; set; }
+    string Title { get; set; }
 
-        TreeViewItemViewModel Item { get; }
+    TreeViewItemViewModel Item { get; }
 
-        string? StatusText { get; }
+    string? StatusText { get; }
 
-        int Zoom { get; }
+    int Zoom { get; }
 
-        MainWindowViewModel MainWindow { get; }
+    MainWindowViewModel MainWindow { get; }
 
-        void ApplyChanges();
-    }
+    void ApplyChanges();
 }

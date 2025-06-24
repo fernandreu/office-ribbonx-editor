@@ -1,18 +1,17 @@
-﻿namespace OfficeRibbonXEditor.Helpers.Xml
+﻿namespace OfficeRibbonXEditor.Helpers.Xml;
+
+public class XmlError
 {
-    public class XmlError
+    public XmlError(int lineNumber, int linePosition, string message)
     {
-        public XmlError(int lineNumber, int linePosition, string message)
-        {
-            LineNumber = lineNumber;
-            LinePosition = linePosition;
-            Message = message;
-        }
-
-        public int LineNumber { get; }
-
-        public int LinePosition { get; }
-
-        public string Message { get; }
+        LineNumber = lineNumber;
+        LinePosition = linePosition;
+        Message = message;
     }
+
+    public int LineNumber { get; }
+
+    public int LinePosition { get; }
+
+    public string Message { get; }
 }

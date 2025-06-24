@@ -5,32 +5,31 @@ using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
-namespace OfficeRibbonXEditor.ViewModels.Dialogs
+namespace OfficeRibbonXEditor.ViewModels.Dialogs;
+
+[Export]
+public partial class DialogHostViewModel : ObservableObject
 {
-    [Export]
-    public partial class DialogHostViewModel : ObservableObject
-    {
-        public event EventHandler? ShowingDialog;
+    public event EventHandler? ShowingDialog;
 
-        public event EventHandler? Closed;
+    public event EventHandler? Closed;
         
-        [ObservableProperty]
-        private IContentDialogBase? _content;
+    [ObservableProperty]
+    private IContentDialogBase? _content;
 
-        [RelayCommand]
-        private void Closing(CancelEventArgs args)
-        {
-            _content?.ClosingCommand.Execute(args);
-        }
+    [RelayCommand]
+    private void Closing(CancelEventArgs args)
+    {
+        Content?.ClosingCommand.Execute(args);
+    }
 
-        public void ShowDialog()
-        {
-            ShowingDialog?.Invoke(this, EventArgs.Empty);
-        }
+    public void ShowDialog()
+    {
+        ShowingDialog?.Invoke(this, EventArgs.Empty);
+    }
 
-        public void Close()
-        {
-            Closed?.Invoke(this, EventArgs.Empty);
-        }
+    public void Close()
+    {
+        Closed?.Invoke(this, EventArgs.Empty);
     }
 }

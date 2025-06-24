@@ -1,42 +1,41 @@
 ﻿using FlaUI.Core;
 using FlaUI.Core.Patterns;
 
-namespace OfficeRibbonXEditor.UITests.Helpers
+namespace OfficeRibbonXEditor.UITests.Helpers;
+
+public class SelectedTextRange : TextRange
 {
-    public class SelectedTextRange : TextRange
+    public SelectedTextRange(ITextPattern textPattern, IValuePattern valuePattern, ITextRange range) : base(textPattern, valuePattern, range)
     {
-        public SelectedTextRange(ITextPattern textPattern, IValuePattern valuePattern, ITextRange range) : base(textPattern, valuePattern, range)
-        {
-        }
+    }
 
-        public override int Position
+    public override int Position
+    {
+        get => base.Position;
+        set
         {
-            get => base.Position;
-            set
-            {
-                base.Position = value;
-                Range.Select();
-            }
+            base.Position = value;
+            Range.Select();
         }
+    }
 
-        public override int EndPosition
+    public override int EndPosition
+    {
+        get => base.EndPosition;
+        set
         {
-            get => base.EndPosition;
-            set
-            {
-                base.EndPosition = value;
-                Range.Select();
-            }
+            base.EndPosition = value;
+            Range.Select();
         }
+    }
 
-        public override int Line
+    public override int Line
+    {
+        get => base.Line;
+        set
         {
-            get => base.Line;
-            set
-            {
-                base.Line = value;
-                Range.Select();
-            }
+            base.Line = value;
+            Range.Select();
         }
     }
 }

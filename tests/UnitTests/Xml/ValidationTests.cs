@@ -1,18 +1,18 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using OfficeRibbonXEditor.Documents;
+using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Helpers.Xml;
 using SmartFormat;
 
-namespace OfficeRibbonXEditor.UnitTests.Xml
+namespace OfficeRibbonXEditor.UnitTests.Xml;
+
+public class ValidationTests
 {
-    public class ValidationTests
-    {
-        private const string Namespace12 = "2006/01";
+    private const string Namespace12 = "2006/01";
 
-        private const string Namespace14 = "2009/07";
+    private const string Namespace14 = "2009/07";
 
-        private const string BasicContent = @"
+    private const string BasicContent = @"
         <customUI xmlns=""http://schemas.microsoft.com/office/{Namespace}/customui"">
             <ribbon {RibbonAttributes}>
                 <tabs>
@@ -25,70 +25,69 @@ namespace OfficeRibbonXEditor.UnitTests.Xml
             </ribbon>
         </customUI>"; 
         
-        [TestCase(XmlPart.RibbonX12, ExpectedResult = false)]
-        [TestCase(XmlPart.RibbonX14, ExpectedResult = false)]
-        public bool TestEmpty(XmlPart partType)
+    [TestCase(XmlPart.RibbonX12, ExpectedResult = false)]
+    [TestCase(XmlPart.RibbonX14, ExpectedResult = false)]
+    public bool TestEmpty(XmlPart partType)
+    {
+        // Arrange
+        var content = string.Empty;
+        var schema = Schema.Load(partType);
+        Assert.That(schema, Is.Not.Null);
+
+        // Act
+        var errors = XmlValidation.Validate(content, schema!);
+
+        return !errors.Any();
+    }
+
+    [TestCase(Namespace12, XmlPart.RibbonX12, ExpectedResult = true)]
+    [TestCase(Namespace14, XmlPart.RibbonX12, ExpectedResult = false)]
+    [TestCase(Namespace12, XmlPart.RibbonX14, ExpectedResult = false)]
+    [TestCase(Namespace14, XmlPart.RibbonX14, ExpectedResult = true)]
+    public bool TestNamespace(string xmlNamespace, XmlPart schema)
+        => ValidateInternal(new ValidationOptions
         {
-            // Arrange
-            var content = string.Empty;
-            var schema = Schema.Load(partType);
-            Assert.IsNotNull(schema);
+            Namespace = xmlNamespace,
+            Schema = schema,
+        });
 
-            // Act
-            var errors = XmlValidation.Validate(content, schema!);
-
-            return !errors.Any();
-        }
-
-        [TestCase(Namespace12, XmlPart.RibbonX12, ExpectedResult = true)]
-        [TestCase(Namespace14, XmlPart.RibbonX12, ExpectedResult = false)]
-        [TestCase(Namespace12, XmlPart.RibbonX14, ExpectedResult = false)]
-        [TestCase(Namespace14, XmlPart.RibbonX14, ExpectedResult = true)]
-        public bool TestNamespace(string xmlNamespace, XmlPart schema)
-            => ValidateInternal(new ValidationOptions
-            {
-                Namespace = xmlNamespace,
-                Schema = schema,
-            });
-
-        [TestCase("title=\"ABC\"", "getTitle=\"DEF\"", ExpectedResult = false)]
-        [TestCase("insertBeforeMso=\"ABC\"", "insertAfterMso=\"DEF\"", ExpectedResult = false)]
-        [TestCase("supertip=\"ABC\"", "getScreentip=\"DEF\"", ExpectedResult = true)]
-        public bool TestMutuallyExclusive(params string[] attributes)
-            => ValidateInternal(new ValidationOptions
-            {
-                ButtonAttributes = string.Join(" ", attributes),
-            });
-
-        private static bool ValidateInternal(ValidationOptions options)
+    [TestCase("title=\"ABC\"", "getTitle=\"DEF\"", ExpectedResult = false)]
+    [TestCase("insertBeforeMso=\"ABC\"", "insertAfterMso=\"DEF\"", ExpectedResult = false)]
+    [TestCase("supertip=\"ABC\"", "getScreentip=\"DEF\"", ExpectedResult = true)]
+    public bool TestMutuallyExclusive(params string[] attributes)
+        => ValidateInternal(new ValidationOptions
         {
-            // Arrange
-            var schema = Schema.Load(options.Schema);
-            Assert.NotNull(schema);
+            ButtonAttributes = string.Join(" ", attributes),
+        });
 
-            var xml = Smart.Format(options.Content ?? string.Empty, options);
+    private static bool ValidateInternal(ValidationOptions options)
+    {
+        // Arrange
+        var schema = Schema.Load(options.Schema);
+        Assert.That(schema, Is.Not.Null);
 
-            // Act
-            var errors = XmlValidation.Validate(xml, schema!);
+        var xml = Smart.Format(options.Content ?? string.Empty, options);
 
-            return !errors.Any();
-        }
+        // Act
+        var errors = XmlValidation.Validate(xml, schema!);
 
-        private class ValidationOptions
-        {
-            public string? Content { get; set; } = BasicContent;
+        return !errors.Any();
+    }
 
-            public XmlPart Schema { get; set; } = XmlPart.RibbonX12;
+    private class ValidationOptions
+    {
+        public string? Content { get; set; } = BasicContent;
 
-            public string? Namespace { get; set; } = Namespace12;
+        public XmlPart Schema { get; set; } = XmlPart.RibbonX12;
 
-            public string? RibbonAttributes { get; set; }
+        public string? Namespace { get; set; } = Namespace12;
 
-            public string? TabAttributes { get; set; }
+        public string? RibbonAttributes { get; set; }
 
-            public string? GroupAttributes { get; set; }
+        public string? TabAttributes { get; set; }
 
-            public string? ButtonAttributes { get; set; }
-        }
+        public string? GroupAttributes { get; set; }
+
+        public string? ButtonAttributes { get; set; }
     }
 }
