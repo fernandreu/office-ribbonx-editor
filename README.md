@@ -3,12 +3,10 @@
 
 [![Downloads](https://img.shields.io/github/downloads/fernandreu/office-ribbonx-editor/total.svg?style=popout)](https://github.com/fernandreu/office-ribbonx-editor/releases)
 [![Release Version](https://img.shields.io/github/release/fernandreu/office-ribbonx-editor)](https://github.com/fernandreu/office-ribbonx-editor/releases/latest)
-[![.NET Framework](https://img.shields.io/badge/.NET%20Framework-%3E%3D%204.6.1-informational)](https://dotnet.microsoft.com/download)
-[![.NET](https://img.shields.io/badge/.NET-%3E%3D%205.0.0-informational)](https://dotnet.microsoft.com/download)
+[![Pre-release Version](https://img.shields.io/github/v/release/fernandreu/office-ribbonx-editor?include_prereleases&label=pre-release)](https://github.com/fernandreu/office-ribbonx-editor/releases)
+[![.NET](https://img.shields.io/badge/.NET-%3E%3D%209.0.0-informational)](https://dotnet.microsoft.com/download)
 [![Build Status](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_apis/build/status/CI%20Pipeline?branchName=master&stageName=Build)](https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=fernandreu_office-ribbonx-editor&metric=alert_status)](https://sonarcloud.io/dashboard?id=fernandreu_office-ribbonx-editor)
-
-**Translators welcome! See [below](#do-you-want-to-see-the-tool-in-your-language).**
 
 The Office RibbonX Editor is a standalone tool to edit the Custom UI part of Office open document file format. 
 It contains both Office 2007 and Office 2010 custom UI schemas.
@@ -50,9 +48,12 @@ To download the latest release, go to the following link:
 
 https://github.com/fernandreu/office-ribbonx-editor/releases/latest
 
-To download the latest development build instead, go to the Artifacts section on Azure Pipelines:
+To download the latest pre-release, go to the full list of releases on GitHub:
 
-https://dev.azure.com/fernandreu-public/OfficeRibbonXEditor/_build/latest?definitionId=1&branchName=master
+https://github.com/fernandreu/office-ribbonx-editor/releases
+
+> **Note:** From v2.0 onwards, .NET Framework is no longer supported. The latest .NET Framework version is v1.9 and
+> can be found [here](https://github.com/fernandreu/office-ribbonx-editor/releases/tag/v1.9.0).
 
 
 ## How does the `Reload on Save` option work?
@@ -88,6 +89,28 @@ essence, Step 4 will no longer use the temporary unzipped copy of the Excel file
 but will generate a new one instead. As a consequence, any external changes you might have done in the meantime
 (i.e. Step 3) will no longer get lost. If you did not make any external changes, the `Reload on Save` button
 won’t have any noticeable impact for you.
+
+
+## Code Signing
+
+The tool is no longer being signed using a certificate from a trusted root certification authority. Instead, each
+build now uses a temporary, unique code signing certificate. Those will be signed using the following self-signed
+certificate:
+
+- Subject: `github.com/fernandreu`
+- Thumbprint: `62530bc980ec95d70a9a0abf931a4c28877ef4c6`
+
+This will give issues with Microsoft SmartScreen, but you should be able to skip any warnings. If you are unsure if
+you should skip those warnings, there are a couple of things you could check:
+
+- You can verify that the installer / binaries have been signed with a certificate whose root certificate matches the
+  details above. If some bundled dlls were already signed (e.g. official Microsoft libraries), their original
+  signatures will be kept
+- The details of the temporary code signing certificates will also be made available for each build / release (just
+  the public ones, such as the thumbprint or the public key). Hence, you can also check that the certificate used for
+  the binaries / installer matches those details
+
+For more information, see [#185](https://github.com/fernandreu/office-ribbonx-editor/issues/185).
 
 
 ## Do you want to see the tool in your language?
@@ -152,24 +175,3 @@ how your translation looks (you will be able to see it from the build artifacts 
 - Indonesian: [aliishaq-zz](https://github.com/aliishaq-zz)
 - Portuguese: [ALeXceL](https://github.com/Alexcel)
 - Turkish: [fatihmeh](https://github.com/fatihmeh)
-
-## Code Signing
-
-The tool is no longer being signed using a certificate from a trusted root certification authority. Instead, each
-build now uses a temporary, unique code signing certificate. Those will be signed using the following self-signed
-certificate:
-
-- Subject: `github.com/fernandreu`
-- Thumbprint: `62530bc980ec95d70a9a0abf931a4c28877ef4c6`
-
-This will give issues with Microsoft SmartScreen, but you should be able to skip any warnings. If you are unsure if
-you should skip those warnings, there are a couple of things you could check:
-
-- You can verify that the installer / binaries have been signed with a certificate whose root certificate matches the
-  details above. If some bundled dlls were already signed (e.g. official Microsoft libraries), their original
-  signatures will be kept
-- The details of the temporary code signing certificates will also be made available for each build / release (just
-  the public ones, such as the thumbprint or the public key). Hence, you can also check that the certificate used for
-  the binaries / installer matches those details
-  
-For more information, see [#185](https://github.com/fernandreu/office-ribbonx-editor/issues/185).
