@@ -50,21 +50,13 @@ public static class XmlValidation
         var schemaSet = new XmlSchemaSet();
         schemaSet.Add(targetSchema);
 
-        var ns = xmlDoc.Root?.GetDefaultNamespace().ToString();
+        var ns = xmlDoc.Root?.Name.NamespaceName;
         if (ns != targetSchema.TargetNamespace)
         {
             errorList.Add(new XmlError(
                 1,
                 1,
                 string.Format(CultureInfo.InvariantCulture, Strings.Validation_WrongNamespace, ns, targetSchema.TargetNamespace)));
-        }
-
-        void ValidateHandler(object? o, ValidationEventArgs e)
-        {
-            errorList?.Add(new XmlError(
-                e.Exception.LineNumber,
-                e.Exception.LinePosition,
-                e.Message));
         }
 
         try
@@ -92,6 +84,14 @@ public static class XmlValidation
         }
 
         return errorList;
+
+        void ValidateHandler(object? o, ValidationEventArgs e)
+        {
+            errorList.Add(new XmlError(
+                e.Exception.LineNumber,
+                e.Exception.LinePosition,
+                e.Message));
+        }
     }
 
     private static void ValidateFurther(XElement element, ICollection<XmlError> errorList)
@@ -117,9 +117,9 @@ public static class XmlValidation
                     }
 
                     // Only showing errors at the second occurrence. If there are more, the same error already shown will be enough
-                    var info = attribute as IXmlLineInfo;
+                    IXmlLineInfo info = attribute;
                     var message = string.Format(CultureInfo.InvariantCulture, Strings.Validation_MutuallyExclusive, string.Join(", ", MutuallyExclusiveAttributes[index]));
-                    errorList.Add(new XmlError(info?.LineNumber ?? 1, info?.LinePosition ?? 1, message));
+                    errorList.Add(new XmlError(info.LineNumber, info.LinePosition, message));
                 }
             }
         }
