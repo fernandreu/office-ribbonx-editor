@@ -138,7 +138,7 @@ public partial class App
                     = new CultureInfo(Settings.Default.UICulture);
     }
 
-    private static void ApplicationExit(object? sender, ExitEventArgs e)
+    private void ApplicationExit(object? sender, ExitEventArgs e)
     {
         Settings.Default.Save();
     }
