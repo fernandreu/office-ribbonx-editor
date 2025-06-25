@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
+using JetBrains.Annotations;
 using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents;
@@ -40,7 +41,7 @@ public partial class TreeViewItemViewModel : ObservableObject
     /// <summary>
     /// Gets the logical child items of this object.
     /// </summary>
-    public ObservableCollection<TreeViewItemViewModel> Children { get; } = new ObservableCollection<TreeViewItemViewModel>();
+    public ObservableCollection<TreeViewItemViewModel> Children { get; } = [];
         
     public ListCollectionView SortedChildren { get; }
 
@@ -55,6 +56,7 @@ public partial class TreeViewItemViewModel : ObservableObject
     [ObservableProperty]
     private bool _isExpanded;
 
+    [UsedImplicitly]
     partial void OnIsExpandedChanged(bool value)
     {
         // Expand all the way up to the root.
@@ -77,6 +79,7 @@ public partial class TreeViewItemViewModel : ObservableObject
     [ObservableProperty]
     private bool _isSelected;
 
+    [UsedImplicitly]
     partial void OnIsSelectedChanged(bool value)
     {
         if (value)
