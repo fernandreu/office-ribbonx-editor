@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -23,16 +22,16 @@ namespace OfficeRibbonXEditor;
 /// </summary>
 public partial class App
 {
-    private readonly IContainer _container = CreateContainer();
+    public IContainer Container { get; } = CreateContainer();
 
-    private readonly Dictionary<IContentDialogBase, DialogHost> _dialogs = new Dictionary<IContentDialogBase, DialogHost>();
+    private readonly Dictionary<IContentDialogBase, DialogHost> _dialogs = [];
 
     public App()
     {
         this.Dispatcher.UnhandledException += this.OnUnhandledException;
     }
 
-    public static IContainer CreateContainer()
+    private static IContainer CreateContainer()
     {
         return CreateContainerBuilder().Build();
     }
@@ -139,14 +138,14 @@ public partial class App
                     = new CultureInfo(Settings.Default.UICulture);
     }
 
-    private void ApplicationExit(object? sender, ExitEventArgs e)
+    private static void ApplicationExit(object? sender, ExitEventArgs e)
     {
         Settings.Default.Save();
     }
 
     private void LaunchMainWindow()
     {
-        var windowModel = this._container.Resolve<MainWindowViewModel>();
+        var windowModel = this.Container.Resolve<MainWindowViewModel>();
         var window = new MainWindow();
         window.DataContext = windowModel;
         windowModel.LaunchingDialog += (o, e) => this.LaunchDialog(window, e.Content, e.ShowDialog);
@@ -168,7 +167,7 @@ public partial class App
             return;
         }
 
-        var dialogModel = this._container.Resolve<DialogHostViewModel>();
+        var dialogModel = this.Container.Resolve<DialogHostViewModel>();
         dialog = new DialogHost {DataContext = dialogModel, Owner = mainWindow};
         dialogModel.Content = content;
         content.Closed += (o, e) => dialog.Close();
@@ -200,7 +199,7 @@ public partial class App
             ex = targetEx.InnerException;
         }
 
-        var dialog = this._container.Resolve<ExceptionDialogViewModel>();
+        var dialog = this.Container.Resolve<ExceptionDialogViewModel>();
         dialog.OnLoaded(ex);
         this.LaunchDialog(this.MainWindow, dialog, true);
     }

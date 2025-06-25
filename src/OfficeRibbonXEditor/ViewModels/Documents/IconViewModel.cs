@@ -1,34 +1,25 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Xml;
-using CommonServiceLocator;
+using Autofac;
 using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Resources;
 
 namespace OfficeRibbonXEditor.ViewModels.Documents;
 
-public partial class IconViewModel : TreeViewItemViewModel
+public partial class IconViewModel(string name, BitmapImage image, OfficePartViewModel parent)
+    : TreeViewItemViewModel(parent, false, false)
 {
-    public IconViewModel(string name, BitmapImage image, OfficePartViewModel parent)
-        : base(parent, false, false)
-    {
-        Image = image;
-        _name = name;
-        _newName = name;
-    }
-
     public IconViewModel(string name, string filePath, OfficePartViewModel parent) 
         : this(name, LoadImageFromPath(filePath), parent)
     {
     }
 
-    public BitmapImage Image { get; }
+    public BitmapImage Image { get; } = image;
 
-    private string _name;
+    private string _name = name;
     /// <summary>
     /// Gets or sets the Id of the icon, applying the changes directly to the underlying model
     /// </summary>
@@ -43,7 +34,7 @@ public partial class IconViewModel : TreeViewItemViewModel
                 return;
             }
                 
-            if (Parent?.Children?.OfType<IconViewModel>()?.Any(x => x.Name == value) ?? false)
+            if (Parent?.Children.OfType<IconViewModel>().Any(x => x.Name == value) ?? false)
             {
                 // There is already an icon with the same name. It could be this same icon and not
                 // a sibling, in which case the Set() call below would have returned false anyway
@@ -70,7 +61,7 @@ public partial class IconViewModel : TreeViewItemViewModel
     /// editing mode before committing to use the new ID (in case the user discard the changes)
     /// </summary>
     [ObservableProperty]
-    private string _newName;
+    private string _newName = name;
 
     [ObservableProperty]
     private bool _isEditingId;
@@ -86,11 +77,14 @@ public partial class IconViewModel : TreeViewItemViewModel
         {
             // Revert back the change
             NewName = Name;
-            ServiceLocator.Current.GetInstance<IMessageBoxService>()?.Show(
+            
+            // We do not have access to a "UI" view model, so we cannot inject the service as usual
+            ((App)Application.Current).Container.Resolve<IMessageBoxService>().Show(
                 errorMessage, 
                 Strings.Message_ChangeIdError_Title, 
                 MessageBoxButton.OK, 
                 MessageBoxImage.Error);
+            
             return;
         }
 
@@ -150,7 +144,7 @@ public partial class IconViewModel : TreeViewItemViewModel
     {
         if (Parent is OfficePartViewModel viewModel)
         {
-            viewModel?.ChangeIconId(oldId, newId);
+            viewModel.ChangeIconId(oldId, newId);
         }
 
         IsEditingId = false;
