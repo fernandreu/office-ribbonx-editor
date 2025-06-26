@@ -61,17 +61,14 @@ public partial class OfficePartViewModel : TreeViewItemViewModel
         Part.RemoveImage(id);
         for (var i = 0; i < Children.Count; ++i)
         {
-            if (Children[i] is not IconViewModel icon)
+            if (Children[i] is not IconViewModel icon || icon.Name != id)
             {
                 continue;
             }
 
-            if (icon.Name == id)
-            {
-                Children.RemoveAt(i);
-                IconsChanged = true;
-                return;
-            }
+            Children.RemoveAt(i);
+            IconsChanged = true;
+            return;
         }
     }
 
