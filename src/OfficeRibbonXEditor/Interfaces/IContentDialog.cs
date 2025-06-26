@@ -25,6 +25,8 @@ public interface IContentDialogBase
     /// </summary>
     bool IsCancelled { get; }
 
+    IRelayCommand CloseCommand { get; } 
+
     IRelayCommand<CancelEventArgs> ClosingCommand { get; }
 
     event EventHandler Closed;

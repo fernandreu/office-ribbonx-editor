@@ -1,18 +1,22 @@
-﻿<dialogs:DialogHostBase x:Class="OfficeRibbonXEditor.Views.Dialogs.DialogHost"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels.Dialogs"
-        xmlns:dialogs="clr-namespace:OfficeRibbonXEditor.Views.Dialogs"
-        mc:Ignorable="d"
-        Title="{Binding View.Title, ElementName=Window}"
-        WindowStartupLocation="CenterOwner"
-        ShowInTaskbar="False"
-        Icon="{Binding View.Icon, ElementName=Window}"
-        ResizeMode="{Binding View.ResizeMode, ElementName=Window}"
-        SizeToContent="WidthAndHeight"
-        d:DataContext="{d:DesignInstance viewModels:DialogHostViewModel}"
-        Model="{Binding Content}"
-        x:Name="Window">
+﻿<dialogs:DialogHostBase
+    x:Class="OfficeRibbonXEditor.Views.Dialogs.DialogHost"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:OfficeRibbonXEditor.ViewModels.Dialogs"
+    xmlns:dialogs="clr-namespace:OfficeRibbonXEditor.Views.Dialogs"
+    mc:Ignorable="d"
+    Title="{Binding View.Title, ElementName=Window}"
+    WindowStartupLocation="CenterOwner"
+    ShowInTaskbar="False"
+    Icon="{Binding View.Icon, ElementName=Window}"
+    ResizeMode="{Binding View.ResizeMode, ElementName=Window}"
+    SizeToContent="WidthAndHeight"
+    d:DataContext="{d:DesignInstance viewModels:DialogHostViewModel}"
+    Model="{Binding Content}"
+    x:Name="Window">
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="{Binding Content.CloseCommand}"/>
+    </Window.InputBindings>    
 </dialogs:DialogHostBase>
