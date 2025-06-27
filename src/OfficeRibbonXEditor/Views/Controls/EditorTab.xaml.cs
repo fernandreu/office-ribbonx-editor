@@ -135,7 +135,7 @@ public partial class EditorTab : UserControl
 
     private void OnDidCopy(object? sender, EventArgs e)
     {
-        Editor.Copy();
+        Editor.CopyAllowLine();
     }
 
     private void OnDidPaste(object? sender, EventArgs e)
