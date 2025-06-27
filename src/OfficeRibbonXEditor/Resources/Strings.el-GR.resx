@@ -1,0 +1,787 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+<data name="About.Author" xml:space="preserve">
+    <value>Συγγραφέας:</value>
+  </data>
+  <data name="About.Close" xml:space="preserve">
+    <value>Κλείσιμο</value>
+  </data>
+  <data name="About.CopyVersion" xml:space="preserve">
+    <value>Αντιγραφή πληροφοριών έκδοσης</value>
+  </data>
+  <data name="About.License" xml:space="preserve">
+    <value>Άδεια:</value>
+  </data>
+  <data name="About.OperatingSystem" xml:space="preserve">
+    <value>Λειτουργικό Σύστημα:</value>
+  </data>
+  <data name="About.Paragraph1" xml:space="preserve">
+    <value>Ο Επεξεργαστής Office RibbonX είναι ένα δωρεάν, ανοιχτού κώδικα, αυτόνομο εργαλείο για την επεξεργασία του τμήματος Custom UI της μορφής αρχείου Office open document. Περιέχει τόσο τα σχήματα Custom UI του Office 2007 όσο και του Office 2010.</value>
+  </data>
+  <data name="About.Paragraph2" xml:space="preserve">
+    <value>Το σχήμα Custom UI του Office 2010 είναι το τελευταίο σχήμα και εξακολουθεί να χρησιμοποιείται στις τελευταίες εκδόσεις του Office, συμπεριλαμβανομένων του Office 2013, Office 2016, Office 2019 και Office 365.</value>
+  </data>
+  <data name="About.ProjectPage" xml:space="preserve">
+    <value>Σελίδα έργου:</value>
+  </data>
+  <data name="About.Runtime" xml:space="preserve">
+    <value>Ροή:</value>
+  </data>
+  <data name="About.SubmitIssue" xml:space="preserve">
+    <value>Υποβολή ζητήματος</value>
+  </data>
+  <data name="About.Title" xml:space="preserve">
+    <value>Σχετικά με τον Office RibbonX Editor</value>
+  </data>
+  <data name="About.Version" xml:space="preserve">
+    <value>Έκδοση:</value>
+  </data>
+  <data name="Callbacks.Title" xml:space="preserve">
+    <value>Προβολή Callback</value>
+  </data>
+  <data name="ContextMenu.TreeView.ChangeId" xml:space="preserve">
+    <value>Αλλαγή ID</value>
+  </data>
+  <data name="ContextMenu.TreeView.Close" xml:space="preserve">
+    <value>Κλείσιμο</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertIcons" xml:space="preserve">
+    <value>Εισαγωγή Εικονιδίων...</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2007" xml:space="preserve">
+    <value>Εισαγωγή Τμήματος Custom UI Office 2007</value>
+  </data>
+  <data name="ContextMenu.TreeView.InsertOffice2010" xml:space="preserve">
+    <value>Εισαγωγή Τμήματος Custom UI Office 2010+</value>
+  </data>
+  <data name="ContextMenu.TreeView.Open" xml:space="preserve">
+    <value>Άνοιγμα</value>
+  </data>
+  <data name="ContextMenu.TreeView.Remove" xml:space="preserve">
+    <value>Αφαίρεση</value>
+  </data>
+  <data name="ContextMenu.TreeView.Save" xml:space="preserve">
+    <value>Αποθήκευση</value>
+  </data>
+  <data name="ContextMenu.TreeView.SaveAs" xml:space="preserve">
+    <value>Αποθήκευση ως...</value>
+  </data>
+  <data name="Editor.ZoomFactor" xml:space="preserve">
+    <value>Παράγοντας Ζουμ:</value>
+  </data>
+  <data name="Exception.CloseDialog" xml:space="preserve">
+    <value>Κλείσιμο αυτού τού παραθύρου</value>
+  </data>
+  <data name="Exception.Disclaimer" xml:space="preserve">
+    <value>Εάν συνεχίσετε να χρησιμοποιείτε το εργαλείο μετά από αυτό τό σφάλμα, ενδέχεται να αρχίσει να λειτουργεί λανθασμένα.</value>
+  </data>
+  <data name="Exception.ShutdownApp" xml:space="preserve">
+    <value>Τερματισμός εφαρμογής</value>
+  </data>
+  <data name="Exception.SubmitBug" xml:space="preserve">
+    <value>Υποβολή αναφοράς σφάλματος</value>
+  </data>
+  <data name="Exception.Title" xml:space="preserve">
+    <value>Προέκυψε μη διαχειριζόμενο σφάλμα</value>
+  </data>
+  <data name="Filter.All" xml:space="preserve">
+    <value>Όλα τα αρχεία (*.*)|*.*</value>
+  </data>
+  <data name="Filter.AllOfficeDocuments" xml:space="preserve">
+    <value>Όλα τα έγγραφα Office|*.???x;*.???m</value>
+  </data>
+  <data name="Filter.ExcelDocuments" xml:space="preserve">
+    <value>Βιβλία εργασίας του Microsoft Excel|*.xlsx;*.xlsm;*.xlam;*.xltx;*.xltm</value>
+  </data>
+  <data name="Filter.Icons" xml:space="preserve">
+    <value>Υποστηριζόμενα Εικονίδια|*.ico;*.bmp;*.png;*.jpg;*.tif</value>
+  </data>
+  <data name="Filter.PowerPointDocuments" xml:space="preserve">
+    <value>Παρουσιάσεις Microsoft PowerPoint|*.pp?x;*.pp?m;*.potx;*.potm;*.thmx</value>
+  </data>
+  <data name="Filter.VisioDocuments" xml:space="preserve">
+    <value>Σχέδια Microsoft Visio|*.vsdx;*.vsdm;*.vstx;*.vstm;*.vssx;*.vssm;</value>
+  </data>
+  <data name="Filter.SaveAs0" xml:space="preserve">
+    <value>Βιβλίο Εργασίας Excel|*.xlsx</value>
+  </data>
+  <data name="Filter.SaveAs1" xml:space="preserve">
+    <value>Βιβλίο Εργασίας Excel με Macros|*.xlsm</value>
+  </data>
+  <data name="Filter.SaveAs10" xml:space="preserve">
+    <value>Παρουσίαση PowerPoint|*.ppsx</value>
+  </data>
+  <data name="Filter.SaveAs11" xml:space="preserve">
+    <value>Παρουσίαση PowerPoint με Macros|*.ppsm</value>
+  </data>
+  <data name="Filter.SaveAs12" xml:space="preserve">
+    <value>Πρόσθετο PowerPoint|*.ppam</value>
+  </data>
+  <data name="Filter.SaveAs13" xml:space="preserve">
+    <value>Έγγραφο Word|*.docx</value>
+  </data>
+  <data name="Filter.SaveAs14" xml:space="preserve">
+    <value>Έγγραφο Word με Macros|*.docm</value>
+  </data>
+  <data name="Filter.SaveAs15" xml:space="preserve">
+    <value>Πρότυπο Word|*.dotx</value>
+  </data>
+  <data name="Filter.SaveAs16" xml:space="preserve">
+    <value>Πρότυπο Word με Macros|*.dotm</value>
+  </data>
+  <data name="Filter.SaveAs17" xml:space="preserve">
+    <value>Διάγραμμα Visio|*.vsdx</value>
+  </data>
+  <data name="Filter.SaveAs18" xml:space="preserve">
+    <value>Διάγραμμα Visio με Macros|*.vsdm</value>
+  </data>
+  <data name="Filter.SaveAs19" xml:space="preserve">
+    <value>Πρότυπο Visio|*.vstx</value>
+  </data>
+  <data name="Filter.SaveAs20" xml:space="preserve">
+    <value>Πρότυπο Visio με Macros|*.vstm</value>
+  </data>
+  <data name="Filter.SaveAs2" xml:space="preserve">
+    <value>Δυαδικό Βιβλίο Εργασίας Excel|*.xlsb</value>
+  </data>
+  <data name="Filter.SaveAs3" xml:space="preserve">
+    <value>Πρότυπο Excel|*.xltx</value>
+  </data>
+  <data name="Filter.SaveAs4" xml:space="preserve">
+    <value>Πρότυπο Excel με Macros|*.xltm</value>
+  </data>
+  <data name="Filter.SaveAs5" xml:space="preserve">
+    <value>Πρόσθετο Excel|*.xlam</value>
+  </data>
+  <data name="Filter.SaveAs6" xml:space="preserve">
+    <value>Παρουσίαση PowerPoint|*.pptx</value>
+  </data>
+  <data name="Filter.SaveAs7" xml:space="preserve">
+    <value>Παρουσίαση PowerPoint με Macros|*.pptm</value>
+  </data>
+  <data name="Filter.SaveAs8" xml:space="preserve">
+    <value>Πρότυπο PowerPoint|*.potx</value>
+  </data>
+  <data name="Filter.SaveAs9" xml:space="preserve">
+    <value>Πρότυπο PowerPoint με Macros|*.potm</value>
+  </data>
+  <data name="Filter.WordDocuments" xml:space="preserve">
+    <value>Έγγραφα Microsoft Word|*.do?x;*.do?m</value>
+  </data>
+  <data name="FindReplace.Find" xml:space="preserve">
+    <value>_Εύρεση</value>
+  </data>
+  <data name="FindReplace.FindAll" xml:space="preserve">
+    <value>Εύρεση όλων</value>
+  </data>
+  <data name="FindReplace.FindAll.Clear" xml:space="preserve">
+    <value>_Εκκαθάριση</value>
+  </data>
+  <data name="FindReplace.FindAll.HighlightMatches" xml:space="preserve">
+    <value>_Επισήμανση Αντιστοιχιών</value>
+  </data>
+  <data name="FindReplace.FindAll.MarkLine" xml:space="preserve">
+    <value>_Σήμανση Γραμμής</value>
+  </data>
+  <data name="FindReplace.FindAll.Ok" xml:space="preserve">
+    <value>Εύρεση _Όλων</value>
+  </data>
+  <data name="FindReplace.FindNext" xml:space="preserve">
+    <value>Εύρεση Επόμενου</value>
+  </data>
+  <data name="FindReplace.FindPrevious" xml:space="preserve">
+    <value>Εύρεση Προηγούμενου</value>
+  </data>
+  <data name="FindReplace.FindTab" xml:space="preserve">
+    <value>Εύρεση</value>
+  </data>
+  <data name="FindReplace.Options" xml:space="preserve">
+    <value>Επιλογές</value>
+  </data>
+  <data name="FindReplace.Options.Compiled" xml:space="preserve">
+    <value>_Συγκεντρωμένος</value>
+  </data>
+  <data name="FindReplace.Options.ECMAScript" xml:space="preserve">
+    <value>ECMAScript</value>
+  </data>
+  <data name="FindReplace.Options.ExplicitCapture" xml:space="preserve">
+    <value>E_xplicit Σύλληψη</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreCase" xml:space="preserve">
+    <value>I_gnore Περίπτωση</value>
+  </data>
+  <data name="FindReplace.Options.IgnoreWhitespace" xml:space="preserve">
+    <value>Αγνόηση Λευκού Χώρου Προτύπου</value>
+  </data>
+  <data name="FindReplace.Options.Invariant" xml:space="preserve">
+    <value>C_ulture Ανεξάρτητο</value>
+  </data>
+  <data name="FindReplace.Options.Multiline" xml:space="preserve">
+    <value>Πολλαπλές γραμμές</value>
+  </data>
+  <data name="FindReplace.Options.RightToLeft" xml:space="preserve">
+    <value>Από δεξιά προς αριστερά</value>
+  </data>
+  <data name="FindReplace.Options.Singleline" xml:space="preserve">
+    <value>Μοναδική γραμμή</value>
+  </data>
+  <data name="FindReplace.Replace" xml:space="preserve">
+    <value>_Αντικατάσταση</value>
+  </data>
+  <data name="FindReplace.ReplaceAll" xml:space="preserve">
+    <value>Αντικατάσταση _Όλων</value>
+  </data>
+  <data name="FindReplace.ReplaceNext" xml:space="preserve">
+    <value>Αντικατάσταση _Επόμενου</value>
+  </data>
+  <data name="FindReplace.ReplacePrevious" xml:space="preserve">
+    <value>Αντικατάσταση _Προηγούμενου</value>
+  </data>
+  <data name="FindReplace.ReplaceTab" xml:space="preserve">
+    <value>Αντικατάσταση</value>
+  </data>
+  <data name="FindReplace.SearchType" xml:space="preserve">
+    <value>Τύπος Αναζήτησης</value>
+  </data>
+  <data name="FindReplace.SearchType.Extended" xml:space="preserve">
+    <value>E_xtended (\n, \r, \t, \0)</value>
+  </data>
+  <data name="FindReplace.SearchType.Regular" xml:space="preserve">
+    <value>Κανονική _Έκφραση</value>
+  </data>
+  <data name="FindReplace.SearchType.Standard" xml:space="preserve">
+    <value>_Καθιερωμένο</value>
+  </data>
+  <data name="FindReplace.Selection" xml:space="preserve">
+    <value>Αναζήτηση Επιλογής</value>
+  </data>
+  <data name="FindReplace.Status.NoMatch" xml:space="preserve">
+    <value>Δεν βρέθηκε αντιστοιχία</value>
+  </data>
+  <data name="FindReplace.Status.RegExError" xml:space="preserve">
+    <value>Σφάλμα στην Κανονική Έκφραση</value>
+  </data>
+  <data name="FindReplace.Status.TotalFound" xml:space="preserve">
+    <value>Σύνολο βρεθέντων</value>
+  </data>
+  <data name="FindReplace.Status.TotalReplaced" xml:space="preserve">
+    <value>Σύνολο αντικαταστάσεων</value>
+  </data>
+  <data name="FindReplace.Status.Wrap" xml:space="preserve">
+    <value>Η αναζήτηση αντωνύμωσης έχει επιστρέψει στην αρχή του εγγράφου / επιλογής</value>
+  </data>
+  <data name="FindReplace.Title" xml:space="preserve">
+    <value>Εύρεση και Αντικατάσταση</value>
+  </data>
+  <data name="FindReplace.Wrap" xml:space="preserve">
+    <value>_Αναδίπλωση</value>
+  </data>
+  <data name="GoTo.Cancel" xml:space="preserve">
+    <value>Ακύρωση</value>
+  </data>
+  <data name="GoTo.CurrentLine" xml:space="preserve">
+    <value>_Τρέχων αριθμός γραμμής</value>
+  </data>
+  <data name="GoTo.DesiredLine" xml:space="preserve">
+    <value>Μετάβαση στον αριθμό γραμμής</value>
+  </data>
+  <data name="GoTo.MaxLine" xml:space="preserve">
+    <value>_Μέγιστος αριθμός γραμμής</value>
+  </data>
+  <data name="GoTo.Ok" xml:space="preserve">
+    <value>ΟΚ</value>
+  </data>
+  <data name="GoTo.Title" xml:space="preserve">
+    <value>Μετάβαση στη Γραμμή</value>
+  </data>
+  <data name="MainWindow.Title" xml:space="preserve">
+    <value>Επεξεργαστής Office RibbonX</value>
+  </data>
+  <data name="Menu.Edit" xml:space="preserve">
+    <value>_Επεξεργασία</value>
+  </data>
+  <data name="Menu.Edit.Copy" xml:space="preserve">
+    <value>Αντιγραφή</value>
+  </data>
+  <data name="Menu.Edit.Cut" xml:space="preserve">
+    <value>Αποκοπή</value>
+  </data>
+  <data name="Menu.Edit.DuplicateLine" xml:space="preserve">
+    <value>Διπλασιασμός Γραμμής</value>
+  </data>
+  <data name="Menu.Edit.Find" xml:space="preserve">
+    <value>Εύρεση...</value>
+  </data>
+  <data name="Menu.Edit.FindNext" xml:space="preserve">
+    <value>Εύρεση Επόμενου</value>
+  </data>
+  <data name="Menu.Edit.FindPrevious" xml:space="preserve">
+    <value>Εύρεση Προηγούμενου</value>
+  </data>
+  <data name="Menu.Edit.GoTo" xml:space="preserve">
+    <value>Μετάβαση στη Γραμμή...</value>
+  </data>
+  <data name="Menu.Edit.Incremental" xml:space="preserve">
+    <value>Αυξανόμενη Αναζήτηση...</value>
+  </data>
+  <data name="Menu.Edit.Paste" xml:space="preserve">
+    <value>Επικόλληση</value>
+  </data>
+  <data name="Menu.Edit.Redo" xml:space="preserve">
+    <value>Αναίρεση</value>
+  </data>
+  <data name="Menu.Edit.Replace" xml:space="preserve">
+    <value>Αντικατάσταση...</value>
+  </data>
+  <data name="Menu.Edit.SelectAll" xml:space="preserve">
+    <value>Επιλογή Όλων</value>
+  </data>
+  <data name="Menu.Edit.Undo" xml:space="preserve">
+    <value>Αναίρεση</value>
+  </data>
+  <data name="Menu.File" xml:space="preserve">
+    <value>_Αρχείο</value>
+  </data>
+  <data name="Menu.File.Close" xml:space="preserve">
+    <value>Κλείσιμο Τρέχοντος Εγγράφου</value>
+  </data>
+  <data name="Menu.File.Exit" xml:space="preserve">
+    <value>Έξοδος</value>
+  </data>
+  <data name="Menu.File.Open" xml:space="preserve">
+    <value>Άνοιγμα</value>
+  </data>
+  <data name="Menu.File.Save" xml:space="preserve">
+    <value>Αποθήκευση Τρέχοντος Εγγράφου</value>
+  </data>
+  <data name="Menu.File.SaveAll" xml:space="preserve">
+    <value>Αποθήκευση Όλων των Εγγράφων</value>
+  </data>
+  <data name="Menu.File.SaveAs" xml:space="preserve">
+    <value>Αποθήκευση ως...</value>
+  </data>
+  <data name="Menu.File.SaveAs.ToolTip" xml:space="preserve">
+    <value>Αποθήκευση του τρέχοντος εγγράφου με διαφορετικό όνομα</value>
+  </data>
+  <data name="Menu.FIle.SaveCopy" xml:space="preserve">
+    <value>Αποθήκευση Αντιγράφου ως...</value>
+  </data>
+  <data name="Menu.File.SaveCopy.ToolTip" xml:space="preserve">
+    <value>Αποθήκευση εντελώς ξεχωριστού αντιγράφου του τρέχοντος εγγράφου</value>
+  </data>
+  <data name="Menu.File.Settings" xml:space="preserve">
+    <value>Ρυθμίσεις...</value>
+  </data>
+  <data name="Menu.Help" xml:space="preserve">
+    <value>_Βοήθεια</value>
+  </data>
+  <data name="Menu.Help.About" xml:space="preserve">
+    <value>Σχετικά</value>
+  </data>
+  <data name="Menu.Help.UsefulLinks" xml:space="preserve">
+    <value>Χρήσιμοι Σύνδεσμοι</value>
+  </data>
+  <data name="Menu.Insert" xml:space="preserve">
+    <value>_Εισαγωγή</value>
+  </data>
+  <data name="Menu.Insert.Icons" xml:space="preserve">
+    <value>Εικονίδια...</value>
+  </data>
+  <data name="Menu.Insert.Office2007" xml:space="preserve">
+    <value>Τμήμα Custom UI Office 2007</value>
+  </data>
+  <data name="Menu.Insert.Office2010" xml:space="preserve">
+    <value>Τμήμα Custom UI Office 2010+</value>
+  </data>
+  <data name="Menu.Insert.Sample" xml:space="preserve">
+    <value>Δείγμα XML</value>
+  </data>
+  <data name="Menu.View" xml:space="preserve">
+    <value>_Προβολή</value>
+  </data>
+  <data name="Menu.View.FoldAll" xml:space="preserve">
+    <value>Συμπτυξή Όλων</value>
+  </data>
+  <data name="Menu.View.FoldCurrent" xml:space="preserve">
+    <value>Συμπτυξή Τρέχοντος Επιπέδου</value>
+  </data>
+  <data name="Menu.View.FoldLevel" xml:space="preserve">
+    <value>Συμπτυξή Επιπέδου</value>
+    <comment>The menu title for folding a specific level</comment>
+  </data>
+  <data name="Menu.View.UnfoldAll" xml:space="preserve">
+    <value>Αναδίπλωση Όλων</value>
+  </data>
+  <data name="Menu.View.UnfoldCurrent" xml:space="preserve">
+    <value>Αναδίπλωση Τρέχοντος Επιπέδου</value>
+  </data>
+  <data name="Menu.View.UnfoldLevel" xml:space="preserve">
+    <value>Αναδίπλωση Επιπέδου</value>
+    <comment>The menu title for unfolding a specific level</comment>
+  </data>
+  <data name="Message.AlreadyOpen.Text" xml:space="preserve">
+    <value>Το έγγραφο '{0}' είναι ήδη ανοιχτό. Το άνοιγμα ενός εγγράφου περισσότερες από μία φορές είναι επικίνδυνο και μπορεί να οδηγήσει σε απώλεια δεδομένων, εκτός και αν το αποθηκεύσετε με διαφορετικό όνομα αμέσως.
+
+Είστε απόλυτα σίγουρος ότι θέλετε να ανοίξετε αυτό το έγγραφο ξανά;</value>
+  </data>
+  <data name="Message.AlreadyOpen.Title" xml:space="preserve">
+    <value>Έγγραφο Ήδη Ανοιχτό</value>
+  </data>
+  <data name="Message.CallbackError.Title" xml:space="preserve">
+    <value>Σφάλμα στη Δημιουργία Κλήσεων</value>
+  </data>
+  <data name="Message.ChangeIdError.Title" xml:space="preserve">
+    <value>Σφάλμα στην Αλλαγή Ταυτότητας Εικονιδίου</value>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Text" xml:space="preserve">
+    <value>Το αρχείο {0} έχει μη αποθηκευμένες αλλαγές. Θέλετε να τις αποθηκεύσετε πριν το κλείσετε;</value>
+    <comment>{0} is the placeholder for the file name</comment>
+  </data>
+  <data name="Message.CloseUnsavedDoc.Title" xml:space="preserve">
+    <value>Μη Αποθηκευμένες Αλλαγές</value>
+  </data>
+  <data name="Message.IconExists.Text" xml:space="preserve">
+    <value>Αυτό το αρχείο Custom UI έχει ήδη ένα εικονίδιο με ταυτότητα {0}. Θέλετε να εισαγάγετε το νέο εικονίδιο με ταυτότητα {1} αντί αυτού;</value>
+  </data>
+  <data name="Message.IconExists.Title" xml:space="preserve">
+    <value>Το Εικονίδιο Ήδη Υπάρχει</value>
+  </data>
+  <data name="Message.InsertSample.Text" xml:space="preserve">
+    <value>Αυτό θα εισαγάγει το δείγμα XML στον τρέχοντα δείκτη. Είστε σίγουροι ότι θέλετε να συνεχίσετε;</value>
+  </data>
+  <data name="Message.InsertSample.Title" xml:space="preserve">
+    <value>Εισαγωγή Δείγματος XML</value>
+  </data>
+  <data name="Message.InsertSampleError.Title" xml:space="preserve">
+    <value>Σφάλμα στην Εισαγωγή Δείγματος XML</value>
+  </data>
+  <data name="Message.NewVersion.Text" xml:space="preserve">
+    <value>Η έκδοση {0} είναι τώρα διαθέσιμη. Θέλετε να την κατεβάσετε;</value>
+  </data>
+  <data name="Message.NewVersion.Title" xml:space="preserve">
+    <value>Διαθέσιμη Νέα Έκδοση</value>
+  </data>
+  <data name="Message.NoCallbacks.Text" xml:space="preserve">
+    <value>Δεν υπάρχει κλήση για να δημιουργηθεί.</value>
+  </data>
+  <data name="Message.NoCallbacks.Title" xml:space="preserve">
+    <value>Δημιουργία Κλήσεων</value>
+  </data>
+  <data name="Message.OpenError.Title" xml:space="preserve">
+    <value>Σφάλμα κατά το άνοιγμα του εγγράφου Office</value>
+  </data>
+  <data name="Message.RemoveIcon.Text" xml:space="preserve">
+    <value>Αυτή η ενέργεια δεν μπορεί να αναιρεθεί. Είστε σίγουροι ότι θέλετε να συνεχίσετε;</value>
+  </data>
+  <data name="Message.RemoveIcon.Title" xml:space="preserve">
+    <value>Αφαίρεση Εικονιδίου</value>
+  </data>
+  <data name="Message.RemovePart.Text" xml:space="preserve">
+    <value>Αυτή η ενέργεια δεν μπορεί να αναιρεθεί. Είστε σίγουροι ότι θέλετε να συνεχίσετε;</value>
+  </data>
+  <data name="Message.RemovePart.Title" xml:space="preserve">
+    <value>Αφαίρεση Μέρους XML</value>
+  </data>
+  <data name="Message.SaveError.Title" xml:space="preserve">
+    <value>Σφάλμα κατά την αποθήκευση του εγγράφου Office</value>
+  </data>
+  <data name="Message.ValidXml.Text" xml:space="preserve">
+    <value>Το Custom UI XML είναι καλά διαμορφωμένο.</value>
+  </data>
+  <data name="Message.ValidXml.Title" xml:space="preserve">
+    <value>Το XML είναι Έγκυρο</value>
+  </data>
+  <data name="Message.VersionCopy.Text" xml:space="preserve">
+    <value>Η πληροφορία έκδοσης έχει αντιγραφεί στο πρόχειρο.</value>
+  </data>
+  <data name="Message.VersionCopy.Title" xml:space="preserve">
+    <value>Η Πληροφορία Έκδοσης Αντιγράφηκε</value>
+  </data>
+  <data name="OpenDialog.Document.Title" xml:space="preserve">
+    <value>Άνοιγμα Εγγράφου OOXML</value>
+  </data>
+  <data name="OpenDialog.Icons.Title" xml:space="preserve">
+    <value>Εισαγωγή Προσαρμοσμένων Εικονιδίων</value>
+  </data>
+  <data name="SaveDialog.SaveAs.Title" xml:space="preserve">
+    <value>Αποθήκευση Εγγράφου OOXML</value>
+  </data>
+  <data name="Settings.Accept" xml:space="preserve">
+    <value>Αποδοχή</value>
+  </data>
+  <data name="Settings.Apply" xml:space="preserve">
+    <value>Εφαρμογή</value>
+  </data>
+  <data name="Settings.Colors" xml:space="preserve">
+    <value>Χρώματα Επεξεργαστή</value>
+  </data>
+  <data name="Settings.Colors.Attribute" xml:space="preserve">
+    <value>Αναγνωριστικό</value>
+  </data>
+  <data name="Settings.Colors.Background" xml:space="preserve">
+    <value>Υπόβαθρο</value>
+  </data>
+  <data name="Settings.Colors.Comment" xml:space="preserve">
+    <value>Σχόλιο</value>
+  </data>
+  <data name="Settings.Colors.Default" xml:space="preserve">
+    <value>Κανονικό Κείμενο</value>
+  </data>
+  <data name="Settings.Colors.String" xml:space="preserve">
+    <value>Συμβολοσειρά</value>
+  </data>
+  <data name="Settings.Colors.Tag" xml:space="preserve">
+    <value>Ετικέτα</value>
+  </data>
+  <data name="Settings.Editor" xml:space="preserve">
+    <value>Άλλες ρυθμίσεις επεξεργαστή</value>
+  </data>
+  <data name="Settings.Editor.AutoIndent" xml:space="preserve">
+    <value>Αυτόματη Εσοχή Νέων Γραμμών</value>
+  </data>
+  <data name="Settings.Editor.FontSize" xml:space="preserve">
+    <value>Μέγεθος Γραμματοσειράς</value>
+  </data>
+  <data name="Settings.Editor.TabWidth" xml:space="preserve">
+    <value>Πλάτος Καρτέλας</value>
+  </data>
+  <data name="Settings.Editor.WrapMode" xml:space="preserve">
+    <value>Λειτουργία Αναδίπλωσης</value>
+  </data>
+  <data name="Settings.FileAssociations" xml:space="preserve">
+    <value>Συσχετίσεις Αρχείων</value>
+  </data>
+  <data name="Settings.FileAssociations.CheckAll" xml:space="preserve">
+    <value>Επιλογή Όλων</value>
+  </data>
+  <data name="Settings.FileAssociations.ToolTip" xml:space="preserve">
+    <value>Θα εμφανιστεί μια είσοδος στο μενού περιβάλλοντος των Windows Explorer για να επεξεργαστείτε αυτά τα αρχεία άμεσα με το εργαλείο</value>
+  </data>
+  <data name="Settings.FileAssociations.UncheckAll" xml:space="preserve">
+    <value>Αποεπιλογή Όλων</value>
+  </data>
+  <data name="Settings.Misc" xml:space="preserve">
+    <value>Διάφορα</value>
+  </data>
+  <data name="Settings.Misc.DefaultTemplates" xml:space="preserve">
+    <value>Εμφάνιση προεπιλεγμένων προτύπων XML στο μενού Εισαγωγή</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates" xml:space="preserve">
+    <value>Επιπλέον πρότυπα XML για φόρτωση:</value>
+  </data>
+  <data name="Settings.Misc.ExtraTemplates.ToolTip" xml:space="preserve">
+    <value>Μία διαδρομή ανά γραμμή. Οι διαδρομές μπορεί να είναι αρχεία XML ή φάκελοι που περιέχουν αυτά. Μπορούν επίσης να είναι σχετικές με το φάκελο του εργαλείου</value>
+  </data>
+  <data name="Settings.Misc.Language" xml:space="preserve">
+    <value>Γλώσσα</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes" xml:space="preserve">
+    <value>Διατήρηση των χαρακτηριστικών του αρχείου κατά την αποθήκευση ενός ήδη υπάρχοντος εγγράφου</value>
+  </data>
+  <data name="Settings.Misc.PreserveAttributes.ToolTip" xml:space="preserve">
+    <value>Εάν επιλεγεί, τα αρχεία μόνο για ανάγνωση θα παραμείνουν μόνο για ανάγνωση μετά την αποθήκευσή τους, για παράδειγμα</value>
+  </data>
+  <data name="Settings.ResetDefaults" xml:space="preserve">
+    <value>Επαναφορά Προεπιλογών</value>
+  </data>
+  <data name="Settings.Title" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
+  </data>
+  <data name="ToolBar.Callbacks" xml:space="preserve">
+    <value>Δημιουργία Κλήσεων</value>
+  </data>
+  <data name="ToolBar.Callbacks.ToolTip" xml:space="preserve">
+    <value>Δημιουργία Κλήσεων για το τρέχον XML αρχείο</value>
+  </data>
+  <data name="ToolBar.InsertIcons" xml:space="preserve">
+    <value>Εισαγωγή Εικονιδίων</value>
+  </data>
+  <data name="ToolBar.InsertIcons.ToolTip" xml:space="preserve">
+    <value>Εισαγωγή Εικονιδίων</value>
+  </data>
+  <data name="ToolBar.Open" xml:space="preserve">
+    <value>Άνοιγμα</value>
+  </data>
+  <data name="ToolBar.Open.ToolTip" xml:space="preserve">
+    <value>Άνοιγμα ενός εγγράφου Office</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave" xml:space="preserve">
+    <value>Επαναφόρτωση κατά την Αποθήκευση</value>
+  </data>
+  <data name="ToolBar.ReloadOnSave.ToolTip" xml:space="preserve">
+    <value>Για να βεβαιωθείτε ότι δεν διαγράφετε τις αλλαγές που έγιναν εξωτερικά, μπορείτε να επαναφορτώσετε τα έγγραφα ακριβώς πριν τα αποθηκεύσετε</value>
+  </data>
+  <data name="ToolBar.Save" xml:space="preserve">
+    <value>Αποθήκευση</value>
+  </data>
+  <data name="ToolBar.Save.ToolTip" xml:space="preserve">
+    <value>Αποθήκευση του τρέχοντος εγγράφου Office</value>
+  </data>
+  <data name="ToolBar.Settings" xml:space="preserve">
+    <value>Ρυθμίσεις</value>
+  </data>
+  <data name="ToolBar.Settings.ToolTip" xml:space="preserve">
+    <value>Δείτε τις ρυθμίσεις επεξεργαστή</value>
+  </data>
+  <data name="ToolBar.ShowWhitespaces.ToolTip" xml:space="preserve">
+    <value>Εμφάνιση χαρακτήρων κενών, καρτέλας και τελικών γραμμών στον επεξεργαστή</value>
+  </data>
+  <data name="ToolBar.ToggleComment.ToolTip" xml:space="preserve">
+    <value>Σχολιασμός / αποσχολιασμός των επιλεγμένων γραμμών</value>
+  </data>
+  <data name="ToolBar.Validate" xml:space="preserve">
+    <value>Επικύρωση</value>
+  </data>
+  <data name="ToolBar.Validate.ToolTip" xml:space="preserve">
+    <value>Ελέγξτε αν το τρέχον αρχείο XML συμφωνεί με το αντίστοιχο σχήμα του</value>
+  </data>
+  <data name="ToolBar.VersionAvailable" xml:space="preserve">
+    <value>v{0} Διαθέσιμο!</value>
+    <comment>{0} is the placeholder for the version, e.g. "1.2.3"</comment>
+  </data>
+  <data name="Validation.MutuallyExclusive" xml:space="preserve">
+    <value>Μπορείτε να ορίσετε μόνο ένα από τα εξής χαρακτηριστικά σε ένα στοιχείο: {0}</value>
+  </data>
+  <data name="Validation.WrongNamespace" xml:space="preserve">
+    <value>Άγνωστο namespace "{0}". Το namespace του Custom UI XML πρέπει να είναι "{1}"</value>
+  </data>
+  <data name="About.Translators" xml:space="preserve">
+    <value>Μεταφραστές:</value>
+  </data>
+  <data name="Message.CorruptedSettings.Text" xml:space="preserve">
+    <value>Το αρχείο ρυθμίσεων χρήστη στη θέση που ακολουθεί είναι κατεστραμμένο και δεν μπορεί να διαγραφεί:
+
+{0}
+
+Παρακαλώ διαγράψτε αυτό το αρχείο χειροκίνητα και επανεκκινήστε την εφαρμογή. Η τοποθεσία του φακέλου έχει αντιγραφεί στο πρόχειρο.</value>
+  </data>
+  <data name="Message.CorruptedSettings.Title" xml:space="preserve">
+    <value>Κατεστραμμένες Ρυθμίσεις</value>
+  </data>
+  <data name="Message.MissingRedistributable.Text" xml:space="preserve">
+    <value>Το εργαλείο απαιτεί τουλάχιστον {0} από το Microsoft Visual C++ Redistributable ({1}) εγκατεστημένο, αλλά δεν ανιχνεύτηκε στον υπολογιστή σας. Αυτό πιθανότατα θα οδηγήσει σε σφάλματα κατά το άνοιγμα των καρτελών του επεξεργαστή.
+
+Θέλετε να κατεβάσετε το τελευταίο πακέτο τώρα;</value>
+    <comment>{0} is the placeholder for the version, e.g. "v14.16". {1} is the placeholder for the architecture, e.g. "arm64" / "x64"</comment>
+  </data>
+  <data name="Message.MissingRedistributable.Title" xml:space="preserve">
+    <value>Απουσιάζει το VC++ Redistributable</value>
+  </data>
+</root>

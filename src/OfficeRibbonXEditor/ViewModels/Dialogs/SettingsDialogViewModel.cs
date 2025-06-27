@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Globalization;
-using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using JetBrains.Annotations;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 using OfficeRibbonXEditor.Properties;
@@ -17,18 +15,20 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs;
 [Export]
 public partial class SettingsDialogViewModel : DialogBase, IContentDialog<ICollection<ITabItemViewModel>>
 {
-    public static readonly ICollection<CultureInfo> LanguageChoices = new[]
-    {
-        new CultureInfo("en-US"),
-        new CultureInfo("de-DE"),
-        new CultureInfo("es-ES"),
-        new CultureInfo("fr-FR"),
-        new CultureInfo("id-ID"),
-        new CultureInfo("nl-NL"),
-        new CultureInfo("pt-BR"),
-        new CultureInfo("tr-TR"),
-        new CultureInfo("zh-CN"),
-    };
+    public static readonly ICollection<CultureInfo> LanguageChoices =
+    [
+        new("en-US"),
+        new("de-DE"),
+        new("el-GR"),
+        new("es-ES"),
+        new("fr-FR"),
+        new("id-ID"),
+        new("it-IT"),
+        new("nl-NL"),
+        new("pt-BR"),
+        new("tr-TR"),
+        new("zh-CN")
+    ];
 
     private static readonly ICollection<string> Extensions = new List<string>
     {
@@ -54,7 +54,7 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
     };
 
     private readonly string[] _usedProperties =
-    {
+    [
         nameof(Settings.Default.TextColor),
         nameof(Settings.Default.BackgroundColor),
         nameof(Settings.Default.TagColor),
@@ -68,10 +68,10 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
         nameof(Settings.Default.PreserveAttributes),
         nameof(Settings.Default.ShowDefaultSamples),
         nameof(Settings.Default.CustomSamples),
-        nameof(Settings.Default.UICulture),
-    };
+        nameof(Settings.Default.UICulture)
+    ];
 
-    private readonly Dictionary<string, object> _currentValues = new Dictionary<string, object>();
+    private readonly Dictionary<string, object> _currentValues = new();
 
     public SettingsDialogViewModel()
     {
@@ -92,6 +92,7 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
     [ObservableProperty]
     private string? _language;
 
+    [UsedImplicitly]
     partial void OnLanguageChanged(string? value)
     {
         SaveLanguage();

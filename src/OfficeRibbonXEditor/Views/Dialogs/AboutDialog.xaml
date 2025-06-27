@@ -43,28 +43,34 @@
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" Text="{lex:Loc About.Paragraph2}"/>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4,0,0" Text="{lex:Loc About.Translators}"/>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,0,0,4">
-            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=zh-CN}"/>:
-                <controls:ExternalHyperlink NavigateUri="https://github.com/bitaller">bitaller</controls:ExternalHyperlink>
-            <LineBreak/>
-            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=nl-NL}"/>:
-                <controls:ExternalHyperlink NavigateUri="https://github.com/pplanch">pplanch</controls:ExternalHyperlink>
-            <LineBreak/>
-            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=fr-FR}"/>:
-                <controls:ExternalHyperlink NavigateUri="https://github.com/pplanch">pplanch</controls:ExternalHyperlink>
-            <LineBreak/>
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=de-DE}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/carpac">carpac</controls:ExternalHyperlink>,
                 <controls:ExternalHyperlink NavigateUri="https://github.com/Claythve">Claythve</controls:ExternalHyperlink>,
                 <controls:ExternalHyperlink NavigateUri="https://github.com/Mo-Gul">Mo-Gul</controls:ExternalHyperlink>
             <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=el-GR}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/ManosPapadakis95">ManosPapadakis95</controls:ExternalHyperlink>
+            <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=fr-FR}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/pplanch">pplanch</controls:ExternalHyperlink>
+            <LineBreak/>
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=id-ID}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/aliishaq-zz">aliishaq-zz</controls:ExternalHyperlink>
+            <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=it-IT}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/dprevato">dprevato</controls:ExternalHyperlink>
+            <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=nl-NL}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/pplanch">pplanch</controls:ExternalHyperlink>
             <LineBreak/>
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=pt-BR}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/Alexcel">ALeXceL </controls:ExternalHyperlink>
             <LineBreak/>
             - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=tr-TR}"/>:
                 <controls:ExternalHyperlink NavigateUri="https://github.com/fatihmeh">fatihmeh</controls:ExternalHyperlink>
+            <LineBreak/>
+            - <Run Text="{Binding Mode=OneWay, Converter={StaticResource CultureConverter}, ConverterParameter=zh-CN}"/>:
+                <controls:ExternalHyperlink NavigateUri="https://github.com/bitaller">bitaller</controls:ExternalHyperlink>
         </TextBlock>
         <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Margin="0,4" FontStyle="Italic">
             This tool is a fork of the original <controls:ExternalHyperlink NavigateUri="https://github.com/OfficeDev/office-custom-ui-editor">Custom UI Editor for Microsoft Office</controls:ExternalHyperlink>, 
