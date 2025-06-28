@@ -2,6 +2,8 @@
   <Import Project="..\..\build\Common.props" />
   <PropertyGroup>
     <PublishTrimmed>true</PublishTrimmed>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />

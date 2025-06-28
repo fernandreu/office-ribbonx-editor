@@ -20,7 +20,7 @@
     <SelfContained Condition="'$(SELF_CONTAINED)' != ''">$(SELF_CONTAINED)</SelfContained>
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
     
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
 
     <!--This also allows caching NuGet packages in Azure Pipelines. No longer used because it seemed to cause more harm than good-->
