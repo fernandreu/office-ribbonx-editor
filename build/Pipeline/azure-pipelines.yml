@@ -210,28 +210,19 @@ stages:
                 
                 ## How to install / use
                 
-                Download one of the items from the `Assets` section below. If in doubt, I would
-                recommend using the self-contained installer.
+                Download one of the items from the `Assets` section below. If in doubt, I would recommend using the self-contained installer.
 
                 There are two types of downloads available:
 
-                - **Binaries:** These are just a `.zip` file ready to be extracted, with no
-                  installation necessary. No entry will be created in the control panel's program
-                  list
-                - **Installers:** A typical self-extracting installer which will require admin
-                  rights
+                - **Binaries:** These are just a `.zip` file ready to be extracted, with no installation necessary. No entry will be created in the control panel's program list
+                - **Installers:** A typical self-extracting installer which will require admin rights
                 
                 For each of those download types, there are two variants:
 
-                - **Framework-dependent:** This requires at least version 9.0 of the
-                  [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime)
-                  installed (the one for desktop apps is enough)
-                - **Self-contained:** For these, the .NET runtime is included with the
-                  installation, so you won't need to install anything else. As a drawback, the
-                  resulting tool is much larger in file size
+                - **Framework-dependent:** This requires at least version 9.0 of the [.NET Runtime](https://dotnet.microsoft.com/download/dotnet/current/runtime) installed (the one for desktop apps is enough)
+                - **Self-contained:** For these, the .NET runtime is included with the installation, so you won't need to install anything else. As a drawback, the resulting tool is much larger in file size
                   
-                **Starting from version 2.0, .NET Framework is no longer supported. For more
-                information, see #188.**
+                **Starting from version 2.0, .NET Framework is no longer supported. For more information, see #188.**
 
               assets: '$(Build.ArtifactStagingDirectory)/*.*'
               isPreRelease: true

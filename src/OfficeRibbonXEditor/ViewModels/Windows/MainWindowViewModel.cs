@@ -17,6 +17,7 @@ using System.Xml.Schema;
 using AsyncAwaitBestPractices;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using JetBrains.Annotations;
 using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Extensions;
@@ -95,17 +96,18 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
 
     public event EventHandler<DataEventArgs<Cursor>>? SetGlobalCursor; 
 
-    public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = new ObservableCollection<OfficeDocumentViewModel>();
+    public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = [];
 
     [ObservableProperty]
     private SampleFolderViewModel? _xmlSamples;
 
-    public ObservableCollection<ITabItemViewModel> OpenTabs { get; } = new ObservableCollection<ITabItemViewModel>();
+    public ObservableCollection<ITabItemViewModel> OpenTabs { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEditorTabSelected))]
     private ITabItemViewModel? _selectedTab;
 
+    [UsedImplicitly]
     partial void OnSelectedTabChanged(ITabItemViewModel? value)
     {
         if (value != null)
@@ -127,6 +129,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     private bool _showWhitespaces;
 
+    [UsedImplicitly]
     partial void OnShowWhitespacesChanged(bool value)
     {
         Settings.Default.ShowWhitespace = value;
@@ -151,6 +154,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(CanInsertXml14Part))]
     private TreeViewItemViewModel? _selectedItem;
 
+    [UsedImplicitly]
     partial void OnSelectedItemChanging(TreeViewItemViewModel? value)
     {
         if (value is IconViewModel icon)
@@ -161,6 +165,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         }
     }
 
+    [UsedImplicitly]
     partial void OnSelectedItemChanged(TreeViewItemViewModel? value)
     {
         if (SelectedItem != null)
@@ -204,28 +209,14 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
         {
             // Get currently active document
             var elem = SelectedItem;
-            if (elem == null)
+            return elem switch
             {
-                return null;
-            }
-
-            // Find the root document
-            if (elem is IconViewModel)
-            {
-                return elem.Parent?.Parent as OfficeDocumentViewModel;
-            }
-
-            if (elem is OfficePartViewModel)
-            {
-                return elem.Parent as OfficeDocumentViewModel;
-            }
-
-            if (elem is OfficeDocumentViewModel viewModel)
-            {
-                return viewModel;
-            }
-
-            return null;
+                // Find the root document
+                IconViewModel => elem.Parent?.Parent as OfficeDocumentViewModel,
+                OfficePartViewModel => elem.Parent as OfficeDocumentViewModel,
+                OfficeDocumentViewModel viewModel => viewModel,
+                _ => null
+            };
         }
     }
 
