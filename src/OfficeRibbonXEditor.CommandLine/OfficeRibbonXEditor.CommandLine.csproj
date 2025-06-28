@@ -5,6 +5,8 @@
     <PublishTrimmed>true</PublishTrimmed>
     <SelfContained Condition="'$(SELF_CONTAINED)' != ''">$(SELF_CONTAINED)</SelfContained>
     <SelfContained Condition="'$(SelfContained)' == ''">false</SelfContained>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Using Include="System.ComponentModel.DataAnnotations.RequiredAttribute" Alias="RequiredAttribute" />

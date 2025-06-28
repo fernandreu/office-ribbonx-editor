@@ -14,7 +14,7 @@
     <WarningsAsErrors>NU1605;nullable</WarningsAsErrors>
     <LangVersion>13.0</LangVersion>
 
-    <DebugType>full</DebugType>
+    <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>
 
     <!-- SonarQube needs this -->
