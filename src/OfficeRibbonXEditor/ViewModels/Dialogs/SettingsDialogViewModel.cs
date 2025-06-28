@@ -104,7 +104,7 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
     [ObservableProperty]
     private bool _languageChanged;
 
-    public ICollection<ITabItemViewModel> Tabs { get; } = new List<ITabItemViewModel>();
+    public ICollection<ITabItemViewModel> Tabs { get; private set; } = [];
 
     public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();
 
@@ -114,12 +114,10 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
 
     public bool OnLoaded(ICollection<ITabItemViewModel> payload)
     {
-        Tabs.Clear();
-        foreach (var tab in payload)
-        {
-            Tabs.Add(tab);
-        }
-
+        // It is important to use the same collection instead of a copy so that it holds an accurate information by
+        // the time settings are to be applied. Otherwise, tabs opened since the dialog was opened would not get the
+        // new settings applied to them
+        Tabs = payload;
         LoadCurrent();
         return true;
     }
