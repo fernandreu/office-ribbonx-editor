@@ -1,14 +1,10 @@
-﻿using System;
+﻿namespace OfficeRibbonXEditor.Helpers;
 
-namespace OfficeRibbonXEditor.Helpers;
-
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
-public class ExportViewAttribute : Attribute
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public class ExportViewAttribute(Type viewModelType) : Attribute
 {
-    public Type ViewModelType { get; }
-
-    public ExportViewAttribute(Type viewModelType)
-    {
-        ViewModelType = viewModelType;
-    }
+    public Type ViewModelType { get; } = viewModelType;
 }
+
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public class ExportViewAttribute<T>() : ExportViewAttribute(typeof(T));

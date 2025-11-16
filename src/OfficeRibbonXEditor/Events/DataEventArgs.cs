@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace OfficeRibbonXEditor.Events;
+﻿namespace OfficeRibbonXEditor.Events;
 
 /// <inheritdoc />
 /// <summary>

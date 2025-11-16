@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using OfficeRibbonXEditor.Interfaces;
 using ScintillaNET;
 
 namespace OfficeRibbonXEditor.Helpers.Xml;
 
-public class XmlErrorResults : IResultCollection
+public class XmlErrorResults(IEnumerable<XmlError> items) : IResultCollection
 {
-    public XmlErrorResults(IEnumerable<XmlError> items)
-    {
-        Items = new List<XmlError>(items);
-    }
-
     public string Header { get; } = "XML Validation Results";
 
-    public List<XmlError> Items { get; }
+    public List<XmlError> Items { get; } = [..items];
 
     public bool IsEmpty => Items.Count == 0;
 

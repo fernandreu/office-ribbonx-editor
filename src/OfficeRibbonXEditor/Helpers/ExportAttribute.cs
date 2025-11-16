@@ -1,8 +1,6 @@
-﻿using System;
+﻿namespace OfficeRibbonXEditor.Helpers;
 
-namespace OfficeRibbonXEditor.Helpers;
-
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
 public class ExportAttribute : Attribute
 {
     public Type? InterfaceType { get; }
@@ -18,3 +16,6 @@ public class ExportAttribute : Attribute
 
     public Lifetime Lifetime { get; set; } = Lifetime.Transient;
 }
+
+[AttributeUsage(AttributeTargets.Class, Inherited = false)]
+public class ExportAttribute<T>() : ExportAttribute(typeof(T));

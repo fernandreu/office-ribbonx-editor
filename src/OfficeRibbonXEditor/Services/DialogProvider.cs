@@ -4,15 +4,10 @@ using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services;
 
-[Export(typeof(IDialogProvider))]
-public class DialogProvider : IDialogProvider
+[Export<IDialogProvider>]
+public class DialogProvider(ILifetimeScope container) : IDialogProvider
 {
-    private readonly ILifetimeScope _container;
-
-    public DialogProvider(ILifetimeScope container)
-    {
-        _container = container;
-    }
+    private readonly ILifetimeScope _container = container;
 
     public T ResolveDialog<T>() where T : IContentDialogBase
     {

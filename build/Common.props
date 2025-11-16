@@ -8,11 +8,17 @@
     <Version>$(VersionNumber).$(BuildNumber)</Version>
     <CopyrightYear>$([System.DateTime]::Now.ToString("yyyy"))</CopyrightYear>
     <Copyright>Copyright (c) $(CopyrightYear) $(Authors)</Copyright>
-    <TargetFramework>net9.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <WarningsAsErrors>NU1605;nullable</WarningsAsErrors>
-    <LangVersion>13.0</LangVersion>
+    <LangVersion>preview</LangVersion>
     <NoWarn>NU1701</NoWarn>
   </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="UnitTests"/>
+    <InternalsVisibleTo Include="IntegrationTests"/>
+    <InternalsVisibleTo Include="FunctionalTests"/>
+    <InternalsVisibleTo Include="UITests"/>
+  </ItemGroup>
 </Project>

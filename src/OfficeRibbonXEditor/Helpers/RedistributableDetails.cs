@@ -1,22 +1,12 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿namespace OfficeRibbonXEditor.Helpers;
 
-namespace OfficeRibbonXEditor.Helpers;
-
-public class RedistributableDetails
+public class RedistributableDetails(string neededVersion, string processArchitecture, Uri downloadLink)
 {
-    public RedistributableDetails(string neededVersion, string processArchitecture, Uri downloadLink)
-    {
-        NeededVersion = neededVersion;
-        ProcessArchitecture = processArchitecture;
-        DownloadLink = downloadLink;
-    }
+    public string NeededVersion { get; } = neededVersion;
 
-    public string NeededVersion { get; }
+    public string ProcessArchitecture { get; } = processArchitecture;
 
-    public string ProcessArchitecture { get; }
-
-    public Uri DownloadLink { get; }
+    public Uri DownloadLink { get; } = downloadLink;
 
     public string? InstalledVersion { get; set; }
 

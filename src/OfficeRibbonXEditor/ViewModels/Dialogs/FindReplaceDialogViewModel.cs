@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -39,9 +38,9 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
     public IncrementalSearcher? IncrementalSearcher { get; private set; }
 
     [ObservableProperty]
-    private Scintilla _scintilla;
+    public partial Scintilla? Scintilla { get; set; }
 
-    partial void OnScintillaChanging(Scintilla value)
+    partial void OnScintillaChanging(Scintilla? value)
     {
         if (value != null && IncrementalSearcher != null)
         {
@@ -49,94 +48,101 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
         }
     }
 
-    partial void OnScintillaChanged(Scintilla value)
+    partial void OnScintillaChanged(Scintilla? value)
     {
-        FindReplace = new FindReplace(Scintilla);
+        if (value is null)
+        {
+            return;
+        }
+        
+        FindReplace = new(value);
         FindReplace.FindAllResults += FindAllHandler;
 
-        IncrementalSearcher = new IncrementalSearcher
+        IncrementalSearcher = new()
         {
-            Scintilla = Scintilla,
+            Scintilla = value,
             FindReplace = this,
             Visible = false
         };
-        Scintilla.Controls.Add(IncrementalSearcher);
+        value.Controls.Add(IncrementalSearcher);
     }
         
     private FindReplace.FindAllResultsEventHandler FindAllHandler { get; set; }
 
     [ObservableProperty]
-    private bool _autoPosition = true;
+    public partial bool AutoPosition { get; set; } = true;
 
     [ObservableProperty]
-    private bool _isFindTabSelected = true;
+    public partial bool IsFindTabSelected { get; set; } = true;
 
     [ObservableProperty]
-    private bool _isStandardSearch = true;
+    public partial bool IsStandardSearch { get; set; } = true;
 
     [ObservableProperty]
-    private bool _isExtendedSearch;
+    public partial bool IsExtendedSearch { get; set; }
 
     [ObservableProperty]
-    private bool _isRegExSearch;
+    public partial bool IsRegExSearch { get; set; }
 
     [ObservableProperty]
-    private bool _ignoreCase;
+    public partial bool IgnoreCase { get; set; }
 
     [ObservableProperty]
-    private bool _wholeWord;
+    public partial bool WholeWord { get; set; }
 
     [ObservableProperty]
-    private bool _wordStart;
+    public partial bool WordStart { get; set; }
 
     [ObservableProperty]
-    private bool _isCompiled;
+    public partial bool IsCompiled { get; set; }
 
     [ObservableProperty]
-    private bool _isCultureInvariant;
+    public partial bool IsCultureInvariant { get; set; }
 
     [ObservableProperty]
-    private bool _isEcmaScript;
+    public partial bool IsEcmaScript { get; set; }
 
     [ObservableProperty]
-    private bool _isExplicitCapture;
+    public partial bool IsExplicitCapture { get; set; }
 
     [ObservableProperty]
-    private bool _ignorePatternWhitespace;
+    public partial bool IgnorePatternWhitespace { get; set; }
 
     [ObservableProperty]
-    private bool _isMultiline;
+    public partial bool IsMultiline { get; set; }
 
     [ObservableProperty]
-    private bool _isRightToLeft;
+    public partial bool IsRightToLeft { get; set; }
 
     [ObservableProperty]
-    private bool _isSingleLine;
+    public partial bool IsSingleLine { get; set; }
 
     [ObservableProperty]
-    private bool _wrap;
+    public partial bool Wrap { get; set; }
 
     [ObservableProperty]
-    private bool _searchSelection;
+    public partial bool SearchSelection { get; set; }
 
     [ObservableProperty]
-    private bool _markLine;
+    public partial bool MarkLine { get; set; }
 
     [ObservableProperty]
-    private bool _highlightMatches;
+    public partial bool HighlightMatches { get; set; }
 
     [ObservableProperty]
-    private string _findText = string.Empty;
+    public partial string FindText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _replaceText = string.Empty;
+    public partial string ReplaceText { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string _statusText = string.Empty;
+    public partial string StatusText { get; set; } = string.Empty;
 
     [RelayCommand]
     private void FindAll()
     {
+        Guard.IsNotNull(Scintilla);
+        
         if (string.IsNullOrEmpty(FindText))
         {
             return;
@@ -191,6 +197,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
     [RelayCommand]
     private void ReplaceAll()
     {
+        Guard.IsNotNull(Scintilla);
         if (string.IsNullOrEmpty(FindText))
         {
             return;
@@ -248,6 +255,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
     [RelayCommand]
     private void Clear()
     {
+        Guard.IsNotNull(Scintilla);
         Scintilla.MarkerDeleteAll(FindReplace.Marker.Index);
         FindReplace.ClearAllHighlights();
     }
@@ -257,6 +265,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
 
     private void FindWrapper(bool searchUp)
     {
+        Guard.IsNotNull(Scintilla);
         if (string.IsNullOrEmpty(FindText))
         {
             return;
@@ -327,6 +336,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
 
     private CharacterRange FindNext(bool searchUp, ref Regex? rr)
     {
+        Guard.IsNotNull(Scintilla);
         CharacterRange foundRange;
 
         if (IsRegExSearch)
@@ -388,6 +398,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
 
     private void ReplaceWrapper(bool searchUp)
     {
+        Guard.IsNotNull(Scintilla);
         if (string.IsNullOrEmpty(FindText))
         {
             return;
@@ -435,6 +446,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
 
     private CharacterRange ReplaceNext(bool searchUp)
     {
+        Guard.IsNotNull(Scintilla);
         Regex? rr = null;
         var selRange = new CharacterRange(Scintilla.Selections[0].Start, Scintilla.Selections[0].End);
 
@@ -609,6 +621,7 @@ public partial class FindReplaceDialogViewModel : DialogBase, IContentDialog<Val
 
     public virtual void MoveDialogAwayFromSelection()
     {
+        Guard.IsNotNull(Scintilla);
         if (!AutoPosition)
         {
             return;

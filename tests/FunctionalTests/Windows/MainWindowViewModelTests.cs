@@ -5,7 +5,6 @@ using System.Windows;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Common;
 using OfficeRibbonXEditor.Events;
-using OfficeRibbonXEditor.Extensions;
 using OfficeRibbonXEditor.FunctionalTests.Helpers;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;

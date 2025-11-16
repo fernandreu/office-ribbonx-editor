@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
@@ -19,7 +18,7 @@ namespace OfficeRibbonXEditor.Converters;
 [ValueConversion(typeof(object), typeof(ICommand))]
 public class MethodToCommandConverter : IValueConverter
 {
-    public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null || parameter is not string methodName)
         {
@@ -27,7 +26,7 @@ public class MethodToCommandConverter : IValueConverter
             return value;
         }
 
-        var methodInfo = value.GetType().GetMethod(methodName, Array.Empty<Type>());
+        var methodInfo = value.GetType().GetMethod(methodName, []);
         if (methodInfo == null)
         {
             Debug.WriteLine($"Method '{methodName}' not found for object of type {value.GetType()}");
@@ -37,7 +36,7 @@ public class MethodToCommandConverter : IValueConverter
         return new MethodProxy(methodInfo, value);
     }
 
-    public object? ConvertBack(object? value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new InvalidOperationException($"{nameof(MethodToCommandConverter)} can only be used OneWay.");
     }
@@ -50,9 +49,9 @@ public class MethodToCommandConverter : IValueConverter
     {
         private readonly MethodInfo _method;
 
-        private readonly object _sender;
+        private readonly object? _sender;
 
-        public MethodProxy(MethodInfo method, object sender)
+        public MethodProxy(MethodInfo method, object? sender)
         {
             _method = method;
             _sender = sender;
@@ -60,7 +59,7 @@ public class MethodToCommandConverter : IValueConverter
 
         /// <summary>
         /// The CanExecute property of this command will never change, but we still need to define the
-        /// the corresponding event. The empty add / remove is a way to tell the compiler (or the code
+        /// corresponding event. The empty add / remove is a way to tell the compiler (or the code
         /// readers) that this event is only added for the sake of the ICommand interface
         /// </summary>
         [SuppressMessage("SonarLint", "S108", Justification = "Warning is due to empty blocks. As explained above, we are doing this on purpose")]

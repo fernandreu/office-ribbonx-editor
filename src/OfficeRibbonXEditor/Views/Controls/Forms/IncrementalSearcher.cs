@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
@@ -26,7 +25,6 @@ public sealed partial class IncrementalSearcher : UserControl
 
     #region Properties
 
-    private bool _autoPosition = true;
     /// <summary>
     /// Gets or sets whether the control should automatically move away from the current
     /// selection to prevent obscuring it.
@@ -36,9 +34,9 @@ public sealed partial class IncrementalSearcher : UserControl
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     public bool AutoPosition
     {
-        get => _autoPosition;
-        set => _autoPosition = !ToolItem && value;
-    }
+        get;
+        set => field = !ToolItem && value;
+    } = true;
 
     [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
     [EditorBrowsable(EditorBrowsableState.Advanced)]

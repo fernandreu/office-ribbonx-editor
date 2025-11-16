@@ -19,52 +19,51 @@ public partial class IconViewModel(string name, BitmapImage image, OfficePartVie
 
     public BitmapImage Image { get; } = image;
 
-    private string _name = name;
     /// <summary>
     /// Gets or sets the Id of the icon, applying the changes directly to the underlying model
     /// </summary>
     public override string Name
     {
-        get => _name;
+        get;
         set
         {
             if (!IsValidId(value))
             {
-                NewName = _name;
+                NewName = field;
                 return;
             }
-                
+
             if (Parent?.Children.OfType<IconViewModel>().Any(x => x.Name == value) ?? false)
             {
                 // There is already an icon with the same name. It could be this same icon and not
                 // a sibling, in which case the Set() call below would have returned false anyway
-                NewName = _name;
+                NewName = field;
                 return;
             }
 
             // Make sure this.ChangeId() is later called with the previous ID and not the new one
             // already. Otherwise, the icon will actually not be updated inside the part
-            var previousId = _name;
+            var previousId = field;
 
-            if (!SetProperty(ref _name, value))
+            if (!SetProperty(ref field, value))
             {
-                NewName = _name; // This should do nothing, since both should coincide
+                NewName = field; // This should do nothing, since both should coincide
                 return;
             }
-                
+
             ChangeId(previousId, value);
         }
-    }
+    } = name;
 
     /// <summary>
     /// Gets or sets the potentially new ID to be used for the icon. This is used, for example, in
     /// editing mode before committing to use the new ID (in case the user discard the changes)
     /// </summary>
     [ObservableProperty]
-    private string _newName = name;
+    public partial string NewName { get; set; } = name;
 
     [ObservableProperty]
-    private bool _isEditingId;
+    public partial bool IsEditingId { get; set; }
 
     /// <summary>
     /// Attempts to apply the NewName property to the Id one, but cancels the action if the ID is invalid

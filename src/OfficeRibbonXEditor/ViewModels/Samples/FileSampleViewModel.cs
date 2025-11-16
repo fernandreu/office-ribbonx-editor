@@ -1,18 +1,12 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 
 namespace OfficeRibbonXEditor.ViewModels.Samples;
 
-public class FileSampleViewModel : XmlSampleViewModel
+public class FileSampleViewModel(string path) : XmlSampleViewModel
 {
-    public FileSampleViewModel(string path)
-    {
-        Path = path;
-    }
-
     public override string Name => System.IO.Path.GetFileNameWithoutExtension(Path);
 
-    public string Path { get; }
+    public string Path { get; } = path;
 
     public override string ReadContents()
     {

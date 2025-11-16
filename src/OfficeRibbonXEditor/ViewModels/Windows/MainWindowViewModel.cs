@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -8,8 +6,6 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Xml;
@@ -99,13 +95,12 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     public ObservableCollection<OfficeDocumentViewModel> DocumentList { get; } = [];
 
     [ObservableProperty]
-    private SampleFolderViewModel? _xmlSamples;
-
+    public partial SampleFolderViewModel? XmlSamples { get; set; }
     public ObservableCollection<ITabItemViewModel> OpenTabs { get; } = [];
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEditorTabSelected))]
-    private ITabItemViewModel? _selectedTab;
+    public partial ITabItemViewModel? SelectedTab { get; set; }
 
     [UsedImplicitly]
     partial void OnSelectedTabChanged(ITabItemViewModel? value)
@@ -116,13 +111,13 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             SelectedItem = value.Item;
         }
     }
-        
+
     /// <summary>
     /// Whether documents should be reloaded right before being saved.
     /// </summary>
     [ObservableProperty]
-    private bool _reloadOnSave = true;
-        
+    public partial bool ReloadOnSave { get; set; } = true;
+
     /// <summary>
     /// Whether the editor should make the whitespace / EOL characters visible.
     /// </summary>
@@ -138,12 +133,12 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
             tab.Lexer?.Update();
         }
     }
-        
+
     /// <summary>
     /// The version string of a newer release, if available
     /// </summary>
     [ObservableProperty]
-    private string? _newerVersion;
+    public partial string? NewerVersion { get; set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CurrentDocument))]
@@ -152,7 +147,7 @@ public partial class MainWindowViewModel : ObservableObject, IDisposable
     [NotifyPropertyChangedFor(nameof(IsIconSelected))]
     [NotifyPropertyChangedFor(nameof(CanInsertXml12Part))]
     [NotifyPropertyChangedFor(nameof(CanInsertXml14Part))]
-    private TreeViewItemViewModel? _selectedItem;
+    public partial TreeViewItemViewModel? SelectedItem { get; set; }
 
     [UsedImplicitly]
     partial void OnSelectedItemChanging(TreeViewItemViewModel? value)

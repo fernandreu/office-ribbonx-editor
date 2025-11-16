@@ -1,6 +1,4 @@
 ﻿using OfficeRibbonXEditor.Helpers;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace OfficeRibbonXEditor.Interfaces;
 

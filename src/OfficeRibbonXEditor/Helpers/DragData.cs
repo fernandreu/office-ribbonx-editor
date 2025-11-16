@@ -2,14 +2,9 @@
 
 namespace OfficeRibbonXEditor.Helpers;
 
-public class DragData
+public class DragData(IDataObject data)
 {
-    public DragData(IDataObject data)
-    {
-        Data = data;
-    }
-
-    public IDataObject Data { get; }
+    public IDataObject Data { get; } = data;
 
     public bool Handled { get; set; }
 }

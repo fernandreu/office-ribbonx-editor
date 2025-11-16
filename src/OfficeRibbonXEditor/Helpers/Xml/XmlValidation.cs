@@ -11,22 +11,22 @@ public static class XmlValidation
 {
     private static readonly List<HashSet<string>> MutuallyExclusiveAttributes =
     [
-        new() { "title", "getTitle" },
-        new() { "enabled", "getEnabled" },
-        new() { "visible", "getVisible" },
-        new() { "label", "getLabel" },
-        new() { "keytip", "getKeytip" },
-        new() { "screentip", "getScreentip" },
-        new() { "supertip", "getSupertip" },
-        new() { "description", "getDescription" },
-        new() { "altText", "getAltText" },
-        new() { "showLabel", "getShowLabel" },
-        new() { "helperText", "getHelperText" },
-        new() { "showImage", "getShowImage" },
-        new() { "size", "getSize" },
-        new() { "id", "idMso", "idQ" },
-        new() { "image", "imageMso", "getImage" },
-        new() { "insertBeforeMso", "insertAfterMso", "insertBeforeQ", "insertAfterQ" }
+        ["title", "getTitle"],
+        ["enabled", "getEnabled"],
+        ["visible", "getVisible"],
+        ["label", "getLabel"],
+        ["keytip", "getKeytip"],
+        ["screentip", "getScreentip"],
+        ["supertip", "getSupertip"],
+        ["description", "getDescription"],
+        ["altText", "getAltText"],
+        ["showLabel", "getShowLabel"],
+        ["helperText", "getHelperText"],
+        ["showImage", "getShowImage"],
+        ["size", "getSize"],
+        ["id", "idMso", "idQ"],
+        ["image", "imageMso", "getImage"],
+        ["insertBeforeMso", "insertAfterMso", "insertBeforeQ", "insertAfterQ"]
     ];
 
     public static IList<XmlError> Validate(string? xml, XmlSchema targetSchema)

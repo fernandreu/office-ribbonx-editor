@@ -8,12 +8,8 @@ namespace OfficeRibbonXEditor.CommandLine;
 [Command(Name = "OfficeRibbonXEditor", Description = "A command-line interface to edit the custom UI of Office files")]
 [Subcommand(typeof(ExtractCommand), typeof(InsertCommand))]
 [UsedImplicitly]
-public class Program : BaseCommand
+public class Program(IConsole console) : BaseCommand(console)
 {
-    public Program(IConsole console) : base(console)
-    {
-    }
-
     public static int Main(string[] args)
         => CommandLineApplication.Execute<Program>(args);
 

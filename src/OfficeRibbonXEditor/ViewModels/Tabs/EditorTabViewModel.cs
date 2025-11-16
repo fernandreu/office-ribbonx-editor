@@ -1,5 +1,4 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Events;
 using OfficeRibbonXEditor.Helpers;
@@ -16,7 +15,7 @@ public partial class EditorTabViewModel : ObservableObject, ITabItemViewModel
 {
     public EditorTabViewModel(OfficePartViewModel part, MainWindowViewModel mainWindow)
     {
-        _part = part;
+        Part = part;
         MainWindow = mainWindow;
     }
 
@@ -37,21 +36,20 @@ public partial class EditorTabViewModel : ObservableObject, ITabItemViewModel
     public event EventHandler? DidDuplicateLine;
 
     [ObservableProperty]
-    private string _title = string.Empty;
+    public partial string Title { get; set; } = string.Empty;
 
     [ObservableProperty]
-    private string? _statusText;
+    public partial string? StatusText { get; set; }
 
     [ObservableProperty]
-    private int _zoom;
-
+    public partial int Zoom { get; set; }
     public ScintillaLexer? Lexer { get; set; }
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StatusText))]
     [NotifyPropertyChangedFor(nameof(Item))]
-    private OfficePartViewModel _part;
-        
+    public partial OfficePartViewModel Part { get; set; }
+
     public TreeViewItemViewModel Item => Part;
 
     public MainWindowViewModel MainWindow { get; set; }

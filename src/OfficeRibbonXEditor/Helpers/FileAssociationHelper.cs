@@ -1,19 +1,13 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Microsoft.Win32;
 
 namespace OfficeRibbonXEditor.Helpers;
 
-public class FileAssociationHelper
+public class FileAssociationHelper(string extension)
 {
     private const string MenuEntryName = "OfficeXRibbonEdit";
 
-    private readonly string _extension;
-
-    public FileAssociationHelper(string extension)
-    {
-        _extension = extension;
-    }
+    private readonly string _extension = extension;
 
     public bool CheckAssociation()
     {

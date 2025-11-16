@@ -3,14 +3,9 @@ using McMaster.Extensions.CommandLineUtils;
 
 namespace OfficeRibbonXEditor.CommandLine.Commands;
 
-public abstract class BaseCommand
+public abstract class BaseCommand(IConsole console)
 {
-    private readonly IConsole _console;
-
-    protected BaseCommand(IConsole console)
-    {
-        _console = console;
-    }
+    private readonly IConsole _console = console;
 
     [Option("-q|--quiet", Description = "Suppress normal output messages. This does not suppress errors")]
     [UsedImplicitly]

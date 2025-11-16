@@ -1,5 +1,4 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
@@ -10,13 +9,12 @@ namespace OfficeRibbonXEditor.ViewModels.Dialogs;
 [Export]
 public partial class GoToDialogViewModel : DialogBase, IContentDialog<ScintillaLexer>
 {
-    private ScintillaLexer? _lexer;
     public ScintillaLexer? Lexer
     {
-        get => _lexer;
+        get;
         set
         {
-            if (!SetProperty(ref _lexer, value))
+            if (!SetProperty(ref field, value))
             {
                 return;
             }
@@ -41,7 +39,7 @@ public partial class GoToDialogViewModel : DialogBase, IContentDialog<ScintillaL
     public int MaximumLineNumber => Lexer?.Editor?.Lines.Count ?? 0;
 
     [ObservableProperty]
-    private int _target;
+    public partial int Target { get; set; }
 
     public bool OnLoaded(ScintillaLexer payload)
     {

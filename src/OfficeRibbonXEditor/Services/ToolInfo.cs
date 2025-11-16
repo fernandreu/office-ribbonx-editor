@@ -5,7 +5,7 @@ using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services;
 
-[Export(typeof(IToolInfo))]
+[Export<IToolInfo>]
 public class ToolInfo : IToolInfo
 {
     public string AssemblyTitle

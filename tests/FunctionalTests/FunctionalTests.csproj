@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows</TargetFramework>
+    <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
 
@@ -12,7 +12,7 @@
 
     <Nullable>enable</Nullable>
     <WarningsAsErrors>NU1605;nullable</WarningsAsErrors>
-    <LangVersion>13.0</LangVersion>
+    <LangVersion>preview</LangVersion>
 
     <DebugType>portable</DebugType>
     <DebugSymbols>true</DebugSymbols>

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Windows.Media.Imaging;
 using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Common;
@@ -13,7 +10,7 @@ public partial class OfficePartViewModel : TreeViewItemViewModel
     public OfficePartViewModel(OfficePart part, OfficeDocumentViewModel parent) 
         : base(parent, false, contents: part.ReadContent())
     {
-        _part = part;
+        Part = part;
         OriginalContents = Contents ?? string.Empty;
         LoadIcons();
     }
@@ -21,8 +18,7 @@ public partial class OfficePartViewModel : TreeViewItemViewModel
     public string OriginalContents { get; private set; }
 
     [ObservableProperty]
-    private OfficePart? _part;
-
+    public partial OfficePart? Part { get; set; }
     public bool IconsChanged { get; set; }
 
     public bool HasUnsavedChanges => OriginalContents != Contents || IconsChanged;

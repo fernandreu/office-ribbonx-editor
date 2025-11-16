@@ -84,13 +84,13 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
             FileAssociations.Add(association);
         }
 
-        _language = LoadLanguage();
+        Language = LoadLanguage();
 
         Settings.Default.PropertyChanged += SettingsChangedEventHandler;
     }
 
     [ObservableProperty]
-    private string? _language;
+    public partial string? Language { get; set; }
 
     [UsedImplicitly]
     partial void OnLanguageChanged(string? value)
@@ -99,11 +99,10 @@ public partial class SettingsDialogViewModel : DialogBase, IContentDialog<IColle
     }
 
     [ObservableProperty]
-    private bool _settingsChanged;
+    public partial bool SettingsChanged { get; set; }
 
     [ObservableProperty]
-    private bool _languageChanged;
-
+    public partial bool LanguageChanged { get; set; }
     public ICollection<ITabItemViewModel> Tabs { get; private set; } = [];
 
     public ICollection<FileAssociationViewModel> FileAssociations { get; } = new List<FileAssociationViewModel>();

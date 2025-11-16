@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Windows;
 using NUnit.Framework;
 using OfficeRibbonXEditor.Converters;
-using RectConverter = OfficeRibbonXEditor.Converters.RectConverter;
 
 namespace OfficeRibbonXEditor.UnitTests.Converters;
 

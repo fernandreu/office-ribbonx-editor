@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 
 namespace OfficeRibbonXEditor.Events;
 
@@ -7,7 +6,6 @@ public class PointEventArgs : EventArgs
 {
     public PointEventArgs()
     {
-            
     }
 
     public PointEventArgs(Point data)

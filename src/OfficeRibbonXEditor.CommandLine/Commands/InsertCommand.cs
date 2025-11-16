@@ -6,12 +6,8 @@ using OfficeRibbonXEditor.Common;
 namespace OfficeRibbonXEditor.CommandLine.Commands;
 
 [Command(Description = "Inserts a custom UI file to an Office file. If it already exists, it will be overwritten")]
-public class InsertCommand : BaseUpdateCommand
+public class InsertCommand(IConsole console) : BaseUpdateCommand(console)
 {
-    public InsertCommand(IConsole console) : base(console)
-    {
-    }
-
     [Option("--type <TYPE>", Description = "The type of Custom UI file. If not given, it will be inferred from the filename")]
     [AllowedValues("12", "14")]
     [UsedImplicitly]

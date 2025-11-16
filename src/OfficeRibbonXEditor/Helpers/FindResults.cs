@@ -1,20 +1,14 @@
-﻿using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using OfficeRibbonXEditor.Interfaces;
 using ScintillaNET;
 
 namespace OfficeRibbonXEditor.Helpers;
 
-public class FindResults : IResultCollection
+public class FindResults(IEnumerable<CharacterRange> items) : IResultCollection
 {
-    public FindResults(IEnumerable<CharacterRange> items)
-    {
-        Items = new List<CharacterRange>(items);
-    }
-
     public string Header { get; } = "Find Results";
 
-    public List<CharacterRange> Items { get; }
+    public List<CharacterRange> Items { get; } = [..items];
 
     public bool IsEmpty => Items.Count == 0;
 
