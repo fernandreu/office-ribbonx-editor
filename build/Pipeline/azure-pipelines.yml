@@ -19,7 +19,7 @@ variables:
 - group: CodeSign
 - group: SonarCloud
 - name: solution
-  value: '**/*.sln'
+  value: '**/*.slnx'
 - name: NUGET_PACKAGES
   value: $(Pipeline.Workspace)/.nuget/packages
 - name: isMasterBranch

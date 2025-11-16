@@ -24,7 +24,7 @@ steps:
   displayName: 'Build solution'
   inputs:
     command: build
-    projects: $(Build.SourcesDirectory)/*.sln
+    projects: $(Build.SourcesDirectory)/*.slnx
     arguments: '--configuration $(buildConfiguration)'
     
 # This task is necessary for coverlet to work with the OfficeRibbonXEditor project correctly.
