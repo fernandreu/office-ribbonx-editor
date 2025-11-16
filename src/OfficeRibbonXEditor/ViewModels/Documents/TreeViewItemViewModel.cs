@@ -49,12 +49,12 @@ public partial class TreeViewItemViewModel : ObservableObject
     /// Returns true if this object's Children have not yet been populated.
     /// </summary>
     public bool HasDummyChild => Children.Count == 1 && Children[0] == DummyChild;
-        
+
     /// <summary>
     /// Gets or sets a value indicating whether the TreeViewItem associated with this object is expanded.
     /// </summary>
     [ObservableProperty]
-    private bool _isExpanded;
+    public partial bool IsExpanded { get; set; }
 
     [UsedImplicitly]
     partial void OnIsExpandedChanged(bool value)
@@ -72,12 +72,12 @@ public partial class TreeViewItemViewModel : ObservableObject
             LoadChildren();
         }
     }
-        
+
     /// <summary>
     /// Gets or sets a value indicating whether the TreeViewItem associated with this object is selected.
     /// </summary>
     [ObservableProperty]
-    private bool _isSelected;
+    public partial bool IsSelected { get; set; }
 
     [UsedImplicitly]
     partial void OnIsSelectedChanged(bool value)
@@ -87,16 +87,15 @@ public partial class TreeViewItemViewModel : ObservableObject
             IsExpanded = true;
         }
     }
-        
+
     /// <summary>
     /// Gets or sets a value indicating whether this TreeViewItem can have contents edited in the code control
     /// </summary>
     [ObservableProperty]
-    private bool _canHaveContents;
+    public partial bool CanHaveContents { get; set; }
 
     [ObservableProperty]
-    private string? _contents;
-        
+    public partial string? Contents { get; set; }
     public TreeViewItemViewModel? Parent { get; }
 
     /// <summary>

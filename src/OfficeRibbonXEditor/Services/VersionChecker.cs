@@ -1,20 +1,17 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Win32;
 using OfficeRibbonXEditor.Helpers;
 using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services;
 
-[Export(typeof(IVersionChecker))]
+[Export<IVersionChecker>]
 public partial class VersionChecker : IVersionChecker
 {
     [SuppressMessage("SonarLint", "S1075", Justification = "This warning is due to the hard-coded url. If this ever change (e.g. repo is moved), the code will need changes overall anyway")]

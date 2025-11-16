@@ -7,20 +7,14 @@ using OfficeRibbonXEditor.Resources;
 namespace OfficeRibbonXEditor.ViewModels.Dialogs;
 
 [Export]
-public partial class AboutDialogViewModel : DialogBase
+public partial class AboutDialogViewModel(IMessageBoxService messageBoxService, IToolInfo info, IUrlHelper urlHelper)
+    : DialogBase
 {
-    private readonly IMessageBoxService _messageBoxService;
+    private readonly IMessageBoxService _messageBoxService = messageBoxService;
 
-    private readonly IUrlHelper _urlHelper;
+    private readonly IUrlHelper _urlHelper = urlHelper;
 
-    public AboutDialogViewModel(IMessageBoxService messageBoxService, IToolInfo info, IUrlHelper urlHelper)
-    {
-        _messageBoxService = messageBoxService;
-        Info = info;
-        _urlHelper = urlHelper;
-    }
-
-    public IToolInfo Info { get; }
+    public IToolInfo Info { get; } = info;
 
     [RelayCommand]
     private void SubmitIssue()

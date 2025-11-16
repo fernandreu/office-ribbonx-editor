@@ -1,5 +1,4 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using OfficeRibbonXEditor.Helpers;
 
 namespace OfficeRibbonXEditor.ViewModels.Shell;
@@ -19,13 +18,12 @@ public class FileAssociationViewModel : ObservableObject
 
     private bool PreviousValue { get; set; }
 
-    private bool _newValue;
     public bool NewValue
     {
-        get => _newValue;
+        get;
         set
         {
-            if (!SetProperty(ref _newValue, value))
+            if (!SetProperty(ref field, value))
             {
                 return;
             }

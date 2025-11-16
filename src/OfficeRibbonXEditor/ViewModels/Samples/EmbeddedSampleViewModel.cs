@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Reflection;
 
 namespace OfficeRibbonXEditor.ViewModels.Samples;
 
-public class EmbeddedSampleViewModel : XmlSampleViewModel
+public class EmbeddedSampleViewModel(string resourceName) : XmlSampleViewModel
 {
-    public EmbeddedSampleViewModel(string resourceName)
-    {
-        ResourceName = resourceName;
-    }
-
-    public string ResourceName { get; }
+    public string ResourceName { get; } = resourceName;
 
     private static readonly string SamplesNamespace = $"{nameof(OfficeRibbonXEditor)}.{nameof(Resources)}.Samples";
 

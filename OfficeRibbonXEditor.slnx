@@ -1,0 +1,28 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/root/">
+    <File Path=".editorconfig" />
+    <File Path="CONTRIBUTING.md" />
+    <File Path="LICENSE" />
+    <File Path="README.md" />
+    <File Path="THIRD-PARTY-NOTICES" />
+    <Project Path="build/build.csproj" />
+  </Folder>
+  <Folder Name="/root/docs/">
+    <File Path="docs/Screenshot.png" />
+  </Folder>
+  <Folder Name="/root/src/">
+    <Project Path="src/OfficeRibbonXEditor.CommandLine/OfficeRibbonXEditor.CommandLine.csproj" />
+    <Project Path="src/OfficeRibbonXEditor.Common/OfficeRibbonXEditor.Common.csproj" />
+    <Project Path="src/OfficeRibbonXEditor/OfficeRibbonXEditor.csproj" />
+  </Folder>
+  <Folder Name="/root/tests/">
+    <Project Path="tests/FunctionalTests/FunctionalTests.csproj" />
+    <Project Path="tests/IntegrationTests/IntegrationTests.csproj" />
+    <Project Path="tests/UITests/UITests.csproj" />
+    <Project Path="tests/UnitTests/UnitTests.csproj" />
+  </Folder>
+</Solution>

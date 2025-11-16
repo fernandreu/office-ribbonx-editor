@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace OfficeRibbonXEditor.Interfaces;
+﻿namespace OfficeRibbonXEditor.Interfaces;
 
 /// <summary>
 /// Holds the list of recent files used by the corresponding user control, with the storage method used left up

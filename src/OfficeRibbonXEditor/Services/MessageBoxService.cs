@@ -4,7 +4,7 @@ using OfficeRibbonXEditor.Interfaces;
 
 namespace OfficeRibbonXEditor.Services;
 
-[Export(typeof(IMessageBoxService))]
+[Export<IMessageBoxService>]
 public class MessageBoxService : IMessageBoxService
 {
     public MessageBoxResult Show(string text, string caption, MessageBoxButton button = MessageBoxButton.OK, MessageBoxImage image = MessageBoxImage.None)

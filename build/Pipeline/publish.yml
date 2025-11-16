@@ -3,7 +3,7 @@ parameters:
   jobDisplayName: 'Framework Dependent' 
   artifactName: 'Framework Dependent'
   selfContained: false
-  targetFramework: 'net9.0-windows'
+  targetFramework: 'net10.0-windows'
   architecture: ''
   sign: true
 

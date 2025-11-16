@@ -1,6 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Linq;
+﻿using System.IO;
 using System.Text;
 
 namespace OfficeRibbonXEditor.Helpers;
@@ -37,7 +35,7 @@ public static class StringUtils
         }
 
         // RemoveEmptyEntries shouldn't really be needed for paths, but it is a way to call the char[] overload for sure without code analysis warnings
-        var elements = pathName[root.Length..].Split(new[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar }, StringSplitOptions.RemoveEmptyEntries);
+        var elements = pathName[root.Length..].Split([Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar], StringSplitOptions.RemoveEmptyEntries);
 
         if (elements.Length == 1)
         {

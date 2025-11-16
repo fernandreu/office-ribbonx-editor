@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace OfficeRibbonXEditor.Interfaces;
+﻿namespace OfficeRibbonXEditor.Interfaces;
 
 public interface IFileDialogService
 {

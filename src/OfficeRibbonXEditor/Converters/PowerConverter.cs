@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 
 namespace OfficeRibbonXEditor.Converters;
@@ -7,7 +6,7 @@ namespace OfficeRibbonXEditor.Converters;
 [ValueConversion(typeof(double), typeof(double), ParameterType = typeof(double))]
 public class PowerConverter : IValueConverter
 {
-    public object? Convert(object? value, Type targetType, object parameter, CultureInfo culture)
+    public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)
         {
@@ -20,7 +19,7 @@ public class PowerConverter : IValueConverter
         return Math.Pow(baseValue, exponent);
     }
 
-    public object? ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         if (value == null)
         {

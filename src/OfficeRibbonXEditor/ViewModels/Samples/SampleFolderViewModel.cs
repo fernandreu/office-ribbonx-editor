@@ -8,5 +8,5 @@ public class SampleFolderViewModel : ObservableObject, ISampleMenuItem
 {
     public string Name { get; set; } = string.Empty;
 
-    public ObservableCollection<ISampleMenuItem> Items { get; } = new ObservableCollection<ISampleMenuItem>();
+    public ObservableCollection<ISampleMenuItem> Items { get; } = [];
 }

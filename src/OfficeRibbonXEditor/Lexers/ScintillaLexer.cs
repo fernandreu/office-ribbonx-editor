@@ -10,30 +10,28 @@ namespace OfficeRibbonXEditor.Lexers;
 /// </summary>
 public abstract class ScintillaLexer
 {
-    private ScintillaWPF? _editor;
-
     private int _maxLineNumberCharLength;
 
     public ScintillaWPF? Editor
     {
-        get => _editor;
+        get;
         set
         {
-            if (_editor == value)
+            if (field == value)
             {
                 return;
             }
 
-            if (_editor != null)
+            if (field != null)
             {
-                _editor.UpdateUI -= ScintillaUpdateUi;
+                field.UpdateUI -= ScintillaUpdateUi;
             }
 
-            _editor = value;
+            field = value;
 
-            if (_editor != null)
+            if (field != null)
             {
-                _editor.UpdateUI += ScintillaUpdateUi;
+                field.UpdateUI += ScintillaUpdateUi;
             }
 
             Update();

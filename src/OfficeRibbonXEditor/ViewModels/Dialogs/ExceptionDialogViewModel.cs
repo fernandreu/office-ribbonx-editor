@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
@@ -8,20 +7,14 @@ using OfficeRibbonXEditor.Interfaces;
 namespace OfficeRibbonXEditor.ViewModels.Dialogs;
 
 [Export]
-public partial class ExceptionDialogViewModel : DialogBase, IContentDialog<Exception?>
+public partial class ExceptionDialogViewModel(IToolInfo info, IUrlHelper urlHelper) : DialogBase, IContentDialog<Exception?>
 {
-    private readonly IToolInfo _info;
+    private readonly IToolInfo _info = info;
 
-    private readonly IUrlHelper _urlHelper;
-
-    public ExceptionDialogViewModel(IToolInfo info, IUrlHelper urlHelper)
-    {
-        _info = info;
-        _urlHelper = urlHelper;
-    }
+    private readonly IUrlHelper _urlHelper = urlHelper;
 
     [ObservableProperty]
-    private Exception? _exception;
+    public partial Exception? Exception { get; set; }
 
     public bool OnLoaded(Exception? payload)
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -13,25 +12,23 @@ public class EditableComboBox : ComboBox
         IsEditable = true;
     }
 
-    private TextBox? _textBox;
-
     public TextBox? TextBox
     {
         get
         {
-            if (_textBox != null)
+            if (field != null)
             {
-                return _textBox;
+                return field;
             }
 
             ApplyTemplate();
-            _textBox = Template.FindName("PART_EditableTextBox", this) as TextBox;
-            if (_textBox == null)
+            field = Template.FindName("PART_EditableTextBox", this) as TextBox;
+            if (field == null)
             {
                 throw new InvalidOperationException($"Make sure IsEditable is set to true when using an {nameof(EditableComboBox)}");
             }
 
-            return _textBox;
+            return field;
         }
     }
 

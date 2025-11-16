@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using OfficeRibbonXEditor.Helpers;
@@ -13,9 +12,9 @@ public partial class DialogHostViewModel : ObservableObject
     public event EventHandler? ShowingDialog;
 
     public event EventHandler? Closed;
-        
+
     [ObservableProperty]
-    private IContentDialogBase? _content;
+    public partial IContentDialogBase? Content { get; set; }
 
     [RelayCommand]
     private void Closing(CancelEventArgs args)

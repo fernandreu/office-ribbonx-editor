@@ -20,7 +20,7 @@ public partial class IconTabViewModel : ObservableObject, ITabItemViewModel
 #pragma warning restore CS8618 // Non-nullable field is uninitialized. Consider declaring as nullable.
 
     [ObservableProperty]
-    private string _title = string.Empty;
+    public partial string Title { get; set; } = string.Empty;
 
     public string? StatusText
     {
@@ -38,7 +38,7 @@ public partial class IconTabViewModel : ObservableObject, ITabItemViewModel
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(StatusText))]
     [NotifyPropertyChangedFor(nameof(Item))]
-    private IconViewModel _icon;
+    public partial IconViewModel Icon { get; set; }
 
     partial void OnIconChanging(IconViewModel value)
     {
@@ -59,8 +59,7 @@ public partial class IconTabViewModel : ObservableObject, ITabItemViewModel
     public TreeViewItemViewModel Item => Icon;
 
     [ObservableProperty]
-    private int _zoom;
-
+    public partial int Zoom { get; set; }
     public MainWindowViewModel MainWindow { get; set; }
 
     public void ApplyChanges()
