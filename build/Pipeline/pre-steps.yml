@@ -8,4 +8,4 @@ steps:
   displayName: 'Use .NET SDK'
   inputs:
     packageType: sdk
-    version: 9.0.100
+    version: 10.0.100
